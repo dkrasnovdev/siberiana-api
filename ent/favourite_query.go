@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -301,12 +302,12 @@ func (fq *FavouriteQuery) WithProxies(opts ...func(*ProxyQuery)) *FavouriteQuery
 // Example:
 //
 //	var v []struct {
-//		OwnerID string `json:"owner_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Favourite.Query().
-//		GroupBy(favourite.FieldOwnerID).
+//		GroupBy(favourite.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (fq *FavouriteQuery) GroupBy(field string, fields ...string) *FavouriteGroupBy {
@@ -324,11 +325,11 @@ func (fq *FavouriteQuery) GroupBy(field string, fields ...string) *FavouriteGrou
 // Example:
 //
 //	var v []struct {
-//		OwnerID string `json:"owner_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Favourite.Query().
-//		Select(favourite.FieldOwnerID).
+//		Select(favourite.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (fq *FavouriteQuery) Select(fields ...string) *FavouriteSelect {
 	fq.ctx.Fields = append(fq.ctx.Fields, fields...)
@@ -365,6 +366,12 @@ func (fq *FavouriteQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		fq.sql = prev
+	}
+	if favourite.Policy == nil {
+		return errors.New("ent: uninitialized favourite.Policy (forgotten import ent/runtime?)")
+	}
+	if err := favourite.Policy.EvalQuery(ctx, fq); err != nil {
+		return err
 	}
 	return nil
 }

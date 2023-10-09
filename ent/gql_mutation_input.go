@@ -11,6 +11,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
@@ -2114,6 +2115,94 @@ func (c *DistrictUpdate) SetInput(i UpdateDistrictInput) *DistrictUpdate {
 
 // SetInput applies the change-set in the UpdateDistrictInput on the DistrictUpdateOne builder.
 func (c *DistrictUpdateOne) SetInput(i UpdateDistrictInput) *DistrictUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateFavouriteInput represents a mutation input for creating favourites.
+type CreateFavouriteInput struct {
+	CreatedAt *time.Time
+	CreatedBy *string
+	UpdatedAt *time.Time
+	UpdatedBy *string
+	OwnerID   string
+	ProxyIDs  []int
+}
+
+// Mutate applies the CreateFavouriteInput on the FavouriteMutation builder.
+func (i *CreateFavouriteInput) Mutate(m *FavouriteMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	m.SetOwnerID(i.OwnerID)
+	if v := i.ProxyIDs; len(v) > 0 {
+		m.AddProxyIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateFavouriteInput on the FavouriteCreate builder.
+func (c *FavouriteCreate) SetInput(i CreateFavouriteInput) *FavouriteCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateFavouriteInput represents a mutation input for updating favourites.
+type UpdateFavouriteInput struct {
+	ClearCreatedBy bool
+	CreatedBy      *string
+	UpdatedAt      *time.Time
+	ClearUpdatedBy bool
+	UpdatedBy      *string
+	ClearProxies   bool
+	AddProxyIDs    []int
+	RemoveProxyIDs []int
+}
+
+// Mutate applies the UpdateFavouriteInput on the FavouriteMutation builder.
+func (i *UpdateFavouriteInput) Mutate(m *FavouriteMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearProxies {
+		m.ClearProxies()
+	}
+	if v := i.AddProxyIDs; len(v) > 0 {
+		m.AddProxyIDs(v...)
+	}
+	if v := i.RemoveProxyIDs; len(v) > 0 {
+		m.RemoveProxyIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateFavouriteInput on the FavouriteUpdate builder.
+func (c *FavouriteUpdate) SetInput(i UpdateFavouriteInput) *FavouriteUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateFavouriteInput on the FavouriteUpdateOne builder.
+func (c *FavouriteUpdateOne) SetInput(i UpdateFavouriteInput) *FavouriteUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -4282,6 +4371,100 @@ func (c *PersonRoleUpdateOne) SetInput(i UpdatePersonRoleInput) *PersonRoleUpdat
 	return c
 }
 
+// CreatePersonalInput represents a mutation input for creating personals.
+type CreatePersonalInput struct {
+	CreatedAt   *time.Time
+	CreatedBy   *string
+	UpdatedAt   *time.Time
+	UpdatedBy   *string
+	OwnerID     string
+	DisplayName string
+	ProxyIDs    []int
+}
+
+// Mutate applies the CreatePersonalInput on the PersonalMutation builder.
+func (i *CreatePersonalInput) Mutate(m *PersonalMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	m.SetOwnerID(i.OwnerID)
+	m.SetDisplayName(i.DisplayName)
+	if v := i.ProxyIDs; len(v) > 0 {
+		m.AddProxyIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreatePersonalInput on the PersonalCreate builder.
+func (c *PersonalCreate) SetInput(i CreatePersonalInput) *PersonalCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePersonalInput represents a mutation input for updating personals.
+type UpdatePersonalInput struct {
+	ClearCreatedBy bool
+	CreatedBy      *string
+	UpdatedAt      *time.Time
+	ClearUpdatedBy bool
+	UpdatedBy      *string
+	DisplayName    *string
+	ClearProxies   bool
+	AddProxyIDs    []int
+	RemoveProxyIDs []int
+}
+
+// Mutate applies the UpdatePersonalInput on the PersonalMutation builder.
+func (i *UpdatePersonalInput) Mutate(m *PersonalMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearProxies {
+		m.ClearProxies()
+	}
+	if v := i.AddProxyIDs; len(v) > 0 {
+		m.AddProxyIDs(v...)
+	}
+	if v := i.RemoveProxyIDs; len(v) > 0 {
+		m.RemoveProxyIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePersonalInput on the PersonalUpdate builder.
+func (c *PersonalUpdate) SetInput(i UpdatePersonalInput) *PersonalUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePersonalInput on the PersonalUpdateOne builder.
+func (c *PersonalUpdateOne) SetInput(i UpdatePersonalInput) *PersonalUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateProjectInput represents a mutation input for creating projects.
 type CreateProjectInput struct {
 	CreatedAt     *time.Time
@@ -5126,6 +5309,114 @@ func (c *ProtectedAreaPictureUpdate) SetInput(i UpdateProtectedAreaPictureInput)
 
 // SetInput applies the change-set in the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureUpdateOne builder.
 func (c *ProtectedAreaPictureUpdateOne) SetInput(i UpdateProtectedAreaPictureInput) *ProtectedAreaPictureUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateProxyInput represents a mutation input for creating proxies.
+type CreateProxyInput struct {
+	CreatedAt   *time.Time
+	CreatedBy   *string
+	UpdatedAt   *time.Time
+	UpdatedBy   *string
+	Type        proxy.Type
+	RefID       string
+	URL         string
+	FavouriteID *int
+	PersonalID  *int
+}
+
+// Mutate applies the CreateProxyInput on the ProxyMutation builder.
+func (i *CreateProxyInput) Mutate(m *ProxyMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	m.SetType(i.Type)
+	m.SetRefID(i.RefID)
+	m.SetURL(i.URL)
+	if v := i.FavouriteID; v != nil {
+		m.SetFavouriteID(*v)
+	}
+	if v := i.PersonalID; v != nil {
+		m.SetPersonalID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateProxyInput on the ProxyCreate builder.
+func (c *ProxyCreate) SetInput(i CreateProxyInput) *ProxyCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateProxyInput represents a mutation input for updating proxies.
+type UpdateProxyInput struct {
+	ClearCreatedBy bool
+	CreatedBy      *string
+	UpdatedAt      *time.Time
+	ClearUpdatedBy bool
+	UpdatedBy      *string
+	RefID          *string
+	URL            *string
+	ClearFavourite bool
+	FavouriteID    *int
+	ClearPersonal  bool
+	PersonalID     *int
+}
+
+// Mutate applies the UpdateProxyInput on the ProxyMutation builder.
+func (i *UpdateProxyInput) Mutate(m *ProxyMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.RefID; v != nil {
+		m.SetRefID(*v)
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
+	if i.ClearFavourite {
+		m.ClearFavourite()
+	}
+	if v := i.FavouriteID; v != nil {
+		m.SetFavouriteID(*v)
+	}
+	if i.ClearPersonal {
+		m.ClearPersonal()
+	}
+	if v := i.PersonalID; v != nil {
+		m.SetPersonalID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateProxyInput on the ProxyUpdate builder.
+func (c *ProxyUpdate) SetInput(i UpdateProxyInput) *ProxyUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateProxyInput on the ProxyUpdateOne builder.
+func (c *ProxyUpdateOne) SetInput(i UpdateProxyInput) *ProxyUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

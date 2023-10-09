@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -301,12 +302,12 @@ func (pq *PersonalQuery) WithProxies(opts ...func(*ProxyQuery)) *PersonalQuery {
 // Example:
 //
 //	var v []struct {
-//		OwnerID string `json:"owner_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Personal.Query().
-//		GroupBy(personal.FieldOwnerID).
+//		GroupBy(personal.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (pq *PersonalQuery) GroupBy(field string, fields ...string) *PersonalGroupBy {
@@ -324,11 +325,11 @@ func (pq *PersonalQuery) GroupBy(field string, fields ...string) *PersonalGroupB
 // Example:
 //
 //	var v []struct {
-//		OwnerID string `json:"owner_id,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Personal.Query().
-//		Select(personal.FieldOwnerID).
+//		Select(personal.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (pq *PersonalQuery) Select(fields ...string) *PersonalSelect {
 	pq.ctx.Fields = append(pq.ctx.Fields, fields...)
@@ -365,6 +366,12 @@ func (pq *PersonalQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		pq.sql = prev
+	}
+	if personal.Policy == nil {
+		return errors.New("ent: uninitialized personal.Policy (forgotten import ent/runtime?)")
+	}
+	if err := personal.Policy.EvalQuery(ctx, pq); err != nil {
+		return err
 	}
 	return nil
 }

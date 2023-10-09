@@ -29,6 +29,9 @@ type Mutation {
   # Culture
   createCulture(input: CreateCultureInput!): Culture!
   updateCulture(id: ID!, input: UpdateCultureInput!): Culture!
+  # Favourite
+  createFavourite(input: CreateFavouriteInput!): Favourite!
+  updateFavourite(id: ID!, input: UpdateFavouriteInput!): Favourite!
   # District
   createDistrict(input: CreateDistrictInput!): District!
   updateDistrict(id: ID!, input: UpdateDistrictInput!): District!
@@ -76,6 +79,9 @@ type Mutation {
   # PersonRole
   createPersonRole(input: CreatePersonRoleInput!): PersonRole!
   updatePersonRole(id: ID!, input: UpdatePersonRoleInput!): PersonRole!
+  # Personal
+  createPersonal(input: CreatePersonalInput!): Personal!
+  updatePersonal(id: ID!, input: UpdatePersonalInput!): Personal!
   # Project
   createProject(input: CreateProjectInput!): Project!
   updateProject(id: ID!, input: UpdateProjectInput!): Project!
@@ -101,6 +107,9 @@ type Mutation {
     id: ID!
     input: UpdateProtectedAreaPictureInput!
   ): ProtectedAreaPicture!
+  # Proxy
+  createProxy(input: CreateProxyInput!): Proxy!
+  updateProxy(id: ID!, input: UpdateProxyInput!): Proxy!
   # Publication
   createPublication(input: CreatePublicationInput!): Publication!
   updatePublication(id: ID!, input: UpdatePublicationInput!): Publication!

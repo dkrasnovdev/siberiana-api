@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -336,12 +337,12 @@ func (pq *ProxyQuery) WithPersonal(opts ...func(*PersonalQuery)) *ProxyQuery {
 // Example:
 //
 //	var v []struct {
-//		Type proxy.Type `json:"type,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Proxy.Query().
-//		GroupBy(proxy.FieldType).
+//		GroupBy(proxy.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (pq *ProxyQuery) GroupBy(field string, fields ...string) *ProxyGroupBy {
@@ -359,11 +360,11 @@ func (pq *ProxyQuery) GroupBy(field string, fields ...string) *ProxyGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Type proxy.Type `json:"type,omitempty"`
+//		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
 //	client.Proxy.Query().
-//		Select(proxy.FieldType).
+//		Select(proxy.FieldCreatedAt).
 //		Scan(ctx, &v)
 func (pq *ProxyQuery) Select(fields ...string) *ProxySelect {
 	pq.ctx.Fields = append(pq.ctx.Fields, fields...)
@@ -400,6 +401,12 @@ func (pq *ProxyQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		pq.sql = prev
+	}
+	if proxy.Policy == nil {
+		return errors.New("ent: uninitialized proxy.Policy (forgotten import ent/runtime?)")
+	}
+	if err := proxy.Policy.EvalQuery(ctx, pq); err != nil {
+		return err
 	}
 	return nil
 }

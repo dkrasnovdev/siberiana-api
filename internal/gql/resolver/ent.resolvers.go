@@ -25,81 +25,103 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, erro
 // Arts is the resolver for the arts field.
 func (r *queryResolver) Arts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtOrder, where *ent.ArtWhereInput) (*ent.ArtConnection, error) {
 	return r.client.Art.Query().Paginate(ctx, after, first, before, last, offset, ent.WithArtOrder(orderBy), ent.WithArtFilter(where.Filter))
+
 }
 
 // ArtGenres is the resolver for the artGenres field.
 func (r *queryResolver) ArtGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtGenreOrder, where *ent.ArtGenreWhereInput) (*ent.ArtGenreConnection, error) {
 	return r.client.ArtGenre.Query().Paginate(ctx, after, first, before, last, offset, ent.WithArtGenreOrder(orderBy), ent.WithArtGenreFilter(where.Filter))
+
 }
 
 // ArtStyles is the resolver for the artStyles field.
 func (r *queryResolver) ArtStyles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtStyleOrder, where *ent.ArtStyleWhereInput) (*ent.ArtStyleConnection, error) {
 	return r.client.ArtStyle.Query().Paginate(ctx, after, first, before, last, offset, ent.WithArtStyleOrder(orderBy), ent.WithArtStyleFilter(where.Filter))
+
 }
 
 // Artifacts is the resolver for the artifacts field.
 func (r *queryResolver) Artifacts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ArtifactOrder, where *ent.ArtifactWhereInput) (*ent.ArtifactConnection, error) {
 	return r.client.Artifact.Query().Paginate(ctx, after, first, before, last, offset, ent.WithArtifactOrder(orderBy), ent.WithArtifactFilter(where.Filter))
+
 }
 
 // AuditLogs is the resolver for the auditLogs field.
 func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.AuditLogOrder, where *ent.AuditLogWhereInput) (*ent.AuditLogConnection, error) {
 	return r.client.AuditLog.Query().Paginate(ctx, after, first, before, last, offset, ent.WithAuditLogOrder(orderBy), ent.WithAuditLogFilter(where.Filter))
+
 }
 
 // Books is the resolver for the books field.
 func (r *queryResolver) Books(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.BookOrder, where *ent.BookWhereInput) (*ent.BookConnection, error) {
 	return r.client.Book.Query().Paginate(ctx, after, first, before, last, offset, ent.WithBookOrder(orderBy), ent.WithBookFilter(where.Filter))
+
 }
 
 // BookGenres is the resolver for the bookGenres field.
 func (r *queryResolver) BookGenres(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.BookGenreOrder, where *ent.BookGenreWhereInput) (*ent.BookGenreConnection, error) {
 	return r.client.BookGenre.Query().Paginate(ctx, after, first, before, last, offset, ent.WithBookGenreOrder(orderBy), ent.WithBookGenreFilter(where.Filter))
+
 }
 
 // Categories is the resolver for the categories field.
 func (r *queryResolver) Categories(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CategoryOrder, where *ent.CategoryWhereInput) (*ent.CategoryConnection, error) {
 	return r.client.Category.Query().Paginate(ctx, after, first, before, last, offset, ent.WithCategoryOrder(orderBy), ent.WithCategoryFilter(where.Filter))
+
 }
 
 // Collections is the resolver for the collections field.
 func (r *queryResolver) Collections(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CollectionOrder, where *ent.CollectionWhereInput) (*ent.CollectionConnection, error) {
 	return r.client.Collection.Query().Paginate(ctx, after, first, before, last, offset, ent.WithCollectionOrder(orderBy), ent.WithCollectionFilter(where.Filter))
+
 }
 
 // Countries is the resolver for the countries field.
 func (r *queryResolver) Countries(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CountryOrder, where *ent.CountryWhereInput) (*ent.CountryConnection, error) {
 	return r.client.Country.Query().Paginate(ctx, after, first, before, last, offset, ent.WithCountryOrder(orderBy), ent.WithCountryFilter(where.Filter))
+
 }
 
 // Cultures is the resolver for the cultures field.
 func (r *queryResolver) Cultures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.CultureOrder, where *ent.CultureWhereInput) (*ent.CultureConnection, error) {
 	return r.client.Culture.Query().Paginate(ctx, after, first, before, last, offset, ent.WithCultureOrder(orderBy), ent.WithCultureFilter(where.Filter))
+
 }
 
 // Districts is the resolver for the districts field.
 func (r *queryResolver) Districts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) (*ent.DistrictConnection, error) {
 	return r.client.District.Query().Paginate(ctx, after, first, before, last, offset, ent.WithDistrictOrder(orderBy), ent.WithDistrictFilter(where.Filter))
+
+}
+
+// Favourites is the resolver for the favourites field.
+func (r *queryResolver) Favourites(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.FavouriteOrder, where *ent.FavouriteWhereInput) (*ent.FavouriteConnection, error) {
+	return r.client.Favourite.Query().Paginate(ctx, after, first, before, last, offset, ent.WithFavouriteOrder(orderBy), ent.WithFavouriteFilter(where.Filter))
+
 }
 
 // Holders is the resolver for the holders field.
 func (r *queryResolver) Holders(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) (*ent.HolderConnection, error) {
 	return r.client.Holder.Query().Paginate(ctx, after, first, before, last, offset, ent.WithHolderOrder(orderBy), ent.WithHolderFilter(where.Filter))
+
 }
 
 // HolderResponsibilities is the resolver for the holderResponsibilities field.
 func (r *queryResolver) HolderResponsibilities(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) (*ent.HolderResponsibilityConnection, error) {
 	return r.client.HolderResponsibility.Query().Paginate(ctx, after, first, before, last, offset, ent.WithHolderResponsibilityOrder(orderBy), ent.WithHolderResponsibilityFilter(where.Filter))
+
 }
 
 // Licenses is the resolver for the licenses field.
 func (r *queryResolver) Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error) {
 	return r.client.License.Query().Paginate(ctx, after, first, before, last, offset, ent.WithLicenseOrder(orderBy), ent.WithLicenseFilter(where.Filter))
+
 }
 
 // Locations is the resolver for the locations field.
 func (r *queryResolver) Locations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LocationOrder, where *ent.LocationWhereInput) (*ent.LocationConnection, error) {
 	return r.client.Location.Query().Paginate(ctx, after, first, before, last, offset, ent.WithLocationOrder(orderBy), ent.WithLocationFilter(where.Filter))
+
 }
 
 // Media is the resolver for the media field.
@@ -142,6 +164,11 @@ func (r *queryResolver) PersonRoles(ctx context.Context, after *entgql.Cursor[in
 	return r.client.PersonRole.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonRoleOrder(orderBy), ent.WithPersonRoleFilter(where.Filter))
 }
 
+// Personals is the resolver for the personals field.
+func (r *queryResolver) Personals(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonalOrder, where *ent.PersonalWhereInput) (*ent.PersonalConnection, error) {
+	return r.client.Personal.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonalOrder(orderBy), ent.WithPersonalFilter(where.Filter))
+}
+
 // Projects is the resolver for the projects field.
 func (r *queryResolver) Projects(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) (*ent.ProjectConnection, error) {
 	return r.client.Project.Query().Paginate(ctx, after, first, before, last, offset, ent.WithProjectOrder(orderBy), ent.WithProjectFilter(where.Filter))
@@ -165,6 +192,11 @@ func (r *queryResolver) ProtectedAreaCategories(ctx context.Context, after *entg
 // ProtectedAreaPictures is the resolver for the protectedAreaPictures field.
 func (r *queryResolver) ProtectedAreaPictures(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProtectedAreaPictureOrder, where *ent.ProtectedAreaPictureWhereInput) (*ent.ProtectedAreaPictureConnection, error) {
 	return r.client.ProtectedAreaPicture.Query().Paginate(ctx, after, first, before, last, offset, ent.WithProtectedAreaPictureOrder(orderBy), ent.WithProtectedAreaPictureFilter(where.Filter))
+}
+
+// Proxies is the resolver for the proxies field.
+func (r *queryResolver) Proxies(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProxyOrder, where *ent.ProxyWhereInput) (*ent.ProxyConnection, error) {
+	return r.client.Proxy.Query().Paginate(ctx, after, first, before, last, offset, ent.WithProxyOrder(orderBy), ent.WithProxyFilter(where.Filter))
 }
 
 // Publications is the resolver for the publications field.

@@ -2170,6 +2170,26 @@ func (f *FavouriteQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 			f.WithNamedProxies(alias, func(wq *ProxyQuery) {
 				*wq = *query
 			})
+		case "createdAt":
+			if _, ok := fieldSeen[favourite.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, favourite.FieldCreatedAt)
+				fieldSeen[favourite.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[favourite.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, favourite.FieldCreatedBy)
+				fieldSeen[favourite.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[favourite.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, favourite.FieldUpdatedAt)
+				fieldSeen[favourite.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[favourite.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, favourite.FieldUpdatedBy)
+				fieldSeen[favourite.FieldUpdatedBy] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[favourite.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, favourite.FieldOwnerID)
@@ -2209,6 +2229,34 @@ func newFavouritePaginateArgs(rv map[string]any) *favouritePaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*FavouriteOrder:
+			args.opts = append(args.opts, WithFavouriteOrder(v))
+		case []any:
+			var orders []*FavouriteOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &FavouriteOrder{Field: &FavouriteOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithFavouriteOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*FavouriteWhereInput); ok {
 		args.opts = append(args.opts, WithFavouriteFilter(v.Filter))
@@ -4332,6 +4380,26 @@ func (pe *PersonalQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 			pe.WithNamedProxies(alias, func(wq *ProxyQuery) {
 				*wq = *query
 			})
+		case "createdAt":
+			if _, ok := fieldSeen[personal.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, personal.FieldCreatedAt)
+				fieldSeen[personal.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[personal.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, personal.FieldCreatedBy)
+				fieldSeen[personal.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[personal.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, personal.FieldUpdatedAt)
+				fieldSeen[personal.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[personal.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, personal.FieldUpdatedBy)
+				fieldSeen[personal.FieldUpdatedBy] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[personal.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, personal.FieldOwnerID)
@@ -4376,6 +4444,34 @@ func newPersonalPaginateArgs(rv map[string]any) *personalPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*PersonalOrder:
+			args.opts = append(args.opts, WithPersonalOrder(v))
+		case []any:
+			var orders []*PersonalOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PersonalOrder{Field: &PersonalOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithPersonalOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*PersonalWhereInput); ok {
 		args.opts = append(args.opts, WithPersonalFilter(v.Filter))
@@ -5239,6 +5335,26 @@ func (pr *ProxyQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 				return err
 			}
 			pr.withPersonal = query
+		case "createdAt":
+			if _, ok := fieldSeen[proxy.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, proxy.FieldCreatedAt)
+				fieldSeen[proxy.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[proxy.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, proxy.FieldCreatedBy)
+				fieldSeen[proxy.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[proxy.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, proxy.FieldUpdatedAt)
+				fieldSeen[proxy.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[proxy.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, proxy.FieldUpdatedBy)
+				fieldSeen[proxy.FieldUpdatedBy] = struct{}{}
+			}
 		case "type":
 			if _, ok := fieldSeen[proxy.FieldType]; !ok {
 				selectedFields = append(selectedFields, proxy.FieldType)
@@ -5288,6 +5404,34 @@ func newProxyPaginateArgs(rv map[string]any) *proxyPaginateArgs {
 	}
 	if v := rv[beforeField]; v != nil {
 		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*ProxyOrder:
+			args.opts = append(args.opts, WithProxyOrder(v))
+		case []any:
+			var orders []*ProxyOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &ProxyOrder{Field: &ProxyOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithProxyOrder(orders))
+		}
 	}
 	if v, ok := rv[whereField].(*ProxyWhereInput); ok {
 		args.opts = append(args.opts, WithProxyFilter(v.Filter))

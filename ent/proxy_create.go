@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -19,6 +20,62 @@ type ProxyCreate struct {
 	config
 	mutation *ProxyMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (pc *ProxyCreate) SetCreatedAt(t time.Time) *ProxyCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *ProxyCreate) SetNillableCreatedAt(t *time.Time) *ProxyCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pc *ProxyCreate) SetCreatedBy(s string) *ProxyCreate {
+	pc.mutation.SetCreatedBy(s)
+	return pc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pc *ProxyCreate) SetNillableCreatedBy(s *string) *ProxyCreate {
+	if s != nil {
+		pc.SetCreatedBy(*s)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *ProxyCreate) SetUpdatedAt(t time.Time) *ProxyCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *ProxyCreate) SetNillableUpdatedAt(t *time.Time) *ProxyCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pc *ProxyCreate) SetUpdatedBy(s string) *ProxyCreate {
+	pc.mutation.SetUpdatedBy(s)
+	return pc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pc *ProxyCreate) SetNillableUpdatedBy(s *string) *ProxyCreate {
+	if s != nil {
+		pc.SetUpdatedBy(*s)
+	}
+	return pc
 }
 
 // SetType sets the "type" field.
@@ -84,6 +141,9 @@ func (pc *ProxyCreate) Mutation() *ProxyMutation {
 
 // Save creates the Proxy in the database.
 func (pc *ProxyCreate) Save(ctx context.Context) (*Proxy, error) {
+	if err := pc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -109,8 +169,33 @@ func (pc *ProxyCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *ProxyCreate) defaults() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		if proxy.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized proxy.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := proxy.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		if proxy.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized proxy.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := proxy.DefaultUpdatedAt()
+		pc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProxyCreate) check() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Proxy.created_at"`)}
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Proxy.updated_at"`)}
+	}
 	if _, ok := pc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Proxy.type"`)}
 	}
@@ -151,6 +236,22 @@ func (pc *ProxyCreate) createSpec() (*Proxy, *sqlgraph.CreateSpec) {
 		_node = &Proxy{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(proxy.Table, sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt))
 	)
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(proxy.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.CreatedBy(); ok {
+		_spec.SetField(proxy.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(proxy.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedBy(); ok {
+		_spec.SetField(proxy.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
 	if value, ok := pc.mutation.GetType(); ok {
 		_spec.SetField(proxy.FieldType, field.TypeEnum, value)
 		_node.Type = value
@@ -218,6 +319,7 @@ func (pcb *ProxyCreateBulk) Save(ctx context.Context) ([]*Proxy, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProxyMutation)
 				if !ok {

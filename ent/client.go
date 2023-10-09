@@ -6260,7 +6260,8 @@ func (c *ProxyClient) QueryPersonal(pr *Proxy) *PersonalQuery {
 
 // Hooks returns the client hooks.
 func (c *ProxyClient) Hooks() []Hook {
-	return c.hooks.Proxy
+	hooks := c.hooks.Proxy
+	return append(hooks[:len(hooks):len(hooks)], proxy.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.

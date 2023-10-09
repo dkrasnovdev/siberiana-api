@@ -14860,6 +14860,10 @@ type FavouriteMutation struct {
 	op             Op
 	typ            string
 	id             *int
+	created_at     *time.Time
+	created_by     *string
+	updated_at     *time.Time
+	updated_by     *string
 	owner_id       *string
 	clearedFields  map[string]struct{}
 	proxies        map[int]struct{}
@@ -14966,6 +14970,176 @@ func (m *FavouriteMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *FavouriteMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *FavouriteMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Favourite entity.
+// If the Favourite object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FavouriteMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *FavouriteMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *FavouriteMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *FavouriteMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Favourite entity.
+// If the Favourite object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FavouriteMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *FavouriteMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[favourite.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *FavouriteMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[favourite.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *FavouriteMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, favourite.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *FavouriteMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *FavouriteMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Favourite entity.
+// If the Favourite object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FavouriteMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *FavouriteMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *FavouriteMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *FavouriteMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Favourite entity.
+// If the Favourite object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FavouriteMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *FavouriteMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[favourite.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *FavouriteMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[favourite.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *FavouriteMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, favourite.FieldUpdatedBy)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -15092,7 +15266,19 @@ func (m *FavouriteMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FavouriteMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 5)
+	if m.created_at != nil {
+		fields = append(fields, favourite.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, favourite.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, favourite.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, favourite.FieldUpdatedBy)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, favourite.FieldOwnerID)
 	}
@@ -15104,6 +15290,14 @@ func (m *FavouriteMutation) Fields() []string {
 // schema.
 func (m *FavouriteMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case favourite.FieldCreatedAt:
+		return m.CreatedAt()
+	case favourite.FieldCreatedBy:
+		return m.CreatedBy()
+	case favourite.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case favourite.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case favourite.FieldOwnerID:
 		return m.OwnerID()
 	}
@@ -15115,6 +15309,14 @@ func (m *FavouriteMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *FavouriteMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case favourite.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case favourite.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case favourite.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case favourite.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case favourite.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	}
@@ -15126,6 +15328,34 @@ func (m *FavouriteMutation) OldField(ctx context.Context, name string) (ent.Valu
 // type.
 func (m *FavouriteMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case favourite.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case favourite.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case favourite.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case favourite.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case favourite.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -15162,7 +15392,14 @@ func (m *FavouriteMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *FavouriteMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(favourite.FieldCreatedBy) {
+		fields = append(fields, favourite.FieldCreatedBy)
+	}
+	if m.FieldCleared(favourite.FieldUpdatedBy) {
+		fields = append(fields, favourite.FieldUpdatedBy)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -15175,6 +15412,14 @@ func (m *FavouriteMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *FavouriteMutation) ClearField(name string) error {
+	switch name {
+	case favourite.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case favourite.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	}
 	return fmt.Errorf("unknown Favourite nullable field %s", name)
 }
 
@@ -15182,6 +15427,18 @@ func (m *FavouriteMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *FavouriteMutation) ResetField(name string) error {
 	switch name {
+	case favourite.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case favourite.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case favourite.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case favourite.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case favourite.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -29565,6 +29822,10 @@ type PersonalMutation struct {
 	op             Op
 	typ            string
 	id             *int
+	created_at     *time.Time
+	created_by     *string
+	updated_at     *time.Time
+	updated_by     *string
 	owner_id       *string
 	display_name   *string
 	clearedFields  map[string]struct{}
@@ -29672,6 +29933,176 @@ func (m *PersonalMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PersonalMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PersonalMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Personal entity.
+// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PersonalMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PersonalMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PersonalMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Personal entity.
+// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PersonalMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[personal.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PersonalMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[personal.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PersonalMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, personal.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PersonalMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PersonalMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Personal entity.
+// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PersonalMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PersonalMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PersonalMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Personal entity.
+// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PersonalMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[personal.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PersonalMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[personal.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PersonalMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, personal.FieldUpdatedBy)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -29834,7 +30265,19 @@ func (m *PersonalMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonalMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 6)
+	if m.created_at != nil {
+		fields = append(fields, personal.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, personal.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, personal.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, personal.FieldUpdatedBy)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, personal.FieldOwnerID)
 	}
@@ -29849,6 +30292,14 @@ func (m *PersonalMutation) Fields() []string {
 // schema.
 func (m *PersonalMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case personal.FieldCreatedAt:
+		return m.CreatedAt()
+	case personal.FieldCreatedBy:
+		return m.CreatedBy()
+	case personal.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case personal.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case personal.FieldOwnerID:
 		return m.OwnerID()
 	case personal.FieldDisplayName:
@@ -29862,6 +30313,14 @@ func (m *PersonalMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *PersonalMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case personal.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case personal.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case personal.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case personal.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case personal.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case personal.FieldDisplayName:
@@ -29875,6 +30334,34 @@ func (m *PersonalMutation) OldField(ctx context.Context, name string) (ent.Value
 // type.
 func (m *PersonalMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case personal.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case personal.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case personal.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case personal.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case personal.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -29918,7 +30405,14 @@ func (m *PersonalMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *PersonalMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(personal.FieldCreatedBy) {
+		fields = append(fields, personal.FieldCreatedBy)
+	}
+	if m.FieldCleared(personal.FieldUpdatedBy) {
+		fields = append(fields, personal.FieldUpdatedBy)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -29931,6 +30425,14 @@ func (m *PersonalMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *PersonalMutation) ClearField(name string) error {
+	switch name {
+	case personal.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case personal.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	}
 	return fmt.Errorf("unknown Personal nullable field %s", name)
 }
 
@@ -29938,6 +30440,18 @@ func (m *PersonalMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *PersonalMutation) ResetField(name string) error {
 	switch name {
+	case personal.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case personal.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case personal.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case personal.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case personal.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -35634,6 +36148,10 @@ type ProxyMutation struct {
 	op               Op
 	typ              string
 	id               *int
+	created_at       *time.Time
+	created_by       *string
+	updated_at       *time.Time
+	updated_by       *string
 	_type            *proxy.Type
 	ref_id           *string
 	url              *string
@@ -35743,6 +36261,176 @@ func (m *ProxyMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ProxyMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ProxyMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Proxy entity.
+// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProxyMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ProxyMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ProxyMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ProxyMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Proxy entity.
+// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProxyMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ProxyMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[proxy.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ProxyMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[proxy.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ProxyMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, proxy.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ProxyMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ProxyMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Proxy entity.
+// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProxyMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ProxyMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ProxyMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ProxyMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Proxy entity.
+// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProxyMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ProxyMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[proxy.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ProxyMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[proxy.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ProxyMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, proxy.FieldUpdatedBy)
 }
 
 // SetType sets the "type" field.
@@ -35965,7 +36653,19 @@ func (m *ProxyMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProxyMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 7)
+	if m.created_at != nil {
+		fields = append(fields, proxy.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, proxy.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, proxy.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, proxy.FieldUpdatedBy)
+	}
 	if m._type != nil {
 		fields = append(fields, proxy.FieldType)
 	}
@@ -35983,6 +36683,14 @@ func (m *ProxyMutation) Fields() []string {
 // schema.
 func (m *ProxyMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case proxy.FieldCreatedAt:
+		return m.CreatedAt()
+	case proxy.FieldCreatedBy:
+		return m.CreatedBy()
+	case proxy.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case proxy.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case proxy.FieldType:
 		return m.GetType()
 	case proxy.FieldRefID:
@@ -35998,6 +36706,14 @@ func (m *ProxyMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ProxyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case proxy.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case proxy.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case proxy.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case proxy.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case proxy.FieldType:
 		return m.OldType(ctx)
 	case proxy.FieldRefID:
@@ -36013,6 +36729,34 @@ func (m *ProxyMutation) OldField(ctx context.Context, name string) (ent.Value, e
 // type.
 func (m *ProxyMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case proxy.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case proxy.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case proxy.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case proxy.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case proxy.FieldType:
 		v, ok := value.(proxy.Type)
 		if !ok {
@@ -36063,7 +36807,14 @@ func (m *ProxyMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ProxyMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(proxy.FieldCreatedBy) {
+		fields = append(fields, proxy.FieldCreatedBy)
+	}
+	if m.FieldCleared(proxy.FieldUpdatedBy) {
+		fields = append(fields, proxy.FieldUpdatedBy)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -36076,6 +36827,14 @@ func (m *ProxyMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ProxyMutation) ClearField(name string) error {
+	switch name {
+	case proxy.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case proxy.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	}
 	return fmt.Errorf("unknown Proxy nullable field %s", name)
 }
 
@@ -36083,6 +36842,18 @@ func (m *ProxyMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ProxyMutation) ResetField(name string) error {
 	switch name {
+	case proxy.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case proxy.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case proxy.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case proxy.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case proxy.FieldType:
 		m.ResetType()
 		return nil

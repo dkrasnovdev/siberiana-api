@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +19,62 @@ type FavouriteCreate struct {
 	config
 	mutation *FavouriteMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (fc *FavouriteCreate) SetCreatedAt(t time.Time) *FavouriteCreate {
+	fc.mutation.SetCreatedAt(t)
+	return fc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (fc *FavouriteCreate) SetNillableCreatedAt(t *time.Time) *FavouriteCreate {
+	if t != nil {
+		fc.SetCreatedAt(*t)
+	}
+	return fc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (fc *FavouriteCreate) SetCreatedBy(s string) *FavouriteCreate {
+	fc.mutation.SetCreatedBy(s)
+	return fc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (fc *FavouriteCreate) SetNillableCreatedBy(s *string) *FavouriteCreate {
+	if s != nil {
+		fc.SetCreatedBy(*s)
+	}
+	return fc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (fc *FavouriteCreate) SetUpdatedAt(t time.Time) *FavouriteCreate {
+	fc.mutation.SetUpdatedAt(t)
+	return fc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (fc *FavouriteCreate) SetNillableUpdatedAt(t *time.Time) *FavouriteCreate {
+	if t != nil {
+		fc.SetUpdatedAt(*t)
+	}
+	return fc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (fc *FavouriteCreate) SetUpdatedBy(s string) *FavouriteCreate {
+	fc.mutation.SetUpdatedBy(s)
+	return fc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (fc *FavouriteCreate) SetNillableUpdatedBy(s *string) *FavouriteCreate {
+	if s != nil {
+		fc.SetUpdatedBy(*s)
+	}
+	return fc
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -48,6 +105,9 @@ func (fc *FavouriteCreate) Mutation() *FavouriteMutation {
 
 // Save creates the Favourite in the database.
 func (fc *FavouriteCreate) Save(ctx context.Context) (*Favourite, error) {
+	if err := fc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, fc.sqlSave, fc.mutation, fc.hooks)
 }
 
@@ -73,8 +133,33 @@ func (fc *FavouriteCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (fc *FavouriteCreate) defaults() error {
+	if _, ok := fc.mutation.CreatedAt(); !ok {
+		if favourite.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized favourite.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := favourite.DefaultCreatedAt()
+		fc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := fc.mutation.UpdatedAt(); !ok {
+		if favourite.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized favourite.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := favourite.DefaultUpdatedAt()
+		fc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (fc *FavouriteCreate) check() error {
+	if _, ok := fc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Favourite.created_at"`)}
+	}
+	if _, ok := fc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Favourite.updated_at"`)}
+	}
 	if _, ok := fc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`ent: missing required field "Favourite.owner_id"`)}
 	}
@@ -109,6 +194,22 @@ func (fc *FavouriteCreate) createSpec() (*Favourite, *sqlgraph.CreateSpec) {
 		_node = &Favourite{config: fc.config}
 		_spec = sqlgraph.NewCreateSpec(favourite.Table, sqlgraph.NewFieldSpec(favourite.FieldID, field.TypeInt))
 	)
+	if value, ok := fc.mutation.CreatedAt(); ok {
+		_spec.SetField(favourite.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := fc.mutation.CreatedBy(); ok {
+		_spec.SetField(favourite.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := fc.mutation.UpdatedAt(); ok {
+		_spec.SetField(favourite.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := fc.mutation.UpdatedBy(); ok {
+		_spec.SetField(favourite.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
 	if value, ok := fc.mutation.OwnerID(); ok {
 		_spec.SetField(favourite.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -150,6 +251,7 @@ func (fcb *FavouriteCreateBulk) Save(ctx context.Context) ([]*Favourite, error) 
 	for i := range fcb.builders {
 		func(i int, root context.Context) {
 			builder := fcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FavouriteMutation)
 				if !ok {

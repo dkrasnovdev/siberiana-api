@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -26,6 +27,52 @@ type ProxyUpdate struct {
 // Where appends a list predicates to the ProxyUpdate builder.
 func (pu *ProxyUpdate) Where(ps ...predicate.Proxy) *ProxyUpdate {
 	pu.mutation.Where(ps...)
+	return pu
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pu *ProxyUpdate) SetCreatedBy(s string) *ProxyUpdate {
+	pu.mutation.SetCreatedBy(s)
+	return pu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pu *ProxyUpdate) SetNillableCreatedBy(s *string) *ProxyUpdate {
+	if s != nil {
+		pu.SetCreatedBy(*s)
+	}
+	return pu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (pu *ProxyUpdate) ClearCreatedBy() *ProxyUpdate {
+	pu.mutation.ClearCreatedBy()
+	return pu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pu *ProxyUpdate) SetUpdatedAt(t time.Time) *ProxyUpdate {
+	pu.mutation.SetUpdatedAt(t)
+	return pu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pu *ProxyUpdate) SetUpdatedBy(s string) *ProxyUpdate {
+	pu.mutation.SetUpdatedBy(s)
+	return pu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pu *ProxyUpdate) SetNillableUpdatedBy(s *string) *ProxyUpdate {
+	if s != nil {
+		pu.SetUpdatedBy(*s)
+	}
+	return pu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pu *ProxyUpdate) ClearUpdatedBy() *ProxyUpdate {
+	pu.mutation.ClearUpdatedBy()
 	return pu
 }
 
@@ -98,6 +145,9 @@ func (pu *ProxyUpdate) ClearPersonal() *ProxyUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *ProxyUpdate) Save(ctx context.Context) (int, error) {
+	if err := pu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
 }
 
@@ -123,6 +173,18 @@ func (pu *ProxyUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pu *ProxyUpdate) defaults() error {
+	if _, ok := pu.mutation.UpdatedAt(); !ok {
+		if proxy.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized proxy.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := proxy.UpdateDefaultUpdatedAt()
+		pu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (pu *ProxyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(proxy.Table, proxy.Columns, sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
@@ -131,6 +193,21 @@ func (pu *ProxyUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := pu.mutation.CreatedBy(); ok {
+		_spec.SetField(proxy.FieldCreatedBy, field.TypeString, value)
+	}
+	if pu.mutation.CreatedByCleared() {
+		_spec.ClearField(proxy.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.UpdatedAt(); ok {
+		_spec.SetField(proxy.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := pu.mutation.UpdatedBy(); ok {
+		_spec.SetField(proxy.FieldUpdatedBy, field.TypeString, value)
+	}
+	if pu.mutation.UpdatedByCleared() {
+		_spec.ClearField(proxy.FieldUpdatedBy, field.TypeString)
 	}
 	if value, ok := pu.mutation.RefID(); ok {
 		_spec.SetField(proxy.FieldRefID, field.TypeString, value)
@@ -216,6 +293,52 @@ type ProxyUpdateOne struct {
 	mutation *ProxyMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (puo *ProxyUpdateOne) SetCreatedBy(s string) *ProxyUpdateOne {
+	puo.mutation.SetCreatedBy(s)
+	return puo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (puo *ProxyUpdateOne) SetNillableCreatedBy(s *string) *ProxyUpdateOne {
+	if s != nil {
+		puo.SetCreatedBy(*s)
+	}
+	return puo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (puo *ProxyUpdateOne) ClearCreatedBy() *ProxyUpdateOne {
+	puo.mutation.ClearCreatedBy()
+	return puo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (puo *ProxyUpdateOne) SetUpdatedAt(t time.Time) *ProxyUpdateOne {
+	puo.mutation.SetUpdatedAt(t)
+	return puo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (puo *ProxyUpdateOne) SetUpdatedBy(s string) *ProxyUpdateOne {
+	puo.mutation.SetUpdatedBy(s)
+	return puo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (puo *ProxyUpdateOne) SetNillableUpdatedBy(s *string) *ProxyUpdateOne {
+	if s != nil {
+		puo.SetUpdatedBy(*s)
+	}
+	return puo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (puo *ProxyUpdateOne) ClearUpdatedBy() *ProxyUpdateOne {
+	puo.mutation.ClearUpdatedBy()
+	return puo
+}
+
 // SetRefID sets the "ref_id" field.
 func (puo *ProxyUpdateOne) SetRefID(s string) *ProxyUpdateOne {
 	puo.mutation.SetRefID(s)
@@ -298,6 +421,9 @@ func (puo *ProxyUpdateOne) Select(field string, fields ...string) *ProxyUpdateOn
 
 // Save executes the query and returns the updated Proxy entity.
 func (puo *ProxyUpdateOne) Save(ctx context.Context) (*Proxy, error) {
+	if err := puo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
 }
 
@@ -321,6 +447,18 @@ func (puo *ProxyUpdateOne) ExecX(ctx context.Context) {
 	if err := puo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (puo *ProxyUpdateOne) defaults() error {
+	if _, ok := puo.mutation.UpdatedAt(); !ok {
+		if proxy.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized proxy.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := proxy.UpdateDefaultUpdatedAt()
+		puo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (puo *ProxyUpdateOne) sqlSave(ctx context.Context) (_node *Proxy, err error) {
@@ -348,6 +486,21 @@ func (puo *ProxyUpdateOne) sqlSave(ctx context.Context) (_node *Proxy, err error
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := puo.mutation.CreatedBy(); ok {
+		_spec.SetField(proxy.FieldCreatedBy, field.TypeString, value)
+	}
+	if puo.mutation.CreatedByCleared() {
+		_spec.ClearField(proxy.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.UpdatedAt(); ok {
+		_spec.SetField(proxy.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := puo.mutation.UpdatedBy(); ok {
+		_spec.SetField(proxy.FieldUpdatedBy, field.TypeString, value)
+	}
+	if puo.mutation.UpdatedByCleared() {
+		_spec.ClearField(proxy.FieldUpdatedBy, field.TypeString)
 	}
 	if value, ok := puo.mutation.RefID(); ok {
 		_spec.SetField(proxy.FieldRefID, field.TypeString, value)

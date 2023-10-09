@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -25,6 +26,52 @@ type FavouriteUpdate struct {
 // Where appends a list predicates to the FavouriteUpdate builder.
 func (fu *FavouriteUpdate) Where(ps ...predicate.Favourite) *FavouriteUpdate {
 	fu.mutation.Where(ps...)
+	return fu
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (fu *FavouriteUpdate) SetCreatedBy(s string) *FavouriteUpdate {
+	fu.mutation.SetCreatedBy(s)
+	return fu
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (fu *FavouriteUpdate) SetNillableCreatedBy(s *string) *FavouriteUpdate {
+	if s != nil {
+		fu.SetCreatedBy(*s)
+	}
+	return fu
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (fu *FavouriteUpdate) ClearCreatedBy() *FavouriteUpdate {
+	fu.mutation.ClearCreatedBy()
+	return fu
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (fu *FavouriteUpdate) SetUpdatedAt(t time.Time) *FavouriteUpdate {
+	fu.mutation.SetUpdatedAt(t)
+	return fu
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (fu *FavouriteUpdate) SetUpdatedBy(s string) *FavouriteUpdate {
+	fu.mutation.SetUpdatedBy(s)
+	return fu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (fu *FavouriteUpdate) SetNillableUpdatedBy(s *string) *FavouriteUpdate {
+	if s != nil {
+		fu.SetUpdatedBy(*s)
+	}
+	return fu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (fu *FavouriteUpdate) ClearUpdatedBy() *FavouriteUpdate {
+	fu.mutation.ClearUpdatedBy()
 	return fu
 }
 
@@ -71,6 +118,9 @@ func (fu *FavouriteUpdate) RemoveProxies(p ...*Proxy) *FavouriteUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (fu *FavouriteUpdate) Save(ctx context.Context) (int, error) {
+	if err := fu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, fu.sqlSave, fu.mutation, fu.hooks)
 }
 
@@ -96,6 +146,18 @@ func (fu *FavouriteUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (fu *FavouriteUpdate) defaults() error {
+	if _, ok := fu.mutation.UpdatedAt(); !ok {
+		if favourite.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized favourite.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := favourite.UpdateDefaultUpdatedAt()
+		fu.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 func (fu *FavouriteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(favourite.Table, favourite.Columns, sqlgraph.NewFieldSpec(favourite.FieldID, field.TypeInt))
 	if ps := fu.mutation.predicates; len(ps) > 0 {
@@ -104,6 +166,21 @@ func (fu *FavouriteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := fu.mutation.CreatedBy(); ok {
+		_spec.SetField(favourite.FieldCreatedBy, field.TypeString, value)
+	}
+	if fu.mutation.CreatedByCleared() {
+		_spec.ClearField(favourite.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := fu.mutation.UpdatedAt(); ok {
+		_spec.SetField(favourite.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := fu.mutation.UpdatedBy(); ok {
+		_spec.SetField(favourite.FieldUpdatedBy, field.TypeString, value)
+	}
+	if fu.mutation.UpdatedByCleared() {
+		_spec.ClearField(favourite.FieldUpdatedBy, field.TypeString)
 	}
 	if fu.mutation.ProxiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -170,6 +247,52 @@ type FavouriteUpdateOne struct {
 	mutation *FavouriteMutation
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (fuo *FavouriteUpdateOne) SetCreatedBy(s string) *FavouriteUpdateOne {
+	fuo.mutation.SetCreatedBy(s)
+	return fuo
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (fuo *FavouriteUpdateOne) SetNillableCreatedBy(s *string) *FavouriteUpdateOne {
+	if s != nil {
+		fuo.SetCreatedBy(*s)
+	}
+	return fuo
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (fuo *FavouriteUpdateOne) ClearCreatedBy() *FavouriteUpdateOne {
+	fuo.mutation.ClearCreatedBy()
+	return fuo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (fuo *FavouriteUpdateOne) SetUpdatedAt(t time.Time) *FavouriteUpdateOne {
+	fuo.mutation.SetUpdatedAt(t)
+	return fuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (fuo *FavouriteUpdateOne) SetUpdatedBy(s string) *FavouriteUpdateOne {
+	fuo.mutation.SetUpdatedBy(s)
+	return fuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (fuo *FavouriteUpdateOne) SetNillableUpdatedBy(s *string) *FavouriteUpdateOne {
+	if s != nil {
+		fuo.SetUpdatedBy(*s)
+	}
+	return fuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (fuo *FavouriteUpdateOne) ClearUpdatedBy() *FavouriteUpdateOne {
+	fuo.mutation.ClearUpdatedBy()
+	return fuo
+}
+
 // AddProxyIDs adds the "proxies" edge to the Proxy entity by IDs.
 func (fuo *FavouriteUpdateOne) AddProxyIDs(ids ...int) *FavouriteUpdateOne {
 	fuo.mutation.AddProxyIDs(ids...)
@@ -226,6 +349,9 @@ func (fuo *FavouriteUpdateOne) Select(field string, fields ...string) *Favourite
 
 // Save executes the query and returns the updated Favourite entity.
 func (fuo *FavouriteUpdateOne) Save(ctx context.Context) (*Favourite, error) {
+	if err := fuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, fuo.sqlSave, fuo.mutation, fuo.hooks)
 }
 
@@ -249,6 +375,18 @@ func (fuo *FavouriteUpdateOne) ExecX(ctx context.Context) {
 	if err := fuo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// defaults sets the default values of the builder before save.
+func (fuo *FavouriteUpdateOne) defaults() error {
+	if _, ok := fuo.mutation.UpdatedAt(); !ok {
+		if favourite.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized favourite.UpdateDefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := favourite.UpdateDefaultUpdatedAt()
+		fuo.mutation.SetUpdatedAt(v)
+	}
+	return nil
 }
 
 func (fuo *FavouriteUpdateOne) sqlSave(ctx context.Context) (_node *Favourite, err error) {
@@ -276,6 +414,21 @@ func (fuo *FavouriteUpdateOne) sqlSave(ctx context.Context) (_node *Favourite, e
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := fuo.mutation.CreatedBy(); ok {
+		_spec.SetField(favourite.FieldCreatedBy, field.TypeString, value)
+	}
+	if fuo.mutation.CreatedByCleared() {
+		_spec.ClearField(favourite.FieldCreatedBy, field.TypeString)
+	}
+	if value, ok := fuo.mutation.UpdatedAt(); ok {
+		_spec.SetField(favourite.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if value, ok := fuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(favourite.FieldUpdatedBy, field.TypeString, value)
+	}
+	if fuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(favourite.FieldUpdatedBy, field.TypeString)
 	}
 	if fuo.mutation.ProxiesCleared() {
 		edge := &sqlgraph.EdgeSpec{

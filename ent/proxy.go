@@ -5,6 +5,7 @@ package ent
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -18,6 +19,14 @@ type Proxy struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	// CreatedBy holds the value of the "created_by" field.
+	CreatedBy string `json:"created_by,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// UpdatedBy holds the value of the "updated_by" field.
+	UpdatedBy string `json:"updated_by,omitempty"`
 	// Type holds the value of the "type" field.
 	Type proxy.Type `json:"type,omitempty"`
 	// RefID holds the value of the "ref_id" field.
@@ -78,8 +87,10 @@ func (*Proxy) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case proxy.FieldID:
 			values[i] = new(sql.NullInt64)
-		case proxy.FieldType, proxy.FieldRefID, proxy.FieldURL:
+		case proxy.FieldCreatedBy, proxy.FieldUpdatedBy, proxy.FieldType, proxy.FieldRefID, proxy.FieldURL:
 			values[i] = new(sql.NullString)
+		case proxy.FieldCreatedAt, proxy.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case proxy.ForeignKeys[0]: // favourite_proxies
 			values[i] = new(sql.NullInt64)
 		case proxy.ForeignKeys[1]: // personal_proxies
@@ -105,6 +116,30 @@ func (pr *Proxy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			pr.ID = int(value.Int64)
+		case proxy.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				pr.CreatedAt = value.Time
+			}
+		case proxy.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				pr.CreatedBy = value.String
+			}
+		case proxy.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				pr.UpdatedAt = value.Time
+			}
+		case proxy.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				pr.UpdatedBy = value.String
+			}
 		case proxy.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
@@ -183,6 +218,18 @@ func (pr *Proxy) String() string {
 	var builder strings.Builder
 	builder.WriteString("Proxy(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", pr.ID))
+	builder.WriteString("created_at=")
+	builder.WriteString(pr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(pr.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(pr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(pr.UpdatedBy)
+	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Type))
 	builder.WriteString(", ")

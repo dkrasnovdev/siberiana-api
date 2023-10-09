@@ -351,6 +351,10 @@ var (
 	// FavouritesColumns holds the columns for the "favourites" table.
 	FavouritesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Unique: true},
 	}
 	// FavouritesTable holds the schema information for the "favourites" table.
@@ -669,6 +673,10 @@ var (
 	// PersonalsColumns holds the columns for the "personals" table.
 	PersonalsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Unique: true},
 		{Name: "display_name", Type: field.TypeString},
 	}
@@ -828,6 +836,10 @@ var (
 	// ProxiesColumns holds the columns for the "proxies" table.
 	ProxiesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "type", Type: field.TypeEnum, Enums: []string{"artifacts", "books", "protected_area_pictures"}},
 		{Name: "ref_id", Type: field.TypeString},
 		{Name: "url", Type: field.TypeString},
@@ -842,13 +854,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "proxies_favourites_proxies",
-				Columns:    []*schema.Column{ProxiesColumns[4]},
+				Columns:    []*schema.Column{ProxiesColumns[8]},
 				RefColumns: []*schema.Column{FavouritesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "proxies_personals_proxies",
-				Columns:    []*schema.Column{ProxiesColumns[5]},
+				Columns:    []*schema.Column{ProxiesColumns[9]},
 				RefColumns: []*schema.Column{PersonalsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

@@ -39,6 +39,7 @@ func (r *mutationResolver) UpdateArt(ctx context.Context, id int, input ent.Upda
 func (r *mutationResolver) CreateArtGenre(ctx context.Context, input ent.CreateArtGenreInput) (*ent.ArtGenre, error) {
 	client := ent.FromContext(ctx)
 	return client.ArtGenre.Create().SetInput(input).Save(ctx)
+
 }
 
 // UpdateArtGenre is the resolver for the updateArtGenre field.
@@ -129,6 +130,18 @@ func (r *mutationResolver) CreateCulture(ctx context.Context, input ent.CreateCu
 func (r *mutationResolver) UpdateCulture(ctx context.Context, id int, input ent.UpdateCultureInput) (*ent.Culture, error) {
 	client := ent.FromContext(ctx)
 	return client.Culture.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// CreateFavourite is the resolver for the createFavourite field.
+func (r *mutationResolver) CreateFavourite(ctx context.Context, input ent.CreateFavouriteInput) (*ent.Favourite, error) {
+	client := ent.FromContext(ctx)
+	return client.Favourite.Create().SetInput(input).Save(ctx)
+}
+
+// UpdateFavourite is the resolver for the updateFavourite field.
+func (r *mutationResolver) UpdateFavourite(ctx context.Context, id int, input ent.UpdateFavouriteInput) (*ent.Favourite, error) {
+	client := ent.FromContext(ctx)
+	return client.Favourite.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
 // CreateDistrict is the resolver for the createDistrict field.
@@ -287,6 +300,18 @@ func (r *mutationResolver) UpdatePersonRole(ctx context.Context, id int, input e
 	return client.PersonRole.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// CreatePersonal is the resolver for the createPersonal field.
+func (r *mutationResolver) CreatePersonal(ctx context.Context, input ent.CreatePersonalInput) (*ent.Personal, error) {
+	client := ent.FromContext(ctx)
+	return client.Personal.Create().SetInput(input).Save(ctx)
+}
+
+// UpdatePersonal is the resolver for the updatePersonal field.
+func (r *mutationResolver) UpdatePersonal(ctx context.Context, id int, input ent.UpdatePersonalInput) (*ent.Personal, error) {
+	client := ent.FromContext(ctx)
+	return client.Personal.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
 // CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input ent.CreateProjectInput) (*ent.Project, error) {
 	client := ent.FromContext(ctx)
@@ -345,6 +370,18 @@ func (r *mutationResolver) CreateProtectedAreaPicture(ctx context.Context, input
 func (r *mutationResolver) UpdateProtectedAreaPicture(ctx context.Context, id int, input ent.UpdateProtectedAreaPictureInput) (*ent.ProtectedAreaPicture, error) {
 	client := ent.FromContext(ctx)
 	return client.ProtectedAreaPicture.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// CreateProxy is the resolver for the createProxy field.
+func (r *mutationResolver) CreateProxy(ctx context.Context, input ent.CreateProxyInput) (*ent.Proxy, error) {
+	client := ent.FromContext(ctx)
+	return client.Proxy.Create().SetInput(input).Save(ctx)
+}
+
+// UpdateProxy is the resolver for the updateProxy field.
+func (r *mutationResolver) UpdateProxy(ctx context.Context, id int, input ent.UpdateProxyInput) (*ent.Proxy, error) {
+	client := ent.FromContext(ctx)
+	return client.Proxy.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
 // CreatePublication is the resolver for the createPublication field.

@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -18,6 +19,62 @@ type PersonalCreate struct {
 	config
 	mutation *PersonalMutation
 	hooks    []Hook
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (pc *PersonalCreate) SetCreatedAt(t time.Time) *PersonalCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (pc *PersonalCreate) SetNillableCreatedAt(t *time.Time) *PersonalCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (pc *PersonalCreate) SetCreatedBy(s string) *PersonalCreate {
+	pc.mutation.SetCreatedBy(s)
+	return pc
+}
+
+// SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
+func (pc *PersonalCreate) SetNillableCreatedBy(s *string) *PersonalCreate {
+	if s != nil {
+		pc.SetCreatedBy(*s)
+	}
+	return pc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (pc *PersonalCreate) SetUpdatedAt(t time.Time) *PersonalCreate {
+	pc.mutation.SetUpdatedAt(t)
+	return pc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (pc *PersonalCreate) SetNillableUpdatedAt(t *time.Time) *PersonalCreate {
+	if t != nil {
+		pc.SetUpdatedAt(*t)
+	}
+	return pc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pc *PersonalCreate) SetUpdatedBy(s string) *PersonalCreate {
+	pc.mutation.SetUpdatedBy(s)
+	return pc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pc *PersonalCreate) SetNillableUpdatedBy(s *string) *PersonalCreate {
+	if s != nil {
+		pc.SetUpdatedBy(*s)
+	}
+	return pc
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -54,6 +111,9 @@ func (pc *PersonalCreate) Mutation() *PersonalMutation {
 
 // Save creates the Personal in the database.
 func (pc *PersonalCreate) Save(ctx context.Context) (*Personal, error) {
+	if err := pc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
@@ -79,8 +139,33 @@ func (pc *PersonalCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (pc *PersonalCreate) defaults() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		if personal.DefaultCreatedAt == nil {
+			return fmt.Errorf("ent: uninitialized personal.DefaultCreatedAt (forgotten import ent/runtime?)")
+		}
+		v := personal.DefaultCreatedAt()
+		pc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		if personal.DefaultUpdatedAt == nil {
+			return fmt.Errorf("ent: uninitialized personal.DefaultUpdatedAt (forgotten import ent/runtime?)")
+		}
+		v := personal.DefaultUpdatedAt()
+		pc.mutation.SetUpdatedAt(v)
+	}
+	return nil
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (pc *PersonalCreate) check() error {
+	if _, ok := pc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "Personal.created_at"`)}
+	}
+	if _, ok := pc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Personal.updated_at"`)}
+	}
 	if _, ok := pc.mutation.OwnerID(); !ok {
 		return &ValidationError{Name: "owner_id", err: errors.New(`ent: missing required field "Personal.owner_id"`)}
 	}
@@ -123,6 +208,22 @@ func (pc *PersonalCreate) createSpec() (*Personal, *sqlgraph.CreateSpec) {
 		_node = &Personal{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(personal.Table, sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt))
 	)
+	if value, ok := pc.mutation.CreatedAt(); ok {
+		_spec.SetField(personal.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := pc.mutation.CreatedBy(); ok {
+		_spec.SetField(personal.FieldCreatedBy, field.TypeString, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := pc.mutation.UpdatedAt(); ok {
+		_spec.SetField(personal.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := pc.mutation.UpdatedBy(); ok {
+		_spec.SetField(personal.FieldUpdatedBy, field.TypeString, value)
+		_node.UpdatedBy = value
+	}
 	if value, ok := pc.mutation.OwnerID(); ok {
 		_spec.SetField(personal.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -168,6 +269,7 @@ func (pcb *PersonalCreateBulk) Save(ctx context.Context) ([]*Personal, error) {
 	for i := range pcb.builders {
 		func(i int, root context.Context) {
 			builder := pcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*PersonalMutation)
 				if !ok {

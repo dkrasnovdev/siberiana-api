@@ -26,6 +26,7 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/collection
   - github.com/dkrasnovdev/siberiana-api/ent/culture
   - github.com/dkrasnovdev/siberiana-api/ent/district
+  - github.com/dkrasnovdev/siberiana-api/ent/favourite
   - github.com/dkrasnovdev/siberiana-api/ent/holder
   - github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility
   - github.com/dkrasnovdev/siberiana-api/ent/keyword
@@ -38,11 +39,13 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/period
   - github.com/dkrasnovdev/siberiana-api/ent/person
   - github.com/dkrasnovdev/siberiana-api/ent/personrole
+  - github.com/dkrasnovdev/siberiana-api/ent/personal
   - github.com/dkrasnovdev/siberiana-api/ent/project
   - github.com/dkrasnovdev/siberiana-api/ent/projecttype
   - github.com/dkrasnovdev/siberiana-api/ent/protectedarea
   - github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory
   - github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture
+  - github.com/dkrasnovdev/siberiana-api/ent/proxy
   - github.com/dkrasnovdev/siberiana-api/ent/publication
   - github.com/dkrasnovdev/siberiana-api/ent/publisher
   - github.com/dkrasnovdev/siberiana-api/ent/region
