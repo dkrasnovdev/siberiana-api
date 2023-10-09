@@ -133,16 +133,16 @@ func (mc *ModelCreate) SetNillableExternalLink(s *string) *ModelCreate {
 	return mc
 }
 
-// SetType sets the "type" field.
-func (mc *ModelCreate) SetType(m model.Type) *ModelCreate {
-	mc.mutation.SetType(m)
+// SetStatus sets the "status" field.
+func (mc *ModelCreate) SetStatus(m model.Status) *ModelCreate {
+	mc.mutation.SetStatus(m)
 	return mc
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (mc *ModelCreate) SetNillableType(m *model.Type) *ModelCreate {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (mc *ModelCreate) SetNillableStatus(m *model.Status) *ModelCreate {
 	if m != nil {
-		mc.SetType(*m)
+		mc.SetStatus(*m)
 	}
 	return mc
 }
@@ -213,9 +213,9 @@ func (mc *ModelCreate) defaults() error {
 		v := model.DefaultUpdatedAt()
 		mc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := mc.mutation.GetType(); !ok {
-		v := model.DefaultType
-		mc.mutation.SetType(v)
+	if _, ok := mc.mutation.Status(); !ok {
+		v := model.DefaultStatus
+		mc.mutation.SetStatus(v)
 	}
 	return nil
 }
@@ -228,9 +228,9 @@ func (mc *ModelCreate) check() error {
 	if _, ok := mc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Model.updated_at"`)}
 	}
-	if v, ok := mc.mutation.GetType(); ok {
-		if err := model.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Model.type": %w`, err)}
+	if v, ok := mc.mutation.Status(); ok {
+		if err := model.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Model.status": %w`, err)}
 		}
 	}
 	return nil
@@ -291,9 +291,9 @@ func (mc *ModelCreate) createSpec() (*Model, *sqlgraph.CreateSpec) {
 		_spec.SetField(model.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if value, ok := mc.mutation.GetType(); ok {
-		_spec.SetField(model.FieldType, field.TypeEnum, value)
-		_node.Type = value
+	if value, ok := mc.mutation.Status(); ok {
+		_spec.SetField(model.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if nodes := mc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

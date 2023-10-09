@@ -641,34 +641,34 @@ func ExternalLinkContainsFold(v string) predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
-// TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v Type) predicate.ProtectedAreaPicture {
-	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldType, v))
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v Status) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldEQ(FieldStatus, v))
 }
 
-// TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v Type) predicate.ProtectedAreaPicture {
-	return predicate.ProtectedAreaPicture(sql.FieldNEQ(FieldType, v))
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v Status) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNEQ(FieldStatus, v))
 }
 
-// TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...Type) predicate.ProtectedAreaPicture {
-	return predicate.ProtectedAreaPicture(sql.FieldIn(FieldType, vs...))
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...Status) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIn(FieldStatus, vs...))
 }
 
-// TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...Type) predicate.ProtectedAreaPicture {
-	return predicate.ProtectedAreaPicture(sql.FieldNotIn(FieldType, vs...))
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...Status) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotIn(FieldStatus, vs...))
 }
 
-// TypeIsNil applies the IsNil predicate on the "type" field.
-func TypeIsNil() predicate.ProtectedAreaPicture {
-	return predicate.ProtectedAreaPicture(sql.FieldIsNull(FieldType))
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldIsNull(FieldStatus))
 }
 
-// TypeNotNil applies the NotNil predicate on the "type" field.
-func TypeNotNil() predicate.ProtectedAreaPicture {
-	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldType))
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldStatus))
 }
 
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.

@@ -146,16 +146,16 @@ func (ac *ArtifactCreate) SetNillableExternalLink(s *string) *ArtifactCreate {
 	return ac
 }
 
-// SetType sets the "type" field.
-func (ac *ArtifactCreate) SetType(a artifact.Type) *ArtifactCreate {
-	ac.mutation.SetType(a)
+// SetStatus sets the "status" field.
+func (ac *ArtifactCreate) SetStatus(a artifact.Status) *ArtifactCreate {
+	ac.mutation.SetStatus(a)
 	return ac
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableType(a *artifact.Type) *ArtifactCreate {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableStatus(a *artifact.Status) *ArtifactCreate {
 	if a != nil {
-		ac.SetType(*a)
+		ac.SetStatus(*a)
 	}
 	return ac
 }
@@ -591,9 +591,9 @@ func (ac *ArtifactCreate) defaults() error {
 		v := artifact.DefaultUpdatedAt()
 		ac.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := ac.mutation.GetType(); !ok {
-		v := artifact.DefaultType
-		ac.mutation.SetType(v)
+	if _, ok := ac.mutation.Status(); !ok {
+		v := artifact.DefaultStatus
+		ac.mutation.SetStatus(v)
 	}
 	return nil
 }
@@ -606,9 +606,9 @@ func (ac *ArtifactCreate) check() error {
 	if _, ok := ac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Artifact.updated_at"`)}
 	}
-	if v, ok := ac.mutation.GetType(); ok {
-		if err := artifact.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Artifact.type": %w`, err)}
+	if v, ok := ac.mutation.Status(); ok {
+		if err := artifact.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Artifact.status": %w`, err)}
 		}
 	}
 	if _, ok := ac.mutation.CollectionID(); !ok {
@@ -672,9 +672,9 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if value, ok := ac.mutation.GetType(); ok {
-		_spec.SetField(artifact.FieldType, field.TypeEnum, value)
-		_node.Type = value
+	if value, ok := ac.mutation.Status(); ok {
+		_spec.SetField(artifact.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if value, ok := ac.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)

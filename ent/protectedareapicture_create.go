@@ -137,16 +137,16 @@ func (papc *ProtectedAreaPictureCreate) SetNillableExternalLink(s *string) *Prot
 	return papc
 }
 
-// SetType sets the "type" field.
-func (papc *ProtectedAreaPictureCreate) SetType(pr protectedareapicture.Type) *ProtectedAreaPictureCreate {
-	papc.mutation.SetType(pr)
+// SetStatus sets the "status" field.
+func (papc *ProtectedAreaPictureCreate) SetStatus(pr protectedareapicture.Status) *ProtectedAreaPictureCreate {
+	papc.mutation.SetStatus(pr)
 	return papc
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (papc *ProtectedAreaPictureCreate) SetNillableType(pr *protectedareapicture.Type) *ProtectedAreaPictureCreate {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableStatus(pr *protectedareapicture.Status) *ProtectedAreaPictureCreate {
 	if pr != nil {
-		papc.SetType(*pr)
+		papc.SetStatus(*pr)
 	}
 	return papc
 }
@@ -318,9 +318,9 @@ func (papc *ProtectedAreaPictureCreate) defaults() error {
 		v := protectedareapicture.DefaultUpdatedAt()
 		papc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := papc.mutation.GetType(); !ok {
-		v := protectedareapicture.DefaultType
-		papc.mutation.SetType(v)
+	if _, ok := papc.mutation.Status(); !ok {
+		v := protectedareapicture.DefaultStatus
+		papc.mutation.SetStatus(v)
 	}
 	return nil
 }
@@ -333,9 +333,9 @@ func (papc *ProtectedAreaPictureCreate) check() error {
 	if _, ok := papc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ProtectedAreaPicture.updated_at"`)}
 	}
-	if v, ok := papc.mutation.GetType(); ok {
-		if err := protectedareapicture.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "ProtectedAreaPicture.type": %w`, err)}
+	if v, ok := papc.mutation.Status(); ok {
+		if err := protectedareapicture.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "ProtectedAreaPicture.status": %w`, err)}
 		}
 	}
 	if _, ok := papc.mutation.CollectionID(); !ok {
@@ -399,9 +399,9 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 		_spec.SetField(protectedareapicture.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if value, ok := papc.mutation.GetType(); ok {
-		_spec.SetField(protectedareapicture.FieldType, field.TypeEnum, value)
-		_node.Type = value
+	if value, ok := papc.mutation.Status(); ok {
+		_spec.SetField(protectedareapicture.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if value, ok := papc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)

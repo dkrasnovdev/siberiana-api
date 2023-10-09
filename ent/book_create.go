@@ -139,16 +139,16 @@ func (bc *BookCreate) SetNillableExternalLink(s *string) *BookCreate {
 	return bc
 }
 
-// SetType sets the "type" field.
-func (bc *BookCreate) SetType(b book.Type) *BookCreate {
-	bc.mutation.SetType(b)
+// SetStatus sets the "status" field.
+func (bc *BookCreate) SetStatus(b book.Status) *BookCreate {
+	bc.mutation.SetStatus(b)
 	return bc
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (bc *BookCreate) SetNillableType(b *book.Type) *BookCreate {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (bc *BookCreate) SetNillableStatus(b *book.Status) *BookCreate {
 	if b != nil {
-		bc.SetType(*b)
+		bc.SetStatus(*b)
 	}
 	return bc
 }
@@ -357,9 +357,9 @@ func (bc *BookCreate) defaults() error {
 		v := book.DefaultUpdatedAt()
 		bc.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := bc.mutation.GetType(); !ok {
-		v := book.DefaultType
-		bc.mutation.SetType(v)
+	if _, ok := bc.mutation.Status(); !ok {
+		v := book.DefaultStatus
+		bc.mutation.SetStatus(v)
 	}
 	return nil
 }
@@ -372,9 +372,9 @@ func (bc *BookCreate) check() error {
 	if _, ok := bc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Book.updated_at"`)}
 	}
-	if v, ok := bc.mutation.GetType(); ok {
-		if err := book.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Book.type": %w`, err)}
+	if v, ok := bc.mutation.Status(); ok {
+		if err := book.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Book.status": %w`, err)}
 		}
 	}
 	if v, ok := bc.mutation.Year(); ok {
@@ -443,9 +443,9 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 		_spec.SetField(book.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if value, ok := bc.mutation.GetType(); ok {
-		_spec.SetField(book.FieldType, field.TypeEnum, value)
-		_node.Type = value
+	if value, ok := bc.mutation.Status(); ok {
+		_spec.SetField(book.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if value, ok := bc.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(book.FieldPrimaryImageURL, field.TypeString, value)

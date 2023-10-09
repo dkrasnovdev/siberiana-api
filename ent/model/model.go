@@ -34,8 +34,8 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
-	// FieldType holds the string denoting the type field in the database.
-	FieldType = "type"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// Table holds the table name of the model in the database.
@@ -60,7 +60,7 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
-	FieldType,
+	FieldStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -89,30 +89,30 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 )
 
-// Type defines the type for the "type" enum field.
-type Type string
+// Status defines the type for the "status" enum field.
+type Status string
 
-// TypeDraft is the default value of the Type enum.
-const DefaultType = TypeDraft
+// StatusDraft is the default value of the Status enum.
+const DefaultStatus = StatusDraft
 
-// Type values.
+// Status values.
 const (
-	TypeListed   Type = "listed"
-	TypeUnlisted Type = "unlisted"
-	TypeDraft    Type = "draft"
+	StatusListed   Status = "listed"
+	StatusUnlisted Status = "unlisted"
+	StatusDraft    Status = "draft"
 )
 
-func (_type Type) String() string {
-	return string(_type)
+func (s Status) String() string {
+	return string(s)
 }
 
-// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
-func TypeValidator(_type Type) error {
-	switch _type {
-	case TypeListed, TypeUnlisted, TypeDraft:
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s Status) error {
+	switch s {
+	case StatusListed, StatusUnlisted, StatusDraft:
 		return nil
 	default:
-		return fmt.Errorf("model: invalid enum value for type field: %q", _type)
+		return fmt.Errorf("model: invalid enum value for status field: %q", s)
 	}
 }
 
@@ -164,9 +164,9 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
-// ByType orders the results by the type field.
-func ByType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldType, opts...).ToFunc()
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.
@@ -191,19 +191,19 @@ func newArtifactsStep() *sqlgraph.Step {
 }
 
 // MarshalGQL implements graphql.Marshaler interface.
-func (e Type) MarshalGQL(w io.Writer) {
+func (e Status) MarshalGQL(w io.Writer) {
 	io.WriteString(w, strconv.Quote(e.String()))
 }
 
 // UnmarshalGQL implements graphql.Unmarshaler interface.
-func (e *Type) UnmarshalGQL(val interface{}) error {
+func (e *Status) UnmarshalGQL(val interface{}) error {
 	str, ok := val.(string)
 	if !ok {
 		return fmt.Errorf("enum %T must be a string", val)
 	}
-	*e = Type(str)
-	if err := TypeValidator(*e); err != nil {
-		return fmt.Errorf("%s is not a valid Type", str)
+	*e = Status(str)
+	if err := StatusValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Status", str)
 	}
 	return nil
 }

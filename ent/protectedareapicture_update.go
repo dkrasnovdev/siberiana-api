@@ -160,23 +160,23 @@ func (papu *ProtectedAreaPictureUpdate) ClearExternalLink() *ProtectedAreaPictur
 	return papu
 }
 
-// SetType sets the "type" field.
-func (papu *ProtectedAreaPictureUpdate) SetType(pr protectedareapicture.Type) *ProtectedAreaPictureUpdate {
-	papu.mutation.SetType(pr)
+// SetStatus sets the "status" field.
+func (papu *ProtectedAreaPictureUpdate) SetStatus(pr protectedareapicture.Status) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetStatus(pr)
 	return papu
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (papu *ProtectedAreaPictureUpdate) SetNillableType(pr *protectedareapicture.Type) *ProtectedAreaPictureUpdate {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableStatus(pr *protectedareapicture.Status) *ProtectedAreaPictureUpdate {
 	if pr != nil {
-		papu.SetType(*pr)
+		papu.SetStatus(*pr)
 	}
 	return papu
 }
 
-// ClearType clears the value of the "type" field.
-func (papu *ProtectedAreaPictureUpdate) ClearType() *ProtectedAreaPictureUpdate {
-	papu.mutation.ClearType()
+// ClearStatus clears the value of the "status" field.
+func (papu *ProtectedAreaPictureUpdate) ClearStatus() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearStatus()
 	return papu
 }
 
@@ -399,9 +399,9 @@ func (papu *ProtectedAreaPictureUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (papu *ProtectedAreaPictureUpdate) check() error {
-	if v, ok := papu.mutation.GetType(); ok {
-		if err := protectedareapicture.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "ProtectedAreaPicture.type": %w`, err)}
+	if v, ok := papu.mutation.Status(); ok {
+		if err := protectedareapicture.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "ProtectedAreaPicture.status": %w`, err)}
 		}
 	}
 	if _, ok := papu.mutation.CollectionID(); papu.mutation.CollectionCleared() && !ok {
@@ -461,11 +461,11 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 	if papu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedareapicture.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := papu.mutation.GetType(); ok {
-		_spec.SetField(protectedareapicture.FieldType, field.TypeEnum, value)
+	if value, ok := papu.mutation.Status(); ok {
+		_spec.SetField(protectedareapicture.FieldStatus, field.TypeEnum, value)
 	}
-	if papu.mutation.TypeCleared() {
-		_spec.ClearField(protectedareapicture.FieldType, field.TypeEnum)
+	if papu.mutation.StatusCleared() {
+		_spec.ClearField(protectedareapicture.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := papu.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)
@@ -758,23 +758,23 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearExternalLink() *ProtectedAreaPi
 	return papuo
 }
 
-// SetType sets the "type" field.
-func (papuo *ProtectedAreaPictureUpdateOne) SetType(pr protectedareapicture.Type) *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.SetType(pr)
+// SetStatus sets the "status" field.
+func (papuo *ProtectedAreaPictureUpdateOne) SetStatus(pr protectedareapicture.Status) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetStatus(pr)
 	return papuo
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (papuo *ProtectedAreaPictureUpdateOne) SetNillableType(pr *protectedareapicture.Type) *ProtectedAreaPictureUpdateOne {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableStatus(pr *protectedareapicture.Status) *ProtectedAreaPictureUpdateOne {
 	if pr != nil {
-		papuo.SetType(*pr)
+		papuo.SetStatus(*pr)
 	}
 	return papuo
 }
 
-// ClearType clears the value of the "type" field.
-func (papuo *ProtectedAreaPictureUpdateOne) ClearType() *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.ClearType()
+// ClearStatus clears the value of the "status" field.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearStatus() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearStatus()
 	return papuo
 }
 
@@ -1010,9 +1010,9 @@ func (papuo *ProtectedAreaPictureUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (papuo *ProtectedAreaPictureUpdateOne) check() error {
-	if v, ok := papuo.mutation.GetType(); ok {
-		if err := protectedareapicture.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "ProtectedAreaPicture.type": %w`, err)}
+	if v, ok := papuo.mutation.Status(); ok {
+		if err := protectedareapicture.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "ProtectedAreaPicture.status": %w`, err)}
 		}
 	}
 	if _, ok := papuo.mutation.CollectionID(); papuo.mutation.CollectionCleared() && !ok {
@@ -1089,11 +1089,11 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 	if papuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(protectedareapicture.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := papuo.mutation.GetType(); ok {
-		_spec.SetField(protectedareapicture.FieldType, field.TypeEnum, value)
+	if value, ok := papuo.mutation.Status(); ok {
+		_spec.SetField(protectedareapicture.FieldStatus, field.TypeEnum, value)
 	}
-	if papuo.mutation.TypeCleared() {
-		_spec.ClearField(protectedareapicture.FieldType, field.TypeEnum)
+	if papuo.mutation.StatusCleared() {
+		_spec.ClearField(protectedareapicture.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := papuo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(protectedareapicture.FieldPrimaryImageURL, field.TypeString, value)

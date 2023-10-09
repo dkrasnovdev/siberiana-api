@@ -625,34 +625,34 @@ func ExternalLinkContainsFold(v string) predicate.Model {
 	return predicate.Model(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
-// TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v Type) predicate.Model {
-	return predicate.Model(sql.FieldEQ(FieldType, v))
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v Status) predicate.Model {
+	return predicate.Model(sql.FieldEQ(FieldStatus, v))
 }
 
-// TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v Type) predicate.Model {
-	return predicate.Model(sql.FieldNEQ(FieldType, v))
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v Status) predicate.Model {
+	return predicate.Model(sql.FieldNEQ(FieldStatus, v))
 }
 
-// TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...Type) predicate.Model {
-	return predicate.Model(sql.FieldIn(FieldType, vs...))
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...Status) predicate.Model {
+	return predicate.Model(sql.FieldIn(FieldStatus, vs...))
 }
 
-// TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...Type) predicate.Model {
-	return predicate.Model(sql.FieldNotIn(FieldType, vs...))
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...Status) predicate.Model {
+	return predicate.Model(sql.FieldNotIn(FieldStatus, vs...))
 }
 
-// TypeIsNil applies the IsNil predicate on the "type" field.
-func TypeIsNil() predicate.Model {
-	return predicate.Model(sql.FieldIsNull(FieldType))
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.Model {
+	return predicate.Model(sql.FieldIsNull(FieldStatus))
 }
 
-// TypeNotNil applies the NotNil predicate on the "type" field.
-func TypeNotNil() predicate.Model {
-	return predicate.Model(sql.FieldNotNull(FieldType))
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.Model {
+	return predicate.Model(sql.FieldNotNull(FieldStatus))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

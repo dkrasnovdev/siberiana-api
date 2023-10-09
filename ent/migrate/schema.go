@@ -75,7 +75,7 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
@@ -182,7 +182,7 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "files", Type: field.TypeJSON, Nullable: true},
@@ -503,7 +503,7 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
 	}
 	// ModelsTable holds the schema information for the "models" table.
 	ModelsTable = &schema.Table{
@@ -791,7 +791,7 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "shooting_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},

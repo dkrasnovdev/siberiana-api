@@ -675,34 +675,34 @@ func ExternalLinkContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
-// TypeEQ applies the EQ predicate on the "type" field.
-func TypeEQ(v Type) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldType, v))
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v Status) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldStatus, v))
 }
 
-// TypeNEQ applies the NEQ predicate on the "type" field.
-func TypeNEQ(v Type) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNEQ(FieldType, v))
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v Status) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldStatus, v))
 }
 
-// TypeIn applies the In predicate on the "type" field.
-func TypeIn(vs ...Type) predicate.Artifact {
-	return predicate.Artifact(sql.FieldIn(FieldType, vs...))
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...Status) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldStatus, vs...))
 }
 
-// TypeNotIn applies the NotIn predicate on the "type" field.
-func TypeNotIn(vs ...Type) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotIn(FieldType, vs...))
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...Status) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldStatus, vs...))
 }
 
-// TypeIsNil applies the IsNil predicate on the "type" field.
-func TypeIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldType))
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldStatus))
 }
 
-// TypeNotNil applies the NotNil predicate on the "type" field.
-func TypeNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldType))
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldStatus))
 }
 
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.

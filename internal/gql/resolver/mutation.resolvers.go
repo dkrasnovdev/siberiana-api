@@ -39,7 +39,6 @@ func (r *mutationResolver) UpdateArt(ctx context.Context, id int, input ent.Upda
 func (r *mutationResolver) CreateArtGenre(ctx context.Context, input ent.CreateArtGenreInput) (*ent.ArtGenre, error) {
 	client := ent.FromContext(ctx)
 	return client.ArtGenre.Create().SetInput(input).Save(ctx)
-
 }
 
 // UpdateArtGenre is the resolver for the updateArtGenre field.

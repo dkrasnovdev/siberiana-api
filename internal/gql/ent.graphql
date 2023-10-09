@@ -560,7 +560,7 @@ type Artifact implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  type: ArtifactType
+  status: ArtifactStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
   deletedAt: Time
@@ -616,8 +616,8 @@ enum ArtifactOrderField {
   UPDATED_AT
   DISPLAY_NAME
 }
-"""ArtifactType is enum for the field type"""
-enum ArtifactType @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/artifact.Type") {
+"""ArtifactStatus is enum for the field status"""
+enum ArtifactStatus @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/artifact.Status") {
   listed
   unlisted
   draft
@@ -753,13 +753,13 @@ input ArtifactWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """type field predicates"""
-  type: ArtifactType
-  typeNEQ: ArtifactType
-  typeIn: [ArtifactType!]
-  typeNotIn: [ArtifactType!]
-  typeIsNil: Boolean
-  typeNotNil: Boolean
+  """status field predicates"""
+  status: ArtifactStatus
+  statusNEQ: ArtifactStatus
+  statusIn: [ArtifactStatus!]
+  statusNotIn: [ArtifactStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -1088,7 +1088,7 @@ type Book implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  type: BookType
+  status: BookStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
   files: [String!]
@@ -1306,8 +1306,8 @@ enum BookOrderField {
   UPDATED_AT
   DISPLAY_NAME
 }
-"""BookType is enum for the field type"""
-enum BookType @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/book.Type") {
+"""BookStatus is enum for the field status"""
+enum BookStatus @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/book.Status") {
   listed
   unlisted
   draft
@@ -1443,13 +1443,13 @@ input BookWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """type field predicates"""
-  type: BookType
-  typeNEQ: BookType
-  typeIn: [BookType!]
-  typeNotIn: [BookType!]
-  typeIsNil: Boolean
-  typeNotNil: Boolean
+  """status field predicates"""
+  status: BookStatus
+  statusNEQ: BookStatus
+  statusIn: [BookStatus!]
+  statusNotIn: [BookStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -2184,7 +2184,7 @@ input CreateArtifactInput {
   abbreviation: String
   description: String
   externalLink: String
-  type: ArtifactType
+  status: ArtifactStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
   deletedAt: Time
@@ -2239,7 +2239,7 @@ input CreateBookInput {
   abbreviation: String
   description: String
   externalLink: String
-  type: BookType
+  status: BookStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
   files: [String!]
@@ -2449,7 +2449,7 @@ input CreateModelInput {
   abbreviation: String
   description: String
   externalLink: String
-  type: ModelType
+  status: ModelStatus
   artifactIDs: [ID!]
 }
 """
@@ -2664,7 +2664,7 @@ input CreateProtectedAreaPictureInput {
   abbreviation: String
   description: String
   externalLink: String
-  type: ProtectedAreaPictureType
+  status: ProtectedAreaPictureStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
@@ -4184,7 +4184,7 @@ type Model implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  type: ModelType
+  status: ModelStatus
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -4216,8 +4216,8 @@ enum ModelOrderField {
   UPDATED_AT
   DISPLAY_NAME
 }
-"""ModelType is enum for the field type"""
-enum ModelType @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/model.Type") {
+"""ModelStatus is enum for the field status"""
+enum ModelStatus @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/model.Status") {
   listed
   unlisted
   draft
@@ -4353,13 +4353,13 @@ input ModelWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """type field predicates"""
-  type: ModelType
-  typeNEQ: ModelType
-  typeIn: [ModelType!]
-  typeNotIn: [ModelType!]
-  typeIsNil: Boolean
-  typeNotNil: Boolean
+  """status field predicates"""
+  status: ModelStatus
+  statusNEQ: ModelStatus
+  statusIn: [ModelStatus!]
+  statusNotIn: [ModelStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -6424,7 +6424,7 @@ type ProtectedAreaPicture implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  type: ProtectedAreaPictureType
+  status: ProtectedAreaPictureStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
   shootingDate: Time
@@ -6463,8 +6463,8 @@ enum ProtectedAreaPictureOrderField {
   UPDATED_AT
   DISPLAY_NAME
 }
-"""ProtectedAreaPictureType is enum for the field type"""
-enum ProtectedAreaPictureType @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture.Type") {
+"""ProtectedAreaPictureStatus is enum for the field status"""
+enum ProtectedAreaPictureStatus @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture.Status") {
   listed
   unlisted
   draft
@@ -6600,13 +6600,13 @@ input ProtectedAreaPictureWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """type field predicates"""
-  type: ProtectedAreaPictureType
-  typeNEQ: ProtectedAreaPictureType
-  typeIn: [ProtectedAreaPictureType!]
-  typeNotIn: [ProtectedAreaPictureType!]
-  typeIsNil: Boolean
-  typeNotNil: Boolean
+  """status field predicates"""
+  status: ProtectedAreaPictureStatus
+  statusNEQ: ProtectedAreaPictureStatus
+  statusIn: [ProtectedAreaPictureStatus!]
+  statusNotIn: [ProtectedAreaPictureStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -8982,8 +8982,8 @@ input UpdateArtifactInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  type: ArtifactType
-  clearType: Boolean
+  status: ArtifactStatus
+  clearStatus: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -9081,8 +9081,8 @@ input UpdateBookInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  type: BookType
-  clearType: Boolean
+  status: BookStatus
+  clearStatus: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
@@ -9411,8 +9411,8 @@ input UpdateModelInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  type: ModelType
-  clearType: Boolean
+  status: ModelStatus
+  clearStatus: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9755,8 +9755,8 @@ input UpdateProtectedAreaPictureInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  type: ProtectedAreaPictureType
-  clearType: Boolean
+  status: ProtectedAreaPictureStatus
+  clearStatus: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]

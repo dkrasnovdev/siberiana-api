@@ -155,23 +155,23 @@ func (mu *ModelUpdate) ClearExternalLink() *ModelUpdate {
 	return mu
 }
 
-// SetType sets the "type" field.
-func (mu *ModelUpdate) SetType(m model.Type) *ModelUpdate {
-	mu.mutation.SetType(m)
+// SetStatus sets the "status" field.
+func (mu *ModelUpdate) SetStatus(m model.Status) *ModelUpdate {
+	mu.mutation.SetStatus(m)
 	return mu
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (mu *ModelUpdate) SetNillableType(m *model.Type) *ModelUpdate {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (mu *ModelUpdate) SetNillableStatus(m *model.Status) *ModelUpdate {
 	if m != nil {
-		mu.SetType(*m)
+		mu.SetStatus(*m)
 	}
 	return mu
 }
 
-// ClearType clears the value of the "type" field.
-func (mu *ModelUpdate) ClearType() *ModelUpdate {
-	mu.mutation.ClearType()
+// ClearStatus clears the value of the "status" field.
+func (mu *ModelUpdate) ClearStatus() *ModelUpdate {
+	mu.mutation.ClearStatus()
 	return mu
 }
 
@@ -260,9 +260,9 @@ func (mu *ModelUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (mu *ModelUpdate) check() error {
-	if v, ok := mu.mutation.GetType(); ok {
-		if err := model.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Model.type": %w`, err)}
+	if v, ok := mu.mutation.Status(); ok {
+		if err := model.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Model.status": %w`, err)}
 		}
 	}
 	return nil
@@ -319,11 +319,11 @@ func (mu *ModelUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if mu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(model.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := mu.mutation.GetType(); ok {
-		_spec.SetField(model.FieldType, field.TypeEnum, value)
+	if value, ok := mu.mutation.Status(); ok {
+		_spec.SetField(model.FieldStatus, field.TypeEnum, value)
 	}
-	if mu.mutation.TypeCleared() {
-		_spec.ClearField(model.FieldType, field.TypeEnum)
+	if mu.mutation.StatusCleared() {
+		_spec.ClearField(model.FieldStatus, field.TypeEnum)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -516,23 +516,23 @@ func (muo *ModelUpdateOne) ClearExternalLink() *ModelUpdateOne {
 	return muo
 }
 
-// SetType sets the "type" field.
-func (muo *ModelUpdateOne) SetType(m model.Type) *ModelUpdateOne {
-	muo.mutation.SetType(m)
+// SetStatus sets the "status" field.
+func (muo *ModelUpdateOne) SetStatus(m model.Status) *ModelUpdateOne {
+	muo.mutation.SetStatus(m)
 	return muo
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (muo *ModelUpdateOne) SetNillableType(m *model.Type) *ModelUpdateOne {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (muo *ModelUpdateOne) SetNillableStatus(m *model.Status) *ModelUpdateOne {
 	if m != nil {
-		muo.SetType(*m)
+		muo.SetStatus(*m)
 	}
 	return muo
 }
 
-// ClearType clears the value of the "type" field.
-func (muo *ModelUpdateOne) ClearType() *ModelUpdateOne {
-	muo.mutation.ClearType()
+// ClearStatus clears the value of the "status" field.
+func (muo *ModelUpdateOne) ClearStatus() *ModelUpdateOne {
+	muo.mutation.ClearStatus()
 	return muo
 }
 
@@ -634,9 +634,9 @@ func (muo *ModelUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (muo *ModelUpdateOne) check() error {
-	if v, ok := muo.mutation.GetType(); ok {
-		if err := model.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Model.type": %w`, err)}
+	if v, ok := muo.mutation.Status(); ok {
+		if err := model.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Model.status": %w`, err)}
 		}
 	}
 	return nil
@@ -710,11 +710,11 @@ func (muo *ModelUpdateOne) sqlSave(ctx context.Context) (_node *Model, err error
 	if muo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(model.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := muo.mutation.GetType(); ok {
-		_spec.SetField(model.FieldType, field.TypeEnum, value)
+	if value, ok := muo.mutation.Status(); ok {
+		_spec.SetField(model.FieldStatus, field.TypeEnum, value)
 	}
-	if muo.mutation.TypeCleared() {
-		_spec.ClearField(model.FieldType, field.TypeEnum)
+	if muo.mutation.StatusCleared() {
+		_spec.ClearField(model.FieldStatus, field.TypeEnum)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

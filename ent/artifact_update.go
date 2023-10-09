@@ -169,23 +169,23 @@ func (au *ArtifactUpdate) ClearExternalLink() *ArtifactUpdate {
 	return au
 }
 
-// SetType sets the "type" field.
-func (au *ArtifactUpdate) SetType(a artifact.Type) *ArtifactUpdate {
-	au.mutation.SetType(a)
+// SetStatus sets the "status" field.
+func (au *ArtifactUpdate) SetStatus(a artifact.Status) *ArtifactUpdate {
+	au.mutation.SetStatus(a)
 	return au
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableType(a *artifact.Type) *ArtifactUpdate {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableStatus(a *artifact.Status) *ArtifactUpdate {
 	if a != nil {
-		au.SetType(*a)
+		au.SetStatus(*a)
 	}
 	return au
 }
 
-// ClearType clears the value of the "type" field.
-func (au *ArtifactUpdate) ClearType() *ArtifactUpdate {
-	au.mutation.ClearType()
+// ClearStatus clears the value of the "status" field.
+func (au *ArtifactUpdate) ClearStatus() *ArtifactUpdate {
+	au.mutation.ClearStatus()
 	return au
 }
 
@@ -864,9 +864,9 @@ func (au *ArtifactUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (au *ArtifactUpdate) check() error {
-	if v, ok := au.mutation.GetType(); ok {
-		if err := artifact.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Artifact.type": %w`, err)}
+	if v, ok := au.mutation.Status(); ok {
+		if err := artifact.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Artifact.status": %w`, err)}
 		}
 	}
 	if _, ok := au.mutation.CollectionID(); au.mutation.CollectionCleared() && !ok {
@@ -926,11 +926,11 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := au.mutation.GetType(); ok {
-		_spec.SetField(artifact.FieldType, field.TypeEnum, value)
+	if value, ok := au.mutation.Status(); ok {
+		_spec.SetField(artifact.FieldStatus, field.TypeEnum, value)
 	}
-	if au.mutation.TypeCleared() {
-		_spec.ClearField(artifact.FieldType, field.TypeEnum)
+	if au.mutation.StatusCleared() {
+		_spec.ClearField(artifact.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := au.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)
@@ -1651,23 +1651,23 @@ func (auo *ArtifactUpdateOne) ClearExternalLink() *ArtifactUpdateOne {
 	return auo
 }
 
-// SetType sets the "type" field.
-func (auo *ArtifactUpdateOne) SetType(a artifact.Type) *ArtifactUpdateOne {
-	auo.mutation.SetType(a)
+// SetStatus sets the "status" field.
+func (auo *ArtifactUpdateOne) SetStatus(a artifact.Status) *ArtifactUpdateOne {
+	auo.mutation.SetStatus(a)
 	return auo
 }
 
-// SetNillableType sets the "type" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableType(a *artifact.Type) *ArtifactUpdateOne {
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableStatus(a *artifact.Status) *ArtifactUpdateOne {
 	if a != nil {
-		auo.SetType(*a)
+		auo.SetStatus(*a)
 	}
 	return auo
 }
 
-// ClearType clears the value of the "type" field.
-func (auo *ArtifactUpdateOne) ClearType() *ArtifactUpdateOne {
-	auo.mutation.ClearType()
+// ClearStatus clears the value of the "status" field.
+func (auo *ArtifactUpdateOne) ClearStatus() *ArtifactUpdateOne {
+	auo.mutation.ClearStatus()
 	return auo
 }
 
@@ -2359,9 +2359,9 @@ func (auo *ArtifactUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (auo *ArtifactUpdateOne) check() error {
-	if v, ok := auo.mutation.GetType(); ok {
-		if err := artifact.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Artifact.type": %w`, err)}
+	if v, ok := auo.mutation.Status(); ok {
+		if err := artifact.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Artifact.status": %w`, err)}
 		}
 	}
 	if _, ok := auo.mutation.CollectionID(); auo.mutation.CollectionCleared() && !ok {
@@ -2438,11 +2438,11 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(artifact.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := auo.mutation.GetType(); ok {
-		_spec.SetField(artifact.FieldType, field.TypeEnum, value)
+	if value, ok := auo.mutation.Status(); ok {
+		_spec.SetField(artifact.FieldStatus, field.TypeEnum, value)
 	}
-	if auo.mutation.TypeCleared() {
-		_spec.ClearField(artifact.FieldType, field.TypeEnum)
+	if auo.mutation.StatusCleared() {
+		_spec.ClearField(artifact.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := auo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(artifact.FieldPrimaryImageURL, field.TypeString, value)

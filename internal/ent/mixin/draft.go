@@ -12,7 +12,7 @@ type DraftMixin struct {
 
 func (DraftMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.Enum("type").
+		field.Enum("status").
 			Values("listed", "unlisted", "draft").
 			Optional().
 			Default("draft"),

@@ -471,7 +471,7 @@ type CreateArtifactInput struct {
 	Abbreviation          *string
 	Description           *string
 	ExternalLink          *string
-	Type                  *artifact.Type
+	Status                *artifact.Status
 	PrimaryImageURL       *string
 	AdditionalImagesUrls  []string
 	DeletedAt             *time.Time
@@ -525,8 +525,8 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -624,8 +624,8 @@ type UpdateArtifactInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
-	ClearType                  bool
-	Type                       *artifact.Type
+	ClearStatus                bool
+	Status                     *artifact.Status
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -725,11 +725,11 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearType {
-		m.ClearType()
+	if i.ClearStatus {
+		m.ClearStatus()
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -923,7 +923,7 @@ type CreateBookInput struct {
 	Abbreviation         *string
 	Description          *string
 	ExternalLink         *string
-	Type                 *book.Type
+	Status               *book.Status
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	Files                []string
@@ -963,8 +963,8 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -1020,8 +1020,8 @@ type UpdateBookInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
-	ClearType                  bool
-	Type                       *book.Type
+	ClearStatus                bool
+	Status                     *book.Status
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -1091,11 +1091,11 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearType {
-		m.ClearType()
+	if i.ClearStatus {
+		m.ClearStatus()
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
@@ -3037,7 +3037,7 @@ type CreateModelInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
-	Type         *model.Type
+	Status       *model.Status
 	ArtifactIDs  []int
 }
 
@@ -3067,8 +3067,8 @@ func (i *CreateModelInput) Mutate(m *ModelMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -3096,8 +3096,8 @@ type UpdateModelInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearType         bool
-	Type              *model.Type
+	ClearStatus       bool
+	Status            *model.Status
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -3144,11 +3144,11 @@ func (i *UpdateModelInput) Mutate(m *ModelMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearType {
-		m.ClearType()
+	if i.ClearStatus {
+		m.ClearStatus()
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -5099,7 +5099,7 @@ type CreateProtectedAreaPictureInput struct {
 	Abbreviation         *string
 	Description          *string
 	ExternalLink         *string
-	Type                 *protectedareapicture.Type
+	Status               *protectedareapicture.Status
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
 	ShootingDate         *time.Time
@@ -5136,8 +5136,8 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
@@ -5184,8 +5184,8 @@ type UpdateProtectedAreaPictureInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
-	ClearType                  bool
-	Type                       *protectedareapicture.Type
+	ClearStatus                bool
+	Status                     *protectedareapicture.Status
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
@@ -5245,11 +5245,11 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearType {
-		m.ClearType()
+	if i.ClearStatus {
+		m.ClearStatus()
 	}
-	if v := i.Type; v != nil {
-		m.SetType(*v)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
