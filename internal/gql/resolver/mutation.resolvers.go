@@ -23,6 +23,16 @@ func (r *mutationResolver) UpdateArtifact(ctx context.Context, id int, input ent
 	return client.Artifact.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// UpdateArtifact is the resolver for the updateArtifact field.
+func (r *mutationResolver) DeleteArtifact(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Artifact.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Artifact has been deleted", nil
+}
+
 // CreateArt is the resolver for the createArt field.
 func (r *mutationResolver) CreateArt(ctx context.Context, input ent.CreateArtInput) (*ent.Art, error) {
 	client := ent.FromContext(ctx)
