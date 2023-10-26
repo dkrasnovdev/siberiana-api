@@ -727,6 +727,36 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldDimensions)
 				fieldSeen[artifact.FieldDimensions] = struct{}{}
 			}
+		case "height":
+			if _, ok := fieldSeen[artifact.FieldHeight]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldHeight)
+				fieldSeen[artifact.FieldHeight] = struct{}{}
+			}
+		case "width":
+			if _, ok := fieldSeen[artifact.FieldWidth]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldWidth)
+				fieldSeen[artifact.FieldWidth] = struct{}{}
+			}
+		case "length":
+			if _, ok := fieldSeen[artifact.FieldLength]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldLength)
+				fieldSeen[artifact.FieldLength] = struct{}{}
+			}
+		case "depth":
+			if _, ok := fieldSeen[artifact.FieldDepth]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDepth)
+				fieldSeen[artifact.FieldDepth] = struct{}{}
+			}
+		case "diameter":
+			if _, ok := fieldSeen[artifact.FieldDiameter]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDiameter)
+				fieldSeen[artifact.FieldDiameter] = struct{}{}
+			}
+		case "weight":
+			if _, ok := fieldSeen[artifact.FieldWeight]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldWeight)
+				fieldSeen[artifact.FieldWeight] = struct{}{}
+			}
 		case "chemicalComposition":
 			if _, ok := fieldSeen[artifact.FieldChemicalComposition]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldChemicalComposition)
@@ -741,11 +771,6 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[artifact.FieldTypology]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldTypology)
 				fieldSeen[artifact.FieldTypology] = struct{}{}
-			}
-		case "weight":
-			if _, ok := fieldSeen[artifact.FieldWeight]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldWeight)
-				fieldSeen[artifact.FieldWeight] = struct{}{}
 			}
 		case "admissionDate":
 			if _, ok := fieldSeen[artifact.FieldAdmissionDate]; !ok {

@@ -2114,6 +2114,83 @@ type ArtifactWhereInput struct {
 	DimensionsEqualFold    *string  `json:"dimensionsEqualFold,omitempty"`
 	DimensionsContainsFold *string  `json:"dimensionsContainsFold,omitempty"`
 
+	// "height" field predicates.
+	Height       *float64  `json:"height,omitempty"`
+	HeightNEQ    *float64  `json:"heightNEQ,omitempty"`
+	HeightIn     []float64 `json:"heightIn,omitempty"`
+	HeightNotIn  []float64 `json:"heightNotIn,omitempty"`
+	HeightGT     *float64  `json:"heightGT,omitempty"`
+	HeightGTE    *float64  `json:"heightGTE,omitempty"`
+	HeightLT     *float64  `json:"heightLT,omitempty"`
+	HeightLTE    *float64  `json:"heightLTE,omitempty"`
+	HeightIsNil  bool      `json:"heightIsNil,omitempty"`
+	HeightNotNil bool      `json:"heightNotNil,omitempty"`
+
+	// "width" field predicates.
+	Width       *float64  `json:"width,omitempty"`
+	WidthNEQ    *float64  `json:"widthNEQ,omitempty"`
+	WidthIn     []float64 `json:"widthIn,omitempty"`
+	WidthNotIn  []float64 `json:"widthNotIn,omitempty"`
+	WidthGT     *float64  `json:"widthGT,omitempty"`
+	WidthGTE    *float64  `json:"widthGTE,omitempty"`
+	WidthLT     *float64  `json:"widthLT,omitempty"`
+	WidthLTE    *float64  `json:"widthLTE,omitempty"`
+	WidthIsNil  bool      `json:"widthIsNil,omitempty"`
+	WidthNotNil bool      `json:"widthNotNil,omitempty"`
+
+	// "length" field predicates.
+	Length       *float64  `json:"length,omitempty"`
+	LengthNEQ    *float64  `json:"lengthNEQ,omitempty"`
+	LengthIn     []float64 `json:"lengthIn,omitempty"`
+	LengthNotIn  []float64 `json:"lengthNotIn,omitempty"`
+	LengthGT     *float64  `json:"lengthGT,omitempty"`
+	LengthGTE    *float64  `json:"lengthGTE,omitempty"`
+	LengthLT     *float64  `json:"lengthLT,omitempty"`
+	LengthLTE    *float64  `json:"lengthLTE,omitempty"`
+	LengthIsNil  bool      `json:"lengthIsNil,omitempty"`
+	LengthNotNil bool      `json:"lengthNotNil,omitempty"`
+
+	// "depth" field predicates.
+	Depth       *float64  `json:"depth,omitempty"`
+	DepthNEQ    *float64  `json:"depthNEQ,omitempty"`
+	DepthIn     []float64 `json:"depthIn,omitempty"`
+	DepthNotIn  []float64 `json:"depthNotIn,omitempty"`
+	DepthGT     *float64  `json:"depthGT,omitempty"`
+	DepthGTE    *float64  `json:"depthGTE,omitempty"`
+	DepthLT     *float64  `json:"depthLT,omitempty"`
+	DepthLTE    *float64  `json:"depthLTE,omitempty"`
+	DepthIsNil  bool      `json:"depthIsNil,omitempty"`
+	DepthNotNil bool      `json:"depthNotNil,omitempty"`
+
+	// "diameter" field predicates.
+	Diameter       *float64  `json:"diameter,omitempty"`
+	DiameterNEQ    *float64  `json:"diameterNEQ,omitempty"`
+	DiameterIn     []float64 `json:"diameterIn,omitempty"`
+	DiameterNotIn  []float64 `json:"diameterNotIn,omitempty"`
+	DiameterGT     *float64  `json:"diameterGT,omitempty"`
+	DiameterGTE    *float64  `json:"diameterGTE,omitempty"`
+	DiameterLT     *float64  `json:"diameterLT,omitempty"`
+	DiameterLTE    *float64  `json:"diameterLTE,omitempty"`
+	DiameterIsNil  bool      `json:"diameterIsNil,omitempty"`
+	DiameterNotNil bool      `json:"diameterNotNil,omitempty"`
+
+	// "weight" field predicates.
+	Weight             *string  `json:"weight,omitempty"`
+	WeightNEQ          *string  `json:"weightNEQ,omitempty"`
+	WeightIn           []string `json:"weightIn,omitempty"`
+	WeightNotIn        []string `json:"weightNotIn,omitempty"`
+	WeightGT           *string  `json:"weightGT,omitempty"`
+	WeightGTE          *string  `json:"weightGTE,omitempty"`
+	WeightLT           *string  `json:"weightLT,omitempty"`
+	WeightLTE          *string  `json:"weightLTE,omitempty"`
+	WeightContains     *string  `json:"weightContains,omitempty"`
+	WeightHasPrefix    *string  `json:"weightHasPrefix,omitempty"`
+	WeightHasSuffix    *string  `json:"weightHasSuffix,omitempty"`
+	WeightIsNil        bool     `json:"weightIsNil,omitempty"`
+	WeightNotNil       bool     `json:"weightNotNil,omitempty"`
+	WeightEqualFold    *string  `json:"weightEqualFold,omitempty"`
+	WeightContainsFold *string  `json:"weightContainsFold,omitempty"`
+
 	// "chemical_composition" field predicates.
 	ChemicalComposition             *string  `json:"chemicalComposition,omitempty"`
 	ChemicalCompositionNEQ          *string  `json:"chemicalCompositionNEQ,omitempty"`
@@ -2164,23 +2241,6 @@ type ArtifactWhereInput struct {
 	TypologyNotNil       bool     `json:"typologyNotNil,omitempty"`
 	TypologyEqualFold    *string  `json:"typologyEqualFold,omitempty"`
 	TypologyContainsFold *string  `json:"typologyContainsFold,omitempty"`
-
-	// "weight" field predicates.
-	Weight             *string  `json:"weight,omitempty"`
-	WeightNEQ          *string  `json:"weightNEQ,omitempty"`
-	WeightIn           []string `json:"weightIn,omitempty"`
-	WeightNotIn        []string `json:"weightNotIn,omitempty"`
-	WeightGT           *string  `json:"weightGT,omitempty"`
-	WeightGTE          *string  `json:"weightGTE,omitempty"`
-	WeightLT           *string  `json:"weightLT,omitempty"`
-	WeightLTE          *string  `json:"weightLTE,omitempty"`
-	WeightContains     *string  `json:"weightContains,omitempty"`
-	WeightHasPrefix    *string  `json:"weightHasPrefix,omitempty"`
-	WeightHasSuffix    *string  `json:"weightHasSuffix,omitempty"`
-	WeightIsNil        bool     `json:"weightIsNil,omitempty"`
-	WeightNotNil       bool     `json:"weightNotNil,omitempty"`
-	WeightEqualFold    *string  `json:"weightEqualFold,omitempty"`
-	WeightContainsFold *string  `json:"weightContainsFold,omitempty"`
 
 	// "admission_date" field predicates.
 	AdmissionDate       *time.Time  `json:"admissionDate,omitempty"`
@@ -2888,6 +2948,201 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	if i.DimensionsContainsFold != nil {
 		predicates = append(predicates, artifact.DimensionsContainsFold(*i.DimensionsContainsFold))
 	}
+	if i.Height != nil {
+		predicates = append(predicates, artifact.HeightEQ(*i.Height))
+	}
+	if i.HeightNEQ != nil {
+		predicates = append(predicates, artifact.HeightNEQ(*i.HeightNEQ))
+	}
+	if len(i.HeightIn) > 0 {
+		predicates = append(predicates, artifact.HeightIn(i.HeightIn...))
+	}
+	if len(i.HeightNotIn) > 0 {
+		predicates = append(predicates, artifact.HeightNotIn(i.HeightNotIn...))
+	}
+	if i.HeightGT != nil {
+		predicates = append(predicates, artifact.HeightGT(*i.HeightGT))
+	}
+	if i.HeightGTE != nil {
+		predicates = append(predicates, artifact.HeightGTE(*i.HeightGTE))
+	}
+	if i.HeightLT != nil {
+		predicates = append(predicates, artifact.HeightLT(*i.HeightLT))
+	}
+	if i.HeightLTE != nil {
+		predicates = append(predicates, artifact.HeightLTE(*i.HeightLTE))
+	}
+	if i.HeightIsNil {
+		predicates = append(predicates, artifact.HeightIsNil())
+	}
+	if i.HeightNotNil {
+		predicates = append(predicates, artifact.HeightNotNil())
+	}
+	if i.Width != nil {
+		predicates = append(predicates, artifact.WidthEQ(*i.Width))
+	}
+	if i.WidthNEQ != nil {
+		predicates = append(predicates, artifact.WidthNEQ(*i.WidthNEQ))
+	}
+	if len(i.WidthIn) > 0 {
+		predicates = append(predicates, artifact.WidthIn(i.WidthIn...))
+	}
+	if len(i.WidthNotIn) > 0 {
+		predicates = append(predicates, artifact.WidthNotIn(i.WidthNotIn...))
+	}
+	if i.WidthGT != nil {
+		predicates = append(predicates, artifact.WidthGT(*i.WidthGT))
+	}
+	if i.WidthGTE != nil {
+		predicates = append(predicates, artifact.WidthGTE(*i.WidthGTE))
+	}
+	if i.WidthLT != nil {
+		predicates = append(predicates, artifact.WidthLT(*i.WidthLT))
+	}
+	if i.WidthLTE != nil {
+		predicates = append(predicates, artifact.WidthLTE(*i.WidthLTE))
+	}
+	if i.WidthIsNil {
+		predicates = append(predicates, artifact.WidthIsNil())
+	}
+	if i.WidthNotNil {
+		predicates = append(predicates, artifact.WidthNotNil())
+	}
+	if i.Length != nil {
+		predicates = append(predicates, artifact.LengthEQ(*i.Length))
+	}
+	if i.LengthNEQ != nil {
+		predicates = append(predicates, artifact.LengthNEQ(*i.LengthNEQ))
+	}
+	if len(i.LengthIn) > 0 {
+		predicates = append(predicates, artifact.LengthIn(i.LengthIn...))
+	}
+	if len(i.LengthNotIn) > 0 {
+		predicates = append(predicates, artifact.LengthNotIn(i.LengthNotIn...))
+	}
+	if i.LengthGT != nil {
+		predicates = append(predicates, artifact.LengthGT(*i.LengthGT))
+	}
+	if i.LengthGTE != nil {
+		predicates = append(predicates, artifact.LengthGTE(*i.LengthGTE))
+	}
+	if i.LengthLT != nil {
+		predicates = append(predicates, artifact.LengthLT(*i.LengthLT))
+	}
+	if i.LengthLTE != nil {
+		predicates = append(predicates, artifact.LengthLTE(*i.LengthLTE))
+	}
+	if i.LengthIsNil {
+		predicates = append(predicates, artifact.LengthIsNil())
+	}
+	if i.LengthNotNil {
+		predicates = append(predicates, artifact.LengthNotNil())
+	}
+	if i.Depth != nil {
+		predicates = append(predicates, artifact.DepthEQ(*i.Depth))
+	}
+	if i.DepthNEQ != nil {
+		predicates = append(predicates, artifact.DepthNEQ(*i.DepthNEQ))
+	}
+	if len(i.DepthIn) > 0 {
+		predicates = append(predicates, artifact.DepthIn(i.DepthIn...))
+	}
+	if len(i.DepthNotIn) > 0 {
+		predicates = append(predicates, artifact.DepthNotIn(i.DepthNotIn...))
+	}
+	if i.DepthGT != nil {
+		predicates = append(predicates, artifact.DepthGT(*i.DepthGT))
+	}
+	if i.DepthGTE != nil {
+		predicates = append(predicates, artifact.DepthGTE(*i.DepthGTE))
+	}
+	if i.DepthLT != nil {
+		predicates = append(predicates, artifact.DepthLT(*i.DepthLT))
+	}
+	if i.DepthLTE != nil {
+		predicates = append(predicates, artifact.DepthLTE(*i.DepthLTE))
+	}
+	if i.DepthIsNil {
+		predicates = append(predicates, artifact.DepthIsNil())
+	}
+	if i.DepthNotNil {
+		predicates = append(predicates, artifact.DepthNotNil())
+	}
+	if i.Diameter != nil {
+		predicates = append(predicates, artifact.DiameterEQ(*i.Diameter))
+	}
+	if i.DiameterNEQ != nil {
+		predicates = append(predicates, artifact.DiameterNEQ(*i.DiameterNEQ))
+	}
+	if len(i.DiameterIn) > 0 {
+		predicates = append(predicates, artifact.DiameterIn(i.DiameterIn...))
+	}
+	if len(i.DiameterNotIn) > 0 {
+		predicates = append(predicates, artifact.DiameterNotIn(i.DiameterNotIn...))
+	}
+	if i.DiameterGT != nil {
+		predicates = append(predicates, artifact.DiameterGT(*i.DiameterGT))
+	}
+	if i.DiameterGTE != nil {
+		predicates = append(predicates, artifact.DiameterGTE(*i.DiameterGTE))
+	}
+	if i.DiameterLT != nil {
+		predicates = append(predicates, artifact.DiameterLT(*i.DiameterLT))
+	}
+	if i.DiameterLTE != nil {
+		predicates = append(predicates, artifact.DiameterLTE(*i.DiameterLTE))
+	}
+	if i.DiameterIsNil {
+		predicates = append(predicates, artifact.DiameterIsNil())
+	}
+	if i.DiameterNotNil {
+		predicates = append(predicates, artifact.DiameterNotNil())
+	}
+	if i.Weight != nil {
+		predicates = append(predicates, artifact.WeightEQ(*i.Weight))
+	}
+	if i.WeightNEQ != nil {
+		predicates = append(predicates, artifact.WeightNEQ(*i.WeightNEQ))
+	}
+	if len(i.WeightIn) > 0 {
+		predicates = append(predicates, artifact.WeightIn(i.WeightIn...))
+	}
+	if len(i.WeightNotIn) > 0 {
+		predicates = append(predicates, artifact.WeightNotIn(i.WeightNotIn...))
+	}
+	if i.WeightGT != nil {
+		predicates = append(predicates, artifact.WeightGT(*i.WeightGT))
+	}
+	if i.WeightGTE != nil {
+		predicates = append(predicates, artifact.WeightGTE(*i.WeightGTE))
+	}
+	if i.WeightLT != nil {
+		predicates = append(predicates, artifact.WeightLT(*i.WeightLT))
+	}
+	if i.WeightLTE != nil {
+		predicates = append(predicates, artifact.WeightLTE(*i.WeightLTE))
+	}
+	if i.WeightContains != nil {
+		predicates = append(predicates, artifact.WeightContains(*i.WeightContains))
+	}
+	if i.WeightHasPrefix != nil {
+		predicates = append(predicates, artifact.WeightHasPrefix(*i.WeightHasPrefix))
+	}
+	if i.WeightHasSuffix != nil {
+		predicates = append(predicates, artifact.WeightHasSuffix(*i.WeightHasSuffix))
+	}
+	if i.WeightIsNil {
+		predicates = append(predicates, artifact.WeightIsNil())
+	}
+	if i.WeightNotNil {
+		predicates = append(predicates, artifact.WeightNotNil())
+	}
+	if i.WeightEqualFold != nil {
+		predicates = append(predicates, artifact.WeightEqualFold(*i.WeightEqualFold))
+	}
+	if i.WeightContainsFold != nil {
+		predicates = append(predicates, artifact.WeightContainsFold(*i.WeightContainsFold))
+	}
 	if i.ChemicalComposition != nil {
 		predicates = append(predicates, artifact.ChemicalCompositionEQ(*i.ChemicalComposition))
 	}
@@ -3022,51 +3277,6 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 	}
 	if i.TypologyContainsFold != nil {
 		predicates = append(predicates, artifact.TypologyContainsFold(*i.TypologyContainsFold))
-	}
-	if i.Weight != nil {
-		predicates = append(predicates, artifact.WeightEQ(*i.Weight))
-	}
-	if i.WeightNEQ != nil {
-		predicates = append(predicates, artifact.WeightNEQ(*i.WeightNEQ))
-	}
-	if len(i.WeightIn) > 0 {
-		predicates = append(predicates, artifact.WeightIn(i.WeightIn...))
-	}
-	if len(i.WeightNotIn) > 0 {
-		predicates = append(predicates, artifact.WeightNotIn(i.WeightNotIn...))
-	}
-	if i.WeightGT != nil {
-		predicates = append(predicates, artifact.WeightGT(*i.WeightGT))
-	}
-	if i.WeightGTE != nil {
-		predicates = append(predicates, artifact.WeightGTE(*i.WeightGTE))
-	}
-	if i.WeightLT != nil {
-		predicates = append(predicates, artifact.WeightLT(*i.WeightLT))
-	}
-	if i.WeightLTE != nil {
-		predicates = append(predicates, artifact.WeightLTE(*i.WeightLTE))
-	}
-	if i.WeightContains != nil {
-		predicates = append(predicates, artifact.WeightContains(*i.WeightContains))
-	}
-	if i.WeightHasPrefix != nil {
-		predicates = append(predicates, artifact.WeightHasPrefix(*i.WeightHasPrefix))
-	}
-	if i.WeightHasSuffix != nil {
-		predicates = append(predicates, artifact.WeightHasSuffix(*i.WeightHasSuffix))
-	}
-	if i.WeightIsNil {
-		predicates = append(predicates, artifact.WeightIsNil())
-	}
-	if i.WeightNotNil {
-		predicates = append(predicates, artifact.WeightNotNil())
-	}
-	if i.WeightEqualFold != nil {
-		predicates = append(predicates, artifact.WeightEqualFold(*i.WeightEqualFold))
-	}
-	if i.WeightContainsFold != nil {
-		predicates = append(predicates, artifact.WeightContainsFold(*i.WeightContainsFold))
 	}
 	if i.AdmissionDate != nil {
 		predicates = append(predicates, artifact.AdmissionDateEQ(*i.AdmissionDate))

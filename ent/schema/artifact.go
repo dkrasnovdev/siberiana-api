@@ -58,10 +58,15 @@ func (Artifact) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("dating").Optional(),
 		field.String("dimensions").Optional(),
+		field.Float("height").Optional(),
+		field.Float("width").Optional(),
+		field.Float("length").Optional(),
+		field.Float("depth").Optional(),
+		field.Float("diameter").Optional(),
+		field.String("weight").Optional(),
 		field.String("chemical_composition").Optional(),
 		field.String("number").Optional(),
 		field.String("typology").Optional(),
-		field.String("weight").Optional(),
 		field.Time("admission_date").
 			Optional().
 			SchemaType(map[string]string{

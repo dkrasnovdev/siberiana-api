@@ -306,6 +306,161 @@ func (au *ArtifactUpdate) ClearDimensions() *ArtifactUpdate {
 	return au
 }
 
+// SetHeight sets the "height" field.
+func (au *ArtifactUpdate) SetHeight(f float64) *ArtifactUpdate {
+	au.mutation.ResetHeight()
+	au.mutation.SetHeight(f)
+	return au
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableHeight(f *float64) *ArtifactUpdate {
+	if f != nil {
+		au.SetHeight(*f)
+	}
+	return au
+}
+
+// AddHeight adds f to the "height" field.
+func (au *ArtifactUpdate) AddHeight(f float64) *ArtifactUpdate {
+	au.mutation.AddHeight(f)
+	return au
+}
+
+// ClearHeight clears the value of the "height" field.
+func (au *ArtifactUpdate) ClearHeight() *ArtifactUpdate {
+	au.mutation.ClearHeight()
+	return au
+}
+
+// SetWidth sets the "width" field.
+func (au *ArtifactUpdate) SetWidth(f float64) *ArtifactUpdate {
+	au.mutation.ResetWidth()
+	au.mutation.SetWidth(f)
+	return au
+}
+
+// SetNillableWidth sets the "width" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableWidth(f *float64) *ArtifactUpdate {
+	if f != nil {
+		au.SetWidth(*f)
+	}
+	return au
+}
+
+// AddWidth adds f to the "width" field.
+func (au *ArtifactUpdate) AddWidth(f float64) *ArtifactUpdate {
+	au.mutation.AddWidth(f)
+	return au
+}
+
+// ClearWidth clears the value of the "width" field.
+func (au *ArtifactUpdate) ClearWidth() *ArtifactUpdate {
+	au.mutation.ClearWidth()
+	return au
+}
+
+// SetLength sets the "length" field.
+func (au *ArtifactUpdate) SetLength(f float64) *ArtifactUpdate {
+	au.mutation.ResetLength()
+	au.mutation.SetLength(f)
+	return au
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableLength(f *float64) *ArtifactUpdate {
+	if f != nil {
+		au.SetLength(*f)
+	}
+	return au
+}
+
+// AddLength adds f to the "length" field.
+func (au *ArtifactUpdate) AddLength(f float64) *ArtifactUpdate {
+	au.mutation.AddLength(f)
+	return au
+}
+
+// ClearLength clears the value of the "length" field.
+func (au *ArtifactUpdate) ClearLength() *ArtifactUpdate {
+	au.mutation.ClearLength()
+	return au
+}
+
+// SetDepth sets the "depth" field.
+func (au *ArtifactUpdate) SetDepth(f float64) *ArtifactUpdate {
+	au.mutation.ResetDepth()
+	au.mutation.SetDepth(f)
+	return au
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDepth(f *float64) *ArtifactUpdate {
+	if f != nil {
+		au.SetDepth(*f)
+	}
+	return au
+}
+
+// AddDepth adds f to the "depth" field.
+func (au *ArtifactUpdate) AddDepth(f float64) *ArtifactUpdate {
+	au.mutation.AddDepth(f)
+	return au
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (au *ArtifactUpdate) ClearDepth() *ArtifactUpdate {
+	au.mutation.ClearDepth()
+	return au
+}
+
+// SetDiameter sets the "diameter" field.
+func (au *ArtifactUpdate) SetDiameter(f float64) *ArtifactUpdate {
+	au.mutation.ResetDiameter()
+	au.mutation.SetDiameter(f)
+	return au
+}
+
+// SetNillableDiameter sets the "diameter" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDiameter(f *float64) *ArtifactUpdate {
+	if f != nil {
+		au.SetDiameter(*f)
+	}
+	return au
+}
+
+// AddDiameter adds f to the "diameter" field.
+func (au *ArtifactUpdate) AddDiameter(f float64) *ArtifactUpdate {
+	au.mutation.AddDiameter(f)
+	return au
+}
+
+// ClearDiameter clears the value of the "diameter" field.
+func (au *ArtifactUpdate) ClearDiameter() *ArtifactUpdate {
+	au.mutation.ClearDiameter()
+	return au
+}
+
+// SetWeight sets the "weight" field.
+func (au *ArtifactUpdate) SetWeight(s string) *ArtifactUpdate {
+	au.mutation.SetWeight(s)
+	return au
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableWeight(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetWeight(*s)
+	}
+	return au
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (au *ArtifactUpdate) ClearWeight() *ArtifactUpdate {
+	au.mutation.ClearWeight()
+	return au
+}
+
 // SetChemicalComposition sets the "chemical_composition" field.
 func (au *ArtifactUpdate) SetChemicalComposition(s string) *ArtifactUpdate {
 	au.mutation.SetChemicalComposition(s)
@@ -363,26 +518,6 @@ func (au *ArtifactUpdate) SetNillableTypology(s *string) *ArtifactUpdate {
 // ClearTypology clears the value of the "typology" field.
 func (au *ArtifactUpdate) ClearTypology() *ArtifactUpdate {
 	au.mutation.ClearTypology()
-	return au
-}
-
-// SetWeight sets the "weight" field.
-func (au *ArtifactUpdate) SetWeight(s string) *ArtifactUpdate {
-	au.mutation.SetWeight(s)
-	return au
-}
-
-// SetNillableWeight sets the "weight" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableWeight(s *string) *ArtifactUpdate {
-	if s != nil {
-		au.SetWeight(*s)
-	}
-	return au
-}
-
-// ClearWeight clears the value of the "weight" field.
-func (au *ArtifactUpdate) ClearWeight() *ArtifactUpdate {
-	au.mutation.ClearWeight()
 	return au
 }
 
@@ -936,6 +1071,57 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.DimensionsCleared() {
 		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
 	}
+	if value, ok := au.mutation.Height(); ok {
+		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedHeight(); ok {
+		_spec.AddField(artifact.FieldHeight, field.TypeFloat64, value)
+	}
+	if au.mutation.HeightCleared() {
+		_spec.ClearField(artifact.FieldHeight, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Width(); ok {
+		_spec.SetField(artifact.FieldWidth, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedWidth(); ok {
+		_spec.AddField(artifact.FieldWidth, field.TypeFloat64, value)
+	}
+	if au.mutation.WidthCleared() {
+		_spec.ClearField(artifact.FieldWidth, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Length(); ok {
+		_spec.SetField(artifact.FieldLength, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedLength(); ok {
+		_spec.AddField(artifact.FieldLength, field.TypeFloat64, value)
+	}
+	if au.mutation.LengthCleared() {
+		_spec.ClearField(artifact.FieldLength, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Depth(); ok {
+		_spec.SetField(artifact.FieldDepth, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedDepth(); ok {
+		_spec.AddField(artifact.FieldDepth, field.TypeFloat64, value)
+	}
+	if au.mutation.DepthCleared() {
+		_spec.ClearField(artifact.FieldDepth, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Diameter(); ok {
+		_spec.SetField(artifact.FieldDiameter, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedDiameter(); ok {
+		_spec.AddField(artifact.FieldDiameter, field.TypeFloat64, value)
+	}
+	if au.mutation.DiameterCleared() {
+		_spec.ClearField(artifact.FieldDiameter, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Weight(); ok {
+		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
+	}
+	if au.mutation.WeightCleared() {
+		_spec.ClearField(artifact.FieldWeight, field.TypeString)
+	}
 	if value, ok := au.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 	}
@@ -953,12 +1139,6 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.TypologyCleared() {
 		_spec.ClearField(artifact.FieldTypology, field.TypeString)
-	}
-	if value, ok := au.mutation.Weight(); ok {
-		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
-	}
-	if au.mutation.WeightCleared() {
-		_spec.ClearField(artifact.FieldWeight, field.TypeString)
 	}
 	if value, ok := au.mutation.AdmissionDate(); ok {
 		_spec.SetField(artifact.FieldAdmissionDate, field.TypeTime, value)
@@ -1707,6 +1887,161 @@ func (auo *ArtifactUpdateOne) ClearDimensions() *ArtifactUpdateOne {
 	return auo
 }
 
+// SetHeight sets the "height" field.
+func (auo *ArtifactUpdateOne) SetHeight(f float64) *ArtifactUpdateOne {
+	auo.mutation.ResetHeight()
+	auo.mutation.SetHeight(f)
+	return auo
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableHeight(f *float64) *ArtifactUpdateOne {
+	if f != nil {
+		auo.SetHeight(*f)
+	}
+	return auo
+}
+
+// AddHeight adds f to the "height" field.
+func (auo *ArtifactUpdateOne) AddHeight(f float64) *ArtifactUpdateOne {
+	auo.mutation.AddHeight(f)
+	return auo
+}
+
+// ClearHeight clears the value of the "height" field.
+func (auo *ArtifactUpdateOne) ClearHeight() *ArtifactUpdateOne {
+	auo.mutation.ClearHeight()
+	return auo
+}
+
+// SetWidth sets the "width" field.
+func (auo *ArtifactUpdateOne) SetWidth(f float64) *ArtifactUpdateOne {
+	auo.mutation.ResetWidth()
+	auo.mutation.SetWidth(f)
+	return auo
+}
+
+// SetNillableWidth sets the "width" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableWidth(f *float64) *ArtifactUpdateOne {
+	if f != nil {
+		auo.SetWidth(*f)
+	}
+	return auo
+}
+
+// AddWidth adds f to the "width" field.
+func (auo *ArtifactUpdateOne) AddWidth(f float64) *ArtifactUpdateOne {
+	auo.mutation.AddWidth(f)
+	return auo
+}
+
+// ClearWidth clears the value of the "width" field.
+func (auo *ArtifactUpdateOne) ClearWidth() *ArtifactUpdateOne {
+	auo.mutation.ClearWidth()
+	return auo
+}
+
+// SetLength sets the "length" field.
+func (auo *ArtifactUpdateOne) SetLength(f float64) *ArtifactUpdateOne {
+	auo.mutation.ResetLength()
+	auo.mutation.SetLength(f)
+	return auo
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableLength(f *float64) *ArtifactUpdateOne {
+	if f != nil {
+		auo.SetLength(*f)
+	}
+	return auo
+}
+
+// AddLength adds f to the "length" field.
+func (auo *ArtifactUpdateOne) AddLength(f float64) *ArtifactUpdateOne {
+	auo.mutation.AddLength(f)
+	return auo
+}
+
+// ClearLength clears the value of the "length" field.
+func (auo *ArtifactUpdateOne) ClearLength() *ArtifactUpdateOne {
+	auo.mutation.ClearLength()
+	return auo
+}
+
+// SetDepth sets the "depth" field.
+func (auo *ArtifactUpdateOne) SetDepth(f float64) *ArtifactUpdateOne {
+	auo.mutation.ResetDepth()
+	auo.mutation.SetDepth(f)
+	return auo
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDepth(f *float64) *ArtifactUpdateOne {
+	if f != nil {
+		auo.SetDepth(*f)
+	}
+	return auo
+}
+
+// AddDepth adds f to the "depth" field.
+func (auo *ArtifactUpdateOne) AddDepth(f float64) *ArtifactUpdateOne {
+	auo.mutation.AddDepth(f)
+	return auo
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (auo *ArtifactUpdateOne) ClearDepth() *ArtifactUpdateOne {
+	auo.mutation.ClearDepth()
+	return auo
+}
+
+// SetDiameter sets the "diameter" field.
+func (auo *ArtifactUpdateOne) SetDiameter(f float64) *ArtifactUpdateOne {
+	auo.mutation.ResetDiameter()
+	auo.mutation.SetDiameter(f)
+	return auo
+}
+
+// SetNillableDiameter sets the "diameter" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDiameter(f *float64) *ArtifactUpdateOne {
+	if f != nil {
+		auo.SetDiameter(*f)
+	}
+	return auo
+}
+
+// AddDiameter adds f to the "diameter" field.
+func (auo *ArtifactUpdateOne) AddDiameter(f float64) *ArtifactUpdateOne {
+	auo.mutation.AddDiameter(f)
+	return auo
+}
+
+// ClearDiameter clears the value of the "diameter" field.
+func (auo *ArtifactUpdateOne) ClearDiameter() *ArtifactUpdateOne {
+	auo.mutation.ClearDiameter()
+	return auo
+}
+
+// SetWeight sets the "weight" field.
+func (auo *ArtifactUpdateOne) SetWeight(s string) *ArtifactUpdateOne {
+	auo.mutation.SetWeight(s)
+	return auo
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableWeight(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetWeight(*s)
+	}
+	return auo
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (auo *ArtifactUpdateOne) ClearWeight() *ArtifactUpdateOne {
+	auo.mutation.ClearWeight()
+	return auo
+}
+
 // SetChemicalComposition sets the "chemical_composition" field.
 func (auo *ArtifactUpdateOne) SetChemicalComposition(s string) *ArtifactUpdateOne {
 	auo.mutation.SetChemicalComposition(s)
@@ -1764,26 +2099,6 @@ func (auo *ArtifactUpdateOne) SetNillableTypology(s *string) *ArtifactUpdateOne 
 // ClearTypology clears the value of the "typology" field.
 func (auo *ArtifactUpdateOne) ClearTypology() *ArtifactUpdateOne {
 	auo.mutation.ClearTypology()
-	return auo
-}
-
-// SetWeight sets the "weight" field.
-func (auo *ArtifactUpdateOne) SetWeight(s string) *ArtifactUpdateOne {
-	auo.mutation.SetWeight(s)
-	return auo
-}
-
-// SetNillableWeight sets the "weight" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableWeight(s *string) *ArtifactUpdateOne {
-	if s != nil {
-		auo.SetWeight(*s)
-	}
-	return auo
-}
-
-// ClearWeight clears the value of the "weight" field.
-func (auo *ArtifactUpdateOne) ClearWeight() *ArtifactUpdateOne {
-	auo.mutation.ClearWeight()
 	return auo
 }
 
@@ -2367,6 +2682,57 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.DimensionsCleared() {
 		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
 	}
+	if value, ok := auo.mutation.Height(); ok {
+		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedHeight(); ok {
+		_spec.AddField(artifact.FieldHeight, field.TypeFloat64, value)
+	}
+	if auo.mutation.HeightCleared() {
+		_spec.ClearField(artifact.FieldHeight, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Width(); ok {
+		_spec.SetField(artifact.FieldWidth, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedWidth(); ok {
+		_spec.AddField(artifact.FieldWidth, field.TypeFloat64, value)
+	}
+	if auo.mutation.WidthCleared() {
+		_spec.ClearField(artifact.FieldWidth, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Length(); ok {
+		_spec.SetField(artifact.FieldLength, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedLength(); ok {
+		_spec.AddField(artifact.FieldLength, field.TypeFloat64, value)
+	}
+	if auo.mutation.LengthCleared() {
+		_spec.ClearField(artifact.FieldLength, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Depth(); ok {
+		_spec.SetField(artifact.FieldDepth, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedDepth(); ok {
+		_spec.AddField(artifact.FieldDepth, field.TypeFloat64, value)
+	}
+	if auo.mutation.DepthCleared() {
+		_spec.ClearField(artifact.FieldDepth, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Diameter(); ok {
+		_spec.SetField(artifact.FieldDiameter, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedDiameter(); ok {
+		_spec.AddField(artifact.FieldDiameter, field.TypeFloat64, value)
+	}
+	if auo.mutation.DiameterCleared() {
+		_spec.ClearField(artifact.FieldDiameter, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Weight(); ok {
+		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
+	}
+	if auo.mutation.WeightCleared() {
+		_spec.ClearField(artifact.FieldWeight, field.TypeString)
+	}
 	if value, ok := auo.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 	}
@@ -2384,12 +2750,6 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	}
 	if auo.mutation.TypologyCleared() {
 		_spec.ClearField(artifact.FieldTypology, field.TypeString)
-	}
-	if value, ok := auo.mutation.Weight(); ok {
-		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
-	}
-	if auo.mutation.WeightCleared() {
-		_spec.ClearField(artifact.FieldWeight, field.TypeString)
 	}
 	if value, ok := auo.mutation.AdmissionDate(); ok {
 		_spec.SetField(artifact.FieldAdmissionDate, field.TypeTime, value)

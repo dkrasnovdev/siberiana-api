@@ -120,6 +120,36 @@ func Dimensions(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldDimensions, v))
 }
 
+// Height applies equality check predicate on the "height" field. It's identical to HeightEQ.
+func Height(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldHeight, v))
+}
+
+// Width applies equality check predicate on the "width" field. It's identical to WidthEQ.
+func Width(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldWidth, v))
+}
+
+// Length applies equality check predicate on the "length" field. It's identical to LengthEQ.
+func Length(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldLength, v))
+}
+
+// Depth applies equality check predicate on the "depth" field. It's identical to DepthEQ.
+func Depth(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDepth, v))
+}
+
+// Diameter applies equality check predicate on the "diameter" field. It's identical to DiameterEQ.
+func Diameter(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDiameter, v))
+}
+
+// Weight applies equality check predicate on the "weight" field. It's identical to WeightEQ.
+func Weight(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldWeight, v))
+}
+
 // ChemicalComposition applies equality check predicate on the "chemical_composition" field. It's identical to ChemicalCompositionEQ.
 func ChemicalComposition(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldChemicalComposition, v))
@@ -133,11 +163,6 @@ func Number(v string) predicate.Artifact {
 // Typology applies equality check predicate on the "typology" field. It's identical to TypologyEQ.
 func Typology(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldTypology, v))
-}
-
-// Weight applies equality check predicate on the "weight" field. It's identical to WeightEQ.
-func Weight(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldWeight, v))
 }
 
 // AdmissionDate applies equality check predicate on the "admission_date" field. It's identical to AdmissionDateEQ.
@@ -1065,6 +1090,331 @@ func DimensionsContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldDimensions, v))
 }
 
+// HeightEQ applies the EQ predicate on the "height" field.
+func HeightEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldHeight, v))
+}
+
+// HeightNEQ applies the NEQ predicate on the "height" field.
+func HeightNEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldHeight, v))
+}
+
+// HeightIn applies the In predicate on the "height" field.
+func HeightIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldHeight, vs...))
+}
+
+// HeightNotIn applies the NotIn predicate on the "height" field.
+func HeightNotIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldHeight, vs...))
+}
+
+// HeightGT applies the GT predicate on the "height" field.
+func HeightGT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldHeight, v))
+}
+
+// HeightGTE applies the GTE predicate on the "height" field.
+func HeightGTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldHeight, v))
+}
+
+// HeightLT applies the LT predicate on the "height" field.
+func HeightLT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldHeight, v))
+}
+
+// HeightLTE applies the LTE predicate on the "height" field.
+func HeightLTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldHeight, v))
+}
+
+// HeightIsNil applies the IsNil predicate on the "height" field.
+func HeightIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldHeight))
+}
+
+// HeightNotNil applies the NotNil predicate on the "height" field.
+func HeightNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldHeight))
+}
+
+// WidthEQ applies the EQ predicate on the "width" field.
+func WidthEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldWidth, v))
+}
+
+// WidthNEQ applies the NEQ predicate on the "width" field.
+func WidthNEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldWidth, v))
+}
+
+// WidthIn applies the In predicate on the "width" field.
+func WidthIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldWidth, vs...))
+}
+
+// WidthNotIn applies the NotIn predicate on the "width" field.
+func WidthNotIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldWidth, vs...))
+}
+
+// WidthGT applies the GT predicate on the "width" field.
+func WidthGT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldWidth, v))
+}
+
+// WidthGTE applies the GTE predicate on the "width" field.
+func WidthGTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldWidth, v))
+}
+
+// WidthLT applies the LT predicate on the "width" field.
+func WidthLT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldWidth, v))
+}
+
+// WidthLTE applies the LTE predicate on the "width" field.
+func WidthLTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldWidth, v))
+}
+
+// WidthIsNil applies the IsNil predicate on the "width" field.
+func WidthIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldWidth))
+}
+
+// WidthNotNil applies the NotNil predicate on the "width" field.
+func WidthNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldWidth))
+}
+
+// LengthEQ applies the EQ predicate on the "length" field.
+func LengthEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldLength, v))
+}
+
+// LengthNEQ applies the NEQ predicate on the "length" field.
+func LengthNEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldLength, v))
+}
+
+// LengthIn applies the In predicate on the "length" field.
+func LengthIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldLength, vs...))
+}
+
+// LengthNotIn applies the NotIn predicate on the "length" field.
+func LengthNotIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldLength, vs...))
+}
+
+// LengthGT applies the GT predicate on the "length" field.
+func LengthGT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldLength, v))
+}
+
+// LengthGTE applies the GTE predicate on the "length" field.
+func LengthGTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldLength, v))
+}
+
+// LengthLT applies the LT predicate on the "length" field.
+func LengthLT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldLength, v))
+}
+
+// LengthLTE applies the LTE predicate on the "length" field.
+func LengthLTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldLength, v))
+}
+
+// LengthIsNil applies the IsNil predicate on the "length" field.
+func LengthIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldLength))
+}
+
+// LengthNotNil applies the NotNil predicate on the "length" field.
+func LengthNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldLength))
+}
+
+// DepthEQ applies the EQ predicate on the "depth" field.
+func DepthEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDepth, v))
+}
+
+// DepthNEQ applies the NEQ predicate on the "depth" field.
+func DepthNEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDepth, v))
+}
+
+// DepthIn applies the In predicate on the "depth" field.
+func DepthIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDepth, vs...))
+}
+
+// DepthNotIn applies the NotIn predicate on the "depth" field.
+func DepthNotIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDepth, vs...))
+}
+
+// DepthGT applies the GT predicate on the "depth" field.
+func DepthGT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDepth, v))
+}
+
+// DepthGTE applies the GTE predicate on the "depth" field.
+func DepthGTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDepth, v))
+}
+
+// DepthLT applies the LT predicate on the "depth" field.
+func DepthLT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDepth, v))
+}
+
+// DepthLTE applies the LTE predicate on the "depth" field.
+func DepthLTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDepth, v))
+}
+
+// DepthIsNil applies the IsNil predicate on the "depth" field.
+func DepthIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDepth))
+}
+
+// DepthNotNil applies the NotNil predicate on the "depth" field.
+func DepthNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDepth))
+}
+
+// DiameterEQ applies the EQ predicate on the "diameter" field.
+func DiameterEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDiameter, v))
+}
+
+// DiameterNEQ applies the NEQ predicate on the "diameter" field.
+func DiameterNEQ(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDiameter, v))
+}
+
+// DiameterIn applies the In predicate on the "diameter" field.
+func DiameterIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDiameter, vs...))
+}
+
+// DiameterNotIn applies the NotIn predicate on the "diameter" field.
+func DiameterNotIn(vs ...float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDiameter, vs...))
+}
+
+// DiameterGT applies the GT predicate on the "diameter" field.
+func DiameterGT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDiameter, v))
+}
+
+// DiameterGTE applies the GTE predicate on the "diameter" field.
+func DiameterGTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDiameter, v))
+}
+
+// DiameterLT applies the LT predicate on the "diameter" field.
+func DiameterLT(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDiameter, v))
+}
+
+// DiameterLTE applies the LTE predicate on the "diameter" field.
+func DiameterLTE(v float64) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDiameter, v))
+}
+
+// DiameterIsNil applies the IsNil predicate on the "diameter" field.
+func DiameterIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDiameter))
+}
+
+// DiameterNotNil applies the NotNil predicate on the "diameter" field.
+func DiameterNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDiameter))
+}
+
+// WeightEQ applies the EQ predicate on the "weight" field.
+func WeightEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldWeight, v))
+}
+
+// WeightNEQ applies the NEQ predicate on the "weight" field.
+func WeightNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldWeight, v))
+}
+
+// WeightIn applies the In predicate on the "weight" field.
+func WeightIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldWeight, vs...))
+}
+
+// WeightNotIn applies the NotIn predicate on the "weight" field.
+func WeightNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldWeight, vs...))
+}
+
+// WeightGT applies the GT predicate on the "weight" field.
+func WeightGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldWeight, v))
+}
+
+// WeightGTE applies the GTE predicate on the "weight" field.
+func WeightGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldWeight, v))
+}
+
+// WeightLT applies the LT predicate on the "weight" field.
+func WeightLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldWeight, v))
+}
+
+// WeightLTE applies the LTE predicate on the "weight" field.
+func WeightLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldWeight, v))
+}
+
+// WeightContains applies the Contains predicate on the "weight" field.
+func WeightContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldWeight, v))
+}
+
+// WeightHasPrefix applies the HasPrefix predicate on the "weight" field.
+func WeightHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldWeight, v))
+}
+
+// WeightHasSuffix applies the HasSuffix predicate on the "weight" field.
+func WeightHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldWeight, v))
+}
+
+// WeightIsNil applies the IsNil predicate on the "weight" field.
+func WeightIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldWeight))
+}
+
+// WeightNotNil applies the NotNil predicate on the "weight" field.
+func WeightNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldWeight))
+}
+
+// WeightEqualFold applies the EqualFold predicate on the "weight" field.
+func WeightEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldWeight, v))
+}
+
+// WeightContainsFold applies the ContainsFold predicate on the "weight" field.
+func WeightContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldWeight, v))
+}
+
 // ChemicalCompositionEQ applies the EQ predicate on the "chemical_composition" field.
 func ChemicalCompositionEQ(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldChemicalComposition, v))
@@ -1288,81 +1638,6 @@ func TypologyEqualFold(v string) predicate.Artifact {
 // TypologyContainsFold applies the ContainsFold predicate on the "typology" field.
 func TypologyContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldTypology, v))
-}
-
-// WeightEQ applies the EQ predicate on the "weight" field.
-func WeightEQ(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldWeight, v))
-}
-
-// WeightNEQ applies the NEQ predicate on the "weight" field.
-func WeightNEQ(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNEQ(FieldWeight, v))
-}
-
-// WeightIn applies the In predicate on the "weight" field.
-func WeightIn(vs ...string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldIn(FieldWeight, vs...))
-}
-
-// WeightNotIn applies the NotIn predicate on the "weight" field.
-func WeightNotIn(vs ...string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotIn(FieldWeight, vs...))
-}
-
-// WeightGT applies the GT predicate on the "weight" field.
-func WeightGT(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGT(FieldWeight, v))
-}
-
-// WeightGTE applies the GTE predicate on the "weight" field.
-func WeightGTE(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGTE(FieldWeight, v))
-}
-
-// WeightLT applies the LT predicate on the "weight" field.
-func WeightLT(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLT(FieldWeight, v))
-}
-
-// WeightLTE applies the LTE predicate on the "weight" field.
-func WeightLTE(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLTE(FieldWeight, v))
-}
-
-// WeightContains applies the Contains predicate on the "weight" field.
-func WeightContains(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldContains(FieldWeight, v))
-}
-
-// WeightHasPrefix applies the HasPrefix predicate on the "weight" field.
-func WeightHasPrefix(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldHasPrefix(FieldWeight, v))
-}
-
-// WeightHasSuffix applies the HasSuffix predicate on the "weight" field.
-func WeightHasSuffix(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldHasSuffix(FieldWeight, v))
-}
-
-// WeightIsNil applies the IsNil predicate on the "weight" field.
-func WeightIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldWeight))
-}
-
-// WeightNotNil applies the NotNil predicate on the "weight" field.
-func WeightNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldWeight))
-}
-
-// WeightEqualFold applies the EqualFold predicate on the "weight" field.
-func WeightEqualFold(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEqualFold(FieldWeight, v))
-}
-
-// WeightContainsFold applies the ContainsFold predicate on the "weight" field.
-func WeightContainsFold(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldContainsFold(FieldWeight, v))
 }
 
 // AdmissionDateEQ applies the EQ predicate on the "admission_date" field.

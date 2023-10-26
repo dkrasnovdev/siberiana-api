@@ -56,14 +56,24 @@ type Artifact struct {
 	Dating string `json:"dating,omitempty"`
 	// Dimensions holds the value of the "dimensions" field.
 	Dimensions string `json:"dimensions,omitempty"`
+	// Height holds the value of the "height" field.
+	Height float64 `json:"height,omitempty"`
+	// Width holds the value of the "width" field.
+	Width float64 `json:"width,omitempty"`
+	// Length holds the value of the "length" field.
+	Length float64 `json:"length,omitempty"`
+	// Depth holds the value of the "depth" field.
+	Depth float64 `json:"depth,omitempty"`
+	// Diameter holds the value of the "diameter" field.
+	Diameter float64 `json:"diameter,omitempty"`
+	// Weight holds the value of the "weight" field.
+	Weight string `json:"weight,omitempty"`
 	// ChemicalComposition holds the value of the "chemical_composition" field.
 	ChemicalComposition string `json:"chemical_composition,omitempty"`
 	// Number holds the value of the "number" field.
 	Number string `json:"number,omitempty"`
 	// Typology holds the value of the "typology" field.
 	Typology string `json:"typology,omitempty"`
-	// Weight holds the value of the "weight" field.
-	Weight string `json:"weight,omitempty"`
 	// AdmissionDate holds the value of the "admission_date" field.
 	AdmissionDate time.Time `json:"admission_date,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -277,9 +287,11 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case artifact.FieldAdditionalImagesUrls:
 			values[i] = new([]byte)
+		case artifact.FieldHeight, artifact.FieldWidth, artifact.FieldLength, artifact.FieldDepth, artifact.FieldDiameter:
+			values[i] = new(sql.NullFloat64)
 		case artifact.FieldID:
 			values[i] = new(sql.NullInt64)
-		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldAbbreviation, artifact.FieldDescription, artifact.FieldExternalLink, artifact.FieldStatus, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldDimensions, artifact.FieldChemicalComposition, artifact.FieldNumber, artifact.FieldTypology, artifact.FieldWeight:
+		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldAbbreviation, artifact.FieldDescription, artifact.FieldExternalLink, artifact.FieldStatus, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldDimensions, artifact.FieldWeight, artifact.FieldChemicalComposition, artifact.FieldNumber, artifact.FieldTypology:
 			values[i] = new(sql.NullString)
 		case artifact.FieldCreatedAt, artifact.FieldUpdatedAt, artifact.FieldDeletedAt, artifact.FieldAdmissionDate:
 			values[i] = new(sql.NullTime)
@@ -412,6 +424,42 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.Dimensions = value.String
 			}
+		case artifact.FieldHeight:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field height", values[i])
+			} else if value.Valid {
+				a.Height = value.Float64
+			}
+		case artifact.FieldWidth:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field width", values[i])
+			} else if value.Valid {
+				a.Width = value.Float64
+			}
+		case artifact.FieldLength:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field length", values[i])
+			} else if value.Valid {
+				a.Length = value.Float64
+			}
+		case artifact.FieldDepth:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field depth", values[i])
+			} else if value.Valid {
+				a.Depth = value.Float64
+			}
+		case artifact.FieldDiameter:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field diameter", values[i])
+			} else if value.Valid {
+				a.Diameter = value.Float64
+			}
+		case artifact.FieldWeight:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field weight", values[i])
+			} else if value.Valid {
+				a.Weight = value.String
+			}
 		case artifact.FieldChemicalComposition:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field chemical_composition", values[i])
@@ -429,12 +477,6 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field typology", values[i])
 			} else if value.Valid {
 				a.Typology = value.String
-			}
-		case artifact.FieldWeight:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field weight", values[i])
-			} else if value.Valid {
-				a.Weight = value.String
 			}
 		case artifact.FieldAdmissionDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -644,6 +686,24 @@ func (a *Artifact) String() string {
 	builder.WriteString("dimensions=")
 	builder.WriteString(a.Dimensions)
 	builder.WriteString(", ")
+	builder.WriteString("height=")
+	builder.WriteString(fmt.Sprintf("%v", a.Height))
+	builder.WriteString(", ")
+	builder.WriteString("width=")
+	builder.WriteString(fmt.Sprintf("%v", a.Width))
+	builder.WriteString(", ")
+	builder.WriteString("length=")
+	builder.WriteString(fmt.Sprintf("%v", a.Length))
+	builder.WriteString(", ")
+	builder.WriteString("depth=")
+	builder.WriteString(fmt.Sprintf("%v", a.Depth))
+	builder.WriteString(", ")
+	builder.WriteString("diameter=")
+	builder.WriteString(fmt.Sprintf("%v", a.Diameter))
+	builder.WriteString(", ")
+	builder.WriteString("weight=")
+	builder.WriteString(a.Weight)
+	builder.WriteString(", ")
 	builder.WriteString("chemical_composition=")
 	builder.WriteString(a.ChemicalComposition)
 	builder.WriteString(", ")
@@ -652,9 +712,6 @@ func (a *Artifact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("typology=")
 	builder.WriteString(a.Typology)
-	builder.WriteString(", ")
-	builder.WriteString("weight=")
-	builder.WriteString(a.Weight)
 	builder.WriteString(", ")
 	builder.WriteString("admission_date=")
 	builder.WriteString(a.AdmissionDate.Format(time.ANSIC))

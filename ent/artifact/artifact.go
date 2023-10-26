@@ -48,14 +48,24 @@ const (
 	FieldDating = "dating"
 	// FieldDimensions holds the string denoting the dimensions field in the database.
 	FieldDimensions = "dimensions"
+	// FieldHeight holds the string denoting the height field in the database.
+	FieldHeight = "height"
+	// FieldWidth holds the string denoting the width field in the database.
+	FieldWidth = "width"
+	// FieldLength holds the string denoting the length field in the database.
+	FieldLength = "length"
+	// FieldDepth holds the string denoting the depth field in the database.
+	FieldDepth = "depth"
+	// FieldDiameter holds the string denoting the diameter field in the database.
+	FieldDiameter = "diameter"
+	// FieldWeight holds the string denoting the weight field in the database.
+	FieldWeight = "weight"
 	// FieldChemicalComposition holds the string denoting the chemical_composition field in the database.
 	FieldChemicalComposition = "chemical_composition"
 	// FieldNumber holds the string denoting the number field in the database.
 	FieldNumber = "number"
 	// FieldTypology holds the string denoting the typology field in the database.
 	FieldTypology = "typology"
-	// FieldWeight holds the string denoting the weight field in the database.
-	FieldWeight = "weight"
 	// FieldAdmissionDate holds the string denoting the admission_date field in the database.
 	FieldAdmissionDate = "admission_date"
 	// EdgeAuthors holds the string denoting the authors edge name in mutations.
@@ -187,10 +197,15 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDating,
 	FieldDimensions,
+	FieldHeight,
+	FieldWidth,
+	FieldLength,
+	FieldDepth,
+	FieldDiameter,
+	FieldWeight,
 	FieldChemicalComposition,
 	FieldNumber,
 	FieldTypology,
-	FieldWeight,
 	FieldAdmissionDate,
 }
 
@@ -362,6 +377,36 @@ func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
 }
 
+// ByHeight orders the results by the height field.
+func ByHeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeight, opts...).ToFunc()
+}
+
+// ByWidth orders the results by the width field.
+func ByWidth(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWidth, opts...).ToFunc()
+}
+
+// ByLength orders the results by the length field.
+func ByLength(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLength, opts...).ToFunc()
+}
+
+// ByDepth orders the results by the depth field.
+func ByDepth(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDepth, opts...).ToFunc()
+}
+
+// ByDiameter orders the results by the diameter field.
+func ByDiameter(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDiameter, opts...).ToFunc()
+}
+
+// ByWeight orders the results by the weight field.
+func ByWeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWeight, opts...).ToFunc()
+}
+
 // ByChemicalComposition orders the results by the chemical_composition field.
 func ByChemicalComposition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChemicalComposition, opts...).ToFunc()
@@ -375,11 +420,6 @@ func ByNumber(opts ...sql.OrderTermOption) OrderOption {
 // ByTypology orders the results by the typology field.
 func ByTypology(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTypology, opts...).ToFunc()
-}
-
-// ByWeight orders the results by the weight field.
-func ByWeight(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldWeight, opts...).ToFunc()
 }
 
 // ByAdmissionDate orders the results by the admission_date field.

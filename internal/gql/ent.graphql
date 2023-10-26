@@ -567,10 +567,15 @@ type Artifact implements Node {
   deletedBy: String
   dating: String
   dimensions: String
+  height: Float
+  width: Float
+  length: Float
+  depth: Float
+  diameter: Float
+  weight: String
   chemicalComposition: String
   number: String
   typology: String
-  weight: String
   admissionDate: Time
   authors: [Person!]
   mediums: [Medium!]
@@ -834,6 +839,77 @@ input ArtifactWhereInput {
   dimensionsNotNil: Boolean
   dimensionsEqualFold: String
   dimensionsContainsFold: String
+  """height field predicates"""
+  height: Float
+  heightNEQ: Float
+  heightIn: [Float!]
+  heightNotIn: [Float!]
+  heightGT: Float
+  heightGTE: Float
+  heightLT: Float
+  heightLTE: Float
+  heightIsNil: Boolean
+  heightNotNil: Boolean
+  """width field predicates"""
+  width: Float
+  widthNEQ: Float
+  widthIn: [Float!]
+  widthNotIn: [Float!]
+  widthGT: Float
+  widthGTE: Float
+  widthLT: Float
+  widthLTE: Float
+  widthIsNil: Boolean
+  widthNotNil: Boolean
+  """length field predicates"""
+  length: Float
+  lengthNEQ: Float
+  lengthIn: [Float!]
+  lengthNotIn: [Float!]
+  lengthGT: Float
+  lengthGTE: Float
+  lengthLT: Float
+  lengthLTE: Float
+  lengthIsNil: Boolean
+  lengthNotNil: Boolean
+  """depth field predicates"""
+  depth: Float
+  depthNEQ: Float
+  depthIn: [Float!]
+  depthNotIn: [Float!]
+  depthGT: Float
+  depthGTE: Float
+  depthLT: Float
+  depthLTE: Float
+  depthIsNil: Boolean
+  depthNotNil: Boolean
+  """diameter field predicates"""
+  diameter: Float
+  diameterNEQ: Float
+  diameterIn: [Float!]
+  diameterNotIn: [Float!]
+  diameterGT: Float
+  diameterGTE: Float
+  diameterLT: Float
+  diameterLTE: Float
+  diameterIsNil: Boolean
+  diameterNotNil: Boolean
+  """weight field predicates"""
+  weight: String
+  weightNEQ: String
+  weightIn: [String!]
+  weightNotIn: [String!]
+  weightGT: String
+  weightGTE: String
+  weightLT: String
+  weightLTE: String
+  weightContains: String
+  weightHasPrefix: String
+  weightHasSuffix: String
+  weightIsNil: Boolean
+  weightNotNil: Boolean
+  weightEqualFold: String
+  weightContainsFold: String
   """chemical_composition field predicates"""
   chemicalComposition: String
   chemicalCompositionNEQ: String
@@ -882,22 +958,6 @@ input ArtifactWhereInput {
   typologyNotNil: Boolean
   typologyEqualFold: String
   typologyContainsFold: String
-  """weight field predicates"""
-  weight: String
-  weightNEQ: String
-  weightIn: [String!]
-  weightNotIn: [String!]
-  weightGT: String
-  weightGTE: String
-  weightLT: String
-  weightLTE: String
-  weightContains: String
-  weightHasPrefix: String
-  weightHasSuffix: String
-  weightIsNil: Boolean
-  weightNotNil: Boolean
-  weightEqualFold: String
-  weightContainsFold: String
   """admission_date field predicates"""
   admissionDate: Time
   admissionDateNEQ: Time
@@ -2183,10 +2243,15 @@ input CreateArtifactInput {
   deletedBy: String
   dating: String
   dimensions: String
+  height: Float
+  width: Float
+  length: Float
+  depth: Float
+  diameter: Float
+  weight: String
   chemicalComposition: String
   number: String
   typology: String
-  weight: String
   admissionDate: Time
   authorIDs: [ID!]
   mediumIDs: [ID!]
@@ -7926,14 +7991,24 @@ input UpdateArtifactInput {
   clearDating: Boolean
   dimensions: String
   clearDimensions: Boolean
+  height: Float
+  clearHeight: Boolean
+  width: Float
+  clearWidth: Boolean
+  length: Float
+  clearLength: Boolean
+  depth: Float
+  clearDepth: Boolean
+  diameter: Float
+  clearDiameter: Boolean
+  weight: String
+  clearWeight: Boolean
   chemicalComposition: String
   clearChemicalComposition: Boolean
   number: String
   clearNumber: Boolean
   typology: String
   clearTypology: Boolean
-  weight: String
-  clearWeight: Boolean
   admissionDate: Time
   clearAdmissionDate: Boolean
   addAuthorIDs: [ID!]

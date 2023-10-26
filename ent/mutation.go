@@ -3103,10 +3103,20 @@ type ArtifactMutation struct {
 	deleted_by                   *string
 	dating                       *string
 	dimensions                   *string
+	height                       *float64
+	addheight                    *float64
+	width                        *float64
+	addwidth                     *float64
+	length                       *float64
+	addlength                    *float64
+	depth                        *float64
+	adddepth                     *float64
+	diameter                     *float64
+	adddiameter                  *float64
+	weight                       *string
 	chemical_composition         *string
 	number                       *string
 	typology                     *string
-	weight                       *string
 	admission_date               *time.Time
 	clearedFields                map[string]struct{}
 	authors                      map[int]struct{}
@@ -3968,6 +3978,405 @@ func (m *ArtifactMutation) ResetDimensions() {
 	delete(m.clearedFields, artifact.FieldDimensions)
 }
 
+// SetHeight sets the "height" field.
+func (m *ArtifactMutation) SetHeight(f float64) {
+	m.height = &f
+	m.addheight = nil
+}
+
+// Height returns the value of the "height" field in the mutation.
+func (m *ArtifactMutation) Height() (r float64, exists bool) {
+	v := m.height
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHeight returns the old "height" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldHeight(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHeight: %w", err)
+	}
+	return oldValue.Height, nil
+}
+
+// AddHeight adds f to the "height" field.
+func (m *ArtifactMutation) AddHeight(f float64) {
+	if m.addheight != nil {
+		*m.addheight += f
+	} else {
+		m.addheight = &f
+	}
+}
+
+// AddedHeight returns the value that was added to the "height" field in this mutation.
+func (m *ArtifactMutation) AddedHeight() (r float64, exists bool) {
+	v := m.addheight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearHeight clears the value of the "height" field.
+func (m *ArtifactMutation) ClearHeight() {
+	m.height = nil
+	m.addheight = nil
+	m.clearedFields[artifact.FieldHeight] = struct{}{}
+}
+
+// HeightCleared returns if the "height" field was cleared in this mutation.
+func (m *ArtifactMutation) HeightCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldHeight]
+	return ok
+}
+
+// ResetHeight resets all changes to the "height" field.
+func (m *ArtifactMutation) ResetHeight() {
+	m.height = nil
+	m.addheight = nil
+	delete(m.clearedFields, artifact.FieldHeight)
+}
+
+// SetWidth sets the "width" field.
+func (m *ArtifactMutation) SetWidth(f float64) {
+	m.width = &f
+	m.addwidth = nil
+}
+
+// Width returns the value of the "width" field in the mutation.
+func (m *ArtifactMutation) Width() (r float64, exists bool) {
+	v := m.width
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWidth returns the old "width" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldWidth(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWidth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWidth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWidth: %w", err)
+	}
+	return oldValue.Width, nil
+}
+
+// AddWidth adds f to the "width" field.
+func (m *ArtifactMutation) AddWidth(f float64) {
+	if m.addwidth != nil {
+		*m.addwidth += f
+	} else {
+		m.addwidth = &f
+	}
+}
+
+// AddedWidth returns the value that was added to the "width" field in this mutation.
+func (m *ArtifactMutation) AddedWidth() (r float64, exists bool) {
+	v := m.addwidth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearWidth clears the value of the "width" field.
+func (m *ArtifactMutation) ClearWidth() {
+	m.width = nil
+	m.addwidth = nil
+	m.clearedFields[artifact.FieldWidth] = struct{}{}
+}
+
+// WidthCleared returns if the "width" field was cleared in this mutation.
+func (m *ArtifactMutation) WidthCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldWidth]
+	return ok
+}
+
+// ResetWidth resets all changes to the "width" field.
+func (m *ArtifactMutation) ResetWidth() {
+	m.width = nil
+	m.addwidth = nil
+	delete(m.clearedFields, artifact.FieldWidth)
+}
+
+// SetLength sets the "length" field.
+func (m *ArtifactMutation) SetLength(f float64) {
+	m.length = &f
+	m.addlength = nil
+}
+
+// Length returns the value of the "length" field in the mutation.
+func (m *ArtifactMutation) Length() (r float64, exists bool) {
+	v := m.length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLength returns the old "length" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldLength(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLength is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLength requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLength: %w", err)
+	}
+	return oldValue.Length, nil
+}
+
+// AddLength adds f to the "length" field.
+func (m *ArtifactMutation) AddLength(f float64) {
+	if m.addlength != nil {
+		*m.addlength += f
+	} else {
+		m.addlength = &f
+	}
+}
+
+// AddedLength returns the value that was added to the "length" field in this mutation.
+func (m *ArtifactMutation) AddedLength() (r float64, exists bool) {
+	v := m.addlength
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearLength clears the value of the "length" field.
+func (m *ArtifactMutation) ClearLength() {
+	m.length = nil
+	m.addlength = nil
+	m.clearedFields[artifact.FieldLength] = struct{}{}
+}
+
+// LengthCleared returns if the "length" field was cleared in this mutation.
+func (m *ArtifactMutation) LengthCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldLength]
+	return ok
+}
+
+// ResetLength resets all changes to the "length" field.
+func (m *ArtifactMutation) ResetLength() {
+	m.length = nil
+	m.addlength = nil
+	delete(m.clearedFields, artifact.FieldLength)
+}
+
+// SetDepth sets the "depth" field.
+func (m *ArtifactMutation) SetDepth(f float64) {
+	m.depth = &f
+	m.adddepth = nil
+}
+
+// Depth returns the value of the "depth" field in the mutation.
+func (m *ArtifactMutation) Depth() (r float64, exists bool) {
+	v := m.depth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDepth returns the old "depth" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDepth(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDepth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDepth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDepth: %w", err)
+	}
+	return oldValue.Depth, nil
+}
+
+// AddDepth adds f to the "depth" field.
+func (m *ArtifactMutation) AddDepth(f float64) {
+	if m.adddepth != nil {
+		*m.adddepth += f
+	} else {
+		m.adddepth = &f
+	}
+}
+
+// AddedDepth returns the value that was added to the "depth" field in this mutation.
+func (m *ArtifactMutation) AddedDepth() (r float64, exists bool) {
+	v := m.adddepth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (m *ArtifactMutation) ClearDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	m.clearedFields[artifact.FieldDepth] = struct{}{}
+}
+
+// DepthCleared returns if the "depth" field was cleared in this mutation.
+func (m *ArtifactMutation) DepthCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDepth]
+	return ok
+}
+
+// ResetDepth resets all changes to the "depth" field.
+func (m *ArtifactMutation) ResetDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	delete(m.clearedFields, artifact.FieldDepth)
+}
+
+// SetDiameter sets the "diameter" field.
+func (m *ArtifactMutation) SetDiameter(f float64) {
+	m.diameter = &f
+	m.adddiameter = nil
+}
+
+// Diameter returns the value of the "diameter" field in the mutation.
+func (m *ArtifactMutation) Diameter() (r float64, exists bool) {
+	v := m.diameter
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDiameter returns the old "diameter" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDiameter(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDiameter is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDiameter requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDiameter: %w", err)
+	}
+	return oldValue.Diameter, nil
+}
+
+// AddDiameter adds f to the "diameter" field.
+func (m *ArtifactMutation) AddDiameter(f float64) {
+	if m.adddiameter != nil {
+		*m.adddiameter += f
+	} else {
+		m.adddiameter = &f
+	}
+}
+
+// AddedDiameter returns the value that was added to the "diameter" field in this mutation.
+func (m *ArtifactMutation) AddedDiameter() (r float64, exists bool) {
+	v := m.adddiameter
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDiameter clears the value of the "diameter" field.
+func (m *ArtifactMutation) ClearDiameter() {
+	m.diameter = nil
+	m.adddiameter = nil
+	m.clearedFields[artifact.FieldDiameter] = struct{}{}
+}
+
+// DiameterCleared returns if the "diameter" field was cleared in this mutation.
+func (m *ArtifactMutation) DiameterCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDiameter]
+	return ok
+}
+
+// ResetDiameter resets all changes to the "diameter" field.
+func (m *ArtifactMutation) ResetDiameter() {
+	m.diameter = nil
+	m.adddiameter = nil
+	delete(m.clearedFields, artifact.FieldDiameter)
+}
+
+// SetWeight sets the "weight" field.
+func (m *ArtifactMutation) SetWeight(s string) {
+	m.weight = &s
+}
+
+// Weight returns the value of the "weight" field in the mutation.
+func (m *ArtifactMutation) Weight() (r string, exists bool) {
+	v := m.weight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWeight returns the old "weight" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldWeight(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWeight: %w", err)
+	}
+	return oldValue.Weight, nil
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (m *ArtifactMutation) ClearWeight() {
+	m.weight = nil
+	m.clearedFields[artifact.FieldWeight] = struct{}{}
+}
+
+// WeightCleared returns if the "weight" field was cleared in this mutation.
+func (m *ArtifactMutation) WeightCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldWeight]
+	return ok
+}
+
+// ResetWeight resets all changes to the "weight" field.
+func (m *ArtifactMutation) ResetWeight() {
+	m.weight = nil
+	delete(m.clearedFields, artifact.FieldWeight)
+}
+
 // SetChemicalComposition sets the "chemical_composition" field.
 func (m *ArtifactMutation) SetChemicalComposition(s string) {
 	m.chemical_composition = &s
@@ -4113,55 +4522,6 @@ func (m *ArtifactMutation) TypologyCleared() bool {
 func (m *ArtifactMutation) ResetTypology() {
 	m.typology = nil
 	delete(m.clearedFields, artifact.FieldTypology)
-}
-
-// SetWeight sets the "weight" field.
-func (m *ArtifactMutation) SetWeight(s string) {
-	m.weight = &s
-}
-
-// Weight returns the value of the "weight" field in the mutation.
-func (m *ArtifactMutation) Weight() (r string, exists bool) {
-	v := m.weight
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldWeight returns the old "weight" field's value of the Artifact entity.
-// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldWeight(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldWeight is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldWeight requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldWeight: %w", err)
-	}
-	return oldValue.Weight, nil
-}
-
-// ClearWeight clears the value of the "weight" field.
-func (m *ArtifactMutation) ClearWeight() {
-	m.weight = nil
-	m.clearedFields[artifact.FieldWeight] = struct{}{}
-}
-
-// WeightCleared returns if the "weight" field was cleared in this mutation.
-func (m *ArtifactMutation) WeightCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldWeight]
-	return ok
-}
-
-// ResetWeight resets all changes to the "weight" field.
-func (m *ArtifactMutation) ResetWeight() {
-	m.weight = nil
-	delete(m.clearedFields, artifact.FieldWeight)
 }
 
 // SetAdmissionDate sets the "admission_date" field.
@@ -4829,7 +5189,7 @@ func (m *ArtifactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtifactMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 25)
 	if m.created_at != nil {
 		fields = append(fields, artifact.FieldCreatedAt)
 	}
@@ -4875,6 +5235,24 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.dimensions != nil {
 		fields = append(fields, artifact.FieldDimensions)
 	}
+	if m.height != nil {
+		fields = append(fields, artifact.FieldHeight)
+	}
+	if m.width != nil {
+		fields = append(fields, artifact.FieldWidth)
+	}
+	if m.length != nil {
+		fields = append(fields, artifact.FieldLength)
+	}
+	if m.depth != nil {
+		fields = append(fields, artifact.FieldDepth)
+	}
+	if m.diameter != nil {
+		fields = append(fields, artifact.FieldDiameter)
+	}
+	if m.weight != nil {
+		fields = append(fields, artifact.FieldWeight)
+	}
 	if m.chemical_composition != nil {
 		fields = append(fields, artifact.FieldChemicalComposition)
 	}
@@ -4883,9 +5261,6 @@ func (m *ArtifactMutation) Fields() []string {
 	}
 	if m.typology != nil {
 		fields = append(fields, artifact.FieldTypology)
-	}
-	if m.weight != nil {
-		fields = append(fields, artifact.FieldWeight)
 	}
 	if m.admission_date != nil {
 		fields = append(fields, artifact.FieldAdmissionDate)
@@ -4928,14 +5303,24 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.Dating()
 	case artifact.FieldDimensions:
 		return m.Dimensions()
+	case artifact.FieldHeight:
+		return m.Height()
+	case artifact.FieldWidth:
+		return m.Width()
+	case artifact.FieldLength:
+		return m.Length()
+	case artifact.FieldDepth:
+		return m.Depth()
+	case artifact.FieldDiameter:
+		return m.Diameter()
+	case artifact.FieldWeight:
+		return m.Weight()
 	case artifact.FieldChemicalComposition:
 		return m.ChemicalComposition()
 	case artifact.FieldNumber:
 		return m.Number()
 	case artifact.FieldTypology:
 		return m.Typology()
-	case artifact.FieldWeight:
-		return m.Weight()
 	case artifact.FieldAdmissionDate:
 		return m.AdmissionDate()
 	}
@@ -4977,14 +5362,24 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDating(ctx)
 	case artifact.FieldDimensions:
 		return m.OldDimensions(ctx)
+	case artifact.FieldHeight:
+		return m.OldHeight(ctx)
+	case artifact.FieldWidth:
+		return m.OldWidth(ctx)
+	case artifact.FieldLength:
+		return m.OldLength(ctx)
+	case artifact.FieldDepth:
+		return m.OldDepth(ctx)
+	case artifact.FieldDiameter:
+		return m.OldDiameter(ctx)
+	case artifact.FieldWeight:
+		return m.OldWeight(ctx)
 	case artifact.FieldChemicalComposition:
 		return m.OldChemicalComposition(ctx)
 	case artifact.FieldNumber:
 		return m.OldNumber(ctx)
 	case artifact.FieldTypology:
 		return m.OldTypology(ctx)
-	case artifact.FieldWeight:
-		return m.OldWeight(ctx)
 	case artifact.FieldAdmissionDate:
 		return m.OldAdmissionDate(ctx)
 	}
@@ -5101,6 +5496,48 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDimensions(v)
 		return nil
+	case artifact.FieldHeight:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHeight(v)
+		return nil
+	case artifact.FieldWidth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWidth(v)
+		return nil
+	case artifact.FieldLength:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLength(v)
+		return nil
+	case artifact.FieldDepth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDepth(v)
+		return nil
+	case artifact.FieldDiameter:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDiameter(v)
+		return nil
+	case artifact.FieldWeight:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWeight(v)
+		return nil
 	case artifact.FieldChemicalComposition:
 		v, ok := value.(string)
 		if !ok {
@@ -5122,13 +5559,6 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTypology(v)
 		return nil
-	case artifact.FieldWeight:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetWeight(v)
-		return nil
 	case artifact.FieldAdmissionDate:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5143,13 +5573,41 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ArtifactMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addheight != nil {
+		fields = append(fields, artifact.FieldHeight)
+	}
+	if m.addwidth != nil {
+		fields = append(fields, artifact.FieldWidth)
+	}
+	if m.addlength != nil {
+		fields = append(fields, artifact.FieldLength)
+	}
+	if m.adddepth != nil {
+		fields = append(fields, artifact.FieldDepth)
+	}
+	if m.adddiameter != nil {
+		fields = append(fields, artifact.FieldDiameter)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ArtifactMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case artifact.FieldHeight:
+		return m.AddedHeight()
+	case artifact.FieldWidth:
+		return m.AddedWidth()
+	case artifact.FieldLength:
+		return m.AddedLength()
+	case artifact.FieldDepth:
+		return m.AddedDepth()
+	case artifact.FieldDiameter:
+		return m.AddedDiameter()
+	}
 	return nil, false
 }
 
@@ -5158,6 +5616,41 @@ func (m *ArtifactMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ArtifactMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case artifact.FieldHeight:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHeight(v)
+		return nil
+	case artifact.FieldWidth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddWidth(v)
+		return nil
+	case artifact.FieldLength:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLength(v)
+		return nil
+	case artifact.FieldDepth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDepth(v)
+		return nil
+	case artifact.FieldDiameter:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDiameter(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Artifact numeric field %s", name)
 }
@@ -5205,6 +5698,24 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldDimensions) {
 		fields = append(fields, artifact.FieldDimensions)
 	}
+	if m.FieldCleared(artifact.FieldHeight) {
+		fields = append(fields, artifact.FieldHeight)
+	}
+	if m.FieldCleared(artifact.FieldWidth) {
+		fields = append(fields, artifact.FieldWidth)
+	}
+	if m.FieldCleared(artifact.FieldLength) {
+		fields = append(fields, artifact.FieldLength)
+	}
+	if m.FieldCleared(artifact.FieldDepth) {
+		fields = append(fields, artifact.FieldDepth)
+	}
+	if m.FieldCleared(artifact.FieldDiameter) {
+		fields = append(fields, artifact.FieldDiameter)
+	}
+	if m.FieldCleared(artifact.FieldWeight) {
+		fields = append(fields, artifact.FieldWeight)
+	}
 	if m.FieldCleared(artifact.FieldChemicalComposition) {
 		fields = append(fields, artifact.FieldChemicalComposition)
 	}
@@ -5213,9 +5724,6 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(artifact.FieldTypology) {
 		fields = append(fields, artifact.FieldTypology)
-	}
-	if m.FieldCleared(artifact.FieldWeight) {
-		fields = append(fields, artifact.FieldWeight)
 	}
 	if m.FieldCleared(artifact.FieldAdmissionDate) {
 		fields = append(fields, artifact.FieldAdmissionDate)
@@ -5273,6 +5781,24 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldDimensions:
 		m.ClearDimensions()
 		return nil
+	case artifact.FieldHeight:
+		m.ClearHeight()
+		return nil
+	case artifact.FieldWidth:
+		m.ClearWidth()
+		return nil
+	case artifact.FieldLength:
+		m.ClearLength()
+		return nil
+	case artifact.FieldDepth:
+		m.ClearDepth()
+		return nil
+	case artifact.FieldDiameter:
+		m.ClearDiameter()
+		return nil
+	case artifact.FieldWeight:
+		m.ClearWeight()
+		return nil
 	case artifact.FieldChemicalComposition:
 		m.ClearChemicalComposition()
 		return nil
@@ -5281,9 +5807,6 @@ func (m *ArtifactMutation) ClearField(name string) error {
 		return nil
 	case artifact.FieldTypology:
 		m.ClearTypology()
-		return nil
-	case artifact.FieldWeight:
-		m.ClearWeight()
 		return nil
 	case artifact.FieldAdmissionDate:
 		m.ClearAdmissionDate()
@@ -5341,6 +5864,24 @@ func (m *ArtifactMutation) ResetField(name string) error {
 	case artifact.FieldDimensions:
 		m.ResetDimensions()
 		return nil
+	case artifact.FieldHeight:
+		m.ResetHeight()
+		return nil
+	case artifact.FieldWidth:
+		m.ResetWidth()
+		return nil
+	case artifact.FieldLength:
+		m.ResetLength()
+		return nil
+	case artifact.FieldDepth:
+		m.ResetDepth()
+		return nil
+	case artifact.FieldDiameter:
+		m.ResetDiameter()
+		return nil
+	case artifact.FieldWeight:
+		m.ResetWeight()
+		return nil
 	case artifact.FieldChemicalComposition:
 		m.ResetChemicalComposition()
 		return nil
@@ -5349,9 +5890,6 @@ func (m *ArtifactMutation) ResetField(name string) error {
 		return nil
 	case artifact.FieldTypology:
 		m.ResetTypology()
-		return nil
-	case artifact.FieldWeight:
-		m.ResetWeight()
 		return nil
 	case artifact.FieldAdmissionDate:
 		m.ResetAdmissionDate()

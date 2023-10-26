@@ -6,7 +6,7 @@ go 1.20
 
 require (
 	ariga.io/entcache v0.1.0
-	entgo.io/contrib v0.4.6-0.20230615102013-704944fdc0f6
+	entgo.io/contrib v0.4.6-0.20230921075353-58da6fd37195
 	entgo.io/ent v0.12.4
 	github.com/99designs/gqlgen v0.17.38
 	github.com/go-chi/chi/v5 v5.0.10

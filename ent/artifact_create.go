@@ -235,6 +235,90 @@ func (ac *ArtifactCreate) SetNillableDimensions(s *string) *ArtifactCreate {
 	return ac
 }
 
+// SetHeight sets the "height" field.
+func (ac *ArtifactCreate) SetHeight(f float64) *ArtifactCreate {
+	ac.mutation.SetHeight(f)
+	return ac
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableHeight(f *float64) *ArtifactCreate {
+	if f != nil {
+		ac.SetHeight(*f)
+	}
+	return ac
+}
+
+// SetWidth sets the "width" field.
+func (ac *ArtifactCreate) SetWidth(f float64) *ArtifactCreate {
+	ac.mutation.SetWidth(f)
+	return ac
+}
+
+// SetNillableWidth sets the "width" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableWidth(f *float64) *ArtifactCreate {
+	if f != nil {
+		ac.SetWidth(*f)
+	}
+	return ac
+}
+
+// SetLength sets the "length" field.
+func (ac *ArtifactCreate) SetLength(f float64) *ArtifactCreate {
+	ac.mutation.SetLength(f)
+	return ac
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableLength(f *float64) *ArtifactCreate {
+	if f != nil {
+		ac.SetLength(*f)
+	}
+	return ac
+}
+
+// SetDepth sets the "depth" field.
+func (ac *ArtifactCreate) SetDepth(f float64) *ArtifactCreate {
+	ac.mutation.SetDepth(f)
+	return ac
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDepth(f *float64) *ArtifactCreate {
+	if f != nil {
+		ac.SetDepth(*f)
+	}
+	return ac
+}
+
+// SetDiameter sets the "diameter" field.
+func (ac *ArtifactCreate) SetDiameter(f float64) *ArtifactCreate {
+	ac.mutation.SetDiameter(f)
+	return ac
+}
+
+// SetNillableDiameter sets the "diameter" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDiameter(f *float64) *ArtifactCreate {
+	if f != nil {
+		ac.SetDiameter(*f)
+	}
+	return ac
+}
+
+// SetWeight sets the "weight" field.
+func (ac *ArtifactCreate) SetWeight(s string) *ArtifactCreate {
+	ac.mutation.SetWeight(s)
+	return ac
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableWeight(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetWeight(*s)
+	}
+	return ac
+}
+
 // SetChemicalComposition sets the "chemical_composition" field.
 func (ac *ArtifactCreate) SetChemicalComposition(s string) *ArtifactCreate {
 	ac.mutation.SetChemicalComposition(s)
@@ -273,20 +357,6 @@ func (ac *ArtifactCreate) SetTypology(s string) *ArtifactCreate {
 func (ac *ArtifactCreate) SetNillableTypology(s *string) *ArtifactCreate {
 	if s != nil {
 		ac.SetTypology(*s)
-	}
-	return ac
-}
-
-// SetWeight sets the "weight" field.
-func (ac *ArtifactCreate) SetWeight(s string) *ArtifactCreate {
-	ac.mutation.SetWeight(s)
-	return ac
-}
-
-// SetNillableWeight sets the "weight" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableWeight(s *string) *ArtifactCreate {
-	if s != nil {
-		ac.SetWeight(*s)
 	}
 	return ac
 }
@@ -684,6 +754,30 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
 		_node.Dimensions = value
 	}
+	if value, ok := ac.mutation.Height(); ok {
+		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
+		_node.Height = value
+	}
+	if value, ok := ac.mutation.Width(); ok {
+		_spec.SetField(artifact.FieldWidth, field.TypeFloat64, value)
+		_node.Width = value
+	}
+	if value, ok := ac.mutation.Length(); ok {
+		_spec.SetField(artifact.FieldLength, field.TypeFloat64, value)
+		_node.Length = value
+	}
+	if value, ok := ac.mutation.Depth(); ok {
+		_spec.SetField(artifact.FieldDepth, field.TypeFloat64, value)
+		_node.Depth = value
+	}
+	if value, ok := ac.mutation.Diameter(); ok {
+		_spec.SetField(artifact.FieldDiameter, field.TypeFloat64, value)
+		_node.Diameter = value
+	}
+	if value, ok := ac.mutation.Weight(); ok {
+		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
+		_node.Weight = value
+	}
 	if value, ok := ac.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 		_node.ChemicalComposition = value
@@ -695,10 +789,6 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Typology(); ok {
 		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
 		_node.Typology = value
-	}
-	if value, ok := ac.mutation.Weight(); ok {
-		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
-		_node.Weight = value
 	}
 	if value, ok := ac.mutation.AdmissionDate(); ok {
 		_spec.SetField(artifact.FieldAdmissionDate, field.TypeTime, value)

@@ -478,10 +478,15 @@ type CreateArtifactInput struct {
 	DeletedBy             *string
 	Dating                *string
 	Dimensions            *string
+	Height                *float64
+	Width                 *float64
+	Length                *float64
+	Depth                 *float64
+	Diameter              *float64
+	Weight                *string
 	ChemicalComposition   *string
 	Number                *string
 	Typology              *string
-	Weight                *string
 	AdmissionDate         *time.Time
 	AuthorIDs             []int
 	MediumIDs             []int
@@ -545,6 +550,24 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
 	}
+	if v := i.Height; v != nil {
+		m.SetHeight(*v)
+	}
+	if v := i.Width; v != nil {
+		m.SetWidth(*v)
+	}
+	if v := i.Length; v != nil {
+		m.SetLength(*v)
+	}
+	if v := i.Depth; v != nil {
+		m.SetDepth(*v)
+	}
+	if v := i.Diameter; v != nil {
+		m.SetDiameter(*v)
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
+	}
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
 	}
@@ -553,9 +576,6 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.Typology; v != nil {
 		m.SetTypology(*v)
-	}
-	if v := i.Weight; v != nil {
-		m.SetWeight(*v)
 	}
 	if v := i.AdmissionDate; v != nil {
 		m.SetAdmissionDate(*v)
@@ -635,14 +655,24 @@ type UpdateArtifactInput struct {
 	Dating                     *string
 	ClearDimensions            bool
 	Dimensions                 *string
+	ClearHeight                bool
+	Height                     *float64
+	ClearWidth                 bool
+	Width                      *float64
+	ClearLength                bool
+	Length                     *float64
+	ClearDepth                 bool
+	Depth                      *float64
+	ClearDiameter              bool
+	Diameter                   *float64
+	ClearWeight                bool
+	Weight                     *string
 	ClearChemicalComposition   bool
 	ChemicalComposition        *string
 	ClearNumber                bool
 	Number                     *string
 	ClearTypology              bool
 	Typology                   *string
-	ClearWeight                bool
-	Weight                     *string
 	ClearAdmissionDate         bool
 	AdmissionDate              *time.Time
 	ClearAuthors               bool
@@ -763,6 +793,42 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
 	}
+	if i.ClearHeight {
+		m.ClearHeight()
+	}
+	if v := i.Height; v != nil {
+		m.SetHeight(*v)
+	}
+	if i.ClearWidth {
+		m.ClearWidth()
+	}
+	if v := i.Width; v != nil {
+		m.SetWidth(*v)
+	}
+	if i.ClearLength {
+		m.ClearLength()
+	}
+	if v := i.Length; v != nil {
+		m.SetLength(*v)
+	}
+	if i.ClearDepth {
+		m.ClearDepth()
+	}
+	if v := i.Depth; v != nil {
+		m.SetDepth(*v)
+	}
+	if i.ClearDiameter {
+		m.ClearDiameter()
+	}
+	if v := i.Diameter; v != nil {
+		m.SetDiameter(*v)
+	}
+	if i.ClearWeight {
+		m.ClearWeight()
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
+	}
 	if i.ClearChemicalComposition {
 		m.ClearChemicalComposition()
 	}
@@ -780,12 +846,6 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.Typology; v != nil {
 		m.SetTypology(*v)
-	}
-	if i.ClearWeight {
-		m.ClearWeight()
-	}
-	if v := i.Weight; v != nil {
-		m.SetWeight(*v)
 	}
 	if i.ClearAdmissionDate {
 		m.ClearAdmissionDate()
