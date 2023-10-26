@@ -79,7 +79,6 @@ func (Artifact) Edges() []ent.Edge {
 		edge.From("period", Period.Type).Ref("artifacts").Unique(),
 		edge.From("projects", Project.Type).Ref("artifacts"),
 		edge.From("publications", Publication.Type).Ref("artifacts"),
-		edge.From("holders", Holder.Type).Ref("artifacts"),
 		edge.From("cultural_affiliation", Culture.Type).Ref("artifacts").Unique(),
 		edge.From("monument", Monument.Type).Ref("artifacts").Unique(),
 		edge.From("model", Model.Type).Ref("artifacts").Unique(),

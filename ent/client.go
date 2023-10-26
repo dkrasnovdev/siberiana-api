@@ -28,8 +28,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
-	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -37,13 +35,10 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
-	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
-	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -87,10 +82,6 @@ type Client struct {
 	District *DistrictClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
-	// Holder is the client for interacting with the Holder builders.
-	Holder *HolderClient
-	// HolderResponsibility is the client for interacting with the HolderResponsibility builders.
-	HolderResponsibility *HolderResponsibilityClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
 	// License is the client for interacting with the License builders.
@@ -105,20 +96,14 @@ type Client struct {
 	Monument *MonumentClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
-	// OrganizationType is the client for interacting with the OrganizationType builders.
-	OrganizationType *OrganizationTypeClient
 	// Period is the client for interacting with the Period builders.
 	Period *PeriodClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
-	// PersonRole is the client for interacting with the PersonRole builders.
-	PersonRole *PersonRoleClient
 	// Personal is the client for interacting with the Personal builders.
 	Personal *PersonalClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
-	// ProjectType is the client for interacting with the ProjectType builders.
-	ProjectType *ProjectTypeClient
 	// ProtectedArea is the client for interacting with the ProtectedArea builders.
 	ProtectedArea *ProtectedAreaClient
 	// ProtectedAreaCategory is the client for interacting with the ProtectedAreaCategory builders.
@@ -167,8 +152,6 @@ func (c *Client) init() {
 	c.Culture = NewCultureClient(c.config)
 	c.District = NewDistrictClient(c.config)
 	c.Favourite = NewFavouriteClient(c.config)
-	c.Holder = NewHolderClient(c.config)
-	c.HolderResponsibility = NewHolderResponsibilityClient(c.config)
 	c.Keyword = NewKeywordClient(c.config)
 	c.License = NewLicenseClient(c.config)
 	c.Location = NewLocationClient(c.config)
@@ -176,13 +159,10 @@ func (c *Client) init() {
 	c.Model = NewModelClient(c.config)
 	c.Monument = NewMonumentClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
-	c.OrganizationType = NewOrganizationTypeClient(c.config)
 	c.Period = NewPeriodClient(c.config)
 	c.Person = NewPersonClient(c.config)
-	c.PersonRole = NewPersonRoleClient(c.config)
 	c.Personal = NewPersonalClient(c.config)
 	c.Project = NewProjectClient(c.config)
-	c.ProjectType = NewProjectTypeClient(c.config)
 	c.ProtectedArea = NewProtectedAreaClient(c.config)
 	c.ProtectedAreaCategory = NewProtectedAreaCategoryClient(c.config)
 	c.ProtectedAreaPicture = NewProtectedAreaPictureClient(c.config)
@@ -291,8 +271,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Favourite:             NewFavouriteClient(cfg),
-		Holder:                NewHolderClient(cfg),
-		HolderResponsibility:  NewHolderResponsibilityClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
 		License:               NewLicenseClient(cfg),
 		Location:              NewLocationClient(cfg),
@@ -300,13 +278,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
-		OrganizationType:      NewOrganizationTypeClient(cfg),
 		Period:                NewPeriodClient(cfg),
 		Person:                NewPersonClient(cfg),
-		PersonRole:            NewPersonRoleClient(cfg),
 		Personal:              NewPersonalClient(cfg),
 		Project:               NewProjectClient(cfg),
-		ProjectType:           NewProjectTypeClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
@@ -349,8 +324,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Favourite:             NewFavouriteClient(cfg),
-		Holder:                NewHolderClient(cfg),
-		HolderResponsibility:  NewHolderResponsibilityClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
 		License:               NewLicenseClient(cfg),
 		Location:              NewLocationClient(cfg),
@@ -358,13 +331,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
-		OrganizationType:      NewOrganizationTypeClient(cfg),
 		Period:                NewPeriodClient(cfg),
 		Person:                NewPersonClient(cfg),
-		PersonRole:            NewPersonRoleClient(cfg),
 		Personal:              NewPersonalClient(cfg),
 		Project:               NewProjectClient(cfg),
-		ProjectType:           NewProjectTypeClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
@@ -406,9 +376,8 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
-		c.Holder, c.HolderResponsibility, c.Keyword, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
-		c.PersonRole, c.Personal, c.Project, c.ProjectType, c.ProtectedArea,
+		c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
+		c.Organization, c.Period, c.Person, c.Personal, c.Project, c.ProtectedArea,
 		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
 		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
@@ -422,9 +391,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
-		c.Holder, c.HolderResponsibility, c.Keyword, c.License, c.Location, c.Medium,
-		c.Model, c.Monument, c.Organization, c.OrganizationType, c.Period, c.Person,
-		c.PersonRole, c.Personal, c.Project, c.ProjectType, c.ProtectedArea,
+		c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
+		c.Organization, c.Period, c.Person, c.Personal, c.Project, c.ProtectedArea,
 		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
 		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
@@ -461,10 +429,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.District.mutate(ctx, m)
 	case *FavouriteMutation:
 		return c.Favourite.mutate(ctx, m)
-	case *HolderMutation:
-		return c.Holder.mutate(ctx, m)
-	case *HolderResponsibilityMutation:
-		return c.HolderResponsibility.mutate(ctx, m)
 	case *KeywordMutation:
 		return c.Keyword.mutate(ctx, m)
 	case *LicenseMutation:
@@ -479,20 +443,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Monument.mutate(ctx, m)
 	case *OrganizationMutation:
 		return c.Organization.mutate(ctx, m)
-	case *OrganizationTypeMutation:
-		return c.OrganizationType.mutate(ctx, m)
 	case *PeriodMutation:
 		return c.Period.mutate(ctx, m)
 	case *PersonMutation:
 		return c.Person.mutate(ctx, m)
-	case *PersonRoleMutation:
-		return c.PersonRole.mutate(ctx, m)
 	case *PersonalMutation:
 		return c.Personal.mutate(ctx, m)
 	case *ProjectMutation:
 		return c.Project.mutate(ctx, m)
-	case *ProjectTypeMutation:
-		return c.ProjectType.mutate(ctx, m)
 	case *ProtectedAreaMutation:
 		return c.ProtectedArea.mutate(ctx, m)
 	case *ProtectedAreaCategoryMutation:
@@ -1188,22 +1146,6 @@ func (c *ArtifactClient) QueryPublications(a *Artifact) *PublicationQuery {
 	return query
 }
 
-// QueryHolders queries the holders edge of a Artifact.
-func (c *ArtifactClient) QueryHolders(a *Artifact) *HolderQuery {
-	query := (&HolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(artifact.Table, artifact.FieldID, id),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, artifact.HoldersTable, artifact.HoldersPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryCulturalAffiliation queries the cultural_affiliation edge of a Artifact.
 func (c *ArtifactClient) QueryCulturalAffiliation(a *Artifact) *CultureQuery {
 	query := (&CultureClient{config: c.config}).Query()
@@ -1626,22 +1568,6 @@ func (c *BookClient) QueryCollection(b *Book) *CollectionQuery {
 			sqlgraph.From(book.Table, book.FieldID, id),
 			sqlgraph.To(collection.Table, collection.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.CollectionTable, book.CollectionColumn),
-		)
-		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryHolders queries the holders edge of a Book.
-func (c *BookClient) QueryHolders(b *Book) *HolderQuery {
-	query := (&HolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := b.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(book.Table, book.FieldID, id),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, book.HoldersTable, book.HoldersPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
@@ -2837,370 +2763,6 @@ func (c *FavouriteClient) mutate(ctx context.Context, m *FavouriteMutation) (Val
 	}
 }
 
-// HolderClient is a client for the Holder schema.
-type HolderClient struct {
-	config
-}
-
-// NewHolderClient returns a client for the Holder from the given config.
-func NewHolderClient(c config) *HolderClient {
-	return &HolderClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `holder.Hooks(f(g(h())))`.
-func (c *HolderClient) Use(hooks ...Hook) {
-	c.hooks.Holder = append(c.hooks.Holder, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `holder.Intercept(f(g(h())))`.
-func (c *HolderClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Holder = append(c.inters.Holder, interceptors...)
-}
-
-// Create returns a builder for creating a Holder entity.
-func (c *HolderClient) Create() *HolderCreate {
-	mutation := newHolderMutation(c.config, OpCreate)
-	return &HolderCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of Holder entities.
-func (c *HolderClient) CreateBulk(builders ...*HolderCreate) *HolderCreateBulk {
-	return &HolderCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *HolderClient) MapCreateBulk(slice any, setFunc func(*HolderCreate, int)) *HolderCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &HolderCreateBulk{err: fmt.Errorf("calling to HolderClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*HolderCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &HolderCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for Holder.
-func (c *HolderClient) Update() *HolderUpdate {
-	mutation := newHolderMutation(c.config, OpUpdate)
-	return &HolderUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *HolderClient) UpdateOne(h *Holder) *HolderUpdateOne {
-	mutation := newHolderMutation(c.config, OpUpdateOne, withHolder(h))
-	return &HolderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *HolderClient) UpdateOneID(id int) *HolderUpdateOne {
-	mutation := newHolderMutation(c.config, OpUpdateOne, withHolderID(id))
-	return &HolderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for Holder.
-func (c *HolderClient) Delete() *HolderDelete {
-	mutation := newHolderMutation(c.config, OpDelete)
-	return &HolderDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *HolderClient) DeleteOne(h *Holder) *HolderDeleteOne {
-	return c.DeleteOneID(h.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *HolderClient) DeleteOneID(id int) *HolderDeleteOne {
-	builder := c.Delete().Where(holder.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &HolderDeleteOne{builder}
-}
-
-// Query returns a query builder for Holder.
-func (c *HolderClient) Query() *HolderQuery {
-	return &HolderQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeHolder},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a Holder entity by its id.
-func (c *HolderClient) Get(ctx context.Context, id int) (*Holder, error) {
-	return c.Query().Where(holder.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *HolderClient) GetX(ctx context.Context, id int) *Holder {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryArtifacts queries the artifacts edge of a Holder.
-func (c *HolderClient) QueryArtifacts(h *Holder) *ArtifactQuery {
-	query := (&ArtifactClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := h.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(holder.Table, holder.FieldID, id),
-			sqlgraph.To(artifact.Table, artifact.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, holder.ArtifactsTable, holder.ArtifactsPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryBooks queries the books edge of a Holder.
-func (c *HolderClient) QueryBooks(h *Holder) *BookQuery {
-	query := (&BookClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := h.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(holder.Table, holder.FieldID, id),
-			sqlgraph.To(book.Table, book.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, holder.BooksTable, holder.BooksPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryHolderResponsibilities queries the holder_responsibilities edge of a Holder.
-func (c *HolderClient) QueryHolderResponsibilities(h *Holder) *HolderResponsibilityQuery {
-	query := (&HolderResponsibilityClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := h.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(holder.Table, holder.FieldID, id),
-			sqlgraph.To(holderresponsibility.Table, holderresponsibility.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, holder.HolderResponsibilitiesTable, holder.HolderResponsibilitiesPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPerson queries the person edge of a Holder.
-func (c *HolderClient) QueryPerson(h *Holder) *PersonQuery {
-	query := (&PersonClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := h.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(holder.Table, holder.FieldID, id),
-			sqlgraph.To(person.Table, person.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, holder.PersonTable, holder.PersonColumn),
-		)
-		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryOrganization queries the organization edge of a Holder.
-func (c *HolderClient) QueryOrganization(h *Holder) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := h.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(holder.Table, holder.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, holder.OrganizationTable, holder.OrganizationColumn),
-		)
-		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *HolderClient) Hooks() []Hook {
-	hooks := c.hooks.Holder
-	return append(hooks[:len(hooks):len(hooks)], holder.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *HolderClient) Interceptors() []Interceptor {
-	return c.inters.Holder
-}
-
-func (c *HolderClient) mutate(ctx context.Context, m *HolderMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&HolderCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&HolderUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&HolderUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&HolderDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown Holder mutation op: %q", m.Op())
-	}
-}
-
-// HolderResponsibilityClient is a client for the HolderResponsibility schema.
-type HolderResponsibilityClient struct {
-	config
-}
-
-// NewHolderResponsibilityClient returns a client for the HolderResponsibility from the given config.
-func NewHolderResponsibilityClient(c config) *HolderResponsibilityClient {
-	return &HolderResponsibilityClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `holderresponsibility.Hooks(f(g(h())))`.
-func (c *HolderResponsibilityClient) Use(hooks ...Hook) {
-	c.hooks.HolderResponsibility = append(c.hooks.HolderResponsibility, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `holderresponsibility.Intercept(f(g(h())))`.
-func (c *HolderResponsibilityClient) Intercept(interceptors ...Interceptor) {
-	c.inters.HolderResponsibility = append(c.inters.HolderResponsibility, interceptors...)
-}
-
-// Create returns a builder for creating a HolderResponsibility entity.
-func (c *HolderResponsibilityClient) Create() *HolderResponsibilityCreate {
-	mutation := newHolderResponsibilityMutation(c.config, OpCreate)
-	return &HolderResponsibilityCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of HolderResponsibility entities.
-func (c *HolderResponsibilityClient) CreateBulk(builders ...*HolderResponsibilityCreate) *HolderResponsibilityCreateBulk {
-	return &HolderResponsibilityCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *HolderResponsibilityClient) MapCreateBulk(slice any, setFunc func(*HolderResponsibilityCreate, int)) *HolderResponsibilityCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &HolderResponsibilityCreateBulk{err: fmt.Errorf("calling to HolderResponsibilityClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*HolderResponsibilityCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &HolderResponsibilityCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for HolderResponsibility.
-func (c *HolderResponsibilityClient) Update() *HolderResponsibilityUpdate {
-	mutation := newHolderResponsibilityMutation(c.config, OpUpdate)
-	return &HolderResponsibilityUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *HolderResponsibilityClient) UpdateOne(hr *HolderResponsibility) *HolderResponsibilityUpdateOne {
-	mutation := newHolderResponsibilityMutation(c.config, OpUpdateOne, withHolderResponsibility(hr))
-	return &HolderResponsibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *HolderResponsibilityClient) UpdateOneID(id int) *HolderResponsibilityUpdateOne {
-	mutation := newHolderResponsibilityMutation(c.config, OpUpdateOne, withHolderResponsibilityID(id))
-	return &HolderResponsibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for HolderResponsibility.
-func (c *HolderResponsibilityClient) Delete() *HolderResponsibilityDelete {
-	mutation := newHolderResponsibilityMutation(c.config, OpDelete)
-	return &HolderResponsibilityDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *HolderResponsibilityClient) DeleteOne(hr *HolderResponsibility) *HolderResponsibilityDeleteOne {
-	return c.DeleteOneID(hr.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *HolderResponsibilityClient) DeleteOneID(id int) *HolderResponsibilityDeleteOne {
-	builder := c.Delete().Where(holderresponsibility.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &HolderResponsibilityDeleteOne{builder}
-}
-
-// Query returns a query builder for HolderResponsibility.
-func (c *HolderResponsibilityClient) Query() *HolderResponsibilityQuery {
-	return &HolderResponsibilityQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeHolderResponsibility},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a HolderResponsibility entity by its id.
-func (c *HolderResponsibilityClient) Get(ctx context.Context, id int) (*HolderResponsibility, error) {
-	return c.Query().Where(holderresponsibility.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *HolderResponsibilityClient) GetX(ctx context.Context, id int) *HolderResponsibility {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryHolder queries the holder edge of a HolderResponsibility.
-func (c *HolderResponsibilityClient) QueryHolder(hr *HolderResponsibility) *HolderQuery {
-	query := (&HolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := hr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(holderresponsibility.Table, holderresponsibility.FieldID, id),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, holderresponsibility.HolderTable, holderresponsibility.HolderPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(hr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *HolderResponsibilityClient) Hooks() []Hook {
-	hooks := c.hooks.HolderResponsibility
-	return append(hooks[:len(hooks):len(hooks)], holderresponsibility.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *HolderResponsibilityClient) Interceptors() []Interceptor {
-	return c.inters.HolderResponsibility
-}
-
-func (c *HolderResponsibilityClient) mutate(ctx context.Context, m *HolderResponsibilityMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&HolderResponsibilityCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&HolderResponsibilityUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&HolderResponsibilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&HolderResponsibilityDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown HolderResponsibility mutation op: %q", m.Op())
-	}
-}
-
 // KeywordClient is a client for the Keyword schema.
 type KeywordClient struct {
 	config
@@ -4352,38 +3914,6 @@ func (c *OrganizationClient) QueryPeople(o *Organization) *PersonQuery {
 	return query
 }
 
-// QueryHolder queries the holder edge of a Organization.
-func (c *OrganizationClient) QueryHolder(o *Organization) *HolderQuery {
-	query := (&HolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, organization.HolderTable, organization.HolderColumn),
-		)
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryOrganizationType queries the organization_type edge of a Organization.
-func (c *OrganizationClient) QueryOrganizationType(o *Organization) *OrganizationTypeQuery {
-	query := (&OrganizationTypeClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := o.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(organizationtype.Table, organizationtype.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, organization.OrganizationTypeTable, organization.OrganizationTypeColumn),
-		)
-		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *OrganizationClient) Hooks() []Hook {
 	hooks := c.hooks.Organization
@@ -4407,156 +3937,6 @@ func (c *OrganizationClient) mutate(ctx context.Context, m *OrganizationMutation
 		return (&OrganizationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Organization mutation op: %q", m.Op())
-	}
-}
-
-// OrganizationTypeClient is a client for the OrganizationType schema.
-type OrganizationTypeClient struct {
-	config
-}
-
-// NewOrganizationTypeClient returns a client for the OrganizationType from the given config.
-func NewOrganizationTypeClient(c config) *OrganizationTypeClient {
-	return &OrganizationTypeClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `organizationtype.Hooks(f(g(h())))`.
-func (c *OrganizationTypeClient) Use(hooks ...Hook) {
-	c.hooks.OrganizationType = append(c.hooks.OrganizationType, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `organizationtype.Intercept(f(g(h())))`.
-func (c *OrganizationTypeClient) Intercept(interceptors ...Interceptor) {
-	c.inters.OrganizationType = append(c.inters.OrganizationType, interceptors...)
-}
-
-// Create returns a builder for creating a OrganizationType entity.
-func (c *OrganizationTypeClient) Create() *OrganizationTypeCreate {
-	mutation := newOrganizationTypeMutation(c.config, OpCreate)
-	return &OrganizationTypeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of OrganizationType entities.
-func (c *OrganizationTypeClient) CreateBulk(builders ...*OrganizationTypeCreate) *OrganizationTypeCreateBulk {
-	return &OrganizationTypeCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *OrganizationTypeClient) MapCreateBulk(slice any, setFunc func(*OrganizationTypeCreate, int)) *OrganizationTypeCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &OrganizationTypeCreateBulk{err: fmt.Errorf("calling to OrganizationTypeClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*OrganizationTypeCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &OrganizationTypeCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for OrganizationType.
-func (c *OrganizationTypeClient) Update() *OrganizationTypeUpdate {
-	mutation := newOrganizationTypeMutation(c.config, OpUpdate)
-	return &OrganizationTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *OrganizationTypeClient) UpdateOne(ot *OrganizationType) *OrganizationTypeUpdateOne {
-	mutation := newOrganizationTypeMutation(c.config, OpUpdateOne, withOrganizationType(ot))
-	return &OrganizationTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *OrganizationTypeClient) UpdateOneID(id int) *OrganizationTypeUpdateOne {
-	mutation := newOrganizationTypeMutation(c.config, OpUpdateOne, withOrganizationTypeID(id))
-	return &OrganizationTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for OrganizationType.
-func (c *OrganizationTypeClient) Delete() *OrganizationTypeDelete {
-	mutation := newOrganizationTypeMutation(c.config, OpDelete)
-	return &OrganizationTypeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *OrganizationTypeClient) DeleteOne(ot *OrganizationType) *OrganizationTypeDeleteOne {
-	return c.DeleteOneID(ot.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *OrganizationTypeClient) DeleteOneID(id int) *OrganizationTypeDeleteOne {
-	builder := c.Delete().Where(organizationtype.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &OrganizationTypeDeleteOne{builder}
-}
-
-// Query returns a query builder for OrganizationType.
-func (c *OrganizationTypeClient) Query() *OrganizationTypeQuery {
-	return &OrganizationTypeQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeOrganizationType},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a OrganizationType entity by its id.
-func (c *OrganizationTypeClient) Get(ctx context.Context, id int) (*OrganizationType, error) {
-	return c.Query().Where(organizationtype.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *OrganizationTypeClient) GetX(ctx context.Context, id int) *OrganizationType {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOrganizations queries the organizations edge of a OrganizationType.
-func (c *OrganizationTypeClient) QueryOrganizations(ot *OrganizationType) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := ot.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organizationtype.Table, organizationtype.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organizationtype.OrganizationsTable, organizationtype.OrganizationsColumn),
-		)
-		fromV = sqlgraph.Neighbors(ot.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *OrganizationTypeClient) Hooks() []Hook {
-	hooks := c.hooks.OrganizationType
-	return append(hooks[:len(hooks):len(hooks)], organizationtype.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *OrganizationTypeClient) Interceptors() []Interceptor {
-	return c.inters.OrganizationType
-}
-
-func (c *OrganizationTypeClient) mutate(ctx context.Context, m *OrganizationTypeMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&OrganizationTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&OrganizationTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&OrganizationTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&OrganizationTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown OrganizationType mutation op: %q", m.Op())
 	}
 }
 
@@ -4898,38 +4278,6 @@ func (c *PersonClient) QueryPublications(pe *Person) *PublicationQuery {
 	return query
 }
 
-// QueryPersonRoles queries the person_roles edge of a Person.
-func (c *PersonClient) QueryPersonRoles(pe *Person) *PersonRoleQuery {
-	query := (&PersonRoleClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(person.Table, person.FieldID, id),
-			sqlgraph.To(personrole.Table, personrole.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, person.PersonRolesTable, person.PersonRolesPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryHolder queries the holder edge of a Person.
-func (c *PersonClient) QueryHolder(pe *Person) *HolderQuery {
-	query := (&HolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(person.Table, person.FieldID, id),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, person.HolderTable, person.HolderColumn),
-		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryAffiliation queries the affiliation edge of a Person.
 func (c *PersonClient) QueryAffiliation(pe *Person) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -4969,156 +4317,6 @@ func (c *PersonClient) mutate(ctx context.Context, m *PersonMutation) (Value, er
 		return (&PersonDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Person mutation op: %q", m.Op())
-	}
-}
-
-// PersonRoleClient is a client for the PersonRole schema.
-type PersonRoleClient struct {
-	config
-}
-
-// NewPersonRoleClient returns a client for the PersonRole from the given config.
-func NewPersonRoleClient(c config) *PersonRoleClient {
-	return &PersonRoleClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `personrole.Hooks(f(g(h())))`.
-func (c *PersonRoleClient) Use(hooks ...Hook) {
-	c.hooks.PersonRole = append(c.hooks.PersonRole, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `personrole.Intercept(f(g(h())))`.
-func (c *PersonRoleClient) Intercept(interceptors ...Interceptor) {
-	c.inters.PersonRole = append(c.inters.PersonRole, interceptors...)
-}
-
-// Create returns a builder for creating a PersonRole entity.
-func (c *PersonRoleClient) Create() *PersonRoleCreate {
-	mutation := newPersonRoleMutation(c.config, OpCreate)
-	return &PersonRoleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of PersonRole entities.
-func (c *PersonRoleClient) CreateBulk(builders ...*PersonRoleCreate) *PersonRoleCreateBulk {
-	return &PersonRoleCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *PersonRoleClient) MapCreateBulk(slice any, setFunc func(*PersonRoleCreate, int)) *PersonRoleCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &PersonRoleCreateBulk{err: fmt.Errorf("calling to PersonRoleClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*PersonRoleCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &PersonRoleCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for PersonRole.
-func (c *PersonRoleClient) Update() *PersonRoleUpdate {
-	mutation := newPersonRoleMutation(c.config, OpUpdate)
-	return &PersonRoleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *PersonRoleClient) UpdateOne(pr *PersonRole) *PersonRoleUpdateOne {
-	mutation := newPersonRoleMutation(c.config, OpUpdateOne, withPersonRole(pr))
-	return &PersonRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *PersonRoleClient) UpdateOneID(id int) *PersonRoleUpdateOne {
-	mutation := newPersonRoleMutation(c.config, OpUpdateOne, withPersonRoleID(id))
-	return &PersonRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for PersonRole.
-func (c *PersonRoleClient) Delete() *PersonRoleDelete {
-	mutation := newPersonRoleMutation(c.config, OpDelete)
-	return &PersonRoleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *PersonRoleClient) DeleteOne(pr *PersonRole) *PersonRoleDeleteOne {
-	return c.DeleteOneID(pr.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *PersonRoleClient) DeleteOneID(id int) *PersonRoleDeleteOne {
-	builder := c.Delete().Where(personrole.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &PersonRoleDeleteOne{builder}
-}
-
-// Query returns a query builder for PersonRole.
-func (c *PersonRoleClient) Query() *PersonRoleQuery {
-	return &PersonRoleQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypePersonRole},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a PersonRole entity by its id.
-func (c *PersonRoleClient) Get(ctx context.Context, id int) (*PersonRole, error) {
-	return c.Query().Where(personrole.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *PersonRoleClient) GetX(ctx context.Context, id int) *PersonRole {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryPerson queries the person edge of a PersonRole.
-func (c *PersonRoleClient) QueryPerson(pr *PersonRole) *PersonQuery {
-	query := (&PersonClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(personrole.Table, personrole.FieldID, id),
-			sqlgraph.To(person.Table, person.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, personrole.PersonTable, personrole.PersonPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *PersonRoleClient) Hooks() []Hook {
-	hooks := c.hooks.PersonRole
-	return append(hooks[:len(hooks):len(hooks)], personrole.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *PersonRoleClient) Interceptors() []Interceptor {
-	return c.inters.PersonRole
-}
-
-func (c *PersonRoleClient) mutate(ctx context.Context, m *PersonRoleMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&PersonRoleCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&PersonRoleUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&PersonRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&PersonRoleDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown PersonRole mutation op: %q", m.Op())
 	}
 }
 
@@ -5412,22 +4610,6 @@ func (c *ProjectClient) QueryTeam(pr *Project) *PersonQuery {
 	return query
 }
 
-// QueryProjectType queries the project_type edge of a Project.
-func (c *ProjectClient) QueryProjectType(pr *Project) *ProjectTypeQuery {
-	query := (&ProjectTypeClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(project.Table, project.FieldID, id),
-			sqlgraph.To(projecttype.Table, projecttype.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, project.ProjectTypeTable, project.ProjectTypeColumn),
-		)
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *ProjectClient) Hooks() []Hook {
 	hooks := c.hooks.Project
@@ -5451,156 +4633,6 @@ func (c *ProjectClient) mutate(ctx context.Context, m *ProjectMutation) (Value, 
 		return (&ProjectDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Project mutation op: %q", m.Op())
-	}
-}
-
-// ProjectTypeClient is a client for the ProjectType schema.
-type ProjectTypeClient struct {
-	config
-}
-
-// NewProjectTypeClient returns a client for the ProjectType from the given config.
-func NewProjectTypeClient(c config) *ProjectTypeClient {
-	return &ProjectTypeClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `projecttype.Hooks(f(g(h())))`.
-func (c *ProjectTypeClient) Use(hooks ...Hook) {
-	c.hooks.ProjectType = append(c.hooks.ProjectType, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `projecttype.Intercept(f(g(h())))`.
-func (c *ProjectTypeClient) Intercept(interceptors ...Interceptor) {
-	c.inters.ProjectType = append(c.inters.ProjectType, interceptors...)
-}
-
-// Create returns a builder for creating a ProjectType entity.
-func (c *ProjectTypeClient) Create() *ProjectTypeCreate {
-	mutation := newProjectTypeMutation(c.config, OpCreate)
-	return &ProjectTypeCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of ProjectType entities.
-func (c *ProjectTypeClient) CreateBulk(builders ...*ProjectTypeCreate) *ProjectTypeCreateBulk {
-	return &ProjectTypeCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *ProjectTypeClient) MapCreateBulk(slice any, setFunc func(*ProjectTypeCreate, int)) *ProjectTypeCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &ProjectTypeCreateBulk{err: fmt.Errorf("calling to ProjectTypeClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*ProjectTypeCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &ProjectTypeCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for ProjectType.
-func (c *ProjectTypeClient) Update() *ProjectTypeUpdate {
-	mutation := newProjectTypeMutation(c.config, OpUpdate)
-	return &ProjectTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ProjectTypeClient) UpdateOne(pt *ProjectType) *ProjectTypeUpdateOne {
-	mutation := newProjectTypeMutation(c.config, OpUpdateOne, withProjectType(pt))
-	return &ProjectTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ProjectTypeClient) UpdateOneID(id int) *ProjectTypeUpdateOne {
-	mutation := newProjectTypeMutation(c.config, OpUpdateOne, withProjectTypeID(id))
-	return &ProjectTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for ProjectType.
-func (c *ProjectTypeClient) Delete() *ProjectTypeDelete {
-	mutation := newProjectTypeMutation(c.config, OpDelete)
-	return &ProjectTypeDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ProjectTypeClient) DeleteOne(pt *ProjectType) *ProjectTypeDeleteOne {
-	return c.DeleteOneID(pt.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ProjectTypeClient) DeleteOneID(id int) *ProjectTypeDeleteOne {
-	builder := c.Delete().Where(projecttype.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ProjectTypeDeleteOne{builder}
-}
-
-// Query returns a query builder for ProjectType.
-func (c *ProjectTypeClient) Query() *ProjectTypeQuery {
-	return &ProjectTypeQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeProjectType},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a ProjectType entity by its id.
-func (c *ProjectTypeClient) Get(ctx context.Context, id int) (*ProjectType, error) {
-	return c.Query().Where(projecttype.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ProjectTypeClient) GetX(ctx context.Context, id int) *ProjectType {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryProjects queries the projects edge of a ProjectType.
-func (c *ProjectTypeClient) QueryProjects(pt *ProjectType) *ProjectQuery {
-	query := (&ProjectClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pt.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(projecttype.Table, projecttype.FieldID, id),
-			sqlgraph.To(project.Table, project.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, projecttype.ProjectsTable, projecttype.ProjectsColumn),
-		)
-		fromV = sqlgraph.Neighbors(pt.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *ProjectTypeClient) Hooks() []Hook {
-	hooks := c.hooks.ProjectType
-	return append(hooks[:len(hooks):len(hooks)], projecttype.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *ProjectTypeClient) Interceptors() []Interceptor {
-	return c.inters.ProjectType
-}
-
-func (c *ProjectTypeClient) mutate(ctx context.Context, m *ProjectTypeMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ProjectTypeCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ProjectTypeUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ProjectTypeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ProjectTypeDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown ProjectType mutation op: %q", m.Op())
 	}
 }
 
@@ -7220,18 +6252,16 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Favourite, Holder,
-		HolderResponsibility, Keyword, License, Location, Medium, Model, Monument,
-		Organization, OrganizationType, Period, Person, PersonRole, Personal, Project,
-		ProjectType, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
-		Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
+		Collection, Country, Culture, District, Favourite, Keyword, License, Location,
+		Medium, Model, Monument, Organization, Period, Person, Personal, Project,
+		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy, Publication,
+		Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Favourite, Holder,
-		HolderResponsibility, Keyword, License, Location, Medium, Model, Monument,
-		Organization, OrganizationType, Period, Person, PersonRole, Personal, Project,
-		ProjectType, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
-		Publication, Publisher, Region, Set, Settlement, Technique []ent.Interceptor
+		Collection, Country, Culture, District, Favourite, Keyword, License, Location,
+		Medium, Model, Monument, Organization, Period, Person, Personal, Project,
+		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy, Publication,
+		Publisher, Region, Set, Settlement, Technique []ent.Interceptor
 	}
 )

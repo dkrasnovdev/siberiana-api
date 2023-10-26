@@ -13,7 +13,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/bookgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -232,21 +231,6 @@ func (bc *BookCreate) SetCollectionID(id int) *BookCreate {
 // SetCollection sets the "collection" edge to the Collection entity.
 func (bc *BookCreate) SetCollection(c *Collection) *BookCreate {
 	return bc.SetCollectionID(c.ID)
-}
-
-// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
-func (bc *BookCreate) AddHolderIDs(ids ...int) *BookCreate {
-	bc.mutation.AddHolderIDs(ids...)
-	return bc
-}
-
-// AddHolders adds the "holders" edges to the Holder entity.
-func (bc *BookCreate) AddHolders(h ...*Holder) *BookCreate {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return bc.AddHolderIDs(ids...)
 }
 
 // SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
@@ -510,22 +494,6 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.collection_books = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := bc.mutation.HoldersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   book.HoldersTable,
-			Columns: book.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := bc.mutation.PublisherIDs(); len(nodes) > 0 {

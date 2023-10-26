@@ -39,8 +39,6 @@ const (
 	EdgeArtifacts = "artifacts"
 	// EdgeTeam holds the string denoting the team edge name in mutations.
 	EdgeTeam = "team"
-	// EdgeProjectType holds the string denoting the project_type edge name in mutations.
-	EdgeProjectType = "project_type"
 	// Table holds the table name of the project in the database.
 	Table = "projects"
 	// ArtifactsTable is the table that holds the artifacts relation/edge. The primary key declared below.
@@ -53,13 +51,6 @@ const (
 	// TeamInverseTable is the table name for the Person entity.
 	// It exists in this package in order to avoid circular dependency with the "person" package.
 	TeamInverseTable = "persons"
-	// ProjectTypeTable is the table that holds the project_type relation/edge.
-	ProjectTypeTable = "projects"
-	// ProjectTypeInverseTable is the table name for the ProjectType entity.
-	// It exists in this package in order to avoid circular dependency with the "projecttype" package.
-	ProjectTypeInverseTable = "project_types"
-	// ProjectTypeColumn is the table column denoting the project_type relation/edge.
-	ProjectTypeColumn = "project_type_projects"
 )
 
 // Columns holds all SQL columns for project fields.
@@ -77,12 +68,6 @@ var Columns = []string{
 	FieldEndDate,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "projects"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"project_type_projects",
-}
-
 var (
 	// ArtifactsPrimaryKey and ArtifactsColumn2 are the table columns denoting the
 	// primary key for the artifacts relation (M2M).
@@ -96,11 +81,6 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -208,13 +188,6 @@ func ByTeam(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTeamStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-
-// ByProjectTypeField orders the results by project_type field.
-func ByProjectTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProjectTypeStep(), sql.OrderByField(field, opts...))
-	}
-}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -227,12 +200,5 @@ func newTeamStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TeamInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, TeamTable, TeamPrimaryKey...),
-	)
-}
-func newProjectTypeStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProjectTypeInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, ProjectTypeTable, ProjectTypeColumn),
 	)
 }

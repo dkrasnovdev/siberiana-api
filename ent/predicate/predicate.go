@@ -45,12 +45,6 @@ type District func(*sql.Selector)
 // Favourite is the predicate function for favourite builders.
 type Favourite func(*sql.Selector)
 
-// Holder is the predicate function for holder builders.
-type Holder func(*sql.Selector)
-
-// HolderResponsibility is the predicate function for holderresponsibility builders.
-type HolderResponsibility func(*sql.Selector)
-
 // Keyword is the predicate function for keyword builders.
 type Keyword func(*sql.Selector)
 
@@ -72,26 +66,17 @@ type Monument func(*sql.Selector)
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
 
-// OrganizationType is the predicate function for organizationtype builders.
-type OrganizationType func(*sql.Selector)
-
 // Period is the predicate function for period builders.
 type Period func(*sql.Selector)
 
 // Person is the predicate function for person builders.
 type Person func(*sql.Selector)
 
-// PersonRole is the predicate function for personrole builders.
-type PersonRole func(*sql.Selector)
-
 // Personal is the predicate function for personal builders.
 type Personal func(*sql.Selector)
 
 // Project is the predicate function for project builders.
 type Project func(*sql.Selector)
-
-// ProjectType is the predicate function for projecttype builders.
-type ProjectType func(*sql.Selector)
 
 // ProtectedArea is the predicate function for protectedarea builders.
 type ProtectedArea func(*sql.Selector)

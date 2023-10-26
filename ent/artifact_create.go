@@ -13,7 +13,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -398,21 +397,6 @@ func (ac *ArtifactCreate) AddPublications(p ...*Publication) *ArtifactCreate {
 		ids[i] = p[i].ID
 	}
 	return ac.AddPublicationIDs(ids...)
-}
-
-// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
-func (ac *ArtifactCreate) AddHolderIDs(ids ...int) *ArtifactCreate {
-	ac.mutation.AddHolderIDs(ids...)
-	return ac
-}
-
-// AddHolders adds the "holders" edges to the Holder entity.
-func (ac *ArtifactCreate) AddHolders(h ...*Holder) *ArtifactCreate {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return ac.AddHolderIDs(ids...)
 }
 
 // SetCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID.
@@ -810,22 +794,6 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ac.mutation.HoldersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   artifact.HoldersTable,
-			Columns: artifact.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

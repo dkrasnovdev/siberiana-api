@@ -6,92 +6,91 @@ type Mutation {
   # Art
   createArt(input: CreateArtInput!): Art!
   updateArt(id: ID!, input: UpdateArtInput!): Art!
+  deleteArt(id: ID!): String!
   # ArtGenre
   createArtGenre(input: CreateArtGenreInput!): ArtGenre!
   updateArtGenre(id: ID!, input: UpdateArtGenreInput!): ArtGenre!
+  deleteArtGenre(id: ID!): String!
   # ArtStyle
   createArtStyle(input: CreateArtStyleInput!): ArtStyle!
   updateArtStyle(id: ID!, input: UpdateArtStyleInput!): ArtStyle!
+  deleteArtStyle(id: ID!): String!
   # Book
   createBook(input: CreateBookInput!): Book!
   updateBook(id: ID!, input: UpdateBookInput!): Book!
+  deleteBook(id: ID!): String!
   # BookGenre
   createBookGenre(input: CreateBookGenreInput!): BookGenre!
   updateBookGenre(id: ID!, input: UpdateBookGenreInput!): BookGenre!
+  deleteBookGenre(id: ID!): String!
   # Category
   createCategory(input: CreateCategoryInput!): Category!
   updateCategory(id: ID!, input: UpdateCategoryInput!): Category!
+  deleteCategory(id: ID!): String!
   # Collection
   createCollection(input: CreateCollectionInput!): Collection!
   updateCollection(id: ID!, input: UpdateCollectionInput!): Collection!
+  deleteCollection(id: ID!): String!
   # Country
   createCountry(input: CreateCountryInput!): Country!
   updateCountry(id: ID!, input: UpdateCountryInput!): Country!
+  deleteCountry(id: ID!): String!
   # Culture
   createCulture(input: CreateCultureInput!): Culture!
   updateCulture(id: ID!, input: UpdateCultureInput!): Culture!
+  deleteCulture(id: ID!): String!
   # Favourite
   createFavourite(input: CreateFavouriteInput!): Favourite!
   updateFavourite(id: ID!, input: UpdateFavouriteInput!): Favourite!
+  deleteFavourite(id: ID!): String!
   # District
   createDistrict(input: CreateDistrictInput!): District!
   updateDistrict(id: ID!, input: UpdateDistrictInput!): District!
-  # Holder
-  createHolder(input: CreateHolderInput!): Holder!
-  updateHolder(id: ID!, input: UpdateHolderInput!): Holder!
-  # HolderResponsibility
-  createHolderResponsibility(
-    input: CreateHolderResponsibilityInput!
-  ): HolderResponsibility!
-  updateHolderResponsibility(
-    id: ID!
-    input: UpdateHolderResponsibilityInput!
-  ): HolderResponsibility!
+  deleteDistrict(id: ID!): String!
   # License
   createLicense(input: CreateLicenseInput!): License!
   updateLicense(id: ID!, input: UpdateLicenseInput!): License!
+  deleteLicense(id: ID!): String!
   # Location
   createLocation(input: CreateLocationInput!): Location!
   updateLocation(id: ID!, input: UpdateLocationInput!): Location!
+  deleteLocation(id: ID!): String!
   # Medium
   createMedium(input: CreateMediumInput!): Medium!
   updateMedium(id: ID!, input: UpdateMediumInput!): Medium!
+  deleteMedium(id: ID!): String!
   # Model
   createModel(input: CreateModelInput!): Model!
   updateModel(id: ID!, input: UpdateModelInput!): Model!
+  deleteModel(id: ID!): String!
   # Monument
   createMonument(input: CreateMonumentInput!): Monument!
   updateMonument(id: ID!, input: UpdateMonumentInput!): Monument!
+  deleteMonument(id: ID!): String!
   # Organization
   createOrganization(input: CreateOrganizationInput!): Organization!
   updateOrganization(id: ID!, input: UpdateOrganizationInput!): Organization!
-  # OrganizationType
-  createOrganizationType(input: CreateOrganizationTypeInput!): OrganizationType!
-  updateOrganizationType(
-    id: ID!
-    input: UpdateOrganizationTypeInput!
-  ): OrganizationType!
+  deleteOrganization(id: ID!): String!
   # Period
   createPeriod(input: CreatePeriodInput!): Period!
   updatePeriod(id: ID!, input: UpdatePeriodInput!): Period!
+  deletePeriod(id: ID!): String!
   # Person
   createPerson(input: CreatePersonInput!): Person!
   updatePerson(id: ID!, input: UpdatePersonInput!): Person!
-  # PersonRole
-  createPersonRole(input: CreatePersonRoleInput!): PersonRole!
-  updatePersonRole(id: ID!, input: UpdatePersonRoleInput!): PersonRole!
+  deletePerson(id: ID!): String!
   # Personal
   createPersonal(input: CreatePersonalInput!): Personal!
   updatePersonal(id: ID!, input: UpdatePersonalInput!): Personal!
+  deletePersonal(id: ID!): String!
   # Project
   createProject(input: CreateProjectInput!): Project!
   updateProject(id: ID!, input: UpdateProjectInput!): Project!
-  # ProjectType
-  createProjectType(input: CreateProjectTypeInput!): ProjectType!
-  updateProjectType(id: ID!, input: UpdateProjectTypeInput!): ProjectType!
+  deleteProject(id: ID!): String!
   # ProtectedArea
   createProtectedArea(input: CreateProtectedAreaInput!): ProtectedArea!
   updateProtectedArea(id: ID!, input: UpdateProtectedAreaInput!): ProtectedArea!
+  deleteProtectedArea(id: ID!): String!
   # ProtectedAreaCategory
   createProtectedAreaCategory(
     input: CreateProtectedAreaCategoryInput!
@@ -100,6 +99,7 @@ type Mutation {
     id: ID!
     input: UpdateProtectedAreaCategoryInput!
   ): ProtectedAreaCategory!
+  deleteProtectedAreaCategory(id: ID!): String!
   # ProtectedAreaPicture
   createProtectedAreaPicture(
     input: CreateProtectedAreaPictureInput!
@@ -108,25 +108,33 @@ type Mutation {
     id: ID!
     input: UpdateProtectedAreaPictureInput!
   ): ProtectedAreaPicture!
+  deleteProtectedAreaPicture(id: ID!): String!
   # Proxy
   createProxy(input: CreateProxyInput!): Proxy!
   updateProxy(id: ID!, input: UpdateProxyInput!): Proxy!
+  deleteProxy(id: ID!): String!
   # Publication
   createPublication(input: CreatePublicationInput!): Publication!
   updatePublication(id: ID!, input: UpdatePublicationInput!): Publication!
+  deletePublication(id: ID!): String!
   # Publisher
   createPublisher(input: CreatePublisherInput!): Publisher!
   updatePublisher(id: ID!, input: UpdatePublisherInput!): Publisher!
+  deletePublisher(id: ID!): String!
   # Region
   createRegion(input: CreateRegionInput!): Region!
   updateRegion(id: ID!, input: UpdateRegionInput!): Region!
+  deleteRegion(id: ID!): String!
   # Set
   createSet(input: CreateSetInput!): Set!
   updateSet(id: ID!, input: UpdateSetInput!): Set!
+  deleteSet(id: ID!): String!
   # Settlement
   createSettlement(input: CreateSettlementInput!): Settlement!
   updateSettlement(id: ID!, input: UpdateSettlementInput!): Settlement!
+  deleteSettlement(id: ID!): String!
   # Technique
   createTechnique(input: CreateTechniqueInput!): Technique!
   updateTechnique(id: ID!, input: UpdateTechniqueInput!): Technique!
+  deleteTechnique(id: ID!): String!
 }

@@ -15,7 +15,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -501,21 +500,6 @@ func (au *ArtifactUpdate) AddPublications(p ...*Publication) *ArtifactUpdate {
 	return au.AddPublicationIDs(ids...)
 }
 
-// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
-func (au *ArtifactUpdate) AddHolderIDs(ids ...int) *ArtifactUpdate {
-	au.mutation.AddHolderIDs(ids...)
-	return au
-}
-
-// AddHolders adds the "holders" edges to the Holder entity.
-func (au *ArtifactUpdate) AddHolders(h ...*Holder) *ArtifactUpdate {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return au.AddHolderIDs(ids...)
-}
-
 // SetCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID.
 func (au *ArtifactUpdate) SetCulturalAffiliationID(id int) *ArtifactUpdate {
 	au.mutation.SetCulturalAffiliationID(id)
@@ -755,27 +739,6 @@ func (au *ArtifactUpdate) RemovePublications(p ...*Publication) *ArtifactUpdate 
 		ids[i] = p[i].ID
 	}
 	return au.RemovePublicationIDs(ids...)
-}
-
-// ClearHolders clears all "holders" edges to the Holder entity.
-func (au *ArtifactUpdate) ClearHolders() *ArtifactUpdate {
-	au.mutation.ClearHolders()
-	return au
-}
-
-// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
-func (au *ArtifactUpdate) RemoveHolderIDs(ids ...int) *ArtifactUpdate {
-	au.mutation.RemoveHolderIDs(ids...)
-	return au
-}
-
-// RemoveHolders removes "holders" edges to Holder entities.
-func (au *ArtifactUpdate) RemoveHolders(h ...*Holder) *ArtifactUpdate {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return au.RemoveHolderIDs(ids...)
 }
 
 // ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
@@ -1250,51 +1213,6 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if au.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   artifact.HoldersTable,
-			Columns: artifact.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := au.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !au.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   artifact.HoldersTable,
-			Columns: artifact.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := au.mutation.HoldersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   artifact.HoldersTable,
-			Columns: artifact.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1983,21 +1901,6 @@ func (auo *ArtifactUpdateOne) AddPublications(p ...*Publication) *ArtifactUpdate
 	return auo.AddPublicationIDs(ids...)
 }
 
-// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
-func (auo *ArtifactUpdateOne) AddHolderIDs(ids ...int) *ArtifactUpdateOne {
-	auo.mutation.AddHolderIDs(ids...)
-	return auo
-}
-
-// AddHolders adds the "holders" edges to the Holder entity.
-func (auo *ArtifactUpdateOne) AddHolders(h ...*Holder) *ArtifactUpdateOne {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return auo.AddHolderIDs(ids...)
-}
-
 // SetCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by ID.
 func (auo *ArtifactUpdateOne) SetCulturalAffiliationID(id int) *ArtifactUpdateOne {
 	auo.mutation.SetCulturalAffiliationID(id)
@@ -2237,27 +2140,6 @@ func (auo *ArtifactUpdateOne) RemovePublications(p ...*Publication) *ArtifactUpd
 		ids[i] = p[i].ID
 	}
 	return auo.RemovePublicationIDs(ids...)
-}
-
-// ClearHolders clears all "holders" edges to the Holder entity.
-func (auo *ArtifactUpdateOne) ClearHolders() *ArtifactUpdateOne {
-	auo.mutation.ClearHolders()
-	return auo
-}
-
-// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
-func (auo *ArtifactUpdateOne) RemoveHolderIDs(ids ...int) *ArtifactUpdateOne {
-	auo.mutation.RemoveHolderIDs(ids...)
-	return auo
-}
-
-// RemoveHolders removes "holders" edges to Holder entities.
-func (auo *ArtifactUpdateOne) RemoveHolders(h ...*Holder) *ArtifactUpdateOne {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return auo.RemoveHolderIDs(ids...)
 }
 
 // ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
@@ -2762,51 +2644,6 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if auo.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   artifact.HoldersTable,
-			Columns: artifact.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := auo.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !auo.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   artifact.HoldersTable,
-			Columns: artifact.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := auo.mutation.HoldersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   artifact.HoldersTable,
-			Columns: artifact.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

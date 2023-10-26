@@ -25,8 +25,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
-	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -34,13 +32,10 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
-	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
-	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -124,8 +119,6 @@ func checkColumn(table, column string) error {
 			culture.Table:               culture.ValidColumn,
 			district.Table:              district.ValidColumn,
 			favourite.Table:             favourite.ValidColumn,
-			holder.Table:                holder.ValidColumn,
-			holderresponsibility.Table:  holderresponsibility.ValidColumn,
 			keyword.Table:               keyword.ValidColumn,
 			license.Table:               license.ValidColumn,
 			location.Table:              location.ValidColumn,
@@ -133,13 +126,10 @@ func checkColumn(table, column string) error {
 			model.Table:                 model.ValidColumn,
 			monument.Table:              monument.ValidColumn,
 			organization.Table:          organization.ValidColumn,
-			organizationtype.Table:      organizationtype.ValidColumn,
 			period.Table:                period.ValidColumn,
 			person.Table:                person.ValidColumn,
-			personrole.Table:            personrole.ValidColumn,
 			personal.Table:              personal.ValidColumn,
 			project.Table:               project.ValidColumn,
-			projecttype.Table:           projecttype.ValidColumn,
 			protectedarea.Table:         protectedarea.ValidColumn,
 			protectedareacategory.Table: protectedareacategory.ValidColumn,
 			protectedareapicture.Table:  protectedareapicture.ValidColumn,

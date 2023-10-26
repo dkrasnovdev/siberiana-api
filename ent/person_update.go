@@ -15,10 +15,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -438,40 +436,6 @@ func (pu *PersonUpdate) AddPublications(p ...*Publication) *PersonUpdate {
 	return pu.AddPublicationIDs(ids...)
 }
 
-// AddPersonRoleIDs adds the "person_roles" edge to the PersonRole entity by IDs.
-func (pu *PersonUpdate) AddPersonRoleIDs(ids ...int) *PersonUpdate {
-	pu.mutation.AddPersonRoleIDs(ids...)
-	return pu
-}
-
-// AddPersonRoles adds the "person_roles" edges to the PersonRole entity.
-func (pu *PersonUpdate) AddPersonRoles(p ...*PersonRole) *PersonUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pu.AddPersonRoleIDs(ids...)
-}
-
-// SetHolderID sets the "holder" edge to the Holder entity by ID.
-func (pu *PersonUpdate) SetHolderID(id int) *PersonUpdate {
-	pu.mutation.SetHolderID(id)
-	return pu
-}
-
-// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
-func (pu *PersonUpdate) SetNillableHolderID(id *int) *PersonUpdate {
-	if id != nil {
-		pu = pu.SetHolderID(*id)
-	}
-	return pu
-}
-
-// SetHolder sets the "holder" edge to the Holder entity.
-func (pu *PersonUpdate) SetHolder(h *Holder) *PersonUpdate {
-	return pu.SetHolderID(h.ID)
-}
-
 // SetAffiliationID sets the "affiliation" edge to the Organization entity by ID.
 func (pu *PersonUpdate) SetAffiliationID(id int) *PersonUpdate {
 	pu.mutation.SetAffiliationID(id)
@@ -599,33 +563,6 @@ func (pu *PersonUpdate) RemovePublications(p ...*Publication) *PersonUpdate {
 		ids[i] = p[i].ID
 	}
 	return pu.RemovePublicationIDs(ids...)
-}
-
-// ClearPersonRoles clears all "person_roles" edges to the PersonRole entity.
-func (pu *PersonUpdate) ClearPersonRoles() *PersonUpdate {
-	pu.mutation.ClearPersonRoles()
-	return pu
-}
-
-// RemovePersonRoleIDs removes the "person_roles" edge to PersonRole entities by IDs.
-func (pu *PersonUpdate) RemovePersonRoleIDs(ids ...int) *PersonUpdate {
-	pu.mutation.RemovePersonRoleIDs(ids...)
-	return pu
-}
-
-// RemovePersonRoles removes "person_roles" edges to PersonRole entities.
-func (pu *PersonUpdate) RemovePersonRoles(p ...*PersonRole) *PersonUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pu.RemovePersonRoleIDs(ids...)
-}
-
-// ClearHolder clears the "holder" edge to the Holder entity.
-func (pu *PersonUpdate) ClearHolder() *PersonUpdate {
-	pu.mutation.ClearHolder()
-	return pu
 }
 
 // ClearAffiliation clears the "affiliation" edge to the Organization entity.
@@ -1033,80 +970,6 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if pu.mutation.PersonRolesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   person.PersonRolesTable,
-			Columns: person.PersonRolesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.RemovedPersonRolesIDs(); len(nodes) > 0 && !pu.mutation.PersonRolesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   person.PersonRolesTable,
-			Columns: person.PersonRolesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.PersonRolesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   person.PersonRolesTable,
-			Columns: person.PersonRolesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if pu.mutation.HolderCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   person.HolderTable,
-			Columns: []string{person.HolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.HolderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   person.HolderTable,
-			Columns: []string{person.HolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1564,40 +1427,6 @@ func (puo *PersonUpdateOne) AddPublications(p ...*Publication) *PersonUpdateOne 
 	return puo.AddPublicationIDs(ids...)
 }
 
-// AddPersonRoleIDs adds the "person_roles" edge to the PersonRole entity by IDs.
-func (puo *PersonUpdateOne) AddPersonRoleIDs(ids ...int) *PersonUpdateOne {
-	puo.mutation.AddPersonRoleIDs(ids...)
-	return puo
-}
-
-// AddPersonRoles adds the "person_roles" edges to the PersonRole entity.
-func (puo *PersonUpdateOne) AddPersonRoles(p ...*PersonRole) *PersonUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return puo.AddPersonRoleIDs(ids...)
-}
-
-// SetHolderID sets the "holder" edge to the Holder entity by ID.
-func (puo *PersonUpdateOne) SetHolderID(id int) *PersonUpdateOne {
-	puo.mutation.SetHolderID(id)
-	return puo
-}
-
-// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
-func (puo *PersonUpdateOne) SetNillableHolderID(id *int) *PersonUpdateOne {
-	if id != nil {
-		puo = puo.SetHolderID(*id)
-	}
-	return puo
-}
-
-// SetHolder sets the "holder" edge to the Holder entity.
-func (puo *PersonUpdateOne) SetHolder(h *Holder) *PersonUpdateOne {
-	return puo.SetHolderID(h.ID)
-}
-
 // SetAffiliationID sets the "affiliation" edge to the Organization entity by ID.
 func (puo *PersonUpdateOne) SetAffiliationID(id int) *PersonUpdateOne {
 	puo.mutation.SetAffiliationID(id)
@@ -1725,33 +1554,6 @@ func (puo *PersonUpdateOne) RemovePublications(p ...*Publication) *PersonUpdateO
 		ids[i] = p[i].ID
 	}
 	return puo.RemovePublicationIDs(ids...)
-}
-
-// ClearPersonRoles clears all "person_roles" edges to the PersonRole entity.
-func (puo *PersonUpdateOne) ClearPersonRoles() *PersonUpdateOne {
-	puo.mutation.ClearPersonRoles()
-	return puo
-}
-
-// RemovePersonRoleIDs removes the "person_roles" edge to PersonRole entities by IDs.
-func (puo *PersonUpdateOne) RemovePersonRoleIDs(ids ...int) *PersonUpdateOne {
-	puo.mutation.RemovePersonRoleIDs(ids...)
-	return puo
-}
-
-// RemovePersonRoles removes "person_roles" edges to PersonRole entities.
-func (puo *PersonUpdateOne) RemovePersonRoles(p ...*PersonRole) *PersonUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return puo.RemovePersonRoleIDs(ids...)
-}
-
-// ClearHolder clears the "holder" edge to the Holder entity.
-func (puo *PersonUpdateOne) ClearHolder() *PersonUpdateOne {
-	puo.mutation.ClearHolder()
-	return puo
 }
 
 // ClearAffiliation clears the "affiliation" edge to the Organization entity.
@@ -2189,80 +1991,6 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(publication.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.PersonRolesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   person.PersonRolesTable,
-			Columns: person.PersonRolesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.RemovedPersonRolesIDs(); len(nodes) > 0 && !puo.mutation.PersonRolesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   person.PersonRolesTable,
-			Columns: person.PersonRolesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.PersonRolesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   person.PersonRolesTable,
-			Columns: person.PersonRolesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.HolderCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   person.HolderTable,
-			Columns: []string{person.HolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.HolderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   person.HolderTable,
-			Columns: []string{person.HolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

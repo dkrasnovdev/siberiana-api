@@ -15,7 +15,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/bookgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -306,21 +305,6 @@ func (bu *BookUpdate) SetCollection(c *Collection) *BookUpdate {
 	return bu.SetCollectionID(c.ID)
 }
 
-// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
-func (bu *BookUpdate) AddHolderIDs(ids ...int) *BookUpdate {
-	bu.mutation.AddHolderIDs(ids...)
-	return bu
-}
-
-// AddHolders adds the "holders" edges to the Holder entity.
-func (bu *BookUpdate) AddHolders(h ...*Holder) *BookUpdate {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return bu.AddHolderIDs(ids...)
-}
-
 // SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
 func (bu *BookUpdate) SetPublisherID(id int) *BookUpdate {
 	bu.mutation.SetPublisherID(id)
@@ -429,27 +413,6 @@ func (bu *BookUpdate) RemoveBookGenres(b ...*BookGenre) *BookUpdate {
 func (bu *BookUpdate) ClearCollection() *BookUpdate {
 	bu.mutation.ClearCollection()
 	return bu
-}
-
-// ClearHolders clears all "holders" edges to the Holder entity.
-func (bu *BookUpdate) ClearHolders() *BookUpdate {
-	bu.mutation.ClearHolders()
-	return bu
-}
-
-// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
-func (bu *BookUpdate) RemoveHolderIDs(ids ...int) *BookUpdate {
-	bu.mutation.RemoveHolderIDs(ids...)
-	return bu
-}
-
-// RemoveHolders removes "holders" edges to Holder entities.
-func (bu *BookUpdate) RemoveHolders(h ...*Holder) *BookUpdate {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return bu.RemoveHolderIDs(ids...)
 }
 
 // ClearPublisher clears the "publisher" edge to the Publisher entity.
@@ -736,51 +699,6 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if bu.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   book.HoldersTable,
-			Columns: book.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := bu.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !bu.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   book.HoldersTable,
-			Columns: book.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := bu.mutation.HoldersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   book.HoldersTable,
-			Columns: book.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1165,21 +1083,6 @@ func (buo *BookUpdateOne) SetCollection(c *Collection) *BookUpdateOne {
 	return buo.SetCollectionID(c.ID)
 }
 
-// AddHolderIDs adds the "holders" edge to the Holder entity by IDs.
-func (buo *BookUpdateOne) AddHolderIDs(ids ...int) *BookUpdateOne {
-	buo.mutation.AddHolderIDs(ids...)
-	return buo
-}
-
-// AddHolders adds the "holders" edges to the Holder entity.
-func (buo *BookUpdateOne) AddHolders(h ...*Holder) *BookUpdateOne {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return buo.AddHolderIDs(ids...)
-}
-
 // SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
 func (buo *BookUpdateOne) SetPublisherID(id int) *BookUpdateOne {
 	buo.mutation.SetPublisherID(id)
@@ -1288,27 +1191,6 @@ func (buo *BookUpdateOne) RemoveBookGenres(b ...*BookGenre) *BookUpdateOne {
 func (buo *BookUpdateOne) ClearCollection() *BookUpdateOne {
 	buo.mutation.ClearCollection()
 	return buo
-}
-
-// ClearHolders clears all "holders" edges to the Holder entity.
-func (buo *BookUpdateOne) ClearHolders() *BookUpdateOne {
-	buo.mutation.ClearHolders()
-	return buo
-}
-
-// RemoveHolderIDs removes the "holders" edge to Holder entities by IDs.
-func (buo *BookUpdateOne) RemoveHolderIDs(ids ...int) *BookUpdateOne {
-	buo.mutation.RemoveHolderIDs(ids...)
-	return buo
-}
-
-// RemoveHolders removes "holders" edges to Holder entities.
-func (buo *BookUpdateOne) RemoveHolders(h ...*Holder) *BookUpdateOne {
-	ids := make([]int, len(h))
-	for i := range h {
-		ids[i] = h[i].ID
-	}
-	return buo.RemoveHolderIDs(ids...)
 }
 
 // ClearPublisher clears the "publisher" edge to the Publisher entity.
@@ -1625,51 +1507,6 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if buo.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   book.HoldersTable,
-			Columns: book.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := buo.mutation.RemovedHoldersIDs(); len(nodes) > 0 && !buo.mutation.HoldersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   book.HoldersTable,
-			Columns: book.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := buo.mutation.HoldersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   book.HoldersTable,
-			Columns: book.HoldersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

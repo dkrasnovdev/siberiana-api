@@ -15,7 +15,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/bookgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -33,7 +32,6 @@ type BookQuery struct {
 	withAuthors         *PersonQuery
 	withBookGenres      *BookGenreQuery
 	withCollection      *CollectionQuery
-	withHolders         *HolderQuery
 	withPublisher       *PublisherQuery
 	withLicense         *LicenseQuery
 	withLocation        *LocationQuery
@@ -42,7 +40,6 @@ type BookQuery struct {
 	loadTotal           []func(context.Context, []*Book) error
 	withNamedAuthors    map[string]*PersonQuery
 	withNamedBookGenres map[string]*BookGenreQuery
-	withNamedHolders    map[string]*HolderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -138,28 +135,6 @@ func (bq *BookQuery) QueryCollection() *CollectionQuery {
 			sqlgraph.From(book.Table, book.FieldID, selector),
 			sqlgraph.To(collection.Table, collection.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.CollectionTable, book.CollectionColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryHolders chains the current query on the "holders" edge.
-func (bq *BookQuery) QueryHolders() *HolderQuery {
-	query := (&HolderClient{config: bq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := bq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := bq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(book.Table, book.FieldID, selector),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, book.HoldersTable, book.HoldersPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -428,7 +403,6 @@ func (bq *BookQuery) Clone() *BookQuery {
 		withAuthors:    bq.withAuthors.Clone(),
 		withBookGenres: bq.withBookGenres.Clone(),
 		withCollection: bq.withCollection.Clone(),
-		withHolders:    bq.withHolders.Clone(),
 		withPublisher:  bq.withPublisher.Clone(),
 		withLicense:    bq.withLicense.Clone(),
 		withLocation:   bq.withLocation.Clone(),
@@ -468,17 +442,6 @@ func (bq *BookQuery) WithCollection(opts ...func(*CollectionQuery)) *BookQuery {
 		opt(query)
 	}
 	bq.withCollection = query
-	return bq
-}
-
-// WithHolders tells the query-builder to eager-load the nodes that are connected to
-// the "holders" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BookQuery) WithHolders(opts ...func(*HolderQuery)) *BookQuery {
-	query := (&HolderClient{config: bq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	bq.withHolders = query
 	return bq
 }
 
@@ -600,11 +563,10 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 		nodes       = []*Book{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [6]bool{
 			bq.withAuthors != nil,
 			bq.withBookGenres != nil,
 			bq.withCollection != nil,
-			bq.withHolders != nil,
 			bq.withPublisher != nil,
 			bq.withLicense != nil,
 			bq.withLocation != nil,
@@ -657,13 +619,6 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 			return nil, err
 		}
 	}
-	if query := bq.withHolders; query != nil {
-		if err := bq.loadHolders(ctx, query, nodes,
-			func(n *Book) { n.Edges.Holders = []*Holder{} },
-			func(n *Book, e *Holder) { n.Edges.Holders = append(n.Edges.Holders, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := bq.withPublisher; query != nil {
 		if err := bq.loadPublisher(ctx, query, nodes, nil,
 			func(n *Book, e *Publisher) { n.Edges.Publisher = e }); err != nil {
@@ -693,13 +648,6 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 		if err := bq.loadBookGenres(ctx, query, nodes,
 			func(n *Book) { n.appendNamedBookGenres(name) },
 			func(n *Book, e *BookGenre) { n.appendNamedBookGenres(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range bq.withNamedHolders {
-		if err := bq.loadHolders(ctx, query, nodes,
-			func(n *Book) { n.appendNamedHolders(name) },
-			func(n *Book, e *Holder) { n.appendNamedHolders(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -861,67 +809,6 @@ func (bq *BookQuery) loadCollection(ctx context.Context, query *CollectionQuery,
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (bq *BookQuery) loadHolders(ctx context.Context, query *HolderQuery, nodes []*Book, init func(*Book), assign func(*Book, *Holder)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*Book)
-	nids := make(map[int]map[*Book]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(book.HoldersTable)
-		s.Join(joinT).On(s.C(holder.FieldID), joinT.C(book.HoldersPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(book.HoldersPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(book.HoldersPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := int(values[0].(*sql.NullInt64).Int64)
-				inValue := int(values[1].(*sql.NullInt64).Int64)
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Book]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Holder](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "holders" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
 		}
 	}
 	return nil
@@ -1132,20 +1019,6 @@ func (bq *BookQuery) WithNamedBookGenres(name string, opts ...func(*BookGenreQue
 		bq.withNamedBookGenres = make(map[string]*BookGenreQuery)
 	}
 	bq.withNamedBookGenres[name] = query
-	return bq
-}
-
-// WithNamedHolders tells the query-builder to eager-load the nodes that are connected to the "holders"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (bq *BookQuery) WithNamedHolders(name string, opts ...func(*HolderQuery)) *BookQuery {
-	query := (&HolderClient{config: bq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if bq.withNamedHolders == nil {
-		bq.withNamedHolders = make(map[string]*HolderQuery)
-	}
-	bq.withNamedHolders[name] = query
 	return bq
 }
 

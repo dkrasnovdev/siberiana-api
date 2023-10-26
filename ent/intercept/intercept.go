@@ -21,8 +21,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
-	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -30,14 +28,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
-	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
-	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -457,60 +452,6 @@ func (f TraverseFavourite) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.FavouriteQuery", q)
 }
 
-// The HolderFunc type is an adapter to allow the use of ordinary function as a Querier.
-type HolderFunc func(context.Context, *ent.HolderQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f HolderFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.HolderQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.HolderQuery", q)
-}
-
-// The TraverseHolder type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseHolder func(context.Context, *ent.HolderQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseHolder) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseHolder) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.HolderQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.HolderQuery", q)
-}
-
-// The HolderResponsibilityFunc type is an adapter to allow the use of ordinary function as a Querier.
-type HolderResponsibilityFunc func(context.Context, *ent.HolderResponsibilityQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f HolderResponsibilityFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.HolderResponsibilityQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.HolderResponsibilityQuery", q)
-}
-
-// The TraverseHolderResponsibility type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseHolderResponsibility func(context.Context, *ent.HolderResponsibilityQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseHolderResponsibility) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseHolderResponsibility) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.HolderResponsibilityQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.HolderResponsibilityQuery", q)
-}
-
 // The KeywordFunc type is an adapter to allow the use of ordinary function as a Querier.
 type KeywordFunc func(context.Context, *ent.KeywordQuery) (ent.Value, error)
 
@@ -700,33 +641,6 @@ func (f TraverseOrganization) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.OrganizationQuery", q)
 }
 
-// The OrganizationTypeFunc type is an adapter to allow the use of ordinary function as a Querier.
-type OrganizationTypeFunc func(context.Context, *ent.OrganizationTypeQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f OrganizationTypeFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.OrganizationTypeQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.OrganizationTypeQuery", q)
-}
-
-// The TraverseOrganizationType type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseOrganizationType func(context.Context, *ent.OrganizationTypeQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseOrganizationType) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseOrganizationType) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.OrganizationTypeQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.OrganizationTypeQuery", q)
-}
-
 // The PeriodFunc type is an adapter to allow the use of ordinary function as a Querier.
 type PeriodFunc func(context.Context, *ent.PeriodQuery) (ent.Value, error)
 
@@ -781,33 +695,6 @@ func (f TraversePerson) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.PersonQuery", q)
 }
 
-// The PersonRoleFunc type is an adapter to allow the use of ordinary function as a Querier.
-type PersonRoleFunc func(context.Context, *ent.PersonRoleQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f PersonRoleFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.PersonRoleQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.PersonRoleQuery", q)
-}
-
-// The TraversePersonRole type is an adapter to allow the use of ordinary function as Traverser.
-type TraversePersonRole func(context.Context, *ent.PersonRoleQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraversePersonRole) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraversePersonRole) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.PersonRoleQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.PersonRoleQuery", q)
-}
-
 // The PersonalFunc type is an adapter to allow the use of ordinary function as a Querier.
 type PersonalFunc func(context.Context, *ent.PersonalQuery) (ent.Value, error)
 
@@ -860,33 +747,6 @@ func (f TraverseProject) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.ProjectQuery", q)
-}
-
-// The ProjectTypeFunc type is an adapter to allow the use of ordinary function as a Querier.
-type ProjectTypeFunc func(context.Context, *ent.ProjectTypeQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f ProjectTypeFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.ProjectTypeQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ProjectTypeQuery", q)
-}
-
-// The TraverseProjectType type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseProjectType func(context.Context, *ent.ProjectTypeQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseProjectType) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseProjectType) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.ProjectTypeQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.ProjectTypeQuery", q)
 }
 
 // The ProtectedAreaFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1188,10 +1048,6 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.DistrictQuery, predicate.District, district.OrderOption]{typ: ent.TypeDistrict, tq: q}, nil
 	case *ent.FavouriteQuery:
 		return &query[*ent.FavouriteQuery, predicate.Favourite, favourite.OrderOption]{typ: ent.TypeFavourite, tq: q}, nil
-	case *ent.HolderQuery:
-		return &query[*ent.HolderQuery, predicate.Holder, holder.OrderOption]{typ: ent.TypeHolder, tq: q}, nil
-	case *ent.HolderResponsibilityQuery:
-		return &query[*ent.HolderResponsibilityQuery, predicate.HolderResponsibility, holderresponsibility.OrderOption]{typ: ent.TypeHolderResponsibility, tq: q}, nil
 	case *ent.KeywordQuery:
 		return &query[*ent.KeywordQuery, predicate.Keyword, keyword.OrderOption]{typ: ent.TypeKeyword, tq: q}, nil
 	case *ent.LicenseQuery:
@@ -1206,20 +1062,14 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.MonumentQuery, predicate.Monument, monument.OrderOption]{typ: ent.TypeMonument, tq: q}, nil
 	case *ent.OrganizationQuery:
 		return &query[*ent.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: ent.TypeOrganization, tq: q}, nil
-	case *ent.OrganizationTypeQuery:
-		return &query[*ent.OrganizationTypeQuery, predicate.OrganizationType, organizationtype.OrderOption]{typ: ent.TypeOrganizationType, tq: q}, nil
 	case *ent.PeriodQuery:
 		return &query[*ent.PeriodQuery, predicate.Period, period.OrderOption]{typ: ent.TypePeriod, tq: q}, nil
 	case *ent.PersonQuery:
 		return &query[*ent.PersonQuery, predicate.Person, person.OrderOption]{typ: ent.TypePerson, tq: q}, nil
-	case *ent.PersonRoleQuery:
-		return &query[*ent.PersonRoleQuery, predicate.PersonRole, personrole.OrderOption]{typ: ent.TypePersonRole, tq: q}, nil
 	case *ent.PersonalQuery:
 		return &query[*ent.PersonalQuery, predicate.Personal, personal.OrderOption]{typ: ent.TypePersonal, tq: q}, nil
 	case *ent.ProjectQuery:
 		return &query[*ent.ProjectQuery, predicate.Project, project.OrderOption]{typ: ent.TypeProject, tq: q}, nil
-	case *ent.ProjectTypeQuery:
-		return &query[*ent.ProjectTypeQuery, predicate.ProjectType, projecttype.OrderOption]{typ: ent.TypeProjectType, tq: q}, nil
 	case *ent.ProtectedAreaQuery:
 		return &query[*ent.ProtectedAreaQuery, predicate.ProtectedArea, protectedarea.OrderOption]{typ: ent.TypeProtectedArea, tq: q}, nil
 	case *ent.ProtectedAreaCategoryQuery:

@@ -489,7 +489,6 @@ type CreateArtifactInput struct {
 	PeriodID              *int
 	ProjectIDs            []int
 	PublicationIDs        []int
-	HolderIDs             []int
 	CulturalAffiliationID *int
 	MonumentID            *int
 	ModelID               *int
@@ -579,9 +578,6 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.PublicationIDs; len(v) > 0 {
 		m.AddPublicationIDs(v...)
 	}
-	if v := i.HolderIDs; len(v) > 0 {
-		m.AddHolderIDs(v...)
-	}
 	if v := i.CulturalAffiliationID; v != nil {
 		m.SetCulturalAffiliationID(*v)
 	}
@@ -666,9 +662,6 @@ type UpdateArtifactInput struct {
 	ClearPublications          bool
 	AddPublicationIDs          []int
 	RemovePublicationIDs       []int
-	ClearHolders               bool
-	AddHolderIDs               []int
-	RemoveHolderIDs            []int
 	ClearCulturalAffiliation   bool
 	CulturalAffiliationID      *int
 	ClearMonument              bool
@@ -851,15 +844,6 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.RemovePublicationIDs; len(v) > 0 {
 		m.RemovePublicationIDs(v...)
 	}
-	if i.ClearHolders {
-		m.ClearHolders()
-	}
-	if v := i.AddHolderIDs; len(v) > 0 {
-		m.AddHolderIDs(v...)
-	}
-	if v := i.RemoveHolderIDs; len(v) > 0 {
-		m.RemoveHolderIDs(v...)
-	}
 	if i.ClearCulturalAffiliation {
 		m.ClearCulturalAffiliation()
 	}
@@ -931,7 +915,6 @@ type CreateBookInput struct {
 	AuthorIDs            []int
 	BookGenreIDs         []int
 	CollectionID         int
-	HolderIDs            []int
 	PublisherID          *int
 	LicenseID            *int
 	LocationID           *int
@@ -985,9 +968,6 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 		m.AddBookGenreIDs(v...)
 	}
 	m.SetCollectionID(i.CollectionID)
-	if v := i.HolderIDs; len(v) > 0 {
-		m.AddHolderIDs(v...)
-	}
 	if v := i.PublisherID; v != nil {
 		m.SetPublisherID(*v)
 	}
@@ -1039,9 +1019,6 @@ type UpdateBookInput struct {
 	AddBookGenreIDs            []int
 	RemoveBookGenreIDs         []int
 	CollectionID               *int
-	ClearHolders               bool
-	AddHolderIDs               []int
-	RemoveHolderIDs            []int
 	ClearPublisher             bool
 	PublisherID                *int
 	ClearLicense               bool
@@ -1147,15 +1124,6 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
-	}
-	if i.ClearHolders {
-		m.ClearHolders()
-	}
-	if v := i.AddHolderIDs; len(v) > 0 {
-		m.AddHolderIDs(v...)
-	}
-	if v := i.RemoveHolderIDs; len(v) > 0 {
-		m.RemoveHolderIDs(v...)
 	}
 	if i.ClearPublisher {
 		m.ClearPublisher()
@@ -2207,300 +2175,6 @@ func (c *FavouriteUpdateOne) SetInput(i UpdateFavouriteInput) *FavouriteUpdateOn
 	return c
 }
 
-// CreateHolderInput represents a mutation input for creating holders.
-type CreateHolderInput struct {
-	CreatedAt               *time.Time
-	CreatedBy               *string
-	UpdatedAt               *time.Time
-	UpdatedBy               *string
-	BeginData               time.Time
-	EndDate                 *time.Time
-	ArtifactIDs             []int
-	BookIDs                 []int
-	HolderResponsibilityIDs []int
-	PersonID                *int
-	OrganizationID          *int
-}
-
-// Mutate applies the CreateHolderInput on the HolderMutation builder.
-func (i *CreateHolderInput) Mutate(m *HolderMutation) {
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	m.SetBeginData(i.BeginData)
-	if v := i.EndDate; v != nil {
-		m.SetEndDate(*v)
-	}
-	if v := i.ArtifactIDs; len(v) > 0 {
-		m.AddArtifactIDs(v...)
-	}
-	if v := i.BookIDs; len(v) > 0 {
-		m.AddBookIDs(v...)
-	}
-	if v := i.HolderResponsibilityIDs; len(v) > 0 {
-		m.AddHolderResponsibilityIDs(v...)
-	}
-	if v := i.PersonID; v != nil {
-		m.SetPersonID(*v)
-	}
-	if v := i.OrganizationID; v != nil {
-		m.SetOrganizationID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateHolderInput on the HolderCreate builder.
-func (c *HolderCreate) SetInput(i CreateHolderInput) *HolderCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateHolderInput represents a mutation input for updating holders.
-type UpdateHolderInput struct {
-	ClearCreatedBy                bool
-	CreatedBy                     *string
-	UpdatedAt                     *time.Time
-	ClearUpdatedBy                bool
-	UpdatedBy                     *string
-	BeginData                     *time.Time
-	ClearEndDate                  bool
-	EndDate                       *time.Time
-	ClearArtifacts                bool
-	AddArtifactIDs                []int
-	RemoveArtifactIDs             []int
-	ClearBooks                    bool
-	AddBookIDs                    []int
-	RemoveBookIDs                 []int
-	ClearHolderResponsibilities   bool
-	AddHolderResponsibilityIDs    []int
-	RemoveHolderResponsibilityIDs []int
-	ClearPerson                   bool
-	PersonID                      *int
-	ClearOrganization             bool
-	OrganizationID                *int
-}
-
-// Mutate applies the UpdateHolderInput on the HolderMutation builder.
-func (i *UpdateHolderInput) Mutate(m *HolderMutation) {
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.BeginData; v != nil {
-		m.SetBeginData(*v)
-	}
-	if i.ClearEndDate {
-		m.ClearEndDate()
-	}
-	if v := i.EndDate; v != nil {
-		m.SetEndDate(*v)
-	}
-	if i.ClearArtifacts {
-		m.ClearArtifacts()
-	}
-	if v := i.AddArtifactIDs; len(v) > 0 {
-		m.AddArtifactIDs(v...)
-	}
-	if v := i.RemoveArtifactIDs; len(v) > 0 {
-		m.RemoveArtifactIDs(v...)
-	}
-	if i.ClearBooks {
-		m.ClearBooks()
-	}
-	if v := i.AddBookIDs; len(v) > 0 {
-		m.AddBookIDs(v...)
-	}
-	if v := i.RemoveBookIDs; len(v) > 0 {
-		m.RemoveBookIDs(v...)
-	}
-	if i.ClearHolderResponsibilities {
-		m.ClearHolderResponsibilities()
-	}
-	if v := i.AddHolderResponsibilityIDs; len(v) > 0 {
-		m.AddHolderResponsibilityIDs(v...)
-	}
-	if v := i.RemoveHolderResponsibilityIDs; len(v) > 0 {
-		m.RemoveHolderResponsibilityIDs(v...)
-	}
-	if i.ClearPerson {
-		m.ClearPerson()
-	}
-	if v := i.PersonID; v != nil {
-		m.SetPersonID(*v)
-	}
-	if i.ClearOrganization {
-		m.ClearOrganization()
-	}
-	if v := i.OrganizationID; v != nil {
-		m.SetOrganizationID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateHolderInput on the HolderUpdate builder.
-func (c *HolderUpdate) SetInput(i UpdateHolderInput) *HolderUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateHolderInput on the HolderUpdateOne builder.
-func (c *HolderUpdateOne) SetInput(i UpdateHolderInput) *HolderUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateHolderResponsibilityInput represents a mutation input for creating holderresponsibilities.
-type CreateHolderResponsibilityInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	HolderIDs    []int
-}
-
-// Mutate applies the CreateHolderResponsibilityInput on the HolderResponsibilityMutation builder.
-func (i *CreateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation) {
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if v := i.HolderIDs; len(v) > 0 {
-		m.AddHolderIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateHolderResponsibilityInput on the HolderResponsibilityCreate builder.
-func (c *HolderResponsibilityCreate) SetInput(i CreateHolderResponsibilityInput) *HolderResponsibilityCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateHolderResponsibilityInput represents a mutation input for updating holderresponsibilities.
-type UpdateHolderResponsibilityInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearHolder       bool
-	AddHolderIDs      []int
-	RemoveHolderIDs   []int
-}
-
-// Mutate applies the UpdateHolderResponsibilityInput on the HolderResponsibilityMutation builder.
-func (i *UpdateHolderResponsibilityInput) Mutate(m *HolderResponsibilityMutation) {
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if i.ClearDisplayName {
-		m.ClearDisplayName()
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if i.ClearAbbreviation {
-		m.ClearAbbreviation()
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if i.ClearExternalLink {
-		m.ClearExternalLink()
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if i.ClearHolder {
-		m.ClearHolder()
-	}
-	if v := i.AddHolderIDs; len(v) > 0 {
-		m.AddHolderIDs(v...)
-	}
-	if v := i.RemoveHolderIDs; len(v) > 0 {
-		m.RemoveHolderIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateHolderResponsibilityInput on the HolderResponsibilityUpdate builder.
-func (c *HolderResponsibilityUpdate) SetInput(i UpdateHolderResponsibilityInput) *HolderResponsibilityUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateHolderResponsibilityInput on the HolderResponsibilityUpdateOne builder.
-func (c *HolderResponsibilityUpdateOne) SetInput(i UpdateHolderResponsibilityInput) *HolderResponsibilityUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
 // CreateLicenseInput represents a mutation input for creating licenses.
 type CreateLicenseInput struct {
 	CreatedAt               *time.Time
@@ -3342,8 +3016,6 @@ type CreateOrganizationInput struct {
 	IsInAConsortium       *bool
 	ConsortiumDocumentURL *string
 	PersonIDs             []int
-	HolderID              *int
-	OrganizationTypeID    *int
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -3399,12 +3071,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.PersonIDs; len(v) > 0 {
 		m.AddPersonIDs(v...)
 	}
-	if v := i.HolderID; v != nil {
-		m.SetHolderID(*v)
-	}
-	if v := i.OrganizationTypeID; v != nil {
-		m.SetOrganizationTypeID(*v)
-	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -3451,10 +3117,6 @@ type UpdateOrganizationInput struct {
 	ClearPeople                bool
 	AddPersonIDs               []int
 	RemovePersonIDs            []int
-	ClearHolder                bool
-	HolderID                   *int
-	ClearOrganizationType      bool
-	OrganizationTypeID         *int
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -3567,18 +3229,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemovePersonIDs; len(v) > 0 {
 		m.RemovePersonIDs(v...)
 	}
-	if i.ClearHolder {
-		m.ClearHolder()
-	}
-	if v := i.HolderID; v != nil {
-		m.SetHolderID(*v)
-	}
-	if i.ClearOrganizationType {
-		m.ClearOrganizationType()
-	}
-	if v := i.OrganizationTypeID; v != nil {
-		m.SetOrganizationTypeID(*v)
-	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -3589,140 +3239,6 @@ func (c *OrganizationUpdate) SetInput(i UpdateOrganizationInput) *OrganizationUp
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdateOne builder.
 func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *OrganizationUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateOrganizationTypeInput represents a mutation input for creating organizationtypes.
-type CreateOrganizationTypeInput struct {
-	CreatedAt       *time.Time
-	CreatedBy       *string
-	UpdatedAt       *time.Time
-	UpdatedBy       *string
-	DisplayName     *string
-	Abbreviation    *string
-	Description     *string
-	ExternalLink    *string
-	OrganizationIDs []int
-}
-
-// Mutate applies the CreateOrganizationTypeInput on the OrganizationTypeMutation builder.
-func (i *CreateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if v := i.OrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateOrganizationTypeInput on the OrganizationTypeCreate builder.
-func (c *OrganizationTypeCreate) SetInput(i CreateOrganizationTypeInput) *OrganizationTypeCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateOrganizationTypeInput represents a mutation input for updating organizationtypes.
-type UpdateOrganizationTypeInput struct {
-	ClearCreatedBy        bool
-	CreatedBy             *string
-	UpdatedAt             *time.Time
-	ClearUpdatedBy        bool
-	UpdatedBy             *string
-	ClearDisplayName      bool
-	DisplayName           *string
-	ClearAbbreviation     bool
-	Abbreviation          *string
-	ClearDescription      bool
-	Description           *string
-	ClearExternalLink     bool
-	ExternalLink          *string
-	ClearOrganizations    bool
-	AddOrganizationIDs    []int
-	RemoveOrganizationIDs []int
-}
-
-// Mutate applies the UpdateOrganizationTypeInput on the OrganizationTypeMutation builder.
-func (i *UpdateOrganizationTypeInput) Mutate(m *OrganizationTypeMutation) {
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if i.ClearDisplayName {
-		m.ClearDisplayName()
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if i.ClearAbbreviation {
-		m.ClearAbbreviation()
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if i.ClearExternalLink {
-		m.ClearExternalLink()
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if i.ClearOrganizations {
-		m.ClearOrganizations()
-	}
-	if v := i.AddOrganizationIDs; len(v) > 0 {
-		m.AddOrganizationIDs(v...)
-	}
-	if v := i.RemoveOrganizationIDs; len(v) > 0 {
-		m.RemoveOrganizationIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateOrganizationTypeInput on the OrganizationTypeUpdate builder.
-func (c *OrganizationTypeUpdate) SetInput(i UpdateOrganizationTypeInput) *OrganizationTypeUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateOrganizationTypeInput on the OrganizationTypeUpdateOne builder.
-func (c *OrganizationTypeUpdateOne) SetInput(i UpdateOrganizationTypeInput) *OrganizationTypeUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -3887,8 +3403,6 @@ type CreatePersonInput struct {
 	BookIDs              []int
 	ProjectIDs           []int
 	PublicationIDs       []int
-	PersonRoleIDs        []int
-	HolderID             *int
 	AffiliationID        *int
 }
 
@@ -3964,12 +3478,6 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.PublicationIDs; len(v) > 0 {
 		m.AddPublicationIDs(v...)
 	}
-	if v := i.PersonRoleIDs; len(v) > 0 {
-		m.AddPersonRoleIDs(v...)
-	}
-	if v := i.HolderID; v != nil {
-		m.SetHolderID(*v)
-	}
 	if v := i.AffiliationID; v != nil {
 		m.SetAffiliationID(*v)
 	}
@@ -4035,11 +3543,6 @@ type UpdatePersonInput struct {
 	ClearPublications          bool
 	AddPublicationIDs          []int
 	RemovePublicationIDs       []int
-	ClearPersonRoles           bool
-	AddPersonRoleIDs           []int
-	RemovePersonRoleIDs        []int
-	ClearHolder                bool
-	HolderID                   *int
 	ClearAffiliation           bool
 	AffiliationID              *int
 }
@@ -4202,21 +3705,6 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.RemovePublicationIDs; len(v) > 0 {
 		m.RemovePublicationIDs(v...)
 	}
-	if i.ClearPersonRoles {
-		m.ClearPersonRoles()
-	}
-	if v := i.AddPersonRoleIDs; len(v) > 0 {
-		m.AddPersonRoleIDs(v...)
-	}
-	if v := i.RemovePersonRoleIDs; len(v) > 0 {
-		m.RemovePersonRoleIDs(v...)
-	}
-	if i.ClearHolder {
-		m.ClearHolder()
-	}
-	if v := i.HolderID; v != nil {
-		m.SetHolderID(*v)
-	}
 	if i.ClearAffiliation {
 		m.ClearAffiliation()
 	}
@@ -4233,140 +3721,6 @@ func (c *PersonUpdate) SetInput(i UpdatePersonInput) *PersonUpdate {
 
 // SetInput applies the change-set in the UpdatePersonInput on the PersonUpdateOne builder.
 func (c *PersonUpdateOne) SetInput(i UpdatePersonInput) *PersonUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreatePersonRoleInput represents a mutation input for creating personroles.
-type CreatePersonRoleInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	PersonIDs    []int
-}
-
-// Mutate applies the CreatePersonRoleInput on the PersonRoleMutation builder.
-func (i *CreatePersonRoleInput) Mutate(m *PersonRoleMutation) {
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if v := i.PersonIDs; len(v) > 0 {
-		m.AddPersonIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreatePersonRoleInput on the PersonRoleCreate builder.
-func (c *PersonRoleCreate) SetInput(i CreatePersonRoleInput) *PersonRoleCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdatePersonRoleInput represents a mutation input for updating personroles.
-type UpdatePersonRoleInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearPerson       bool
-	AddPersonIDs      []int
-	RemovePersonIDs   []int
-}
-
-// Mutate applies the UpdatePersonRoleInput on the PersonRoleMutation builder.
-func (i *UpdatePersonRoleInput) Mutate(m *PersonRoleMutation) {
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if i.ClearDisplayName {
-		m.ClearDisplayName()
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if i.ClearAbbreviation {
-		m.ClearAbbreviation()
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if i.ClearExternalLink {
-		m.ClearExternalLink()
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if i.ClearPerson {
-		m.ClearPerson()
-	}
-	if v := i.AddPersonIDs; len(v) > 0 {
-		m.AddPersonIDs(v...)
-	}
-	if v := i.RemovePersonIDs; len(v) > 0 {
-		m.RemovePersonIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdatePersonRoleInput on the PersonRoleUpdate builder.
-func (c *PersonRoleUpdate) SetInput(i UpdatePersonRoleInput) *PersonRoleUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdatePersonRoleInput on the PersonRoleUpdateOne builder.
-func (c *PersonRoleUpdateOne) SetInput(i UpdatePersonRoleInput) *PersonRoleUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -4467,19 +3821,18 @@ func (c *PersonalUpdateOne) SetInput(i UpdatePersonalInput) *PersonalUpdateOne {
 
 // CreateProjectInput represents a mutation input for creating projects.
 type CreateProjectInput struct {
-	CreatedAt     *time.Time
-	CreatedBy     *string
-	UpdatedAt     *time.Time
-	UpdatedBy     *string
-	DisplayName   *string
-	Abbreviation  *string
-	Description   *string
-	ExternalLink  *string
-	BeginData     *time.Time
-	EndDate       *time.Time
-	ArtifactIDs   []int
-	TeamIDs       []int
-	ProjectTypeID *int
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	BeginData    *time.Time
+	EndDate      *time.Time
+	ArtifactIDs  []int
+	TeamIDs      []int
 }
 
 // Mutate applies the CreateProjectInput on the ProjectMutation builder.
@@ -4520,9 +3873,6 @@ func (i *CreateProjectInput) Mutate(m *ProjectMutation) {
 	if v := i.TeamIDs; len(v) > 0 {
 		m.AddTeamIDs(v...)
 	}
-	if v := i.ProjectTypeID; v != nil {
-		m.SetProjectTypeID(*v)
-	}
 }
 
 // SetInput applies the change-set in the CreateProjectInput on the ProjectCreate builder.
@@ -4556,8 +3906,6 @@ type UpdateProjectInput struct {
 	ClearTeam         bool
 	AddTeamIDs        []int
 	RemoveTeamIDs     []int
-	ClearProjectType  bool
-	ProjectTypeID     *int
 }
 
 // Mutate applies the UpdateProjectInput on the ProjectMutation builder.
@@ -4631,12 +3979,6 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	if v := i.RemoveTeamIDs; len(v) > 0 {
 		m.RemoveTeamIDs(v...)
 	}
-	if i.ClearProjectType {
-		m.ClearProjectType()
-	}
-	if v := i.ProjectTypeID; v != nil {
-		m.SetProjectTypeID(*v)
-	}
 }
 
 // SetInput applies the change-set in the UpdateProjectInput on the ProjectUpdate builder.
@@ -4647,140 +3989,6 @@ func (c *ProjectUpdate) SetInput(i UpdateProjectInput) *ProjectUpdate {
 
 // SetInput applies the change-set in the UpdateProjectInput on the ProjectUpdateOne builder.
 func (c *ProjectUpdateOne) SetInput(i UpdateProjectInput) *ProjectUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateProjectTypeInput represents a mutation input for creating projecttypes.
-type CreateProjectTypeInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	ProjectIDs   []int
-}
-
-// Mutate applies the CreateProjectTypeInput on the ProjectTypeMutation builder.
-func (i *CreateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if v := i.ProjectIDs; len(v) > 0 {
-		m.AddProjectIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateProjectTypeInput on the ProjectTypeCreate builder.
-func (c *ProjectTypeCreate) SetInput(i CreateProjectTypeInput) *ProjectTypeCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateProjectTypeInput represents a mutation input for updating projecttypes.
-type UpdateProjectTypeInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearProjects     bool
-	AddProjectIDs     []int
-	RemoveProjectIDs  []int
-}
-
-// Mutate applies the UpdateProjectTypeInput on the ProjectTypeMutation builder.
-func (i *UpdateProjectTypeInput) Mutate(m *ProjectTypeMutation) {
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if i.ClearDisplayName {
-		m.ClearDisplayName()
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if i.ClearAbbreviation {
-		m.ClearAbbreviation()
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if i.ClearExternalLink {
-		m.ClearExternalLink()
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if i.ClearProjects {
-		m.ClearProjects()
-	}
-	if v := i.AddProjectIDs; len(v) > 0 {
-		m.AddProjectIDs(v...)
-	}
-	if v := i.RemoveProjectIDs; len(v) > 0 {
-		m.RemoveProjectIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateProjectTypeInput on the ProjectTypeUpdate builder.
-func (c *ProjectTypeUpdate) SetInput(i UpdateProjectTypeInput) *ProjectTypeUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateProjectTypeInput on the ProjectTypeUpdateOne builder.
-func (c *ProjectTypeUpdateOne) SetInput(i UpdateProjectTypeInput) *ProjectTypeUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

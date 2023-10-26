@@ -66,8 +66,6 @@ type BookEdges struct {
 	BookGenres []*BookGenre `json:"book_genres,omitempty"`
 	// Collection holds the value of the collection edge.
 	Collection *Collection `json:"collection,omitempty"`
-	// Holders holds the value of the holders edge.
-	Holders []*Holder `json:"holders,omitempty"`
 	// Publisher holds the value of the publisher edge.
 	Publisher *Publisher `json:"publisher,omitempty"`
 	// License holds the value of the license edge.
@@ -76,13 +74,12 @@ type BookEdges struct {
 	Location *Location `json:"location,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [6]map[string]int
 
 	namedAuthors    map[string][]*Person
 	namedBookGenres map[string][]*BookGenre
-	namedHolders    map[string][]*Holder
 }
 
 // AuthorsOrErr returns the Authors value or an error if the edge
@@ -116,19 +113,10 @@ func (e BookEdges) CollectionOrErr() (*Collection, error) {
 	return nil, &NotLoadedError{edge: "collection"}
 }
 
-// HoldersOrErr returns the Holders value or an error if the edge
-// was not loaded in eager-loading.
-func (e BookEdges) HoldersOrErr() ([]*Holder, error) {
-	if e.loadedTypes[3] {
-		return e.Holders, nil
-	}
-	return nil, &NotLoadedError{edge: "holders"}
-}
-
 // PublisherOrErr returns the Publisher value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookEdges) PublisherOrErr() (*Publisher, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[3] {
 		if e.Publisher == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: publisher.Label}
@@ -141,7 +129,7 @@ func (e BookEdges) PublisherOrErr() (*Publisher, error) {
 // LicenseOrErr returns the License value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookEdges) LicenseOrErr() (*License, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[4] {
 		if e.License == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: license.Label}
@@ -154,7 +142,7 @@ func (e BookEdges) LicenseOrErr() (*License, error) {
 // LocationOrErr returns the Location value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookEdges) LocationOrErr() (*Location, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[5] {
 		if e.Location == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: location.Label}
@@ -344,11 +332,6 @@ func (b *Book) QueryCollection() *CollectionQuery {
 	return NewBookClient(b.config).QueryCollection(b)
 }
 
-// QueryHolders queries the "holders" edge of the Book entity.
-func (b *Book) QueryHolders() *HolderQuery {
-	return NewBookClient(b.config).QueryHolders(b)
-}
-
 // QueryPublisher queries the "publisher" edge of the Book entity.
 func (b *Book) QueryPublisher() *PublisherQuery {
 	return NewBookClient(b.config).QueryPublisher(b)
@@ -474,30 +457,6 @@ func (b *Book) appendNamedBookGenres(name string, edges ...*BookGenre) {
 		b.Edges.namedBookGenres[name] = []*BookGenre{}
 	} else {
 		b.Edges.namedBookGenres[name] = append(b.Edges.namedBookGenres[name], edges...)
-	}
-}
-
-// NamedHolders returns the Holders named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (b *Book) NamedHolders(name string) ([]*Holder, error) {
-	if b.Edges.namedHolders == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := b.Edges.namedHolders[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (b *Book) appendNamedHolders(name string, edges ...*Holder) {
-	if b.Edges.namedHolders == nil {
-		b.Edges.namedHolders = make(map[string][]*Holder)
-	}
-	if len(edges) == 0 {
-		b.Edges.namedHolders[name] = []*Holder{}
-	} else {
-		b.Edges.namedHolders[name] = append(b.Edges.namedHolders[name], edges...)
 	}
 }
 

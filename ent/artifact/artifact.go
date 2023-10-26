@@ -70,8 +70,6 @@ const (
 	EdgeProjects = "projects"
 	// EdgePublications holds the string denoting the publications edge name in mutations.
 	EdgePublications = "publications"
-	// EdgeHolders holds the string denoting the holders edge name in mutations.
-	EdgeHolders = "holders"
 	// EdgeCulturalAffiliation holds the string denoting the cultural_affiliation edge name in mutations.
 	EdgeCulturalAffiliation = "cultural_affiliation"
 	// EdgeMonument holds the string denoting the monument edge name in mutations.
@@ -120,11 +118,6 @@ const (
 	// PublicationsInverseTable is the table name for the Publication entity.
 	// It exists in this package in order to avoid circular dependency with the "publication" package.
 	PublicationsInverseTable = "publications"
-	// HoldersTable is the table that holds the holders relation/edge. The primary key declared below.
-	HoldersTable = "holder_artifacts"
-	// HoldersInverseTable is the table name for the Holder entity.
-	// It exists in this package in order to avoid circular dependency with the "holder" package.
-	HoldersInverseTable = "holders"
 	// CulturalAffiliationTable is the table that holds the cultural_affiliation relation/edge.
 	CulturalAffiliationTable = "artifacts"
 	// CulturalAffiliationInverseTable is the table name for the Culture entity.
@@ -230,9 +223,6 @@ var (
 	// PublicationsPrimaryKey and PublicationsColumn2 are the table columns denoting the
 	// primary key for the publications relation (M2M).
 	PublicationsPrimaryKey = []string{"publication_id", "artifact_id"}
-	// HoldersPrimaryKey and HoldersColumn2 are the table columns denoting the
-	// primary key for the holders relation (M2M).
-	HoldersPrimaryKey = []string{"holder_id", "artifact_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -474,20 +464,6 @@ func ByPublications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByHoldersCount orders the results by holders count.
-func ByHoldersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newHoldersStep(), opts...)
-	}
-}
-
-// ByHolders orders the results by holders terms.
-func ByHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByCulturalAffiliationField orders the results by cultural_affiliation field.
 func ByCulturalAffiliationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -576,13 +552,6 @@ func newPublicationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PublicationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, PublicationsTable, PublicationsPrimaryKey...),
-	)
-}
-func newHoldersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(HoldersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, HoldersTable, HoldersPrimaryKey...),
 	)
 }
 func newCulturalAffiliationStep() *sqlgraph.Step {

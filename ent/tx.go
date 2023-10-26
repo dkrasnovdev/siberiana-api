@@ -38,10 +38,6 @@ type Tx struct {
 	District *DistrictClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
-	// Holder is the client for interacting with the Holder builders.
-	Holder *HolderClient
-	// HolderResponsibility is the client for interacting with the HolderResponsibility builders.
-	HolderResponsibility *HolderResponsibilityClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
 	// License is the client for interacting with the License builders.
@@ -56,20 +52,14 @@ type Tx struct {
 	Monument *MonumentClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
-	// OrganizationType is the client for interacting with the OrganizationType builders.
-	OrganizationType *OrganizationTypeClient
 	// Period is the client for interacting with the Period builders.
 	Period *PeriodClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
-	// PersonRole is the client for interacting with the PersonRole builders.
-	PersonRole *PersonRoleClient
 	// Personal is the client for interacting with the Personal builders.
 	Personal *PersonalClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
-	// ProjectType is the client for interacting with the ProjectType builders.
-	ProjectType *ProjectTypeClient
 	// ProtectedArea is the client for interacting with the ProtectedArea builders.
 	ProtectedArea *ProtectedAreaClient
 	// ProtectedAreaCategory is the client for interacting with the ProtectedAreaCategory builders.
@@ -234,8 +224,6 @@ func (tx *Tx) init() {
 	tx.Culture = NewCultureClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
 	tx.Favourite = NewFavouriteClient(tx.config)
-	tx.Holder = NewHolderClient(tx.config)
-	tx.HolderResponsibility = NewHolderResponsibilityClient(tx.config)
 	tx.Keyword = NewKeywordClient(tx.config)
 	tx.License = NewLicenseClient(tx.config)
 	tx.Location = NewLocationClient(tx.config)
@@ -243,13 +231,10 @@ func (tx *Tx) init() {
 	tx.Model = NewModelClient(tx.config)
 	tx.Monument = NewMonumentClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
-	tx.OrganizationType = NewOrganizationTypeClient(tx.config)
 	tx.Period = NewPeriodClient(tx.config)
 	tx.Person = NewPersonClient(tx.config)
-	tx.PersonRole = NewPersonRoleClient(tx.config)
 	tx.Personal = NewPersonalClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)
-	tx.ProjectType = NewProjectTypeClient(tx.config)
 	tx.ProtectedArea = NewProtectedAreaClient(tx.config)
 	tx.ProtectedAreaCategory = NewProtectedAreaCategoryClient(tx.config)
 	tx.ProtectedAreaPicture = NewProtectedAreaPictureClient(tx.config)

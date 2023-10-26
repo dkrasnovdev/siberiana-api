@@ -71,6 +71,5 @@ func (Project) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
 		edge.From("team", Person.Type).Ref("projects"),
-		edge.From("project_type", ProjectType.Type).Ref("projects").Unique(),
 	}
 }

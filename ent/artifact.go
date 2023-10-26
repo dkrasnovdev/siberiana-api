@@ -94,8 +94,6 @@ type ArtifactEdges struct {
 	Projects []*Project `json:"projects,omitempty"`
 	// Publications holds the value of the publications edge.
 	Publications []*Publication `json:"publications,omitempty"`
-	// Holders holds the value of the holders edge.
-	Holders []*Holder `json:"holders,omitempty"`
 	// CulturalAffiliation holds the value of the cultural_affiliation edge.
 	CulturalAffiliation *Culture `json:"cultural_affiliation,omitempty"`
 	// Monument holds the value of the monument edge.
@@ -112,16 +110,15 @@ type ArtifactEdges struct {
 	License *License `json:"license,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [13]map[string]int
 
 	namedAuthors      map[string][]*Person
 	namedMediums      map[string][]*Medium
 	namedTechniques   map[string][]*Technique
 	namedProjects     map[string][]*Project
 	namedPublications map[string][]*Publication
-	namedHolders      map[string][]*Holder
 }
 
 // AuthorsOrErr returns the Authors value or an error if the edge
@@ -182,19 +179,10 @@ func (e ArtifactEdges) PublicationsOrErr() ([]*Publication, error) {
 	return nil, &NotLoadedError{edge: "publications"}
 }
 
-// HoldersOrErr returns the Holders value or an error if the edge
-// was not loaded in eager-loading.
-func (e ArtifactEdges) HoldersOrErr() ([]*Holder, error) {
-	if e.loadedTypes[6] {
-		return e.Holders, nil
-	}
-	return nil, &NotLoadedError{edge: "holders"}
-}
-
 // CulturalAffiliationOrErr returns the CulturalAffiliation value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) CulturalAffiliationOrErr() (*Culture, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[6] {
 		if e.CulturalAffiliation == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: culture.Label}
@@ -207,7 +195,7 @@ func (e ArtifactEdges) CulturalAffiliationOrErr() (*Culture, error) {
 // MonumentOrErr returns the Monument value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) MonumentOrErr() (*Monument, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[7] {
 		if e.Monument == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: monument.Label}
@@ -220,7 +208,7 @@ func (e ArtifactEdges) MonumentOrErr() (*Monument, error) {
 // ModelOrErr returns the Model value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) ModelOrErr() (*Model, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[8] {
 		if e.Model == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: model.Label}
@@ -233,7 +221,7 @@ func (e ArtifactEdges) ModelOrErr() (*Model, error) {
 // SetOrErr returns the Set value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) SetOrErr() (*Set, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[9] {
 		if e.Set == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: set.Label}
@@ -246,7 +234,7 @@ func (e ArtifactEdges) SetOrErr() (*Set, error) {
 // LocationOrErr returns the Location value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) LocationOrErr() (*Location, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[10] {
 		if e.Location == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: location.Label}
@@ -259,7 +247,7 @@ func (e ArtifactEdges) LocationOrErr() (*Location, error) {
 // CollectionOrErr returns the Collection value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) CollectionOrErr() (*Collection, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[11] {
 		if e.Collection == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: collection.Label}
@@ -272,7 +260,7 @@ func (e ArtifactEdges) CollectionOrErr() (*Collection, error) {
 // LicenseOrErr returns the License value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) LicenseOrErr() (*License, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[12] {
 		if e.License == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: license.Label}
@@ -553,11 +541,6 @@ func (a *Artifact) QueryPublications() *PublicationQuery {
 	return NewArtifactClient(a.config).QueryPublications(a)
 }
 
-// QueryHolders queries the "holders" edge of the Artifact entity.
-func (a *Artifact) QueryHolders() *HolderQuery {
-	return NewArtifactClient(a.config).QueryHolders(a)
-}
-
 // QueryCulturalAffiliation queries the "cultural_affiliation" edge of the Artifact entity.
 func (a *Artifact) QueryCulturalAffiliation() *CultureQuery {
 	return NewArtifactClient(a.config).QueryCulturalAffiliation(a)
@@ -796,30 +779,6 @@ func (a *Artifact) appendNamedPublications(name string, edges ...*Publication) {
 		a.Edges.namedPublications[name] = []*Publication{}
 	} else {
 		a.Edges.namedPublications[name] = append(a.Edges.namedPublications[name], edges...)
-	}
-}
-
-// NamedHolders returns the Holders named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (a *Artifact) NamedHolders(name string) ([]*Holder, error) {
-	if a.Edges.namedHolders == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := a.Edges.namedHolders[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (a *Artifact) appendNamedHolders(name string, edges ...*Holder) {
-	if a.Edges.namedHolders == nil {
-		a.Edges.namedHolders = make(map[string][]*Holder)
-	}
-	if len(edges) == 0 {
-		a.Edges.namedHolders[name] = []*Holder{}
-	} else {
-		a.Edges.namedHolders[name] = append(a.Edges.namedHolders[name], edges...)
 	}
 }
 

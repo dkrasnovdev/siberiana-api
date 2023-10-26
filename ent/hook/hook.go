@@ -165,30 +165,6 @@ func (f FavouriteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, e
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FavouriteMutation", m)
 }
 
-// The HolderFunc type is an adapter to allow the use of ordinary
-// function as Holder mutator.
-type HolderFunc func(context.Context, *ent.HolderMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f HolderFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.HolderMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HolderMutation", m)
-}
-
-// The HolderResponsibilityFunc type is an adapter to allow the use of ordinary
-// function as HolderResponsibility mutator.
-type HolderResponsibilityFunc func(context.Context, *ent.HolderResponsibilityMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f HolderResponsibilityFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.HolderResponsibilityMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HolderResponsibilityMutation", m)
-}
-
 // The KeywordFunc type is an adapter to allow the use of ordinary
 // function as Keyword mutator.
 type KeywordFunc func(context.Context, *ent.KeywordMutation) (ent.Value, error)
@@ -273,18 +249,6 @@ func (f OrganizationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OrganizationMutation", m)
 }
 
-// The OrganizationTypeFunc type is an adapter to allow the use of ordinary
-// function as OrganizationType mutator.
-type OrganizationTypeFunc func(context.Context, *ent.OrganizationTypeMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f OrganizationTypeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.OrganizationTypeMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OrganizationTypeMutation", m)
-}
-
 // The PeriodFunc type is an adapter to allow the use of ordinary
 // function as Period mutator.
 type PeriodFunc func(context.Context, *ent.PeriodMutation) (ent.Value, error)
@@ -309,18 +273,6 @@ func (f PersonFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, erro
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonMutation", m)
 }
 
-// The PersonRoleFunc type is an adapter to allow the use of ordinary
-// function as PersonRole mutator.
-type PersonRoleFunc func(context.Context, *ent.PersonRoleMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f PersonRoleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.PersonRoleMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonRoleMutation", m)
-}
-
 // The PersonalFunc type is an adapter to allow the use of ordinary
 // function as Personal mutator.
 type PersonalFunc func(context.Context, *ent.PersonalMutation) (ent.Value, error)
@@ -343,18 +295,6 @@ func (f ProjectFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProjectMutation", m)
-}
-
-// The ProjectTypeFunc type is an adapter to allow the use of ordinary
-// function as ProjectType mutator.
-type ProjectTypeFunc func(context.Context, *ent.ProjectTypeMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ProjectTypeFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.ProjectTypeMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ProjectTypeMutation", m)
 }
 
 // The ProtectedAreaFunc type is an adapter to allow the use of ordinary

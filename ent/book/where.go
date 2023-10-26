@@ -879,29 +879,6 @@ func HasCollectionWith(preds ...predicate.Collection) predicate.Book {
 	})
 }
 
-// HasHolders applies the HasEdge predicate on the "holders" edge.
-func HasHolders() predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, HoldersTable, HoldersPrimaryKey...),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasHoldersWith applies the HasEdge predicate on the "holders" edge with a given conditions (other predicates).
-func HasHoldersWith(preds ...predicate.Holder) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		step := newHoldersStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasPublisher applies the HasEdge predicate on the "publisher" edge.
 func HasPublisher() predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {

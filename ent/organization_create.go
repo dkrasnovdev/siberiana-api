@@ -10,9 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 )
 
@@ -230,44 +228,6 @@ func (oc *OrganizationCreate) AddPeople(p ...*Person) *OrganizationCreate {
 	return oc.AddPersonIDs(ids...)
 }
 
-// SetHolderID sets the "holder" edge to the Holder entity by ID.
-func (oc *OrganizationCreate) SetHolderID(id int) *OrganizationCreate {
-	oc.mutation.SetHolderID(id)
-	return oc
-}
-
-// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableHolderID(id *int) *OrganizationCreate {
-	if id != nil {
-		oc = oc.SetHolderID(*id)
-	}
-	return oc
-}
-
-// SetHolder sets the "holder" edge to the Holder entity.
-func (oc *OrganizationCreate) SetHolder(h *Holder) *OrganizationCreate {
-	return oc.SetHolderID(h.ID)
-}
-
-// SetOrganizationTypeID sets the "organization_type" edge to the OrganizationType entity by ID.
-func (oc *OrganizationCreate) SetOrganizationTypeID(id int) *OrganizationCreate {
-	oc.mutation.SetOrganizationTypeID(id)
-	return oc
-}
-
-// SetNillableOrganizationTypeID sets the "organization_type" edge to the OrganizationType entity by ID if the given value is not nil.
-func (oc *OrganizationCreate) SetNillableOrganizationTypeID(id *int) *OrganizationCreate {
-	if id != nil {
-		oc = oc.SetOrganizationTypeID(*id)
-	}
-	return oc
-}
-
-// SetOrganizationType sets the "organization_type" edge to the OrganizationType entity.
-func (oc *OrganizationCreate) SetOrganizationType(o *OrganizationType) *OrganizationCreate {
-	return oc.SetOrganizationTypeID(o.ID)
-}
-
 // Mutation returns the OrganizationMutation object of the builder.
 func (oc *OrganizationCreate) Mutation() *OrganizationMutation {
 	return oc.mutation
@@ -434,40 +394,6 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := oc.mutation.HolderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   organization.HolderTable,
-			Columns: []string{organization.HolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.holder_organization = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := oc.mutation.OrganizationTypeIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   organization.OrganizationTypeTable,
-			Columns: []string{organization.OrganizationTypeColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organizationtype.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.organization_type_organizations = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -26,8 +26,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
-	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -35,13 +33,10 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
-	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
-	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -126,16 +121,6 @@ var favouriteImplementors = []string{"Favourite", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Favourite) IsNode() {}
 
-var holderImplementors = []string{"Holder", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*Holder) IsNode() {}
-
-var holderresponsibilityImplementors = []string{"HolderResponsibility", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*HolderResponsibility) IsNode() {}
-
 var keywordImplementors = []string{"Keyword", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -171,11 +156,6 @@ var organizationImplementors = []string{"Organization", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Organization) IsNode() {}
 
-var organizationtypeImplementors = []string{"OrganizationType", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*OrganizationType) IsNode() {}
-
 var periodImplementors = []string{"Period", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -186,11 +166,6 @@ var personImplementors = []string{"Person", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Person) IsNode() {}
 
-var personroleImplementors = []string{"PersonRole", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*PersonRole) IsNode() {}
-
 var personalImplementors = []string{"Personal", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -200,11 +175,6 @@ var projectImplementors = []string{"Project", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Project) IsNode() {}
-
-var projecttypeImplementors = []string{"ProjectType", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*ProjectType) IsNode() {}
 
 var protectedareaImplementors = []string{"ProtectedArea", "Node"}
 
@@ -470,30 +440,6 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
-	case holder.Table:
-		query := c.Holder.Query().
-			Where(holder.ID(id))
-		query, err := query.CollectFields(ctx, holderImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
-	case holderresponsibility.Table:
-		query := c.HolderResponsibility.Query().
-			Where(holderresponsibility.ID(id))
-		query, err := query.CollectFields(ctx, holderresponsibilityImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
 	case keyword.Table:
 		query := c.Keyword.Query().
 			Where(keyword.ID(id))
@@ -578,18 +524,6 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
-	case organizationtype.Table:
-		query := c.OrganizationType.Query().
-			Where(organizationtype.ID(id))
-		query, err := query.CollectFields(ctx, organizationtypeImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
 	case period.Table:
 		query := c.Period.Query().
 			Where(period.ID(id))
@@ -614,18 +548,6 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
-	case personrole.Table:
-		query := c.PersonRole.Query().
-			Where(personrole.ID(id))
-		query, err := query.CollectFields(ctx, personroleImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
 	case personal.Table:
 		query := c.Personal.Query().
 			Where(personal.ID(id))
@@ -642,18 +564,6 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Project.Query().
 			Where(project.ID(id))
 		query, err := query.CollectFields(ctx, projectImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
-	case projecttype.Table:
-		query := c.ProjectType.Query().
-			Where(projecttype.ID(id))
-		query, err := query.CollectFields(ctx, projecttypeImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1063,38 +973,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
-	case holder.Table:
-		query := c.Holder.Query().
-			Where(holder.IDIn(ids...))
-		query, err := query.CollectFields(ctx, holderImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case holderresponsibility.Table:
-		query := c.HolderResponsibility.Query().
-			Where(holderresponsibility.IDIn(ids...))
-		query, err := query.CollectFields(ctx, holderresponsibilityImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case keyword.Table:
 		query := c.Keyword.Query().
 			Where(keyword.IDIn(ids...))
@@ -1207,22 +1085,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
-	case organizationtype.Table:
-		query := c.OrganizationType.Query().
-			Where(organizationtype.IDIn(ids...))
-		query, err := query.CollectFields(ctx, organizationtypeImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case period.Table:
 		query := c.Period.Query().
 			Where(period.IDIn(ids...))
@@ -1255,22 +1117,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
-	case personrole.Table:
-		query := c.PersonRole.Query().
-			Where(personrole.IDIn(ids...))
-		query, err := query.CollectFields(ctx, personroleImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case personal.Table:
 		query := c.Personal.Query().
 			Where(personal.IDIn(ids...))
@@ -1291,22 +1137,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Project.Query().
 			Where(project.IDIn(ids...))
 		query, err := query.CollectFields(ctx, projectImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case projecttype.Table:
-		query := c.ProjectType.Query().
-			Where(projecttype.IDIn(ids...))
-		query, err := query.CollectFields(ctx, projecttypeImplementors...)
 		if err != nil {
 			return nil, err
 		}

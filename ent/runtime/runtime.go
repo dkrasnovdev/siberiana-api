@@ -19,21 +19,16 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
-	"github.com/dkrasnovdev/siberiana-api/ent/holderresponsibility"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/organizationtype"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
-	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
-	"github.com/dkrasnovdev/siberiana-api/ent/projecttype"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -415,60 +410,6 @@ func init() {
 	favouriteDescOwnerID := favouriteMixinFields1[0].Descriptor()
 	// favourite.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	favourite.OwnerIDValidator = favouriteDescOwnerID.Validators[0].(func(string) error)
-	holderMixin := schema.Holder{}.Mixin()
-	holder.Policy = privacy.NewPolicies(schema.Holder{})
-	holder.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := holder.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	holderMixinHooks0 := holderMixin[0].Hooks()
-
-	holder.Hooks[1] = holderMixinHooks0[0]
-	holderMixinFields0 := holderMixin[0].Fields()
-	_ = holderMixinFields0
-	holderFields := schema.Holder{}.Fields()
-	_ = holderFields
-	// holderDescCreatedAt is the schema descriptor for created_at field.
-	holderDescCreatedAt := holderMixinFields0[0].Descriptor()
-	// holder.DefaultCreatedAt holds the default value on creation for the created_at field.
-	holder.DefaultCreatedAt = holderDescCreatedAt.Default.(func() time.Time)
-	// holderDescUpdatedAt is the schema descriptor for updated_at field.
-	holderDescUpdatedAt := holderMixinFields0[2].Descriptor()
-	// holder.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	holder.DefaultUpdatedAt = holderDescUpdatedAt.Default.(func() time.Time)
-	// holder.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	holder.UpdateDefaultUpdatedAt = holderDescUpdatedAt.UpdateDefault.(func() time.Time)
-	holderresponsibilityMixin := schema.HolderResponsibility{}.Mixin()
-	holderresponsibility.Policy = privacy.NewPolicies(schema.HolderResponsibility{})
-	holderresponsibility.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := holderresponsibility.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	holderresponsibilityMixinHooks0 := holderresponsibilityMixin[0].Hooks()
-
-	holderresponsibility.Hooks[1] = holderresponsibilityMixinHooks0[0]
-	holderresponsibilityMixinFields0 := holderresponsibilityMixin[0].Fields()
-	_ = holderresponsibilityMixinFields0
-	holderresponsibilityFields := schema.HolderResponsibility{}.Fields()
-	_ = holderresponsibilityFields
-	// holderresponsibilityDescCreatedAt is the schema descriptor for created_at field.
-	holderresponsibilityDescCreatedAt := holderresponsibilityMixinFields0[0].Descriptor()
-	// holderresponsibility.DefaultCreatedAt holds the default value on creation for the created_at field.
-	holderresponsibility.DefaultCreatedAt = holderresponsibilityDescCreatedAt.Default.(func() time.Time)
-	// holderresponsibilityDescUpdatedAt is the schema descriptor for updated_at field.
-	holderresponsibilityDescUpdatedAt := holderresponsibilityMixinFields0[2].Descriptor()
-	// holderresponsibility.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	holderresponsibility.DefaultUpdatedAt = holderresponsibilityDescUpdatedAt.Default.(func() time.Time)
-	// holderresponsibility.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	holderresponsibility.UpdateDefaultUpdatedAt = holderresponsibilityDescUpdatedAt.UpdateDefault.(func() time.Time)
 	licenseMixin := schema.License{}.Mixin()
 	license.Policy = privacy.NewPolicies(schema.License{})
 	license.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -633,33 +574,6 @@ func init() {
 	organization.DefaultUpdatedAt = organizationDescUpdatedAt.Default.(func() time.Time)
 	// organization.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	organization.UpdateDefaultUpdatedAt = organizationDescUpdatedAt.UpdateDefault.(func() time.Time)
-	organizationtypeMixin := schema.OrganizationType{}.Mixin()
-	organizationtype.Policy = privacy.NewPolicies(schema.OrganizationType{})
-	organizationtype.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := organizationtype.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	organizationtypeMixinHooks0 := organizationtypeMixin[0].Hooks()
-
-	organizationtype.Hooks[1] = organizationtypeMixinHooks0[0]
-	organizationtypeMixinFields0 := organizationtypeMixin[0].Fields()
-	_ = organizationtypeMixinFields0
-	organizationtypeFields := schema.OrganizationType{}.Fields()
-	_ = organizationtypeFields
-	// organizationtypeDescCreatedAt is the schema descriptor for created_at field.
-	organizationtypeDescCreatedAt := organizationtypeMixinFields0[0].Descriptor()
-	// organizationtype.DefaultCreatedAt holds the default value on creation for the created_at field.
-	organizationtype.DefaultCreatedAt = organizationtypeDescCreatedAt.Default.(func() time.Time)
-	// organizationtypeDescUpdatedAt is the schema descriptor for updated_at field.
-	organizationtypeDescUpdatedAt := organizationtypeMixinFields0[2].Descriptor()
-	// organizationtype.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	organizationtype.DefaultUpdatedAt = organizationtypeDescUpdatedAt.Default.(func() time.Time)
-	// organizationtype.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	organizationtype.UpdateDefaultUpdatedAt = organizationtypeDescUpdatedAt.UpdateDefault.(func() time.Time)
 	periodMixin := schema.Period{}.Mixin()
 	period.Policy = privacy.NewPolicies(schema.Period{})
 	period.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -714,33 +628,6 @@ func init() {
 	person.DefaultUpdatedAt = personDescUpdatedAt.Default.(func() time.Time)
 	// person.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	person.UpdateDefaultUpdatedAt = personDescUpdatedAt.UpdateDefault.(func() time.Time)
-	personroleMixin := schema.PersonRole{}.Mixin()
-	personrole.Policy = privacy.NewPolicies(schema.PersonRole{})
-	personrole.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := personrole.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	personroleMixinHooks0 := personroleMixin[0].Hooks()
-
-	personrole.Hooks[1] = personroleMixinHooks0[0]
-	personroleMixinFields0 := personroleMixin[0].Fields()
-	_ = personroleMixinFields0
-	personroleFields := schema.PersonRole{}.Fields()
-	_ = personroleFields
-	// personroleDescCreatedAt is the schema descriptor for created_at field.
-	personroleDescCreatedAt := personroleMixinFields0[0].Descriptor()
-	// personrole.DefaultCreatedAt holds the default value on creation for the created_at field.
-	personrole.DefaultCreatedAt = personroleDescCreatedAt.Default.(func() time.Time)
-	// personroleDescUpdatedAt is the schema descriptor for updated_at field.
-	personroleDescUpdatedAt := personroleMixinFields0[2].Descriptor()
-	// personrole.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	personrole.DefaultUpdatedAt = personroleDescUpdatedAt.Default.(func() time.Time)
-	// personrole.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	personrole.UpdateDefaultUpdatedAt = personroleDescUpdatedAt.UpdateDefault.(func() time.Time)
 	personalMixin := schema.Personal{}.Mixin()
 	personal.Policy = privacy.NewPolicies(schema.Personal{})
 	personal.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -808,33 +695,6 @@ func init() {
 	project.DefaultUpdatedAt = projectDescUpdatedAt.Default.(func() time.Time)
 	// project.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	project.UpdateDefaultUpdatedAt = projectDescUpdatedAt.UpdateDefault.(func() time.Time)
-	projecttypeMixin := schema.ProjectType{}.Mixin()
-	projecttype.Policy = privacy.NewPolicies(schema.ProjectType{})
-	projecttype.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := projecttype.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	projecttypeMixinHooks0 := projecttypeMixin[0].Hooks()
-
-	projecttype.Hooks[1] = projecttypeMixinHooks0[0]
-	projecttypeMixinFields0 := projecttypeMixin[0].Fields()
-	_ = projecttypeMixinFields0
-	projecttypeFields := schema.ProjectType{}.Fields()
-	_ = projecttypeFields
-	// projecttypeDescCreatedAt is the schema descriptor for created_at field.
-	projecttypeDescCreatedAt := projecttypeMixinFields0[0].Descriptor()
-	// projecttype.DefaultCreatedAt holds the default value on creation for the created_at field.
-	projecttype.DefaultCreatedAt = projecttypeDescCreatedAt.Default.(func() time.Time)
-	// projecttypeDescUpdatedAt is the schema descriptor for updated_at field.
-	projecttypeDescUpdatedAt := projecttypeMixinFields0[2].Descriptor()
-	// projecttype.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	projecttype.DefaultUpdatedAt = projecttypeDescUpdatedAt.Default.(func() time.Time)
-	// projecttype.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	projecttype.UpdateDefaultUpdatedAt = projecttypeDescUpdatedAt.UpdateDefault.(func() time.Time)
 	protectedareaMixin := schema.ProtectedArea{}.Mixin()
 	protectedarea.Policy = privacy.NewPolicies(schema.ProtectedArea{})
 	protectedarea.Hooks[0] = func(next ent.Mutator) ent.Mutator {

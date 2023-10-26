@@ -15,7 +15,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -43,7 +42,6 @@ type ArtifactQuery struct {
 	withPeriod              *PeriodQuery
 	withProjects            *ProjectQuery
 	withPublications        *PublicationQuery
-	withHolders             *HolderQuery
 	withCulturalAffiliation *CultureQuery
 	withMonument            *MonumentQuery
 	withModel               *ModelQuery
@@ -59,7 +57,6 @@ type ArtifactQuery struct {
 	withNamedTechniques     map[string]*TechniqueQuery
 	withNamedProjects       map[string]*ProjectQuery
 	withNamedPublications   map[string]*PublicationQuery
-	withNamedHolders        map[string]*HolderQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -221,28 +218,6 @@ func (aq *ArtifactQuery) QueryPublications() *PublicationQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
 			sqlgraph.To(publication.Table, publication.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PublicationsTable, artifact.PublicationsPrimaryKey...),
-		)
-		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryHolders chains the current query on the "holders" edge.
-func (aq *ArtifactQuery) QueryHolders() *HolderQuery {
-	query := (&HolderClient{config: aq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := aq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := aq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
-			sqlgraph.To(holder.Table, holder.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, artifact.HoldersTable, artifact.HoldersPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -602,7 +577,6 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		withPeriod:              aq.withPeriod.Clone(),
 		withProjects:            aq.withProjects.Clone(),
 		withPublications:        aq.withPublications.Clone(),
-		withHolders:             aq.withHolders.Clone(),
 		withCulturalAffiliation: aq.withCulturalAffiliation.Clone(),
 		withMonument:            aq.withMonument.Clone(),
 		withModel:               aq.withModel.Clone(),
@@ -679,17 +653,6 @@ func (aq *ArtifactQuery) WithPublications(opts ...func(*PublicationQuery)) *Arti
 		opt(query)
 	}
 	aq.withPublications = query
-	return aq
-}
-
-// WithHolders tells the query-builder to eager-load the nodes that are connected to
-// the "holders" edge. The optional arguments are used to configure the query builder of the edge.
-func (aq *ArtifactQuery) WithHolders(opts ...func(*HolderQuery)) *ArtifactQuery {
-	query := (&HolderClient{config: aq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	aq.withHolders = query
 	return aq
 }
 
@@ -855,14 +818,13 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		nodes       = []*Artifact{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [13]bool{
 			aq.withAuthors != nil,
 			aq.withMediums != nil,
 			aq.withTechniques != nil,
 			aq.withPeriod != nil,
 			aq.withProjects != nil,
 			aq.withPublications != nil,
-			aq.withHolders != nil,
 			aq.withCulturalAffiliation != nil,
 			aq.withMonument != nil,
 			aq.withModel != nil,
@@ -940,13 +902,6 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			return nil, err
 		}
 	}
-	if query := aq.withHolders; query != nil {
-		if err := aq.loadHolders(ctx, query, nodes,
-			func(n *Artifact) { n.Edges.Holders = []*Holder{} },
-			func(n *Artifact, e *Holder) { n.Edges.Holders = append(n.Edges.Holders, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := aq.withCulturalAffiliation; query != nil {
 		if err := aq.loadCulturalAffiliation(ctx, query, nodes, nil,
 			func(n *Artifact, e *Culture) { n.Edges.CulturalAffiliation = e }); err != nil {
@@ -1021,13 +976,6 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		if err := aq.loadPublications(ctx, query, nodes,
 			func(n *Artifact) { n.appendNamedPublications(name) },
 			func(n *Artifact, e *Publication) { n.appendNamedPublications(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range aq.withNamedHolders {
-		if err := aq.loadHolders(ctx, query, nodes,
-			func(n *Artifact) { n.appendNamedHolders(name) },
-			func(n *Artifact, e *Holder) { n.appendNamedHolders(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1369,67 +1317,6 @@ func (aq *ArtifactQuery) loadPublications(ctx context.Context, query *Publicatio
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "publications" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (aq *ArtifactQuery) loadHolders(ctx context.Context, query *HolderQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Holder)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*Artifact)
-	nids := make(map[int]map[*Artifact]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(artifact.HoldersTable)
-		s.Join(joinT).On(s.C(holder.FieldID), joinT.C(artifact.HoldersPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(artifact.HoldersPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(artifact.HoldersPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := int(values[0].(*sql.NullInt64).Int64)
-				inValue := int(values[1].(*sql.NullInt64).Int64)
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Holder](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "holders" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1813,20 +1700,6 @@ func (aq *ArtifactQuery) WithNamedPublications(name string, opts ...func(*Public
 		aq.withNamedPublications = make(map[string]*PublicationQuery)
 	}
 	aq.withNamedPublications[name] = query
-	return aq
-}
-
-// WithNamedHolders tells the query-builder to eager-load the nodes that are connected to the "holders"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (aq *ArtifactQuery) WithNamedHolders(name string, opts ...func(*HolderQuery)) *ArtifactQuery {
-	query := (&HolderClient{config: aq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if aq.withNamedHolders == nil {
-		aq.withNamedHolders = make(map[string]*HolderQuery)
-	}
-	aq.withNamedHolders[name] = query
 	return aq
 }
 

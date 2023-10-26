@@ -23,7 +23,7 @@ func (r *mutationResolver) UpdateArtifact(ctx context.Context, id int, input ent
 	return client.Artifact.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
-// UpdateArtifact is the resolver for the updateArtifact field.
+// DeleteArtifact is the resolver for the deleteArtifact field.
 func (r *mutationResolver) DeleteArtifact(ctx context.Context, id int) (string, error) {
 	client := ent.FromContext(ctx)
 	err := client.Artifact.DeleteOneID(id).Exec(ctx)
@@ -45,6 +45,16 @@ func (r *mutationResolver) UpdateArt(ctx context.Context, id int, input ent.Upda
 	return client.Art.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteArt is the resolver for the deleteArt field.
+func (r *mutationResolver) DeleteArt(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Art.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Art has been deleted", nil
+}
+
 // CreateArtGenre is the resolver for the createArtGenre field.
 func (r *mutationResolver) CreateArtGenre(ctx context.Context, input ent.CreateArtGenreInput) (*ent.ArtGenre, error) {
 	client := ent.FromContext(ctx)
@@ -55,6 +65,16 @@ func (r *mutationResolver) CreateArtGenre(ctx context.Context, input ent.CreateA
 func (r *mutationResolver) UpdateArtGenre(ctx context.Context, id int, input ent.UpdateArtGenreInput) (*ent.ArtGenre, error) {
 	client := ent.FromContext(ctx)
 	return client.ArtGenre.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteArtGenre is the resolver for the deleteArtGenre field.
+func (r *mutationResolver) DeleteArtGenre(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.ArtGenre.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "ArtGenre has been deleted", nil
 }
 
 // CreateArtStyle is the resolver for the createArtStyle field.
@@ -69,6 +89,16 @@ func (r *mutationResolver) UpdateArtStyle(ctx context.Context, id int, input ent
 	return client.ArtStyle.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteArtStyle is the resolver for the deleteArtStyle field.
+func (r *mutationResolver) DeleteArtStyle(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.ArtStyle.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "ArtStyle has been deleted", nil
+}
+
 // CreateBook is the resolver for the createBook field.
 func (r *mutationResolver) CreateBook(ctx context.Context, input ent.CreateBookInput) (*ent.Book, error) {
 	client := ent.FromContext(ctx)
@@ -79,6 +109,16 @@ func (r *mutationResolver) CreateBook(ctx context.Context, input ent.CreateBookI
 func (r *mutationResolver) UpdateBook(ctx context.Context, id int, input ent.UpdateBookInput) (*ent.Book, error) {
 	client := ent.FromContext(ctx)
 	return client.Book.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteBook is the resolver for the deleteBook field.
+func (r *mutationResolver) DeleteBook(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Book.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Book has been deleted", nil
 }
 
 // CreateBookGenre is the resolver for the createBookGenre field.
@@ -93,6 +133,16 @@ func (r *mutationResolver) UpdateBookGenre(ctx context.Context, id int, input en
 	return client.BookGenre.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteBookGenre is the resolver for the deleteBookGenre field.
+func (r *mutationResolver) DeleteBookGenre(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.BookGenre.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "BookGenre has been deleted", nil
+}
+
 // CreateCategory is the resolver for the createCategory field.
 func (r *mutationResolver) CreateCategory(ctx context.Context, input ent.CreateCategoryInput) (*ent.Category, error) {
 	client := ent.FromContext(ctx)
@@ -103,6 +153,16 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input ent.CreateC
 func (r *mutationResolver) UpdateCategory(ctx context.Context, id int, input ent.UpdateCategoryInput) (*ent.Category, error) {
 	client := ent.FromContext(ctx)
 	return client.Category.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteCategory is the resolver for the deleteCategory field.
+func (r *mutationResolver) DeleteCategory(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Category.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Category has been deleted", nil
 }
 
 // CreateCollection is the resolver for the createCollection field.
@@ -117,6 +177,16 @@ func (r *mutationResolver) UpdateCollection(ctx context.Context, id int, input e
 	return client.Collection.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteCollection is the resolver for the deleteCollection field.
+func (r *mutationResolver) DeleteCollection(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Collection.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Collection has been deleted", nil
+}
+
 // CreateCountry is the resolver for the createCountry field.
 func (r *mutationResolver) CreateCountry(ctx context.Context, input ent.CreateCountryInput) (*ent.Country, error) {
 	client := ent.FromContext(ctx)
@@ -127,6 +197,16 @@ func (r *mutationResolver) CreateCountry(ctx context.Context, input ent.CreateCo
 func (r *mutationResolver) UpdateCountry(ctx context.Context, id int, input ent.UpdateCountryInput) (*ent.Country, error) {
 	client := ent.FromContext(ctx)
 	return client.Country.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteCountry is the resolver for the deleteCountry field.
+func (r *mutationResolver) DeleteCountry(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Country.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Country has been deleted", nil
 }
 
 // CreateCulture is the resolver for the createCulture field.
@@ -141,6 +221,16 @@ func (r *mutationResolver) UpdateCulture(ctx context.Context, id int, input ent.
 	return client.Culture.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteCulture is the resolver for the deleteCulture field.
+func (r *mutationResolver) DeleteCulture(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Culture.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Culture has been deleted", nil
+}
+
 // CreateFavourite is the resolver for the createFavourite field.
 func (r *mutationResolver) CreateFavourite(ctx context.Context, input ent.CreateFavouriteInput) (*ent.Favourite, error) {
 	client := ent.FromContext(ctx)
@@ -151,6 +241,16 @@ func (r *mutationResolver) CreateFavourite(ctx context.Context, input ent.Create
 func (r *mutationResolver) UpdateFavourite(ctx context.Context, id int, input ent.UpdateFavouriteInput) (*ent.Favourite, error) {
 	client := ent.FromContext(ctx)
 	return client.Favourite.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteFavourite is the resolver for the deleteFavourite field.
+func (r *mutationResolver) DeleteFavourite(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Favourite.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Favourite has been deleted", nil
 }
 
 // CreateDistrict is the resolver for the createDistrict field.
@@ -165,28 +265,14 @@ func (r *mutationResolver) UpdateDistrict(ctx context.Context, id int, input ent
 	return client.District.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
-// CreateHolder is the resolver for the createHolder field.
-func (r *mutationResolver) CreateHolder(ctx context.Context, input ent.CreateHolderInput) (*ent.Holder, error) {
+// DeleteDistrict is the resolver for the deleteDistrict field.
+func (r *mutationResolver) DeleteDistrict(ctx context.Context, id int) (string, error) {
 	client := ent.FromContext(ctx)
-	return client.Holder.Create().SetInput(input).Save(ctx)
-}
-
-// UpdateHolder is the resolver for the updateHolder field.
-func (r *mutationResolver) UpdateHolder(ctx context.Context, id int, input ent.UpdateHolderInput) (*ent.Holder, error) {
-	client := ent.FromContext(ctx)
-	return client.Holder.UpdateOneID(id).SetInput(input).Save(ctx)
-}
-
-// CreateHolderResponsibility is the resolver for the createHolderResponsibility field.
-func (r *mutationResolver) CreateHolderResponsibility(ctx context.Context, input ent.CreateHolderResponsibilityInput) (*ent.HolderResponsibility, error) {
-	client := ent.FromContext(ctx)
-	return client.HolderResponsibility.Create().SetInput(input).Save(ctx)
-}
-
-// UpdateHolderResponsibility is the resolver for the updateHolderResponsibility field.
-func (r *mutationResolver) UpdateHolderResponsibility(ctx context.Context, id int, input ent.UpdateHolderResponsibilityInput) (*ent.HolderResponsibility, error) {
-	client := ent.FromContext(ctx)
-	return client.HolderResponsibility.UpdateOneID(id).SetInput(input).Save(ctx)
+	err := client.District.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "District has been deleted", nil
 }
 
 // CreateLicense is the resolver for the createLicense field.
@@ -201,6 +287,16 @@ func (r *mutationResolver) UpdateLicense(ctx context.Context, id int, input ent.
 	return client.License.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteLicense is the resolver for the deleteLicense field.
+func (r *mutationResolver) DeleteLicense(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.License.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "License has been deleted", nil
+}
+
 // CreateLocation is the resolver for the createLocation field.
 func (r *mutationResolver) CreateLocation(ctx context.Context, input ent.CreateLocationInput) (*ent.Location, error) {
 	client := ent.FromContext(ctx)
@@ -211,6 +307,16 @@ func (r *mutationResolver) CreateLocation(ctx context.Context, input ent.CreateL
 func (r *mutationResolver) UpdateLocation(ctx context.Context, id int, input ent.UpdateLocationInput) (*ent.Location, error) {
 	client := ent.FromContext(ctx)
 	return client.Location.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteLocation is the resolver for the deleteLocation field.
+func (r *mutationResolver) DeleteLocation(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Location.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Location has been deleted", nil
 }
 
 // CreateMedium is the resolver for the createMedium field.
@@ -225,6 +331,16 @@ func (r *mutationResolver) UpdateMedium(ctx context.Context, id int, input ent.U
 	return client.Medium.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteMedium is the resolver for the deleteMedium field.
+func (r *mutationResolver) DeleteMedium(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Medium.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Medium has been deleted", nil
+}
+
 // CreateModel is the resolver for the createModel field.
 func (r *mutationResolver) CreateModel(ctx context.Context, input ent.CreateModelInput) (*ent.Model, error) {
 	client := ent.FromContext(ctx)
@@ -235,6 +351,16 @@ func (r *mutationResolver) CreateModel(ctx context.Context, input ent.CreateMode
 func (r *mutationResolver) UpdateModel(ctx context.Context, id int, input ent.UpdateModelInput) (*ent.Model, error) {
 	client := ent.FromContext(ctx)
 	return client.Model.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteModel is the resolver for the deleteModel field.
+func (r *mutationResolver) DeleteModel(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Model.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Model has been deleted", nil
 }
 
 // CreateMonument is the resolver for the createMonument field.
@@ -249,6 +375,16 @@ func (r *mutationResolver) UpdateMonument(ctx context.Context, id int, input ent
 	return client.Monument.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteMonument is the resolver for the deleteMonument field.
+func (r *mutationResolver) DeleteMonument(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Monument.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Monument has been deleted", nil
+}
+
 // CreateOrganization is the resolver for the createOrganization field.
 func (r *mutationResolver) CreateOrganization(ctx context.Context, input ent.CreateOrganizationInput) (*ent.Organization, error) {
 	client := ent.FromContext(ctx)
@@ -261,16 +397,14 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id int, input
 	return client.Organization.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
-// CreateOrganizationType is the resolver for the createOrganizationType field.
-func (r *mutationResolver) CreateOrganizationType(ctx context.Context, input ent.CreateOrganizationTypeInput) (*ent.OrganizationType, error) {
+// DeleteOrganization is the resolver for the deleteOrganization field.
+func (r *mutationResolver) DeleteOrganization(ctx context.Context, id int) (string, error) {
 	client := ent.FromContext(ctx)
-	return client.OrganizationType.Create().SetInput(input).Save(ctx)
-}
-
-// UpdateOrganizationType is the resolver for the updateOrganizationType field.
-func (r *mutationResolver) UpdateOrganizationType(ctx context.Context, id int, input ent.UpdateOrganizationTypeInput) (*ent.OrganizationType, error) {
-	client := ent.FromContext(ctx)
-	return client.OrganizationType.UpdateOneID(id).SetInput(input).Save(ctx)
+	err := client.Organization.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Organization has been deleted", nil
 }
 
 // CreatePeriod is the resolver for the createPeriod field.
@@ -285,6 +419,16 @@ func (r *mutationResolver) UpdatePeriod(ctx context.Context, id int, input ent.U
 	return client.Period.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeletePeriod is the resolver for the deletePeriod field.
+func (r *mutationResolver) DeletePeriod(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Period.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Period has been deleted", nil
+}
+
 // CreatePerson is the resolver for the createPerson field.
 func (r *mutationResolver) CreatePerson(ctx context.Context, input ent.CreatePersonInput) (*ent.Person, error) {
 	client := ent.FromContext(ctx)
@@ -297,16 +441,14 @@ func (r *mutationResolver) UpdatePerson(ctx context.Context, id int, input ent.U
 	return client.Person.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
-// CreatePersonRole is the resolver for the createPersonRole field.
-func (r *mutationResolver) CreatePersonRole(ctx context.Context, input ent.CreatePersonRoleInput) (*ent.PersonRole, error) {
+// DeletePerson is the resolver for the deletePerson field.
+func (r *mutationResolver) DeletePerson(ctx context.Context, id int) (string, error) {
 	client := ent.FromContext(ctx)
-	return client.PersonRole.Create().SetInput(input).Save(ctx)
-}
-
-// UpdatePersonRole is the resolver for the updatePersonRole field.
-func (r *mutationResolver) UpdatePersonRole(ctx context.Context, id int, input ent.UpdatePersonRoleInput) (*ent.PersonRole, error) {
-	client := ent.FromContext(ctx)
-	return client.PersonRole.UpdateOneID(id).SetInput(input).Save(ctx)
+	err := client.Person.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Person has been deleted", nil
 }
 
 // CreatePersonal is the resolver for the createPersonal field.
@@ -321,6 +463,16 @@ func (r *mutationResolver) UpdatePersonal(ctx context.Context, id int, input ent
 	return client.Personal.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeletePersonal is the resolver for the deletePersonal field.
+func (r *mutationResolver) DeletePersonal(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Personal.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Personal has been deleted", nil
+}
+
 // CreateProject is the resolver for the createProject field.
 func (r *mutationResolver) CreateProject(ctx context.Context, input ent.CreateProjectInput) (*ent.Project, error) {
 	client := ent.FromContext(ctx)
@@ -333,16 +485,14 @@ func (r *mutationResolver) UpdateProject(ctx context.Context, id int, input ent.
 	return client.Project.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
-// CreateProjectType is the resolver for the createProjectType field.
-func (r *mutationResolver) CreateProjectType(ctx context.Context, input ent.CreateProjectTypeInput) (*ent.ProjectType, error) {
+// DeleteProject is the resolver for the deleteProject field.
+func (r *mutationResolver) DeleteProject(ctx context.Context, id int) (string, error) {
 	client := ent.FromContext(ctx)
-	return client.ProjectType.Create().SetInput(input).Save(ctx)
-}
-
-// UpdateProjectType is the resolver for the updateProjectType field.
-func (r *mutationResolver) UpdateProjectType(ctx context.Context, id int, input ent.UpdateProjectTypeInput) (*ent.ProjectType, error) {
-	client := ent.FromContext(ctx)
-	return client.ProjectType.UpdateOneID(id).SetInput(input).Save(ctx)
+	err := client.Project.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Project has been deleted", nil
 }
 
 // CreateProtectedArea is the resolver for the createProtectedArea field.
@@ -357,6 +507,16 @@ func (r *mutationResolver) UpdateProtectedArea(ctx context.Context, id int, inpu
 	return client.ProtectedArea.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteProtectedArea is the resolver for the deleteProtectedArea field.
+func (r *mutationResolver) DeleteProtectedArea(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.ProtectedArea.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "ProtectedArea has been deleted", nil
+}
+
 // CreateProtectedAreaCategory is the resolver for the createProtectedAreaCategory field.
 func (r *mutationResolver) CreateProtectedAreaCategory(ctx context.Context, input ent.CreateProtectedAreaCategoryInput) (*ent.ProtectedAreaCategory, error) {
 	client := ent.FromContext(ctx)
@@ -367,6 +527,16 @@ func (r *mutationResolver) CreateProtectedAreaCategory(ctx context.Context, inpu
 func (r *mutationResolver) UpdateProtectedAreaCategory(ctx context.Context, id int, input ent.UpdateProtectedAreaCategoryInput) (*ent.ProtectedAreaCategory, error) {
 	client := ent.FromContext(ctx)
 	return client.ProtectedAreaCategory.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteProtectedAreaCategory is the resolver for the deleteProtectedAreaCategory field.
+func (r *mutationResolver) DeleteProtectedAreaCategory(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.ProtectedAreaCategory.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "ProtectedAreaCategory has been deleted", nil
 }
 
 // CreateProtectedAreaPicture is the resolver for the createProtectedAreaPicture field.
@@ -381,6 +551,16 @@ func (r *mutationResolver) UpdateProtectedAreaPicture(ctx context.Context, id in
 	return client.ProtectedAreaPicture.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteProtectedAreaPicture is the resolver for the deleteProtectedAreaPicture field.
+func (r *mutationResolver) DeleteProtectedAreaPicture(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.ProtectedAreaPicture.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "ProtectedAreaPicture has been deleted", nil
+}
+
 // CreateProxy is the resolver for the createProxy field.
 func (r *mutationResolver) CreateProxy(ctx context.Context, input ent.CreateProxyInput) (*ent.Proxy, error) {
 	client := ent.FromContext(ctx)
@@ -391,6 +571,16 @@ func (r *mutationResolver) CreateProxy(ctx context.Context, input ent.CreateProx
 func (r *mutationResolver) UpdateProxy(ctx context.Context, id int, input ent.UpdateProxyInput) (*ent.Proxy, error) {
 	client := ent.FromContext(ctx)
 	return client.Proxy.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteProxy is the resolver for the deleteProxy field.
+func (r *mutationResolver) DeleteProxy(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Proxy.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Proxy has been deleted", nil
 }
 
 // CreatePublication is the resolver for the createPublication field.
@@ -405,6 +595,16 @@ func (r *mutationResolver) UpdatePublication(ctx context.Context, id int, input 
 	return client.Publication.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeletePublication is the resolver for the deletePublication field.
+func (r *mutationResolver) DeletePublication(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Publication.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Publication has been deleted", nil
+}
+
 // CreatePublisher is the resolver for the createPublisher field.
 func (r *mutationResolver) CreatePublisher(ctx context.Context, input ent.CreatePublisherInput) (*ent.Publisher, error) {
 	client := ent.FromContext(ctx)
@@ -415,6 +615,16 @@ func (r *mutationResolver) CreatePublisher(ctx context.Context, input ent.Create
 func (r *mutationResolver) UpdatePublisher(ctx context.Context, id int, input ent.UpdatePublisherInput) (*ent.Publisher, error) {
 	client := ent.FromContext(ctx)
 	return client.Publisher.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeletePublisher is the resolver for the deletePublisher field.
+func (r *mutationResolver) DeletePublisher(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Publisher.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Publisher has been deleted", nil
 }
 
 // CreateRegion is the resolver for the createRegion field.
@@ -429,6 +639,16 @@ func (r *mutationResolver) UpdateRegion(ctx context.Context, id int, input ent.U
 	return client.Region.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteRegion is the resolver for the deleteRegion field.
+func (r *mutationResolver) DeleteRegion(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Region.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Region has been deleted", nil
+}
+
 // CreateSet is the resolver for the createSet field.
 func (r *mutationResolver) CreateSet(ctx context.Context, input ent.CreateSetInput) (*ent.Set, error) {
 	client := ent.FromContext(ctx)
@@ -439,6 +659,16 @@ func (r *mutationResolver) CreateSet(ctx context.Context, input ent.CreateSetInp
 func (r *mutationResolver) UpdateSet(ctx context.Context, id int, input ent.UpdateSetInput) (*ent.Set, error) {
 	client := ent.FromContext(ctx)
 	return client.Set.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteSet is the resolver for the deleteSet field.
+func (r *mutationResolver) DeleteSet(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Set.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Set has been deleted", nil
 }
 
 // CreateSettlement is the resolver for the createSettlement field.
@@ -453,6 +683,16 @@ func (r *mutationResolver) UpdateSettlement(ctx context.Context, id int, input e
 	return client.Settlement.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteSettlement is the resolver for the deleteSettlement field.
+func (r *mutationResolver) DeleteSettlement(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Settlement.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Settlement has been deleted", nil
+}
+
 // CreateTechnique is the resolver for the createTechnique field.
 func (r *mutationResolver) CreateTechnique(ctx context.Context, input ent.CreateTechniqueInput) (*ent.Technique, error) {
 	client := ent.FromContext(ctx)
@@ -463,6 +703,16 @@ func (r *mutationResolver) CreateTechnique(ctx context.Context, input ent.Create
 func (r *mutationResolver) UpdateTechnique(ctx context.Context, id int, input ent.UpdateTechniqueInput) (*ent.Technique, error) {
 	client := ent.FromContext(ctx)
 	return client.Technique.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteTechnique is the resolver for the deleteTechnique field.
+func (r *mutationResolver) DeleteTechnique(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Technique.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Technique has been deleted", nil
 }
 
 // Mutation returns gql.MutationResolver implementation.

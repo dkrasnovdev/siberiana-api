@@ -124,18 +124,6 @@ func (a *Artifact) Publications(ctx context.Context) (result []*Publication, err
 	return result, err
 }
 
-func (a *Artifact) Holders(ctx context.Context) (result []*Holder, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = a.NamedHolders(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = a.Edges.HoldersOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = a.QueryHolders().All(ctx)
-	}
-	return result, err
-}
-
 func (a *Artifact) CulturalAffiliation(ctx context.Context) (*Culture, error) {
 	result, err := a.Edges.CulturalAffiliationOrErr()
 	if IsNotLoaded(err) {
@@ -220,18 +208,6 @@ func (b *Book) Collection(ctx context.Context) (*Collection, error) {
 	result, err := b.Edges.CollectionOrErr()
 	if IsNotLoaded(err) {
 		result, err = b.QueryCollection().Only(ctx)
-	}
-	return result, err
-}
-
-func (b *Book) Holders(ctx context.Context) (result []*Holder, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = b.NamedHolders(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = b.Edges.HoldersOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = b.QueryHolders().All(ctx)
 	}
 	return result, err
 }
@@ -384,70 +360,6 @@ func (f *Favourite) Proxies(ctx context.Context) (result []*Proxy, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = f.QueryProxies().All(ctx)
-	}
-	return result, err
-}
-
-func (h *Holder) Artifacts(ctx context.Context) (result []*Artifact, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = h.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = h.Edges.ArtifactsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = h.QueryArtifacts().All(ctx)
-	}
-	return result, err
-}
-
-func (h *Holder) Books(ctx context.Context) (result []*Book, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = h.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = h.Edges.BooksOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = h.QueryBooks().All(ctx)
-	}
-	return result, err
-}
-
-func (h *Holder) HolderResponsibilities(ctx context.Context) (result []*HolderResponsibility, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = h.NamedHolderResponsibilities(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = h.Edges.HolderResponsibilitiesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = h.QueryHolderResponsibilities().All(ctx)
-	}
-	return result, err
-}
-
-func (h *Holder) Person(ctx context.Context) (*Person, error) {
-	result, err := h.Edges.PersonOrErr()
-	if IsNotLoaded(err) {
-		result, err = h.QueryPerson().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (h *Holder) Organization(ctx context.Context) (*Organization, error) {
-	result, err := h.Edges.OrganizationOrErr()
-	if IsNotLoaded(err) {
-		result, err = h.QueryOrganization().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (hr *HolderResponsibility) Holder(ctx context.Context) (result []*Holder, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = hr.NamedHolder(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = hr.Edges.HolderOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = hr.QueryHolder().All(ctx)
 	}
 	return result, err
 }
@@ -616,34 +528,6 @@ func (o *Organization) People(ctx context.Context) (result []*Person, err error)
 	return result, err
 }
 
-func (o *Organization) Holder(ctx context.Context) (*Holder, error) {
-	result, err := o.Edges.HolderOrErr()
-	if IsNotLoaded(err) {
-		result, err = o.QueryHolder().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (o *Organization) OrganizationType(ctx context.Context) (*OrganizationType, error) {
-	result, err := o.Edges.OrganizationTypeOrErr()
-	if IsNotLoaded(err) {
-		result, err = o.QueryOrganizationType().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (ot *OrganizationType) Organizations(ctx context.Context) (result []*Organization, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = ot.NamedOrganizations(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = ot.Edges.OrganizationsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = ot.QueryOrganizations().All(ctx)
-	}
-	return result, err
-}
-
 func (pe *Period) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -716,44 +600,12 @@ func (pe *Person) Publications(ctx context.Context) (result []*Publication, err 
 	return result, err
 }
 
-func (pe *Person) PersonRoles(ctx context.Context) (result []*PersonRole, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedPersonRoles(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = pe.Edges.PersonRolesOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = pe.QueryPersonRoles().All(ctx)
-	}
-	return result, err
-}
-
-func (pe *Person) Holder(ctx context.Context) (*Holder, error) {
-	result, err := pe.Edges.HolderOrErr()
-	if IsNotLoaded(err) {
-		result, err = pe.QueryHolder().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (pe *Person) Affiliation(ctx context.Context) (*Organization, error) {
 	result, err := pe.Edges.AffiliationOrErr()
 	if IsNotLoaded(err) {
 		result, err = pe.QueryAffiliation().Only(ctx)
 	}
 	return result, MaskNotFound(err)
-}
-
-func (pr *PersonRole) Person(ctx context.Context) (result []*Person, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pr.NamedPerson(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = pr.Edges.PersonOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = pr.QueryPerson().All(ctx)
-	}
-	return result, err
 }
 
 func (pe *Personal) Proxies(ctx context.Context) (result []*Proxy, err error) {
@@ -788,26 +640,6 @@ func (pr *Project) Team(ctx context.Context) (result []*Person, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = pr.QueryTeam().All(ctx)
-	}
-	return result, err
-}
-
-func (pr *Project) ProjectType(ctx context.Context) (*ProjectType, error) {
-	result, err := pr.Edges.ProjectTypeOrErr()
-	if IsNotLoaded(err) {
-		result, err = pr.QueryProjectType().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
-func (pt *ProjectType) Projects(ctx context.Context) (result []*Project, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pt.NamedProjects(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = pt.Edges.ProjectsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = pt.QueryProjects().All(ctx)
 	}
 	return result, err
 }

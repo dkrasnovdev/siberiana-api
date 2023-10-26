@@ -49,10 +49,6 @@ const (
 	FieldConsortiumDocumentURL = "consortium_document_url"
 	// EdgePeople holds the string denoting the people edge name in mutations.
 	EdgePeople = "people"
-	// EdgeHolder holds the string denoting the holder edge name in mutations.
-	EdgeHolder = "holder"
-	// EdgeOrganizationType holds the string denoting the organization_type edge name in mutations.
-	EdgeOrganizationType = "organization_type"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
 	// PeopleTable is the table that holds the people relation/edge.
@@ -62,20 +58,6 @@ const (
 	PeopleInverseTable = "persons"
 	// PeopleColumn is the table column denoting the people relation/edge.
 	PeopleColumn = "organization_people"
-	// HolderTable is the table that holds the holder relation/edge.
-	HolderTable = "organizations"
-	// HolderInverseTable is the table name for the Holder entity.
-	// It exists in this package in order to avoid circular dependency with the "holder" package.
-	HolderInverseTable = "holders"
-	// HolderColumn is the table column denoting the holder relation/edge.
-	HolderColumn = "holder_organization"
-	// OrganizationTypeTable is the table that holds the organization_type relation/edge.
-	OrganizationTypeTable = "organizations"
-	// OrganizationTypeInverseTable is the table name for the OrganizationType entity.
-	// It exists in this package in order to avoid circular dependency with the "organizationtype" package.
-	OrganizationTypeInverseTable = "organization_types"
-	// OrganizationTypeColumn is the table column denoting the organization_type relation/edge.
-	OrganizationTypeColumn = "organization_type_organizations"
 )
 
 // Columns holds all SQL columns for organization fields.
@@ -99,22 +81,10 @@ var Columns = []string{
 	FieldConsortiumDocumentURL,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "organizations"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"holder_organization",
-	"organization_type_organizations",
-}
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -218,38 +188,10 @@ func ByPeople(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newPeopleStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-
-// ByHolderField orders the results by holder field.
-func ByHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newHolderStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByOrganizationTypeField orders the results by organization_type field.
-func ByOrganizationTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newOrganizationTypeStep(), sql.OrderByField(field, opts...))
-	}
-}
 func newPeopleStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PeopleInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
-	)
-}
-func newHolderStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(HolderInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, true, HolderTable, HolderColumn),
-	)
-}
-func newOrganizationTypeStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(OrganizationTypeInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTypeTable, OrganizationTypeColumn),
 	)
 }

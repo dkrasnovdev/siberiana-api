@@ -13,10 +13,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
-	"github.com/dkrasnovdev/siberiana-api/ent/holder"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personrole"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 )
@@ -337,40 +335,6 @@ func (pc *PersonCreate) AddPublications(p ...*Publication) *PersonCreate {
 	return pc.AddPublicationIDs(ids...)
 }
 
-// AddPersonRoleIDs adds the "person_roles" edge to the PersonRole entity by IDs.
-func (pc *PersonCreate) AddPersonRoleIDs(ids ...int) *PersonCreate {
-	pc.mutation.AddPersonRoleIDs(ids...)
-	return pc
-}
-
-// AddPersonRoles adds the "person_roles" edges to the PersonRole entity.
-func (pc *PersonCreate) AddPersonRoles(p ...*PersonRole) *PersonCreate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pc.AddPersonRoleIDs(ids...)
-}
-
-// SetHolderID sets the "holder" edge to the Holder entity by ID.
-func (pc *PersonCreate) SetHolderID(id int) *PersonCreate {
-	pc.mutation.SetHolderID(id)
-	return pc
-}
-
-// SetNillableHolderID sets the "holder" edge to the Holder entity by ID if the given value is not nil.
-func (pc *PersonCreate) SetNillableHolderID(id *int) *PersonCreate {
-	if id != nil {
-		pc = pc.SetHolderID(*id)
-	}
-	return pc
-}
-
-// SetHolder sets the "holder" edge to the Holder entity.
-func (pc *PersonCreate) SetHolder(h *Holder) *PersonCreate {
-	return pc.SetHolderID(h.ID)
-}
-
 // SetAffiliationID sets the "affiliation" edge to the Organization entity by ID.
 func (pc *PersonCreate) SetAffiliationID(id int) *PersonCreate {
 	pc.mutation.SetAffiliationID(id)
@@ -640,39 +604,6 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.PersonRolesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   person.PersonRolesTable,
-			Columns: person.PersonRolesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personrole.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.HolderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   person.HolderTable,
-			Columns: []string{person.HolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(holder.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.holder_person = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.AffiliationIDs(); len(nodes) > 0 {

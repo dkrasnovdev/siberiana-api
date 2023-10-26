@@ -1,6 +1,8 @@
 version: "3"
 
 tasks:
+  clean:
+    - go run ./internal/entclean/main.go
   env:
     - cp .env.example .env
   network:

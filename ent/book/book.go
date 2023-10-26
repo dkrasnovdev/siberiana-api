@@ -50,8 +50,6 @@ const (
 	EdgeBookGenres = "book_genres"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
 	EdgeCollection = "collection"
-	// EdgeHolders holds the string denoting the holders edge name in mutations.
-	EdgeHolders = "holders"
 	// EdgePublisher holds the string denoting the publisher edge name in mutations.
 	EdgePublisher = "publisher"
 	// EdgeLicense holds the string denoting the license edge name in mutations.
@@ -77,11 +75,6 @@ const (
 	CollectionInverseTable = "collections"
 	// CollectionColumn is the table column denoting the collection relation/edge.
 	CollectionColumn = "collection_books"
-	// HoldersTable is the table that holds the holders relation/edge. The primary key declared below.
-	HoldersTable = "holder_books"
-	// HoldersInverseTable is the table name for the Holder entity.
-	// It exists in this package in order to avoid circular dependency with the "holder" package.
-	HoldersInverseTable = "holders"
 	// PublisherTable is the table that holds the publisher relation/edge.
 	PublisherTable = "books"
 	// PublisherInverseTable is the table name for the Publisher entity.
@@ -139,9 +132,6 @@ var (
 	// BookGenresPrimaryKey and BookGenresColumn2 are the table columns denoting the
 	// primary key for the book_genres relation (M2M).
 	BookGenresPrimaryKey = []string{"book_genre_id", "book_id"}
-	// HoldersPrimaryKey and HoldersColumn2 are the table columns denoting the
-	// primary key for the holders relation (M2M).
-	HoldersPrimaryKey = []string{"holder_id", "book_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -302,20 +292,6 @@ func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByHoldersCount orders the results by holders count.
-func ByHoldersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newHoldersStep(), opts...)
-	}
-}
-
-// ByHolders orders the results by holders terms.
-func ByHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByPublisherField orders the results by publisher field.
 func ByPublisherField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -355,13 +331,6 @@ func newCollectionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CollectionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
-	)
-}
-func newHoldersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(HoldersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, HoldersTable, HoldersPrimaryKey...),
 	)
 }
 func newPublisherStep() *sqlgraph.Step {

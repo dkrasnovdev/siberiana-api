@@ -1553,29 +1553,6 @@ func HasPublicationsWith(preds ...predicate.Publication) predicate.Artifact {
 	})
 }
 
-// HasHolders applies the HasEdge predicate on the "holders" edge.
-func HasHolders() predicate.Artifact {
-	return predicate.Artifact(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, HoldersTable, HoldersPrimaryKey...),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasHoldersWith applies the HasEdge predicate on the "holders" edge with a given conditions (other predicates).
-func HasHoldersWith(preds ...predicate.Holder) predicate.Artifact {
-	return predicate.Artifact(func(s *sql.Selector) {
-		step := newHoldersStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasCulturalAffiliation applies the HasEdge predicate on the "cultural_affiliation" edge.
 func HasCulturalAffiliation() predicate.Artifact {
 	return predicate.Artifact(func(s *sql.Selector) {

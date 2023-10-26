@@ -781,29 +781,6 @@ func HasTeamWith(preds ...predicate.Person) predicate.Project {
 	})
 }
 
-// HasProjectType applies the HasEdge predicate on the "project_type" edge.
-func HasProjectType() predicate.Project {
-	return predicate.Project(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, ProjectTypeTable, ProjectTypeColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasProjectTypeWith applies the HasEdge predicate on the "project_type" edge with a given conditions (other predicates).
-func HasProjectTypeWith(preds ...predicate.ProjectType) predicate.Project {
-	return predicate.Project(func(s *sql.Selector) {
-		step := newProjectTypeStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Project) predicate.Project {
 	return predicate.Project(sql.AndPredicates(predicates...))

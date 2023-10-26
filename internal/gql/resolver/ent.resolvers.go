@@ -87,16 +87,6 @@ func (r *queryResolver) Favourites(ctx context.Context, after *entgql.Cursor[int
 	return r.client.Favourite.Query().Paginate(ctx, after, first, before, last, offset, ent.WithFavouriteOrder(orderBy), ent.WithFavouriteFilter(where.Filter))
 }
 
-// Holders is the resolver for the holders field.
-func (r *queryResolver) Holders(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderOrder, where *ent.HolderWhereInput) (*ent.HolderConnection, error) {
-	return r.client.Holder.Query().Paginate(ctx, after, first, before, last, offset, ent.WithHolderOrder(orderBy), ent.WithHolderFilter(where.Filter))
-}
-
-// HolderResponsibilities is the resolver for the holderResponsibilities field.
-func (r *queryResolver) HolderResponsibilities(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HolderResponsibilityOrder, where *ent.HolderResponsibilityWhereInput) (*ent.HolderResponsibilityConnection, error) {
-	return r.client.HolderResponsibility.Query().Paginate(ctx, after, first, before, last, offset, ent.WithHolderResponsibilityOrder(orderBy), ent.WithHolderResponsibilityFilter(where.Filter))
-}
-
 // Licenses is the resolver for the licenses field.
 func (r *queryResolver) Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error) {
 	return r.client.License.Query().Paginate(ctx, after, first, before, last, offset, ent.WithLicenseOrder(orderBy), ent.WithLicenseFilter(where.Filter))
@@ -127,11 +117,6 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 	return r.client.Organization.Query().Paginate(ctx, after, first, before, last, offset, ent.WithOrganizationOrder(orderBy), ent.WithOrganizationFilter(where.Filter))
 }
 
-// OrganizationTypes is the resolver for the organizationTypes field.
-func (r *queryResolver) OrganizationTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.OrganizationTypeOrder, where *ent.OrganizationTypeWhereInput) (*ent.OrganizationTypeConnection, error) {
-	return r.client.OrganizationType.Query().Paginate(ctx, after, first, before, last, offset, ent.WithOrganizationTypeOrder(orderBy), ent.WithOrganizationTypeFilter(where.Filter))
-}
-
 // Periods is the resolver for the periods field.
 func (r *queryResolver) Periods(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) (*ent.PeriodConnection, error) {
 	return r.client.Period.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPeriodOrder(orderBy), ent.WithPeriodFilter(where.Filter))
@@ -142,11 +127,6 @@ func (r *queryResolver) Persons(ctx context.Context, after *entgql.Cursor[int], 
 	return r.client.Person.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonOrder(orderBy), ent.WithPersonFilter(where.Filter))
 }
 
-// PersonRoles is the resolver for the personRoles field.
-func (r *queryResolver) PersonRoles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonRoleOrder, where *ent.PersonRoleWhereInput) (*ent.PersonRoleConnection, error) {
-	return r.client.PersonRole.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonRoleOrder(orderBy), ent.WithPersonRoleFilter(where.Filter))
-}
-
 // Personals is the resolver for the personals field.
 func (r *queryResolver) Personals(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonalOrder, where *ent.PersonalWhereInput) (*ent.PersonalConnection, error) {
 	return r.client.Personal.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonalOrder(orderBy), ent.WithPersonalFilter(where.Filter))
@@ -155,11 +135,6 @@ func (r *queryResolver) Personals(ctx context.Context, after *entgql.Cursor[int]
 // Projects is the resolver for the projects field.
 func (r *queryResolver) Projects(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) (*ent.ProjectConnection, error) {
 	return r.client.Project.Query().Paginate(ctx, after, first, before, last, offset, ent.WithProjectOrder(orderBy), ent.WithProjectFilter(where.Filter))
-}
-
-// ProjectTypes is the resolver for the projectTypes field.
-func (r *queryResolver) ProjectTypes(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectTypeOrder, where *ent.ProjectTypeWhereInput) (*ent.ProjectTypeConnection, error) {
-	return r.client.ProjectType.Query().Paginate(ctx, after, first, before, last, offset, ent.WithProjectTypeOrder(orderBy), ent.WithProjectTypeFilter(where.Filter))
 }
 
 // ProtectedAreas is the resolver for the protectedAreas field.
