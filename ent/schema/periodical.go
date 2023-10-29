@@ -10,13 +10,13 @@ import (
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 )
 
-// Settlement holds the schema definition for the Settlement entity.
-type Settlement struct {
+// Periodical holds the schema definition for the Periodical entity.
+type Periodical struct {
 	ent.Schema
 }
 
-// Privacy policy of the Settlement.
-func (Settlement) Policy() ent.Policy {
+// Privacy policy of the Periodical.
+func (Periodical) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.DenyIfNoViewer(),
@@ -30,16 +30,16 @@ func (Settlement) Policy() ent.Policy {
 	}
 }
 
-// Mixin of the Settlement.
-func (Settlement) Mixin() []ent.Mixin {
+// Mixin of the Periodical.
+func (Periodical) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
 		mixin.DetailsMixin{},
 	}
 }
 
-// Annotations of the Settlement.
-func (Settlement) Annotations() []schema.Annotation {
+// Annotations of the Periodical.
+func (Periodical) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
@@ -48,10 +48,9 @@ func (Settlement) Annotations() []schema.Annotation {
 	}
 }
 
-// Edges of the Settlement.
-func (Settlement) Edges() []ent.Edge {
+// Edges of the Periodical.
+func (Periodical) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("books", Book.Type),
-		edge.From("locations", Location.Type).Ref("settlement"),
 	}
 }

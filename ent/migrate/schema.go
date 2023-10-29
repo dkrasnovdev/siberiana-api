@@ -195,7 +195,10 @@ var (
 		{Name: "collection_books", Type: field.TypeInt},
 		{Name: "license_books", Type: field.TypeInt, Nullable: true},
 		{Name: "location_books", Type: field.TypeInt, Nullable: true},
+		{Name: "organization_books", Type: field.TypeInt, Nullable: true},
+		{Name: "periodical_books", Type: field.TypeInt, Nullable: true},
 		{Name: "publisher_books", Type: field.TypeInt, Nullable: true},
+		{Name: "settlement_books", Type: field.TypeInt, Nullable: true},
 	}
 	// BooksTable holds the schema information for the "books" table.
 	BooksTable = &schema.Table{
@@ -222,9 +225,27 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "books_publishers_books",
+				Symbol:     "books_organizations_books",
 				Columns:    []*schema.Column{BooksColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_periodicals_books",
+				Columns:    []*schema.Column{BooksColumns[18]},
+				RefColumns: []*schema.Column{PeriodicalsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_publishers_books",
+				Columns:    []*schema.Column{BooksColumns[19]},
 				RefColumns: []*schema.Column{PublishersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_settlements_books",
+				Columns:    []*schema.Column{BooksColumns[20]},
+				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -519,6 +540,7 @@ var (
 		{Name: "previous_names", Type: field.TypeJSON, Nullable: true},
 		{Name: "is_in_a_consortium", Type: field.TypeBool, Nullable: true},
 		{Name: "consortium_document_url", Type: field.TypeString, Nullable: true},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"museum", "library", "archive", "other"}},
 	}
 	// OrganizationsTable holds the schema information for the "organizations" table.
 	OrganizationsTable = &schema.Table{
@@ -543,6 +565,24 @@ var (
 		Name:       "periods",
 		Columns:    PeriodsColumns,
 		PrimaryKey: []*schema.Column{PeriodsColumns[0]},
+	}
+	// PeriodicalsColumns holds the columns for the "periodicals" table.
+	PeriodicalsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+	}
+	// PeriodicalsTable holds the schema information for the "periodicals" table.
+	PeriodicalsTable = &schema.Table{
+		Name:       "periodicals",
+		Columns:    PeriodicalsColumns,
+		PrimaryKey: []*schema.Column{PeriodicalsColumns[0]},
 	}
 	// PersonsColumns holds the columns for the "persons" table.
 	PersonsColumns = []*schema.Column{
@@ -1207,6 +1247,7 @@ var (
 		MonumentsTable,
 		OrganizationsTable,
 		PeriodsTable,
+		PeriodicalsTable,
 		PersonsTable,
 		PersonalsTable,
 		ProjectsTable,
@@ -1248,7 +1289,10 @@ func init() {
 	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
 	BooksTable.ForeignKeys[1].RefTable = LicensesTable
 	BooksTable.ForeignKeys[2].RefTable = LocationsTable
-	BooksTable.ForeignKeys[3].RefTable = PublishersTable
+	BooksTable.ForeignKeys[3].RefTable = OrganizationsTable
+	BooksTable.ForeignKeys[4].RefTable = PeriodicalsTable
+	BooksTable.ForeignKeys[5].RefTable = PublishersTable
+	BooksTable.ForeignKeys[6].RefTable = SettlementsTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	LocationsTable.ForeignKeys[0].RefTable = CountriesTable
 	LocationsTable.ForeignKeys[1].RefTable = DistrictsTable

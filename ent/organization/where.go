@@ -930,6 +930,59 @@ func ConsortiumDocumentURLContainsFold(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldContainsFold(FieldConsortiumDocumentURL, v))
 }
 
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v Type) predicate.Organization {
+	return predicate.Organization(sql.FieldEQ(FieldType, v))
+}
+
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v Type) predicate.Organization {
+	return predicate.Organization(sql.FieldNEQ(FieldType, v))
+}
+
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...Type) predicate.Organization {
+	return predicate.Organization(sql.FieldIn(FieldType, vs...))
+}
+
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...Type) predicate.Organization {
+	return predicate.Organization(sql.FieldNotIn(FieldType, vs...))
+}
+
+// TypeIsNil applies the IsNil predicate on the "type" field.
+func TypeIsNil() predicate.Organization {
+	return predicate.Organization(sql.FieldIsNull(FieldType))
+}
+
+// TypeNotNil applies the NotNil predicate on the "type" field.
+func TypeNotNil() predicate.Organization {
+	return predicate.Organization(sql.FieldNotNull(FieldType))
+}
+
+// HasBooks applies the HasEdge predicate on the "books" edge.
+func HasBooks() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBooksWith applies the HasEdge predicate on the "books" edge with a given conditions (other predicates).
+func HasBooksWith(preds ...predicate.Book) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newBooksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPeople applies the HasEdge predicate on the "people" edge.
 func HasPeople() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

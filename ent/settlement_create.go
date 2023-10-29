@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
@@ -131,6 +132,21 @@ func (sc *SettlementCreate) SetNillableExternalLink(s *string) *SettlementCreate
 		sc.SetExternalLink(*s)
 	}
 	return sc
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (sc *SettlementCreate) AddBookIDs(ids ...int) *SettlementCreate {
+	sc.mutation.AddBookIDs(ids...)
+	return sc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (sc *SettlementCreate) AddBooks(b ...*Book) *SettlementCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return sc.AddBookIDs(ids...)
 }
 
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
@@ -267,6 +283,22 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 	if value, ok := sc.mutation.ExternalLink(); ok {
 		_spec.SetField(settlement.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if nodes := sc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.BooksTable,
+			Columns: []string{settlement.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := sc.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

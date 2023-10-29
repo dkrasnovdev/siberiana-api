@@ -28,6 +28,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -1036,6 +1037,16 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				return err
 			}
 			b.withCollection = query
+		case "periodical":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PeriodicalClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, periodicalImplementors)...); err != nil {
+				return err
+			}
+			b.withPeriodical = query
 		case "publisher":
 			var (
 				alias = field.Alias
@@ -1066,6 +1077,26 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				return err
 			}
 			b.withLocation = query
+		case "placeOfPublication":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			b.withPlaceOfPublication = query
+		case "library":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			b.withLibrary = query
 		case "createdAt":
 			if _, ok := fieldSeen[book.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, book.FieldCreatedAt)
@@ -3147,6 +3178,18 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
 		case "people":
 			var (
 				alias = field.Alias
@@ -3238,6 +3281,11 @@ func (o *OrganizationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 			if _, ok := fieldSeen[organization.FieldConsortiumDocumentURL]; !ok {
 				selectedFields = append(selectedFields, organization.FieldConsortiumDocumentURL)
 				fieldSeen[organization.FieldConsortiumDocumentURL] = struct{}{}
+			}
+		case "type":
+			if _, ok := fieldSeen[organization.FieldType]; !ok {
+				selectedFields = append(selectedFields, organization.FieldType)
+				fieldSeen[organization.FieldType] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3440,6 +3488,148 @@ func newPeriodPaginateArgs(rv map[string]any) *periodPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*PeriodWhereInput); ok {
 		args.opts = append(args.opts, WithPeriodFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pe *PeriodicalQuery) CollectFields(ctx context.Context, satisfies ...string) (*PeriodicalQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pe, nil
+	}
+	if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pe, nil
+}
+
+func (pe *PeriodicalQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(periodical.Columns))
+		selectedFields = []string{periodical.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[periodical.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldCreatedAt)
+				fieldSeen[periodical.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[periodical.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldCreatedBy)
+				fieldSeen[periodical.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[periodical.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldUpdatedAt)
+				fieldSeen[periodical.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[periodical.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldUpdatedBy)
+				fieldSeen[periodical.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[periodical.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldDisplayName)
+				fieldSeen[periodical.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[periodical.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldAbbreviation)
+				fieldSeen[periodical.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[periodical.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldDescription)
+				fieldSeen[periodical.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[periodical.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, periodical.FieldExternalLink)
+				fieldSeen[periodical.FieldExternalLink] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pe.Select(selectedFields...)
+	}
+	return nil
+}
+
+type periodicalPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []PeriodicalPaginateOption
+}
+
+func newPeriodicalPaginateArgs(rv map[string]any) *periodicalPaginateArgs {
+	args := &periodicalPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*PeriodicalOrder:
+			args.opts = append(args.opts, WithPeriodicalOrder(v))
+		case []any:
+			var orders []*PeriodicalOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PeriodicalOrder{Field: &PeriodicalOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithPeriodicalOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*PeriodicalWhereInput); ok {
+		args.opts = append(args.opts, WithPeriodicalFilter(v.Filter))
 	}
 	return args
 }
@@ -5252,6 +5442,18 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
 		case "locations":
 			var (
 				alias = field.Alias

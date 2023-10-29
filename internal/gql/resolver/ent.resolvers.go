@@ -122,6 +122,11 @@ func (r *queryResolver) Periods(ctx context.Context, after *entgql.Cursor[int], 
 	return r.client.Period.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPeriodOrder(orderBy), ent.WithPeriodFilter(where.Filter))
 }
 
+// Periodicals is the resolver for the periodicals field.
+func (r *queryResolver) Periodicals(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodicalOrder, where *ent.PeriodicalWhereInput) (*ent.PeriodicalConnection, error) {
+	return r.client.Periodical.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPeriodicalOrder(orderBy), ent.WithPeriodicalFilter(where.Filter))
+}
+
 // Persons is the resolver for the persons field.
 func (r *queryResolver) Persons(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) (*ent.PersonConnection, error) {
 	return r.client.Person.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonOrder(orderBy), ent.WithPersonFilter(where.Filter))

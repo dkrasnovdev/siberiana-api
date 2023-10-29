@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -308,6 +309,41 @@ func (ou *OrganizationUpdate) ClearConsortiumDocumentURL() *OrganizationUpdate {
 	return ou
 }
 
+// SetType sets the "type" field.
+func (ou *OrganizationUpdate) SetType(o organization.Type) *OrganizationUpdate {
+	ou.mutation.SetType(o)
+	return ou
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (ou *OrganizationUpdate) SetNillableType(o *organization.Type) *OrganizationUpdate {
+	if o != nil {
+		ou.SetType(*o)
+	}
+	return ou
+}
+
+// ClearType clears the value of the "type" field.
+func (ou *OrganizationUpdate) ClearType() *OrganizationUpdate {
+	ou.mutation.ClearType()
+	return ou
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (ou *OrganizationUpdate) AddBookIDs(ids ...int) *OrganizationUpdate {
+	ou.mutation.AddBookIDs(ids...)
+	return ou
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (ou *OrganizationUpdate) AddBooks(b ...*Book) *OrganizationUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return ou.AddBookIDs(ids...)
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (ou *OrganizationUpdate) AddPersonIDs(ids ...int) *OrganizationUpdate {
 	ou.mutation.AddPersonIDs(ids...)
@@ -326,6 +362,27 @@ func (ou *OrganizationUpdate) AddPeople(p ...*Person) *OrganizationUpdate {
 // Mutation returns the OrganizationMutation object of the builder.
 func (ou *OrganizationUpdate) Mutation() *OrganizationMutation {
 	return ou.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (ou *OrganizationUpdate) ClearBooks() *OrganizationUpdate {
+	ou.mutation.ClearBooks()
+	return ou
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (ou *OrganizationUpdate) RemoveBookIDs(ids ...int) *OrganizationUpdate {
+	ou.mutation.RemoveBookIDs(ids...)
+	return ou
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (ou *OrganizationUpdate) RemoveBooks(b ...*Book) *OrganizationUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return ou.RemoveBookIDs(ids...)
 }
 
 // ClearPeople clears all "people" edges to the Person entity.
@@ -391,7 +448,20 @@ func (ou *OrganizationUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ou *OrganizationUpdate) check() error {
+	if v, ok := ou.mutation.GetType(); ok {
+		if err := organization.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Organization.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := ou.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(organization.Table, organization.Columns, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt))
 	if ps := ou.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -506,6 +576,57 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.ConsortiumDocumentURLCleared() {
 		_spec.ClearField(organization.FieldConsortiumDocumentURL, field.TypeString)
+	}
+	if value, ok := ou.mutation.GetType(); ok {
+		_spec.SetField(organization.FieldType, field.TypeEnum, value)
+	}
+	if ou.mutation.TypeCleared() {
+		_spec.ClearField(organization.FieldType, field.TypeEnum)
+	}
+	if ou.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.BooksTable,
+			Columns: []string{organization.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedBooksIDs(); len(nodes) > 0 && !ou.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.BooksTable,
+			Columns: []string{organization.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.BooksTable,
+			Columns: []string{organization.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ou.mutation.PeopleCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -850,6 +971,41 @@ func (ouo *OrganizationUpdateOne) ClearConsortiumDocumentURL() *OrganizationUpda
 	return ouo
 }
 
+// SetType sets the "type" field.
+func (ouo *OrganizationUpdateOne) SetType(o organization.Type) *OrganizationUpdateOne {
+	ouo.mutation.SetType(o)
+	return ouo
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (ouo *OrganizationUpdateOne) SetNillableType(o *organization.Type) *OrganizationUpdateOne {
+	if o != nil {
+		ouo.SetType(*o)
+	}
+	return ouo
+}
+
+// ClearType clears the value of the "type" field.
+func (ouo *OrganizationUpdateOne) ClearType() *OrganizationUpdateOne {
+	ouo.mutation.ClearType()
+	return ouo
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (ouo *OrganizationUpdateOne) AddBookIDs(ids ...int) *OrganizationUpdateOne {
+	ouo.mutation.AddBookIDs(ids...)
+	return ouo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (ouo *OrganizationUpdateOne) AddBooks(b ...*Book) *OrganizationUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return ouo.AddBookIDs(ids...)
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (ouo *OrganizationUpdateOne) AddPersonIDs(ids ...int) *OrganizationUpdateOne {
 	ouo.mutation.AddPersonIDs(ids...)
@@ -868,6 +1024,27 @@ func (ouo *OrganizationUpdateOne) AddPeople(p ...*Person) *OrganizationUpdateOne
 // Mutation returns the OrganizationMutation object of the builder.
 func (ouo *OrganizationUpdateOne) Mutation() *OrganizationMutation {
 	return ouo.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (ouo *OrganizationUpdateOne) ClearBooks() *OrganizationUpdateOne {
+	ouo.mutation.ClearBooks()
+	return ouo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveBookIDs(ids ...int) *OrganizationUpdateOne {
+	ouo.mutation.RemoveBookIDs(ids...)
+	return ouo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (ouo *OrganizationUpdateOne) RemoveBooks(b ...*Book) *OrganizationUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return ouo.RemoveBookIDs(ids...)
 }
 
 // ClearPeople clears all "people" edges to the Person entity.
@@ -946,7 +1123,20 @@ func (ouo *OrganizationUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ouo *OrganizationUpdateOne) check() error {
+	if v, ok := ouo.mutation.GetType(); ok {
+		if err := organization.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Organization.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organization, err error) {
+	if err := ouo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(organization.Table, organization.Columns, sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt))
 	id, ok := ouo.mutation.ID()
 	if !ok {
@@ -1078,6 +1268,57 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.ConsortiumDocumentURLCleared() {
 		_spec.ClearField(organization.FieldConsortiumDocumentURL, field.TypeString)
+	}
+	if value, ok := ouo.mutation.GetType(); ok {
+		_spec.SetField(organization.FieldType, field.TypeEnum, value)
+	}
+	if ouo.mutation.TypeCleared() {
+		_spec.ClearField(organization.FieldType, field.TypeEnum)
+	}
+	if ouo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.BooksTable,
+			Columns: []string{organization.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !ouo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.BooksTable,
+			Columns: []string{organization.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.BooksTable,
+			Columns: []string{organization.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ouo.mutation.PeopleCleared() {
 		edge := &sqlgraph.EdgeSpec{

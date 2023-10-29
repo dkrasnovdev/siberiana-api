@@ -33,6 +33,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -127,6 +128,7 @@ func checkColumn(table, column string) error {
 			monument.Table:              monument.ValidColumn,
 			organization.Table:          organization.ValidColumn,
 			period.Table:                period.ValidColumn,
+			periodical.Table:            periodical.ValidColumn,
 			person.Table:                person.ValidColumn,
 			personal.Table:              personal.ValidColumn,
 			project.Table:               project.ValidColumn,

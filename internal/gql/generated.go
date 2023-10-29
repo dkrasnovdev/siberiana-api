@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
@@ -220,8 +221,11 @@ type ComplexityRoot struct {
 		ExternalLink         func(childComplexity int) int
 		Files                func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		Library              func(childComplexity int) int
 		License              func(childComplexity int) int
 		Location             func(childComplexity int) int
+		Periodical           func(childComplexity int) int
+		PlaceOfPublication   func(childComplexity int) int
 		PrimaryImageURL      func(childComplexity int) int
 		Publisher            func(childComplexity int) int
 		Status               func(childComplexity int) int
@@ -572,6 +576,7 @@ type ComplexityRoot struct {
 		CreateMonument              func(childComplexity int, input ent.CreateMonumentInput) int
 		CreateOrganization          func(childComplexity int, input ent.CreateOrganizationInput) int
 		CreatePeriod                func(childComplexity int, input ent.CreatePeriodInput) int
+		CreatePeriodical            func(childComplexity int, input ent.CreatePeriodicalInput) int
 		CreatePerson                func(childComplexity int, input ent.CreatePersonInput) int
 		CreatePersonal              func(childComplexity int, input ent.CreatePersonalInput) int
 		CreateProject               func(childComplexity int, input ent.CreateProjectInput) int
@@ -604,6 +609,7 @@ type ComplexityRoot struct {
 		DeleteMonument              func(childComplexity int, id int) int
 		DeleteOrganization          func(childComplexity int, id int) int
 		DeletePeriod                func(childComplexity int, id int) int
+		DeletePeriodical            func(childComplexity int, id int) int
 		DeletePerson                func(childComplexity int, id int) int
 		DeletePersonal              func(childComplexity int, id int) int
 		DeleteProject               func(childComplexity int, id int) int
@@ -636,6 +642,7 @@ type ComplexityRoot struct {
 		UpdateMonument              func(childComplexity int, id int, input ent.UpdateMonumentInput) int
 		UpdateOrganization          func(childComplexity int, id int, input ent.UpdateOrganizationInput) int
 		UpdatePeriod                func(childComplexity int, id int, input ent.UpdatePeriodInput) int
+		UpdatePeriodical            func(childComplexity int, id int, input ent.UpdatePeriodicalInput) int
 		UpdatePerson                func(childComplexity int, id int, input ent.UpdatePersonInput) int
 		UpdatePersonal              func(childComplexity int, id int, input ent.UpdatePersonalInput) int
 		UpdateProject               func(childComplexity int, id int, input ent.UpdateProjectInput) int
@@ -655,6 +662,7 @@ type ComplexityRoot struct {
 		Abbreviation          func(childComplexity int) int
 		AdditionalImagesUrls  func(childComplexity int) int
 		Address               func(childComplexity int) int
+		Books                 func(childComplexity int) int
 		ConsortiumDocumentURL func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -668,6 +676,7 @@ type ComplexityRoot struct {
 		PhoneNumbers          func(childComplexity int) int
 		PreviousNames         func(childComplexity int) int
 		PrimaryImageURL       func(childComplexity int) int
+		Type                  func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 	}
@@ -710,6 +719,30 @@ type ComplexityRoot struct {
 	}
 
 	PeriodEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	Periodical struct {
+		Abbreviation func(childComplexity int) int
+		Books        func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		DisplayName  func(childComplexity int) int
+		ExternalLink func(childComplexity int) int
+		ID           func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
+	}
+
+	PeriodicalConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	PeriodicalEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -981,6 +1014,7 @@ type ComplexityRoot struct {
 		Node                    func(childComplexity int, id int) int
 		Nodes                   func(childComplexity int, ids []int) int
 		Organizations           func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) int
+		Periodicals             func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodicalOrder, where *ent.PeriodicalWhereInput) int
 		Periods                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) int
 		Personals               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonalOrder, where *ent.PersonalWhereInput) int
 		Persons                 func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) int
@@ -1048,6 +1082,7 @@ type ComplexityRoot struct {
 
 	Settlement struct {
 		Abbreviation func(childComplexity int) int
+		Books        func(childComplexity int) int
 		CreatedAt    func(childComplexity int) int
 		CreatedBy    func(childComplexity int) int
 		Description  func(childComplexity int) int
@@ -1153,6 +1188,9 @@ type MutationResolver interface {
 	CreatePeriod(ctx context.Context, input ent.CreatePeriodInput) (*ent.Period, error)
 	UpdatePeriod(ctx context.Context, id int, input ent.UpdatePeriodInput) (*ent.Period, error)
 	DeletePeriod(ctx context.Context, id int) (string, error)
+	CreatePeriodical(ctx context.Context, input ent.CreatePeriodicalInput) (*ent.Periodical, error)
+	UpdatePeriodical(ctx context.Context, id int, input ent.UpdatePeriodicalInput) (*ent.Periodical, error)
+	DeletePeriodical(ctx context.Context, id int) (string, error)
 	CreatePerson(ctx context.Context, input ent.CreatePersonInput) (*ent.Person, error)
 	UpdatePerson(ctx context.Context, id int, input ent.UpdatePersonInput) (*ent.Person, error)
 	DeletePerson(ctx context.Context, id int) (string, error)
@@ -1216,6 +1254,7 @@ type QueryResolver interface {
 	Monuments(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.MonumentOrder, where *ent.MonumentWhereInput) (*ent.MonumentConnection, error)
 	Organizations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) (*ent.OrganizationConnection, error)
 	Periods(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) (*ent.PeriodConnection, error)
+	Periodicals(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodicalOrder, where *ent.PeriodicalWhereInput) (*ent.PeriodicalConnection, error)
 	Persons(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonOrder, where *ent.PersonWhereInput) (*ent.PersonConnection, error)
 	Personals(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonalOrder, where *ent.PersonalWhereInput) (*ent.PersonalConnection, error)
 	Projects(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProjectOrder, where *ent.ProjectWhereInput) (*ent.ProjectConnection, error)
@@ -2079,6 +2118,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Book.ID(childComplexity), true
 
+	case "Book.library":
+		if e.complexity.Book.Library == nil {
+			break
+		}
+
+		return e.complexity.Book.Library(childComplexity), true
+
 	case "Book.license":
 		if e.complexity.Book.License == nil {
 			break
@@ -2092,6 +2138,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Book.Location(childComplexity), true
+
+	case "Book.periodical":
+		if e.complexity.Book.Periodical == nil {
+			break
+		}
+
+		return e.complexity.Book.Periodical(childComplexity), true
+
+	case "Book.placeOfPublication":
+		if e.complexity.Book.PlaceOfPublication == nil {
+			break
+		}
+
+		return e.complexity.Book.PlaceOfPublication(childComplexity), true
 
 	case "Book.primaryImageURL":
 		if e.complexity.Book.PrimaryImageURL == nil {
@@ -3798,6 +3858,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreatePeriod(childComplexity, args["input"].(ent.CreatePeriodInput)), true
 
+	case "Mutation.createPeriodical":
+		if e.complexity.Mutation.CreatePeriodical == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createPeriodical_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreatePeriodical(childComplexity, args["input"].(ent.CreatePeriodicalInput)), true
+
 	case "Mutation.createPerson":
 		if e.complexity.Mutation.CreatePerson == nil {
 			break
@@ -4181,6 +4253,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeletePeriod(childComplexity, args["id"].(int)), true
+
+	case "Mutation.deletePeriodical":
+		if e.complexity.Mutation.DeletePeriodical == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deletePeriodical_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeletePeriodical(childComplexity, args["id"].(int)), true
 
 	case "Mutation.deletePerson":
 		if e.complexity.Mutation.DeletePerson == nil {
@@ -4566,6 +4650,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.UpdatePeriod(childComplexity, args["id"].(int), args["input"].(ent.UpdatePeriodInput)), true
 
+	case "Mutation.updatePeriodical":
+		if e.complexity.Mutation.UpdatePeriodical == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePeriodical_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePeriodical(childComplexity, args["id"].(int), args["input"].(ent.UpdatePeriodicalInput)), true
+
 	case "Mutation.updatePerson":
 		if e.complexity.Mutation.UpdatePerson == nil {
 			break
@@ -4743,6 +4839,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Organization.Address(childComplexity), true
 
+	case "Organization.books":
+		if e.complexity.Organization.Books == nil {
+			break
+		}
+
+		return e.complexity.Organization.Books(childComplexity), true
+
 	case "Organization.consortiumDocumentURL":
 		if e.complexity.Organization.ConsortiumDocumentURL == nil {
 			break
@@ -4833,6 +4936,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Organization.PrimaryImageURL(childComplexity), true
+
+	case "Organization.type":
+		if e.complexity.Organization.Type == nil {
+			break
+		}
+
+		return e.complexity.Organization.Type(childComplexity), true
 
 	case "Organization.updatedAt":
 		if e.complexity.Organization.UpdatedAt == nil {
@@ -5015,6 +5125,111 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PeriodEdge.Node(childComplexity), true
+
+	case "Periodical.abbreviation":
+		if e.complexity.Periodical.Abbreviation == nil {
+			break
+		}
+
+		return e.complexity.Periodical.Abbreviation(childComplexity), true
+
+	case "Periodical.books":
+		if e.complexity.Periodical.Books == nil {
+			break
+		}
+
+		return e.complexity.Periodical.Books(childComplexity), true
+
+	case "Periodical.createdAt":
+		if e.complexity.Periodical.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Periodical.CreatedAt(childComplexity), true
+
+	case "Periodical.createdBy":
+		if e.complexity.Periodical.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Periodical.CreatedBy(childComplexity), true
+
+	case "Periodical.description":
+		if e.complexity.Periodical.Description == nil {
+			break
+		}
+
+		return e.complexity.Periodical.Description(childComplexity), true
+
+	case "Periodical.displayName":
+		if e.complexity.Periodical.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.Periodical.DisplayName(childComplexity), true
+
+	case "Periodical.externalLink":
+		if e.complexity.Periodical.ExternalLink == nil {
+			break
+		}
+
+		return e.complexity.Periodical.ExternalLink(childComplexity), true
+
+	case "Periodical.id":
+		if e.complexity.Periodical.ID == nil {
+			break
+		}
+
+		return e.complexity.Periodical.ID(childComplexity), true
+
+	case "Periodical.updatedAt":
+		if e.complexity.Periodical.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Periodical.UpdatedAt(childComplexity), true
+
+	case "Periodical.updatedBy":
+		if e.complexity.Periodical.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Periodical.UpdatedBy(childComplexity), true
+
+	case "PeriodicalConnection.edges":
+		if e.complexity.PeriodicalConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.PeriodicalConnection.Edges(childComplexity), true
+
+	case "PeriodicalConnection.pageInfo":
+		if e.complexity.PeriodicalConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.PeriodicalConnection.PageInfo(childComplexity), true
+
+	case "PeriodicalConnection.totalCount":
+		if e.complexity.PeriodicalConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PeriodicalConnection.TotalCount(childComplexity), true
+
+	case "PeriodicalEdge.cursor":
+		if e.complexity.PeriodicalEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.PeriodicalEdge.Cursor(childComplexity), true
+
+	case "PeriodicalEdge.node":
+		if e.complexity.PeriodicalEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.PeriodicalEdge.Node(childComplexity), true
 
 	case "Person.abbreviation":
 		if e.complexity.Person.Abbreviation == nil {
@@ -6416,6 +6631,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Organizations(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].(*ent.OrganizationOrder), args["where"].(*ent.OrganizationWhereInput)), true
 
+	case "Query.periodicals":
+		if e.complexity.Query.Periodicals == nil {
+			break
+		}
+
+		args, err := ec.field_Query_periodicals_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Periodicals(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["offset"].(*int), args["orderBy"].([]*ent.PeriodicalOrder), args["where"].(*ent.PeriodicalWhereInput)), true
+
 	case "Query.periods":
 		if e.complexity.Query.Periods == nil {
 			break
@@ -6808,6 +7035,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Settlement.Abbreviation(childComplexity), true
 
+	case "Settlement.books":
+		if e.complexity.Settlement.Books == nil {
+			break
+		}
+
+		return e.complexity.Settlement.Books(childComplexity), true
+
 	case "Settlement.createdAt":
 		if e.complexity.Settlement.CreatedAt == nil {
 			break
@@ -7058,6 +7292,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateMonumentInput,
 		ec.unmarshalInputCreateOrganizationInput,
 		ec.unmarshalInputCreatePeriodInput,
+		ec.unmarshalInputCreatePeriodicalInput,
 		ec.unmarshalInputCreatePersonInput,
 		ec.unmarshalInputCreatePersonalInput,
 		ec.unmarshalInputCreateProjectInput,
@@ -7092,6 +7327,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputOrganizationWhereInput,
 		ec.unmarshalInputPeriodOrder,
 		ec.unmarshalInputPeriodWhereInput,
+		ec.unmarshalInputPeriodicalOrder,
+		ec.unmarshalInputPeriodicalWhereInput,
 		ec.unmarshalInputPersonOrder,
 		ec.unmarshalInputPersonWhereInput,
 		ec.unmarshalInputPersonalOrder,
@@ -7137,6 +7374,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateMonumentInput,
 		ec.unmarshalInputUpdateOrganizationInput,
 		ec.unmarshalInputUpdatePeriodInput,
+		ec.unmarshalInputUpdatePeriodicalInput,
 		ec.unmarshalInputUpdatePersonInput,
 		ec.unmarshalInputUpdatePersonalInput,
 		ec.unmarshalInputUpdateProjectInput,
@@ -7545,6 +7783,21 @@ func (ec *executionContext) field_Mutation_createPeriod_args(ctx context.Context
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNCreatePeriodInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCreatePeriodInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createPeriodical_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 ent.CreatePeriodicalInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNCreatePeriodicalInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCreatePeriodicalInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -8019,6 +8272,21 @@ func (ec *executionContext) field_Mutation_deleteOrganization_args(ctx context.C
 }
 
 func (ec *executionContext) field_Mutation_deletePeriod_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deletePeriodical_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int
@@ -8676,6 +8944,30 @@ func (ec *executionContext) field_Mutation_updatePeriod_args(ctx context.Context
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg1, err = ec.unmarshalNUpdatePeriodInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐUpdatePeriodInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePeriodical_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	var arg1 ent.UpdatePeriodicalInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg1, err = ec.unmarshalNUpdatePeriodicalInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐUpdatePeriodicalInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -10344,6 +10636,75 @@ func (ec *executionContext) field_Query_organizations_args(ctx context.Context, 
 	if tmp, ok := rawArgs["where"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
 		arg6, err = ec.unmarshalOOrganizationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationWhereInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["where"] = arg6
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_periodicals_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *entgql.Cursor[int]
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg0, err = ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg0
+	var arg1 *int
+	if tmp, ok := rawArgs["first"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+		arg1, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["first"] = arg1
+	var arg2 *entgql.Cursor[int]
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg2, err = ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg2
+	var arg3 *int
+	if tmp, ok := rawArgs["last"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("last"))
+		arg3, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["last"] = arg3
+	var arg4 *int
+	if tmp, ok := rawArgs["offset"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+		arg4, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["offset"] = arg4
+	var arg5 []*ent.PeriodicalOrder
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+		arg5, err = ec.unmarshalOPeriodicalOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalOrderᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["orderBy"] = arg5
+	var arg6 *ent.PeriodicalWhereInput
+	if tmp, ok := rawArgs["where"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+		arg6, err = ec.unmarshalOPeriodicalWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -17376,6 +17737,69 @@ func (ec *executionContext) fieldContext_Book_collection(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Book_periodical(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Book_periodical(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Periodical(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Periodical)
+	fc.Result = res
+	return ec.marshalOPeriodical2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodical(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Book_periodical(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Book",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Periodical_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Periodical_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Periodical_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Periodical_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Periodical_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Periodical_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Periodical_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Periodical_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Periodical_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Periodical_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Periodical", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Book_publisher(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Book_publisher(ctx, field)
 	if err != nil {
@@ -17578,6 +18002,154 @@ func (ec *executionContext) fieldContext_Book_location(ctx context.Context, fiel
 				return ec.fieldContext_Location_region(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Location", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Book_placeOfPublication(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Book_placeOfPublication(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PlaceOfPublication(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Settlement)
+	fc.Result = res
+	return ec.marshalOSettlement2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSettlement(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Book_placeOfPublication(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Book",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Settlement_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Settlement_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Settlement_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Settlement_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Settlement_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Settlement_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Settlement_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Settlement_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Settlement_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Settlement_books(ctx, field)
+			case "locations":
+				return ec.fieldContext_Settlement_locations(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Settlement", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Book_library(ctx context.Context, field graphql.CollectedField, obj *ent.Book) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Book_library(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Library(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Organization)
+	fc.Result = res
+	return ec.marshalOOrganization2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganization(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Book_library(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Book",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Organization_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Organization_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Organization_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Organization_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Organization_updatedBy(ctx, field)
+			case "address":
+				return ec.fieldContext_Organization_address(ctx, field)
+			case "phoneNumbers":
+				return ec.fieldContext_Organization_phoneNumbers(ctx, field)
+			case "emails":
+				return ec.fieldContext_Organization_emails(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Organization_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Organization_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Organization_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Organization_externalLink(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Organization_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Organization_additionalImagesUrls(ctx, field)
+			case "previousNames":
+				return ec.fieldContext_Organization_previousNames(ctx, field)
+			case "isInAConsortium":
+				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
+			case "consortiumDocumentURL":
+				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
+			case "type":
+				return ec.fieldContext_Organization_type(ctx, field)
+			case "books":
+				return ec.fieldContext_Organization_books(ctx, field)
+			case "people":
+				return ec.fieldContext_Organization_people(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
 		},
 	}
 	return fc, nil
@@ -17798,12 +18370,18 @@ func (ec *executionContext) fieldContext_BookEdge_node(ctx context.Context, fiel
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -18303,12 +18881,18 @@ func (ec *executionContext) fieldContext_BookGenre_books(ctx context.Context, fi
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -20145,12 +20729,18 @@ func (ec *executionContext) fieldContext_Collection_books(ctx context.Context, f
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -24017,12 +24607,18 @@ func (ec *executionContext) fieldContext_License_books(ctx context.Context, fiel
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -24975,12 +25571,18 @@ func (ec *executionContext) fieldContext_Location_books(ctx context.Context, fie
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -25247,6 +25849,8 @@ func (ec *executionContext) fieldContext_Location_settlement(ctx context.Context
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Settlement_books(ctx, field)
 			case "locations":
 				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
@@ -28985,12 +29589,18 @@ func (ec *executionContext) fieldContext_Mutation_createBook(ctx context.Context
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -29082,12 +29692,18 @@ func (ec *executionContext) fieldContext_Mutation_updateBook(ctx context.Context
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -31818,6 +32434,10 @@ func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context
 				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
 			case "consortiumDocumentURL":
 				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
+			case "type":
+				return ec.fieldContext_Organization_type(ctx, field)
+			case "books":
+				return ec.fieldContext_Organization_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			}
@@ -31911,6 +32531,10 @@ func (ec *executionContext) fieldContext_Mutation_updateOrganization(ctx context
 				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
 			case "consortiumDocumentURL":
 				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
+			case "type":
+				return ec.fieldContext_Organization_type(ctx, field)
+			case "books":
+				return ec.fieldContext_Organization_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			}
@@ -32189,6 +32813,215 @@ func (ec *executionContext) fieldContext_Mutation_deletePeriod(ctx context.Conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deletePeriod_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createPeriodical(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createPeriodical(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreatePeriodical(rctx, fc.Args["input"].(ent.CreatePeriodicalInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Periodical)
+	fc.Result = res
+	return ec.marshalNPeriodical2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodical(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createPeriodical(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Periodical_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Periodical_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Periodical_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Periodical_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Periodical_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Periodical_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Periodical_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Periodical_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Periodical_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Periodical_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Periodical", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createPeriodical_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePeriodical(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updatePeriodical(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePeriodical(rctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePeriodicalInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Periodical)
+	fc.Result = res
+	return ec.marshalNPeriodical2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodical(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updatePeriodical(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Periodical_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Periodical_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Periodical_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Periodical_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Periodical_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Periodical_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Periodical_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Periodical_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Periodical_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Periodical_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Periodical", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePeriodical_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deletePeriodical(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deletePeriodical(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeletePeriodical(rctx, fc.Args["id"].(int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deletePeriodical(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deletePeriodical_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -34671,6 +35504,8 @@ func (ec *executionContext) fieldContext_Mutation_createSettlement(ctx context.C
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Settlement_books(ctx, field)
 			case "locations":
 				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
@@ -34748,6 +35583,8 @@ func (ec *executionContext) fieldContext_Mutation_updateSettlement(ctx context.C
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Settlement_books(ctx, field)
 			case "locations":
 				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
@@ -35738,6 +36575,136 @@ func (ec *executionContext) fieldContext_Organization_consortiumDocumentURL(ctx 
 	return fc, nil
 }
 
+func (ec *executionContext) _Organization_type(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_type(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(organization.Type)
+	fc.Result = res
+	return ec.marshalOOrganizationType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Organization_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type OrganizationType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Organization_books(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Organization_books(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Books(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Book)
+	fc.Result = res
+	return ec.marshalOBook2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Organization_books(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Book_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Book_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Book_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Book_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Book_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Book_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "status":
+				return ec.fieldContext_Book_status(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Book_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Book_additionalImagesUrls(ctx, field)
+			case "files":
+				return ec.fieldContext_Book_files(ctx, field)
+			case "year":
+				return ec.fieldContext_Book_year(ctx, field)
+			case "authors":
+				return ec.fieldContext_Book_authors(ctx, field)
+			case "bookGenres":
+				return ec.fieldContext_Book_bookGenres(ctx, field)
+			case "collection":
+				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
+			case "publisher":
+				return ec.fieldContext_Book_publisher(ctx, field)
+			case "license":
+				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Organization_people(ctx context.Context, field graphql.CollectedField, obj *ent.Organization) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Organization_people(ctx, field)
 	if err != nil {
@@ -36048,6 +37015,10 @@ func (ec *executionContext) fieldContext_OrganizationEdge_node(ctx context.Conte
 				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
 			case "consortiumDocumentURL":
 				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
+			case "type":
+				return ec.fieldContext_Organization_type(ctx, field)
+			case "books":
+				return ec.fieldContext_Organization_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			}
@@ -37012,6 +37983,725 @@ func (ec *executionContext) _PeriodEdge_cursor(ctx context.Context, field graphq
 func (ec *executionContext) fieldContext_PeriodEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PeriodEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_id(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_createdAt(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_createdAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_createdBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_createdBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_updatedAt(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_updatedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_updatedBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_updatedBy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_displayName(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_displayName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DisplayName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_displayName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_abbreviation(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_abbreviation(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Abbreviation, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_abbreviation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_description(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_description(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_description(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_externalLink(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_externalLink(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ExternalLink, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_externalLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Periodical_books(ctx context.Context, field graphql.CollectedField, obj *ent.Periodical) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Periodical_books(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Books(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Book)
+	fc.Result = res
+	return ec.marshalOBook2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Periodical_books(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Periodical",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Book_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Book_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Book_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Book_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Book_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Book_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "status":
+				return ec.fieldContext_Book_status(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Book_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Book_additionalImagesUrls(ctx, field)
+			case "files":
+				return ec.fieldContext_Book_files(ctx, field)
+			case "year":
+				return ec.fieldContext_Book_year(ctx, field)
+			case "authors":
+				return ec.fieldContext_Book_authors(ctx, field)
+			case "bookGenres":
+				return ec.fieldContext_Book_bookGenres(ctx, field)
+			case "collection":
+				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
+			case "publisher":
+				return ec.fieldContext_Book_publisher(ctx, field)
+			case "license":
+				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PeriodicalConnection_edges(ctx context.Context, field graphql.CollectedField, obj *ent.PeriodicalConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PeriodicalConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.PeriodicalEdge)
+	fc.Result = res
+	return ec.marshalOPeriodicalEdge2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalEdge(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PeriodicalConnection_edges(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PeriodicalConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_PeriodicalEdge_node(ctx, field)
+			case "cursor":
+				return ec.fieldContext_PeriodicalEdge_cursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PeriodicalEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PeriodicalConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.PeriodicalConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PeriodicalConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(entgql.PageInfo[int])
+	fc.Result = res
+	return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PeriodicalConnection_pageInfo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PeriodicalConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PeriodicalConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.PeriodicalConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PeriodicalConnection_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PeriodicalConnection_totalCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PeriodicalConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PeriodicalEdge_node(ctx context.Context, field graphql.CollectedField, obj *ent.PeriodicalEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PeriodicalEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*ent.Periodical)
+	fc.Result = res
+	return ec.marshalOPeriodical2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodical(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PeriodicalEdge_node(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PeriodicalEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Periodical_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Periodical_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Periodical_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Periodical_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Periodical_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Periodical_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Periodical_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Periodical_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Periodical_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Periodical_books(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Periodical", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PeriodicalEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *ent.PeriodicalEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PeriodicalEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(entgql.Cursor[int])
+	fc.Result = res
+	return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PeriodicalEdge_cursor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PeriodicalEdge",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -38124,12 +39814,18 @@ func (ec *executionContext) fieldContext_Person_books(ctx context.Context, field
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -38341,6 +40037,10 @@ func (ec *executionContext) fieldContext_Person_affiliation(ctx context.Context,
 				return ec.fieldContext_Organization_isInAConsortium(ctx, field)
 			case "consortiumDocumentURL":
 				return ec.fieldContext_Organization_consortiumDocumentURL(ctx, field)
+			case "type":
+				return ec.fieldContext_Organization_type(ctx, field)
+			case "books":
+				return ec.fieldContext_Organization_books(ctx, field)
 			case "people":
 				return ec.fieldContext_Organization_people(ctx, field)
 			}
@@ -44896,12 +46596,18 @@ func (ec *executionContext) fieldContext_Publisher_books(ctx context.Context, fi
 				return ec.fieldContext_Book_bookGenres(ctx, field)
 			case "collection":
 				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
 			case "publisher":
 				return ec.fieldContext_Book_publisher(ctx, field)
 			case "license":
 				return ec.fieldContext_Book_license(ctx, field)
 			case "location":
 				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
 		},
@@ -46522,6 +48228,69 @@ func (ec *executionContext) fieldContext_Query_periods(ctx context.Context, fiel
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_periods_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_periodicals(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_periodicals(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Periodicals(rctx, fc.Args["after"].(*entgql.Cursor[int]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[int]), fc.Args["last"].(*int), fc.Args["offset"].(*int), fc.Args["orderBy"].([]*ent.PeriodicalOrder), fc.Args["where"].(*ent.PeriodicalWhereInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.PeriodicalConnection)
+	fc.Result = res
+	return ec.marshalNPeriodicalConnection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_periodicals(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_PeriodicalConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_PeriodicalConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PeriodicalConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PeriodicalConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_periodicals_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -49379,6 +51148,95 @@ func (ec *executionContext) fieldContext_Settlement_externalLink(ctx context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Settlement_books(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Settlement_books(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Books(ctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Book)
+	fc.Result = res
+	return ec.marshalOBook2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Settlement_books(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Settlement",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Book_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Book_createdAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Book_createdBy(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Book_updatedAt(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Book_updatedBy(ctx, field)
+			case "displayName":
+				return ec.fieldContext_Book_displayName(ctx, field)
+			case "abbreviation":
+				return ec.fieldContext_Book_abbreviation(ctx, field)
+			case "description":
+				return ec.fieldContext_Book_description(ctx, field)
+			case "externalLink":
+				return ec.fieldContext_Book_externalLink(ctx, field)
+			case "status":
+				return ec.fieldContext_Book_status(ctx, field)
+			case "primaryImageURL":
+				return ec.fieldContext_Book_primaryImageURL(ctx, field)
+			case "additionalImagesUrls":
+				return ec.fieldContext_Book_additionalImagesUrls(ctx, field)
+			case "files":
+				return ec.fieldContext_Book_files(ctx, field)
+			case "year":
+				return ec.fieldContext_Book_year(ctx, field)
+			case "authors":
+				return ec.fieldContext_Book_authors(ctx, field)
+			case "bookGenres":
+				return ec.fieldContext_Book_bookGenres(ctx, field)
+			case "collection":
+				return ec.fieldContext_Book_collection(ctx, field)
+			case "periodical":
+				return ec.fieldContext_Book_periodical(ctx, field)
+			case "publisher":
+				return ec.fieldContext_Book_publisher(ctx, field)
+			case "license":
+				return ec.fieldContext_Book_license(ctx, field)
+			case "location":
+				return ec.fieldContext_Book_location(ctx, field)
+			case "placeOfPublication":
+				return ec.fieldContext_Book_placeOfPublication(ctx, field)
+			case "library":
+				return ec.fieldContext_Book_library(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Book", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Settlement_locations(ctx context.Context, field graphql.CollectedField, obj *ent.Settlement) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Settlement_locations(ctx, field)
 	if err != nil {
@@ -49655,6 +51513,8 @@ func (ec *executionContext) fieldContext_SettlementEdge_node(ctx context.Context
 				return ec.fieldContext_Settlement_description(ctx, field)
 			case "externalLink":
 				return ec.fieldContext_Settlement_externalLink(ctx, field)
+			case "books":
+				return ec.fieldContext_Settlement_books(ctx, field)
 			case "locations":
 				return ec.fieldContext_Settlement_locations(ctx, field)
 			}
@@ -60807,7 +62667,7 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith", "hasLocation", "hasLocationWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "year", "yearNEQ", "yearIn", "yearNotIn", "yearGT", "yearGTE", "yearLT", "yearLTE", "yearIsNil", "yearNotNil", "hasAuthors", "hasAuthorsWith", "hasBookGenres", "hasBookGenresWith", "hasCollection", "hasCollectionWith", "hasPeriodical", "hasPeriodicalWith", "hasPublisher", "hasPublisherWith", "hasLicense", "hasLicenseWith", "hasLocation", "hasLocationWith", "hasPlaceOfPublication", "hasPlaceOfPublicationWith", "hasLibrary", "hasLibraryWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -62200,6 +64060,24 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasCollectionWith = data
+		case "hasPeriodical":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPeriodical"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPeriodical = data
+		case "hasPeriodicalWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPeriodicalWith"))
+			data, err := ec.unmarshalOPeriodicalWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPeriodicalWith = data
 		case "hasPublisher":
 			var err error
 
@@ -62254,6 +64132,42 @@ func (ec *executionContext) unmarshalInputBookWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasLocationWith = data
+		case "hasPlaceOfPublication":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPlaceOfPublication"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPlaceOfPublication = data
+		case "hasPlaceOfPublicationWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPlaceOfPublicationWith"))
+			data, err := ec.unmarshalOSettlementWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐSettlementWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasPlaceOfPublicationWith = data
+		case "hasLibrary":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLibrary"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLibrary = data
+		case "hasLibraryWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasLibraryWith"))
+			data, err := ec.unmarshalOOrganizationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasLibraryWith = data
 		}
 	}
 
@@ -67089,7 +69003,7 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "status", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "publisherID", "licenseID", "locationID"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "status", "primaryImageURL", "additionalImagesUrls", "files", "year", "authorIDs", "bookGenreIDs", "collectionID", "periodicalID", "publisherID", "licenseID", "locationID", "placeOfPublicationID", "libraryID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -67240,6 +69154,15 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.CollectionID = data
+		case "periodicalID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("periodicalID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PeriodicalID = data
 		case "publisherID":
 			var err error
 
@@ -67267,6 +69190,24 @@ func (ec *executionContext) unmarshalInputCreateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.LocationID = data
+		case "placeOfPublicationID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("placeOfPublicationID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PlaceOfPublicationID = data
+		case "libraryID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("libraryID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LibraryID = data
 		}
 	}
 
@@ -68562,7 +70503,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "previousNames", "isInAConsortium", "consortiumDocumentURL", "personIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "address", "phoneNumbers", "emails", "displayName", "abbreviation", "description", "externalLink", "primaryImageURL", "additionalImagesUrls", "previousNames", "isInAConsortium", "consortiumDocumentURL", "type", "bookIDs", "personIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -68713,6 +70654,24 @@ func (ec *executionContext) unmarshalInputCreateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ConsortiumDocumentURL = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "bookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BookIDs = data
 		case "personIDs":
 			var err error
 
@@ -68823,6 +70782,107 @@ func (ec *executionContext) unmarshalInputCreatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.ArtifactIDs = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreatePeriodicalInput(ctx context.Context, obj interface{}) (ent.CreatePeriodicalInput, error) {
+	var it ent.CreatePeriodicalInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "bookIDs"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "createdAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "updatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "displayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "bookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BookIDs = data
 		}
 	}
 
@@ -70217,7 +72277,7 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "locationIDs"}
+	fieldsInOrder := [...]string{"createdAt", "createdBy", "updatedAt", "updatedBy", "displayName", "abbreviation", "description", "externalLink", "bookIDs", "locationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -70296,6 +72356,15 @@ func (ec *executionContext) unmarshalInputCreateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.ExternalLink = data
+		case "bookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BookIDs = data
 		case "locationIDs":
 			var err error
 
@@ -79527,7 +81596,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "isInAConsortium", "isInAConsortiumNEQ", "isInAConsortiumIsNil", "isInAConsortiumNotNil", "consortiumDocumentURL", "consortiumDocumentURLNEQ", "consortiumDocumentURLIn", "consortiumDocumentURLNotIn", "consortiumDocumentURLGT", "consortiumDocumentURLGTE", "consortiumDocumentURLLT", "consortiumDocumentURLLTE", "consortiumDocumentURLContains", "consortiumDocumentURLHasPrefix", "consortiumDocumentURLHasSuffix", "consortiumDocumentURLIsNil", "consortiumDocumentURLNotNil", "consortiumDocumentURLEqualFold", "consortiumDocumentURLContainsFold", "hasPeople", "hasPeopleWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressGT", "addressGTE", "addressLT", "addressLTE", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "primaryImageURL", "primaryImageURLNEQ", "primaryImageURLIn", "primaryImageURLNotIn", "primaryImageURLGT", "primaryImageURLGTE", "primaryImageURLLT", "primaryImageURLLTE", "primaryImageURLContains", "primaryImageURLHasPrefix", "primaryImageURLHasSuffix", "primaryImageURLIsNil", "primaryImageURLNotNil", "primaryImageURLEqualFold", "primaryImageURLContainsFold", "isInAConsortium", "isInAConsortiumNEQ", "isInAConsortiumIsNil", "isInAConsortiumNotNil", "consortiumDocumentURL", "consortiumDocumentURLNEQ", "consortiumDocumentURLIn", "consortiumDocumentURLNotIn", "consortiumDocumentURLGT", "consortiumDocumentURLGTE", "consortiumDocumentURLLT", "consortiumDocumentURLLTE", "consortiumDocumentURLContains", "consortiumDocumentURLHasPrefix", "consortiumDocumentURLHasSuffix", "consortiumDocumentURLIsNil", "consortiumDocumentURLNotNil", "consortiumDocumentURLEqualFold", "consortiumDocumentURLContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "typeIsNil", "typeNotNil", "hasBooks", "hasBooksWith", "hasPeople", "hasPeopleWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -81028,6 +83097,78 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.ConsortiumDocumentURLContainsFold = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "typeNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNEQ"))
+			data, err := ec.unmarshalOOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNEQ = data
+		case "typeIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIn"))
+			data, err := ec.unmarshalOOrganizationType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIn = data
+		case "typeNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotIn"))
+			data, err := ec.unmarshalOOrganizationType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotIn = data
+		case "typeIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeIsNil = data
+		case "typeNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("typeNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TypeNotNil = data
+		case "hasBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooks"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooks = data
+		case "hasBooksWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooksWith"))
+			data, err := ec.unmarshalOBookWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooksWith = data
 		case "hasPeople":
 			var err error
 
@@ -82179,6 +84320,1139 @@ func (ec *executionContext) unmarshalInputPeriodWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.HasArtifactsWith = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputPeriodicalOrder(ctx context.Context, obj interface{}) (ent.PeriodicalOrder, error) {
+	var it ent.PeriodicalOrder
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNPeriodicalOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputPeriodicalWhereInput(ctx context.Context, obj interface{}) (ent.PeriodicalWhereInput, error) {
+	var it ent.PeriodicalWhereInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasBooks", "hasBooksWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOPeriodicalWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOPeriodicalWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOPeriodicalWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGT = data
+		case "idGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDGTE = data
+		case "idLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLT = data
+		case "idLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDLTE = data
+		case "createdAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNEQ = data
+		case "createdAtIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIn = data
+		case "createdAtNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotIn = data
+		case "createdAtGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGT = data
+		case "createdByGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGTE = data
+		case "createdByLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLT = data
+		case "createdByLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLTE = data
+		case "createdByContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNEQ = data
+		case "updatedAtIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIn = data
+		case "updatedAtNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotIn = data
+		case "updatedAtGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGT = data
+		case "updatedByGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGTE = data
+		case "updatedByLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLT = data
+		case "updatedByLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLTE = data
+		case "updatedByContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "displayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayName = data
+		case "displayNameNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameNEQ = data
+		case "displayNameIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameIn = data
+		case "displayNameNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameNotIn = data
+		case "displayNameGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameGT = data
+		case "displayNameGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameGTE = data
+		case "displayNameLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameLT = data
+		case "displayNameLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameLTE = data
+		case "displayNameContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameContains = data
+		case "displayNameHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameHasPrefix = data
+		case "displayNameHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameHasSuffix = data
+		case "displayNameIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameIsNil = data
+		case "displayNameNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameNotNil = data
+		case "displayNameEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameEqualFold = data
+		case "displayNameContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayNameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayNameContainsFold = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "abbreviationNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNEQ = data
+		case "abbreviationIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIn = data
+		case "abbreviationNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotIn = data
+		case "abbreviationGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGT = data
+		case "abbreviationGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationGTE = data
+		case "abbreviationLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLT = data
+		case "abbreviationLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationLTE = data
+		case "abbreviationContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContains = data
+		case "abbreviationHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasPrefix = data
+		case "abbreviationHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationHasSuffix = data
+		case "abbreviationIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationIsNil = data
+		case "abbreviationNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationNotNil = data
+		case "abbreviationEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationEqualFold = data
+		case "abbreviationContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviationContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AbbreviationContainsFold = data
+		case "description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "descriptionNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionNEQ = data
+		case "descriptionIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionIn = data
+		case "descriptionNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionNotIn = data
+		case "descriptionGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionGT = data
+		case "descriptionGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionGTE = data
+		case "descriptionLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionLT = data
+		case "descriptionLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionLTE = data
+		case "descriptionContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionContains = data
+		case "descriptionHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionHasPrefix = data
+		case "descriptionHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionHasSuffix = data
+		case "descriptionIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionIsNil = data
+		case "descriptionNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionNotNil = data
+		case "descriptionEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionEqualFold = data
+		case "descriptionContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("descriptionContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DescriptionContainsFold = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "externalLinkNEQ":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNEQ = data
+		case "externalLinkIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIn = data
+		case "externalLinkNotIn":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotIn = data
+		case "externalLinkGT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGT = data
+		case "externalLinkGTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkGTE = data
+		case "externalLinkLT":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLT = data
+		case "externalLinkLTE":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkLTE = data
+		case "externalLinkContains":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContains = data
+		case "externalLinkHasPrefix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasPrefix = data
+		case "externalLinkHasSuffix":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkHasSuffix = data
+		case "externalLinkIsNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkIsNil = data
+		case "externalLinkNotNil":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkNotNil = data
+		case "externalLinkEqualFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkEqualFold = data
+		case "externalLinkContainsFold":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLinkContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLinkContainsFold = data
+		case "hasBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooks"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooks = data
+		case "hasBooksWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooksWith"))
+			data, err := ec.unmarshalOBookWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooksWith = data
 		}
 	}
 
@@ -96020,7 +99294,7 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasLocations", "hasLocationsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "abbreviation", "abbreviationNEQ", "abbreviationIn", "abbreviationNotIn", "abbreviationGT", "abbreviationGTE", "abbreviationLT", "abbreviationLTE", "abbreviationContains", "abbreviationHasPrefix", "abbreviationHasSuffix", "abbreviationIsNil", "abbreviationNotNil", "abbreviationEqualFold", "abbreviationContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "externalLink", "externalLinkNEQ", "externalLinkIn", "externalLinkNotIn", "externalLinkGT", "externalLinkGTE", "externalLinkLT", "externalLinkLTE", "externalLinkContains", "externalLinkHasPrefix", "externalLinkHasSuffix", "externalLinkIsNil", "externalLinkNotNil", "externalLinkEqualFold", "externalLinkContainsFold", "hasBooks", "hasBooksWith", "hasLocations", "hasLocationsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97080,6 +100354,24 @@ func (ec *executionContext) unmarshalInputSettlementWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.ExternalLinkContainsFold = data
+		case "hasBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooks"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooks = data
+		case "hasBooksWith":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBooksWith"))
+			data, err := ec.unmarshalOBookWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐBookWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBooksWith = data
 		case "hasLocations":
 			var err error
 
@@ -99694,7 +102986,7 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "status", "clearStatus", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "status", "clearStatus", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "files", "appendFiles", "clearFiles", "year", "clearYear", "addAuthorIDs", "removeAuthorIDs", "clearAuthors", "addBookGenreIDs", "removeBookGenreIDs", "clearBookGenres", "collectionID", "periodicalID", "clearPeriodical", "publisherID", "clearPublisher", "licenseID", "clearLicense", "locationID", "clearLocation", "placeOfPublicationID", "clearPlaceOfPublication", "libraryID", "clearLibrary"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99989,6 +103281,24 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.CollectionID = data
+		case "periodicalID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("periodicalID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PeriodicalID = data
+		case "clearPeriodical":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPeriodical"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearPeriodical = data
 		case "publisherID":
 			var err error
 
@@ -100043,6 +103353,42 @@ func (ec *executionContext) unmarshalInputUpdateBookInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearLocation = data
+		case "placeOfPublicationID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("placeOfPublicationID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PlaceOfPublicationID = data
+		case "clearPlaceOfPublication":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPlaceOfPublication"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearPlaceOfPublication = data
+		case "libraryID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("libraryID"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LibraryID = data
+		case "clearLibrary":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLibrary"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearLibrary = data
 		}
 	}
 
@@ -102229,7 +105575,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "previousNames", "appendPreviousNames", "clearPreviousNames", "isInAConsortium", "clearIsInAConsortium", "consortiumDocumentURL", "clearConsortiumDocumentURL", "addPersonIDs", "removePersonIDs", "clearPeople"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "address", "clearAddress", "phoneNumbers", "appendPhoneNumbers", "clearPhoneNumbers", "emails", "appendEmails", "clearEmails", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "primaryImageURL", "clearPrimaryImageURL", "additionalImagesUrls", "appendAdditionalImagesUrls", "clearAdditionalImagesUrls", "previousNames", "appendPreviousNames", "clearPreviousNames", "isInAConsortium", "clearIsInAConsortium", "consortiumDocumentURL", "clearConsortiumDocumentURL", "type", "clearType", "addBookIDs", "removeBookIDs", "clearBooks", "addPersonIDs", "removePersonIDs", "clearPeople"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102533,6 +105879,51 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationInput(ctx context.Co
 				return it, err
 			}
 			it.ClearConsortiumDocumentURL = data
+		case "type":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "clearType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearType"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearType = data
+		case "addBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddBookIDs = data
+		case "removeBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveBookIDs = data
+		case "clearBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBooks"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearBooks = data
 		case "addPersonIDs":
 			var err error
 
@@ -102724,6 +106115,170 @@ func (ec *executionContext) unmarshalInputUpdatePeriodInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearArtifacts = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdatePeriodicalInput(ctx context.Context, obj interface{}) (ent.UpdatePeriodicalInput, error) {
+	var it ent.UpdatePeriodicalInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addBookIDs", "removeBookIDs", "clearBooks"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "createdBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "clearCreatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCreatedBy"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearCreatedBy = data
+		case "updatedAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "clearUpdatedBy":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearUpdatedBy"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearUpdatedBy = data
+		case "displayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayName = data
+		case "clearDisplayName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDisplayName"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearDisplayName = data
+		case "abbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("abbreviation"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Abbreviation = data
+		case "clearAbbreviation":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAbbreviation"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAbbreviation = data
+		case "description":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "clearDescription":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearDescription"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearDescription = data
+		case "externalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalLink"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExternalLink = data
+		case "clearExternalLink":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearExternalLink"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearExternalLink = data
+		case "addBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddBookIDs = data
+		case "removeBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveBookIDs = data
+		case "clearBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBooks"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearBooks = data
 		}
 	}
 
@@ -105081,7 +108636,7 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addLocationIDs", "removeLocationIDs", "clearLocations"}
+	fieldsInOrder := [...]string{"createdBy", "clearCreatedBy", "updatedAt", "updatedBy", "clearUpdatedBy", "displayName", "clearDisplayName", "abbreviation", "clearAbbreviation", "description", "clearDescription", "externalLink", "clearExternalLink", "addBookIDs", "removeBookIDs", "clearBooks", "addLocationIDs", "removeLocationIDs", "clearLocations"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -105205,6 +108760,33 @@ func (ec *executionContext) unmarshalInputUpdateSettlementInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearExternalLink = data
+		case "addBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddBookIDs = data
+		case "removeBookIDs":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeBookIDs"))
+			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveBookIDs = data
+		case "clearBooks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBooks"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearBooks = data
 		case "addLocationIDs":
 			var err error
 
@@ -105515,6 +109097,11 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._Period(ctx, sel, obj)
+	case *ent.Periodical:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Periodical(ctx, sel, obj)
 	case *ent.Person:
 		if obj == nil {
 			return graphql.Null
@@ -107080,6 +110667,39 @@ func (ec *executionContext) _Book(ctx context.Context, sel ast.SelectionSet, obj
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "periodical":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Book_periodical(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "publisher":
 			field := field
 
@@ -107156,6 +110776,72 @@ func (ec *executionContext) _Book(ctx context.Context, sel ast.SelectionSet, obj
 					}
 				}()
 				res = ec._Book_location(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "placeOfPublication":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Book_placeOfPublication(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "library":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Book_library(ctx, field, obj)
 				return res
 			}
 
@@ -110371,6 +114057,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "createPeriodical":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createPeriodical(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePeriodical":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePeriodical(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deletePeriodical":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deletePeriodical(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createPerson":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createPerson(ctx, field)
@@ -110721,6 +114428,41 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._Organization_isInAConsortium(ctx, field, obj)
 		case "consortiumDocumentURL":
 			out.Values[i] = ec._Organization_consortiumDocumentURL(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._Organization_type(ctx, field, obj)
+		case "books":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Organization_books(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "people":
 			field := field
 
@@ -111067,6 +114809,187 @@ func (ec *executionContext) _PeriodEdge(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._PeriodEdge_node(ctx, field, obj)
 		case "cursor":
 			out.Values[i] = ec._PeriodEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var periodicalImplementors = []string{"Periodical", "Node"}
+
+func (ec *executionContext) _Periodical(ctx context.Context, sel ast.SelectionSet, obj *ent.Periodical) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, periodicalImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Periodical")
+		case "id":
+			out.Values[i] = ec._Periodical_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._Periodical_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdBy":
+			out.Values[i] = ec._Periodical_createdBy(ctx, field, obj)
+		case "updatedAt":
+			out.Values[i] = ec._Periodical_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._Periodical_updatedBy(ctx, field, obj)
+		case "displayName":
+			out.Values[i] = ec._Periodical_displayName(ctx, field, obj)
+		case "abbreviation":
+			out.Values[i] = ec._Periodical_abbreviation(ctx, field, obj)
+		case "description":
+			out.Values[i] = ec._Periodical_description(ctx, field, obj)
+		case "externalLink":
+			out.Values[i] = ec._Periodical_externalLink(ctx, field, obj)
+		case "books":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Periodical_books(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var periodicalConnectionImplementors = []string{"PeriodicalConnection"}
+
+func (ec *executionContext) _PeriodicalConnection(ctx context.Context, sel ast.SelectionSet, obj *ent.PeriodicalConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, periodicalConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PeriodicalConnection")
+		case "edges":
+			out.Values[i] = ec._PeriodicalConnection_edges(ctx, field, obj)
+		case "pageInfo":
+			out.Values[i] = ec._PeriodicalConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._PeriodicalConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var periodicalEdgeImplementors = []string{"PeriodicalEdge"}
+
+func (ec *executionContext) _PeriodicalEdge(ctx context.Context, sel ast.SelectionSet, obj *ent.PeriodicalEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, periodicalEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PeriodicalEdge")
+		case "node":
+			out.Values[i] = ec._PeriodicalEdge_node(ctx, field, obj)
+		case "cursor":
+			out.Values[i] = ec._PeriodicalEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -113673,6 +117596,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "periodicals":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_periodicals(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "persons":
 			field := field
 
@@ -114423,6 +118368,39 @@ func (ec *executionContext) _Settlement(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._Settlement_description(ctx, field, obj)
 		case "externalLink":
 			out.Values[i] = ec._Settlement_externalLink(ctx, field, obj)
+		case "books":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Settlement_books(ctx, field, obj)
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "locations":
 			field := field
 
@@ -115739,6 +119717,11 @@ func (ec *executionContext) unmarshalNCreatePeriodInput2githubᚗcomᚋdkrasnovd
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNCreatePeriodicalInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCreatePeriodicalInput(ctx context.Context, v interface{}) (ent.CreatePeriodicalInput, error) {
+	res, err := ec.unmarshalInputCreatePeriodicalInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreatePersonInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐCreatePersonInput(ctx context.Context, v interface{}) (ent.CreatePersonInput, error) {
 	res, err := ec.unmarshalInputCreatePersonInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -116440,6 +120423,16 @@ func (ec *executionContext) marshalNOrganizationOrderField2ᚖgithubᚗcomᚋdkr
 	return v
 }
 
+func (ec *executionContext) unmarshalNOrganizationType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx context.Context, v interface{}) (organization.Type, error) {
+	var res organization.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNOrganizationType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx context.Context, sel ast.SelectionSet, v organization.Type) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNOrganizationWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationWhereInput(ctx context.Context, v interface{}) (*ent.OrganizationWhereInput, error) {
 	res, err := ec.unmarshalInputOrganizationWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -116500,6 +120493,60 @@ func (ec *executionContext) marshalNPeriodOrderField2ᚖgithubᚗcomᚋdkrasnovd
 
 func (ec *executionContext) unmarshalNPeriodWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodWhereInput(ctx context.Context, v interface{}) (*ent.PeriodWhereInput, error) {
 	res, err := ec.unmarshalInputPeriodWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPeriodical2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodical(ctx context.Context, sel ast.SelectionSet, v ent.Periodical) graphql.Marshaler {
+	return ec._Periodical(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPeriodical2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodical(ctx context.Context, sel ast.SelectionSet, v *ent.Periodical) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Periodical(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPeriodicalConnection2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalConnection(ctx context.Context, sel ast.SelectionSet, v ent.PeriodicalConnection) graphql.Marshaler {
+	return ec._PeriodicalConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPeriodicalConnection2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalConnection(ctx context.Context, sel ast.SelectionSet, v *ent.PeriodicalConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PeriodicalConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNPeriodicalOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalOrder(ctx context.Context, v interface{}) (*ent.PeriodicalOrder, error) {
+	res, err := ec.unmarshalInputPeriodicalOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNPeriodicalOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalOrderField(ctx context.Context, v interface{}) (*ent.PeriodicalOrderField, error) {
+	var res = new(ent.PeriodicalOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPeriodicalOrderField2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalOrderField(ctx context.Context, sel ast.SelectionSet, v *ent.PeriodicalOrderField) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNPeriodicalWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInput(ctx context.Context, v interface{}) (*ent.PeriodicalWhereInput, error) {
+	res, err := ec.unmarshalInputPeriodicalWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -117357,6 +121404,11 @@ func (ec *executionContext) unmarshalNUpdateOrganizationInput2githubᚗcomᚋdkr
 
 func (ec *executionContext) unmarshalNUpdatePeriodInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐUpdatePeriodInput(ctx context.Context, v interface{}) (ent.UpdatePeriodInput, error) {
 	res, err := ec.unmarshalInputUpdatePeriodInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePeriodicalInput2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐUpdatePeriodicalInput(ctx context.Context, v interface{}) (ent.UpdatePeriodicalInput, error) {
+	res, err := ec.unmarshalInputUpdatePeriodicalInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -120750,6 +124802,99 @@ func (ec *executionContext) unmarshalOOrganizationOrder2ᚖgithubᚗcomᚋdkrasn
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalOOrganizationType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx context.Context, v interface{}) (organization.Type, error) {
+	var res organization.Type
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOOrganizationType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx context.Context, sel ast.SelectionSet, v organization.Type) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOOrganizationType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐTypeᚄ(ctx context.Context, v interface{}) ([]organization.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]organization.Type, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNOrganizationType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOOrganizationType2ᚕgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []organization.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNOrganizationType2githubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx context.Context, v interface{}) (*organization.Type, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(organization.Type)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOOrganizationType2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚋorganizationᚐType(ctx context.Context, sel ast.SelectionSet, v *organization.Type) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOOrganizationWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐOrganizationWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.OrganizationWhereInput, error) {
 	if v == nil {
 		return nil, nil
@@ -120878,6 +125023,109 @@ func (ec *executionContext) unmarshalOPeriodWhereInput2ᚖgithubᚗcomᚋdkrasno
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputPeriodWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPeriodical2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodical(ctx context.Context, sel ast.SelectionSet, v *ent.Periodical) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Periodical(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOPeriodicalEdge2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalEdge(ctx context.Context, sel ast.SelectionSet, v []*ent.PeriodicalEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOPeriodicalEdge2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOPeriodicalEdge2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalEdge(ctx context.Context, sel ast.SelectionSet, v *ent.PeriodicalEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PeriodicalEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOPeriodicalOrder2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalOrderᚄ(ctx context.Context, v interface{}) ([]*ent.PeriodicalOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.PeriodicalOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNPeriodicalOrder2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOPeriodicalWhereInput2ᚕᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInputᚄ(ctx context.Context, v interface{}) ([]*ent.PeriodicalWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*ent.PeriodicalWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNPeriodicalWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOPeriodicalWhereInput2ᚖgithubᚗcomᚋdkrasnovdevᚋsiberianaᚑapiᚋentᚐPeriodicalWhereInput(ctx context.Context, v interface{}) (*ent.PeriodicalWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputPeriodicalWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

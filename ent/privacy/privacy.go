@@ -614,6 +614,30 @@ func (f PeriodMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PeriodMutation", m)
 }
 
+// The PeriodicalQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type PeriodicalQueryRuleFunc func(context.Context, *ent.PeriodicalQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f PeriodicalQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PeriodicalQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.PeriodicalQuery", q)
+}
+
+// The PeriodicalMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type PeriodicalMutationRuleFunc func(context.Context, *ent.PeriodicalMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f PeriodicalMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.PeriodicalMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PeriodicalMutation", m)
+}
+
 // The PersonQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type PersonQueryRuleFunc func(context.Context, *ent.PersonQuery) error

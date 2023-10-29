@@ -50,6 +50,8 @@ type Organization struct {
 	IsInAConsortium bool `json:"is_in_a_consortium,omitempty"`
 	// ConsortiumDocumentURL holds the value of the "consortium_document_url" field.
 	ConsortiumDocumentURL string `json:"consortium_document_url,omitempty"`
+	// Type holds the value of the "type" field.
+	Type organization.Type `json:"type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationQuery when eager-loading is set.
 	Edges        OrganizationEdges `json:"edges"`
@@ -58,21 +60,33 @@ type Organization struct {
 
 // OrganizationEdges holds the relations/edges for other nodes in the graph.
 type OrganizationEdges struct {
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
 	// People holds the value of the people edge.
 	People []*Person `json:"people,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 
+	namedBooks  map[string][]*Book
 	namedPeople map[string][]*Person
+}
+
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[0] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
 }
 
 // PeopleOrErr returns the People value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) PeopleOrErr() ([]*Person, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.People, nil
 	}
 	return nil, &NotLoadedError{edge: "people"}
@@ -89,7 +103,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case organization.FieldID:
 			values[i] = new(sql.NullInt64)
-		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldAbbreviation, organization.FieldDescription, organization.FieldExternalLink, organization.FieldPrimaryImageURL, organization.FieldConsortiumDocumentURL:
+		case organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldAddress, organization.FieldDisplayName, organization.FieldAbbreviation, organization.FieldDescription, organization.FieldExternalLink, organization.FieldPrimaryImageURL, organization.FieldConsortiumDocumentURL, organization.FieldType:
 			values[i] = new(sql.NullString)
 		case organization.FieldCreatedAt, organization.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -218,6 +232,12 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				o.ConsortiumDocumentURL = value.String
 			}
+		case organization.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
+			} else if value.Valid {
+				o.Type = organization.Type(value.String)
+			}
 		default:
 			o.selectValues.Set(columns[i], values[i])
 		}
@@ -229,6 +249,11 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (o *Organization) Value(name string) (ent.Value, error) {
 	return o.selectValues.Get(name)
+}
+
+// QueryBooks queries the "books" edge of the Organization entity.
+func (o *Organization) QueryBooks() *BookQuery {
+	return NewOrganizationClient(o.config).QueryBooks(o)
 }
 
 // QueryPeople queries the "people" edge of the Organization entity.
@@ -306,8 +331,35 @@ func (o *Organization) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("consortium_document_url=")
 	builder.WriteString(o.ConsortiumDocumentURL)
+	builder.WriteString(", ")
+	builder.WriteString("type=")
+	builder.WriteString(fmt.Sprintf("%v", o.Type))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedBooks(name string) ([]*Book, error) {
+	if o.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedBooks(name string, edges ...*Book) {
+	if o.Edges.namedBooks == nil {
+		o.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedBooks[name] = []*Book{}
+	} else {
+		o.Edges.namedBooks[name] = append(o.Edges.namedBooks[name], edges...)
+	}
 }
 
 // NamedPeople returns the People named value or an error if the edge was not

@@ -879,6 +879,29 @@ func HasCollectionWith(preds ...predicate.Collection) predicate.Book {
 	})
 }
 
+// HasPeriodical applies the HasEdge predicate on the "periodical" edge.
+func HasPeriodical() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PeriodicalTable, PeriodicalColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPeriodicalWith applies the HasEdge predicate on the "periodical" edge with a given conditions (other predicates).
+func HasPeriodicalWith(preds ...predicate.Periodical) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newPeriodicalStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPublisher applies the HasEdge predicate on the "publisher" edge.
 func HasPublisher() predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
@@ -940,6 +963,52 @@ func HasLocation() predicate.Book {
 func HasLocationWith(preds ...predicate.Location) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		step := newLocationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPlaceOfPublication applies the HasEdge predicate on the "place_of_publication" edge.
+func HasPlaceOfPublication() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PlaceOfPublicationTable, PlaceOfPublicationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPlaceOfPublicationWith applies the HasEdge predicate on the "place_of_publication" edge with a given conditions (other predicates).
+func HasPlaceOfPublicationWith(preds ...predicate.Settlement) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newPlaceOfPublicationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLibrary applies the HasEdge predicate on the "library" edge.
+func HasLibrary() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, LibraryTable, LibraryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLibraryWith applies the HasEdge predicate on the "library" edge with a given conditions (other predicates).
+func HasLibraryWith(preds ...predicate.Organization) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newLibraryStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

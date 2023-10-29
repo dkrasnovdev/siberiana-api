@@ -31,6 +31,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -78,6 +79,7 @@ const (
 	TypeMonument              = "Monument"
 	TypeOrganization          = "Organization"
 	TypePeriod                = "Period"
+	TypePeriodical            = "Periodical"
 	TypePerson                = "Person"
 	TypePersonal              = "Personal"
 	TypeProject               = "Project"
@@ -7279,12 +7281,18 @@ type BookMutation struct {
 	clearedbook_genres           bool
 	collection                   *int
 	clearedcollection            bool
+	periodical                   *int
+	clearedperiodical            bool
 	publisher                    *int
 	clearedpublisher             bool
 	license                      *int
 	clearedlicense               bool
 	location                     *int
 	clearedlocation              bool
+	place_of_publication         *int
+	clearedplace_of_publication  bool
+	library                      *int
+	clearedlibrary               bool
 	done                         bool
 	oldValue                     func(context.Context) (*Book, error)
 	predicates                   []predicate.Book
@@ -8199,6 +8207,45 @@ func (m *BookMutation) ResetCollection() {
 	m.clearedcollection = false
 }
 
+// SetPeriodicalID sets the "periodical" edge to the Periodical entity by id.
+func (m *BookMutation) SetPeriodicalID(id int) {
+	m.periodical = &id
+}
+
+// ClearPeriodical clears the "periodical" edge to the Periodical entity.
+func (m *BookMutation) ClearPeriodical() {
+	m.clearedperiodical = true
+}
+
+// PeriodicalCleared reports if the "periodical" edge to the Periodical entity was cleared.
+func (m *BookMutation) PeriodicalCleared() bool {
+	return m.clearedperiodical
+}
+
+// PeriodicalID returns the "periodical" edge ID in the mutation.
+func (m *BookMutation) PeriodicalID() (id int, exists bool) {
+	if m.periodical != nil {
+		return *m.periodical, true
+	}
+	return
+}
+
+// PeriodicalIDs returns the "periodical" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PeriodicalID instead. It exists only for internal usage by the builders.
+func (m *BookMutation) PeriodicalIDs() (ids []int) {
+	if id := m.periodical; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPeriodical resets all changes to the "periodical" edge.
+func (m *BookMutation) ResetPeriodical() {
+	m.periodical = nil
+	m.clearedperiodical = false
+}
+
 // SetPublisherID sets the "publisher" edge to the Publisher entity by id.
 func (m *BookMutation) SetPublisherID(id int) {
 	m.publisher = &id
@@ -8314,6 +8361,84 @@ func (m *BookMutation) LocationIDs() (ids []int) {
 func (m *BookMutation) ResetLocation() {
 	m.location = nil
 	m.clearedlocation = false
+}
+
+// SetPlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by id.
+func (m *BookMutation) SetPlaceOfPublicationID(id int) {
+	m.place_of_publication = &id
+}
+
+// ClearPlaceOfPublication clears the "place_of_publication" edge to the Settlement entity.
+func (m *BookMutation) ClearPlaceOfPublication() {
+	m.clearedplace_of_publication = true
+}
+
+// PlaceOfPublicationCleared reports if the "place_of_publication" edge to the Settlement entity was cleared.
+func (m *BookMutation) PlaceOfPublicationCleared() bool {
+	return m.clearedplace_of_publication
+}
+
+// PlaceOfPublicationID returns the "place_of_publication" edge ID in the mutation.
+func (m *BookMutation) PlaceOfPublicationID() (id int, exists bool) {
+	if m.place_of_publication != nil {
+		return *m.place_of_publication, true
+	}
+	return
+}
+
+// PlaceOfPublicationIDs returns the "place_of_publication" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PlaceOfPublicationID instead. It exists only for internal usage by the builders.
+func (m *BookMutation) PlaceOfPublicationIDs() (ids []int) {
+	if id := m.place_of_publication; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPlaceOfPublication resets all changes to the "place_of_publication" edge.
+func (m *BookMutation) ResetPlaceOfPublication() {
+	m.place_of_publication = nil
+	m.clearedplace_of_publication = false
+}
+
+// SetLibraryID sets the "library" edge to the Organization entity by id.
+func (m *BookMutation) SetLibraryID(id int) {
+	m.library = &id
+}
+
+// ClearLibrary clears the "library" edge to the Organization entity.
+func (m *BookMutation) ClearLibrary() {
+	m.clearedlibrary = true
+}
+
+// LibraryCleared reports if the "library" edge to the Organization entity was cleared.
+func (m *BookMutation) LibraryCleared() bool {
+	return m.clearedlibrary
+}
+
+// LibraryID returns the "library" edge ID in the mutation.
+func (m *BookMutation) LibraryID() (id int, exists bool) {
+	if m.library != nil {
+		return *m.library, true
+	}
+	return
+}
+
+// LibraryIDs returns the "library" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// LibraryID instead. It exists only for internal usage by the builders.
+func (m *BookMutation) LibraryIDs() (ids []int) {
+	if id := m.library; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetLibrary resets all changes to the "library" edge.
+func (m *BookMutation) ResetLibrary() {
+	m.library = nil
+	m.clearedlibrary = false
 }
 
 // Where appends a list predicates to the BookMutation builder.
@@ -8737,7 +8862,7 @@ func (m *BookMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BookMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.authors != nil {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -8747,6 +8872,9 @@ func (m *BookMutation) AddedEdges() []string {
 	if m.collection != nil {
 		edges = append(edges, book.EdgeCollection)
 	}
+	if m.periodical != nil {
+		edges = append(edges, book.EdgePeriodical)
+	}
 	if m.publisher != nil {
 		edges = append(edges, book.EdgePublisher)
 	}
@@ -8755,6 +8883,12 @@ func (m *BookMutation) AddedEdges() []string {
 	}
 	if m.location != nil {
 		edges = append(edges, book.EdgeLocation)
+	}
+	if m.place_of_publication != nil {
+		edges = append(edges, book.EdgePlaceOfPublication)
+	}
+	if m.library != nil {
+		edges = append(edges, book.EdgeLibrary)
 	}
 	return edges
 }
@@ -8779,6 +8913,10 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 		if id := m.collection; id != nil {
 			return []ent.Value{*id}
 		}
+	case book.EdgePeriodical:
+		if id := m.periodical; id != nil {
+			return []ent.Value{*id}
+		}
 	case book.EdgePublisher:
 		if id := m.publisher; id != nil {
 			return []ent.Value{*id}
@@ -8791,13 +8929,21 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 		if id := m.location; id != nil {
 			return []ent.Value{*id}
 		}
+	case book.EdgePlaceOfPublication:
+		if id := m.place_of_publication; id != nil {
+			return []ent.Value{*id}
+		}
+	case book.EdgeLibrary:
+		if id := m.library; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *BookMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.removedauthors != nil {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -8829,7 +8975,7 @@ func (m *BookMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BookMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.clearedauthors {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -8839,6 +8985,9 @@ func (m *BookMutation) ClearedEdges() []string {
 	if m.clearedcollection {
 		edges = append(edges, book.EdgeCollection)
 	}
+	if m.clearedperiodical {
+		edges = append(edges, book.EdgePeriodical)
+	}
 	if m.clearedpublisher {
 		edges = append(edges, book.EdgePublisher)
 	}
@@ -8847,6 +8996,12 @@ func (m *BookMutation) ClearedEdges() []string {
 	}
 	if m.clearedlocation {
 		edges = append(edges, book.EdgeLocation)
+	}
+	if m.clearedplace_of_publication {
+		edges = append(edges, book.EdgePlaceOfPublication)
+	}
+	if m.clearedlibrary {
+		edges = append(edges, book.EdgeLibrary)
 	}
 	return edges
 }
@@ -8861,12 +9016,18 @@ func (m *BookMutation) EdgeCleared(name string) bool {
 		return m.clearedbook_genres
 	case book.EdgeCollection:
 		return m.clearedcollection
+	case book.EdgePeriodical:
+		return m.clearedperiodical
 	case book.EdgePublisher:
 		return m.clearedpublisher
 	case book.EdgeLicense:
 		return m.clearedlicense
 	case book.EdgeLocation:
 		return m.clearedlocation
+	case book.EdgePlaceOfPublication:
+		return m.clearedplace_of_publication
+	case book.EdgeLibrary:
+		return m.clearedlibrary
 	}
 	return false
 }
@@ -8878,6 +9039,9 @@ func (m *BookMutation) ClearEdge(name string) error {
 	case book.EdgeCollection:
 		m.ClearCollection()
 		return nil
+	case book.EdgePeriodical:
+		m.ClearPeriodical()
+		return nil
 	case book.EdgePublisher:
 		m.ClearPublisher()
 		return nil
@@ -8886,6 +9050,12 @@ func (m *BookMutation) ClearEdge(name string) error {
 		return nil
 	case book.EdgeLocation:
 		m.ClearLocation()
+		return nil
+	case book.EdgePlaceOfPublication:
+		m.ClearPlaceOfPublication()
+		return nil
+	case book.EdgeLibrary:
+		m.ClearLibrary()
 		return nil
 	}
 	return fmt.Errorf("unknown Book unique edge %s", name)
@@ -8904,6 +9074,9 @@ func (m *BookMutation) ResetEdge(name string) error {
 	case book.EdgeCollection:
 		m.ResetCollection()
 		return nil
+	case book.EdgePeriodical:
+		m.ResetPeriodical()
+		return nil
 	case book.EdgePublisher:
 		m.ResetPublisher()
 		return nil
@@ -8912,6 +9085,12 @@ func (m *BookMutation) ResetEdge(name string) error {
 		return nil
 	case book.EdgeLocation:
 		m.ResetLocation()
+		return nil
+	case book.EdgePlaceOfPublication:
+		m.ResetPlaceOfPublication()
+		return nil
+	case book.EdgeLibrary:
+		m.ResetLibrary()
 		return nil
 	}
 	return fmt.Errorf("unknown Book edge %s", name)
@@ -21549,7 +21728,11 @@ type OrganizationMutation struct {
 	appendprevious_names         []string
 	is_in_a_consortium           *bool
 	consortium_document_url      *string
+	_type                        *organization.Type
 	clearedFields                map[string]struct{}
+	books                        map[int]struct{}
+	removedbooks                 map[int]struct{}
+	clearedbooks                 bool
 	people                       map[int]struct{}
 	removedpeople                map[int]struct{}
 	clearedpeople                bool
@@ -22478,6 +22661,109 @@ func (m *OrganizationMutation) ResetConsortiumDocumentURL() {
 	delete(m.clearedFields, organization.FieldConsortiumDocumentURL)
 }
 
+// SetType sets the "type" field.
+func (m *OrganizationMutation) SetType(o organization.Type) {
+	m._type = &o
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *OrganizationMutation) GetType() (r organization.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Organization entity.
+// If the Organization object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrganizationMutation) OldType(ctx context.Context) (v organization.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ClearType clears the value of the "type" field.
+func (m *OrganizationMutation) ClearType() {
+	m._type = nil
+	m.clearedFields[organization.FieldType] = struct{}{}
+}
+
+// TypeCleared returns if the "type" field was cleared in this mutation.
+func (m *OrganizationMutation) TypeCleared() bool {
+	_, ok := m.clearedFields[organization.FieldType]
+	return ok
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *OrganizationMutation) ResetType() {
+	m._type = nil
+	delete(m.clearedFields, organization.FieldType)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by ids.
+func (m *OrganizationMutation) AddBookIDs(ids ...int) {
+	if m.books == nil {
+		m.books = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.books[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBooks clears the "books" edge to the Book entity.
+func (m *OrganizationMutation) ClearBooks() {
+	m.clearedbooks = true
+}
+
+// BooksCleared reports if the "books" edge to the Book entity was cleared.
+func (m *OrganizationMutation) BooksCleared() bool {
+	return m.clearedbooks
+}
+
+// RemoveBookIDs removes the "books" edge to the Book entity by IDs.
+func (m *OrganizationMutation) RemoveBookIDs(ids ...int) {
+	if m.removedbooks == nil {
+		m.removedbooks = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.books, ids[i])
+		m.removedbooks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBooks returns the removed IDs of the "books" edge to the Book entity.
+func (m *OrganizationMutation) RemovedBooksIDs() (ids []int) {
+	for id := range m.removedbooks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BooksIDs returns the "books" edge IDs in the mutation.
+func (m *OrganizationMutation) BooksIDs() (ids []int) {
+	for id := range m.books {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBooks resets all changes to the "books" edge.
+func (m *OrganizationMutation) ResetBooks() {
+	m.books = nil
+	m.clearedbooks = false
+	m.removedbooks = nil
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by ids.
 func (m *OrganizationMutation) AddPersonIDs(ids ...int) {
 	if m.people == nil {
@@ -22566,7 +22852,7 @@ func (m *OrganizationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.created_at != nil {
 		fields = append(fields, organization.FieldCreatedAt)
 	}
@@ -22615,6 +22901,9 @@ func (m *OrganizationMutation) Fields() []string {
 	if m.consortium_document_url != nil {
 		fields = append(fields, organization.FieldConsortiumDocumentURL)
 	}
+	if m._type != nil {
+		fields = append(fields, organization.FieldType)
+	}
 	return fields
 }
 
@@ -22655,6 +22944,8 @@ func (m *OrganizationMutation) Field(name string) (ent.Value, bool) {
 		return m.IsInAConsortium()
 	case organization.FieldConsortiumDocumentURL:
 		return m.ConsortiumDocumentURL()
+	case organization.FieldType:
+		return m.GetType()
 	}
 	return nil, false
 }
@@ -22696,6 +22987,8 @@ func (m *OrganizationMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldIsInAConsortium(ctx)
 	case organization.FieldConsortiumDocumentURL:
 		return m.OldConsortiumDocumentURL(ctx)
+	case organization.FieldType:
+		return m.OldType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Organization field %s", name)
 }
@@ -22817,6 +23110,13 @@ func (m *OrganizationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetConsortiumDocumentURL(v)
 		return nil
+	case organization.FieldType:
+		v, ok := value.(organization.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Organization field %s", name)
 }
@@ -22889,6 +23189,9 @@ func (m *OrganizationMutation) ClearedFields() []string {
 	if m.FieldCleared(organization.FieldConsortiumDocumentURL) {
 		fields = append(fields, organization.FieldConsortiumDocumentURL)
 	}
+	if m.FieldCleared(organization.FieldType) {
+		fields = append(fields, organization.FieldType)
+	}
 	return fields
 }
 
@@ -22944,6 +23247,9 @@ func (m *OrganizationMutation) ClearField(name string) error {
 		return nil
 	case organization.FieldConsortiumDocumentURL:
 		m.ClearConsortiumDocumentURL()
+		return nil
+	case organization.FieldType:
+		m.ClearType()
 		return nil
 	}
 	return fmt.Errorf("unknown Organization nullable field %s", name)
@@ -23001,13 +23307,19 @@ func (m *OrganizationMutation) ResetField(name string) error {
 	case organization.FieldConsortiumDocumentURL:
 		m.ResetConsortiumDocumentURL()
 		return nil
+	case organization.FieldType:
+		m.ResetType()
+		return nil
 	}
 	return fmt.Errorf("unknown Organization field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.books != nil {
+		edges = append(edges, organization.EdgeBooks)
+	}
 	if m.people != nil {
 		edges = append(edges, organization.EdgePeople)
 	}
@@ -23018,6 +23330,12 @@ func (m *OrganizationMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case organization.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.books))
+		for id := range m.books {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgePeople:
 		ids := make([]ent.Value, 0, len(m.people))
 		for id := range m.people {
@@ -23030,7 +23348,10 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.removedbooks != nil {
+		edges = append(edges, organization.EdgeBooks)
+	}
 	if m.removedpeople != nil {
 		edges = append(edges, organization.EdgePeople)
 	}
@@ -23041,6 +23362,12 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case organization.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.removedbooks))
+		for id := range m.removedbooks {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgePeople:
 		ids := make([]ent.Value, 0, len(m.removedpeople))
 		for id := range m.removedpeople {
@@ -23053,7 +23380,10 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.clearedbooks {
+		edges = append(edges, organization.EdgeBooks)
+	}
 	if m.clearedpeople {
 		edges = append(edges, organization.EdgePeople)
 	}
@@ -23064,6 +23394,8 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *OrganizationMutation) EdgeCleared(name string) bool {
 	switch name {
+	case organization.EdgeBooks:
+		return m.clearedbooks
 	case organization.EdgePeople:
 		return m.clearedpeople
 	}
@@ -23082,6 +23414,9 @@ func (m *OrganizationMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *OrganizationMutation) ResetEdge(name string) error {
 	switch name {
+	case organization.EdgeBooks:
+		m.ResetBooks()
+		return nil
 	case organization.EdgePeople:
 		m.ResetPeople()
 		return nil
@@ -24001,6 +24336,920 @@ func (m *PeriodMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Period edge %s", name)
+}
+
+// PeriodicalMutation represents an operation that mutates the Periodical nodes in the graph.
+type PeriodicalMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	created_at    *time.Time
+	created_by    *string
+	updated_at    *time.Time
+	updated_by    *string
+	display_name  *string
+	abbreviation  *string
+	description   *string
+	external_link *string
+	clearedFields map[string]struct{}
+	books         map[int]struct{}
+	removedbooks  map[int]struct{}
+	clearedbooks  bool
+	done          bool
+	oldValue      func(context.Context) (*Periodical, error)
+	predicates    []predicate.Periodical
+}
+
+var _ ent.Mutation = (*PeriodicalMutation)(nil)
+
+// periodicalOption allows management of the mutation configuration using functional options.
+type periodicalOption func(*PeriodicalMutation)
+
+// newPeriodicalMutation creates new mutation for the Periodical entity.
+func newPeriodicalMutation(c config, op Op, opts ...periodicalOption) *PeriodicalMutation {
+	m := &PeriodicalMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePeriodical,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPeriodicalID sets the ID field of the mutation.
+func withPeriodicalID(id int) periodicalOption {
+	return func(m *PeriodicalMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Periodical
+		)
+		m.oldValue = func(ctx context.Context) (*Periodical, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Periodical.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPeriodical sets the old Periodical of the mutation.
+func withPeriodical(node *Periodical) periodicalOption {
+	return func(m *PeriodicalMutation) {
+		m.oldValue = func(context.Context) (*Periodical, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PeriodicalMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PeriodicalMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PeriodicalMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PeriodicalMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Periodical.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PeriodicalMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PeriodicalMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PeriodicalMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PeriodicalMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PeriodicalMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PeriodicalMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[periodical.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PeriodicalMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[periodical.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PeriodicalMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, periodical.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PeriodicalMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PeriodicalMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PeriodicalMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PeriodicalMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PeriodicalMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PeriodicalMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[periodical.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PeriodicalMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[periodical.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PeriodicalMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, periodical.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *PeriodicalMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *PeriodicalMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *PeriodicalMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[periodical.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *PeriodicalMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[periodical.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *PeriodicalMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, periodical.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PeriodicalMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PeriodicalMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PeriodicalMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[periodical.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PeriodicalMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[periodical.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PeriodicalMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, periodical.FieldAbbreviation)
+}
+
+// SetDescription sets the "description" field.
+func (m *PeriodicalMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *PeriodicalMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *PeriodicalMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[periodical.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *PeriodicalMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[periodical.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *PeriodicalMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, periodical.FieldDescription)
+}
+
+// SetExternalLink sets the "external_link" field.
+func (m *PeriodicalMutation) SetExternalLink(s string) {
+	m.external_link = &s
+}
+
+// ExternalLink returns the value of the "external_link" field in the mutation.
+func (m *PeriodicalMutation) ExternalLink() (r string, exists bool) {
+	v := m.external_link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLink returns the old "external_link" field's value of the Periodical entity.
+// If the Periodical object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PeriodicalMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+	}
+	return oldValue.ExternalLink, nil
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (m *PeriodicalMutation) ClearExternalLink() {
+	m.external_link = nil
+	m.clearedFields[periodical.FieldExternalLink] = struct{}{}
+}
+
+// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
+func (m *PeriodicalMutation) ExternalLinkCleared() bool {
+	_, ok := m.clearedFields[periodical.FieldExternalLink]
+	return ok
+}
+
+// ResetExternalLink resets all changes to the "external_link" field.
+func (m *PeriodicalMutation) ResetExternalLink() {
+	m.external_link = nil
+	delete(m.clearedFields, periodical.FieldExternalLink)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by ids.
+func (m *PeriodicalMutation) AddBookIDs(ids ...int) {
+	if m.books == nil {
+		m.books = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.books[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBooks clears the "books" edge to the Book entity.
+func (m *PeriodicalMutation) ClearBooks() {
+	m.clearedbooks = true
+}
+
+// BooksCleared reports if the "books" edge to the Book entity was cleared.
+func (m *PeriodicalMutation) BooksCleared() bool {
+	return m.clearedbooks
+}
+
+// RemoveBookIDs removes the "books" edge to the Book entity by IDs.
+func (m *PeriodicalMutation) RemoveBookIDs(ids ...int) {
+	if m.removedbooks == nil {
+		m.removedbooks = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.books, ids[i])
+		m.removedbooks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBooks returns the removed IDs of the "books" edge to the Book entity.
+func (m *PeriodicalMutation) RemovedBooksIDs() (ids []int) {
+	for id := range m.removedbooks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BooksIDs returns the "books" edge IDs in the mutation.
+func (m *PeriodicalMutation) BooksIDs() (ids []int) {
+	for id := range m.books {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBooks resets all changes to the "books" edge.
+func (m *PeriodicalMutation) ResetBooks() {
+	m.books = nil
+	m.clearedbooks = false
+	m.removedbooks = nil
+}
+
+// Where appends a list predicates to the PeriodicalMutation builder.
+func (m *PeriodicalMutation) Where(ps ...predicate.Periodical) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PeriodicalMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PeriodicalMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Periodical, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PeriodicalMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PeriodicalMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Periodical).
+func (m *PeriodicalMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PeriodicalMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.created_at != nil {
+		fields = append(fields, periodical.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, periodical.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, periodical.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, periodical.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, periodical.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, periodical.FieldAbbreviation)
+	}
+	if m.description != nil {
+		fields = append(fields, periodical.FieldDescription)
+	}
+	if m.external_link != nil {
+		fields = append(fields, periodical.FieldExternalLink)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PeriodicalMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case periodical.FieldCreatedAt:
+		return m.CreatedAt()
+	case periodical.FieldCreatedBy:
+		return m.CreatedBy()
+	case periodical.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case periodical.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case periodical.FieldDisplayName:
+		return m.DisplayName()
+	case periodical.FieldAbbreviation:
+		return m.Abbreviation()
+	case periodical.FieldDescription:
+		return m.Description()
+	case periodical.FieldExternalLink:
+		return m.ExternalLink()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PeriodicalMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case periodical.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case periodical.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case periodical.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case periodical.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case periodical.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case periodical.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
+	case periodical.FieldDescription:
+		return m.OldDescription(ctx)
+	case periodical.FieldExternalLink:
+		return m.OldExternalLink(ctx)
+	}
+	return nil, fmt.Errorf("unknown Periodical field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PeriodicalMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case periodical.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case periodical.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case periodical.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case periodical.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case periodical.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case periodical.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
+		return nil
+	case periodical.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case periodical.FieldExternalLink:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLink(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Periodical field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PeriodicalMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PeriodicalMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PeriodicalMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Periodical numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PeriodicalMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(periodical.FieldCreatedBy) {
+		fields = append(fields, periodical.FieldCreatedBy)
+	}
+	if m.FieldCleared(periodical.FieldUpdatedBy) {
+		fields = append(fields, periodical.FieldUpdatedBy)
+	}
+	if m.FieldCleared(periodical.FieldDisplayName) {
+		fields = append(fields, periodical.FieldDisplayName)
+	}
+	if m.FieldCleared(periodical.FieldAbbreviation) {
+		fields = append(fields, periodical.FieldAbbreviation)
+	}
+	if m.FieldCleared(periodical.FieldDescription) {
+		fields = append(fields, periodical.FieldDescription)
+	}
+	if m.FieldCleared(periodical.FieldExternalLink) {
+		fields = append(fields, periodical.FieldExternalLink)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PeriodicalMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PeriodicalMutation) ClearField(name string) error {
+	switch name {
+	case periodical.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case periodical.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case periodical.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case periodical.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
+	case periodical.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case periodical.FieldExternalLink:
+		m.ClearExternalLink()
+		return nil
+	}
+	return fmt.Errorf("unknown Periodical nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PeriodicalMutation) ResetField(name string) error {
+	switch name {
+	case periodical.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case periodical.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case periodical.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case periodical.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case periodical.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case periodical.FieldAbbreviation:
+		m.ResetAbbreviation()
+		return nil
+	case periodical.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case periodical.FieldExternalLink:
+		m.ResetExternalLink()
+		return nil
+	}
+	return fmt.Errorf("unknown Periodical field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PeriodicalMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.books != nil {
+		edges = append(edges, periodical.EdgeBooks)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PeriodicalMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case periodical.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.books))
+		for id := range m.books {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PeriodicalMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedbooks != nil {
+		edges = append(edges, periodical.EdgeBooks)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PeriodicalMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case periodical.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.removedbooks))
+		for id := range m.removedbooks {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PeriodicalMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedbooks {
+		edges = append(edges, periodical.EdgeBooks)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PeriodicalMutation) EdgeCleared(name string) bool {
+	switch name {
+	case periodical.EdgeBooks:
+		return m.clearedbooks
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PeriodicalMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Periodical unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PeriodicalMutation) ResetEdge(name string) error {
+	switch name {
+	case periodical.EdgeBooks:
+		m.ResetBooks()
+		return nil
+	}
+	return fmt.Errorf("unknown Periodical edge %s", name)
 }
 
 // PersonMutation represents an operation that mutates the Person nodes in the graph.
@@ -36150,6 +37399,9 @@ type SettlementMutation struct {
 	description      *string
 	external_link    *string
 	clearedFields    map[string]struct{}
+	books            map[int]struct{}
+	removedbooks     map[int]struct{}
+	clearedbooks     bool
 	locations        map[int]struct{}
 	removedlocations map[int]struct{}
 	clearedlocations bool
@@ -36622,6 +37874,60 @@ func (m *SettlementMutation) ResetExternalLink() {
 	delete(m.clearedFields, settlement.FieldExternalLink)
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by ids.
+func (m *SettlementMutation) AddBookIDs(ids ...int) {
+	if m.books == nil {
+		m.books = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.books[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBooks clears the "books" edge to the Book entity.
+func (m *SettlementMutation) ClearBooks() {
+	m.clearedbooks = true
+}
+
+// BooksCleared reports if the "books" edge to the Book entity was cleared.
+func (m *SettlementMutation) BooksCleared() bool {
+	return m.clearedbooks
+}
+
+// RemoveBookIDs removes the "books" edge to the Book entity by IDs.
+func (m *SettlementMutation) RemoveBookIDs(ids ...int) {
+	if m.removedbooks == nil {
+		m.removedbooks = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.books, ids[i])
+		m.removedbooks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBooks returns the removed IDs of the "books" edge to the Book entity.
+func (m *SettlementMutation) RemovedBooksIDs() (ids []int) {
+	for id := range m.removedbooks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BooksIDs returns the "books" edge IDs in the mutation.
+func (m *SettlementMutation) BooksIDs() (ids []int) {
+	for id := range m.books {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBooks resets all changes to the "books" edge.
+func (m *SettlementMutation) ResetBooks() {
+	m.books = nil
+	m.clearedbooks = false
+	m.removedbooks = nil
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *SettlementMutation) AddLocationIDs(ids ...int) {
 	if m.locations == nil {
@@ -36967,7 +38273,10 @@ func (m *SettlementMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SettlementMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.books != nil {
+		edges = append(edges, settlement.EdgeBooks)
+	}
 	if m.locations != nil {
 		edges = append(edges, settlement.EdgeLocations)
 	}
@@ -36978,6 +38287,12 @@ func (m *SettlementMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case settlement.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.books))
+		for id := range m.books {
+			ids = append(ids, id)
+		}
+		return ids
 	case settlement.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.locations))
 		for id := range m.locations {
@@ -36990,7 +38305,10 @@ func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SettlementMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.removedbooks != nil {
+		edges = append(edges, settlement.EdgeBooks)
+	}
 	if m.removedlocations != nil {
 		edges = append(edges, settlement.EdgeLocations)
 	}
@@ -37001,6 +38319,12 @@ func (m *SettlementMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *SettlementMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case settlement.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.removedbooks))
+		for id := range m.removedbooks {
+			ids = append(ids, id)
+		}
+		return ids
 	case settlement.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.removedlocations))
 		for id := range m.removedlocations {
@@ -37013,7 +38337,10 @@ func (m *SettlementMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SettlementMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.clearedbooks {
+		edges = append(edges, settlement.EdgeBooks)
+	}
 	if m.clearedlocations {
 		edges = append(edges, settlement.EdgeLocations)
 	}
@@ -37024,6 +38351,8 @@ func (m *SettlementMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *SettlementMutation) EdgeCleared(name string) bool {
 	switch name {
+	case settlement.EdgeBooks:
+		return m.clearedbooks
 	case settlement.EdgeLocations:
 		return m.clearedlocations
 	}
@@ -37042,6 +38371,9 @@ func (m *SettlementMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *SettlementMutation) ResetEdge(name string) error {
 	switch name {
+	case settlement.EdgeBooks:
+		m.ResetBooks()
+		return nil
 	case settlement.EdgeLocations:
 		m.ResetLocations()
 		return nil

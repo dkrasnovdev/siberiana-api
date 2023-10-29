@@ -14,7 +14,10 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // Book is the model entity for the Book schema.
@@ -50,12 +53,15 @@ type Book struct {
 	Year int `json:"year,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the BookQuery when eager-loading is set.
-	Edges            BookEdges `json:"edges"`
-	collection_books *int
-	license_books    *int
-	location_books   *int
-	publisher_books  *int
-	selectValues     sql.SelectValues
+	Edges              BookEdges `json:"edges"`
+	collection_books   *int
+	license_books      *int
+	location_books     *int
+	organization_books *int
+	periodical_books   *int
+	publisher_books    *int
+	settlement_books   *int
+	selectValues       sql.SelectValues
 }
 
 // BookEdges holds the relations/edges for other nodes in the graph.
@@ -66,17 +72,23 @@ type BookEdges struct {
 	BookGenres []*BookGenre `json:"book_genres,omitempty"`
 	// Collection holds the value of the collection edge.
 	Collection *Collection `json:"collection,omitempty"`
+	// Periodical holds the value of the periodical edge.
+	Periodical *Periodical `json:"periodical,omitempty"`
 	// Publisher holds the value of the publisher edge.
 	Publisher *Publisher `json:"publisher,omitempty"`
 	// License holds the value of the license edge.
 	License *License `json:"license,omitempty"`
 	// Location holds the value of the location edge.
 	Location *Location `json:"location,omitempty"`
+	// PlaceOfPublication holds the value of the place_of_publication edge.
+	PlaceOfPublication *Settlement `json:"place_of_publication,omitempty"`
+	// Library holds the value of the library edge.
+	Library *Organization `json:"library,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [9]map[string]int
 
 	namedAuthors    map[string][]*Person
 	namedBookGenres map[string][]*BookGenre
@@ -113,10 +125,23 @@ func (e BookEdges) CollectionOrErr() (*Collection, error) {
 	return nil, &NotLoadedError{edge: "collection"}
 }
 
+// PeriodicalOrErr returns the Periodical value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) PeriodicalOrErr() (*Periodical, error) {
+	if e.loadedTypes[3] {
+		if e.Periodical == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: periodical.Label}
+		}
+		return e.Periodical, nil
+	}
+	return nil, &NotLoadedError{edge: "periodical"}
+}
+
 // PublisherOrErr returns the Publisher value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookEdges) PublisherOrErr() (*Publisher, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Publisher == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: publisher.Label}
@@ -129,7 +154,7 @@ func (e BookEdges) PublisherOrErr() (*Publisher, error) {
 // LicenseOrErr returns the License value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookEdges) LicenseOrErr() (*License, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		if e.License == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: license.Label}
@@ -142,7 +167,7 @@ func (e BookEdges) LicenseOrErr() (*License, error) {
 // LocationOrErr returns the Location value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookEdges) LocationOrErr() (*Location, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		if e.Location == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: location.Label}
@@ -150,6 +175,32 @@ func (e BookEdges) LocationOrErr() (*Location, error) {
 		return e.Location, nil
 	}
 	return nil, &NotLoadedError{edge: "location"}
+}
+
+// PlaceOfPublicationOrErr returns the PlaceOfPublication value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) PlaceOfPublicationOrErr() (*Settlement, error) {
+	if e.loadedTypes[7] {
+		if e.PlaceOfPublication == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: settlement.Label}
+		}
+		return e.PlaceOfPublication, nil
+	}
+	return nil, &NotLoadedError{edge: "place_of_publication"}
+}
+
+// LibraryOrErr returns the Library value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) LibraryOrErr() (*Organization, error) {
+	if e.loadedTypes[8] {
+		if e.Library == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: organization.Label}
+		}
+		return e.Library, nil
+	}
+	return nil, &NotLoadedError{edge: "library"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -171,7 +222,13 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case book.ForeignKeys[2]: // location_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[3]: // publisher_books
+		case book.ForeignKeys[3]: // organization_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[4]: // periodical_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[5]: // publisher_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[6]: // settlement_books
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -299,10 +356,31 @@ func (b *Book) assignValues(columns []string, values []any) error {
 			}
 		case book.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field organization_books", value)
+			} else if value.Valid {
+				b.organization_books = new(int)
+				*b.organization_books = int(value.Int64)
+			}
+		case book.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field periodical_books", value)
+			} else if value.Valid {
+				b.periodical_books = new(int)
+				*b.periodical_books = int(value.Int64)
+			}
+		case book.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field publisher_books", value)
 			} else if value.Valid {
 				b.publisher_books = new(int)
 				*b.publisher_books = int(value.Int64)
+			}
+		case book.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field settlement_books", value)
+			} else if value.Valid {
+				b.settlement_books = new(int)
+				*b.settlement_books = int(value.Int64)
 			}
 		default:
 			b.selectValues.Set(columns[i], values[i])
@@ -332,6 +410,11 @@ func (b *Book) QueryCollection() *CollectionQuery {
 	return NewBookClient(b.config).QueryCollection(b)
 }
 
+// QueryPeriodical queries the "periodical" edge of the Book entity.
+func (b *Book) QueryPeriodical() *PeriodicalQuery {
+	return NewBookClient(b.config).QueryPeriodical(b)
+}
+
 // QueryPublisher queries the "publisher" edge of the Book entity.
 func (b *Book) QueryPublisher() *PublisherQuery {
 	return NewBookClient(b.config).QueryPublisher(b)
@@ -345,6 +428,16 @@ func (b *Book) QueryLicense() *LicenseQuery {
 // QueryLocation queries the "location" edge of the Book entity.
 func (b *Book) QueryLocation() *LocationQuery {
 	return NewBookClient(b.config).QueryLocation(b)
+}
+
+// QueryPlaceOfPublication queries the "place_of_publication" edge of the Book entity.
+func (b *Book) QueryPlaceOfPublication() *SettlementQuery {
+	return NewBookClient(b.config).QueryPlaceOfPublication(b)
+}
+
+// QueryLibrary queries the "library" edge of the Book entity.
+func (b *Book) QueryLibrary() *OrganizationQuery {
+	return NewBookClient(b.config).QueryLibrary(b)
 }
 
 // Update returns a builder for updating this Book.

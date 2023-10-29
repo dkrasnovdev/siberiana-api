@@ -29,6 +29,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -668,6 +669,33 @@ func (f TraversePeriod) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.PeriodQuery", q)
 }
 
+// The PeriodicalFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PeriodicalFunc func(context.Context, *ent.PeriodicalQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f PeriodicalFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.PeriodicalQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.PeriodicalQuery", q)
+}
+
+// The TraversePeriodical type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePeriodical func(context.Context, *ent.PeriodicalQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePeriodical) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePeriodical) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PeriodicalQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.PeriodicalQuery", q)
+}
+
 // The PersonFunc type is an adapter to allow the use of ordinary function as a Querier.
 type PersonFunc func(context.Context, *ent.PersonQuery) (ent.Value, error)
 
@@ -1064,6 +1092,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: ent.TypeOrganization, tq: q}, nil
 	case *ent.PeriodQuery:
 		return &query[*ent.PeriodQuery, predicate.Period, period.OrderOption]{typ: ent.TypePeriod, tq: q}, nil
+	case *ent.PeriodicalQuery:
+		return &query[*ent.PeriodicalQuery, predicate.Periodical, periodical.OrderOption]{typ: ent.TypePeriodical, tq: q}, nil
 	case *ent.PersonQuery:
 		return &query[*ent.PersonQuery, predicate.Person, person.OrderOption]{typ: ent.TypePerson, tq: q}, nil
 	case *ent.PersonalQuery:

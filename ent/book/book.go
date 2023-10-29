@@ -50,12 +50,18 @@ const (
 	EdgeBookGenres = "book_genres"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
 	EdgeCollection = "collection"
+	// EdgePeriodical holds the string denoting the periodical edge name in mutations.
+	EdgePeriodical = "periodical"
 	// EdgePublisher holds the string denoting the publisher edge name in mutations.
 	EdgePublisher = "publisher"
 	// EdgeLicense holds the string denoting the license edge name in mutations.
 	EdgeLicense = "license"
 	// EdgeLocation holds the string denoting the location edge name in mutations.
 	EdgeLocation = "location"
+	// EdgePlaceOfPublication holds the string denoting the place_of_publication edge name in mutations.
+	EdgePlaceOfPublication = "place_of_publication"
+	// EdgeLibrary holds the string denoting the library edge name in mutations.
+	EdgeLibrary = "library"
 	// Table holds the table name of the book in the database.
 	Table = "books"
 	// AuthorsTable is the table that holds the authors relation/edge. The primary key declared below.
@@ -75,6 +81,13 @@ const (
 	CollectionInverseTable = "collections"
 	// CollectionColumn is the table column denoting the collection relation/edge.
 	CollectionColumn = "collection_books"
+	// PeriodicalTable is the table that holds the periodical relation/edge.
+	PeriodicalTable = "books"
+	// PeriodicalInverseTable is the table name for the Periodical entity.
+	// It exists in this package in order to avoid circular dependency with the "periodical" package.
+	PeriodicalInverseTable = "periodicals"
+	// PeriodicalColumn is the table column denoting the periodical relation/edge.
+	PeriodicalColumn = "periodical_books"
 	// PublisherTable is the table that holds the publisher relation/edge.
 	PublisherTable = "books"
 	// PublisherInverseTable is the table name for the Publisher entity.
@@ -96,6 +109,20 @@ const (
 	LocationInverseTable = "locations"
 	// LocationColumn is the table column denoting the location relation/edge.
 	LocationColumn = "location_books"
+	// PlaceOfPublicationTable is the table that holds the place_of_publication relation/edge.
+	PlaceOfPublicationTable = "books"
+	// PlaceOfPublicationInverseTable is the table name for the Settlement entity.
+	// It exists in this package in order to avoid circular dependency with the "settlement" package.
+	PlaceOfPublicationInverseTable = "settlements"
+	// PlaceOfPublicationColumn is the table column denoting the place_of_publication relation/edge.
+	PlaceOfPublicationColumn = "settlement_books"
+	// LibraryTable is the table that holds the library relation/edge.
+	LibraryTable = "books"
+	// LibraryInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	LibraryInverseTable = "organizations"
+	// LibraryColumn is the table column denoting the library relation/edge.
+	LibraryColumn = "organization_books"
 )
 
 // Columns holds all SQL columns for book fields.
@@ -122,7 +149,10 @@ var ForeignKeys = []string{
 	"collection_books",
 	"license_books",
 	"location_books",
+	"organization_books",
+	"periodical_books",
 	"publisher_books",
+	"settlement_books",
 }
 
 var (
@@ -292,6 +322,13 @@ func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByPeriodicalField orders the results by periodical field.
+func ByPeriodicalField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPeriodicalStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByPublisherField orders the results by publisher field.
 func ByPublisherField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -310,6 +347,20 @@ func ByLicenseField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newLocationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByPlaceOfPublicationField orders the results by place_of_publication field.
+func ByPlaceOfPublicationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlaceOfPublicationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLibraryField orders the results by library field.
+func ByLibraryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLibraryStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newAuthorsStep() *sqlgraph.Step {
@@ -333,6 +384,13 @@ func newCollectionStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
 	)
 }
+func newPeriodicalStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PeriodicalInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PeriodicalTable, PeriodicalColumn),
+	)
+}
 func newPublisherStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -352,6 +410,20 @@ func newLocationStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LocationInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
+	)
+}
+func newPlaceOfPublicationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlaceOfPublicationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PlaceOfPublicationTable, PlaceOfPublicationColumn),
+	)
+}
+func newLibraryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LibraryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, LibraryTable, LibraryColumn),
 	)
 }
 

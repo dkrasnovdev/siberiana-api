@@ -9,6 +9,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
@@ -975,9 +976,12 @@ type CreateBookInput struct {
 	AuthorIDs            []int
 	BookGenreIDs         []int
 	CollectionID         int
+	PeriodicalID         *int
 	PublisherID          *int
 	LicenseID            *int
 	LocationID           *int
+	PlaceOfPublicationID *int
+	LibraryID            *int
 }
 
 // Mutate applies the CreateBookInput on the BookMutation builder.
@@ -1028,6 +1032,9 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 		m.AddBookGenreIDs(v...)
 	}
 	m.SetCollectionID(i.CollectionID)
+	if v := i.PeriodicalID; v != nil {
+		m.SetPeriodicalID(*v)
+	}
 	if v := i.PublisherID; v != nil {
 		m.SetPublisherID(*v)
 	}
@@ -1036,6 +1043,12 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
+	}
+	if v := i.PlaceOfPublicationID; v != nil {
+		m.SetPlaceOfPublicationID(*v)
+	}
+	if v := i.LibraryID; v != nil {
+		m.SetLibraryID(*v)
 	}
 }
 
@@ -1079,12 +1092,18 @@ type UpdateBookInput struct {
 	AddBookGenreIDs            []int
 	RemoveBookGenreIDs         []int
 	CollectionID               *int
+	ClearPeriodical            bool
+	PeriodicalID               *int
 	ClearPublisher             bool
 	PublisherID                *int
 	ClearLicense               bool
 	LicenseID                  *int
 	ClearLocation              bool
 	LocationID                 *int
+	ClearPlaceOfPublication    bool
+	PlaceOfPublicationID       *int
+	ClearLibrary               bool
+	LibraryID                  *int
 }
 
 // Mutate applies the UpdateBookInput on the BookMutation builder.
@@ -1185,6 +1204,12 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
 	}
+	if i.ClearPeriodical {
+		m.ClearPeriodical()
+	}
+	if v := i.PeriodicalID; v != nil {
+		m.SetPeriodicalID(*v)
+	}
 	if i.ClearPublisher {
 		m.ClearPublisher()
 	}
@@ -1202,6 +1227,18 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
+	}
+	if i.ClearPlaceOfPublication {
+		m.ClearPlaceOfPublication()
+	}
+	if v := i.PlaceOfPublicationID; v != nil {
+		m.SetPlaceOfPublicationID(*v)
+	}
+	if i.ClearLibrary {
+		m.ClearLibrary()
+	}
+	if v := i.LibraryID; v != nil {
+		m.SetLibraryID(*v)
 	}
 }
 
@@ -3075,6 +3112,8 @@ type CreateOrganizationInput struct {
 	PreviousNames         []string
 	IsInAConsortium       *bool
 	ConsortiumDocumentURL *string
+	Type                  *organization.Type
+	BookIDs               []int
 	PersonIDs             []int
 }
 
@@ -3128,6 +3167,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ConsortiumDocumentURL; v != nil {
 		m.SetConsortiumDocumentURL(*v)
 	}
+	if v := i.Type; v != nil {
+		m.SetType(*v)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
 	if v := i.PersonIDs; len(v) > 0 {
 		m.AddPersonIDs(v...)
 	}
@@ -3174,6 +3219,11 @@ type UpdateOrganizationInput struct {
 	IsInAConsortium            *bool
 	ClearConsortiumDocumentURL bool
 	ConsortiumDocumentURL      *string
+	ClearType                  bool
+	Type                       *organization.Type
+	ClearBooks                 bool
+	AddBookIDs                 []int
+	RemoveBookIDs              []int
 	ClearPeople                bool
 	AddPersonIDs               []int
 	RemovePersonIDs            []int
@@ -3279,6 +3329,21 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.ConsortiumDocumentURL; v != nil {
 		m.SetConsortiumDocumentURL(*v)
+	}
+	if i.ClearType {
+		m.ClearType()
+	}
+	if v := i.Type; v != nil {
+		m.SetType(*v)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 	if i.ClearPeople {
 		m.ClearPeople()
@@ -3433,6 +3498,140 @@ func (c *PeriodUpdate) SetInput(i UpdatePeriodInput) *PeriodUpdate {
 
 // SetInput applies the change-set in the UpdatePeriodInput on the PeriodUpdateOne builder.
 func (c *PeriodUpdateOne) SetInput(i UpdatePeriodInput) *PeriodUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreatePeriodicalInput represents a mutation input for creating periodicals.
+type CreatePeriodicalInput struct {
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	BookIDs      []int
+}
+
+// Mutate applies the CreatePeriodicalInput on the PeriodicalMutation builder.
+func (i *CreatePeriodicalInput) Mutate(m *PeriodicalMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreatePeriodicalInput on the PeriodicalCreate builder.
+func (c *PeriodicalCreate) SetInput(i CreatePeriodicalInput) *PeriodicalCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePeriodicalInput represents a mutation input for updating periodicals.
+type UpdatePeriodicalInput struct {
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearBooks        bool
+	AddBookIDs        []int
+	RemoveBookIDs     []int
+}
+
+// Mutate applies the UpdatePeriodicalInput on the PeriodicalMutation builder.
+func (i *UpdatePeriodicalInput) Mutate(m *PeriodicalMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePeriodicalInput on the PeriodicalUpdate builder.
+func (c *PeriodicalUpdate) SetInput(i UpdatePeriodicalInput) *PeriodicalUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePeriodicalInput on the PeriodicalUpdateOne builder.
+func (c *PeriodicalUpdateOne) SetInput(i UpdatePeriodicalInput) *PeriodicalUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -5267,6 +5466,7 @@ type CreateSettlementInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	BookIDs      []int
 	LocationIDs  []int
 }
 
@@ -5296,6 +5496,9 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
@@ -5322,6 +5525,9 @@ type UpdateSettlementInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearBooks        bool
+	AddBookIDs        []int
+	RemoveBookIDs     []int
 	ClearLocations    bool
 	AddLocationIDs    []int
 	RemoveLocationIDs []int
@@ -5367,6 +5573,15 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
 	}
 	if i.ClearLocations {
 		m.ClearLocations()

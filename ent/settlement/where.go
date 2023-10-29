@@ -625,6 +625,29 @@ func ExternalLinkContainsFold(v string) predicate.Settlement {
 	return predicate.Settlement(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
+// HasBooks applies the HasEdge predicate on the "books" edge.
+func HasBooks() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBooksWith applies the HasEdge predicate on the "books" edge with a given conditions (other predicates).
+func HasBooksWith(preds ...predicate.Book) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newBooksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasLocations applies the HasEdge predicate on the "locations" edge.
 func HasLocations() predicate.Settlement {
 	return predicate.Settlement(func(s *sql.Selector) {

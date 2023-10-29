@@ -15,8 +15,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // BookCreate is the builder for creating a Book entity.
@@ -233,6 +236,25 @@ func (bc *BookCreate) SetCollection(c *Collection) *BookCreate {
 	return bc.SetCollectionID(c.ID)
 }
 
+// SetPeriodicalID sets the "periodical" edge to the Periodical entity by ID.
+func (bc *BookCreate) SetPeriodicalID(id int) *BookCreate {
+	bc.mutation.SetPeriodicalID(id)
+	return bc
+}
+
+// SetNillablePeriodicalID sets the "periodical" edge to the Periodical entity by ID if the given value is not nil.
+func (bc *BookCreate) SetNillablePeriodicalID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetPeriodicalID(*id)
+	}
+	return bc
+}
+
+// SetPeriodical sets the "periodical" edge to the Periodical entity.
+func (bc *BookCreate) SetPeriodical(p *Periodical) *BookCreate {
+	return bc.SetPeriodicalID(p.ID)
+}
+
 // SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
 func (bc *BookCreate) SetPublisherID(id int) *BookCreate {
 	bc.mutation.SetPublisherID(id)
@@ -288,6 +310,44 @@ func (bc *BookCreate) SetNillableLocationID(id *int) *BookCreate {
 // SetLocation sets the "location" edge to the Location entity.
 func (bc *BookCreate) SetLocation(l *Location) *BookCreate {
 	return bc.SetLocationID(l.ID)
+}
+
+// SetPlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID.
+func (bc *BookCreate) SetPlaceOfPublicationID(id int) *BookCreate {
+	bc.mutation.SetPlaceOfPublicationID(id)
+	return bc
+}
+
+// SetNillablePlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID if the given value is not nil.
+func (bc *BookCreate) SetNillablePlaceOfPublicationID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetPlaceOfPublicationID(*id)
+	}
+	return bc
+}
+
+// SetPlaceOfPublication sets the "place_of_publication" edge to the Settlement entity.
+func (bc *BookCreate) SetPlaceOfPublication(s *Settlement) *BookCreate {
+	return bc.SetPlaceOfPublicationID(s.ID)
+}
+
+// SetLibraryID sets the "library" edge to the Organization entity by ID.
+func (bc *BookCreate) SetLibraryID(id int) *BookCreate {
+	bc.mutation.SetLibraryID(id)
+	return bc
+}
+
+// SetNillableLibraryID sets the "library" edge to the Organization entity by ID if the given value is not nil.
+func (bc *BookCreate) SetNillableLibraryID(id *int) *BookCreate {
+	if id != nil {
+		bc = bc.SetLibraryID(*id)
+	}
+	return bc
+}
+
+// SetLibrary sets the "library" edge to the Organization entity.
+func (bc *BookCreate) SetLibrary(o *Organization) *BookCreate {
+	return bc.SetLibraryID(o.ID)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -496,6 +556,23 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 		_node.collection_books = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := bc.mutation.PeriodicalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PeriodicalTable,
+			Columns: []string{book.PeriodicalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(periodical.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.periodical_books = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := bc.mutation.PublisherIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -545,6 +622,40 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.location_books = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.PlaceOfPublicationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PlaceOfPublicationTable,
+			Columns: []string{book.PlaceOfPublicationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.settlement_books = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := bc.mutation.LibraryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LibraryTable,
+			Columns: []string{book.LibraryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.organization_books = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

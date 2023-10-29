@@ -17,29 +17,35 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // BookQuery is the builder for querying Book entities.
 type BookQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []book.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.Book
-	withAuthors         *PersonQuery
-	withBookGenres      *BookGenreQuery
-	withCollection      *CollectionQuery
-	withPublisher       *PublisherQuery
-	withLicense         *LicenseQuery
-	withLocation        *LocationQuery
-	withFKs             bool
-	modifiers           []func(*sql.Selector)
-	loadTotal           []func(context.Context, []*Book) error
-	withNamedAuthors    map[string]*PersonQuery
-	withNamedBookGenres map[string]*BookGenreQuery
+	ctx                    *QueryContext
+	order                  []book.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.Book
+	withAuthors            *PersonQuery
+	withBookGenres         *BookGenreQuery
+	withCollection         *CollectionQuery
+	withPeriodical         *PeriodicalQuery
+	withPublisher          *PublisherQuery
+	withLicense            *LicenseQuery
+	withLocation           *LocationQuery
+	withPlaceOfPublication *SettlementQuery
+	withLibrary            *OrganizationQuery
+	withFKs                bool
+	modifiers              []func(*sql.Selector)
+	loadTotal              []func(context.Context, []*Book) error
+	withNamedAuthors       map[string]*PersonQuery
+	withNamedBookGenres    map[string]*BookGenreQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -142,6 +148,28 @@ func (bq *BookQuery) QueryCollection() *CollectionQuery {
 	return query
 }
 
+// QueryPeriodical chains the current query on the "periodical" edge.
+func (bq *BookQuery) QueryPeriodical() *PeriodicalQuery {
+	query := (&PeriodicalClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(periodical.Table, periodical.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.PeriodicalTable, book.PeriodicalColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPublisher chains the current query on the "publisher" edge.
 func (bq *BookQuery) QueryPublisher() *PublisherQuery {
 	query := (&PublisherClient{config: bq.config}).Query()
@@ -201,6 +229,50 @@ func (bq *BookQuery) QueryLocation() *LocationQuery {
 			sqlgraph.From(book.Table, book.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.LocationTable, book.LocationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlaceOfPublication chains the current query on the "place_of_publication" edge.
+func (bq *BookQuery) QueryPlaceOfPublication() *SettlementQuery {
+	query := (&SettlementClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.PlaceOfPublicationTable, book.PlaceOfPublicationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLibrary chains the current query on the "library" edge.
+func (bq *BookQuery) QueryLibrary() *OrganizationQuery {
+	query := (&OrganizationClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.LibraryTable, book.LibraryColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -395,17 +467,20 @@ func (bq *BookQuery) Clone() *BookQuery {
 		return nil
 	}
 	return &BookQuery{
-		config:         bq.config,
-		ctx:            bq.ctx.Clone(),
-		order:          append([]book.OrderOption{}, bq.order...),
-		inters:         append([]Interceptor{}, bq.inters...),
-		predicates:     append([]predicate.Book{}, bq.predicates...),
-		withAuthors:    bq.withAuthors.Clone(),
-		withBookGenres: bq.withBookGenres.Clone(),
-		withCollection: bq.withCollection.Clone(),
-		withPublisher:  bq.withPublisher.Clone(),
-		withLicense:    bq.withLicense.Clone(),
-		withLocation:   bq.withLocation.Clone(),
+		config:                 bq.config,
+		ctx:                    bq.ctx.Clone(),
+		order:                  append([]book.OrderOption{}, bq.order...),
+		inters:                 append([]Interceptor{}, bq.inters...),
+		predicates:             append([]predicate.Book{}, bq.predicates...),
+		withAuthors:            bq.withAuthors.Clone(),
+		withBookGenres:         bq.withBookGenres.Clone(),
+		withCollection:         bq.withCollection.Clone(),
+		withPeriodical:         bq.withPeriodical.Clone(),
+		withPublisher:          bq.withPublisher.Clone(),
+		withLicense:            bq.withLicense.Clone(),
+		withLocation:           bq.withLocation.Clone(),
+		withPlaceOfPublication: bq.withPlaceOfPublication.Clone(),
+		withLibrary:            bq.withLibrary.Clone(),
 		// clone intermediate query.
 		sql:  bq.sql.Clone(),
 		path: bq.path,
@@ -445,6 +520,17 @@ func (bq *BookQuery) WithCollection(opts ...func(*CollectionQuery)) *BookQuery {
 	return bq
 }
 
+// WithPeriodical tells the query-builder to eager-load the nodes that are connected to
+// the "periodical" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithPeriodical(opts ...func(*PeriodicalQuery)) *BookQuery {
+	query := (&PeriodicalClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withPeriodical = query
+	return bq
+}
+
 // WithPublisher tells the query-builder to eager-load the nodes that are connected to
 // the "publisher" edge. The optional arguments are used to configure the query builder of the edge.
 func (bq *BookQuery) WithPublisher(opts ...func(*PublisherQuery)) *BookQuery {
@@ -475,6 +561,28 @@ func (bq *BookQuery) WithLocation(opts ...func(*LocationQuery)) *BookQuery {
 		opt(query)
 	}
 	bq.withLocation = query
+	return bq
+}
+
+// WithPlaceOfPublication tells the query-builder to eager-load the nodes that are connected to
+// the "place_of_publication" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithPlaceOfPublication(opts ...func(*SettlementQuery)) *BookQuery {
+	query := (&SettlementClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withPlaceOfPublication = query
+	return bq
+}
+
+// WithLibrary tells the query-builder to eager-load the nodes that are connected to
+// the "library" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithLibrary(opts ...func(*OrganizationQuery)) *BookQuery {
+	query := (&OrganizationClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withLibrary = query
 	return bq
 }
 
@@ -563,16 +671,19 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 		nodes       = []*Book{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [9]bool{
 			bq.withAuthors != nil,
 			bq.withBookGenres != nil,
 			bq.withCollection != nil,
+			bq.withPeriodical != nil,
 			bq.withPublisher != nil,
 			bq.withLicense != nil,
 			bq.withLocation != nil,
+			bq.withPlaceOfPublication != nil,
+			bq.withLibrary != nil,
 		}
 	)
-	if bq.withCollection != nil || bq.withPublisher != nil || bq.withLicense != nil || bq.withLocation != nil {
+	if bq.withCollection != nil || bq.withPeriodical != nil || bq.withPublisher != nil || bq.withLicense != nil || bq.withLocation != nil || bq.withPlaceOfPublication != nil || bq.withLibrary != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -619,6 +730,12 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 			return nil, err
 		}
 	}
+	if query := bq.withPeriodical; query != nil {
+		if err := bq.loadPeriodical(ctx, query, nodes, nil,
+			func(n *Book, e *Periodical) { n.Edges.Periodical = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := bq.withPublisher; query != nil {
 		if err := bq.loadPublisher(ctx, query, nodes, nil,
 			func(n *Book, e *Publisher) { n.Edges.Publisher = e }); err != nil {
@@ -634,6 +751,18 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 	if query := bq.withLocation; query != nil {
 		if err := bq.loadLocation(ctx, query, nodes, nil,
 			func(n *Book, e *Location) { n.Edges.Location = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withPlaceOfPublication; query != nil {
+		if err := bq.loadPlaceOfPublication(ctx, query, nodes, nil,
+			func(n *Book, e *Settlement) { n.Edges.PlaceOfPublication = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withLibrary; query != nil {
+		if err := bq.loadLibrary(ctx, query, nodes, nil,
+			func(n *Book, e *Organization) { n.Edges.Library = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -813,6 +942,38 @@ func (bq *BookQuery) loadCollection(ctx context.Context, query *CollectionQuery,
 	}
 	return nil
 }
+func (bq *BookQuery) loadPeriodical(ctx context.Context, query *PeriodicalQuery, nodes []*Book, init func(*Book), assign func(*Book, *Periodical)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Book)
+	for i := range nodes {
+		if nodes[i].periodical_books == nil {
+			continue
+		}
+		fk := *nodes[i].periodical_books
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(periodical.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "periodical_books" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (bq *BookQuery) loadPublisher(ctx context.Context, query *PublisherQuery, nodes []*Book, init func(*Book), assign func(*Book, *Publisher)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Book)
@@ -902,6 +1063,70 @@ func (bq *BookQuery) loadLocation(ctx context.Context, query *LocationQuery, nod
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "location_books" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (bq *BookQuery) loadPlaceOfPublication(ctx context.Context, query *SettlementQuery, nodes []*Book, init func(*Book), assign func(*Book, *Settlement)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Book)
+	for i := range nodes {
+		if nodes[i].settlement_books == nil {
+			continue
+		}
+		fk := *nodes[i].settlement_books
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(settlement.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "settlement_books" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (bq *BookQuery) loadLibrary(ctx context.Context, query *OrganizationQuery, nodes []*Book, init func(*Book), assign func(*Book, *Organization)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Book)
+	for i := range nodes {
+		if nodes[i].organization_books == nil {
+			continue
+		}
+		fk := *nodes[i].organization_books
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "organization_books" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

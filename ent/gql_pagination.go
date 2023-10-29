@@ -35,6 +35,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -7729,6 +7730,378 @@ func (pe *Period) ToEdge(order *PeriodOrder) *PeriodEdge {
 		order = DefaultPeriodOrder
 	}
 	return &PeriodEdge{
+		Node:   pe,
+		Cursor: order.Field.toCursor(pe),
+	}
+}
+
+// PeriodicalEdge is the edge representation of Periodical.
+type PeriodicalEdge struct {
+	Node   *Periodical `json:"node"`
+	Cursor Cursor      `json:"cursor"`
+}
+
+// PeriodicalConnection is the connection containing edges to Periodical.
+type PeriodicalConnection struct {
+	Edges      []*PeriodicalEdge `json:"edges"`
+	PageInfo   PageInfo          `json:"pageInfo"`
+	TotalCount int               `json:"totalCount"`
+}
+
+func (c *PeriodicalConnection) build(nodes []*Periodical, pager *periodicalPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Periodical
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Periodical {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Periodical {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PeriodicalEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PeriodicalEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PeriodicalPaginateOption enables pagination customization.
+type PeriodicalPaginateOption func(*periodicalPager) error
+
+// WithPeriodicalOrder configures pagination ordering.
+func WithPeriodicalOrder(order []*PeriodicalOrder) PeriodicalPaginateOption {
+	return func(pager *periodicalPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithPeriodicalFilter configures pagination filter.
+func WithPeriodicalFilter(filter func(*PeriodicalQuery) (*PeriodicalQuery, error)) PeriodicalPaginateOption {
+	return func(pager *periodicalPager) error {
+		if filter == nil {
+			return errors.New("PeriodicalQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type periodicalPager struct {
+	reverse bool
+	order   []*PeriodicalOrder
+	filter  func(*PeriodicalQuery) (*PeriodicalQuery, error)
+}
+
+func newPeriodicalPager(opts []PeriodicalPaginateOption, reverse bool) (*periodicalPager, error) {
+	pager := &periodicalPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *periodicalPager) applyFilter(query *PeriodicalQuery) (*PeriodicalQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *periodicalPager) toCursor(pe *Periodical) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pe).Value)
+	}
+	return Cursor{ID: pe.ID, Value: cs}
+}
+
+func (p *periodicalPager) applyCursors(query *PeriodicalQuery, after, before *Cursor) (*PeriodicalQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultPeriodicalOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *periodicalPager) applyOrder(query *PeriodicalQuery) *PeriodicalQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultPeriodicalOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultPeriodicalOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *periodicalPager) orderExpr(query *PeriodicalQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultPeriodicalOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Periodical.
+func (pe *PeriodicalQuery) Paginate(
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...PeriodicalPaginateOption,
+) (*PeriodicalConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPeriodicalPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pe, err = pager.applyFilter(pe); err != nil {
+		return nil, err
+	}
+	conn := &PeriodicalConnection{Edges: []*PeriodicalEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
+		if hasPagination || ignoredEdges {
+			c := pe.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pe, err = pager.applyCursors(pe, after, before); err != nil {
+		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pe.Offset(*offset)
+
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pe.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pe = pager.applyOrder(pe)
+	nodes, err := pe.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PeriodicalOrderFieldCreatedAt orders Periodical by created_at.
+	PeriodicalOrderFieldCreatedAt = &PeriodicalOrderField{
+		Value: func(pe *Periodical) (ent.Value, error) {
+			return pe.CreatedAt, nil
+		},
+		column: periodical.FieldCreatedAt,
+		toTerm: periodical.ByCreatedAt,
+		toCursor: func(pe *Periodical) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.CreatedAt,
+			}
+		},
+	}
+	// PeriodicalOrderFieldUpdatedAt orders Periodical by updated_at.
+	PeriodicalOrderFieldUpdatedAt = &PeriodicalOrderField{
+		Value: func(pe *Periodical) (ent.Value, error) {
+			return pe.UpdatedAt, nil
+		},
+		column: periodical.FieldUpdatedAt,
+		toTerm: periodical.ByUpdatedAt,
+		toCursor: func(pe *Periodical) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.UpdatedAt,
+			}
+		},
+	}
+	// PeriodicalOrderFieldDisplayName orders Periodical by display_name.
+	PeriodicalOrderFieldDisplayName = &PeriodicalOrderField{
+		Value: func(pe *Periodical) (ent.Value, error) {
+			return pe.DisplayName, nil
+		},
+		column: periodical.FieldDisplayName,
+		toTerm: periodical.ByDisplayName,
+		toCursor: func(pe *Periodical) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PeriodicalOrderField) String() string {
+	var str string
+	switch f.column {
+	case PeriodicalOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case PeriodicalOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	case PeriodicalOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PeriodicalOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PeriodicalOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PeriodicalOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *PeriodicalOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *PeriodicalOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *PeriodicalOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid PeriodicalOrderField", str)
+	}
+	return nil
+}
+
+// PeriodicalOrderField defines the ordering field of Periodical.
+type PeriodicalOrderField struct {
+	// Value extracts the ordering value from the given Periodical.
+	Value    func(*Periodical) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) periodical.OrderOption
+	toCursor func(*Periodical) Cursor
+}
+
+// PeriodicalOrder defines the ordering of Periodical.
+type PeriodicalOrder struct {
+	Direction OrderDirection        `json:"direction"`
+	Field     *PeriodicalOrderField `json:"field"`
+}
+
+// DefaultPeriodicalOrder is the default ordering of Periodical.
+var DefaultPeriodicalOrder = &PeriodicalOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PeriodicalOrderField{
+		Value: func(pe *Periodical) (ent.Value, error) {
+			return pe.ID, nil
+		},
+		column: periodical.FieldID,
+		toTerm: periodical.ByID,
+		toCursor: func(pe *Periodical) Cursor {
+			return Cursor{ID: pe.ID}
+		},
+	},
+}
+
+// ToEdge converts Periodical into PeriodicalEdge.
+func (pe *Periodical) ToEdge(order *PeriodicalOrder) *PeriodicalEdge {
+	if order == nil {
+		order = DefaultPeriodicalOrder
+	}
+	return &PeriodicalEdge{
 		Node:   pe,
 		Cursor: order.Field.toCursor(pe),
 	}

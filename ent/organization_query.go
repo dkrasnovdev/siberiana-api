@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -24,9 +25,11 @@ type OrganizationQuery struct {
 	order           []organization.OrderOption
 	inters          []Interceptor
 	predicates      []predicate.Organization
+	withBooks       *BookQuery
 	withPeople      *PersonQuery
 	modifiers       []func(*sql.Selector)
 	loadTotal       []func(context.Context, []*Organization) error
+	withNamedBooks  map[string]*BookQuery
 	withNamedPeople map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -62,6 +65,28 @@ func (oq *OrganizationQuery) Unique(unique bool) *OrganizationQuery {
 func (oq *OrganizationQuery) Order(o ...organization.OrderOption) *OrganizationQuery {
 	oq.order = append(oq.order, o...)
 	return oq
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (oq *OrganizationQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.BooksTable, organization.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryPeople chains the current query on the "people" edge.
@@ -278,11 +303,23 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		order:      append([]organization.OrderOption{}, oq.order...),
 		inters:     append([]Interceptor{}, oq.inters...),
 		predicates: append([]predicate.Organization{}, oq.predicates...),
+		withBooks:  oq.withBooks.Clone(),
 		withPeople: oq.withPeople.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
 		path: oq.path,
 	}
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithBooks(opts ...func(*BookQuery)) *OrganizationQuery {
+	query := (&BookClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withBooks = query
+	return oq
 }
 
 // WithPeople tells the query-builder to eager-load the nodes that are connected to
@@ -380,7 +417,8 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
+			oq.withBooks != nil,
 			oq.withPeople != nil,
 		}
 	)
@@ -405,10 +443,24 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := oq.withBooks; query != nil {
+		if err := oq.loadBooks(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Books = []*Book{} },
+			func(n *Organization, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withPeople; query != nil {
 		if err := oq.loadPeople(ctx, query, nodes,
 			func(n *Organization) { n.Edges.People = []*Person{} },
 			func(n *Organization, e *Person) { n.Edges.People = append(n.Edges.People, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedBooks {
+		if err := oq.loadBooks(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedBooks(name) },
+			func(n *Organization, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,6 +479,37 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	return nodes, nil
 }
 
+func (oq *OrganizationQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadPeople(ctx context.Context, query *PersonQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Person)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Organization)
@@ -541,6 +624,20 @@ func (oq *OrganizationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *OrganizationQuery {
+	query := (&BookClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedBooks == nil {
+		oq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	oq.withNamedBooks[name] = query
+	return oq
 }
 
 // WithNamedPeople tells the query-builder to eager-load the nodes that are connected to the "people"

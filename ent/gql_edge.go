@@ -212,6 +212,14 @@ func (b *Book) Collection(ctx context.Context) (*Collection, error) {
 	return result, err
 }
 
+func (b *Book) Periodical(ctx context.Context) (*Periodical, error) {
+	result, err := b.Edges.PeriodicalOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryPeriodical().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (b *Book) Publisher(ctx context.Context) (*Publisher, error) {
 	result, err := b.Edges.PublisherOrErr()
 	if IsNotLoaded(err) {
@@ -232,6 +240,22 @@ func (b *Book) Location(ctx context.Context) (*Location, error) {
 	result, err := b.Edges.LocationOrErr()
 	if IsNotLoaded(err) {
 		result, err = b.QueryLocation().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) PlaceOfPublication(ctx context.Context) (*Settlement, error) {
+	result, err := b.Edges.PlaceOfPublicationOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryPlaceOfPublication().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) Library(ctx context.Context) (*Organization, error) {
+	result, err := b.Edges.LibraryOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryLibrary().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -516,6 +540,18 @@ func (m *Monument) Sets(ctx context.Context) (result []*Set, err error) {
 	return result, err
 }
 
+func (o *Organization) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) People(ctx context.Context) (result []*Person, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedPeople(graphql.GetFieldContext(ctx).Field.Alias)
@@ -536,6 +572,18 @@ func (pe *Period) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	}
 	if IsNotLoaded(err) {
 		result, err = pe.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (pe *Periodical) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryBooks().All(ctx)
 	}
 	return result, err
 }
@@ -792,6 +840,18 @@ func (s *Set) Monuments(ctx context.Context) (result []*Monument, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = s.QueryMonuments().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Settlement) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryBooks().All(ctx)
 	}
 	return result, err
 }

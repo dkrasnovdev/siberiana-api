@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
@@ -24,9 +25,11 @@ type SettlementQuery struct {
 	order              []settlement.OrderOption
 	inters             []Interceptor
 	predicates         []predicate.Settlement
+	withBooks          *BookQuery
 	withLocations      *LocationQuery
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Settlement) error
+	withNamedBooks     map[string]*BookQuery
 	withNamedLocations map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -62,6 +65,28 @@ func (sq *SettlementQuery) Unique(unique bool) *SettlementQuery {
 func (sq *SettlementQuery) Order(o ...settlement.OrderOption) *SettlementQuery {
 	sq.order = append(sq.order, o...)
 	return sq
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (sq *SettlementQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.BooksTable, settlement.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryLocations chains the current query on the "locations" edge.
@@ -278,11 +303,23 @@ func (sq *SettlementQuery) Clone() *SettlementQuery {
 		order:         append([]settlement.OrderOption{}, sq.order...),
 		inters:        append([]Interceptor{}, sq.inters...),
 		predicates:    append([]predicate.Settlement{}, sq.predicates...),
+		withBooks:     sq.withBooks.Clone(),
 		withLocations: sq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithBooks(opts ...func(*BookQuery)) *SettlementQuery {
+	query := (&BookClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withBooks = query
+	return sq
 }
 
 // WithLocations tells the query-builder to eager-load the nodes that are connected to
@@ -380,7 +417,8 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	var (
 		nodes       = []*Settlement{}
 		_spec       = sq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
+			sq.withBooks != nil,
 			sq.withLocations != nil,
 		}
 	)
@@ -405,10 +443,24 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := sq.withBooks; query != nil {
+		if err := sq.loadBooks(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.Books = []*Book{} },
+			func(n *Settlement, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := sq.withLocations; query != nil {
 		if err := sq.loadLocations(ctx, query, nodes,
 			func(n *Settlement) { n.Edges.Locations = []*Location{} },
 			func(n *Settlement, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedBooks {
+		if err := sq.loadBooks(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedBooks(name) },
+			func(n *Settlement, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,6 +479,37 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	return nodes, nil
 }
 
+func (sq *SettlementQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Settlement)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(settlement.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.settlement_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "settlement_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "settlement_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (sq *SettlementQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Settlement)
@@ -541,6 +624,20 @@ func (sq *SettlementQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *SettlementQuery {
+	query := (&BookClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedBooks == nil {
+		sq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	sq.withNamedBooks[name] = query
+	return sq
 }
 
 // WithNamedLocations tells the query-builder to eager-load the nodes that are connected to the "locations"

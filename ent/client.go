@@ -36,6 +36,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -98,6 +99,8 @@ type Client struct {
 	Organization *OrganizationClient
 	// Period is the client for interacting with the Period builders.
 	Period *PeriodClient
+	// Periodical is the client for interacting with the Periodical builders.
+	Periodical *PeriodicalClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
 	// Personal is the client for interacting with the Personal builders.
@@ -160,6 +163,7 @@ func (c *Client) init() {
 	c.Monument = NewMonumentClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
 	c.Period = NewPeriodClient(c.config)
+	c.Periodical = NewPeriodicalClient(c.config)
 	c.Person = NewPersonClient(c.config)
 	c.Personal = NewPersonalClient(c.config)
 	c.Project = NewProjectClient(c.config)
@@ -279,6 +283,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		Period:                NewPeriodClient(cfg),
+		Periodical:            NewPeriodicalClient(cfg),
 		Person:                NewPersonClient(cfg),
 		Personal:              NewPersonalClient(cfg),
 		Project:               NewProjectClient(cfg),
@@ -332,6 +337,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		Period:                NewPeriodClient(cfg),
+		Periodical:            NewPeriodicalClient(cfg),
 		Person:                NewPersonClient(cfg),
 		Personal:              NewPersonalClient(cfg),
 		Project:               NewProjectClient(cfg),
@@ -377,9 +383,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
 		c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Period, c.Person, c.Personal, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
-		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Organization, c.Period, c.Periodical, c.Person, c.Personal, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -392,9 +398,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
 		c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Period, c.Person, c.Personal, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
-		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Organization, c.Period, c.Periodical, c.Person, c.Personal, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -445,6 +451,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Organization.mutate(ctx, m)
 	case *PeriodMutation:
 		return c.Period.mutate(ctx, m)
+	case *PeriodicalMutation:
+		return c.Periodical.mutate(ctx, m)
 	case *PersonMutation:
 		return c.Person.mutate(ctx, m)
 	case *PersonalMutation:
@@ -1575,6 +1583,22 @@ func (c *BookClient) QueryCollection(b *Book) *CollectionQuery {
 	return query
 }
 
+// QueryPeriodical queries the periodical edge of a Book.
+func (c *BookClient) QueryPeriodical(b *Book) *PeriodicalQuery {
+	query := (&PeriodicalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(periodical.Table, periodical.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.PeriodicalTable, book.PeriodicalColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPublisher queries the publisher edge of a Book.
 func (c *BookClient) QueryPublisher(b *Book) *PublisherQuery {
 	query := (&PublisherClient{config: c.config}).Query()
@@ -1616,6 +1640,38 @@ func (c *BookClient) QueryLocation(b *Book) *LocationQuery {
 			sqlgraph.From(book.Table, book.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.LocationTable, book.LocationColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPlaceOfPublication queries the place_of_publication edge of a Book.
+func (c *BookClient) QueryPlaceOfPublication(b *Book) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.PlaceOfPublicationTable, book.PlaceOfPublicationColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLibrary queries the library edge of a Book.
+func (c *BookClient) QueryLibrary(b *Book) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.LibraryTable, book.LibraryColumn),
 		)
 		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
@@ -3898,6 +3954,22 @@ func (c *OrganizationClient) GetX(ctx context.Context, id int) *Organization {
 	return obj
 }
 
+// QueryBooks queries the books edge of a Organization.
+func (c *OrganizationClient) QueryBooks(o *Organization) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.BooksTable, organization.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPeople queries the people edge of a Organization.
 func (c *OrganizationClient) QueryPeople(o *Organization) *PersonQuery {
 	query := (&PersonClient{config: c.config}).Query()
@@ -4087,6 +4159,156 @@ func (c *PeriodClient) mutate(ctx context.Context, m *PeriodMutation) (Value, er
 		return (&PeriodDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Period mutation op: %q", m.Op())
+	}
+}
+
+// PeriodicalClient is a client for the Periodical schema.
+type PeriodicalClient struct {
+	config
+}
+
+// NewPeriodicalClient returns a client for the Periodical from the given config.
+func NewPeriodicalClient(c config) *PeriodicalClient {
+	return &PeriodicalClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `periodical.Hooks(f(g(h())))`.
+func (c *PeriodicalClient) Use(hooks ...Hook) {
+	c.hooks.Periodical = append(c.hooks.Periodical, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `periodical.Intercept(f(g(h())))`.
+func (c *PeriodicalClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Periodical = append(c.inters.Periodical, interceptors...)
+}
+
+// Create returns a builder for creating a Periodical entity.
+func (c *PeriodicalClient) Create() *PeriodicalCreate {
+	mutation := newPeriodicalMutation(c.config, OpCreate)
+	return &PeriodicalCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Periodical entities.
+func (c *PeriodicalClient) CreateBulk(builders ...*PeriodicalCreate) *PeriodicalCreateBulk {
+	return &PeriodicalCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PeriodicalClient) MapCreateBulk(slice any, setFunc func(*PeriodicalCreate, int)) *PeriodicalCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PeriodicalCreateBulk{err: fmt.Errorf("calling to PeriodicalClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PeriodicalCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PeriodicalCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Periodical.
+func (c *PeriodicalClient) Update() *PeriodicalUpdate {
+	mutation := newPeriodicalMutation(c.config, OpUpdate)
+	return &PeriodicalUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PeriodicalClient) UpdateOne(pe *Periodical) *PeriodicalUpdateOne {
+	mutation := newPeriodicalMutation(c.config, OpUpdateOne, withPeriodical(pe))
+	return &PeriodicalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PeriodicalClient) UpdateOneID(id int) *PeriodicalUpdateOne {
+	mutation := newPeriodicalMutation(c.config, OpUpdateOne, withPeriodicalID(id))
+	return &PeriodicalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Periodical.
+func (c *PeriodicalClient) Delete() *PeriodicalDelete {
+	mutation := newPeriodicalMutation(c.config, OpDelete)
+	return &PeriodicalDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PeriodicalClient) DeleteOne(pe *Periodical) *PeriodicalDeleteOne {
+	return c.DeleteOneID(pe.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PeriodicalClient) DeleteOneID(id int) *PeriodicalDeleteOne {
+	builder := c.Delete().Where(periodical.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PeriodicalDeleteOne{builder}
+}
+
+// Query returns a query builder for Periodical.
+func (c *PeriodicalClient) Query() *PeriodicalQuery {
+	return &PeriodicalQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePeriodical},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Periodical entity by its id.
+func (c *PeriodicalClient) Get(ctx context.Context, id int) (*Periodical, error) {
+	return c.Query().Where(periodical.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PeriodicalClient) GetX(ctx context.Context, id int) *Periodical {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBooks queries the books edge of a Periodical.
+func (c *PeriodicalClient) QueryBooks(pe *Periodical) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(periodical.Table, periodical.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, periodical.BooksTable, periodical.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PeriodicalClient) Hooks() []Hook {
+	hooks := c.hooks.Periodical
+	return append(hooks[:len(hooks):len(hooks)], periodical.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PeriodicalClient) Interceptors() []Interceptor {
+	return c.inters.Periodical
+}
+
+func (c *PeriodicalClient) mutate(ctx context.Context, m *PeriodicalMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PeriodicalCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PeriodicalUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PeriodicalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PeriodicalDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Periodical mutation op: %q", m.Op())
 	}
 }
 
@@ -6056,6 +6278,22 @@ func (c *SettlementClient) GetX(ctx context.Context, id int) *Settlement {
 	return obj
 }
 
+// QueryBooks queries the books edge of a Settlement.
+func (c *SettlementClient) QueryBooks(s *Settlement) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.BooksTable, settlement.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryLocations queries the locations edge of a Settlement.
 func (c *SettlementClient) QueryLocations(s *Settlement) *LocationQuery {
 	query := (&LocationClient{config: c.config}).Query()
@@ -6253,15 +6491,15 @@ type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, District, Favourite, Keyword, License, Location,
-		Medium, Model, Monument, Organization, Period, Person, Personal, Project,
-		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy, Publication,
-		Publisher, Region, Set, Settlement, Technique []ent.Hook
+		Medium, Model, Monument, Organization, Period, Periodical, Person, Personal,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, District, Favourite, Keyword, License, Location,
-		Medium, Model, Monument, Organization, Period, Person, Personal, Project,
-		ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy, Publication,
-		Publisher, Region, Set, Settlement, Technique []ent.Interceptor
+		Medium, Model, Monument, Organization, Period, Periodical, Person, Personal,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Publication, Publisher, Region, Set, Settlement, Technique []ent.Interceptor
 	}
 )

@@ -17,9 +17,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // BookUpdate is the builder for updating Book entities.
@@ -305,6 +308,25 @@ func (bu *BookUpdate) SetCollection(c *Collection) *BookUpdate {
 	return bu.SetCollectionID(c.ID)
 }
 
+// SetPeriodicalID sets the "periodical" edge to the Periodical entity by ID.
+func (bu *BookUpdate) SetPeriodicalID(id int) *BookUpdate {
+	bu.mutation.SetPeriodicalID(id)
+	return bu
+}
+
+// SetNillablePeriodicalID sets the "periodical" edge to the Periodical entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillablePeriodicalID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetPeriodicalID(*id)
+	}
+	return bu
+}
+
+// SetPeriodical sets the "periodical" edge to the Periodical entity.
+func (bu *BookUpdate) SetPeriodical(p *Periodical) *BookUpdate {
+	return bu.SetPeriodicalID(p.ID)
+}
+
 // SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
 func (bu *BookUpdate) SetPublisherID(id int) *BookUpdate {
 	bu.mutation.SetPublisherID(id)
@@ -362,6 +384,44 @@ func (bu *BookUpdate) SetLocation(l *Location) *BookUpdate {
 	return bu.SetLocationID(l.ID)
 }
 
+// SetPlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID.
+func (bu *BookUpdate) SetPlaceOfPublicationID(id int) *BookUpdate {
+	bu.mutation.SetPlaceOfPublicationID(id)
+	return bu
+}
+
+// SetNillablePlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillablePlaceOfPublicationID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetPlaceOfPublicationID(*id)
+	}
+	return bu
+}
+
+// SetPlaceOfPublication sets the "place_of_publication" edge to the Settlement entity.
+func (bu *BookUpdate) SetPlaceOfPublication(s *Settlement) *BookUpdate {
+	return bu.SetPlaceOfPublicationID(s.ID)
+}
+
+// SetLibraryID sets the "library" edge to the Organization entity by ID.
+func (bu *BookUpdate) SetLibraryID(id int) *BookUpdate {
+	bu.mutation.SetLibraryID(id)
+	return bu
+}
+
+// SetNillableLibraryID sets the "library" edge to the Organization entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableLibraryID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetLibraryID(*id)
+	}
+	return bu
+}
+
+// SetLibrary sets the "library" edge to the Organization entity.
+func (bu *BookUpdate) SetLibrary(o *Organization) *BookUpdate {
+	return bu.SetLibraryID(o.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bu *BookUpdate) Mutation() *BookMutation {
 	return bu.mutation
@@ -415,6 +475,12 @@ func (bu *BookUpdate) ClearCollection() *BookUpdate {
 	return bu
 }
 
+// ClearPeriodical clears the "periodical" edge to the Periodical entity.
+func (bu *BookUpdate) ClearPeriodical() *BookUpdate {
+	bu.mutation.ClearPeriodical()
+	return bu
+}
+
 // ClearPublisher clears the "publisher" edge to the Publisher entity.
 func (bu *BookUpdate) ClearPublisher() *BookUpdate {
 	bu.mutation.ClearPublisher()
@@ -430,6 +496,18 @@ func (bu *BookUpdate) ClearLicense() *BookUpdate {
 // ClearLocation clears the "location" edge to the Location entity.
 func (bu *BookUpdate) ClearLocation() *BookUpdate {
 	bu.mutation.ClearLocation()
+	return bu
+}
+
+// ClearPlaceOfPublication clears the "place_of_publication" edge to the Settlement entity.
+func (bu *BookUpdate) ClearPlaceOfPublication() *BookUpdate {
+	bu.mutation.ClearPlaceOfPublication()
+	return bu
+}
+
+// ClearLibrary clears the "library" edge to the Organization entity.
+func (bu *BookUpdate) ClearLibrary() *BookUpdate {
+	bu.mutation.ClearLibrary()
 	return bu
 }
 
@@ -706,6 +784,35 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if bu.mutation.PeriodicalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PeriodicalTable,
+			Columns: []string{book.PeriodicalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(periodical.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.PeriodicalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PeriodicalTable,
+			Columns: []string{book.PeriodicalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(periodical.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if bu.mutation.PublisherCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -786,6 +893,64 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.PlaceOfPublicationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PlaceOfPublicationTable,
+			Columns: []string{book.PlaceOfPublicationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.PlaceOfPublicationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PlaceOfPublicationTable,
+			Columns: []string{book.PlaceOfPublicationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.LibraryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LibraryTable,
+			Columns: []string{book.LibraryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.LibraryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LibraryTable,
+			Columns: []string{book.LibraryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1083,6 +1248,25 @@ func (buo *BookUpdateOne) SetCollection(c *Collection) *BookUpdateOne {
 	return buo.SetCollectionID(c.ID)
 }
 
+// SetPeriodicalID sets the "periodical" edge to the Periodical entity by ID.
+func (buo *BookUpdateOne) SetPeriodicalID(id int) *BookUpdateOne {
+	buo.mutation.SetPeriodicalID(id)
+	return buo
+}
+
+// SetNillablePeriodicalID sets the "periodical" edge to the Periodical entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillablePeriodicalID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetPeriodicalID(*id)
+	}
+	return buo
+}
+
+// SetPeriodical sets the "periodical" edge to the Periodical entity.
+func (buo *BookUpdateOne) SetPeriodical(p *Periodical) *BookUpdateOne {
+	return buo.SetPeriodicalID(p.ID)
+}
+
 // SetPublisherID sets the "publisher" edge to the Publisher entity by ID.
 func (buo *BookUpdateOne) SetPublisherID(id int) *BookUpdateOne {
 	buo.mutation.SetPublisherID(id)
@@ -1140,6 +1324,44 @@ func (buo *BookUpdateOne) SetLocation(l *Location) *BookUpdateOne {
 	return buo.SetLocationID(l.ID)
 }
 
+// SetPlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID.
+func (buo *BookUpdateOne) SetPlaceOfPublicationID(id int) *BookUpdateOne {
+	buo.mutation.SetPlaceOfPublicationID(id)
+	return buo
+}
+
+// SetNillablePlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillablePlaceOfPublicationID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetPlaceOfPublicationID(*id)
+	}
+	return buo
+}
+
+// SetPlaceOfPublication sets the "place_of_publication" edge to the Settlement entity.
+func (buo *BookUpdateOne) SetPlaceOfPublication(s *Settlement) *BookUpdateOne {
+	return buo.SetPlaceOfPublicationID(s.ID)
+}
+
+// SetLibraryID sets the "library" edge to the Organization entity by ID.
+func (buo *BookUpdateOne) SetLibraryID(id int) *BookUpdateOne {
+	buo.mutation.SetLibraryID(id)
+	return buo
+}
+
+// SetNillableLibraryID sets the "library" edge to the Organization entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableLibraryID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetLibraryID(*id)
+	}
+	return buo
+}
+
+// SetLibrary sets the "library" edge to the Organization entity.
+func (buo *BookUpdateOne) SetLibrary(o *Organization) *BookUpdateOne {
+	return buo.SetLibraryID(o.ID)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (buo *BookUpdateOne) Mutation() *BookMutation {
 	return buo.mutation
@@ -1193,6 +1415,12 @@ func (buo *BookUpdateOne) ClearCollection() *BookUpdateOne {
 	return buo
 }
 
+// ClearPeriodical clears the "periodical" edge to the Periodical entity.
+func (buo *BookUpdateOne) ClearPeriodical() *BookUpdateOne {
+	buo.mutation.ClearPeriodical()
+	return buo
+}
+
 // ClearPublisher clears the "publisher" edge to the Publisher entity.
 func (buo *BookUpdateOne) ClearPublisher() *BookUpdateOne {
 	buo.mutation.ClearPublisher()
@@ -1208,6 +1436,18 @@ func (buo *BookUpdateOne) ClearLicense() *BookUpdateOne {
 // ClearLocation clears the "location" edge to the Location entity.
 func (buo *BookUpdateOne) ClearLocation() *BookUpdateOne {
 	buo.mutation.ClearLocation()
+	return buo
+}
+
+// ClearPlaceOfPublication clears the "place_of_publication" edge to the Settlement entity.
+func (buo *BookUpdateOne) ClearPlaceOfPublication() *BookUpdateOne {
+	buo.mutation.ClearPlaceOfPublication()
+	return buo
+}
+
+// ClearLibrary clears the "library" edge to the Organization entity.
+func (buo *BookUpdateOne) ClearLibrary() *BookUpdateOne {
+	buo.mutation.ClearLibrary()
 	return buo
 }
 
@@ -1514,6 +1754,35 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if buo.mutation.PeriodicalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PeriodicalTable,
+			Columns: []string{book.PeriodicalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(periodical.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.PeriodicalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PeriodicalTable,
+			Columns: []string{book.PeriodicalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(periodical.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if buo.mutation.PublisherCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1594,6 +1863,64 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.PlaceOfPublicationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PlaceOfPublicationTable,
+			Columns: []string{book.PlaceOfPublicationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.PlaceOfPublicationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.PlaceOfPublicationTable,
+			Columns: []string{book.PlaceOfPublicationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.LibraryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LibraryTable,
+			Columns: []string{book.LibraryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.LibraryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.LibraryTable,
+			Columns: []string{book.LibraryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
@@ -155,6 +156,21 @@ func (su *SettlementUpdate) ClearExternalLink() *SettlementUpdate {
 	return su
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (su *SettlementUpdate) AddBookIDs(ids ...int) *SettlementUpdate {
+	su.mutation.AddBookIDs(ids...)
+	return su
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (su *SettlementUpdate) AddBooks(b ...*Book) *SettlementUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return su.AddBookIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (su *SettlementUpdate) AddLocationIDs(ids ...int) *SettlementUpdate {
 	su.mutation.AddLocationIDs(ids...)
@@ -173,6 +189,27 @@ func (su *SettlementUpdate) AddLocations(l ...*Location) *SettlementUpdate {
 // Mutation returns the SettlementMutation object of the builder.
 func (su *SettlementUpdate) Mutation() *SettlementMutation {
 	return su.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (su *SettlementUpdate) ClearBooks() *SettlementUpdate {
+	su.mutation.ClearBooks()
+	return su
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (su *SettlementUpdate) RemoveBookIDs(ids ...int) *SettlementUpdate {
+	su.mutation.RemoveBookIDs(ids...)
+	return su
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (su *SettlementUpdate) RemoveBooks(b ...*Book) *SettlementUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return su.RemoveBookIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -285,6 +322,51 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if su.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
+	}
+	if su.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.BooksTable,
+			Columns: []string{settlement.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedBooksIDs(); len(nodes) > 0 && !su.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.BooksTable,
+			Columns: []string{settlement.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.BooksTable,
+			Columns: []string{settlement.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if su.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +559,21 @@ func (suo *SettlementUpdateOne) ClearExternalLink() *SettlementUpdateOne {
 	return suo
 }
 
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (suo *SettlementUpdateOne) AddBookIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.AddBookIDs(ids...)
+	return suo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (suo *SettlementUpdateOne) AddBooks(b ...*Book) *SettlementUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return suo.AddBookIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (suo *SettlementUpdateOne) AddLocationIDs(ids ...int) *SettlementUpdateOne {
 	suo.mutation.AddLocationIDs(ids...)
@@ -495,6 +592,27 @@ func (suo *SettlementUpdateOne) AddLocations(l ...*Location) *SettlementUpdateOn
 // Mutation returns the SettlementMutation object of the builder.
 func (suo *SettlementUpdateOne) Mutation() *SettlementMutation {
 	return suo.mutation
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (suo *SettlementUpdateOne) ClearBooks() *SettlementUpdateOne {
+	suo.mutation.ClearBooks()
+	return suo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (suo *SettlementUpdateOne) RemoveBookIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.RemoveBookIDs(ids...)
+	return suo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (suo *SettlementUpdateOne) RemoveBooks(b ...*Book) *SettlementUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return suo.RemoveBookIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -637,6 +755,51 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 	}
 	if suo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
+	}
+	if suo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.BooksTable,
+			Columns: []string{settlement.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !suo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.BooksTable,
+			Columns: []string{settlement.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.BooksTable,
+			Columns: []string{settlement.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if suo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{

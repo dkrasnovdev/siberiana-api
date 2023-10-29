@@ -59,12 +59,16 @@ func (Organization) Fields() []ent.Field {
 			Optional(),
 		field.String("consortium_document_url").
 			Optional(),
+		field.Enum("type").
+			Values("museum", "library", "archive", "other").
+			Optional(),
 	}
 }
 
 // Edges of the Organization.
 func (Organization) Edges() []ent.Edge {
 	return []ent.Edge{
+		edge.To("books", Book.Type),
 		edge.To("people", Person.Type),
 	}
 }

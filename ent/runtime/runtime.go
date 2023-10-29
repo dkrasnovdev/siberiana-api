@@ -26,6 +26,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/period"
+	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -601,6 +602,33 @@ func init() {
 	period.DefaultUpdatedAt = periodDescUpdatedAt.Default.(func() time.Time)
 	// period.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	period.UpdateDefaultUpdatedAt = periodDescUpdatedAt.UpdateDefault.(func() time.Time)
+	periodicalMixin := schema.Periodical{}.Mixin()
+	periodical.Policy = privacy.NewPolicies(schema.Periodical{})
+	periodical.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := periodical.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	periodicalMixinHooks0 := periodicalMixin[0].Hooks()
+
+	periodical.Hooks[1] = periodicalMixinHooks0[0]
+	periodicalMixinFields0 := periodicalMixin[0].Fields()
+	_ = periodicalMixinFields0
+	periodicalFields := schema.Periodical{}.Fields()
+	_ = periodicalFields
+	// periodicalDescCreatedAt is the schema descriptor for created_at field.
+	periodicalDescCreatedAt := periodicalMixinFields0[0].Descriptor()
+	// periodical.DefaultCreatedAt holds the default value on creation for the created_at field.
+	periodical.DefaultCreatedAt = periodicalDescCreatedAt.Default.(func() time.Time)
+	// periodicalDescUpdatedAt is the schema descriptor for updated_at field.
+	periodicalDescUpdatedAt := periodicalMixinFields0[2].Descriptor()
+	// periodical.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	periodical.DefaultUpdatedAt = periodicalDescUpdatedAt.Default.(func() time.Time)
+	// periodical.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	periodical.UpdateDefaultUpdatedAt = periodicalDescUpdatedAt.UpdateDefault.(func() time.Time)
 	personMixin := schema.Person{}.Mixin()
 	person.Policy = privacy.NewPolicies(schema.Person{})
 	person.Hooks[0] = func(next ent.Mutator) ent.Mutator {

@@ -69,6 +69,9 @@ type Organization func(*sql.Selector)
 // Period is the predicate function for period builders.
 type Period func(*sql.Selector)
 
+// Periodical is the predicate function for periodical builders.
+type Periodical func(*sql.Selector)
+
 // Person is the predicate function for person builders.
 type Person func(*sql.Selector)
 

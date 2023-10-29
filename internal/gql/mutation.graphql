@@ -75,6 +75,10 @@ type Mutation {
   createPeriod(input: CreatePeriodInput!): Period!
   updatePeriod(id: ID!, input: UpdatePeriodInput!): Period!
   deletePeriod(id: ID!): String!
+  # Periodical
+  createPeriodical(input: CreatePeriodicalInput!): Periodical!
+  updatePeriodical(id: ID!, input: UpdatePeriodicalInput!): Periodical!
+  deletePeriodical(id: ID!): String!
   # Person
   createPerson(input: CreatePersonInput!): Person!
   updatePerson(id: ID!, input: UpdatePersonInput!): Person!

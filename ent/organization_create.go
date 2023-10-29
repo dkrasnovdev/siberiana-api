@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 )
@@ -213,6 +214,35 @@ func (oc *OrganizationCreate) SetNillableConsortiumDocumentURL(s *string) *Organ
 	return oc
 }
 
+// SetType sets the "type" field.
+func (oc *OrganizationCreate) SetType(o organization.Type) *OrganizationCreate {
+	oc.mutation.SetType(o)
+	return oc
+}
+
+// SetNillableType sets the "type" field if the given value is not nil.
+func (oc *OrganizationCreate) SetNillableType(o *organization.Type) *OrganizationCreate {
+	if o != nil {
+		oc.SetType(*o)
+	}
+	return oc
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (oc *OrganizationCreate) AddBookIDs(ids ...int) *OrganizationCreate {
+	oc.mutation.AddBookIDs(ids...)
+	return oc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (oc *OrganizationCreate) AddBooks(b ...*Book) *OrganizationCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return oc.AddBookIDs(ids...)
+}
+
 // AddPersonIDs adds the "people" edge to the Person entity by IDs.
 func (oc *OrganizationCreate) AddPersonIDs(ids ...int) *OrganizationCreate {
 	oc.mutation.AddPersonIDs(ids...)
@@ -289,6 +319,11 @@ func (oc *OrganizationCreate) check() error {
 	}
 	if _, ok := oc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Organization.updated_at"`)}
+	}
+	if v, ok := oc.mutation.GetType(); ok {
+		if err := organization.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Organization.type": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -379,6 +414,26 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.ConsortiumDocumentURL(); ok {
 		_spec.SetField(organization.FieldConsortiumDocumentURL, field.TypeString, value)
 		_node.ConsortiumDocumentURL = value
+	}
+	if value, ok := oc.mutation.GetType(); ok {
+		_spec.SetField(organization.FieldType, field.TypeEnum, value)
+		_node.Type = value
+	}
+	if nodes := oc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.BooksTable,
+			Columns: []string{organization.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := oc.mutation.PeopleIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

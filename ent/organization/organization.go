@@ -3,6 +3,9 @@
 package organization
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 
 	"entgo.io/ent"
@@ -47,10 +50,21 @@ const (
 	FieldIsInAConsortium = "is_in_a_consortium"
 	// FieldConsortiumDocumentURL holds the string denoting the consortium_document_url field in the database.
 	FieldConsortiumDocumentURL = "consortium_document_url"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
+	// EdgeBooks holds the string denoting the books edge name in mutations.
+	EdgeBooks = "books"
 	// EdgePeople holds the string denoting the people edge name in mutations.
 	EdgePeople = "people"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
+	// BooksTable is the table that holds the books relation/edge.
+	BooksTable = "books"
+	// BooksInverseTable is the table name for the Book entity.
+	// It exists in this package in order to avoid circular dependency with the "book" package.
+	BooksInverseTable = "books"
+	// BooksColumn is the table column denoting the books relation/edge.
+	BooksColumn = "organization_books"
 	// PeopleTable is the table that holds the people relation/edge.
 	PeopleTable = "persons"
 	// PeopleInverseTable is the table name for the Person entity.
@@ -79,6 +93,7 @@ var Columns = []string{
 	FieldPreviousNames,
 	FieldIsInAConsortium,
 	FieldConsortiumDocumentURL,
+	FieldType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -106,6 +121,31 @@ var (
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
 )
+
+// Type defines the type for the "type" enum field.
+type Type string
+
+// Type values.
+const (
+	TypeMuseum  Type = "museum"
+	TypeLibrary Type = "library"
+	TypeArchive Type = "archive"
+	TypeOther   Type = "other"
+)
+
+func (_type Type) String() string {
+	return string(_type)
+}
+
+// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
+func TypeValidator(_type Type) error {
+	switch _type {
+	case TypeMuseum, TypeLibrary, TypeArchive, TypeOther:
+		return nil
+	default:
+		return fmt.Errorf("organization: invalid enum value for type field: %q", _type)
+	}
+}
 
 // OrderOption defines the ordering options for the Organization queries.
 type OrderOption func(*sql.Selector)
@@ -175,6 +215,25 @@ func ByConsortiumDocumentURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldConsortiumDocumentURL, opts...).ToFunc()
 }
 
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// ByBooksCount orders the results by books count.
+func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBooksStep(), opts...)
+	}
+}
+
+// ByBooks orders the results by books terms.
+func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBooksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPeopleCount orders the results by people count.
 func ByPeopleCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -188,10 +247,35 @@ func ByPeople(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newPeopleStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+func newBooksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BooksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+	)
+}
 func newPeopleStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PeopleInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PeopleTable, PeopleColumn),
 	)
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e Type) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *Type) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = Type(str)
+	if err := TypeValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Type", str)
+	}
+	return nil
 }
