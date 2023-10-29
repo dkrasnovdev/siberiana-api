@@ -3758,7 +3758,7 @@ type CreatePersonInput struct {
 	PatronymicName       *string
 	BeginData            *time.Time
 	EndDate              *time.Time
-	Gender               person.Gender
+	Gender               *person.Gender
 	CollectionIDs        []int
 	ArtIDs               []int
 	ArtifactIDs          []int
@@ -3824,7 +3824,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
 	}
-	m.SetGender(i.Gender)
+	if v := i.Gender; v != nil {
+		m.SetGender(*v)
+	}
 	if v := i.CollectionIDs; len(v) > 0 {
 		m.AddCollectionIDs(v...)
 	}
@@ -3892,6 +3894,7 @@ type UpdatePersonInput struct {
 	BeginData                  *time.Time
 	ClearEndDate               bool
 	EndDate                    *time.Time
+	ClearGender                bool
 	Gender                     *person.Gender
 	ClearCollections           bool
 	AddCollectionIDs           []int
@@ -4024,6 +4027,9 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
+	}
+	if i.ClearGender {
+		m.ClearGender()
 	}
 	if v := i.Gender; v != nil {
 		m.SetGender(*v)

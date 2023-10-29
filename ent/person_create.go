@@ -261,6 +261,14 @@ func (pc *PersonCreate) SetGender(pe person.Gender) *PersonCreate {
 	return pc
 }
 
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableGender(pe *person.Gender) *PersonCreate {
+	if pe != nil {
+		pc.SetGender(*pe)
+	}
+	return pc
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (pc *PersonCreate) AddCollectionIDs(ids ...int) *PersonCreate {
 	pc.mutation.AddCollectionIDs(ids...)
@@ -431,9 +439,6 @@ func (pc *PersonCreate) check() error {
 	}
 	if _, ok := pc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Person.updated_at"`)}
-	}
-	if _, ok := pc.mutation.Gender(); !ok {
-		return &ValidationError{Name: "gender", err: errors.New(`ent: missing required field "Person.gender"`)}
 	}
 	if v, ok := pc.mutation.Gender(); ok {
 		if err := person.GenderValidator(v); err != nil {

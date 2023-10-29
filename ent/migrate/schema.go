@@ -624,7 +624,7 @@ var (
 		{Name: "patronymic_name", Type: field.TypeString, Nullable: true},
 		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
-		{Name: "gender", Type: field.TypeEnum, Enums: []string{"female", "male"}},
+		{Name: "gender", Type: field.TypeEnum, Nullable: true, Enums: []string{"female", "male"}},
 		{Name: "organization_people", Type: field.TypeInt, Nullable: true},
 	}
 	// PersonsTable holds the schema information for the "persons" table.

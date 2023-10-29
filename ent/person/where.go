@@ -1185,6 +1185,16 @@ func GenderNotIn(vs ...Gender) predicate.Person {
 	return predicate.Person(sql.FieldNotIn(FieldGender, vs...))
 }
 
+// GenderIsNil applies the IsNil predicate on the "gender" field.
+func GenderIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldGender))
+}
+
+// GenderNotNil applies the NotNil predicate on the "gender" field.
+func GenderNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldGender))
+}
+
 // HasCollections applies the HasEdge predicate on the "collections" edge.
 func HasCollections() predicate.Person {
 	return predicate.Person(func(s *sql.Selector) {

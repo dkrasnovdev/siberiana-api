@@ -362,6 +362,20 @@ func (pu *PersonUpdate) SetGender(pe person.Gender) *PersonUpdate {
 	return pu
 }
 
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableGender(pe *person.Gender) *PersonUpdate {
+	if pe != nil {
+		pu.SetGender(*pe)
+	}
+	return pu
+}
+
+// ClearGender clears the value of the "gender" field.
+func (pu *PersonUpdate) ClearGender() *PersonUpdate {
+	pu.mutation.ClearGender()
+	return pu
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (pu *PersonUpdate) AddCollectionIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddCollectionIDs(ids...)
@@ -788,6 +802,9 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.Gender(); ok {
 		_spec.SetField(person.FieldGender, field.TypeEnum, value)
+	}
+	if pu.mutation.GenderCleared() {
+		_spec.ClearField(person.FieldGender, field.TypeEnum)
 	}
 	if pu.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1434,6 +1451,20 @@ func (puo *PersonUpdateOne) SetGender(pe person.Gender) *PersonUpdateOne {
 	return puo
 }
 
+// SetNillableGender sets the "gender" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableGender(pe *person.Gender) *PersonUpdateOne {
+	if pe != nil {
+		puo.SetGender(*pe)
+	}
+	return puo
+}
+
+// ClearGender clears the value of the "gender" field.
+func (puo *PersonUpdateOne) ClearGender() *PersonUpdateOne {
+	puo.mutation.ClearGender()
+	return puo
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (puo *PersonUpdateOne) AddCollectionIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddCollectionIDs(ids...)
@@ -1890,6 +1921,9 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	}
 	if value, ok := puo.mutation.Gender(); ok {
 		_spec.SetField(person.FieldGender, field.TypeEnum, value)
+	}
+	if puo.mutation.GenderCleared() {
+		_spec.ClearField(person.FieldGender, field.TypeEnum)
 	}
 	if puo.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

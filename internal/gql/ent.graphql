@@ -2659,7 +2659,7 @@ input CreatePersonInput {
   patronymicName: String
   beginData: Time
   endDate: Time
-  gender: PersonGender!
+  gender: PersonGender
   collectionIDs: [ID!]
   artIDs: [ID!]
   artifactIDs: [ID!]
@@ -4966,7 +4966,7 @@ type Person implements Node {
   patronymicName: String
   beginData: Time
   endDate: Time
-  gender: PersonGender!
+  gender: PersonGender
   collections: [Collection!]
   arts: [Art!]
   artifacts: [Artifact!]
@@ -5247,6 +5247,8 @@ input PersonWhereInput {
   genderNEQ: PersonGender
   genderIn: [PersonGender!]
   genderNotIn: [PersonGender!]
+  genderIsNil: Boolean
+  genderNotNil: Boolean
   """collections edge predicates"""
   hasCollections: Boolean
   hasCollectionsWith: [CollectionWhereInput!]
@@ -8886,6 +8888,7 @@ input UpdatePersonInput {
   endDate: Time
   clearEndDate: Boolean
   gender: PersonGender
+  clearGender: Boolean
   addCollectionIDs: [ID!]
   removeCollectionIDs: [ID!]
   clearCollections: Boolean

@@ -26925,9 +26925,22 @@ func (m *PersonMutation) OldGender(ctx context.Context) (v person.Gender, err er
 	return oldValue.Gender, nil
 }
 
+// ClearGender clears the value of the "gender" field.
+func (m *PersonMutation) ClearGender() {
+	m.gender = nil
+	m.clearedFields[person.FieldGender] = struct{}{}
+}
+
+// GenderCleared returns if the "gender" field was cleared in this mutation.
+func (m *PersonMutation) GenderCleared() bool {
+	_, ok := m.clearedFields[person.FieldGender]
+	return ok
+}
+
 // ResetGender resets all changes to the "gender" field.
 func (m *PersonMutation) ResetGender() {
 	m.gender = nil
+	delete(m.clearedFields, person.FieldGender)
 }
 
 // AddCollectionIDs adds the "collections" edge to the Collection entity by ids.
@@ -27698,6 +27711,9 @@ func (m *PersonMutation) ClearedFields() []string {
 	if m.FieldCleared(person.FieldEndDate) {
 		fields = append(fields, person.FieldEndDate)
 	}
+	if m.FieldCleared(person.FieldGender) {
+		fields = append(fields, person.FieldGender)
+	}
 	return fields
 }
 
@@ -27759,6 +27775,9 @@ func (m *PersonMutation) ClearField(name string) error {
 		return nil
 	case person.FieldEndDate:
 		m.ClearEndDate()
+		return nil
+	case person.FieldGender:
+		m.ClearGender()
 		return nil
 	}
 	return fmt.Errorf("unknown Person nullable field %s", name)

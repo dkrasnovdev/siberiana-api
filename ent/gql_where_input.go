@@ -14961,10 +14961,12 @@ type PersonWhereInput struct {
 	EndDateNotNil bool        `json:"endDateNotNil,omitempty"`
 
 	// "gender" field predicates.
-	Gender      *person.Gender  `json:"gender,omitempty"`
-	GenderNEQ   *person.Gender  `json:"genderNEQ,omitempty"`
-	GenderIn    []person.Gender `json:"genderIn,omitempty"`
-	GenderNotIn []person.Gender `json:"genderNotIn,omitempty"`
+	Gender       *person.Gender  `json:"gender,omitempty"`
+	GenderNEQ    *person.Gender  `json:"genderNEQ,omitempty"`
+	GenderIn     []person.Gender `json:"genderIn,omitempty"`
+	GenderNotIn  []person.Gender `json:"genderNotIn,omitempty"`
+	GenderIsNil  bool            `json:"genderIsNil,omitempty"`
+	GenderNotNil bool            `json:"genderNotNil,omitempty"`
 
 	// "collections" edge predicates.
 	HasCollections     *bool                   `json:"hasCollections,omitempty"`
@@ -15704,6 +15706,12 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 	}
 	if len(i.GenderNotIn) > 0 {
 		predicates = append(predicates, person.GenderNotIn(i.GenderNotIn...))
+	}
+	if i.GenderIsNil {
+		predicates = append(predicates, person.GenderIsNil())
+	}
+	if i.GenderNotNil {
+		predicates = append(predicates, person.GenderNotNil())
 	}
 
 	if i.HasCollections != nil {

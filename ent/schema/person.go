@@ -72,7 +72,8 @@ func (Person) Fields() []ent.Field {
 				dialect.Postgres: "date",
 			}),
 		field.Enum("gender").
-			Values("female", "male"),
+			Values("female", "male").
+			Optional(),
 	}
 }
 
