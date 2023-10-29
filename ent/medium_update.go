@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -155,6 +156,21 @@ func (mu *MediumUpdate) ClearExternalLink() *MediumUpdate {
 	return mu
 }
 
+// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+func (mu *MediumUpdate) AddArtIDs(ids ...int) *MediumUpdate {
+	mu.mutation.AddArtIDs(ids...)
+	return mu
+}
+
+// AddArts adds the "arts" edges to the Art entity.
+func (mu *MediumUpdate) AddArts(a ...*Art) *MediumUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return mu.AddArtIDs(ids...)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mu *MediumUpdate) AddArtifactIDs(ids ...int) *MediumUpdate {
 	mu.mutation.AddArtifactIDs(ids...)
@@ -173,6 +189,27 @@ func (mu *MediumUpdate) AddArtifacts(a ...*Artifact) *MediumUpdate {
 // Mutation returns the MediumMutation object of the builder.
 func (mu *MediumUpdate) Mutation() *MediumMutation {
 	return mu.mutation
+}
+
+// ClearArts clears all "arts" edges to the Art entity.
+func (mu *MediumUpdate) ClearArts() *MediumUpdate {
+	mu.mutation.ClearArts()
+	return mu
+}
+
+// RemoveArtIDs removes the "arts" edge to Art entities by IDs.
+func (mu *MediumUpdate) RemoveArtIDs(ids ...int) *MediumUpdate {
+	mu.mutation.RemoveArtIDs(ids...)
+	return mu
+}
+
+// RemoveArts removes "arts" edges to Art entities.
+func (mu *MediumUpdate) RemoveArts(a ...*Art) *MediumUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return mu.RemoveArtIDs(ids...)
 }
 
 // ClearArtifacts clears all "artifacts" edges to the Artifact entity.
@@ -285,6 +322,51 @@ func (mu *MediumUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(medium.FieldExternalLink, field.TypeString)
+	}
+	if mu.mutation.ArtsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   medium.ArtsTable,
+			Columns: medium.ArtsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.RemovedArtsIDs(); len(nodes) > 0 && !mu.mutation.ArtsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   medium.ArtsTable,
+			Columns: medium.ArtsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := mu.mutation.ArtsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   medium.ArtsTable,
+			Columns: medium.ArtsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +559,21 @@ func (muo *MediumUpdateOne) ClearExternalLink() *MediumUpdateOne {
 	return muo
 }
 
+// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+func (muo *MediumUpdateOne) AddArtIDs(ids ...int) *MediumUpdateOne {
+	muo.mutation.AddArtIDs(ids...)
+	return muo
+}
+
+// AddArts adds the "arts" edges to the Art entity.
+func (muo *MediumUpdateOne) AddArts(a ...*Art) *MediumUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return muo.AddArtIDs(ids...)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (muo *MediumUpdateOne) AddArtifactIDs(ids ...int) *MediumUpdateOne {
 	muo.mutation.AddArtifactIDs(ids...)
@@ -495,6 +592,27 @@ func (muo *MediumUpdateOne) AddArtifacts(a ...*Artifact) *MediumUpdateOne {
 // Mutation returns the MediumMutation object of the builder.
 func (muo *MediumUpdateOne) Mutation() *MediumMutation {
 	return muo.mutation
+}
+
+// ClearArts clears all "arts" edges to the Art entity.
+func (muo *MediumUpdateOne) ClearArts() *MediumUpdateOne {
+	muo.mutation.ClearArts()
+	return muo
+}
+
+// RemoveArtIDs removes the "arts" edge to Art entities by IDs.
+func (muo *MediumUpdateOne) RemoveArtIDs(ids ...int) *MediumUpdateOne {
+	muo.mutation.RemoveArtIDs(ids...)
+	return muo
+}
+
+// RemoveArts removes "arts" edges to Art entities.
+func (muo *MediumUpdateOne) RemoveArts(a ...*Art) *MediumUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return muo.RemoveArtIDs(ids...)
 }
 
 // ClearArtifacts clears all "artifacts" edges to the Artifact entity.
@@ -637,6 +755,51 @@ func (muo *MediumUpdateOne) sqlSave(ctx context.Context) (_node *Medium, err err
 	}
 	if muo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(medium.FieldExternalLink, field.TypeString)
+	}
+	if muo.mutation.ArtsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   medium.ArtsTable,
+			Columns: medium.ArtsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.RemovedArtsIDs(); len(nodes) > 0 && !muo.mutation.ArtsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   medium.ArtsTable,
+			Columns: medium.ArtsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := muo.mutation.ArtsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   medium.ArtsTable,
+			Columns: medium.ArtsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

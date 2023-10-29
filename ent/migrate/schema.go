@@ -21,12 +21,31 @@ var (
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "number", Type: field.TypeString, Nullable: true},
+		{Name: "dating", Type: field.TypeString, Nullable: true},
+		{Name: "dimensions", Type: field.TypeString, Nullable: true},
+		{Name: "collection_arts", Type: field.TypeInt},
+		{Name: "person_arts", Type: field.TypeInt, Nullable: true},
 	}
 	// ArtsTable holds the schema information for the "arts" table.
 	ArtsTable = &schema.Table{
 		Name:       "arts",
 		Columns:    ArtsColumns,
 		PrimaryKey: []*schema.Column{ArtsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "arts_collections_arts",
+				Columns:    []*schema.Column{ArtsColumns[14]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "arts_persons_arts",
+				Columns:    []*schema.Column{ArtsColumns[15]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// ArtGenresColumns holds the columns for the "art_genres" table.
 	ArtGenresColumns = []*schema.Column{
@@ -974,6 +993,31 @@ var (
 			},
 		},
 	}
+	// MediumArtsColumns holds the columns for the "medium_arts" table.
+	MediumArtsColumns = []*schema.Column{
+		{Name: "medium_id", Type: field.TypeInt},
+		{Name: "art_id", Type: field.TypeInt},
+	}
+	// MediumArtsTable holds the schema information for the "medium_arts" table.
+	MediumArtsTable = &schema.Table{
+		Name:       "medium_arts",
+		Columns:    MediumArtsColumns,
+		PrimaryKey: []*schema.Column{MediumArtsColumns[0], MediumArtsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "medium_arts_medium_id",
+				Columns:    []*schema.Column{MediumArtsColumns[0]},
+				RefColumns: []*schema.Column{MediaColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "medium_arts_art_id",
+				Columns:    []*schema.Column{MediumArtsColumns[1]},
+				RefColumns: []*schema.Column{ArtsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// MediumArtifactsColumns holds the columns for the "medium_artifacts" table.
 	MediumArtifactsColumns = []*schema.Column{
 		{Name: "medium_id", Type: field.TypeInt},
@@ -1264,6 +1308,7 @@ var (
 		ArtGenreArtTable,
 		ArtStyleArtTable,
 		BookGenreBooksTable,
+		MediumArtsTable,
 		MediumArtifactsTable,
 		MonumentSetsTable,
 		PersonCollectionsTable,
@@ -1278,6 +1323,8 @@ var (
 )
 
 func init() {
+	ArtsTable.ForeignKeys[0].RefTable = CollectionsTable
+	ArtsTable.ForeignKeys[1].RefTable = PersonsTable
 	ArtifactsTable.ForeignKeys[0].RefTable = CollectionsTable
 	ArtifactsTable.ForeignKeys[1].RefTable = CulturesTable
 	ArtifactsTable.ForeignKeys[2].RefTable = LicensesTable
@@ -1312,6 +1359,8 @@ func init() {
 	ArtStyleArtTable.ForeignKeys[1].RefTable = ArtsTable
 	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable
 	BookGenreBooksTable.ForeignKeys[1].RefTable = BooksTable
+	MediumArtsTable.ForeignKeys[0].RefTable = MediaTable
+	MediumArtsTable.ForeignKeys[1].RefTable = ArtsTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	MonumentSetsTable.ForeignKeys[0].RefTable = MonumentsTable

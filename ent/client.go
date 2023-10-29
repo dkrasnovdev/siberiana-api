@@ -592,6 +592,22 @@ func (c *ArtClient) GetX(ctx context.Context, id int) *Art {
 	return obj
 }
 
+// QueryAuthor queries the author edge of a Art.
+func (c *ArtClient) QueryAuthor(a *Art) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.AuthorTable, art.AuthorColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryArtGenre queries the art_genre edge of a Art.
 func (c *ArtClient) QueryArtGenre(a *Art) *ArtGenreQuery {
 	query := (&ArtGenreClient{config: c.config}).Query()
@@ -617,6 +633,38 @@ func (c *ArtClient) QueryArtStyle(a *Art) *ArtStyleQuery {
 			sqlgraph.From(art.Table, art.FieldID, id),
 			sqlgraph.To(artstyle.Table, artstyle.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, art.ArtStyleTable, art.ArtStylePrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMediums queries the mediums edge of a Art.
+func (c *ArtClient) QueryMediums(a *Art) *MediumQuery {
+	query := (&MediumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(medium.Table, medium.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.MediumsTable, art.MediumsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCollection queries the collection edge of a Art.
+func (c *ArtClient) QueryCollection(a *Art) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.CollectionTable, art.CollectionColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -2113,6 +2161,22 @@ func (c *CollectionClient) GetX(ctx context.Context, id int) *Collection {
 	return obj
 }
 
+// QueryArts queries the arts edge of a Collection.
+func (c *CollectionClient) QueryArts(co *Collection) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtsTable, collection.ArtsColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryArtifacts queries the artifacts edge of a Collection.
 func (c *CollectionClient) QueryArtifacts(co *Collection) *ArtifactQuery {
 	query := (&ArtifactClient{config: c.config}).Query()
@@ -3488,6 +3552,22 @@ func (c *MediumClient) GetX(ctx context.Context, id int) *Medium {
 	return obj
 }
 
+// QueryArts queries the arts edge of a Medium.
+func (c *MediumClient) QueryArts(m *Medium) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(medium.Table, medium.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtsTable, medium.ArtsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryArtifacts queries the artifacts edge of a Medium.
 func (c *MediumClient) QueryArtifacts(m *Medium) *ArtifactQuery {
 	query := (&ArtifactClient{config: c.config}).Query()
@@ -4429,6 +4509,22 @@ func (c *PersonClient) QueryCollections(pe *Person) *CollectionQuery {
 			sqlgraph.From(person.Table, person.FieldID, id),
 			sqlgraph.To(collection.Table, collection.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.CollectionsTable, person.CollectionsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryArts queries the arts edge of a Person.
+func (c *PersonClient) QueryArts(pe *Person) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.ArtsTable, person.ArtsColumn),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil

@@ -12,8 +12,14 @@ type Art implements Node {
   externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  number: String
+  dating: String
+  dimensions: String
+  author: Person
   artGenre: [ArtGenre!]
   artStyle: [ArtStyle!]
+  mediums: [Medium!]
+  collection: Collection!
 }
 """A connection to a list of items."""
 type ArtConnection {
@@ -543,12 +549,69 @@ input ArtWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
+  """number field predicates"""
+  number: String
+  numberNEQ: String
+  numberIn: [String!]
+  numberNotIn: [String!]
+  numberGT: String
+  numberGTE: String
+  numberLT: String
+  numberLTE: String
+  numberContains: String
+  numberHasPrefix: String
+  numberHasSuffix: String
+  numberIsNil: Boolean
+  numberNotNil: Boolean
+  numberEqualFold: String
+  numberContainsFold: String
+  """dating field predicates"""
+  dating: String
+  datingNEQ: String
+  datingIn: [String!]
+  datingNotIn: [String!]
+  datingGT: String
+  datingGTE: String
+  datingLT: String
+  datingLTE: String
+  datingContains: String
+  datingHasPrefix: String
+  datingHasSuffix: String
+  datingIsNil: Boolean
+  datingNotNil: Boolean
+  datingEqualFold: String
+  datingContainsFold: String
+  """dimensions field predicates"""
+  dimensions: String
+  dimensionsNEQ: String
+  dimensionsIn: [String!]
+  dimensionsNotIn: [String!]
+  dimensionsGT: String
+  dimensionsGTE: String
+  dimensionsLT: String
+  dimensionsLTE: String
+  dimensionsContains: String
+  dimensionsHasPrefix: String
+  dimensionsHasSuffix: String
+  dimensionsIsNil: Boolean
+  dimensionsNotNil: Boolean
+  dimensionsEqualFold: String
+  dimensionsContainsFold: String
+  """author edge predicates"""
+  hasAuthor: Boolean
+  hasAuthorWith: [PersonWhereInput!]
   """art_genre edge predicates"""
   hasArtGenre: Boolean
   hasArtGenreWith: [ArtGenreWhereInput!]
   """art_style edge predicates"""
   hasArtStyle: Boolean
   hasArtStyleWith: [ArtStyleWhereInput!]
+  """mediums edge predicates"""
+  hasMediums: Boolean
+  hasMediumsWith: [MediumWhereInput!]
+  """collection edge predicates"""
+  hasCollection: Boolean
+  hasCollectionWith: [CollectionWhereInput!]
 }
 type Artifact implements Node {
   id: ID!
@@ -1786,6 +1849,7 @@ type Collection implements Node {
   additionalImagesUrls: [String!]
   slug: String!
   type: CollectionType
+  arts: [Art!]
   artifacts: [Artifact!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -1995,6 +2059,9 @@ input CollectionWhereInput {
   typeNotIn: [CollectionType!]
   typeIsNil: Boolean
   typeNotNil: Boolean
+  """arts edge predicates"""
+  hasArts: Boolean
+  hasArtsWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -2217,8 +2284,14 @@ input CreateArtInput {
   externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  number: String
+  dating: String
+  dimensions: String
+  authorID: ID
   artGenreIDs: [ID!]
   artStyleIDs: [ID!]
+  mediumIDs: [ID!]
+  collectionID: ID!
 }
 """
 CreateArtStyleInput is used for create ArtStyle object.
@@ -2357,6 +2430,7 @@ input CreateCollectionInput {
   additionalImagesUrls: [String!]
   slug: String!
   type: CollectionType
+  artIDs: [ID!]
   artifactIDs: [ID!]
   bookIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
@@ -2472,6 +2546,7 @@ input CreateMediumInput {
   abbreviation: String
   description: String
   externalLink: String
+  artIDs: [ID!]
   artifactIDs: [ID!]
 }
 """
@@ -2586,6 +2661,7 @@ input CreatePersonInput {
   endDate: Time
   gender: PersonGender!
   collectionIDs: [ID!]
+  artIDs: [ID!]
   artifactIDs: [ID!]
   bookIDs: [ID!]
   projectIDs: [ID!]
@@ -3693,6 +3769,7 @@ type Medium implements Node {
   abbreviation: String
   description: String
   externalLink: String
+  arts: [Art!]
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -3855,6 +3932,9 @@ input MediumWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
+  """arts edge predicates"""
+  hasArts: Boolean
+  hasArtsWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -4888,6 +4968,7 @@ type Person implements Node {
   endDate: Time
   gender: PersonGender!
   collections: [Collection!]
+  arts: [Art!]
   artifacts: [Artifact!]
   books: [Book!]
   projects: [Project!]
@@ -5169,6 +5250,9 @@ input PersonWhereInput {
   """collections edge predicates"""
   hasCollections: Boolean
   hasCollectionsWith: [CollectionWhereInput!]
+  """arts edge predicates"""
+  hasArts: Boolean
+  hasArtsWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -8183,12 +8267,24 @@ input UpdateArtInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
+  number: String
+  clearNumber: Boolean
+  dating: String
+  clearDating: Boolean
+  dimensions: String
+  clearDimensions: Boolean
+  authorID: ID
+  clearAuthor: Boolean
   addArtGenreIDs: [ID!]
   removeArtGenreIDs: [ID!]
   clearArtGenre: Boolean
   addArtStyleIDs: [ID!]
   removeArtStyleIDs: [ID!]
   clearArtStyle: Boolean
+  addMediumIDs: [ID!]
+  removeMediumIDs: [ID!]
+  clearMediums: Boolean
+  collectionID: ID
 }
 """
 UpdateArtStyleInput is used for update ArtStyle object.
@@ -8420,6 +8516,9 @@ input UpdateCollectionInput {
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
   slug: String
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArts: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8598,6 +8697,9 @@ input UpdateMediumInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArts: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8787,6 +8889,9 @@ input UpdatePersonInput {
   addCollectionIDs: [ID!]
   removeCollectionIDs: [ID!]
   clearCollections: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArts: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

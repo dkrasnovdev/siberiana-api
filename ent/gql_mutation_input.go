@@ -28,8 +28,14 @@ type CreateArtInput struct {
 	ExternalLink         *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
+	Number               *string
+	Dating               *string
+	Dimensions           *string
+	AuthorID             *int
 	ArtGenreIDs          []int
 	ArtStyleIDs          []int
+	MediumIDs            []int
+	CollectionID         int
 }
 
 // Mutate applies the CreateArtInput on the ArtMutation builder.
@@ -64,12 +70,28 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
 	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
+	}
 	if v := i.ArtGenreIDs; len(v) > 0 {
 		m.AddArtGenreIDs(v...)
 	}
 	if v := i.ArtStyleIDs; len(v) > 0 {
 		m.AddArtStyleIDs(v...)
 	}
+	if v := i.MediumIDs; len(v) > 0 {
+		m.AddMediumIDs(v...)
+	}
+	m.SetCollectionID(i.CollectionID)
 }
 
 // SetInput applies the change-set in the CreateArtInput on the ArtCreate builder.
@@ -98,12 +120,24 @@ type UpdateArtInput struct {
 	ClearAdditionalImagesUrls  bool
 	AdditionalImagesUrls       []string
 	AppendAdditionalImagesUrls []string
+	ClearNumber                bool
+	Number                     *string
+	ClearDating                bool
+	Dating                     *string
+	ClearDimensions            bool
+	Dimensions                 *string
+	ClearAuthor                bool
+	AuthorID                   *int
 	ClearArtGenre              bool
 	AddArtGenreIDs             []int
 	RemoveArtGenreIDs          []int
 	ClearArtStyle              bool
 	AddArtStyleIDs             []int
 	RemoveArtStyleIDs          []int
+	ClearMediums               bool
+	AddMediumIDs               []int
+	RemoveMediumIDs            []int
+	CollectionID               *int
 }
 
 // Mutate applies the UpdateArtInput on the ArtMutation builder.
@@ -162,6 +196,30 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
+	if i.ClearNumber {
+		m.ClearNumber()
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if i.ClearDating {
+		m.ClearDating()
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if i.ClearDimensions {
+		m.ClearDimensions()
+	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
+	if i.ClearAuthor {
+		m.ClearAuthor()
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
+	}
 	if i.ClearArtGenre {
 		m.ClearArtGenre()
 	}
@@ -179,6 +237,18 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	}
 	if v := i.RemoveArtStyleIDs; len(v) > 0 {
 		m.RemoveArtStyleIDs(v...)
+	}
+	if i.ClearMediums {
+		m.ClearMediums()
+	}
+	if v := i.AddMediumIDs; len(v) > 0 {
+		m.AddMediumIDs(v...)
+	}
+	if v := i.RemoveMediumIDs; len(v) > 0 {
+		m.RemoveMediumIDs(v...)
+	}
+	if v := i.CollectionID; v != nil {
+		m.SetCollectionID(*v)
 	}
 }
 
@@ -1570,6 +1640,7 @@ type CreateCollectionInput struct {
 	AdditionalImagesUrls    []string
 	Slug                    string
 	Type                    *collection.Type
+	ArtIDs                  []int
 	ArtifactIDs             []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
@@ -1613,6 +1684,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.Type; v != nil {
 		m.SetType(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -1655,6 +1729,9 @@ type UpdateCollectionInput struct {
 	AdditionalImagesUrls          []string
 	AppendAdditionalImagesUrls    []string
 	Slug                          *string
+	ClearArts                     bool
+	AddArtIDs                     []int
+	RemoveArtIDs                  []int
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
@@ -1728,6 +1805,15 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.Slug; v != nil {
 		m.SetSlug(*v)
+	}
+	if i.ClearArts {
+		m.ClearArts()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -2674,6 +2760,7 @@ type CreateMediumInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
+	ArtIDs       []int
 	ArtifactIDs  []int
 }
 
@@ -2703,6 +2790,9 @@ func (i *CreateMediumInput) Mutate(m *MediumMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -2729,6 +2819,9 @@ type UpdateMediumInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
+	ClearArts         bool
+	AddArtIDs         []int
+	RemoveArtIDs      []int
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -2774,6 +2867,15 @@ func (i *UpdateMediumInput) Mutate(m *MediumMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearArts {
+		m.ClearArts()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -3658,6 +3760,7 @@ type CreatePersonInput struct {
 	EndDate              *time.Time
 	Gender               person.Gender
 	CollectionIDs        []int
+	ArtIDs               []int
 	ArtifactIDs          []int
 	BookIDs              []int
 	ProjectIDs           []int
@@ -3725,6 +3828,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.CollectionIDs; len(v) > 0 {
 		m.AddCollectionIDs(v...)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -3790,6 +3896,9 @@ type UpdatePersonInput struct {
 	ClearCollections           bool
 	AddCollectionIDs           []int
 	RemoveCollectionIDs        []int
+	ClearArts                  bool
+	AddArtIDs                  []int
+	RemoveArtIDs               []int
 	ClearArtifacts             bool
 	AddArtifactIDs             []int
 	RemoveArtifactIDs          []int
@@ -3927,6 +4036,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.RemoveCollectionIDs; len(v) > 0 {
 		m.RemoveCollectionIDs(v...)
+	}
+	if i.ClearArts {
+		m.ClearArts()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()

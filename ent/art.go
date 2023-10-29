@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 )
 
 // Art is the model entity for the Art schema.
@@ -38,32 +40,60 @@ type Art struct {
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// Number holds the value of the "number" field.
+	Number string `json:"number,omitempty"`
+	// Dating holds the value of the "dating" field.
+	Dating string `json:"dating,omitempty"`
+	// Dimensions holds the value of the "dimensions" field.
+	Dimensions string `json:"dimensions,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArtQuery when eager-loading is set.
-	Edges        ArtEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges           ArtEdges `json:"edges"`
+	collection_arts *int
+	person_arts     *int
+	selectValues    sql.SelectValues
 }
 
 // ArtEdges holds the relations/edges for other nodes in the graph.
 type ArtEdges struct {
+	// Author holds the value of the author edge.
+	Author *Person `json:"author,omitempty"`
 	// ArtGenre holds the value of the art_genre edge.
 	ArtGenre []*ArtGenre `json:"art_genre,omitempty"`
 	// ArtStyle holds the value of the art_style edge.
 	ArtStyle []*ArtStyle `json:"art_style,omitempty"`
+	// Mediums holds the value of the mediums edge.
+	Mediums []*Medium `json:"mediums,omitempty"`
+	// Collection holds the value of the collection edge.
+	Collection *Collection `json:"collection,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [5]map[string]int
 
 	namedArtGenre map[string][]*ArtGenre
 	namedArtStyle map[string][]*ArtStyle
+	namedMediums  map[string][]*Medium
+}
+
+// AuthorOrErr returns the Author value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtEdges) AuthorOrErr() (*Person, error) {
+	if e.loadedTypes[0] {
+		if e.Author == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: person.Label}
+		}
+		return e.Author, nil
+	}
+	return nil, &NotLoadedError{edge: "author"}
 }
 
 // ArtGenreOrErr returns the ArtGenre value or an error if the edge
 // was not loaded in eager-loading.
 func (e ArtEdges) ArtGenreOrErr() ([]*ArtGenre, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.ArtGenre, nil
 	}
 	return nil, &NotLoadedError{edge: "art_genre"}
@@ -72,10 +102,32 @@ func (e ArtEdges) ArtGenreOrErr() ([]*ArtGenre, error) {
 // ArtStyleOrErr returns the ArtStyle value or an error if the edge
 // was not loaded in eager-loading.
 func (e ArtEdges) ArtStyleOrErr() ([]*ArtStyle, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.ArtStyle, nil
 	}
 	return nil, &NotLoadedError{edge: "art_style"}
+}
+
+// MediumsOrErr returns the Mediums value or an error if the edge
+// was not loaded in eager-loading.
+func (e ArtEdges) MediumsOrErr() ([]*Medium, error) {
+	if e.loadedTypes[3] {
+		return e.Mediums, nil
+	}
+	return nil, &NotLoadedError{edge: "mediums"}
+}
+
+// CollectionOrErr returns the Collection value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtEdges) CollectionOrErr() (*Collection, error) {
+	if e.loadedTypes[4] {
+		if e.Collection == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: collection.Label}
+		}
+		return e.Collection, nil
+	}
+	return nil, &NotLoadedError{edge: "collection"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -87,10 +139,14 @@ func (*Art) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case art.FieldID:
 			values[i] = new(sql.NullInt64)
-		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldExternalLink, art.FieldPrimaryImageURL:
+		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldExternalLink, art.FieldPrimaryImageURL, art.FieldNumber, art.FieldDating, art.FieldDimensions:
 			values[i] = new(sql.NullString)
 		case art.FieldCreatedAt, art.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case art.ForeignKeys[0]: // collection_arts
+			values[i] = new(sql.NullInt64)
+		case art.ForeignKeys[1]: // person_arts
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -174,6 +230,38 @@ func (a *Art) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
+		case art.FieldNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field number", values[i])
+			} else if value.Valid {
+				a.Number = value.String
+			}
+		case art.FieldDating:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dating", values[i])
+			} else if value.Valid {
+				a.Dating = value.String
+			}
+		case art.FieldDimensions:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dimensions", values[i])
+			} else if value.Valid {
+				a.Dimensions = value.String
+			}
+		case art.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field collection_arts", value)
+			} else if value.Valid {
+				a.collection_arts = new(int)
+				*a.collection_arts = int(value.Int64)
+			}
+		case art.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field person_arts", value)
+			} else if value.Valid {
+				a.person_arts = new(int)
+				*a.person_arts = int(value.Int64)
+			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
 		}
@@ -187,6 +275,11 @@ func (a *Art) Value(name string) (ent.Value, error) {
 	return a.selectValues.Get(name)
 }
 
+// QueryAuthor queries the "author" edge of the Art entity.
+func (a *Art) QueryAuthor() *PersonQuery {
+	return NewArtClient(a.config).QueryAuthor(a)
+}
+
 // QueryArtGenre queries the "art_genre" edge of the Art entity.
 func (a *Art) QueryArtGenre() *ArtGenreQuery {
 	return NewArtClient(a.config).QueryArtGenre(a)
@@ -195,6 +288,16 @@ func (a *Art) QueryArtGenre() *ArtGenreQuery {
 // QueryArtStyle queries the "art_style" edge of the Art entity.
 func (a *Art) QueryArtStyle() *ArtStyleQuery {
 	return NewArtClient(a.config).QueryArtStyle(a)
+}
+
+// QueryMediums queries the "mediums" edge of the Art entity.
+func (a *Art) QueryMediums() *MediumQuery {
+	return NewArtClient(a.config).QueryMediums(a)
+}
+
+// QueryCollection queries the "collection" edge of the Art entity.
+func (a *Art) QueryCollection() *CollectionQuery {
+	return NewArtClient(a.config).QueryCollection(a)
 }
 
 // Update returns a builder for updating this Art.
@@ -249,6 +352,15 @@ func (a *Art) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", a.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("number=")
+	builder.WriteString(a.Number)
+	builder.WriteString(", ")
+	builder.WriteString("dating=")
+	builder.WriteString(a.Dating)
+	builder.WriteString(", ")
+	builder.WriteString("dimensions=")
+	builder.WriteString(a.Dimensions)
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -298,6 +410,30 @@ func (a *Art) appendNamedArtStyle(name string, edges ...*ArtStyle) {
 		a.Edges.namedArtStyle[name] = []*ArtStyle{}
 	} else {
 		a.Edges.namedArtStyle[name] = append(a.Edges.namedArtStyle[name], edges...)
+	}
+}
+
+// NamedMediums returns the Mediums named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Art) NamedMediums(name string) ([]*Medium, error) {
+	if a.Edges.namedMediums == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedMediums[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Art) appendNamedMediums(name string, edges ...*Medium) {
+	if a.Edges.namedMediums == nil {
+		a.Edges.namedMediums = make(map[string][]*Medium)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedMediums[name] = []*Medium{}
+	} else {
+		a.Edges.namedMediums[name] = append(a.Edges.namedMediums[name], edges...)
 	}
 }
 

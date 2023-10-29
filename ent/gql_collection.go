@@ -65,6 +65,16 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "author":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			a.withAuthor = query
 		case "artGenre":
 			var (
 				alias = field.Alias
@@ -89,6 +99,28 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 			a.WithNamedArtStyle(alias, func(wq *ArtStyleQuery) {
 				*wq = *query
 			})
+		case "mediums":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MediumClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, mediumImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedMediums(alias, func(wq *MediumQuery) {
+				*wq = *query
+			})
+		case "collection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			a.withCollection = query
 		case "createdAt":
 			if _, ok := fieldSeen[art.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, art.FieldCreatedAt)
@@ -138,6 +170,21 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 			if _, ok := fieldSeen[art.FieldAdditionalImagesUrls]; !ok {
 				selectedFields = append(selectedFields, art.FieldAdditionalImagesUrls)
 				fieldSeen[art.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "number":
+			if _, ok := fieldSeen[art.FieldNumber]; !ok {
+				selectedFields = append(selectedFields, art.FieldNumber)
+				fieldSeen[art.FieldNumber] = struct{}{}
+			}
+		case "dating":
+			if _, ok := fieldSeen[art.FieldDating]; !ok {
+				selectedFields = append(selectedFields, art.FieldDating)
+				fieldSeen[art.FieldDating] = struct{}{}
+			}
+		case "dimensions":
+			if _, ok := fieldSeen[art.FieldDimensions]; !ok {
+				selectedFields = append(selectedFields, art.FieldDimensions)
+				fieldSeen[art.FieldDimensions] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1551,6 +1598,18 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "arts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedArts(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
 		case "artifacts":
 			var (
 				alias = field.Alias
@@ -2735,6 +2794,18 @@ func (m *MediumQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "arts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedArts(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
 		case "artifacts":
 			var (
 				alias = field.Alias
@@ -3665,6 +3736,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				return err
 			}
 			pe.WithNamedCollections(alias, func(wq *CollectionQuery) {
+				*wq = *query
+			})
+		case "arts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedArts(alias, func(wq *ArtQuery) {
 				*wq = *query
 			})
 		case "artifacts":

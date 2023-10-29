@@ -15,6 +15,9 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/medium"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
@@ -25,12 +28,17 @@ type ArtQuery struct {
 	order             []art.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.Art
+	withAuthor        *PersonQuery
 	withArtGenre      *ArtGenreQuery
 	withArtStyle      *ArtStyleQuery
+	withMediums       *MediumQuery
+	withCollection    *CollectionQuery
+	withFKs           bool
 	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*Art) error
 	withNamedArtGenre map[string]*ArtGenreQuery
 	withNamedArtStyle map[string]*ArtStyleQuery
+	withNamedMediums  map[string]*MediumQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -65,6 +73,28 @@ func (aq *ArtQuery) Unique(unique bool) *ArtQuery {
 func (aq *ArtQuery) Order(o ...art.OrderOption) *ArtQuery {
 	aq.order = append(aq.order, o...)
 	return aq
+}
+
+// QueryAuthor chains the current query on the "author" edge.
+func (aq *ArtQuery) QueryAuthor() *PersonQuery {
+	query := (&PersonClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.AuthorTable, art.AuthorColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryArtGenre chains the current query on the "art_genre" edge.
@@ -104,6 +134,50 @@ func (aq *ArtQuery) QueryArtStyle() *ArtStyleQuery {
 			sqlgraph.From(art.Table, art.FieldID, selector),
 			sqlgraph.To(artstyle.Table, artstyle.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, art.ArtStyleTable, art.ArtStylePrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMediums chains the current query on the "mediums" edge.
+func (aq *ArtQuery) QueryMediums() *MediumQuery {
+	query := (&MediumClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(medium.Table, medium.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.MediumsTable, art.MediumsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCollection chains the current query on the "collection" edge.
+func (aq *ArtQuery) QueryCollection() *CollectionQuery {
+	query := (&CollectionClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.CollectionTable, art.CollectionColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -298,17 +372,31 @@ func (aq *ArtQuery) Clone() *ArtQuery {
 		return nil
 	}
 	return &ArtQuery{
-		config:       aq.config,
-		ctx:          aq.ctx.Clone(),
-		order:        append([]art.OrderOption{}, aq.order...),
-		inters:       append([]Interceptor{}, aq.inters...),
-		predicates:   append([]predicate.Art{}, aq.predicates...),
-		withArtGenre: aq.withArtGenre.Clone(),
-		withArtStyle: aq.withArtStyle.Clone(),
+		config:         aq.config,
+		ctx:            aq.ctx.Clone(),
+		order:          append([]art.OrderOption{}, aq.order...),
+		inters:         append([]Interceptor{}, aq.inters...),
+		predicates:     append([]predicate.Art{}, aq.predicates...),
+		withAuthor:     aq.withAuthor.Clone(),
+		withArtGenre:   aq.withArtGenre.Clone(),
+		withArtStyle:   aq.withArtStyle.Clone(),
+		withMediums:    aq.withMediums.Clone(),
+		withCollection: aq.withCollection.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
 	}
+}
+
+// WithAuthor tells the query-builder to eager-load the nodes that are connected to
+// the "author" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithAuthor(opts ...func(*PersonQuery)) *ArtQuery {
+	query := (&PersonClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withAuthor = query
+	return aq
 }
 
 // WithArtGenre tells the query-builder to eager-load the nodes that are connected to
@@ -330,6 +418,28 @@ func (aq *ArtQuery) WithArtStyle(opts ...func(*ArtStyleQuery)) *ArtQuery {
 		opt(query)
 	}
 	aq.withArtStyle = query
+	return aq
+}
+
+// WithMediums tells the query-builder to eager-load the nodes that are connected to
+// the "mediums" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithMediums(opts ...func(*MediumQuery)) *ArtQuery {
+	query := (&MediumClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withMediums = query
+	return aq
+}
+
+// WithCollection tells the query-builder to eager-load the nodes that are connected to
+// the "collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithCollection(opts ...func(*CollectionQuery)) *ArtQuery {
+	query := (&CollectionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withCollection = query
 	return aq
 }
 
@@ -416,12 +526,22 @@ func (aq *ArtQuery) prepareQuery(ctx context.Context) error {
 func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, error) {
 	var (
 		nodes       = []*Art{}
+		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [5]bool{
+			aq.withAuthor != nil,
 			aq.withArtGenre != nil,
 			aq.withArtStyle != nil,
+			aq.withMediums != nil,
+			aq.withCollection != nil,
 		}
 	)
+	if aq.withAuthor != nil || aq.withCollection != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, art.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Art).scanValues(nil, columns)
 	}
@@ -443,6 +563,12 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := aq.withAuthor; query != nil {
+		if err := aq.loadAuthor(ctx, query, nodes, nil,
+			func(n *Art, e *Person) { n.Edges.Author = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := aq.withArtGenre; query != nil {
 		if err := aq.loadArtGenre(ctx, query, nodes,
 			func(n *Art) { n.Edges.ArtGenre = []*ArtGenre{} },
@@ -454,6 +580,19 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 		if err := aq.loadArtStyle(ctx, query, nodes,
 			func(n *Art) { n.Edges.ArtStyle = []*ArtStyle{} },
 			func(n *Art, e *ArtStyle) { n.Edges.ArtStyle = append(n.Edges.ArtStyle, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withMediums; query != nil {
+		if err := aq.loadMediums(ctx, query, nodes,
+			func(n *Art) { n.Edges.Mediums = []*Medium{} },
+			func(n *Art, e *Medium) { n.Edges.Mediums = append(n.Edges.Mediums, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withCollection; query != nil {
+		if err := aq.loadCollection(ctx, query, nodes, nil,
+			func(n *Art, e *Collection) { n.Edges.Collection = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -471,6 +610,13 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 			return nil, err
 		}
 	}
+	for name, query := range aq.withNamedMediums {
+		if err := aq.loadMediums(ctx, query, nodes,
+			func(n *Art) { n.appendNamedMediums(name) },
+			func(n *Art, e *Medium) { n.appendNamedMediums(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for i := range aq.loadTotal {
 		if err := aq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
@@ -479,6 +625,38 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 	return nodes, nil
 }
 
+func (aq *ArtQuery) loadAuthor(ctx context.Context, query *PersonQuery, nodes []*Art, init func(*Art), assign func(*Art, *Person)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Art)
+	for i := range nodes {
+		if nodes[i].person_arts == nil {
+			continue
+		}
+		fk := *nodes[i].person_arts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(person.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "person_arts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (aq *ArtQuery) loadArtGenre(ctx context.Context, query *ArtGenreQuery, nodes []*Art, init func(*Art), assign func(*Art, *ArtGenre)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Art)
@@ -601,6 +779,99 @@ func (aq *ArtQuery) loadArtStyle(ctx context.Context, query *ArtStyleQuery, node
 	}
 	return nil
 }
+func (aq *ArtQuery) loadMediums(ctx context.Context, query *MediumQuery, nodes []*Art, init func(*Art), assign func(*Art, *Medium)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Art)
+	nids := make(map[int]map[*Art]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(art.MediumsTable)
+		s.Join(joinT).On(s.C(medium.FieldID), joinT.C(art.MediumsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(art.MediumsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(art.MediumsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Art]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Medium](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "mediums" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtQuery) loadCollection(ctx context.Context, query *CollectionQuery, nodes []*Art, init func(*Art), assign func(*Art, *Collection)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Art)
+	for i := range nodes {
+		if nodes[i].collection_arts == nil {
+			continue
+		}
+		fk := *nodes[i].collection_arts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(collection.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "collection_arts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (aq *ArtQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := aq.querySpec()
@@ -711,6 +982,20 @@ func (aq *ArtQuery) WithNamedArtStyle(name string, opts ...func(*ArtStyleQuery))
 		aq.withNamedArtStyle = make(map[string]*ArtStyleQuery)
 	}
 	aq.withNamedArtStyle[name] = query
+	return aq
+}
+
+// WithNamedMediums tells the query-builder to eager-load the nodes that are connected to the "mediums"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithNamedMediums(name string, opts ...func(*MediumQuery)) *ArtQuery {
+	query := (&MediumClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedMediums == nil {
+		aq.withNamedMediums = make(map[string]*MediumQuery)
+	}
+	aq.withNamedMediums[name] = query
 	return aq
 }
 

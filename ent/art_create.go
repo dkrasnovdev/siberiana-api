@@ -13,6 +13,9 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/medium"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 )
 
 // ArtCreate is the builder for creating a Art entity.
@@ -154,6 +157,67 @@ func (ac *ArtCreate) SetAdditionalImagesUrls(s []string) *ArtCreate {
 	return ac
 }
 
+// SetNumber sets the "number" field.
+func (ac *ArtCreate) SetNumber(s string) *ArtCreate {
+	ac.mutation.SetNumber(s)
+	return ac
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableNumber(s *string) *ArtCreate {
+	if s != nil {
+		ac.SetNumber(*s)
+	}
+	return ac
+}
+
+// SetDating sets the "dating" field.
+func (ac *ArtCreate) SetDating(s string) *ArtCreate {
+	ac.mutation.SetDating(s)
+	return ac
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableDating(s *string) *ArtCreate {
+	if s != nil {
+		ac.SetDating(*s)
+	}
+	return ac
+}
+
+// SetDimensions sets the "dimensions" field.
+func (ac *ArtCreate) SetDimensions(s string) *ArtCreate {
+	ac.mutation.SetDimensions(s)
+	return ac
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableDimensions(s *string) *ArtCreate {
+	if s != nil {
+		ac.SetDimensions(*s)
+	}
+	return ac
+}
+
+// SetAuthorID sets the "author" edge to the Person entity by ID.
+func (ac *ArtCreate) SetAuthorID(id int) *ArtCreate {
+	ac.mutation.SetAuthorID(id)
+	return ac
+}
+
+// SetNillableAuthorID sets the "author" edge to the Person entity by ID if the given value is not nil.
+func (ac *ArtCreate) SetNillableAuthorID(id *int) *ArtCreate {
+	if id != nil {
+		ac = ac.SetAuthorID(*id)
+	}
+	return ac
+}
+
+// SetAuthor sets the "author" edge to the Person entity.
+func (ac *ArtCreate) SetAuthor(p *Person) *ArtCreate {
+	return ac.SetAuthorID(p.ID)
+}
+
 // AddArtGenreIDs adds the "art_genre" edge to the ArtGenre entity by IDs.
 func (ac *ArtCreate) AddArtGenreIDs(ids ...int) *ArtCreate {
 	ac.mutation.AddArtGenreIDs(ids...)
@@ -182,6 +246,32 @@ func (ac *ArtCreate) AddArtStyle(a ...*ArtStyle) *ArtCreate {
 		ids[i] = a[i].ID
 	}
 	return ac.AddArtStyleIDs(ids...)
+}
+
+// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
+func (ac *ArtCreate) AddMediumIDs(ids ...int) *ArtCreate {
+	ac.mutation.AddMediumIDs(ids...)
+	return ac
+}
+
+// AddMediums adds the "mediums" edges to the Medium entity.
+func (ac *ArtCreate) AddMediums(m ...*Medium) *ArtCreate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return ac.AddMediumIDs(ids...)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (ac *ArtCreate) SetCollectionID(id int) *ArtCreate {
+	ac.mutation.SetCollectionID(id)
+	return ac
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (ac *ArtCreate) SetCollection(c *Collection) *ArtCreate {
+	return ac.SetCollectionID(c.ID)
 }
 
 // Mutation returns the ArtMutation object of the builder.
@@ -245,6 +335,9 @@ func (ac *ArtCreate) check() error {
 	}
 	if _, ok := ac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Art.updated_at"`)}
+	}
+	if _, ok := ac.mutation.CollectionID(); !ok {
+		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "Art.collection"`)}
 	}
 	return nil
 }
@@ -312,6 +405,35 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		_spec.SetField(art.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
 	}
+	if value, ok := ac.mutation.Number(); ok {
+		_spec.SetField(art.FieldNumber, field.TypeString, value)
+		_node.Number = value
+	}
+	if value, ok := ac.mutation.Dating(); ok {
+		_spec.SetField(art.FieldDating, field.TypeString, value)
+		_node.Dating = value
+	}
+	if value, ok := ac.mutation.Dimensions(); ok {
+		_spec.SetField(art.FieldDimensions, field.TypeString, value)
+		_node.Dimensions = value
+	}
+	if nodes := ac.mutation.AuthorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.AuthorTable,
+			Columns: []string{art.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.person_arts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := ac.mutation.ArtGenreIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -342,6 +464,39 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.MediumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.MediumsTable,
+			Columns: art.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.CollectionTable,
+			Columns: []string{art.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.collection_arts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

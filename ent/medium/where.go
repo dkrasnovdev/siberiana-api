@@ -625,6 +625,29 @@ func ExternalLinkContainsFold(v string) predicate.Medium {
 	return predicate.Medium(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
+// HasArts applies the HasEdge predicate on the "arts" edge.
+func HasArts() predicate.Medium {
+	return predicate.Medium(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ArtsTable, ArtsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtsWith applies the HasEdge predicate on the "arts" edge with a given conditions (other predicates).
+func HasArtsWith(preds ...predicate.Art) predicate.Medium {
+	return predicate.Medium(func(s *sql.Selector) {
+		step := newArtsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.
 func HasArtifacts() predicate.Medium {
 	return predicate.Medium(func(s *sql.Selector) {

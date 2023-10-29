@@ -52,6 +52,8 @@ type Collection struct {
 
 // CollectionEdges holds the relations/edges for other nodes in the graph.
 type CollectionEdges struct {
+	// Arts holds the value of the arts edge.
+	Arts []*Art `json:"arts,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
@@ -64,20 +66,30 @@ type CollectionEdges struct {
 	Authors []*Person `json:"authors,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
+	namedArts                  map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedAuthors               map[string][]*Person
 }
 
+// ArtsOrErr returns the Arts value or an error if the edge
+// was not loaded in eager-loading.
+func (e CollectionEdges) ArtsOrErr() ([]*Art, error) {
+	if e.loadedTypes[0] {
+		return e.Arts, nil
+	}
+	return nil, &NotLoadedError{edge: "arts"}
+}
+
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) ArtifactsOrErr() ([]*Artifact, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
@@ -86,7 +98,7 @@ func (e CollectionEdges) ArtifactsOrErr() ([]*Artifact, error) {
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
@@ -95,7 +107,7 @@ func (e CollectionEdges) BooksOrErr() ([]*Book, error) {
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -104,7 +116,7 @@ func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, 
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CollectionEdges) CategoryOrErr() (*Category, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Category == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: category.Label}
@@ -117,7 +129,7 @@ func (e CollectionEdges) CategoryOrErr() (*Category, error) {
 // AuthorsOrErr returns the Authors value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) AuthorsOrErr() ([]*Person, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Authors, nil
 	}
 	return nil, &NotLoadedError{edge: "authors"}
@@ -253,6 +265,11 @@ func (c *Collection) Value(name string) (ent.Value, error) {
 	return c.selectValues.Get(name)
 }
 
+// QueryArts queries the "arts" edge of the Collection entity.
+func (c *Collection) QueryArts() *ArtQuery {
+	return NewCollectionClient(c.config).QueryArts(c)
+}
+
 // QueryArtifacts queries the "artifacts" edge of the Collection entity.
 func (c *Collection) QueryArtifacts() *ArtifactQuery {
 	return NewCollectionClient(c.config).QueryArtifacts(c)
@@ -338,6 +355,30 @@ func (c *Collection) String() string {
 	builder.WriteString(fmt.Sprintf("%v", c.Type))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArts returns the Arts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Collection) NamedArts(name string) ([]*Art, error) {
+	if c.Edges.namedArts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedArts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Collection) appendNamedArts(name string, edges ...*Art) {
+	if c.Edges.namedArts == nil {
+		c.Edges.namedArts = make(map[string][]*Art)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedArts[name] = []*Art{}
+	} else {
+		c.Edges.namedArts[name] = append(c.Edges.namedArts[name], edges...)
+	}
 }
 
 // NamedArtifacts returns the Artifacts named value or an error if the edge was not

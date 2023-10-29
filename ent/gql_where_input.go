@@ -202,6 +202,61 @@ type ArtWhereInput struct {
 	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
 	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
 
+	// "number" field predicates.
+	Number             *string  `json:"number,omitempty"`
+	NumberNEQ          *string  `json:"numberNEQ,omitempty"`
+	NumberIn           []string `json:"numberIn,omitempty"`
+	NumberNotIn        []string `json:"numberNotIn,omitempty"`
+	NumberGT           *string  `json:"numberGT,omitempty"`
+	NumberGTE          *string  `json:"numberGTE,omitempty"`
+	NumberLT           *string  `json:"numberLT,omitempty"`
+	NumberLTE          *string  `json:"numberLTE,omitempty"`
+	NumberContains     *string  `json:"numberContains,omitempty"`
+	NumberHasPrefix    *string  `json:"numberHasPrefix,omitempty"`
+	NumberHasSuffix    *string  `json:"numberHasSuffix,omitempty"`
+	NumberIsNil        bool     `json:"numberIsNil,omitempty"`
+	NumberNotNil       bool     `json:"numberNotNil,omitempty"`
+	NumberEqualFold    *string  `json:"numberEqualFold,omitempty"`
+	NumberContainsFold *string  `json:"numberContainsFold,omitempty"`
+
+	// "dating" field predicates.
+	Dating             *string  `json:"dating,omitempty"`
+	DatingNEQ          *string  `json:"datingNEQ,omitempty"`
+	DatingIn           []string `json:"datingIn,omitempty"`
+	DatingNotIn        []string `json:"datingNotIn,omitempty"`
+	DatingGT           *string  `json:"datingGT,omitempty"`
+	DatingGTE          *string  `json:"datingGTE,omitempty"`
+	DatingLT           *string  `json:"datingLT,omitempty"`
+	DatingLTE          *string  `json:"datingLTE,omitempty"`
+	DatingContains     *string  `json:"datingContains,omitempty"`
+	DatingHasPrefix    *string  `json:"datingHasPrefix,omitempty"`
+	DatingHasSuffix    *string  `json:"datingHasSuffix,omitempty"`
+	DatingIsNil        bool     `json:"datingIsNil,omitempty"`
+	DatingNotNil       bool     `json:"datingNotNil,omitempty"`
+	DatingEqualFold    *string  `json:"datingEqualFold,omitempty"`
+	DatingContainsFold *string  `json:"datingContainsFold,omitempty"`
+
+	// "dimensions" field predicates.
+	Dimensions             *string  `json:"dimensions,omitempty"`
+	DimensionsNEQ          *string  `json:"dimensionsNEQ,omitempty"`
+	DimensionsIn           []string `json:"dimensionsIn,omitempty"`
+	DimensionsNotIn        []string `json:"dimensionsNotIn,omitempty"`
+	DimensionsGT           *string  `json:"dimensionsGT,omitempty"`
+	DimensionsGTE          *string  `json:"dimensionsGTE,omitempty"`
+	DimensionsLT           *string  `json:"dimensionsLT,omitempty"`
+	DimensionsLTE          *string  `json:"dimensionsLTE,omitempty"`
+	DimensionsContains     *string  `json:"dimensionsContains,omitempty"`
+	DimensionsHasPrefix    *string  `json:"dimensionsHasPrefix,omitempty"`
+	DimensionsHasSuffix    *string  `json:"dimensionsHasSuffix,omitempty"`
+	DimensionsIsNil        bool     `json:"dimensionsIsNil,omitempty"`
+	DimensionsNotNil       bool     `json:"dimensionsNotNil,omitempty"`
+	DimensionsEqualFold    *string  `json:"dimensionsEqualFold,omitempty"`
+	DimensionsContainsFold *string  `json:"dimensionsContainsFold,omitempty"`
+
+	// "author" edge predicates.
+	HasAuthor     *bool               `json:"hasAuthor,omitempty"`
+	HasAuthorWith []*PersonWhereInput `json:"hasAuthorWith,omitempty"`
+
 	// "art_genre" edge predicates.
 	HasArtGenre     *bool                 `json:"hasArtGenre,omitempty"`
 	HasArtGenreWith []*ArtGenreWhereInput `json:"hasArtGenreWith,omitempty"`
@@ -209,6 +264,14 @@ type ArtWhereInput struct {
 	// "art_style" edge predicates.
 	HasArtStyle     *bool                 `json:"hasArtStyle,omitempty"`
 	HasArtStyleWith []*ArtStyleWhereInput `json:"hasArtStyleWith,omitempty"`
+
+	// "mediums" edge predicates.
+	HasMediums     *bool               `json:"hasMediums,omitempty"`
+	HasMediumsWith []*MediumWhereInput `json:"hasMediumsWith,omitempty"`
+
+	// "collection" edge predicates.
+	HasCollection     *bool                   `json:"hasCollection,omitempty"`
+	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -669,7 +732,160 @@ func (i *ArtWhereInput) P() (predicate.Art, error) {
 	if i.PrimaryImageURLContainsFold != nil {
 		predicates = append(predicates, art.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
 	}
+	if i.Number != nil {
+		predicates = append(predicates, art.NumberEQ(*i.Number))
+	}
+	if i.NumberNEQ != nil {
+		predicates = append(predicates, art.NumberNEQ(*i.NumberNEQ))
+	}
+	if len(i.NumberIn) > 0 {
+		predicates = append(predicates, art.NumberIn(i.NumberIn...))
+	}
+	if len(i.NumberNotIn) > 0 {
+		predicates = append(predicates, art.NumberNotIn(i.NumberNotIn...))
+	}
+	if i.NumberGT != nil {
+		predicates = append(predicates, art.NumberGT(*i.NumberGT))
+	}
+	if i.NumberGTE != nil {
+		predicates = append(predicates, art.NumberGTE(*i.NumberGTE))
+	}
+	if i.NumberLT != nil {
+		predicates = append(predicates, art.NumberLT(*i.NumberLT))
+	}
+	if i.NumberLTE != nil {
+		predicates = append(predicates, art.NumberLTE(*i.NumberLTE))
+	}
+	if i.NumberContains != nil {
+		predicates = append(predicates, art.NumberContains(*i.NumberContains))
+	}
+	if i.NumberHasPrefix != nil {
+		predicates = append(predicates, art.NumberHasPrefix(*i.NumberHasPrefix))
+	}
+	if i.NumberHasSuffix != nil {
+		predicates = append(predicates, art.NumberHasSuffix(*i.NumberHasSuffix))
+	}
+	if i.NumberIsNil {
+		predicates = append(predicates, art.NumberIsNil())
+	}
+	if i.NumberNotNil {
+		predicates = append(predicates, art.NumberNotNil())
+	}
+	if i.NumberEqualFold != nil {
+		predicates = append(predicates, art.NumberEqualFold(*i.NumberEqualFold))
+	}
+	if i.NumberContainsFold != nil {
+		predicates = append(predicates, art.NumberContainsFold(*i.NumberContainsFold))
+	}
+	if i.Dating != nil {
+		predicates = append(predicates, art.DatingEQ(*i.Dating))
+	}
+	if i.DatingNEQ != nil {
+		predicates = append(predicates, art.DatingNEQ(*i.DatingNEQ))
+	}
+	if len(i.DatingIn) > 0 {
+		predicates = append(predicates, art.DatingIn(i.DatingIn...))
+	}
+	if len(i.DatingNotIn) > 0 {
+		predicates = append(predicates, art.DatingNotIn(i.DatingNotIn...))
+	}
+	if i.DatingGT != nil {
+		predicates = append(predicates, art.DatingGT(*i.DatingGT))
+	}
+	if i.DatingGTE != nil {
+		predicates = append(predicates, art.DatingGTE(*i.DatingGTE))
+	}
+	if i.DatingLT != nil {
+		predicates = append(predicates, art.DatingLT(*i.DatingLT))
+	}
+	if i.DatingLTE != nil {
+		predicates = append(predicates, art.DatingLTE(*i.DatingLTE))
+	}
+	if i.DatingContains != nil {
+		predicates = append(predicates, art.DatingContains(*i.DatingContains))
+	}
+	if i.DatingHasPrefix != nil {
+		predicates = append(predicates, art.DatingHasPrefix(*i.DatingHasPrefix))
+	}
+	if i.DatingHasSuffix != nil {
+		predicates = append(predicates, art.DatingHasSuffix(*i.DatingHasSuffix))
+	}
+	if i.DatingIsNil {
+		predicates = append(predicates, art.DatingIsNil())
+	}
+	if i.DatingNotNil {
+		predicates = append(predicates, art.DatingNotNil())
+	}
+	if i.DatingEqualFold != nil {
+		predicates = append(predicates, art.DatingEqualFold(*i.DatingEqualFold))
+	}
+	if i.DatingContainsFold != nil {
+		predicates = append(predicates, art.DatingContainsFold(*i.DatingContainsFold))
+	}
+	if i.Dimensions != nil {
+		predicates = append(predicates, art.DimensionsEQ(*i.Dimensions))
+	}
+	if i.DimensionsNEQ != nil {
+		predicates = append(predicates, art.DimensionsNEQ(*i.DimensionsNEQ))
+	}
+	if len(i.DimensionsIn) > 0 {
+		predicates = append(predicates, art.DimensionsIn(i.DimensionsIn...))
+	}
+	if len(i.DimensionsNotIn) > 0 {
+		predicates = append(predicates, art.DimensionsNotIn(i.DimensionsNotIn...))
+	}
+	if i.DimensionsGT != nil {
+		predicates = append(predicates, art.DimensionsGT(*i.DimensionsGT))
+	}
+	if i.DimensionsGTE != nil {
+		predicates = append(predicates, art.DimensionsGTE(*i.DimensionsGTE))
+	}
+	if i.DimensionsLT != nil {
+		predicates = append(predicates, art.DimensionsLT(*i.DimensionsLT))
+	}
+	if i.DimensionsLTE != nil {
+		predicates = append(predicates, art.DimensionsLTE(*i.DimensionsLTE))
+	}
+	if i.DimensionsContains != nil {
+		predicates = append(predicates, art.DimensionsContains(*i.DimensionsContains))
+	}
+	if i.DimensionsHasPrefix != nil {
+		predicates = append(predicates, art.DimensionsHasPrefix(*i.DimensionsHasPrefix))
+	}
+	if i.DimensionsHasSuffix != nil {
+		predicates = append(predicates, art.DimensionsHasSuffix(*i.DimensionsHasSuffix))
+	}
+	if i.DimensionsIsNil {
+		predicates = append(predicates, art.DimensionsIsNil())
+	}
+	if i.DimensionsNotNil {
+		predicates = append(predicates, art.DimensionsNotNil())
+	}
+	if i.DimensionsEqualFold != nil {
+		predicates = append(predicates, art.DimensionsEqualFold(*i.DimensionsEqualFold))
+	}
+	if i.DimensionsContainsFold != nil {
+		predicates = append(predicates, art.DimensionsContainsFold(*i.DimensionsContainsFold))
+	}
 
+	if i.HasAuthor != nil {
+		p := art.HasAuthor()
+		if !*i.HasAuthor {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAuthorWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasAuthorWith))
+		for _, w := range i.HasAuthorWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAuthorWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasAuthorWith(with...))
+	}
 	if i.HasArtGenre != nil {
 		p := art.HasArtGenre()
 		if !*i.HasArtGenre {
@@ -705,6 +921,42 @@ func (i *ArtWhereInput) P() (predicate.Art, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, art.HasArtStyleWith(with...))
+	}
+	if i.HasMediums != nil {
+		p := art.HasMediums()
+		if !*i.HasMediums {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMediumsWith) > 0 {
+		with := make([]predicate.Medium, 0, len(i.HasMediumsWith))
+		for _, w := range i.HasMediumsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMediumsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasMediumsWith(with...))
+	}
+	if i.HasCollection != nil {
+		p := art.HasCollection()
+		if !*i.HasCollection {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCollectionWith) > 0 {
+		with := make([]predicate.Collection, 0, len(i.HasCollectionWith))
+		for _, w := range i.HasCollectionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCollectionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasCollectionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -6299,6 +6551,10 @@ type CollectionWhereInput struct {
 	TypeIsNil  bool              `json:"typeIsNil,omitempty"`
 	TypeNotNil bool              `json:"typeNotNil,omitempty"`
 
+	// "arts" edge predicates.
+	HasArts     *bool            `json:"hasArts,omitempty"`
+	HasArtsWith []*ArtWhereInput `json:"hasArtsWith,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -6836,6 +7092,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 		predicates = append(predicates, collection.TypeNotNil())
 	}
 
+	if i.HasArts != nil {
+		p := collection.HasArts()
+		if !*i.HasArts {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtsWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtsWith))
+		for _, w := range i.HasArtsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasArtsWith(with...))
+	}
 	if i.HasArtifacts != nil {
 		p := collection.HasArtifacts()
 		if !*i.HasArtifacts {
@@ -10739,6 +11013,10 @@ type MediumWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "arts" edge predicates.
+	HasArts     *bool            `json:"hasArts,omitempty"`
+	HasArtsWith []*ArtWhereInput `json:"hasArtsWith,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -11158,6 +11436,24 @@ func (i *MediumWhereInput) P() (predicate.Medium, error) {
 		predicates = append(predicates, medium.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
+	if i.HasArts != nil {
+		p := medium.HasArts()
+		if !*i.HasArts {
+			p = medium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtsWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtsWith))
+		for _, w := range i.HasArtsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, medium.HasArtsWith(with...))
+	}
 	if i.HasArtifacts != nil {
 		p := medium.HasArtifacts()
 		if !*i.HasArtifacts {
@@ -14674,6 +14970,10 @@ type PersonWhereInput struct {
 	HasCollections     *bool                   `json:"hasCollections,omitempty"`
 	HasCollectionsWith []*CollectionWhereInput `json:"hasCollectionsWith,omitempty"`
 
+	// "arts" edge predicates.
+	HasArts     *bool            `json:"hasArts,omitempty"`
+	HasArtsWith []*ArtWhereInput `json:"hasArtsWith,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -15423,6 +15723,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, person.HasCollectionsWith(with...))
+	}
+	if i.HasArts != nil {
+		p := person.HasArts()
+		if !*i.HasArts {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtsWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtsWith))
+		for _, w := range i.HasArtsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasArtsWith(with...))
 	}
 	if i.HasArtifacts != nil {
 		p := person.HasArtifacts()

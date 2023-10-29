@@ -35,12 +35,31 @@ const (
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
 	FieldAdditionalImagesUrls = "additional_images_urls"
+	// FieldNumber holds the string denoting the number field in the database.
+	FieldNumber = "number"
+	// FieldDating holds the string denoting the dating field in the database.
+	FieldDating = "dating"
+	// FieldDimensions holds the string denoting the dimensions field in the database.
+	FieldDimensions = "dimensions"
+	// EdgeAuthor holds the string denoting the author edge name in mutations.
+	EdgeAuthor = "author"
 	// EdgeArtGenre holds the string denoting the art_genre edge name in mutations.
 	EdgeArtGenre = "art_genre"
 	// EdgeArtStyle holds the string denoting the art_style edge name in mutations.
 	EdgeArtStyle = "art_style"
+	// EdgeMediums holds the string denoting the mediums edge name in mutations.
+	EdgeMediums = "mediums"
+	// EdgeCollection holds the string denoting the collection edge name in mutations.
+	EdgeCollection = "collection"
 	// Table holds the table name of the art in the database.
 	Table = "arts"
+	// AuthorTable is the table that holds the author relation/edge.
+	AuthorTable = "arts"
+	// AuthorInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	AuthorInverseTable = "persons"
+	// AuthorColumn is the table column denoting the author relation/edge.
+	AuthorColumn = "person_arts"
 	// ArtGenreTable is the table that holds the art_genre relation/edge. The primary key declared below.
 	ArtGenreTable = "art_genre_art"
 	// ArtGenreInverseTable is the table name for the ArtGenre entity.
@@ -51,6 +70,18 @@ const (
 	// ArtStyleInverseTable is the table name for the ArtStyle entity.
 	// It exists in this package in order to avoid circular dependency with the "artstyle" package.
 	ArtStyleInverseTable = "art_styles"
+	// MediumsTable is the table that holds the mediums relation/edge. The primary key declared below.
+	MediumsTable = "medium_arts"
+	// MediumsInverseTable is the table name for the Medium entity.
+	// It exists in this package in order to avoid circular dependency with the "medium" package.
+	MediumsInverseTable = "media"
+	// CollectionTable is the table that holds the collection relation/edge.
+	CollectionTable = "arts"
+	// CollectionInverseTable is the table name for the Collection entity.
+	// It exists in this package in order to avoid circular dependency with the "collection" package.
+	CollectionInverseTable = "collections"
+	// CollectionColumn is the table column denoting the collection relation/edge.
+	CollectionColumn = "collection_arts"
 )
 
 // Columns holds all SQL columns for art fields.
@@ -66,6 +97,16 @@ var Columns = []string{
 	FieldExternalLink,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
+	FieldNumber,
+	FieldDating,
+	FieldDimensions,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "arts"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"collection_arts",
+	"person_arts",
 }
 
 var (
@@ -75,12 +116,20 @@ var (
 	// ArtStylePrimaryKey and ArtStyleColumn2 are the table columns denoting the
 	// primary key for the art_style relation (M2M).
 	ArtStylePrimaryKey = []string{"art_style_id", "art_id"}
+	// MediumsPrimaryKey and MediumsColumn2 are the table columns denoting the
+	// primary key for the mediums relation (M2M).
+	MediumsPrimaryKey = []string{"medium_id", "art_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -156,6 +205,28 @@ func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
 }
 
+// ByNumber orders the results by the number field.
+func ByNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+}
+
+// ByDating orders the results by the dating field.
+func ByDating(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDating, opts...).ToFunc()
+}
+
+// ByDimensions orders the results by the dimensions field.
+func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
+}
+
+// ByAuthorField orders the results by author field.
+func ByAuthorField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAuthorStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByArtGenreCount orders the results by art_genre count.
 func ByArtGenreCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -183,6 +254,34 @@ func ByArtStyle(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newArtStyleStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMediumsCount orders the results by mediums count.
+func ByMediumsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMediumsStep(), opts...)
+	}
+}
+
+// ByMediums orders the results by mediums terms.
+func ByMediums(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMediumsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCollectionField orders the results by collection field.
+func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCollectionStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newAuthorStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AuthorInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, AuthorTable, AuthorColumn),
+	)
+}
 func newArtGenreStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -195,5 +294,19 @@ func newArtStyleStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtStyleInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ArtStyleTable, ArtStylePrimaryKey...),
+	)
+}
+func newMediumsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MediumsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, MediumsTable, MediumsPrimaryKey...),
+	)
+}
+func newCollectionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CollectionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
 	)
 }

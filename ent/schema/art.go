@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
@@ -49,10 +50,22 @@ func (Art) Annotations() []schema.Annotation {
 	}
 }
 
+// Fields of the Art.
+func (Art) Fields() []ent.Field {
+	return []ent.Field{
+		field.String("number").Optional(),
+		field.String("dating").Optional(),
+		field.String("dimensions").Optional(),
+	}
+}
+
 // Edges of the Art.
 func (Art) Edges() []ent.Edge {
 	return []ent.Edge{
+		edge.From("author", Person.Type).Ref("arts").Unique(),
 		edge.From("art_genre", ArtGenre.Type).Ref("art"),
 		edge.From("art_style", ArtStyle.Type).Ref("art"),
+		edge.From("mediums", Medium.Type).Ref("arts"),
+		edge.From("collection", Collection.Type).Ref("arts").Unique().Required(),
 	}
 }

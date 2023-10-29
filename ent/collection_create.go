@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/category"
@@ -175,6 +176,21 @@ func (cc *CollectionCreate) SetNillableType(c *collection.Type) *CollectionCreat
 		cc.SetType(*c)
 	}
 	return cc
+}
+
+// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+func (cc *CollectionCreate) AddArtIDs(ids ...int) *CollectionCreate {
+	cc.mutation.AddArtIDs(ids...)
+	return cc
+}
+
+// AddArts adds the "arts" edges to the Art entity.
+func (cc *CollectionCreate) AddArts(a ...*Art) *CollectionCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cc.AddArtIDs(ids...)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
@@ -394,6 +410,22 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.GetType(); ok {
 		_spec.SetField(collection.FieldType, field.TypeEnum, value)
 		_node.Type = value
+	}
+	if nodes := cc.mutation.ArtsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.ArtsTable,
+			Columns: []string{collection.ArtsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -8,6 +8,14 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+func (a *Art) Author(ctx context.Context) (*Person, error) {
+	result, err := a.Edges.AuthorOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryAuthor().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (a *Art) ArtGenre(ctx context.Context) (result []*ArtGenre, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = a.NamedArtGenre(graphql.GetFieldContext(ctx).Field.Alias)
@@ -28,6 +36,26 @@ func (a *Art) ArtStyle(ctx context.Context) (result []*ArtStyle, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = a.QueryArtStyle().All(ctx)
+	}
+	return result, err
+}
+
+func (a *Art) Mediums(ctx context.Context) (result []*Medium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = a.NamedMediums(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = a.Edges.MediumsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = a.QueryMediums().All(ctx)
+	}
+	return result, err
+}
+
+func (a *Art) Collection(ctx context.Context) (*Collection, error) {
+	result, err := a.Edges.CollectionOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryCollection().Only(ctx)
 	}
 	return result, err
 }
@@ -284,6 +312,18 @@ func (c *Category) Collections(ctx context.Context) (result []*Collection, err e
 	return result, err
 }
 
+func (c *Collection) Arts(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedArts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ArtsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryArts().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Collection) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -492,6 +532,18 @@ func (l *Location) Region(ctx context.Context) (*Region, error) {
 	return result, MaskNotFound(err)
 }
 
+func (m *Medium) Arts(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = m.NamedArts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = m.Edges.ArtsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = m.QueryArts().All(ctx)
+	}
+	return result, err
+}
+
 func (m *Medium) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = m.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -596,6 +648,18 @@ func (pe *Person) Collections(ctx context.Context) (result []*Collection, err er
 	}
 	if IsNotLoaded(err) {
 		result, err = pe.QueryCollections().All(ctx)
+	}
+	return result, err
+}
+
+func (pe *Person) Arts(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedArts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.ArtsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryArts().All(ctx)
 	}
 	return result, err
 }

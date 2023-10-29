@@ -41,21 +41,33 @@ type Medium struct {
 
 // MediumEdges holds the relations/edges for other nodes in the graph.
 type MediumEdges struct {
+	// Arts holds the value of the arts edge.
+	Arts []*Art `json:"arts,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 
+	namedArts      map[string][]*Art
 	namedArtifacts map[string][]*Artifact
+}
+
+// ArtsOrErr returns the Arts value or an error if the edge
+// was not loaded in eager-loading.
+func (e MediumEdges) ArtsOrErr() ([]*Art, error) {
+	if e.loadedTypes[0] {
+		return e.Arts, nil
+	}
+	return nil, &NotLoadedError{edge: "arts"}
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e MediumEdges) ArtifactsOrErr() ([]*Artifact, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
@@ -154,6 +166,11 @@ func (m *Medium) Value(name string) (ent.Value, error) {
 	return m.selectValues.Get(name)
 }
 
+// QueryArts queries the "arts" edge of the Medium entity.
+func (m *Medium) QueryArts() *ArtQuery {
+	return NewMediumClient(m.config).QueryArts(m)
+}
+
 // QueryArtifacts queries the "artifacts" edge of the Medium entity.
 func (m *Medium) QueryArtifacts() *ArtifactQuery {
 	return NewMediumClient(m.config).QueryArtifacts(m)
@@ -207,6 +224,30 @@ func (m *Medium) String() string {
 	builder.WriteString(m.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArts returns the Arts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (m *Medium) NamedArts(name string) ([]*Art, error) {
+	if m.Edges.namedArts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := m.Edges.namedArts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (m *Medium) appendNamedArts(name string, edges ...*Art) {
+	if m.Edges.namedArts == nil {
+		m.Edges.namedArts = make(map[string][]*Art)
+	}
+	if len(edges) == 0 {
+		m.Edges.namedArts[name] = []*Art{}
+	} else {
+		m.Edges.namedArts[name] = append(m.Edges.namedArts[name], edges...)
+	}
 }
 
 // NamedArtifacts returns the Artifacts named value or an error if the edge was not

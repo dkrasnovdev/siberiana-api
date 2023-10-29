@@ -112,13 +112,23 @@ type ArtMutation struct {
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
+	number                       *string
+	dating                       *string
+	dimensions                   *string
 	clearedFields                map[string]struct{}
+	author                       *int
+	clearedauthor                bool
 	art_genre                    map[int]struct{}
 	removedart_genre             map[int]struct{}
 	clearedart_genre             bool
 	art_style                    map[int]struct{}
 	removedart_style             map[int]struct{}
 	clearedart_style             bool
+	mediums                      map[int]struct{}
+	removedmediums               map[int]struct{}
+	clearedmediums               bool
+	collection                   *int
+	clearedcollection            bool
 	done                         bool
 	oldValue                     func(context.Context) (*Art, error)
 	predicates                   []predicate.Art
@@ -702,6 +712,192 @@ func (m *ArtMutation) ResetAdditionalImagesUrls() {
 	delete(m.clearedFields, art.FieldAdditionalImagesUrls)
 }
 
+// SetNumber sets the "number" field.
+func (m *ArtMutation) SetNumber(s string) {
+	m.number = &s
+}
+
+// Number returns the value of the "number" field in the mutation.
+func (m *ArtMutation) Number() (r string, exists bool) {
+	v := m.number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumber returns the old "number" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+	}
+	return oldValue.Number, nil
+}
+
+// ClearNumber clears the value of the "number" field.
+func (m *ArtMutation) ClearNumber() {
+	m.number = nil
+	m.clearedFields[art.FieldNumber] = struct{}{}
+}
+
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *ArtMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[art.FieldNumber]
+	return ok
+}
+
+// ResetNumber resets all changes to the "number" field.
+func (m *ArtMutation) ResetNumber() {
+	m.number = nil
+	delete(m.clearedFields, art.FieldNumber)
+}
+
+// SetDating sets the "dating" field.
+func (m *ArtMutation) SetDating(s string) {
+	m.dating = &s
+}
+
+// Dating returns the value of the "dating" field in the mutation.
+func (m *ArtMutation) Dating() (r string, exists bool) {
+	v := m.dating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDating returns the old "dating" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDating(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDating is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDating: %w", err)
+	}
+	return oldValue.Dating, nil
+}
+
+// ClearDating clears the value of the "dating" field.
+func (m *ArtMutation) ClearDating() {
+	m.dating = nil
+	m.clearedFields[art.FieldDating] = struct{}{}
+}
+
+// DatingCleared returns if the "dating" field was cleared in this mutation.
+func (m *ArtMutation) DatingCleared() bool {
+	_, ok := m.clearedFields[art.FieldDating]
+	return ok
+}
+
+// ResetDating resets all changes to the "dating" field.
+func (m *ArtMutation) ResetDating() {
+	m.dating = nil
+	delete(m.clearedFields, art.FieldDating)
+}
+
+// SetDimensions sets the "dimensions" field.
+func (m *ArtMutation) SetDimensions(s string) {
+	m.dimensions = &s
+}
+
+// Dimensions returns the value of the "dimensions" field in the mutation.
+func (m *ArtMutation) Dimensions() (r string, exists bool) {
+	v := m.dimensions
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDimensions returns the old "dimensions" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDimensions(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDimensions is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDimensions requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDimensions: %w", err)
+	}
+	return oldValue.Dimensions, nil
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (m *ArtMutation) ClearDimensions() {
+	m.dimensions = nil
+	m.clearedFields[art.FieldDimensions] = struct{}{}
+}
+
+// DimensionsCleared returns if the "dimensions" field was cleared in this mutation.
+func (m *ArtMutation) DimensionsCleared() bool {
+	_, ok := m.clearedFields[art.FieldDimensions]
+	return ok
+}
+
+// ResetDimensions resets all changes to the "dimensions" field.
+func (m *ArtMutation) ResetDimensions() {
+	m.dimensions = nil
+	delete(m.clearedFields, art.FieldDimensions)
+}
+
+// SetAuthorID sets the "author" edge to the Person entity by id.
+func (m *ArtMutation) SetAuthorID(id int) {
+	m.author = &id
+}
+
+// ClearAuthor clears the "author" edge to the Person entity.
+func (m *ArtMutation) ClearAuthor() {
+	m.clearedauthor = true
+}
+
+// AuthorCleared reports if the "author" edge to the Person entity was cleared.
+func (m *ArtMutation) AuthorCleared() bool {
+	return m.clearedauthor
+}
+
+// AuthorID returns the "author" edge ID in the mutation.
+func (m *ArtMutation) AuthorID() (id int, exists bool) {
+	if m.author != nil {
+		return *m.author, true
+	}
+	return
+}
+
+// AuthorIDs returns the "author" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AuthorID instead. It exists only for internal usage by the builders.
+func (m *ArtMutation) AuthorIDs() (ids []int) {
+	if id := m.author; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAuthor resets all changes to the "author" edge.
+func (m *ArtMutation) ResetAuthor() {
+	m.author = nil
+	m.clearedauthor = false
+}
+
 // AddArtGenreIDs adds the "art_genre" edge to the ArtGenre entity by ids.
 func (m *ArtMutation) AddArtGenreIDs(ids ...int) {
 	if m.art_genre == nil {
@@ -810,6 +1006,99 @@ func (m *ArtMutation) ResetArtStyle() {
 	m.removedart_style = nil
 }
 
+// AddMediumIDs adds the "mediums" edge to the Medium entity by ids.
+func (m *ArtMutation) AddMediumIDs(ids ...int) {
+	if m.mediums == nil {
+		m.mediums = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.mediums[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMediums clears the "mediums" edge to the Medium entity.
+func (m *ArtMutation) ClearMediums() {
+	m.clearedmediums = true
+}
+
+// MediumsCleared reports if the "mediums" edge to the Medium entity was cleared.
+func (m *ArtMutation) MediumsCleared() bool {
+	return m.clearedmediums
+}
+
+// RemoveMediumIDs removes the "mediums" edge to the Medium entity by IDs.
+func (m *ArtMutation) RemoveMediumIDs(ids ...int) {
+	if m.removedmediums == nil {
+		m.removedmediums = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.mediums, ids[i])
+		m.removedmediums[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMediums returns the removed IDs of the "mediums" edge to the Medium entity.
+func (m *ArtMutation) RemovedMediumsIDs() (ids []int) {
+	for id := range m.removedmediums {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MediumsIDs returns the "mediums" edge IDs in the mutation.
+func (m *ArtMutation) MediumsIDs() (ids []int) {
+	for id := range m.mediums {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMediums resets all changes to the "mediums" edge.
+func (m *ArtMutation) ResetMediums() {
+	m.mediums = nil
+	m.clearedmediums = false
+	m.removedmediums = nil
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by id.
+func (m *ArtMutation) SetCollectionID(id int) {
+	m.collection = &id
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (m *ArtMutation) ClearCollection() {
+	m.clearedcollection = true
+}
+
+// CollectionCleared reports if the "collection" edge to the Collection entity was cleared.
+func (m *ArtMutation) CollectionCleared() bool {
+	return m.clearedcollection
+}
+
+// CollectionID returns the "collection" edge ID in the mutation.
+func (m *ArtMutation) CollectionID() (id int, exists bool) {
+	if m.collection != nil {
+		return *m.collection, true
+	}
+	return
+}
+
+// CollectionIDs returns the "collection" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CollectionID instead. It exists only for internal usage by the builders.
+func (m *ArtMutation) CollectionIDs() (ids []int) {
+	if id := m.collection; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCollection resets all changes to the "collection" edge.
+func (m *ArtMutation) ResetCollection() {
+	m.collection = nil
+	m.clearedcollection = false
+}
+
 // Where appends a list predicates to the ArtMutation builder.
 func (m *ArtMutation) Where(ps ...predicate.Art) {
 	m.predicates = append(m.predicates, ps...)
@@ -844,7 +1133,7 @@ func (m *ArtMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, art.FieldCreatedAt)
 	}
@@ -875,6 +1164,15 @@ func (m *ArtMutation) Fields() []string {
 	if m.additional_images_urls != nil {
 		fields = append(fields, art.FieldAdditionalImagesUrls)
 	}
+	if m.number != nil {
+		fields = append(fields, art.FieldNumber)
+	}
+	if m.dating != nil {
+		fields = append(fields, art.FieldDating)
+	}
+	if m.dimensions != nil {
+		fields = append(fields, art.FieldDimensions)
+	}
 	return fields
 }
 
@@ -903,6 +1201,12 @@ func (m *ArtMutation) Field(name string) (ent.Value, bool) {
 		return m.PrimaryImageURL()
 	case art.FieldAdditionalImagesUrls:
 		return m.AdditionalImagesUrls()
+	case art.FieldNumber:
+		return m.Number()
+	case art.FieldDating:
+		return m.Dating()
+	case art.FieldDimensions:
+		return m.Dimensions()
 	}
 	return nil, false
 }
@@ -932,6 +1236,12 @@ func (m *ArtMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldPrimaryImageURL(ctx)
 	case art.FieldAdditionalImagesUrls:
 		return m.OldAdditionalImagesUrls(ctx)
+	case art.FieldNumber:
+		return m.OldNumber(ctx)
+	case art.FieldDating:
+		return m.OldDating(ctx)
+	case art.FieldDimensions:
+		return m.OldDimensions(ctx)
 	}
 	return nil, fmt.Errorf("unknown Art field %s", name)
 }
@@ -1011,6 +1321,27 @@ func (m *ArtMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalImagesUrls(v)
 		return nil
+	case art.FieldNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumber(v)
+		return nil
+	case art.FieldDating:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDating(v)
+		return nil
+	case art.FieldDimensions:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDimensions(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Art field %s", name)
 }
@@ -1065,6 +1396,15 @@ func (m *ArtMutation) ClearedFields() []string {
 	if m.FieldCleared(art.FieldAdditionalImagesUrls) {
 		fields = append(fields, art.FieldAdditionalImagesUrls)
 	}
+	if m.FieldCleared(art.FieldNumber) {
+		fields = append(fields, art.FieldNumber)
+	}
+	if m.FieldCleared(art.FieldDating) {
+		fields = append(fields, art.FieldDating)
+	}
+	if m.FieldCleared(art.FieldDimensions) {
+		fields = append(fields, art.FieldDimensions)
+	}
 	return fields
 }
 
@@ -1102,6 +1442,15 @@ func (m *ArtMutation) ClearField(name string) error {
 		return nil
 	case art.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
+		return nil
+	case art.FieldNumber:
+		m.ClearNumber()
+		return nil
+	case art.FieldDating:
+		m.ClearDating()
+		return nil
+	case art.FieldDimensions:
+		m.ClearDimensions()
 		return nil
 	}
 	return fmt.Errorf("unknown Art nullable field %s", name)
@@ -1141,18 +1490,36 @@ func (m *ArtMutation) ResetField(name string) error {
 	case art.FieldAdditionalImagesUrls:
 		m.ResetAdditionalImagesUrls()
 		return nil
+	case art.FieldNumber:
+		m.ResetNumber()
+		return nil
+	case art.FieldDating:
+		m.ResetDating()
+		return nil
+	case art.FieldDimensions:
+		m.ResetDimensions()
+		return nil
 	}
 	return fmt.Errorf("unknown Art field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 5)
+	if m.author != nil {
+		edges = append(edges, art.EdgeAuthor)
+	}
 	if m.art_genre != nil {
 		edges = append(edges, art.EdgeArtGenre)
 	}
 	if m.art_style != nil {
 		edges = append(edges, art.EdgeArtStyle)
+	}
+	if m.mediums != nil {
+		edges = append(edges, art.EdgeMediums)
+	}
+	if m.collection != nil {
+		edges = append(edges, art.EdgeCollection)
 	}
 	return edges
 }
@@ -1161,6 +1528,10 @@ func (m *ArtMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ArtMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case art.EdgeAuthor:
+		if id := m.author; id != nil {
+			return []ent.Value{*id}
+		}
 	case art.EdgeArtGenre:
 		ids := make([]ent.Value, 0, len(m.art_genre))
 		for id := range m.art_genre {
@@ -1173,18 +1544,31 @@ func (m *ArtMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case art.EdgeMediums:
+		ids := make([]ent.Value, 0, len(m.mediums))
+		for id := range m.mediums {
+			ids = append(ids, id)
+		}
+		return ids
+	case art.EdgeCollection:
+		if id := m.collection; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 5)
 	if m.removedart_genre != nil {
 		edges = append(edges, art.EdgeArtGenre)
 	}
 	if m.removedart_style != nil {
 		edges = append(edges, art.EdgeArtStyle)
+	}
+	if m.removedmediums != nil {
+		edges = append(edges, art.EdgeMediums)
 	}
 	return edges
 }
@@ -1205,18 +1589,33 @@ func (m *ArtMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case art.EdgeMediums:
+		ids := make([]ent.Value, 0, len(m.removedmediums))
+		for id := range m.removedmediums {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 5)
+	if m.clearedauthor {
+		edges = append(edges, art.EdgeAuthor)
+	}
 	if m.clearedart_genre {
 		edges = append(edges, art.EdgeArtGenre)
 	}
 	if m.clearedart_style {
 		edges = append(edges, art.EdgeArtStyle)
+	}
+	if m.clearedmediums {
+		edges = append(edges, art.EdgeMediums)
+	}
+	if m.clearedcollection {
+		edges = append(edges, art.EdgeCollection)
 	}
 	return edges
 }
@@ -1225,10 +1624,16 @@ func (m *ArtMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ArtMutation) EdgeCleared(name string) bool {
 	switch name {
+	case art.EdgeAuthor:
+		return m.clearedauthor
 	case art.EdgeArtGenre:
 		return m.clearedart_genre
 	case art.EdgeArtStyle:
 		return m.clearedart_style
+	case art.EdgeMediums:
+		return m.clearedmediums
+	case art.EdgeCollection:
+		return m.clearedcollection
 	}
 	return false
 }
@@ -1237,6 +1642,12 @@ func (m *ArtMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *ArtMutation) ClearEdge(name string) error {
 	switch name {
+	case art.EdgeAuthor:
+		m.ClearAuthor()
+		return nil
+	case art.EdgeCollection:
+		m.ClearCollection()
+		return nil
 	}
 	return fmt.Errorf("unknown Art unique edge %s", name)
 }
@@ -1245,11 +1656,20 @@ func (m *ArtMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ArtMutation) ResetEdge(name string) error {
 	switch name {
+	case art.EdgeAuthor:
+		m.ResetAuthor()
+		return nil
 	case art.EdgeArtGenre:
 		m.ResetArtGenre()
 		return nil
 	case art.EdgeArtStyle:
 		m.ResetArtStyle()
+		return nil
+	case art.EdgeMediums:
+		m.ResetMediums()
+		return nil
+	case art.EdgeCollection:
+		m.ResetCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown Art edge %s", name)
@@ -11161,6 +11581,9 @@ type CollectionMutation struct {
 	slug                           *string
 	_type                          *collection.Type
 	clearedFields                  map[string]struct{}
+	arts                           map[int]struct{}
+	removedarts                    map[int]struct{}
+	clearedarts                    bool
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
 	clearedartifacts               bool
@@ -11843,6 +12266,60 @@ func (m *CollectionMutation) ResetType() {
 	delete(m.clearedFields, collection.FieldType)
 }
 
+// AddArtIDs adds the "arts" edge to the Art entity by ids.
+func (m *CollectionMutation) AddArtIDs(ids ...int) {
+	if m.arts == nil {
+		m.arts = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.arts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArts clears the "arts" edge to the Art entity.
+func (m *CollectionMutation) ClearArts() {
+	m.clearedarts = true
+}
+
+// ArtsCleared reports if the "arts" edge to the Art entity was cleared.
+func (m *CollectionMutation) ArtsCleared() bool {
+	return m.clearedarts
+}
+
+// RemoveArtIDs removes the "arts" edge to the Art entity by IDs.
+func (m *CollectionMutation) RemoveArtIDs(ids ...int) {
+	if m.removedarts == nil {
+		m.removedarts = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.arts, ids[i])
+		m.removedarts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArts returns the removed IDs of the "arts" edge to the Art entity.
+func (m *CollectionMutation) RemovedArtsIDs() (ids []int) {
+	for id := range m.removedarts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtsIDs returns the "arts" edge IDs in the mutation.
+func (m *CollectionMutation) ArtsIDs() (ids []int) {
+	for id := range m.arts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArts resets all changes to the "arts" edge.
+func (m *CollectionMutation) ResetArts() {
+	m.arts = nil
+	m.clearedarts = false
+	m.removedarts = nil
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *CollectionMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -12475,7 +12952,10 @@ func (m *CollectionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CollectionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
+	if m.arts != nil {
+		edges = append(edges, collection.EdgeArts)
+	}
 	if m.artifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
 	}
@@ -12498,6 +12978,12 @@ func (m *CollectionMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case collection.EdgeArts:
+		ids := make([]ent.Value, 0, len(m.arts))
+		for id := range m.arts {
+			ids = append(ids, id)
+		}
+		return ids
 	case collection.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.artifacts))
 		for id := range m.artifacts {
@@ -12532,7 +13018,10 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CollectionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
+	if m.removedarts != nil {
+		edges = append(edges, collection.EdgeArts)
+	}
 	if m.removedartifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
 	}
@@ -12552,6 +13041,12 @@ func (m *CollectionMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case collection.EdgeArts:
+		ids := make([]ent.Value, 0, len(m.removedarts))
+		for id := range m.removedarts {
+			ids = append(ids, id)
+		}
+		return ids
 	case collection.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.removedartifacts))
 		for id := range m.removedartifacts {
@@ -12582,7 +13077,10 @@ func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CollectionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
+	if m.clearedarts {
+		edges = append(edges, collection.EdgeArts)
+	}
 	if m.clearedartifacts {
 		edges = append(edges, collection.EdgeArtifacts)
 	}
@@ -12605,6 +13103,8 @@ func (m *CollectionMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *CollectionMutation) EdgeCleared(name string) bool {
 	switch name {
+	case collection.EdgeArts:
+		return m.clearedarts
 	case collection.EdgeArtifacts:
 		return m.clearedartifacts
 	case collection.EdgeBooks:
@@ -12634,6 +13134,9 @@ func (m *CollectionMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *CollectionMutation) ResetEdge(name string) error {
 	switch name {
+	case collection.EdgeArts:
+		m.ResetArts()
+		return nil
 	case collection.EdgeArtifacts:
 		m.ResetArtifacts()
 		return nil
@@ -18819,6 +19322,9 @@ type MediumMutation struct {
 	description      *string
 	external_link    *string
 	clearedFields    map[string]struct{}
+	arts             map[int]struct{}
+	removedarts      map[int]struct{}
+	clearedarts      bool
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
 	clearedartifacts bool
@@ -19291,6 +19797,60 @@ func (m *MediumMutation) ResetExternalLink() {
 	delete(m.clearedFields, medium.FieldExternalLink)
 }
 
+// AddArtIDs adds the "arts" edge to the Art entity by ids.
+func (m *MediumMutation) AddArtIDs(ids ...int) {
+	if m.arts == nil {
+		m.arts = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.arts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArts clears the "arts" edge to the Art entity.
+func (m *MediumMutation) ClearArts() {
+	m.clearedarts = true
+}
+
+// ArtsCleared reports if the "arts" edge to the Art entity was cleared.
+func (m *MediumMutation) ArtsCleared() bool {
+	return m.clearedarts
+}
+
+// RemoveArtIDs removes the "arts" edge to the Art entity by IDs.
+func (m *MediumMutation) RemoveArtIDs(ids ...int) {
+	if m.removedarts == nil {
+		m.removedarts = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.arts, ids[i])
+		m.removedarts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArts returns the removed IDs of the "arts" edge to the Art entity.
+func (m *MediumMutation) RemovedArtsIDs() (ids []int) {
+	for id := range m.removedarts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtsIDs returns the "arts" edge IDs in the mutation.
+func (m *MediumMutation) ArtsIDs() (ids []int) {
+	for id := range m.arts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArts resets all changes to the "arts" edge.
+func (m *MediumMutation) ResetArts() {
+	m.arts = nil
+	m.clearedarts = false
+	m.removedarts = nil
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *MediumMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -19636,7 +20196,10 @@ func (m *MediumMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *MediumMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.arts != nil {
+		edges = append(edges, medium.EdgeArts)
+	}
 	if m.artifacts != nil {
 		edges = append(edges, medium.EdgeArtifacts)
 	}
@@ -19647,6 +20210,12 @@ func (m *MediumMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *MediumMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case medium.EdgeArts:
+		ids := make([]ent.Value, 0, len(m.arts))
+		for id := range m.arts {
+			ids = append(ids, id)
+		}
+		return ids
 	case medium.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.artifacts))
 		for id := range m.artifacts {
@@ -19659,7 +20228,10 @@ func (m *MediumMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *MediumMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.removedarts != nil {
+		edges = append(edges, medium.EdgeArts)
+	}
 	if m.removedartifacts != nil {
 		edges = append(edges, medium.EdgeArtifacts)
 	}
@@ -19670,6 +20242,12 @@ func (m *MediumMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *MediumMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
+	case medium.EdgeArts:
+		ids := make([]ent.Value, 0, len(m.removedarts))
+		for id := range m.removedarts {
+			ids = append(ids, id)
+		}
+		return ids
 	case medium.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.removedartifacts))
 		for id := range m.removedartifacts {
@@ -19682,7 +20260,10 @@ func (m *MediumMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *MediumMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.clearedarts {
+		edges = append(edges, medium.EdgeArts)
+	}
 	if m.clearedartifacts {
 		edges = append(edges, medium.EdgeArtifacts)
 	}
@@ -19693,6 +20274,8 @@ func (m *MediumMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *MediumMutation) EdgeCleared(name string) bool {
 	switch name {
+	case medium.EdgeArts:
+		return m.clearedarts
 	case medium.EdgeArtifacts:
 		return m.clearedartifacts
 	}
@@ -19711,6 +20294,9 @@ func (m *MediumMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *MediumMutation) ResetEdge(name string) error {
 	switch name {
+	case medium.EdgeArts:
+		m.ResetArts()
+		return nil
 	case medium.EdgeArtifacts:
 		m.ResetArtifacts()
 		return nil
@@ -25284,6 +25870,9 @@ type PersonMutation struct {
 	collections                  map[int]struct{}
 	removedcollections           map[int]struct{}
 	clearedcollections           bool
+	arts                         map[int]struct{}
+	removedarts                  map[int]struct{}
+	clearedarts                  bool
 	artifacts                    map[int]struct{}
 	removedartifacts             map[int]struct{}
 	clearedartifacts             bool
@@ -26395,6 +26984,60 @@ func (m *PersonMutation) ResetCollections() {
 	m.removedcollections = nil
 }
 
+// AddArtIDs adds the "arts" edge to the Art entity by ids.
+func (m *PersonMutation) AddArtIDs(ids ...int) {
+	if m.arts == nil {
+		m.arts = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.arts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArts clears the "arts" edge to the Art entity.
+func (m *PersonMutation) ClearArts() {
+	m.clearedarts = true
+}
+
+// ArtsCleared reports if the "arts" edge to the Art entity was cleared.
+func (m *PersonMutation) ArtsCleared() bool {
+	return m.clearedarts
+}
+
+// RemoveArtIDs removes the "arts" edge to the Art entity by IDs.
+func (m *PersonMutation) RemoveArtIDs(ids ...int) {
+	if m.removedarts == nil {
+		m.removedarts = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.arts, ids[i])
+		m.removedarts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArts returns the removed IDs of the "arts" edge to the Art entity.
+func (m *PersonMutation) RemovedArtsIDs() (ids []int) {
+	for id := range m.removedarts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtsIDs returns the "arts" edge IDs in the mutation.
+func (m *PersonMutation) ArtsIDs() (ids []int) {
+	for id := range m.arts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArts resets all changes to the "arts" edge.
+func (m *PersonMutation) ResetArts() {
+	m.arts = nil
+	m.clearedarts = false
+	m.removedarts = nil
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *PersonMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -27188,9 +27831,12 @@ func (m *PersonMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.collections != nil {
 		edges = append(edges, person.EdgeCollections)
+	}
+	if m.arts != nil {
+		edges = append(edges, person.EdgeArts)
 	}
 	if m.artifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
@@ -27217,6 +27863,12 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 	case person.EdgeCollections:
 		ids := make([]ent.Value, 0, len(m.collections))
 		for id := range m.collections {
+			ids = append(ids, id)
+		}
+		return ids
+	case person.EdgeArts:
+		ids := make([]ent.Value, 0, len(m.arts))
+		for id := range m.arts {
 			ids = append(ids, id)
 		}
 		return ids
@@ -27254,9 +27906,12 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedcollections != nil {
 		edges = append(edges, person.EdgeCollections)
+	}
+	if m.removedarts != nil {
+		edges = append(edges, person.EdgeArts)
 	}
 	if m.removedartifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
@@ -27280,6 +27935,12 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 	case person.EdgeCollections:
 		ids := make([]ent.Value, 0, len(m.removedcollections))
 		for id := range m.removedcollections {
+			ids = append(ids, id)
+		}
+		return ids
+	case person.EdgeArts:
+		ids := make([]ent.Value, 0, len(m.removedarts))
+		for id := range m.removedarts {
 			ids = append(ids, id)
 		}
 		return ids
@@ -27313,9 +27974,12 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedcollections {
 		edges = append(edges, person.EdgeCollections)
+	}
+	if m.clearedarts {
+		edges = append(edges, person.EdgeArts)
 	}
 	if m.clearedartifacts {
 		edges = append(edges, person.EdgeArtifacts)
@@ -27341,6 +28005,8 @@ func (m *PersonMutation) EdgeCleared(name string) bool {
 	switch name {
 	case person.EdgeCollections:
 		return m.clearedcollections
+	case person.EdgeArts:
+		return m.clearedarts
 	case person.EdgeArtifacts:
 		return m.clearedartifacts
 	case person.EdgeBooks:
@@ -27372,6 +28038,9 @@ func (m *PersonMutation) ResetEdge(name string) error {
 	switch name {
 	case person.EdgeCollections:
 		m.ResetCollections()
+		return nil
+	case person.EdgeArts:
+		m.ResetArts()
 		return nil
 	case person.EdgeArtifacts:
 		m.ResetArtifacts()

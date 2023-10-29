@@ -815,6 +815,29 @@ func TypeNotNil() predicate.Collection {
 	return predicate.Collection(sql.FieldNotNull(FieldType))
 }
 
+// HasArts applies the HasEdge predicate on the "arts" edge.
+func HasArts() predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ArtsTable, ArtsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtsWith applies the HasEdge predicate on the "arts" edge with a given conditions (other predicates).
+func HasArtsWith(preds ...predicate.Art) predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := newArtsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.
 func HasArtifacts() predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {

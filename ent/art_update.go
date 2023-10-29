@@ -15,6 +15,9 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/medium"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
@@ -195,6 +198,85 @@ func (au *ArtUpdate) ClearAdditionalImagesUrls() *ArtUpdate {
 	return au
 }
 
+// SetNumber sets the "number" field.
+func (au *ArtUpdate) SetNumber(s string) *ArtUpdate {
+	au.mutation.SetNumber(s)
+	return au
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableNumber(s *string) *ArtUpdate {
+	if s != nil {
+		au.SetNumber(*s)
+	}
+	return au
+}
+
+// ClearNumber clears the value of the "number" field.
+func (au *ArtUpdate) ClearNumber() *ArtUpdate {
+	au.mutation.ClearNumber()
+	return au
+}
+
+// SetDating sets the "dating" field.
+func (au *ArtUpdate) SetDating(s string) *ArtUpdate {
+	au.mutation.SetDating(s)
+	return au
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableDating(s *string) *ArtUpdate {
+	if s != nil {
+		au.SetDating(*s)
+	}
+	return au
+}
+
+// ClearDating clears the value of the "dating" field.
+func (au *ArtUpdate) ClearDating() *ArtUpdate {
+	au.mutation.ClearDating()
+	return au
+}
+
+// SetDimensions sets the "dimensions" field.
+func (au *ArtUpdate) SetDimensions(s string) *ArtUpdate {
+	au.mutation.SetDimensions(s)
+	return au
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableDimensions(s *string) *ArtUpdate {
+	if s != nil {
+		au.SetDimensions(*s)
+	}
+	return au
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (au *ArtUpdate) ClearDimensions() *ArtUpdate {
+	au.mutation.ClearDimensions()
+	return au
+}
+
+// SetAuthorID sets the "author" edge to the Person entity by ID.
+func (au *ArtUpdate) SetAuthorID(id int) *ArtUpdate {
+	au.mutation.SetAuthorID(id)
+	return au
+}
+
+// SetNillableAuthorID sets the "author" edge to the Person entity by ID if the given value is not nil.
+func (au *ArtUpdate) SetNillableAuthorID(id *int) *ArtUpdate {
+	if id != nil {
+		au = au.SetAuthorID(*id)
+	}
+	return au
+}
+
+// SetAuthor sets the "author" edge to the Person entity.
+func (au *ArtUpdate) SetAuthor(p *Person) *ArtUpdate {
+	return au.SetAuthorID(p.ID)
+}
+
 // AddArtGenreIDs adds the "art_genre" edge to the ArtGenre entity by IDs.
 func (au *ArtUpdate) AddArtGenreIDs(ids ...int) *ArtUpdate {
 	au.mutation.AddArtGenreIDs(ids...)
@@ -225,9 +307,41 @@ func (au *ArtUpdate) AddArtStyle(a ...*ArtStyle) *ArtUpdate {
 	return au.AddArtStyleIDs(ids...)
 }
 
+// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
+func (au *ArtUpdate) AddMediumIDs(ids ...int) *ArtUpdate {
+	au.mutation.AddMediumIDs(ids...)
+	return au
+}
+
+// AddMediums adds the "mediums" edges to the Medium entity.
+func (au *ArtUpdate) AddMediums(m ...*Medium) *ArtUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.AddMediumIDs(ids...)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (au *ArtUpdate) SetCollectionID(id int) *ArtUpdate {
+	au.mutation.SetCollectionID(id)
+	return au
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (au *ArtUpdate) SetCollection(c *Collection) *ArtUpdate {
+	return au.SetCollectionID(c.ID)
+}
+
 // Mutation returns the ArtMutation object of the builder.
 func (au *ArtUpdate) Mutation() *ArtMutation {
 	return au.mutation
+}
+
+// ClearAuthor clears the "author" edge to the Person entity.
+func (au *ArtUpdate) ClearAuthor() *ArtUpdate {
+	au.mutation.ClearAuthor()
+	return au
 }
 
 // ClearArtGenre clears all "art_genre" edges to the ArtGenre entity.
@@ -272,6 +386,33 @@ func (au *ArtUpdate) RemoveArtStyle(a ...*ArtStyle) *ArtUpdate {
 	return au.RemoveArtStyleIDs(ids...)
 }
 
+// ClearMediums clears all "mediums" edges to the Medium entity.
+func (au *ArtUpdate) ClearMediums() *ArtUpdate {
+	au.mutation.ClearMediums()
+	return au
+}
+
+// RemoveMediumIDs removes the "mediums" edge to Medium entities by IDs.
+func (au *ArtUpdate) RemoveMediumIDs(ids ...int) *ArtUpdate {
+	au.mutation.RemoveMediumIDs(ids...)
+	return au
+}
+
+// RemoveMediums removes "mediums" edges to Medium entities.
+func (au *ArtUpdate) RemoveMediums(m ...*Medium) *ArtUpdate {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return au.RemoveMediumIDs(ids...)
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (au *ArtUpdate) ClearCollection() *ArtUpdate {
+	au.mutation.ClearCollection()
+	return au
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (au *ArtUpdate) Save(ctx context.Context) (int, error) {
 	if err := au.defaults(); err != nil {
@@ -314,7 +455,18 @@ func (au *ArtUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (au *ArtUpdate) check() error {
+	if _, ok := au.mutation.CollectionID(); au.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Art.collection"`)
+	}
+	return nil
+}
+
 func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := au.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(art.Table, art.Columns, sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt))
 	if ps := au.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -378,6 +530,53 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(art.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := au.mutation.Number(); ok {
+		_spec.SetField(art.FieldNumber, field.TypeString, value)
+	}
+	if au.mutation.NumberCleared() {
+		_spec.ClearField(art.FieldNumber, field.TypeString)
+	}
+	if value, ok := au.mutation.Dating(); ok {
+		_spec.SetField(art.FieldDating, field.TypeString, value)
+	}
+	if au.mutation.DatingCleared() {
+		_spec.ClearField(art.FieldDating, field.TypeString)
+	}
+	if value, ok := au.mutation.Dimensions(); ok {
+		_spec.SetField(art.FieldDimensions, field.TypeString, value)
+	}
+	if au.mutation.DimensionsCleared() {
+		_spec.ClearField(art.FieldDimensions, field.TypeString)
+	}
+	if au.mutation.AuthorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.AuthorTable,
+			Columns: []string{art.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.AuthorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.AuthorTable,
+			Columns: []string{art.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if au.mutation.ArtGenreCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -462,6 +661,80 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artstyle.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.MediumsTable,
+			Columns: art.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedMediumsIDs(); len(nodes) > 0 && !au.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.MediumsTable,
+			Columns: art.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.MediumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.MediumsTable,
+			Columns: art.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.CollectionTable,
+			Columns: []string{art.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.CollectionTable,
+			Columns: []string{art.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -653,6 +926,85 @@ func (auo *ArtUpdateOne) ClearAdditionalImagesUrls() *ArtUpdateOne {
 	return auo
 }
 
+// SetNumber sets the "number" field.
+func (auo *ArtUpdateOne) SetNumber(s string) *ArtUpdateOne {
+	auo.mutation.SetNumber(s)
+	return auo
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableNumber(s *string) *ArtUpdateOne {
+	if s != nil {
+		auo.SetNumber(*s)
+	}
+	return auo
+}
+
+// ClearNumber clears the value of the "number" field.
+func (auo *ArtUpdateOne) ClearNumber() *ArtUpdateOne {
+	auo.mutation.ClearNumber()
+	return auo
+}
+
+// SetDating sets the "dating" field.
+func (auo *ArtUpdateOne) SetDating(s string) *ArtUpdateOne {
+	auo.mutation.SetDating(s)
+	return auo
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableDating(s *string) *ArtUpdateOne {
+	if s != nil {
+		auo.SetDating(*s)
+	}
+	return auo
+}
+
+// ClearDating clears the value of the "dating" field.
+func (auo *ArtUpdateOne) ClearDating() *ArtUpdateOne {
+	auo.mutation.ClearDating()
+	return auo
+}
+
+// SetDimensions sets the "dimensions" field.
+func (auo *ArtUpdateOne) SetDimensions(s string) *ArtUpdateOne {
+	auo.mutation.SetDimensions(s)
+	return auo
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableDimensions(s *string) *ArtUpdateOne {
+	if s != nil {
+		auo.SetDimensions(*s)
+	}
+	return auo
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (auo *ArtUpdateOne) ClearDimensions() *ArtUpdateOne {
+	auo.mutation.ClearDimensions()
+	return auo
+}
+
+// SetAuthorID sets the "author" edge to the Person entity by ID.
+func (auo *ArtUpdateOne) SetAuthorID(id int) *ArtUpdateOne {
+	auo.mutation.SetAuthorID(id)
+	return auo
+}
+
+// SetNillableAuthorID sets the "author" edge to the Person entity by ID if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableAuthorID(id *int) *ArtUpdateOne {
+	if id != nil {
+		auo = auo.SetAuthorID(*id)
+	}
+	return auo
+}
+
+// SetAuthor sets the "author" edge to the Person entity.
+func (auo *ArtUpdateOne) SetAuthor(p *Person) *ArtUpdateOne {
+	return auo.SetAuthorID(p.ID)
+}
+
 // AddArtGenreIDs adds the "art_genre" edge to the ArtGenre entity by IDs.
 func (auo *ArtUpdateOne) AddArtGenreIDs(ids ...int) *ArtUpdateOne {
 	auo.mutation.AddArtGenreIDs(ids...)
@@ -683,9 +1035,41 @@ func (auo *ArtUpdateOne) AddArtStyle(a ...*ArtStyle) *ArtUpdateOne {
 	return auo.AddArtStyleIDs(ids...)
 }
 
+// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
+func (auo *ArtUpdateOne) AddMediumIDs(ids ...int) *ArtUpdateOne {
+	auo.mutation.AddMediumIDs(ids...)
+	return auo
+}
+
+// AddMediums adds the "mediums" edges to the Medium entity.
+func (auo *ArtUpdateOne) AddMediums(m ...*Medium) *ArtUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.AddMediumIDs(ids...)
+}
+
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (auo *ArtUpdateOne) SetCollectionID(id int) *ArtUpdateOne {
+	auo.mutation.SetCollectionID(id)
+	return auo
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (auo *ArtUpdateOne) SetCollection(c *Collection) *ArtUpdateOne {
+	return auo.SetCollectionID(c.ID)
+}
+
 // Mutation returns the ArtMutation object of the builder.
 func (auo *ArtUpdateOne) Mutation() *ArtMutation {
 	return auo.mutation
+}
+
+// ClearAuthor clears the "author" edge to the Person entity.
+func (auo *ArtUpdateOne) ClearAuthor() *ArtUpdateOne {
+	auo.mutation.ClearAuthor()
+	return auo
 }
 
 // ClearArtGenre clears all "art_genre" edges to the ArtGenre entity.
@@ -728,6 +1112,33 @@ func (auo *ArtUpdateOne) RemoveArtStyle(a ...*ArtStyle) *ArtUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return auo.RemoveArtStyleIDs(ids...)
+}
+
+// ClearMediums clears all "mediums" edges to the Medium entity.
+func (auo *ArtUpdateOne) ClearMediums() *ArtUpdateOne {
+	auo.mutation.ClearMediums()
+	return auo
+}
+
+// RemoveMediumIDs removes the "mediums" edge to Medium entities by IDs.
+func (auo *ArtUpdateOne) RemoveMediumIDs(ids ...int) *ArtUpdateOne {
+	auo.mutation.RemoveMediumIDs(ids...)
+	return auo
+}
+
+// RemoveMediums removes "mediums" edges to Medium entities.
+func (auo *ArtUpdateOne) RemoveMediums(m ...*Medium) *ArtUpdateOne {
+	ids := make([]int, len(m))
+	for i := range m {
+		ids[i] = m[i].ID
+	}
+	return auo.RemoveMediumIDs(ids...)
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (auo *ArtUpdateOne) ClearCollection() *ArtUpdateOne {
+	auo.mutation.ClearCollection()
+	return auo
 }
 
 // Where appends a list predicates to the ArtUpdate builder.
@@ -785,7 +1196,18 @@ func (auo *ArtUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (auo *ArtUpdateOne) check() error {
+	if _, ok := auo.mutation.CollectionID(); auo.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Art.collection"`)
+	}
+	return nil
+}
+
 func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
+	if err := auo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(art.Table, art.Columns, sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt))
 	id, ok := auo.mutation.ID()
 	if !ok {
@@ -866,6 +1288,53 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 	}
 	if auo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(art.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := auo.mutation.Number(); ok {
+		_spec.SetField(art.FieldNumber, field.TypeString, value)
+	}
+	if auo.mutation.NumberCleared() {
+		_spec.ClearField(art.FieldNumber, field.TypeString)
+	}
+	if value, ok := auo.mutation.Dating(); ok {
+		_spec.SetField(art.FieldDating, field.TypeString, value)
+	}
+	if auo.mutation.DatingCleared() {
+		_spec.ClearField(art.FieldDating, field.TypeString)
+	}
+	if value, ok := auo.mutation.Dimensions(); ok {
+		_spec.SetField(art.FieldDimensions, field.TypeString, value)
+	}
+	if auo.mutation.DimensionsCleared() {
+		_spec.ClearField(art.FieldDimensions, field.TypeString)
+	}
+	if auo.mutation.AuthorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.AuthorTable,
+			Columns: []string{art.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.AuthorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.AuthorTable,
+			Columns: []string{art.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if auo.mutation.ArtGenreCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -950,6 +1419,80 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artstyle.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.MediumsTable,
+			Columns: art.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedMediumsIDs(); len(nodes) > 0 && !auo.mutation.MediumsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.MediumsTable,
+			Columns: art.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.MediumsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.MediumsTable,
+			Columns: art.MediumsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.CollectionTable,
+			Columns: []string{art.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.CollectionTable,
+			Columns: []string{art.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

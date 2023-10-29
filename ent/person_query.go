@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
@@ -30,6 +31,7 @@ type PersonQuery struct {
 	inters                []Interceptor
 	predicates            []predicate.Person
 	withCollections       *CollectionQuery
+	withArts              *ArtQuery
 	withArtifacts         *ArtifactQuery
 	withBooks             *BookQuery
 	withProjects          *ProjectQuery
@@ -39,6 +41,7 @@ type PersonQuery struct {
 	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*Person) error
 	withNamedCollections  map[string]*CollectionQuery
+	withNamedArts         map[string]*ArtQuery
 	withNamedArtifacts    map[string]*ArtifactQuery
 	withNamedBooks        map[string]*BookQuery
 	withNamedProjects     map[string]*ProjectQuery
@@ -94,6 +97,28 @@ func (pq *PersonQuery) QueryCollections() *CollectionQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(collection.Table, collection.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.CollectionsTable, person.CollectionsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryArts chains the current query on the "arts" edge.
+func (pq *PersonQuery) QueryArts() *ArtQuery {
+	query := (&ArtClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.ArtsTable, person.ArtsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -404,6 +429,7 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		inters:           append([]Interceptor{}, pq.inters...),
 		predicates:       append([]predicate.Person{}, pq.predicates...),
 		withCollections:  pq.withCollections.Clone(),
+		withArts:         pq.withArts.Clone(),
 		withArtifacts:    pq.withArtifacts.Clone(),
 		withBooks:        pq.withBooks.Clone(),
 		withProjects:     pq.withProjects.Clone(),
@@ -423,6 +449,17 @@ func (pq *PersonQuery) WithCollections(opts ...func(*CollectionQuery)) *PersonQu
 		opt(query)
 	}
 	pq.withCollections = query
+	return pq
+}
+
+// WithArts tells the query-builder to eager-load the nodes that are connected to
+// the "arts" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithArts(opts ...func(*ArtQuery)) *PersonQuery {
+	query := (&ArtClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withArts = query
 	return pq
 }
 
@@ -566,8 +603,9 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			pq.withCollections != nil,
+			pq.withArts != nil,
 			pq.withArtifacts != nil,
 			pq.withBooks != nil,
 			pq.withProjects != nil,
@@ -609,6 +647,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 			return nil, err
 		}
 	}
+	if query := pq.withArts; query != nil {
+		if err := pq.loadArts(ctx, query, nodes,
+			func(n *Person) { n.Edges.Arts = []*Art{} },
+			func(n *Person, e *Art) { n.Edges.Arts = append(n.Edges.Arts, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withArtifacts; query != nil {
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.Edges.Artifacts = []*Artifact{} },
@@ -647,6 +692,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadCollections(ctx, query, nodes,
 			func(n *Person) { n.appendNamedCollections(name) },
 			func(n *Person, e *Collection) { n.appendNamedCollections(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedArts {
+		if err := pq.loadArts(ctx, query, nodes,
+			func(n *Person) { n.appendNamedArts(name) },
+			func(n *Person, e *Art) { n.appendNamedArts(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -744,6 +796,37 @@ func (pq *PersonQuery) loadCollections(ctx context.Context, query *CollectionQue
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (pq *PersonQuery) loadArts(ctx context.Context, query *ArtQuery, nodes []*Person, init func(*Person), assign func(*Person, *Art)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Person)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Art(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(person.ArtsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.person_arts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "person_arts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "person_arts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1119,6 +1202,20 @@ func (pq *PersonQuery) WithNamedCollections(name string, opts ...func(*Collectio
 		pq.withNamedCollections = make(map[string]*CollectionQuery)
 	}
 	pq.withNamedCollections[name] = query
+	return pq
+}
+
+// WithNamedArts tells the query-builder to eager-load the nodes that are connected to the "arts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedArts(name string, opts ...func(*ArtQuery)) *PersonQuery {
+	query := (&ArtClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedArts == nil {
+		pq.withNamedArts = make(map[string]*ArtQuery)
+	}
+	pq.withNamedArts[name] = query
 	return pq
 }
 
