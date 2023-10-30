@@ -165,6 +165,18 @@ func (f FavouriteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, e
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FavouriteMutation", m)
 }
 
+// The InterviewFunc type is an adapter to allow the use of ordinary
+// function as Interview mutator.
+type InterviewFunc func(context.Context, *ent.InterviewMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f InterviewFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.InterviewMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.InterviewMutation", m)
+}
+
 // The KeywordFunc type is an adapter to allow the use of ordinary
 // function as Keyword mutator.
 type KeywordFunc func(context.Context, *ent.KeywordMutation) (ent.Value, error)
@@ -247,18 +259,6 @@ func (f OrganizationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OrganizationMutation", m)
-}
-
-// The PeriodFunc type is an adapter to allow the use of ordinary
-// function as Period mutator.
-type PeriodFunc func(context.Context, *ent.PeriodMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f PeriodFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.PeriodMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PeriodMutation", m)
 }
 
 // The PeriodicalFunc type is an adapter to allow the use of ordinary

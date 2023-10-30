@@ -56,6 +56,8 @@ const (
 	FieldEndDate = "end_date"
 	// FieldGender holds the string denoting the gender field in the database.
 	FieldGender = "gender"
+	// FieldOccupation holds the string denoting the occupation field in the database.
+	FieldOccupation = "occupation"
 	// EdgeCollections holds the string denoting the collections edge name in mutations.
 	EdgeCollections = "collections"
 	// EdgeArts holds the string denoting the arts edge name in mutations.
@@ -135,6 +137,7 @@ var Columns = []string{
 	FieldBeginData,
 	FieldEndDate,
 	FieldGender,
+	FieldOccupation,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "persons"
@@ -301,6 +304,11 @@ func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
 // ByGender orders the results by the gender field.
 func ByGender(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGender, opts...).ToFunc()
+}
+
+// ByOccupation orders the results by the occupation field.
+func ByOccupation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOccupation, opts...).ToFunc()
 }
 
 // ByCollectionsCount orders the results by collections count.

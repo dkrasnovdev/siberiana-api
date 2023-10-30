@@ -95,6 +95,11 @@ func ExternalLink(v string) predicate.Model {
 	return predicate.Model(sql.FieldEQ(FieldExternalLink, v))
 }
 
+// FileURL applies equality check predicate on the "file_url" field. It's identical to FileURLEQ.
+func FileURL(v string) predicate.Model {
+	return predicate.Model(sql.FieldEQ(FieldFileURL, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Model {
 	return predicate.Model(sql.FieldEQ(FieldCreatedAt, v))
@@ -653,6 +658,71 @@ func StatusIsNil() predicate.Model {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Model {
 	return predicate.Model(sql.FieldNotNull(FieldStatus))
+}
+
+// FileURLEQ applies the EQ predicate on the "file_url" field.
+func FileURLEQ(v string) predicate.Model {
+	return predicate.Model(sql.FieldEQ(FieldFileURL, v))
+}
+
+// FileURLNEQ applies the NEQ predicate on the "file_url" field.
+func FileURLNEQ(v string) predicate.Model {
+	return predicate.Model(sql.FieldNEQ(FieldFileURL, v))
+}
+
+// FileURLIn applies the In predicate on the "file_url" field.
+func FileURLIn(vs ...string) predicate.Model {
+	return predicate.Model(sql.FieldIn(FieldFileURL, vs...))
+}
+
+// FileURLNotIn applies the NotIn predicate on the "file_url" field.
+func FileURLNotIn(vs ...string) predicate.Model {
+	return predicate.Model(sql.FieldNotIn(FieldFileURL, vs...))
+}
+
+// FileURLGT applies the GT predicate on the "file_url" field.
+func FileURLGT(v string) predicate.Model {
+	return predicate.Model(sql.FieldGT(FieldFileURL, v))
+}
+
+// FileURLGTE applies the GTE predicate on the "file_url" field.
+func FileURLGTE(v string) predicate.Model {
+	return predicate.Model(sql.FieldGTE(FieldFileURL, v))
+}
+
+// FileURLLT applies the LT predicate on the "file_url" field.
+func FileURLLT(v string) predicate.Model {
+	return predicate.Model(sql.FieldLT(FieldFileURL, v))
+}
+
+// FileURLLTE applies the LTE predicate on the "file_url" field.
+func FileURLLTE(v string) predicate.Model {
+	return predicate.Model(sql.FieldLTE(FieldFileURL, v))
+}
+
+// FileURLContains applies the Contains predicate on the "file_url" field.
+func FileURLContains(v string) predicate.Model {
+	return predicate.Model(sql.FieldContains(FieldFileURL, v))
+}
+
+// FileURLHasPrefix applies the HasPrefix predicate on the "file_url" field.
+func FileURLHasPrefix(v string) predicate.Model {
+	return predicate.Model(sql.FieldHasPrefix(FieldFileURL, v))
+}
+
+// FileURLHasSuffix applies the HasSuffix predicate on the "file_url" field.
+func FileURLHasSuffix(v string) predicate.Model {
+	return predicate.Model(sql.FieldHasSuffix(FieldFileURL, v))
+}
+
+// FileURLEqualFold applies the EqualFold predicate on the "file_url" field.
+func FileURLEqualFold(v string) predicate.Model {
+	return predicate.Model(sql.FieldEqualFold(FieldFileURL, v))
+}
+
+// FileURLContainsFold applies the ContainsFold predicate on the "file_url" field.
+func FileURLContainsFold(v string) predicate.Model {
+	return predicate.Model(sql.FieldContainsFold(FieldFileURL, v))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

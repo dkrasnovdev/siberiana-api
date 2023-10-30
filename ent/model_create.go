@@ -147,6 +147,12 @@ func (mc *ModelCreate) SetNillableStatus(m *model.Status) *ModelCreate {
 	return mc
 }
 
+// SetFileURL sets the "file_url" field.
+func (mc *ModelCreate) SetFileURL(s string) *ModelCreate {
+	mc.mutation.SetFileURL(s)
+	return mc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mc *ModelCreate) AddArtifactIDs(ids ...int) *ModelCreate {
 	mc.mutation.AddArtifactIDs(ids...)
@@ -233,6 +239,9 @@ func (mc *ModelCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Model.status": %w`, err)}
 		}
 	}
+	if _, ok := mc.mutation.FileURL(); !ok {
+		return &ValidationError{Name: "file_url", err: errors.New(`ent: missing required field "Model.file_url"`)}
+	}
 	return nil
 }
 
@@ -294,6 +303,10 @@ func (mc *ModelCreate) createSpec() (*Model, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.Status(); ok {
 		_spec.SetField(model.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := mc.mutation.FileURL(); ok {
+		_spec.SetField(model.FieldFileURL, field.TypeString, value)
+		_node.FileURL = value
 	}
 	if nodes := mc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

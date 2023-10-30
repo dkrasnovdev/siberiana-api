@@ -26,6 +26,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -33,7 +34,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
@@ -122,6 +122,11 @@ var favouriteImplementors = []string{"Favourite", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Favourite) IsNode() {}
 
+var interviewImplementors = []string{"Interview", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Interview) IsNode() {}
+
 var keywordImplementors = []string{"Keyword", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -156,11 +161,6 @@ var organizationImplementors = []string{"Organization", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Organization) IsNode() {}
-
-var periodImplementors = []string{"Period", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*Period) IsNode() {}
 
 var periodicalImplementors = []string{"Periodical", "Node"}
 
@@ -446,6 +446,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
+	case interview.Table:
+		query := c.Interview.Query().
+			Where(interview.ID(id))
+		query, err := query.CollectFields(ctx, interviewImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case keyword.Table:
 		query := c.Keyword.Query().
 			Where(keyword.ID(id))
@@ -522,18 +534,6 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Organization.Query().
 			Where(organization.ID(id))
 		query, err := query.CollectFields(ctx, organizationImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
-	case period.Table:
-		query := c.Period.Query().
-			Where(period.ID(id))
-		query, err := query.CollectFields(ctx, periodImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -991,6 +991,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
+	case interview.Table:
+		query := c.Interview.Query().
+			Where(interview.IDIn(ids...))
+		query, err := query.CollectFields(ctx, interviewImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case keyword.Table:
 		query := c.Keyword.Query().
 			Where(keyword.IDIn(ids...))
@@ -1091,22 +1107,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Organization.Query().
 			Where(organization.IDIn(ids...))
 		query, err := query.CollectFields(ctx, organizationImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case period.Table:
-		query := c.Period.Query().
-			Where(period.IDIn(ids...))
-		query, err := query.CollectFields(ctx, periodImplementors...)
 		if err != nil {
 			return nil, err
 		}

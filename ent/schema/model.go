@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
@@ -51,7 +52,9 @@ func (Model) Annotations() []schema.Annotation {
 
 // Fields of the Model.
 func (Model) Fields() []ent.Field {
-	return nil
+	return []ent.Field{
+		field.String("file_url"),
+	}
 }
 
 // Edges of the Model.

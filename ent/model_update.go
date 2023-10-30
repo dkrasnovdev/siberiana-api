@@ -175,6 +175,12 @@ func (mu *ModelUpdate) ClearStatus() *ModelUpdate {
 	return mu
 }
 
+// SetFileURL sets the "file_url" field.
+func (mu *ModelUpdate) SetFileURL(s string) *ModelUpdate {
+	mu.mutation.SetFileURL(s)
+	return mu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (mu *ModelUpdate) AddArtifactIDs(ids ...int) *ModelUpdate {
 	mu.mutation.AddArtifactIDs(ids...)
@@ -324,6 +330,9 @@ func (mu *ModelUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if mu.mutation.StatusCleared() {
 		_spec.ClearField(model.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := mu.mutation.FileURL(); ok {
+		_spec.SetField(model.FieldFileURL, field.TypeString, value)
 	}
 	if mu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -536,6 +545,12 @@ func (muo *ModelUpdateOne) ClearStatus() *ModelUpdateOne {
 	return muo
 }
 
+// SetFileURL sets the "file_url" field.
+func (muo *ModelUpdateOne) SetFileURL(s string) *ModelUpdateOne {
+	muo.mutation.SetFileURL(s)
+	return muo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (muo *ModelUpdateOne) AddArtifactIDs(ids ...int) *ModelUpdateOne {
 	muo.mutation.AddArtifactIDs(ids...)
@@ -715,6 +730,9 @@ func (muo *ModelUpdateOne) sqlSave(ctx context.Context) (_node *Model, err error
 	}
 	if muo.mutation.StatusCleared() {
 		_spec.ClearField(model.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := muo.mutation.FileURL(); ok {
+		_spec.SetField(model.FieldFileURL, field.TypeString, value)
 	}
 	if muo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

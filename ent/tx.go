@@ -38,6 +38,8 @@ type Tx struct {
 	District *DistrictClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
+	// Interview is the client for interacting with the Interview builders.
+	Interview *InterviewClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
 	// License is the client for interacting with the License builders.
@@ -52,8 +54,6 @@ type Tx struct {
 	Monument *MonumentClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
-	// Period is the client for interacting with the Period builders.
-	Period *PeriodClient
 	// Periodical is the client for interacting with the Periodical builders.
 	Periodical *PeriodicalClient
 	// Person is the client for interacting with the Person builders.
@@ -226,6 +226,7 @@ func (tx *Tx) init() {
 	tx.Culture = NewCultureClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
 	tx.Favourite = NewFavouriteClient(tx.config)
+	tx.Interview = NewInterviewClient(tx.config)
 	tx.Keyword = NewKeywordClient(tx.config)
 	tx.License = NewLicenseClient(tx.config)
 	tx.Location = NewLocationClient(tx.config)
@@ -233,7 +234,6 @@ func (tx *Tx) init() {
 	tx.Model = NewModelClient(tx.config)
 	tx.Monument = NewMonumentClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
-	tx.Period = NewPeriodClient(tx.config)
 	tx.Periodical = NewPeriodicalClient(tx.config)
 	tx.Person = NewPersonClient(tx.config)
 	tx.Personal = NewPersonalClient(tx.config)

@@ -36,6 +36,8 @@ const (
 	FieldExternalLink = "external_link"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldFileURL holds the string denoting the file_url field in the database.
+	FieldFileURL = "file_url"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// Table holds the table name of the model in the database.
@@ -61,6 +63,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldExternalLink,
 	FieldStatus,
+	FieldFileURL,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -167,6 +170,11 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByFileURL orders the results by the file_url field.
+func ByFileURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFileURL, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.

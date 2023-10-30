@@ -19,13 +19,13 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
@@ -411,6 +411,33 @@ func init() {
 	favouriteDescOwnerID := favouriteMixinFields1[0].Descriptor()
 	// favourite.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	favourite.OwnerIDValidator = favouriteDescOwnerID.Validators[0].(func(string) error)
+	interviewMixin := schema.Interview{}.Mixin()
+	interview.Policy = privacy.NewPolicies(schema.Interview{})
+	interview.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := interview.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	interviewMixinHooks0 := interviewMixin[0].Hooks()
+
+	interview.Hooks[1] = interviewMixinHooks0[0]
+	interviewMixinFields0 := interviewMixin[0].Fields()
+	_ = interviewMixinFields0
+	interviewFields := schema.Interview{}.Fields()
+	_ = interviewFields
+	// interviewDescCreatedAt is the schema descriptor for created_at field.
+	interviewDescCreatedAt := interviewMixinFields0[0].Descriptor()
+	// interview.DefaultCreatedAt holds the default value on creation for the created_at field.
+	interview.DefaultCreatedAt = interviewDescCreatedAt.Default.(func() time.Time)
+	// interviewDescUpdatedAt is the schema descriptor for updated_at field.
+	interviewDescUpdatedAt := interviewMixinFields0[2].Descriptor()
+	// interview.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	interview.DefaultUpdatedAt = interviewDescUpdatedAt.Default.(func() time.Time)
+	// interview.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	interview.UpdateDefaultUpdatedAt = interviewDescUpdatedAt.UpdateDefault.(func() time.Time)
 	licenseMixin := schema.License{}.Mixin()
 	license.Policy = privacy.NewPolicies(schema.License{})
 	license.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -575,33 +602,6 @@ func init() {
 	organization.DefaultUpdatedAt = organizationDescUpdatedAt.Default.(func() time.Time)
 	// organization.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	organization.UpdateDefaultUpdatedAt = organizationDescUpdatedAt.UpdateDefault.(func() time.Time)
-	periodMixin := schema.Period{}.Mixin()
-	period.Policy = privacy.NewPolicies(schema.Period{})
-	period.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := period.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	periodMixinHooks0 := periodMixin[0].Hooks()
-
-	period.Hooks[1] = periodMixinHooks0[0]
-	periodMixinFields0 := periodMixin[0].Fields()
-	_ = periodMixinFields0
-	periodFields := schema.Period{}.Fields()
-	_ = periodFields
-	// periodDescCreatedAt is the schema descriptor for created_at field.
-	periodDescCreatedAt := periodMixinFields0[0].Descriptor()
-	// period.DefaultCreatedAt holds the default value on creation for the created_at field.
-	period.DefaultCreatedAt = periodDescCreatedAt.Default.(func() time.Time)
-	// periodDescUpdatedAt is the schema descriptor for updated_at field.
-	periodDescUpdatedAt := periodMixinFields0[2].Descriptor()
-	// period.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	period.DefaultUpdatedAt = periodDescUpdatedAt.Default.(func() time.Time)
-	// period.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	period.UpdateDefaultUpdatedAt = periodDescUpdatedAt.UpdateDefault.(func() time.Time)
 	periodicalMixin := schema.Periodical{}.Mixin()
 	periodical.Policy = privacy.NewPolicies(schema.Periodical{})
 	periodical.Hooks[0] = func(next ent.Mutator) ent.Mutator {

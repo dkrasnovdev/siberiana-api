@@ -422,6 +422,30 @@ func (f FavouriteMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutat
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.FavouriteMutation", m)
 }
 
+// The InterviewQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type InterviewQueryRuleFunc func(context.Context, *ent.InterviewQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f InterviewQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.InterviewQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.InterviewQuery", q)
+}
+
+// The InterviewMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type InterviewMutationRuleFunc func(context.Context, *ent.InterviewMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f InterviewMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.InterviewMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.InterviewMutation", m)
+}
+
 // The KeywordQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type KeywordQueryRuleFunc func(context.Context, *ent.KeywordQuery) error
@@ -588,30 +612,6 @@ func (f OrganizationMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mu
 		return f(ctx, m)
 	}
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.OrganizationMutation", m)
-}
-
-// The PeriodQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type PeriodQueryRuleFunc func(context.Context, *ent.PeriodQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f PeriodQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.PeriodQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("ent/privacy: unexpected query type %T, expect *ent.PeriodQuery", q)
-}
-
-// The PeriodMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type PeriodMutationRuleFunc func(context.Context, *ent.PeriodMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f PeriodMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
-	if m, ok := m.(*ent.PeriodMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PeriodMutation", m)
 }
 
 // The PeriodicalQueryRuleFunc type is an adapter to allow the use of ordinary

@@ -120,14 +120,6 @@ func (a *Artifact) Techniques(ctx context.Context) (result []*Technique, err err
 	return result, err
 }
 
-func (a *Artifact) Period(ctx context.Context) (*Period, error) {
-	result, err := a.Edges.PeriodOrErr()
-	if IsNotLoaded(err) {
-		result, err = a.QueryPeriod().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (a *Artifact) Projects(ctx context.Context) (result []*Project, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = a.NamedProjects(graphql.GetFieldContext(ctx).Field.Alias)
@@ -612,18 +604,6 @@ func (o *Organization) People(ctx context.Context) (result []*Person, err error)
 	}
 	if IsNotLoaded(err) {
 		result, err = o.QueryPeople().All(ctx)
-	}
-	return result, err
-}
-
-func (pe *Period) Artifacts(ctx context.Context) (result []*Artifact, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = pe.Edges.ArtifactsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = pe.QueryArtifacts().All(ctx)
 	}
 	return result, err
 }

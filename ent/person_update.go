@@ -376,6 +376,26 @@ func (pu *PersonUpdate) ClearGender() *PersonUpdate {
 	return pu
 }
 
+// SetOccupation sets the "occupation" field.
+func (pu *PersonUpdate) SetOccupation(s string) *PersonUpdate {
+	pu.mutation.SetOccupation(s)
+	return pu
+}
+
+// SetNillableOccupation sets the "occupation" field if the given value is not nil.
+func (pu *PersonUpdate) SetNillableOccupation(s *string) *PersonUpdate {
+	if s != nil {
+		pu.SetOccupation(*s)
+	}
+	return pu
+}
+
+// ClearOccupation clears the value of the "occupation" field.
+func (pu *PersonUpdate) ClearOccupation() *PersonUpdate {
+	pu.mutation.ClearOccupation()
+	return pu
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (pu *PersonUpdate) AddCollectionIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddCollectionIDs(ids...)
@@ -805,6 +825,12 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.GenderCleared() {
 		_spec.ClearField(person.FieldGender, field.TypeEnum)
+	}
+	if value, ok := pu.mutation.Occupation(); ok {
+		_spec.SetField(person.FieldOccupation, field.TypeString, value)
+	}
+	if pu.mutation.OccupationCleared() {
+		_spec.ClearField(person.FieldOccupation, field.TypeString)
 	}
 	if pu.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1465,6 +1491,26 @@ func (puo *PersonUpdateOne) ClearGender() *PersonUpdateOne {
 	return puo
 }
 
+// SetOccupation sets the "occupation" field.
+func (puo *PersonUpdateOne) SetOccupation(s string) *PersonUpdateOne {
+	puo.mutation.SetOccupation(s)
+	return puo
+}
+
+// SetNillableOccupation sets the "occupation" field if the given value is not nil.
+func (puo *PersonUpdateOne) SetNillableOccupation(s *string) *PersonUpdateOne {
+	if s != nil {
+		puo.SetOccupation(*s)
+	}
+	return puo
+}
+
+// ClearOccupation clears the value of the "occupation" field.
+func (puo *PersonUpdateOne) ClearOccupation() *PersonUpdateOne {
+	puo.mutation.ClearOccupation()
+	return puo
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (puo *PersonUpdateOne) AddCollectionIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddCollectionIDs(ids...)
@@ -1924,6 +1970,12 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 	}
 	if puo.mutation.GenderCleared() {
 		_spec.ClearField(person.FieldGender, field.TypeEnum)
+	}
+	if value, ok := puo.mutation.Occupation(); ok {
+		_spec.SetField(person.FieldOccupation, field.TypeString, value)
+	}
+	if puo.mutation.OccupationCleared() {
+		_spec.ClearField(person.FieldOccupation, field.TypeString)
 	}
 	if puo.mutation.CollectionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

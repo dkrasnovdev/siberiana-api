@@ -74,6 +74,8 @@ func (Person) Fields() []ent.Field {
 		field.Enum("gender").
 			Values("female", "male").
 			Optional(),
+		field.String("occupation").
+			Optional(),
 	}
 }
 

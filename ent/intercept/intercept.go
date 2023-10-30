@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -28,7 +29,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
@@ -453,6 +453,33 @@ func (f TraverseFavourite) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.FavouriteQuery", q)
 }
 
+// The InterviewFunc type is an adapter to allow the use of ordinary function as a Querier.
+type InterviewFunc func(context.Context, *ent.InterviewQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f InterviewFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.InterviewQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.InterviewQuery", q)
+}
+
+// The TraverseInterview type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseInterview func(context.Context, *ent.InterviewQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseInterview) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseInterview) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.InterviewQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.InterviewQuery", q)
+}
+
 // The KeywordFunc type is an adapter to allow the use of ordinary function as a Querier.
 type KeywordFunc func(context.Context, *ent.KeywordQuery) (ent.Value, error)
 
@@ -640,33 +667,6 @@ func (f TraverseOrganization) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.OrganizationQuery", q)
-}
-
-// The PeriodFunc type is an adapter to allow the use of ordinary function as a Querier.
-type PeriodFunc func(context.Context, *ent.PeriodQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f PeriodFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.PeriodQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.PeriodQuery", q)
-}
-
-// The TraversePeriod type is an adapter to allow the use of ordinary function as Traverser.
-type TraversePeriod func(context.Context, *ent.PeriodQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraversePeriod) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraversePeriod) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.PeriodQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.PeriodQuery", q)
 }
 
 // The PeriodicalFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1076,6 +1076,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.DistrictQuery, predicate.District, district.OrderOption]{typ: ent.TypeDistrict, tq: q}, nil
 	case *ent.FavouriteQuery:
 		return &query[*ent.FavouriteQuery, predicate.Favourite, favourite.OrderOption]{typ: ent.TypeFavourite, tq: q}, nil
+	case *ent.InterviewQuery:
+		return &query[*ent.InterviewQuery, predicate.Interview, interview.OrderOption]{typ: ent.TypeInterview, tq: q}, nil
 	case *ent.KeywordQuery:
 		return &query[*ent.KeywordQuery, predicate.Keyword, keyword.OrderOption]{typ: ent.TypeKeyword, tq: q}, nil
 	case *ent.LicenseQuery:
@@ -1090,8 +1092,6 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.MonumentQuery, predicate.Monument, monument.OrderOption]{typ: ent.TypeMonument, tq: q}, nil
 	case *ent.OrganizationQuery:
 		return &query[*ent.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: ent.TypeOrganization, tq: q}, nil
-	case *ent.PeriodQuery:
-		return &query[*ent.PeriodQuery, predicate.Period, period.OrderOption]{typ: ent.TypePeriod, tq: q}, nil
 	case *ent.PeriodicalQuery:
 		return &query[*ent.PeriodicalQuery, predicate.Periodical, periodical.OrderOption]{typ: ent.TypePeriodical, tq: q}, nil
 	case *ent.PersonQuery:

@@ -6,6 +6,7 @@ package resolver
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/dkrasnovdev/siberiana-api/ent"
@@ -87,6 +88,11 @@ func (r *queryResolver) Favourites(ctx context.Context, after *entgql.Cursor[int
 	return r.client.Favourite.Query().Paginate(ctx, after, first, before, last, offset, ent.WithFavouriteOrder(orderBy), ent.WithFavouriteFilter(where.Filter))
 }
 
+// Interviews is the resolver for the interviews field.
+func (r *queryResolver) Interviews(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.InterviewOrder, where *ent.InterviewWhereInput) (*ent.InterviewConnection, error) {
+	panic(fmt.Errorf("not implemented: Interviews - interviews"))
+}
+
 // Licenses is the resolver for the licenses field.
 func (r *queryResolver) Licenses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.LicenseOrder, where *ent.LicenseWhereInput) (*ent.LicenseConnection, error) {
 	return r.client.License.Query().Paginate(ctx, after, first, before, last, offset, ent.WithLicenseOrder(orderBy), ent.WithLicenseFilter(where.Filter))
@@ -115,11 +121,6 @@ func (r *queryResolver) Monuments(ctx context.Context, after *entgql.Cursor[int]
 // Organizations is the resolver for the organizations field.
 func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) (*ent.OrganizationConnection, error) {
 	return r.client.Organization.Query().Paginate(ctx, after, first, before, last, offset, ent.WithOrganizationOrder(orderBy), ent.WithOrganizationFilter(where.Filter))
-}
-
-// Periods is the resolver for the periods field.
-func (r *queryResolver) Periods(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PeriodOrder, where *ent.PeriodWhereInput) (*ent.PeriodConnection, error) {
-	return r.client.Period.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPeriodOrder(orderBy), ent.WithPeriodFilter(where.Filter))
 }
 
 // Periodicals is the resolver for the periodicals field.

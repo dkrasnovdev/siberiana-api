@@ -71,10 +71,6 @@ type Mutation {
   createOrganization(input: CreateOrganizationInput!): Organization!
   updateOrganization(id: ID!, input: UpdateOrganizationInput!): Organization!
   deleteOrganization(id: ID!): String!
-  # Period
-  createPeriod(input: CreatePeriodInput!): Period!
-  updatePeriod(id: ID!, input: UpdatePeriodInput!): Period!
-  deletePeriod(id: ID!): String!
   # Periodical
   createPeriodical(input: CreatePeriodicalInput!): Periodical!
   updatePeriodical(id: ID!, input: UpdatePeriodicalInput!): Periodical!

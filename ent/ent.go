@@ -25,6 +25,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -32,7 +33,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
@@ -120,6 +120,7 @@ func checkColumn(table, column string) error {
 			culture.Table:               culture.ValidColumn,
 			district.Table:              district.ValidColumn,
 			favourite.Table:             favourite.ValidColumn,
+			interview.Table:             interview.ValidColumn,
 			keyword.Table:               keyword.ValidColumn,
 			license.Table:               license.ValidColumn,
 			location.Table:              location.ValidColumn,
@@ -127,7 +128,6 @@ func checkColumn(table, column string) error {
 			model.Table:                 model.ValidColumn,
 			monument.Table:              monument.ValidColumn,
 			organization.Table:          organization.ValidColumn,
-			period.Table:                period.ValidColumn,
 			periodical.Table:            periodical.ValidColumn,
 			person.Table:                person.ValidColumn,
 			personal.Table:              personal.ValidColumn,

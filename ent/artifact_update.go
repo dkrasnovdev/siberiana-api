@@ -20,7 +20,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -286,23 +285,57 @@ func (au *ArtifactUpdate) ClearDating() *ArtifactUpdate {
 	return au
 }
 
-// SetDimensions sets the "dimensions" field.
-func (au *ArtifactUpdate) SetDimensions(s string) *ArtifactUpdate {
-	au.mutation.SetDimensions(s)
+// SetDatingStart sets the "dating_start" field.
+func (au *ArtifactUpdate) SetDatingStart(i int) *ArtifactUpdate {
+	au.mutation.ResetDatingStart()
+	au.mutation.SetDatingStart(i)
 	return au
 }
 
-// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableDimensions(s *string) *ArtifactUpdate {
-	if s != nil {
-		au.SetDimensions(*s)
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDatingStart(i *int) *ArtifactUpdate {
+	if i != nil {
+		au.SetDatingStart(*i)
 	}
 	return au
 }
 
-// ClearDimensions clears the value of the "dimensions" field.
-func (au *ArtifactUpdate) ClearDimensions() *ArtifactUpdate {
-	au.mutation.ClearDimensions()
+// AddDatingStart adds i to the "dating_start" field.
+func (au *ArtifactUpdate) AddDatingStart(i int) *ArtifactUpdate {
+	au.mutation.AddDatingStart(i)
+	return au
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (au *ArtifactUpdate) ClearDatingStart() *ArtifactUpdate {
+	au.mutation.ClearDatingStart()
+	return au
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (au *ArtifactUpdate) SetDatingEnd(i int) *ArtifactUpdate {
+	au.mutation.ResetDatingEnd()
+	au.mutation.SetDatingEnd(i)
+	return au
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDatingEnd(i *int) *ArtifactUpdate {
+	if i != nil {
+		au.SetDatingEnd(*i)
+	}
+	return au
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (au *ArtifactUpdate) AddDatingEnd(i int) *ArtifactUpdate {
+	au.mutation.AddDatingEnd(i)
+	return au
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (au *ArtifactUpdate) ClearDatingEnd() *ArtifactUpdate {
+	au.mutation.ClearDatingEnd()
 	return au
 }
 
@@ -461,6 +494,26 @@ func (au *ArtifactUpdate) ClearWeight() *ArtifactUpdate {
 	return au
 }
 
+// SetDimensions sets the "dimensions" field.
+func (au *ArtifactUpdate) SetDimensions(s string) *ArtifactUpdate {
+	au.mutation.SetDimensions(s)
+	return au
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDimensions(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetDimensions(*s)
+	}
+	return au
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (au *ArtifactUpdate) ClearDimensions() *ArtifactUpdate {
+	au.mutation.ClearDimensions()
+	return au
+}
+
 // SetChemicalComposition sets the "chemical_composition" field.
 func (au *ArtifactUpdate) SetChemicalComposition(s string) *ArtifactUpdate {
 	au.mutation.SetChemicalComposition(s)
@@ -481,23 +534,43 @@ func (au *ArtifactUpdate) ClearChemicalComposition() *ArtifactUpdate {
 	return au
 }
 
-// SetNumber sets the "number" field.
-func (au *ArtifactUpdate) SetNumber(s string) *ArtifactUpdate {
-	au.mutation.SetNumber(s)
+// SetGoskatalogNumber sets the "goskatalog_number" field.
+func (au *ArtifactUpdate) SetGoskatalogNumber(s string) *ArtifactUpdate {
+	au.mutation.SetGoskatalogNumber(s)
 	return au
 }
 
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableNumber(s *string) *ArtifactUpdate {
+// SetNillableGoskatalogNumber sets the "goskatalog_number" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableGoskatalogNumber(s *string) *ArtifactUpdate {
 	if s != nil {
-		au.SetNumber(*s)
+		au.SetGoskatalogNumber(*s)
 	}
 	return au
 }
 
-// ClearNumber clears the value of the "number" field.
-func (au *ArtifactUpdate) ClearNumber() *ArtifactUpdate {
-	au.mutation.ClearNumber()
+// ClearGoskatalogNumber clears the value of the "goskatalog_number" field.
+func (au *ArtifactUpdate) ClearGoskatalogNumber() *ArtifactUpdate {
+	au.mutation.ClearGoskatalogNumber()
+	return au
+}
+
+// SetInventoryNumber sets the "inventory_number" field.
+func (au *ArtifactUpdate) SetInventoryNumber(s string) *ArtifactUpdate {
+	au.mutation.SetInventoryNumber(s)
+	return au
+}
+
+// SetNillableInventoryNumber sets the "inventory_number" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableInventoryNumber(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetInventoryNumber(*s)
+	}
+	return au
+}
+
+// ClearInventoryNumber clears the value of the "inventory_number" field.
+func (au *ArtifactUpdate) ClearInventoryNumber() *ArtifactUpdate {
+	au.mutation.ClearInventoryNumber()
 	return au
 }
 
@@ -584,25 +657,6 @@ func (au *ArtifactUpdate) AddTechniques(t ...*Technique) *ArtifactUpdate {
 		ids[i] = t[i].ID
 	}
 	return au.AddTechniqueIDs(ids...)
-}
-
-// SetPeriodID sets the "period" edge to the Period entity by ID.
-func (au *ArtifactUpdate) SetPeriodID(id int) *ArtifactUpdate {
-	au.mutation.SetPeriodID(id)
-	return au
-}
-
-// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
-func (au *ArtifactUpdate) SetNillablePeriodID(id *int) *ArtifactUpdate {
-	if id != nil {
-		au = au.SetPeriodID(*id)
-	}
-	return au
-}
-
-// SetPeriod sets the "period" edge to the Period entity.
-func (au *ArtifactUpdate) SetPeriod(p *Period) *ArtifactUpdate {
-	return au.SetPeriodID(p.ID)
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
@@ -826,12 +880,6 @@ func (au *ArtifactUpdate) RemoveTechniques(t ...*Technique) *ArtifactUpdate {
 		ids[i] = t[i].ID
 	}
 	return au.RemoveTechniqueIDs(ids...)
-}
-
-// ClearPeriod clears the "period" edge to the Period entity.
-func (au *ArtifactUpdate) ClearPeriod() *ArtifactUpdate {
-	au.mutation.ClearPeriod()
-	return au
 }
 
 // ClearProjects clears all "projects" edges to the Project entity.
@@ -1065,11 +1113,23 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.DatingCleared() {
 		_spec.ClearField(artifact.FieldDating, field.TypeString)
 	}
-	if value, ok := au.mutation.Dimensions(); ok {
-		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+	if value, ok := au.mutation.DatingStart(); ok {
+		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
 	}
-	if au.mutation.DimensionsCleared() {
-		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	if value, ok := au.mutation.AddedDatingStart(); ok {
+		_spec.AddField(artifact.FieldDatingStart, field.TypeInt, value)
+	}
+	if au.mutation.DatingStartCleared() {
+		_spec.ClearField(artifact.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := au.mutation.DatingEnd(); ok {
+		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := au.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if au.mutation.DatingEndCleared() {
+		_spec.ClearField(artifact.FieldDatingEnd, field.TypeInt)
 	}
 	if value, ok := au.mutation.Height(); ok {
 		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
@@ -1122,17 +1182,29 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.WeightCleared() {
 		_spec.ClearField(artifact.FieldWeight, field.TypeString)
 	}
+	if value, ok := au.mutation.Dimensions(); ok {
+		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+	}
+	if au.mutation.DimensionsCleared() {
+		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	}
 	if value, ok := au.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 	}
 	if au.mutation.ChemicalCompositionCleared() {
 		_spec.ClearField(artifact.FieldChemicalComposition, field.TypeString)
 	}
-	if value, ok := au.mutation.Number(); ok {
-		_spec.SetField(artifact.FieldNumber, field.TypeString, value)
+	if value, ok := au.mutation.GoskatalogNumber(); ok {
+		_spec.SetField(artifact.FieldGoskatalogNumber, field.TypeString, value)
 	}
-	if au.mutation.NumberCleared() {
-		_spec.ClearField(artifact.FieldNumber, field.TypeString)
+	if au.mutation.GoskatalogNumberCleared() {
+		_spec.ClearField(artifact.FieldGoskatalogNumber, field.TypeString)
+	}
+	if value, ok := au.mutation.InventoryNumber(); ok {
+		_spec.SetField(artifact.FieldInventoryNumber, field.TypeString, value)
+	}
+	if au.mutation.InventoryNumberCleared() {
+		_spec.ClearField(artifact.FieldInventoryNumber, field.TypeString)
 	}
 	if value, ok := au.mutation.Typology(); ok {
 		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
@@ -1274,35 +1346,6 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if au.mutation.PeriodCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   artifact.PeriodTable,
-			Columns: []string{artifact.PeriodColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := au.mutation.PeriodIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   artifact.PeriodTable,
-			Columns: []string{artifact.PeriodColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1867,23 +1910,57 @@ func (auo *ArtifactUpdateOne) ClearDating() *ArtifactUpdateOne {
 	return auo
 }
 
-// SetDimensions sets the "dimensions" field.
-func (auo *ArtifactUpdateOne) SetDimensions(s string) *ArtifactUpdateOne {
-	auo.mutation.SetDimensions(s)
+// SetDatingStart sets the "dating_start" field.
+func (auo *ArtifactUpdateOne) SetDatingStart(i int) *ArtifactUpdateOne {
+	auo.mutation.ResetDatingStart()
+	auo.mutation.SetDatingStart(i)
 	return auo
 }
 
-// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableDimensions(s *string) *ArtifactUpdateOne {
-	if s != nil {
-		auo.SetDimensions(*s)
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDatingStart(i *int) *ArtifactUpdateOne {
+	if i != nil {
+		auo.SetDatingStart(*i)
 	}
 	return auo
 }
 
-// ClearDimensions clears the value of the "dimensions" field.
-func (auo *ArtifactUpdateOne) ClearDimensions() *ArtifactUpdateOne {
-	auo.mutation.ClearDimensions()
+// AddDatingStart adds i to the "dating_start" field.
+func (auo *ArtifactUpdateOne) AddDatingStart(i int) *ArtifactUpdateOne {
+	auo.mutation.AddDatingStart(i)
+	return auo
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (auo *ArtifactUpdateOne) ClearDatingStart() *ArtifactUpdateOne {
+	auo.mutation.ClearDatingStart()
+	return auo
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (auo *ArtifactUpdateOne) SetDatingEnd(i int) *ArtifactUpdateOne {
+	auo.mutation.ResetDatingEnd()
+	auo.mutation.SetDatingEnd(i)
+	return auo
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDatingEnd(i *int) *ArtifactUpdateOne {
+	if i != nil {
+		auo.SetDatingEnd(*i)
+	}
+	return auo
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (auo *ArtifactUpdateOne) AddDatingEnd(i int) *ArtifactUpdateOne {
+	auo.mutation.AddDatingEnd(i)
+	return auo
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (auo *ArtifactUpdateOne) ClearDatingEnd() *ArtifactUpdateOne {
+	auo.mutation.ClearDatingEnd()
 	return auo
 }
 
@@ -2042,6 +2119,26 @@ func (auo *ArtifactUpdateOne) ClearWeight() *ArtifactUpdateOne {
 	return auo
 }
 
+// SetDimensions sets the "dimensions" field.
+func (auo *ArtifactUpdateOne) SetDimensions(s string) *ArtifactUpdateOne {
+	auo.mutation.SetDimensions(s)
+	return auo
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDimensions(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetDimensions(*s)
+	}
+	return auo
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (auo *ArtifactUpdateOne) ClearDimensions() *ArtifactUpdateOne {
+	auo.mutation.ClearDimensions()
+	return auo
+}
+
 // SetChemicalComposition sets the "chemical_composition" field.
 func (auo *ArtifactUpdateOne) SetChemicalComposition(s string) *ArtifactUpdateOne {
 	auo.mutation.SetChemicalComposition(s)
@@ -2062,23 +2159,43 @@ func (auo *ArtifactUpdateOne) ClearChemicalComposition() *ArtifactUpdateOne {
 	return auo
 }
 
-// SetNumber sets the "number" field.
-func (auo *ArtifactUpdateOne) SetNumber(s string) *ArtifactUpdateOne {
-	auo.mutation.SetNumber(s)
+// SetGoskatalogNumber sets the "goskatalog_number" field.
+func (auo *ArtifactUpdateOne) SetGoskatalogNumber(s string) *ArtifactUpdateOne {
+	auo.mutation.SetGoskatalogNumber(s)
 	return auo
 }
 
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableNumber(s *string) *ArtifactUpdateOne {
+// SetNillableGoskatalogNumber sets the "goskatalog_number" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableGoskatalogNumber(s *string) *ArtifactUpdateOne {
 	if s != nil {
-		auo.SetNumber(*s)
+		auo.SetGoskatalogNumber(*s)
 	}
 	return auo
 }
 
-// ClearNumber clears the value of the "number" field.
-func (auo *ArtifactUpdateOne) ClearNumber() *ArtifactUpdateOne {
-	auo.mutation.ClearNumber()
+// ClearGoskatalogNumber clears the value of the "goskatalog_number" field.
+func (auo *ArtifactUpdateOne) ClearGoskatalogNumber() *ArtifactUpdateOne {
+	auo.mutation.ClearGoskatalogNumber()
+	return auo
+}
+
+// SetInventoryNumber sets the "inventory_number" field.
+func (auo *ArtifactUpdateOne) SetInventoryNumber(s string) *ArtifactUpdateOne {
+	auo.mutation.SetInventoryNumber(s)
+	return auo
+}
+
+// SetNillableInventoryNumber sets the "inventory_number" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableInventoryNumber(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetInventoryNumber(*s)
+	}
+	return auo
+}
+
+// ClearInventoryNumber clears the value of the "inventory_number" field.
+func (auo *ArtifactUpdateOne) ClearInventoryNumber() *ArtifactUpdateOne {
+	auo.mutation.ClearInventoryNumber()
 	return auo
 }
 
@@ -2165,25 +2282,6 @@ func (auo *ArtifactUpdateOne) AddTechniques(t ...*Technique) *ArtifactUpdateOne 
 		ids[i] = t[i].ID
 	}
 	return auo.AddTechniqueIDs(ids...)
-}
-
-// SetPeriodID sets the "period" edge to the Period entity by ID.
-func (auo *ArtifactUpdateOne) SetPeriodID(id int) *ArtifactUpdateOne {
-	auo.mutation.SetPeriodID(id)
-	return auo
-}
-
-// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillablePeriodID(id *int) *ArtifactUpdateOne {
-	if id != nil {
-		auo = auo.SetPeriodID(*id)
-	}
-	return auo
-}
-
-// SetPeriod sets the "period" edge to the Period entity.
-func (auo *ArtifactUpdateOne) SetPeriod(p *Period) *ArtifactUpdateOne {
-	return auo.SetPeriodID(p.ID)
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
@@ -2407,12 +2505,6 @@ func (auo *ArtifactUpdateOne) RemoveTechniques(t ...*Technique) *ArtifactUpdateO
 		ids[i] = t[i].ID
 	}
 	return auo.RemoveTechniqueIDs(ids...)
-}
-
-// ClearPeriod clears the "period" edge to the Period entity.
-func (auo *ArtifactUpdateOne) ClearPeriod() *ArtifactUpdateOne {
-	auo.mutation.ClearPeriod()
-	return auo
 }
 
 // ClearProjects clears all "projects" edges to the Project entity.
@@ -2676,11 +2768,23 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.DatingCleared() {
 		_spec.ClearField(artifact.FieldDating, field.TypeString)
 	}
-	if value, ok := auo.mutation.Dimensions(); ok {
-		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+	if value, ok := auo.mutation.DatingStart(); ok {
+		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
 	}
-	if auo.mutation.DimensionsCleared() {
-		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	if value, ok := auo.mutation.AddedDatingStart(); ok {
+		_spec.AddField(artifact.FieldDatingStart, field.TypeInt, value)
+	}
+	if auo.mutation.DatingStartCleared() {
+		_spec.ClearField(artifact.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := auo.mutation.DatingEnd(); ok {
+		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := auo.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if auo.mutation.DatingEndCleared() {
+		_spec.ClearField(artifact.FieldDatingEnd, field.TypeInt)
 	}
 	if value, ok := auo.mutation.Height(); ok {
 		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
@@ -2733,17 +2837,29 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.WeightCleared() {
 		_spec.ClearField(artifact.FieldWeight, field.TypeString)
 	}
+	if value, ok := auo.mutation.Dimensions(); ok {
+		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+	}
+	if auo.mutation.DimensionsCleared() {
+		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	}
 	if value, ok := auo.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 	}
 	if auo.mutation.ChemicalCompositionCleared() {
 		_spec.ClearField(artifact.FieldChemicalComposition, field.TypeString)
 	}
-	if value, ok := auo.mutation.Number(); ok {
-		_spec.SetField(artifact.FieldNumber, field.TypeString, value)
+	if value, ok := auo.mutation.GoskatalogNumber(); ok {
+		_spec.SetField(artifact.FieldGoskatalogNumber, field.TypeString, value)
 	}
-	if auo.mutation.NumberCleared() {
-		_spec.ClearField(artifact.FieldNumber, field.TypeString)
+	if auo.mutation.GoskatalogNumberCleared() {
+		_spec.ClearField(artifact.FieldGoskatalogNumber, field.TypeString)
+	}
+	if value, ok := auo.mutation.InventoryNumber(); ok {
+		_spec.SetField(artifact.FieldInventoryNumber, field.TypeString, value)
+	}
+	if auo.mutation.InventoryNumberCleared() {
+		_spec.ClearField(artifact.FieldInventoryNumber, field.TypeString)
 	}
 	if value, ok := auo.mutation.Typology(); ok {
 		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
@@ -2885,35 +3001,6 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if auo.mutation.PeriodCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   artifact.PeriodTable,
-			Columns: []string{artifact.PeriodColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := auo.mutation.PeriodIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   artifact.PeriodTable,
-			Columns: []string{artifact.PeriodColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

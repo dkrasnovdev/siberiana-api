@@ -629,21 +629,23 @@ type Artifact implements Node {
   deletedAt: Time
   deletedBy: String
   dating: String
-  dimensions: String
+  datingStart: Int
+  datingEnd: Int
   height: Float
   width: Float
   length: Float
   depth: Float
   diameter: Float
   weight: String
+  dimensions: String
   chemicalComposition: String
-  number: String
+  goskatalogNumber: String
+  inventoryNumber: String
   typology: String
   admissionDate: Time
   authors: [Person!]
   mediums: [Medium!]
   techniques: [Technique!]
-  period: Period
   projects: [Project!]
   publications: [Publication!]
   culturalAffiliation: Culture
@@ -886,22 +888,28 @@ input ArtifactWhereInput {
   datingNotNil: Boolean
   datingEqualFold: String
   datingContainsFold: String
-  """dimensions field predicates"""
-  dimensions: String
-  dimensionsNEQ: String
-  dimensionsIn: [String!]
-  dimensionsNotIn: [String!]
-  dimensionsGT: String
-  dimensionsGTE: String
-  dimensionsLT: String
-  dimensionsLTE: String
-  dimensionsContains: String
-  dimensionsHasPrefix: String
-  dimensionsHasSuffix: String
-  dimensionsIsNil: Boolean
-  dimensionsNotNil: Boolean
-  dimensionsEqualFold: String
-  dimensionsContainsFold: String
+  """dating_start field predicates"""
+  datingStart: Int
+  datingStartNEQ: Int
+  datingStartIn: [Int!]
+  datingStartNotIn: [Int!]
+  datingStartGT: Int
+  datingStartGTE: Int
+  datingStartLT: Int
+  datingStartLTE: Int
+  datingStartIsNil: Boolean
+  datingStartNotNil: Boolean
+  """dating_end field predicates"""
+  datingEnd: Int
+  datingEndNEQ: Int
+  datingEndIn: [Int!]
+  datingEndNotIn: [Int!]
+  datingEndGT: Int
+  datingEndGTE: Int
+  datingEndLT: Int
+  datingEndLTE: Int
+  datingEndIsNil: Boolean
+  datingEndNotNil: Boolean
   """height field predicates"""
   height: Float
   heightNEQ: Float
@@ -973,6 +981,22 @@ input ArtifactWhereInput {
   weightNotNil: Boolean
   weightEqualFold: String
   weightContainsFold: String
+  """dimensions field predicates"""
+  dimensions: String
+  dimensionsNEQ: String
+  dimensionsIn: [String!]
+  dimensionsNotIn: [String!]
+  dimensionsGT: String
+  dimensionsGTE: String
+  dimensionsLT: String
+  dimensionsLTE: String
+  dimensionsContains: String
+  dimensionsHasPrefix: String
+  dimensionsHasSuffix: String
+  dimensionsIsNil: Boolean
+  dimensionsNotNil: Boolean
+  dimensionsEqualFold: String
+  dimensionsContainsFold: String
   """chemical_composition field predicates"""
   chemicalComposition: String
   chemicalCompositionNEQ: String
@@ -989,22 +1013,38 @@ input ArtifactWhereInput {
   chemicalCompositionNotNil: Boolean
   chemicalCompositionEqualFold: String
   chemicalCompositionContainsFold: String
-  """number field predicates"""
-  number: String
-  numberNEQ: String
-  numberIn: [String!]
-  numberNotIn: [String!]
-  numberGT: String
-  numberGTE: String
-  numberLT: String
-  numberLTE: String
-  numberContains: String
-  numberHasPrefix: String
-  numberHasSuffix: String
-  numberIsNil: Boolean
-  numberNotNil: Boolean
-  numberEqualFold: String
-  numberContainsFold: String
+  """goskatalog_number field predicates"""
+  goskatalogNumber: String
+  goskatalogNumberNEQ: String
+  goskatalogNumberIn: [String!]
+  goskatalogNumberNotIn: [String!]
+  goskatalogNumberGT: String
+  goskatalogNumberGTE: String
+  goskatalogNumberLT: String
+  goskatalogNumberLTE: String
+  goskatalogNumberContains: String
+  goskatalogNumberHasPrefix: String
+  goskatalogNumberHasSuffix: String
+  goskatalogNumberIsNil: Boolean
+  goskatalogNumberNotNil: Boolean
+  goskatalogNumberEqualFold: String
+  goskatalogNumberContainsFold: String
+  """inventory_number field predicates"""
+  inventoryNumber: String
+  inventoryNumberNEQ: String
+  inventoryNumberIn: [String!]
+  inventoryNumberNotIn: [String!]
+  inventoryNumberGT: String
+  inventoryNumberGTE: String
+  inventoryNumberLT: String
+  inventoryNumberLTE: String
+  inventoryNumberContains: String
+  inventoryNumberHasPrefix: String
+  inventoryNumberHasSuffix: String
+  inventoryNumberIsNil: Boolean
+  inventoryNumberNotNil: Boolean
+  inventoryNumberEqualFold: String
+  inventoryNumberContainsFold: String
   """typology field predicates"""
   typology: String
   typologyNEQ: String
@@ -1041,9 +1081,6 @@ input ArtifactWhereInput {
   """techniques edge predicates"""
   hasTechniques: Boolean
   hasTechniquesWith: [TechniqueWhereInput!]
-  """period edge predicates"""
-  hasPeriod: Boolean
-  hasPeriodWith: [PeriodWhereInput!]
   """projects edge predicates"""
   hasProjects: Boolean
   hasProjectsWith: [ProjectWhereInput!]
@@ -2327,21 +2364,23 @@ input CreateArtifactInput {
   deletedAt: Time
   deletedBy: String
   dating: String
-  dimensions: String
+  datingStart: Int
+  datingEnd: Int
   height: Float
   width: Float
   length: Float
   depth: Float
   diameter: Float
   weight: String
+  dimensions: String
   chemicalComposition: String
-  number: String
+  goskatalogNumber: String
+  inventoryNumber: String
   typology: String
   admissionDate: Time
   authorIDs: [ID!]
   mediumIDs: [ID!]
   techniqueIDs: [ID!]
-  periodID: ID
   projectIDs: [ID!]
   publicationIDs: [ID!]
   culturalAffiliationID: ID
@@ -2495,6 +2534,21 @@ input CreateFavouriteInput {
   proxyIDs: [ID!]
 }
 """
+CreateInterviewInput is used for create Interview object.
+Input was generated by ent.
+"""
+input CreateInterviewInput {
+  createdAt: Time
+  createdBy: String
+  updatedAt: Time
+  updatedBy: String
+  displayName: String
+  abbreviation: String
+  description: String
+  externalLink: String
+  date: Time
+}
+"""
 CreateLicenseInput is used for create License object.
 Input was generated by ent.
 """
@@ -2563,6 +2617,7 @@ input CreateModelInput {
   description: String
   externalLink: String
   status: ModelStatus
+  fileURL: String!
   artifactIDs: [ID!]
 }
 """
@@ -2607,21 +2662,6 @@ input CreateOrganizationInput {
   personIDs: [ID!]
 }
 """
-CreatePeriodInput is used for create Period object.
-Input was generated by ent.
-"""
-input CreatePeriodInput {
-  createdAt: Time
-  createdBy: String
-  updatedAt: Time
-  updatedBy: String
-  displayName: String
-  abbreviation: String
-  description: String
-  externalLink: String
-  artifactIDs: [ID!]
-}
-"""
 CreatePeriodicalInput is used for create Periodical object.
 Input was generated by ent.
 """
@@ -2660,6 +2700,7 @@ input CreatePersonInput {
   beginData: Time
   endDate: Time
   gender: PersonGender
+  occupation: String
   collectionIDs: [ID!]
   artIDs: [ID!]
   artifactIDs: [ID!]
@@ -3342,6 +3383,190 @@ input FavouriteWhereInput {
   hasProxies: Boolean
   hasProxiesWith: [ProxyWhereInput!]
 }
+type Interview implements Node {
+  id: ID!
+  createdAt: Time!
+  createdBy: String
+  updatedAt: Time!
+  updatedBy: String
+  displayName: String
+  abbreviation: String
+  description: String
+  externalLink: String
+  date: Time
+}
+"""A connection to a list of items."""
+type InterviewConnection {
+  """A list of edges."""
+  edges: [InterviewEdge]
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+"""An edge in a connection."""
+type InterviewEdge {
+  """The item at the end of the edge."""
+  node: Interview
+  """A cursor for use in pagination."""
+  cursor: Cursor!
+}
+"""Ordering options for Interview connections"""
+input InterviewOrder {
+  """The ordering direction."""
+  direction: OrderDirection! = ASC
+  """The field by which to order Interviews."""
+  field: InterviewOrderField!
+}
+"""Properties by which Interview connections can be ordered."""
+enum InterviewOrderField {
+  CREATED_AT
+  UPDATED_AT
+  DISPLAY_NAME
+}
+"""
+InterviewWhereInput is used for filtering Interview objects.
+Input was generated by ent.
+"""
+input InterviewWhereInput {
+  not: InterviewWhereInput
+  and: [InterviewWhereInput!]
+  or: [InterviewWhereInput!]
+  """id field predicates"""
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  """created_at field predicates"""
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  """created_by field predicates"""
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """updated_at field predicates"""
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  """updated_by field predicates"""
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """display_name field predicates"""
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """abbreviation field predicates"""
+  abbreviation: String
+  abbreviationNEQ: String
+  abbreviationIn: [String!]
+  abbreviationNotIn: [String!]
+  abbreviationGT: String
+  abbreviationGTE: String
+  abbreviationLT: String
+  abbreviationLTE: String
+  abbreviationContains: String
+  abbreviationHasPrefix: String
+  abbreviationHasSuffix: String
+  abbreviationIsNil: Boolean
+  abbreviationNotNil: Boolean
+  abbreviationEqualFold: String
+  abbreviationContainsFold: String
+  """description field predicates"""
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """external_link field predicates"""
+  externalLink: String
+  externalLinkNEQ: String
+  externalLinkIn: [String!]
+  externalLinkNotIn: [String!]
+  externalLinkGT: String
+  externalLinkGTE: String
+  externalLinkLT: String
+  externalLinkLTE: String
+  externalLinkContains: String
+  externalLinkHasPrefix: String
+  externalLinkHasSuffix: String
+  externalLinkIsNil: Boolean
+  externalLinkNotNil: Boolean
+  externalLinkEqualFold: String
+  externalLinkContainsFold: String
+  """date field predicates"""
+  date: Time
+  dateNEQ: Time
+  dateIn: [Time!]
+  dateNotIn: [Time!]
+  dateGT: Time
+  dateGTE: Time
+  dateLT: Time
+  dateLTE: Time
+  dateIsNil: Boolean
+  dateNotNil: Boolean
+}
 type Keyword implements Node {
   id: ID!
 }
@@ -3950,6 +4175,7 @@ type Model implements Node {
   description: String
   externalLink: String
   status: ModelStatus
+  fileURL: String!
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -4125,6 +4351,20 @@ input ModelWhereInput {
   statusNotIn: [ModelStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """file_url field predicates"""
+  fileURL: String
+  fileURLNEQ: String
+  fileURLIn: [String!]
+  fileURLNotIn: [String!]
+  fileURLGT: String
+  fileURLGTE: String
+  fileURLLT: String
+  fileURLLTE: String
+  fileURLContains: String
+  fileURLHasPrefix: String
+  fileURLHasSuffix: String
+  fileURLEqualFold: String
+  fileURLContainsFold: String
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -4594,182 +4834,6 @@ type PageInfo {
   """When paginating forwards, the cursor to continue."""
   endCursor: Cursor
 }
-type Period implements Node {
-  id: ID!
-  createdAt: Time!
-  createdBy: String
-  updatedAt: Time!
-  updatedBy: String
-  displayName: String
-  abbreviation: String
-  description: String
-  externalLink: String
-  artifacts: [Artifact!]
-}
-"""A connection to a list of items."""
-type PeriodConnection {
-  """A list of edges."""
-  edges: [PeriodEdge]
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-  """Identifies the total count of items in the connection."""
-  totalCount: Int!
-}
-"""An edge in a connection."""
-type PeriodEdge {
-  """The item at the end of the edge."""
-  node: Period
-  """A cursor for use in pagination."""
-  cursor: Cursor!
-}
-"""Ordering options for Period connections"""
-input PeriodOrder {
-  """The ordering direction."""
-  direction: OrderDirection! = ASC
-  """The field by which to order Periods."""
-  field: PeriodOrderField!
-}
-"""Properties by which Period connections can be ordered."""
-enum PeriodOrderField {
-  CREATED_AT
-  UPDATED_AT
-  DISPLAY_NAME
-}
-"""
-PeriodWhereInput is used for filtering Period objects.
-Input was generated by ent.
-"""
-input PeriodWhereInput {
-  not: PeriodWhereInput
-  and: [PeriodWhereInput!]
-  or: [PeriodWhereInput!]
-  """id field predicates"""
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  """created_at field predicates"""
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  """created_by field predicates"""
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """updated_at field predicates"""
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  """updated_by field predicates"""
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """display_name field predicates"""
-  displayName: String
-  displayNameNEQ: String
-  displayNameIn: [String!]
-  displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
-  displayNameContains: String
-  displayNameHasPrefix: String
-  displayNameHasSuffix: String
-  displayNameIsNil: Boolean
-  displayNameNotNil: Boolean
-  displayNameEqualFold: String
-  displayNameContainsFold: String
-  """abbreviation field predicates"""
-  abbreviation: String
-  abbreviationNEQ: String
-  abbreviationIn: [String!]
-  abbreviationNotIn: [String!]
-  abbreviationGT: String
-  abbreviationGTE: String
-  abbreviationLT: String
-  abbreviationLTE: String
-  abbreviationContains: String
-  abbreviationHasPrefix: String
-  abbreviationHasSuffix: String
-  abbreviationIsNil: Boolean
-  abbreviationNotNil: Boolean
-  abbreviationEqualFold: String
-  abbreviationContainsFold: String
-  """description field predicates"""
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """external_link field predicates"""
-  externalLink: String
-  externalLinkNEQ: String
-  externalLinkIn: [String!]
-  externalLinkNotIn: [String!]
-  externalLinkGT: String
-  externalLinkGTE: String
-  externalLinkLT: String
-  externalLinkLTE: String
-  externalLinkContains: String
-  externalLinkHasPrefix: String
-  externalLinkHasSuffix: String
-  externalLinkIsNil: Boolean
-  externalLinkNotNil: Boolean
-  externalLinkEqualFold: String
-  externalLinkContainsFold: String
-  """artifacts edge predicates"""
-  hasArtifacts: Boolean
-  hasArtifactsWith: [ArtifactWhereInput!]
-}
 type Periodical implements Node {
   id: ID!
   createdAt: Time!
@@ -4967,6 +5031,7 @@ type Person implements Node {
   beginData: Time
   endDate: Time
   gender: PersonGender
+  occupation: String
   collections: [Collection!]
   arts: [Art!]
   artifacts: [Artifact!]
@@ -5249,6 +5314,22 @@ input PersonWhereInput {
   genderNotIn: [PersonGender!]
   genderIsNil: Boolean
   genderNotNil: Boolean
+  """occupation field predicates"""
+  occupation: String
+  occupationNEQ: String
+  occupationIn: [String!]
+  occupationNotIn: [String!]
+  occupationGT: String
+  occupationGTE: String
+  occupationLT: String
+  occupationLTE: String
+  occupationContains: String
+  occupationHasPrefix: String
+  occupationHasSuffix: String
+  occupationIsNil: Boolean
+  occupationNotNil: Boolean
+  occupationEqualFold: String
+  occupationContainsFold: String
   """collections edge predicates"""
   hasCollections: Boolean
   hasCollectionsWith: [CollectionWhereInput!]
@@ -7047,6 +7128,28 @@ type Query {
     """Filtering options for Favourites returned from the connection."""
     where: FavouriteWhereInput
   ): FavouriteConnection!
+  interviews(
+    """Returns the elements in the list that come after the specified cursor."""
+    after: Cursor
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come before the specified cursor."""
+    before: Cursor
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """Skip _n_ elements from the list."""
+    offset: Int
+
+    """Ordering options for Interviews returned from the connection."""
+    orderBy: [InterviewOrder!]
+
+    """Filtering options for Interviews returned from the connection."""
+    where: InterviewWhereInput
+  ): InterviewConnection!
   licenses(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -7179,28 +7282,6 @@ type Query {
     """Filtering options for Organizations returned from the connection."""
     where: OrganizationWhereInput
   ): OrganizationConnection!
-  periods(
-    """Returns the elements in the list that come after the specified cursor."""
-    after: Cursor
-
-    """Returns the first _n_ elements from the list."""
-    first: Int
-
-    """Returns the elements in the list that come before the specified cursor."""
-    before: Cursor
-
-    """Returns the last _n_ elements from the list."""
-    last: Int
-
-    """Skip _n_ elements from the list."""
-    offset: Int
-
-    """Ordering options for Periods returned from the connection."""
-    orderBy: [PeriodOrder!]
-
-    """Filtering options for Periods returned from the connection."""
-    where: PeriodWhereInput
-  ): PeriodConnection!
   periodicals(
     """Returns the elements in the list that come after the specified cursor."""
     after: Cursor
@@ -8341,8 +8422,10 @@ input UpdateArtifactInput {
   clearDeletedBy: Boolean
   dating: String
   clearDating: Boolean
-  dimensions: String
-  clearDimensions: Boolean
+  datingStart: Int
+  clearDatingStart: Boolean
+  datingEnd: Int
+  clearDatingEnd: Boolean
   height: Float
   clearHeight: Boolean
   width: Float
@@ -8355,10 +8438,14 @@ input UpdateArtifactInput {
   clearDiameter: Boolean
   weight: String
   clearWeight: Boolean
+  dimensions: String
+  clearDimensions: Boolean
   chemicalComposition: String
   clearChemicalComposition: Boolean
-  number: String
-  clearNumber: Boolean
+  goskatalogNumber: String
+  clearGoskatalogNumber: Boolean
+  inventoryNumber: String
+  clearInventoryNumber: Boolean
   typology: String
   clearTypology: Boolean
   admissionDate: Time
@@ -8372,8 +8459,6 @@ input UpdateArtifactInput {
   addTechniqueIDs: [ID!]
   removeTechniqueIDs: [ID!]
   clearTechniques: Boolean
-  periodID: ID
-  clearPeriod: Boolean
   addProjectIDs: [ID!]
   removeProjectIDs: [ID!]
   clearProjects: Boolean
@@ -8616,6 +8701,27 @@ input UpdateFavouriteInput {
   clearProxies: Boolean
 }
 """
+UpdateInterviewInput is used for update Interview object.
+Input was generated by ent.
+"""
+input UpdateInterviewInput {
+  createdBy: String
+  clearCreatedBy: Boolean
+  updatedAt: Time
+  updatedBy: String
+  clearUpdatedBy: Boolean
+  displayName: String
+  clearDisplayName: Boolean
+  abbreviation: String
+  clearAbbreviation: Boolean
+  description: String
+  clearDescription: Boolean
+  externalLink: String
+  clearExternalLink: Boolean
+  date: Time
+  clearDate: Boolean
+}
+"""
 UpdateLicenseInput is used for update License object.
 Input was generated by ent.
 """
@@ -8726,6 +8832,7 @@ input UpdateModelInput {
   clearExternalLink: Boolean
   status: ModelStatus
   clearStatus: Boolean
+  fileURL: String
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8803,28 +8910,6 @@ input UpdateOrganizationInput {
   clearPeople: Boolean
 }
 """
-UpdatePeriodInput is used for update Period object.
-Input was generated by ent.
-"""
-input UpdatePeriodInput {
-  createdBy: String
-  clearCreatedBy: Boolean
-  updatedAt: Time
-  updatedBy: String
-  clearUpdatedBy: Boolean
-  displayName: String
-  clearDisplayName: Boolean
-  abbreviation: String
-  clearAbbreviation: Boolean
-  description: String
-  clearDescription: Boolean
-  externalLink: String
-  clearExternalLink: Boolean
-  addArtifactIDs: [ID!]
-  removeArtifactIDs: [ID!]
-  clearArtifacts: Boolean
-}
-"""
 UpdatePeriodicalInput is used for update Periodical object.
 Input was generated by ent.
 """
@@ -8889,6 +8974,8 @@ input UpdatePersonInput {
   clearEndDate: Boolean
   gender: PersonGender
   clearGender: Boolean
+  occupation: String
+  clearOccupation: Boolean
   addCollectionIDs: [ID!]
   removeCollectionIDs: [ID!]
   clearCollections: Boolean

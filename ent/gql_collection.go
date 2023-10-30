@@ -21,13 +21,13 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
@@ -596,16 +596,6 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			a.WithNamedTechniques(alias, func(wq *TechniqueQuery) {
 				*wq = *query
 			})
-		case "period":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&PeriodClient{config: a.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, periodImplementors)...); err != nil {
-				return err
-			}
-			a.withPeriod = query
 		case "projects":
 			var (
 				alias = field.Alias
@@ -770,10 +760,15 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldDating)
 				fieldSeen[artifact.FieldDating] = struct{}{}
 			}
-		case "dimensions":
-			if _, ok := fieldSeen[artifact.FieldDimensions]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldDimensions)
-				fieldSeen[artifact.FieldDimensions] = struct{}{}
+		case "datingStart":
+			if _, ok := fieldSeen[artifact.FieldDatingStart]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDatingStart)
+				fieldSeen[artifact.FieldDatingStart] = struct{}{}
+			}
+		case "datingEnd":
+			if _, ok := fieldSeen[artifact.FieldDatingEnd]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDatingEnd)
+				fieldSeen[artifact.FieldDatingEnd] = struct{}{}
 			}
 		case "height":
 			if _, ok := fieldSeen[artifact.FieldHeight]; !ok {
@@ -805,15 +800,25 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldWeight)
 				fieldSeen[artifact.FieldWeight] = struct{}{}
 			}
+		case "dimensions":
+			if _, ok := fieldSeen[artifact.FieldDimensions]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDimensions)
+				fieldSeen[artifact.FieldDimensions] = struct{}{}
+			}
 		case "chemicalComposition":
 			if _, ok := fieldSeen[artifact.FieldChemicalComposition]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldChemicalComposition)
 				fieldSeen[artifact.FieldChemicalComposition] = struct{}{}
 			}
-		case "number":
-			if _, ok := fieldSeen[artifact.FieldNumber]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldNumber)
-				fieldSeen[artifact.FieldNumber] = struct{}{}
+		case "goskatalogNumber":
+			if _, ok := fieldSeen[artifact.FieldGoskatalogNumber]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldGoskatalogNumber)
+				fieldSeen[artifact.FieldGoskatalogNumber] = struct{}{}
+			}
+		case "inventoryNumber":
+			if _, ok := fieldSeen[artifact.FieldInventoryNumber]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldInventoryNumber)
+				fieldSeen[artifact.FieldInventoryNumber] = struct{}{}
 			}
 		case "typology":
 			if _, ok := fieldSeen[artifact.FieldTypology]; !ok {
@@ -2351,6 +2356,141 @@ func newFavouritePaginateArgs(rv map[string]any) *favouritePaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (i *InterviewQuery) CollectFields(ctx context.Context, satisfies ...string) (*InterviewQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return i, nil
+	}
+	if err := i.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return i, nil
+}
+
+func (i *InterviewQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(interview.Columns))
+		selectedFields = []string{interview.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[interview.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, interview.FieldCreatedAt)
+				fieldSeen[interview.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[interview.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, interview.FieldCreatedBy)
+				fieldSeen[interview.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[interview.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, interview.FieldUpdatedAt)
+				fieldSeen[interview.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[interview.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, interview.FieldUpdatedBy)
+				fieldSeen[interview.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[interview.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, interview.FieldDisplayName)
+				fieldSeen[interview.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[interview.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, interview.FieldAbbreviation)
+				fieldSeen[interview.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[interview.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, interview.FieldDescription)
+				fieldSeen[interview.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[interview.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, interview.FieldExternalLink)
+				fieldSeen[interview.FieldExternalLink] = struct{}{}
+			}
+		case "date":
+			if _, ok := fieldSeen[interview.FieldDate]; !ok {
+				selectedFields = append(selectedFields, interview.FieldDate)
+				fieldSeen[interview.FieldDate] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		i.Select(selectedFields...)
+	}
+	return nil
+}
+
+type interviewPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []InterviewPaginateOption
+}
+
+func newInterviewPaginateArgs(rv map[string]any) *interviewPaginateArgs {
+	args := &interviewPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*InterviewOrder:
+			args.opts = append(args.opts, WithInterviewOrder(v))
+		case []any:
+			var orders []*InterviewOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &InterviewOrder{Field: &InterviewOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithInterviewOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*InterviewWhereInput); ok {
+		args.opts = append(args.opts, WithInterviewFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (k *KeywordQuery) CollectFields(ctx context.Context, satisfies ...string) (*KeywordQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -3005,6 +3145,11 @@ func (m *ModelQuery) collectField(ctx context.Context, opCtx *graphql.OperationC
 				selectedFields = append(selectedFields, model.FieldStatus)
 				fieldSeen[model.FieldStatus] = struct{}{}
 			}
+		case "fileURL":
+			if _, ok := fieldSeen[model.FieldFileURL]; !ok {
+				selectedFields = append(selectedFields, model.FieldFileURL)
+				fieldSeen[model.FieldFileURL] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -3422,148 +3567,6 @@ func newOrganizationPaginateArgs(rv map[string]any) *organizationPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pe *PeriodQuery) CollectFields(ctx context.Context, satisfies ...string) (*PeriodQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return pe, nil
-	}
-	if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return pe, nil
-}
-
-func (pe *PeriodQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(period.Columns))
-		selectedFields = []string{period.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "artifacts":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ArtifactClient{config: pe.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
-				return err
-			}
-			pe.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
-				*wq = *query
-			})
-		case "createdAt":
-			if _, ok := fieldSeen[period.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, period.FieldCreatedAt)
-				fieldSeen[period.FieldCreatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[period.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, period.FieldCreatedBy)
-				fieldSeen[period.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[period.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, period.FieldUpdatedAt)
-				fieldSeen[period.FieldUpdatedAt] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[period.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, period.FieldUpdatedBy)
-				fieldSeen[period.FieldUpdatedBy] = struct{}{}
-			}
-		case "displayName":
-			if _, ok := fieldSeen[period.FieldDisplayName]; !ok {
-				selectedFields = append(selectedFields, period.FieldDisplayName)
-				fieldSeen[period.FieldDisplayName] = struct{}{}
-			}
-		case "abbreviation":
-			if _, ok := fieldSeen[period.FieldAbbreviation]; !ok {
-				selectedFields = append(selectedFields, period.FieldAbbreviation)
-				fieldSeen[period.FieldAbbreviation] = struct{}{}
-			}
-		case "description":
-			if _, ok := fieldSeen[period.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, period.FieldDescription)
-				fieldSeen[period.FieldDescription] = struct{}{}
-			}
-		case "externalLink":
-			if _, ok := fieldSeen[period.FieldExternalLink]; !ok {
-				selectedFields = append(selectedFields, period.FieldExternalLink)
-				fieldSeen[period.FieldExternalLink] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		pe.Select(selectedFields...)
-	}
-	return nil
-}
-
-type periodPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []PeriodPaginateOption
-}
-
-func newPeriodPaginateArgs(rv map[string]any) *periodPaginateArgs {
-	args := &periodPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case []*PeriodOrder:
-			args.opts = append(args.opts, WithPeriodOrder(v))
-		case []any:
-			var orders []*PeriodOrder
-			for i := range v {
-				mv, ok := v[i].(map[string]any)
-				if !ok {
-					continue
-				}
-				var (
-					err1, err2 error
-					order      = &PeriodOrder{Field: &PeriodOrderField{}, Direction: entgql.OrderDirectionAsc}
-				)
-				if d, ok := mv[directionField]; ok {
-					err1 = order.Direction.UnmarshalGQL(d)
-				}
-				if f, ok := mv[fieldField]; ok {
-					err2 = order.Field.UnmarshalGQL(f)
-				}
-				if err1 == nil && err2 == nil {
-					orders = append(orders, order)
-				}
-			}
-			args.opts = append(args.opts, WithPeriodOrder(orders))
-		}
-	}
-	if v, ok := rv[whereField].(*PeriodWhereInput); ok {
-		args.opts = append(args.opts, WithPeriodFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (pe *PeriodicalQuery) CollectFields(ctx context.Context, satisfies ...string) (*PeriodicalQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -3902,6 +3905,11 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if _, ok := fieldSeen[person.FieldGender]; !ok {
 				selectedFields = append(selectedFields, person.FieldGender)
 				fieldSeen[person.FieldGender] = struct{}{}
+			}
+		case "occupation":
+			if _, ok := fieldSeen[person.FieldOccupation]; !ok {
+				selectedFields = append(selectedFields, person.FieldOccupation)
+				fieldSeen[person.FieldOccupation] = struct{}{}
 			}
 		case "id":
 		case "__typename":

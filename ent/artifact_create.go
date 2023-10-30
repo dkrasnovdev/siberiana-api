@@ -18,7 +18,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -221,16 +220,30 @@ func (ac *ArtifactCreate) SetNillableDating(s *string) *ArtifactCreate {
 	return ac
 }
 
-// SetDimensions sets the "dimensions" field.
-func (ac *ArtifactCreate) SetDimensions(s string) *ArtifactCreate {
-	ac.mutation.SetDimensions(s)
+// SetDatingStart sets the "dating_start" field.
+func (ac *ArtifactCreate) SetDatingStart(i int) *ArtifactCreate {
+	ac.mutation.SetDatingStart(i)
 	return ac
 }
 
-// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableDimensions(s *string) *ArtifactCreate {
-	if s != nil {
-		ac.SetDimensions(*s)
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDatingStart(i *int) *ArtifactCreate {
+	if i != nil {
+		ac.SetDatingStart(*i)
+	}
+	return ac
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (ac *ArtifactCreate) SetDatingEnd(i int) *ArtifactCreate {
+	ac.mutation.SetDatingEnd(i)
+	return ac
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDatingEnd(i *int) *ArtifactCreate {
+	if i != nil {
+		ac.SetDatingEnd(*i)
 	}
 	return ac
 }
@@ -319,6 +332,20 @@ func (ac *ArtifactCreate) SetNillableWeight(s *string) *ArtifactCreate {
 	return ac
 }
 
+// SetDimensions sets the "dimensions" field.
+func (ac *ArtifactCreate) SetDimensions(s string) *ArtifactCreate {
+	ac.mutation.SetDimensions(s)
+	return ac
+}
+
+// SetNillableDimensions sets the "dimensions" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDimensions(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDimensions(*s)
+	}
+	return ac
+}
+
 // SetChemicalComposition sets the "chemical_composition" field.
 func (ac *ArtifactCreate) SetChemicalComposition(s string) *ArtifactCreate {
 	ac.mutation.SetChemicalComposition(s)
@@ -333,16 +360,30 @@ func (ac *ArtifactCreate) SetNillableChemicalComposition(s *string) *ArtifactCre
 	return ac
 }
 
-// SetNumber sets the "number" field.
-func (ac *ArtifactCreate) SetNumber(s string) *ArtifactCreate {
-	ac.mutation.SetNumber(s)
+// SetGoskatalogNumber sets the "goskatalog_number" field.
+func (ac *ArtifactCreate) SetGoskatalogNumber(s string) *ArtifactCreate {
+	ac.mutation.SetGoskatalogNumber(s)
 	return ac
 }
 
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableNumber(s *string) *ArtifactCreate {
+// SetNillableGoskatalogNumber sets the "goskatalog_number" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableGoskatalogNumber(s *string) *ArtifactCreate {
 	if s != nil {
-		ac.SetNumber(*s)
+		ac.SetGoskatalogNumber(*s)
+	}
+	return ac
+}
+
+// SetInventoryNumber sets the "inventory_number" field.
+func (ac *ArtifactCreate) SetInventoryNumber(s string) *ArtifactCreate {
+	ac.mutation.SetInventoryNumber(s)
+	return ac
+}
+
+// SetNillableInventoryNumber sets the "inventory_number" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableInventoryNumber(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetInventoryNumber(*s)
 	}
 	return ac
 }
@@ -418,25 +459,6 @@ func (ac *ArtifactCreate) AddTechniques(t ...*Technique) *ArtifactCreate {
 		ids[i] = t[i].ID
 	}
 	return ac.AddTechniqueIDs(ids...)
-}
-
-// SetPeriodID sets the "period" edge to the Period entity by ID.
-func (ac *ArtifactCreate) SetPeriodID(id int) *ArtifactCreate {
-	ac.mutation.SetPeriodID(id)
-	return ac
-}
-
-// SetNillablePeriodID sets the "period" edge to the Period entity by ID if the given value is not nil.
-func (ac *ArtifactCreate) SetNillablePeriodID(id *int) *ArtifactCreate {
-	if id != nil {
-		ac = ac.SetPeriodID(*id)
-	}
-	return ac
-}
-
-// SetPeriod sets the "period" edge to the Period entity.
-func (ac *ArtifactCreate) SetPeriod(p *Period) *ArtifactCreate {
-	return ac.SetPeriodID(p.ID)
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
@@ -750,9 +772,13 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldDating, field.TypeString, value)
 		_node.Dating = value
 	}
-	if value, ok := ac.mutation.Dimensions(); ok {
-		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
-		_node.Dimensions = value
+	if value, ok := ac.mutation.DatingStart(); ok {
+		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
+		_node.DatingStart = value
+	}
+	if value, ok := ac.mutation.DatingEnd(); ok {
+		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
+		_node.DatingEnd = value
 	}
 	if value, ok := ac.mutation.Height(); ok {
 		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
@@ -778,13 +804,21 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldWeight, field.TypeString, value)
 		_node.Weight = value
 	}
+	if value, ok := ac.mutation.Dimensions(); ok {
+		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
+		_node.Dimensions = value
+	}
 	if value, ok := ac.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 		_node.ChemicalComposition = value
 	}
-	if value, ok := ac.mutation.Number(); ok {
-		_spec.SetField(artifact.FieldNumber, field.TypeString, value)
-		_node.Number = value
+	if value, ok := ac.mutation.GoskatalogNumber(); ok {
+		_spec.SetField(artifact.FieldGoskatalogNumber, field.TypeString, value)
+		_node.GoskatalogNumber = value
+	}
+	if value, ok := ac.mutation.InventoryNumber(); ok {
+		_spec.SetField(artifact.FieldInventoryNumber, field.TypeString, value)
+		_node.InventoryNumber = value
 	}
 	if value, ok := ac.mutation.Typology(); ok {
 		_spec.SetField(artifact.FieldTypology, field.TypeString, value)
@@ -840,23 +874,6 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ac.mutation.PeriodIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   artifact.PeriodTable,
-			Columns: []string{artifact.PeriodColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(period.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.period_artifacts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.ProjectsIDs(); len(nodes) > 0 {

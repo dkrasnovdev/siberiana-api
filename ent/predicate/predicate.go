@@ -45,6 +45,9 @@ type District func(*sql.Selector)
 // Favourite is the predicate function for favourite builders.
 type Favourite func(*sql.Selector)
 
+// Interview is the predicate function for interview builders.
+type Interview func(*sql.Selector)
+
 // Keyword is the predicate function for keyword builders.
 type Keyword func(*sql.Selector)
 
@@ -65,9 +68,6 @@ type Monument func(*sql.Selector)
 
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
-
-// Period is the predicate function for period builders.
-type Period func(*sql.Selector)
 
 // Periodical is the predicate function for periodical builders.
 type Periodical func(*sql.Selector)

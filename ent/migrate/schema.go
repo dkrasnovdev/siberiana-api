@@ -100,15 +100,18 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "dating", Type: field.TypeString, Nullable: true},
-		{Name: "dimensions", Type: field.TypeString, Nullable: true},
+		{Name: "dating_start", Type: field.TypeInt, Nullable: true},
+		{Name: "dating_end", Type: field.TypeInt, Nullable: true},
 		{Name: "height", Type: field.TypeFloat64, Nullable: true},
 		{Name: "width", Type: field.TypeFloat64, Nullable: true},
 		{Name: "length", Type: field.TypeFloat64, Nullable: true},
 		{Name: "depth", Type: field.TypeFloat64, Nullable: true},
 		{Name: "diameter", Type: field.TypeFloat64, Nullable: true},
 		{Name: "weight", Type: field.TypeString, Nullable: true},
+		{Name: "dimensions", Type: field.TypeString, Nullable: true},
 		{Name: "chemical_composition", Type: field.TypeString, Nullable: true},
-		{Name: "number", Type: field.TypeString, Nullable: true},
+		{Name: "goskatalog_number", Type: field.TypeString, Nullable: true},
+		{Name: "inventory_number", Type: field.TypeString, Nullable: true},
 		{Name: "typology", Type: field.TypeString, Nullable: true},
 		{Name: "admission_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "collection_artifacts", Type: field.TypeInt},
@@ -117,7 +120,6 @@ var (
 		{Name: "location_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "model_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "monument_artifacts", Type: field.TypeInt, Nullable: true},
-		{Name: "period_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "set_artifacts", Type: field.TypeInt, Nullable: true},
 	}
 	// ArtifactsTable holds the schema information for the "artifacts" table.
@@ -128,49 +130,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "artifacts_collections_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[26]},
+				Columns:    []*schema.Column{ArtifactsColumns[29]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "artifacts_cultures_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[27]},
+				Columns:    []*schema.Column{ArtifactsColumns[30]},
 				RefColumns: []*schema.Column{CulturesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_licenses_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[28]},
+				Columns:    []*schema.Column{ArtifactsColumns[31]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_locations_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[29]},
+				Columns:    []*schema.Column{ArtifactsColumns[32]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_models_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[30]},
+				Columns:    []*schema.Column{ArtifactsColumns[33]},
 				RefColumns: []*schema.Column{ModelsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_monuments_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[31]},
+				Columns:    []*schema.Column{ArtifactsColumns[34]},
 				RefColumns: []*schema.Column{MonumentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "artifacts_periods_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[32]},
-				RefColumns: []*schema.Column{PeriodsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "artifacts_sets_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[33]},
+				Columns:    []*schema.Column{ArtifactsColumns[35]},
 				RefColumns: []*schema.Column{SetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -408,6 +404,25 @@ var (
 		Columns:    FavouritesColumns,
 		PrimaryKey: []*schema.Column{FavouritesColumns[0]},
 	}
+	// InterviewsColumns holds the columns for the "interviews" table.
+	InterviewsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+	}
+	// InterviewsTable holds the schema information for the "interviews" table.
+	InterviewsTable = &schema.Table{
+		Name:       "interviews",
+		Columns:    InterviewsColumns,
+		PrimaryKey: []*schema.Column{InterviewsColumns[0]},
+	}
 	// KeywordsColumns holds the columns for the "keywords" table.
 	KeywordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -515,6 +530,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "file_url", Type: field.TypeString},
 	}
 	// ModelsTable holds the schema information for the "models" table.
 	ModelsTable = &schema.Table{
@@ -567,24 +583,6 @@ var (
 		Columns:    OrganizationsColumns,
 		PrimaryKey: []*schema.Column{OrganizationsColumns[0]},
 	}
-	// PeriodsColumns holds the columns for the "periods" table.
-	PeriodsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "external_link", Type: field.TypeString, Nullable: true},
-	}
-	// PeriodsTable holds the schema information for the "periods" table.
-	PeriodsTable = &schema.Table{
-		Name:       "periods",
-		Columns:    PeriodsColumns,
-		PrimaryKey: []*schema.Column{PeriodsColumns[0]},
-	}
 	// PeriodicalsColumns holds the columns for the "periodicals" table.
 	PeriodicalsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -625,6 +623,7 @@ var (
 		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "gender", Type: field.TypeEnum, Nullable: true, Enums: []string{"female", "male"}},
+		{Name: "occupation", Type: field.TypeString, Nullable: true},
 		{Name: "organization_people", Type: field.TypeInt, Nullable: true},
 	}
 	// PersonsTable holds the schema information for the "persons" table.
@@ -635,7 +634,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "persons_organizations_people",
-				Columns:    []*schema.Column{PersonsColumns[20]},
+				Columns:    []*schema.Column{PersonsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1283,6 +1282,7 @@ var (
 		CulturesTable,
 		DistrictsTable,
 		FavouritesTable,
+		InterviewsTable,
 		KeywordsTable,
 		LicensesTable,
 		LocationsTable,
@@ -1290,7 +1290,6 @@ var (
 		ModelsTable,
 		MonumentsTable,
 		OrganizationsTable,
-		PeriodsTable,
 		PeriodicalsTable,
 		PersonsTable,
 		PersonalsTable,
@@ -1331,8 +1330,7 @@ func init() {
 	ArtifactsTable.ForeignKeys[3].RefTable = LocationsTable
 	ArtifactsTable.ForeignKeys[4].RefTable = ModelsTable
 	ArtifactsTable.ForeignKeys[5].RefTable = MonumentsTable
-	ArtifactsTable.ForeignKeys[6].RefTable = PeriodsTable
-	ArtifactsTable.ForeignKeys[7].RefTable = SetsTable
+	ArtifactsTable.ForeignKeys[6].RefTable = SetsTable
 	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
 	BooksTable.ForeignKeys[1].RefTable = LicensesTable
 	BooksTable.ForeignKeys[2].RefTable = LocationsTable

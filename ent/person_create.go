@@ -269,6 +269,20 @@ func (pc *PersonCreate) SetNillableGender(pe *person.Gender) *PersonCreate {
 	return pc
 }
 
+// SetOccupation sets the "occupation" field.
+func (pc *PersonCreate) SetOccupation(s string) *PersonCreate {
+	pc.mutation.SetOccupation(s)
+	return pc
+}
+
+// SetNillableOccupation sets the "occupation" field if the given value is not nil.
+func (pc *PersonCreate) SetNillableOccupation(s *string) *PersonCreate {
+	if s != nil {
+		pc.SetOccupation(*s)
+	}
+	return pc
+}
+
 // AddCollectionIDs adds the "collections" edge to the Collection entity by IDs.
 func (pc *PersonCreate) AddCollectionIDs(ids ...int) *PersonCreate {
 	pc.mutation.AddCollectionIDs(ids...)
@@ -546,6 +560,10 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Gender(); ok {
 		_spec.SetField(person.FieldGender, field.TypeEnum, value)
 		_node.Gender = value
+	}
+	if value, ok := pc.mutation.Occupation(); ok {
+		_spec.SetField(person.FieldOccupation, field.TypeString, value)
+		_node.Occupation = value
 	}
 	if nodes := pc.mutation.CollectionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

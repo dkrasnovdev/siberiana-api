@@ -407,28 +407,6 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id int) (stri
 	return "Organization has been deleted", nil
 }
 
-// CreatePeriod is the resolver for the createPeriod field.
-func (r *mutationResolver) CreatePeriod(ctx context.Context, input ent.CreatePeriodInput) (*ent.Period, error) {
-	client := ent.FromContext(ctx)
-	return client.Period.Create().SetInput(input).Save(ctx)
-}
-
-// UpdatePeriod is the resolver for the updatePeriod field.
-func (r *mutationResolver) UpdatePeriod(ctx context.Context, id int, input ent.UpdatePeriodInput) (*ent.Period, error) {
-	client := ent.FromContext(ctx)
-	return client.Period.UpdateOneID(id).SetInput(input).Save(ctx)
-}
-
-// DeletePeriod is the resolver for the deletePeriod field.
-func (r *mutationResolver) DeletePeriod(ctx context.Context, id int) (string, error) {
-	client := ent.FromContext(ctx)
-	err := client.Period.DeleteOneID(id).Exec(ctx)
-	if err != nil {
-		return "", err
-	}
-	return "Period has been deleted", nil
-}
-
 // CreatePeriodical is the resolver for the createPeriodical field.
 func (r *mutationResolver) CreatePeriodical(ctx context.Context, input ent.CreatePeriodicalInput) (*ent.Periodical, error) {
 	client := ent.FromContext(ctx)

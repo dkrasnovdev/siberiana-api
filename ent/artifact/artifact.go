@@ -46,8 +46,10 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldDating holds the string denoting the dating field in the database.
 	FieldDating = "dating"
-	// FieldDimensions holds the string denoting the dimensions field in the database.
-	FieldDimensions = "dimensions"
+	// FieldDatingStart holds the string denoting the dating_start field in the database.
+	FieldDatingStart = "dating_start"
+	// FieldDatingEnd holds the string denoting the dating_end field in the database.
+	FieldDatingEnd = "dating_end"
 	// FieldHeight holds the string denoting the height field in the database.
 	FieldHeight = "height"
 	// FieldWidth holds the string denoting the width field in the database.
@@ -60,10 +62,14 @@ const (
 	FieldDiameter = "diameter"
 	// FieldWeight holds the string denoting the weight field in the database.
 	FieldWeight = "weight"
+	// FieldDimensions holds the string denoting the dimensions field in the database.
+	FieldDimensions = "dimensions"
 	// FieldChemicalComposition holds the string denoting the chemical_composition field in the database.
 	FieldChemicalComposition = "chemical_composition"
-	// FieldNumber holds the string denoting the number field in the database.
-	FieldNumber = "number"
+	// FieldGoskatalogNumber holds the string denoting the goskatalog_number field in the database.
+	FieldGoskatalogNumber = "goskatalog_number"
+	// FieldInventoryNumber holds the string denoting the inventory_number field in the database.
+	FieldInventoryNumber = "inventory_number"
 	// FieldTypology holds the string denoting the typology field in the database.
 	FieldTypology = "typology"
 	// FieldAdmissionDate holds the string denoting the admission_date field in the database.
@@ -74,8 +80,6 @@ const (
 	EdgeMediums = "mediums"
 	// EdgeTechniques holds the string denoting the techniques edge name in mutations.
 	EdgeTechniques = "techniques"
-	// EdgePeriod holds the string denoting the period edge name in mutations.
-	EdgePeriod = "period"
 	// EdgeProjects holds the string denoting the projects edge name in mutations.
 	EdgeProjects = "projects"
 	// EdgePublications holds the string denoting the publications edge name in mutations.
@@ -111,13 +115,6 @@ const (
 	// TechniquesInverseTable is the table name for the Technique entity.
 	// It exists in this package in order to avoid circular dependency with the "technique" package.
 	TechniquesInverseTable = "techniques"
-	// PeriodTable is the table that holds the period relation/edge.
-	PeriodTable = "artifacts"
-	// PeriodInverseTable is the table name for the Period entity.
-	// It exists in this package in order to avoid circular dependency with the "period" package.
-	PeriodInverseTable = "periods"
-	// PeriodColumn is the table column denoting the period relation/edge.
-	PeriodColumn = "period_artifacts"
 	// ProjectsTable is the table that holds the projects relation/edge. The primary key declared below.
 	ProjectsTable = "project_artifacts"
 	// ProjectsInverseTable is the table name for the Project entity.
@@ -196,15 +193,18 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldDating,
-	FieldDimensions,
+	FieldDatingStart,
+	FieldDatingEnd,
 	FieldHeight,
 	FieldWidth,
 	FieldLength,
 	FieldDepth,
 	FieldDiameter,
 	FieldWeight,
+	FieldDimensions,
 	FieldChemicalComposition,
-	FieldNumber,
+	FieldGoskatalogNumber,
+	FieldInventoryNumber,
 	FieldTypology,
 	FieldAdmissionDate,
 }
@@ -218,7 +218,6 @@ var ForeignKeys = []string{
 	"location_artifacts",
 	"model_artifacts",
 	"monument_artifacts",
-	"period_artifacts",
 	"set_artifacts",
 }
 
@@ -372,9 +371,14 @@ func ByDating(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDating, opts...).ToFunc()
 }
 
-// ByDimensions orders the results by the dimensions field.
-func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
+// ByDatingStart orders the results by the dating_start field.
+func ByDatingStart(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDatingStart, opts...).ToFunc()
+}
+
+// ByDatingEnd orders the results by the dating_end field.
+func ByDatingEnd(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDatingEnd, opts...).ToFunc()
 }
 
 // ByHeight orders the results by the height field.
@@ -407,14 +411,24 @@ func ByWeight(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWeight, opts...).ToFunc()
 }
 
+// ByDimensions orders the results by the dimensions field.
+func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
+}
+
 // ByChemicalComposition orders the results by the chemical_composition field.
 func ByChemicalComposition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChemicalComposition, opts...).ToFunc()
 }
 
-// ByNumber orders the results by the number field.
-func ByNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+// ByGoskatalogNumber orders the results by the goskatalog_number field.
+func ByGoskatalogNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGoskatalogNumber, opts...).ToFunc()
+}
+
+// ByInventoryNumber orders the results by the inventory_number field.
+func ByInventoryNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInventoryNumber, opts...).ToFunc()
 }
 
 // ByTypology orders the results by the typology field.
@@ -466,13 +480,6 @@ func ByTechniquesCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTechniques(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTechniquesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByPeriodField orders the results by period field.
-func ByPeriodField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPeriodStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -571,13 +578,6 @@ func newTechniquesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TechniquesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, TechniquesTable, TechniquesPrimaryKey...),
-	)
-}
-func newPeriodStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PeriodInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, PeriodTable, PeriodColumn),
 	)
 }
 func newProjectsStep() *sqlgraph.Step {

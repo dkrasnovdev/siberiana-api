@@ -548,21 +548,23 @@ type CreateArtifactInput struct {
 	DeletedAt             *time.Time
 	DeletedBy             *string
 	Dating                *string
-	Dimensions            *string
+	DatingStart           *int
+	DatingEnd             *int
 	Height                *float64
 	Width                 *float64
 	Length                *float64
 	Depth                 *float64
 	Diameter              *float64
 	Weight                *string
+	Dimensions            *string
 	ChemicalComposition   *string
-	Number                *string
+	GoskatalogNumber      *string
+	InventoryNumber       *string
 	Typology              *string
 	AdmissionDate         *time.Time
 	AuthorIDs             []int
 	MediumIDs             []int
 	TechniqueIDs          []int
-	PeriodID              *int
 	ProjectIDs            []int
 	PublicationIDs        []int
 	CulturalAffiliationID *int
@@ -618,8 +620,11 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Dating; v != nil {
 		m.SetDating(*v)
 	}
-	if v := i.Dimensions; v != nil {
-		m.SetDimensions(*v)
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
 	}
 	if v := i.Height; v != nil {
 		m.SetHeight(*v)
@@ -639,11 +644,17 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Weight; v != nil {
 		m.SetWeight(*v)
 	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
 	}
-	if v := i.Number; v != nil {
-		m.SetNumber(*v)
+	if v := i.GoskatalogNumber; v != nil {
+		m.SetGoskatalogNumber(*v)
+	}
+	if v := i.InventoryNumber; v != nil {
+		m.SetInventoryNumber(*v)
 	}
 	if v := i.Typology; v != nil {
 		m.SetTypology(*v)
@@ -659,9 +670,6 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.TechniqueIDs; len(v) > 0 {
 		m.AddTechniqueIDs(v...)
-	}
-	if v := i.PeriodID; v != nil {
-		m.SetPeriodID(*v)
 	}
 	if v := i.ProjectIDs; len(v) > 0 {
 		m.AddProjectIDs(v...)
@@ -724,8 +732,10 @@ type UpdateArtifactInput struct {
 	DeletedBy                  *string
 	ClearDating                bool
 	Dating                     *string
-	ClearDimensions            bool
-	Dimensions                 *string
+	ClearDatingStart           bool
+	DatingStart                *int
+	ClearDatingEnd             bool
+	DatingEnd                  *int
 	ClearHeight                bool
 	Height                     *float64
 	ClearWidth                 bool
@@ -738,10 +748,14 @@ type UpdateArtifactInput struct {
 	Diameter                   *float64
 	ClearWeight                bool
 	Weight                     *string
+	ClearDimensions            bool
+	Dimensions                 *string
 	ClearChemicalComposition   bool
 	ChemicalComposition        *string
-	ClearNumber                bool
-	Number                     *string
+	ClearGoskatalogNumber      bool
+	GoskatalogNumber           *string
+	ClearInventoryNumber       bool
+	InventoryNumber            *string
 	ClearTypology              bool
 	Typology                   *string
 	ClearAdmissionDate         bool
@@ -755,8 +769,6 @@ type UpdateArtifactInput struct {
 	ClearTechniques            bool
 	AddTechniqueIDs            []int
 	RemoveTechniqueIDs         []int
-	ClearPeriod                bool
-	PeriodID                   *int
 	ClearProjects              bool
 	AddProjectIDs              []int
 	RemoveProjectIDs           []int
@@ -858,11 +870,17 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Dating; v != nil {
 		m.SetDating(*v)
 	}
-	if i.ClearDimensions {
-		m.ClearDimensions()
+	if i.ClearDatingStart {
+		m.ClearDatingStart()
 	}
-	if v := i.Dimensions; v != nil {
-		m.SetDimensions(*v)
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if i.ClearDatingEnd {
+		m.ClearDatingEnd()
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
 	}
 	if i.ClearHeight {
 		m.ClearHeight()
@@ -900,17 +918,29 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.Weight; v != nil {
 		m.SetWeight(*v)
 	}
+	if i.ClearDimensions {
+		m.ClearDimensions()
+	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
 	if i.ClearChemicalComposition {
 		m.ClearChemicalComposition()
 	}
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
 	}
-	if i.ClearNumber {
-		m.ClearNumber()
+	if i.ClearGoskatalogNumber {
+		m.ClearGoskatalogNumber()
 	}
-	if v := i.Number; v != nil {
-		m.SetNumber(*v)
+	if v := i.GoskatalogNumber; v != nil {
+		m.SetGoskatalogNumber(*v)
+	}
+	if i.ClearInventoryNumber {
+		m.ClearInventoryNumber()
+	}
+	if v := i.InventoryNumber; v != nil {
+		m.SetInventoryNumber(*v)
 	}
 	if i.ClearTypology {
 		m.ClearTypology()
@@ -950,12 +980,6 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.RemoveTechniqueIDs; len(v) > 0 {
 		m.RemoveTechniqueIDs(v...)
-	}
-	if i.ClearPeriod {
-		m.ClearPeriod()
-	}
-	if v := i.PeriodID; v != nil {
-		m.SetPeriodID(*v)
 	}
 	if i.ClearProjects {
 		m.ClearProjects()
@@ -2358,6 +2382,136 @@ func (c *FavouriteUpdateOne) SetInput(i UpdateFavouriteInput) *FavouriteUpdateOn
 	return c
 }
 
+// CreateInterviewInput represents a mutation input for creating interviews.
+type CreateInterviewInput struct {
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	Date         *time.Time
+}
+
+// Mutate applies the CreateInterviewInput on the InterviewMutation builder.
+func (i *CreateInterviewInput) Mutate(m *InterviewMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.Date; v != nil {
+		m.SetDate(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateInterviewInput on the InterviewCreate builder.
+func (c *InterviewCreate) SetInput(i CreateInterviewInput) *InterviewCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateInterviewInput represents a mutation input for updating interviews.
+type UpdateInterviewInput struct {
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearDate         bool
+	Date              *time.Time
+}
+
+// Mutate applies the UpdateInterviewInput on the InterviewMutation builder.
+func (i *UpdateInterviewInput) Mutate(m *InterviewMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearDate {
+		m.ClearDate()
+	}
+	if v := i.Date; v != nil {
+		m.SetDate(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateInterviewInput on the InterviewUpdate builder.
+func (c *InterviewUpdate) SetInput(i UpdateInterviewInput) *InterviewUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateInterviewInput on the InterviewUpdateOne builder.
+func (c *InterviewUpdateOne) SetInput(i UpdateInterviewInput) *InterviewUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateLicenseInput represents a mutation input for creating licenses.
 type CreateLicenseInput struct {
 	CreatedAt               *time.Time
@@ -2911,6 +3065,7 @@ type CreateModelInput struct {
 	Description  *string
 	ExternalLink *string
 	Status       *model.Status
+	FileURL      string
 	ArtifactIDs  []int
 }
 
@@ -2943,6 +3098,7 @@ func (i *CreateModelInput) Mutate(m *ModelMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
+	m.SetFileURL(i.FileURL)
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -2971,6 +3127,7 @@ type UpdateModelInput struct {
 	ExternalLink      *string
 	ClearStatus       bool
 	Status            *model.Status
+	FileURL           *string
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -3022,6 +3179,9 @@ func (i *UpdateModelInput) Mutate(m *ModelMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.FileURL; v != nil {
+		m.SetFileURL(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -3470,140 +3630,6 @@ func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *Organizatio
 	return c
 }
 
-// CreatePeriodInput represents a mutation input for creating periods.
-type CreatePeriodInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	ArtifactIDs  []int
-}
-
-// Mutate applies the CreatePeriodInput on the PeriodMutation builder.
-func (i *CreatePeriodInput) Mutate(m *PeriodMutation) {
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if v := i.ArtifactIDs; len(v) > 0 {
-		m.AddArtifactIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreatePeriodInput on the PeriodCreate builder.
-func (c *PeriodCreate) SetInput(i CreatePeriodInput) *PeriodCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdatePeriodInput represents a mutation input for updating periods.
-type UpdatePeriodInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearArtifacts    bool
-	AddArtifactIDs    []int
-	RemoveArtifactIDs []int
-}
-
-// Mutate applies the UpdatePeriodInput on the PeriodMutation builder.
-func (i *UpdatePeriodInput) Mutate(m *PeriodMutation) {
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if i.ClearDisplayName {
-		m.ClearDisplayName()
-	}
-	if v := i.DisplayName; v != nil {
-		m.SetDisplayName(*v)
-	}
-	if i.ClearAbbreviation {
-		m.ClearAbbreviation()
-	}
-	if v := i.Abbreviation; v != nil {
-		m.SetAbbreviation(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if i.ClearExternalLink {
-		m.ClearExternalLink()
-	}
-	if v := i.ExternalLink; v != nil {
-		m.SetExternalLink(*v)
-	}
-	if i.ClearArtifacts {
-		m.ClearArtifacts()
-	}
-	if v := i.AddArtifactIDs; len(v) > 0 {
-		m.AddArtifactIDs(v...)
-	}
-	if v := i.RemoveArtifactIDs; len(v) > 0 {
-		m.RemoveArtifactIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdatePeriodInput on the PeriodUpdate builder.
-func (c *PeriodUpdate) SetInput(i UpdatePeriodInput) *PeriodUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdatePeriodInput on the PeriodUpdateOne builder.
-func (c *PeriodUpdateOne) SetInput(i UpdatePeriodInput) *PeriodUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
 // CreatePeriodicalInput represents a mutation input for creating periodicals.
 type CreatePeriodicalInput struct {
 	CreatedAt    *time.Time
@@ -3759,6 +3785,7 @@ type CreatePersonInput struct {
 	BeginData            *time.Time
 	EndDate              *time.Time
 	Gender               *person.Gender
+	Occupation           *string
 	CollectionIDs        []int
 	ArtIDs               []int
 	ArtifactIDs          []int
@@ -3826,6 +3853,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.Gender; v != nil {
 		m.SetGender(*v)
+	}
+	if v := i.Occupation; v != nil {
+		m.SetOccupation(*v)
 	}
 	if v := i.CollectionIDs; len(v) > 0 {
 		m.AddCollectionIDs(v...)
@@ -3896,6 +3926,8 @@ type UpdatePersonInput struct {
 	EndDate                    *time.Time
 	ClearGender                bool
 	Gender                     *person.Gender
+	ClearOccupation            bool
+	Occupation                 *string
 	ClearCollections           bool
 	AddCollectionIDs           []int
 	RemoveCollectionIDs        []int
@@ -4033,6 +4065,12 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.Gender; v != nil {
 		m.SetGender(*v)
+	}
+	if i.ClearOccupation {
+		m.ClearOccupation()
+	}
+	if v := i.Occupation; v != nil {
+		m.SetOccupation(*v)
 	}
 	if i.ClearCollections {
 		m.ClearCollections()

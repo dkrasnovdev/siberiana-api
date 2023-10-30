@@ -35,6 +35,8 @@ type Model struct {
 	ExternalLink string `json:"external_link,omitempty"`
 	// Status holds the value of the "status" field.
 	Status model.Status `json:"status,omitempty"`
+	// FileURL holds the value of the "file_url" field.
+	FileURL string `json:"file_url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ModelQuery when eager-loading is set.
 	Edges        ModelEdges `json:"edges"`
@@ -70,7 +72,7 @@ func (*Model) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case model.FieldID:
 			values[i] = new(sql.NullInt64)
-		case model.FieldCreatedBy, model.FieldUpdatedBy, model.FieldDisplayName, model.FieldAbbreviation, model.FieldDescription, model.FieldExternalLink, model.FieldStatus:
+		case model.FieldCreatedBy, model.FieldUpdatedBy, model.FieldDisplayName, model.FieldAbbreviation, model.FieldDescription, model.FieldExternalLink, model.FieldStatus, model.FieldFileURL:
 			values[i] = new(sql.NullString)
 		case model.FieldCreatedAt, model.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -149,6 +151,12 @@ func (m *Model) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				m.Status = model.Status(value.String)
 			}
+		case model.FieldFileURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_url", values[i])
+			} else if value.Valid {
+				m.FileURL = value.String
+			}
 		default:
 			m.selectValues.Set(columns[i], values[i])
 		}
@@ -216,6 +224,9 @@ func (m *Model) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("file_url=")
+	builder.WriteString(m.FileURL)
 	builder.WriteByte(')')
 	return builder.String()
 }

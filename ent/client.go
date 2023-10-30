@@ -28,6 +28,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -35,7 +36,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
-	"github.com/dkrasnovdev/siberiana-api/ent/period"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
@@ -83,6 +83,8 @@ type Client struct {
 	District *DistrictClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
+	// Interview is the client for interacting with the Interview builders.
+	Interview *InterviewClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
 	// License is the client for interacting with the License builders.
@@ -97,8 +99,6 @@ type Client struct {
 	Monument *MonumentClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
-	// Period is the client for interacting with the Period builders.
-	Period *PeriodClient
 	// Periodical is the client for interacting with the Periodical builders.
 	Periodical *PeriodicalClient
 	// Person is the client for interacting with the Person builders.
@@ -155,6 +155,7 @@ func (c *Client) init() {
 	c.Culture = NewCultureClient(c.config)
 	c.District = NewDistrictClient(c.config)
 	c.Favourite = NewFavouriteClient(c.config)
+	c.Interview = NewInterviewClient(c.config)
 	c.Keyword = NewKeywordClient(c.config)
 	c.License = NewLicenseClient(c.config)
 	c.Location = NewLocationClient(c.config)
@@ -162,7 +163,6 @@ func (c *Client) init() {
 	c.Model = NewModelClient(c.config)
 	c.Monument = NewMonumentClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
-	c.Period = NewPeriodClient(c.config)
 	c.Periodical = NewPeriodicalClient(c.config)
 	c.Person = NewPersonClient(c.config)
 	c.Personal = NewPersonalClient(c.config)
@@ -275,6 +275,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Favourite:             NewFavouriteClient(cfg),
+		Interview:             NewInterviewClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
 		License:               NewLicenseClient(cfg),
 		Location:              NewLocationClient(cfg),
@@ -282,7 +283,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
-		Period:                NewPeriodClient(cfg),
 		Periodical:            NewPeriodicalClient(cfg),
 		Person:                NewPersonClient(cfg),
 		Personal:              NewPersonalClient(cfg),
@@ -329,6 +329,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
 		Favourite:             NewFavouriteClient(cfg),
+		Interview:             NewInterviewClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
 		License:               NewLicenseClient(cfg),
 		Location:              NewLocationClient(cfg),
@@ -336,7 +337,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
-		Period:                NewPeriodClient(cfg),
 		Periodical:            NewPeriodicalClient(cfg),
 		Person:                NewPersonClient(cfg),
 		Personal:              NewPersonalClient(cfg),
@@ -382,10 +382,10 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
-		c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Period, c.Periodical, c.Person, c.Personal, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
+		c.Organization, c.Periodical, c.Person, c.Personal, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
+		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -397,10 +397,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
-		c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Period, c.Periodical, c.Person, c.Personal, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
+		c.Organization, c.Periodical, c.Person, c.Personal, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
+		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -435,6 +435,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.District.mutate(ctx, m)
 	case *FavouriteMutation:
 		return c.Favourite.mutate(ctx, m)
+	case *InterviewMutation:
+		return c.Interview.mutate(ctx, m)
 	case *KeywordMutation:
 		return c.Keyword.mutate(ctx, m)
 	case *LicenseMutation:
@@ -449,8 +451,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Monument.mutate(ctx, m)
 	case *OrganizationMutation:
 		return c.Organization.mutate(ctx, m)
-	case *PeriodMutation:
-		return c.Period.mutate(ctx, m)
 	case *PeriodicalMutation:
 		return c.Periodical.mutate(ctx, m)
 	case *PersonMutation:
@@ -1147,22 +1147,6 @@ func (c *ArtifactClient) QueryTechniques(a *Artifact) *TechniqueQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, id),
 			sqlgraph.To(technique.Table, technique.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, artifact.TechniquesTable, artifact.TechniquesPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPeriod queries the period edge of a Artifact.
-func (c *ArtifactClient) QueryPeriod(a *Artifact) *PeriodQuery {
-	query := (&PeriodClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := a.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(artifact.Table, artifact.FieldID, id),
-			sqlgraph.To(period.Table, period.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, artifact.PeriodTable, artifact.PeriodColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -2883,6 +2867,140 @@ func (c *FavouriteClient) mutate(ctx context.Context, m *FavouriteMutation) (Val
 	}
 }
 
+// InterviewClient is a client for the Interview schema.
+type InterviewClient struct {
+	config
+}
+
+// NewInterviewClient returns a client for the Interview from the given config.
+func NewInterviewClient(c config) *InterviewClient {
+	return &InterviewClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `interview.Hooks(f(g(h())))`.
+func (c *InterviewClient) Use(hooks ...Hook) {
+	c.hooks.Interview = append(c.hooks.Interview, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `interview.Intercept(f(g(h())))`.
+func (c *InterviewClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Interview = append(c.inters.Interview, interceptors...)
+}
+
+// Create returns a builder for creating a Interview entity.
+func (c *InterviewClient) Create() *InterviewCreate {
+	mutation := newInterviewMutation(c.config, OpCreate)
+	return &InterviewCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Interview entities.
+func (c *InterviewClient) CreateBulk(builders ...*InterviewCreate) *InterviewCreateBulk {
+	return &InterviewCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *InterviewClient) MapCreateBulk(slice any, setFunc func(*InterviewCreate, int)) *InterviewCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &InterviewCreateBulk{err: fmt.Errorf("calling to InterviewClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*InterviewCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &InterviewCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Interview.
+func (c *InterviewClient) Update() *InterviewUpdate {
+	mutation := newInterviewMutation(c.config, OpUpdate)
+	return &InterviewUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *InterviewClient) UpdateOne(i *Interview) *InterviewUpdateOne {
+	mutation := newInterviewMutation(c.config, OpUpdateOne, withInterview(i))
+	return &InterviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *InterviewClient) UpdateOneID(id int) *InterviewUpdateOne {
+	mutation := newInterviewMutation(c.config, OpUpdateOne, withInterviewID(id))
+	return &InterviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Interview.
+func (c *InterviewClient) Delete() *InterviewDelete {
+	mutation := newInterviewMutation(c.config, OpDelete)
+	return &InterviewDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *InterviewClient) DeleteOne(i *Interview) *InterviewDeleteOne {
+	return c.DeleteOneID(i.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *InterviewClient) DeleteOneID(id int) *InterviewDeleteOne {
+	builder := c.Delete().Where(interview.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &InterviewDeleteOne{builder}
+}
+
+// Query returns a query builder for Interview.
+func (c *InterviewClient) Query() *InterviewQuery {
+	return &InterviewQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeInterview},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Interview entity by its id.
+func (c *InterviewClient) Get(ctx context.Context, id int) (*Interview, error) {
+	return c.Query().Where(interview.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *InterviewClient) GetX(ctx context.Context, id int) *Interview {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *InterviewClient) Hooks() []Hook {
+	hooks := c.hooks.Interview
+	return append(hooks[:len(hooks):len(hooks)], interview.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *InterviewClient) Interceptors() []Interceptor {
+	return c.inters.Interview
+}
+
+func (c *InterviewClient) mutate(ctx context.Context, m *InterviewMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&InterviewCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&InterviewUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&InterviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&InterviewDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Interview mutation op: %q", m.Op())
+	}
+}
+
 // KeywordClient is a client for the Keyword schema.
 type KeywordClient struct {
 	config
@@ -4089,156 +4207,6 @@ func (c *OrganizationClient) mutate(ctx context.Context, m *OrganizationMutation
 		return (&OrganizationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Organization mutation op: %q", m.Op())
-	}
-}
-
-// PeriodClient is a client for the Period schema.
-type PeriodClient struct {
-	config
-}
-
-// NewPeriodClient returns a client for the Period from the given config.
-func NewPeriodClient(c config) *PeriodClient {
-	return &PeriodClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `period.Hooks(f(g(h())))`.
-func (c *PeriodClient) Use(hooks ...Hook) {
-	c.hooks.Period = append(c.hooks.Period, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `period.Intercept(f(g(h())))`.
-func (c *PeriodClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Period = append(c.inters.Period, interceptors...)
-}
-
-// Create returns a builder for creating a Period entity.
-func (c *PeriodClient) Create() *PeriodCreate {
-	mutation := newPeriodMutation(c.config, OpCreate)
-	return &PeriodCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of Period entities.
-func (c *PeriodClient) CreateBulk(builders ...*PeriodCreate) *PeriodCreateBulk {
-	return &PeriodCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *PeriodClient) MapCreateBulk(slice any, setFunc func(*PeriodCreate, int)) *PeriodCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &PeriodCreateBulk{err: fmt.Errorf("calling to PeriodClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*PeriodCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &PeriodCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for Period.
-func (c *PeriodClient) Update() *PeriodUpdate {
-	mutation := newPeriodMutation(c.config, OpUpdate)
-	return &PeriodUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *PeriodClient) UpdateOne(pe *Period) *PeriodUpdateOne {
-	mutation := newPeriodMutation(c.config, OpUpdateOne, withPeriod(pe))
-	return &PeriodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *PeriodClient) UpdateOneID(id int) *PeriodUpdateOne {
-	mutation := newPeriodMutation(c.config, OpUpdateOne, withPeriodID(id))
-	return &PeriodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for Period.
-func (c *PeriodClient) Delete() *PeriodDelete {
-	mutation := newPeriodMutation(c.config, OpDelete)
-	return &PeriodDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *PeriodClient) DeleteOne(pe *Period) *PeriodDeleteOne {
-	return c.DeleteOneID(pe.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *PeriodClient) DeleteOneID(id int) *PeriodDeleteOne {
-	builder := c.Delete().Where(period.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &PeriodDeleteOne{builder}
-}
-
-// Query returns a query builder for Period.
-func (c *PeriodClient) Query() *PeriodQuery {
-	return &PeriodQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypePeriod},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a Period entity by its id.
-func (c *PeriodClient) Get(ctx context.Context, id int) (*Period, error) {
-	return c.Query().Where(period.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *PeriodClient) GetX(ctx context.Context, id int) *Period {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryArtifacts queries the artifacts edge of a Period.
-func (c *PeriodClient) QueryArtifacts(pe *Period) *ArtifactQuery {
-	query := (&ArtifactClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(period.Table, period.FieldID, id),
-			sqlgraph.To(artifact.Table, artifact.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, period.ArtifactsTable, period.ArtifactsColumn),
-		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *PeriodClient) Hooks() []Hook {
-	hooks := c.hooks.Period
-	return append(hooks[:len(hooks):len(hooks)], period.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *PeriodClient) Interceptors() []Interceptor {
-	return c.inters.Period
-}
-
-func (c *PeriodClient) mutate(ctx context.Context, m *PeriodMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&PeriodCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&PeriodUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&PeriodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&PeriodDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown Period mutation op: %q", m.Op())
 	}
 }
 
@@ -6586,15 +6554,15 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Favourite, Keyword, License, Location,
-		Medium, Model, Monument, Organization, Period, Periodical, Person, Personal,
+		Collection, Country, Culture, District, Favourite, Interview, Keyword, License,
+		Location, Medium, Model, Monument, Organization, Periodical, Person, Personal,
 		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
 		Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Favourite, Keyword, License, Location,
-		Medium, Model, Monument, Organization, Period, Periodical, Person, Personal,
+		Collection, Country, Culture, District, Favourite, Interview, Keyword, License,
+		Location, Medium, Model, Monument, Organization, Periodical, Person, Personal,
 		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
 		Publication, Publisher, Region, Set, Settlement, Technique []ent.Interceptor
 	}

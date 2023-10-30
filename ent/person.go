@@ -57,6 +57,8 @@ type Person struct {
 	EndDate time.Time `json:"end_date,omitempty"`
 	// Gender holds the value of the "gender" field.
 	Gender person.Gender `json:"gender,omitempty"`
+	// Occupation holds the value of the "occupation" field.
+	Occupation string `json:"occupation,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonQuery when eager-loading is set.
 	Edges               PersonEdges `json:"edges"`
@@ -170,7 +172,7 @@ func (*Person) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case person.FieldID:
 			values[i] = new(sql.NullInt64)
-		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldAbbreviation, person.FieldDescription, person.FieldExternalLink, person.FieldPrimaryImageURL, person.FieldGivenName, person.FieldFamilyName, person.FieldPatronymicName, person.FieldGender:
+		case person.FieldCreatedBy, person.FieldUpdatedBy, person.FieldAddress, person.FieldDisplayName, person.FieldAbbreviation, person.FieldDescription, person.FieldExternalLink, person.FieldPrimaryImageURL, person.FieldGivenName, person.FieldFamilyName, person.FieldPatronymicName, person.FieldGender, person.FieldOccupation:
 			values[i] = new(sql.NullString)
 		case person.FieldCreatedAt, person.FieldUpdatedAt, person.FieldBeginData, person.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -317,6 +319,12 @@ func (pe *Person) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.Gender = person.Gender(value.String)
 			}
+		case person.FieldOccupation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field occupation", values[i])
+			} else if value.Valid {
+				pe.Occupation = value.String
+			}
 		case person.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field organization_people", value)
@@ -451,6 +459,9 @@ func (pe *Person) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("gender=")
 	builder.WriteString(fmt.Sprintf("%v", pe.Gender))
+	builder.WriteString(", ")
+	builder.WriteString("occupation=")
+	builder.WriteString(pe.Occupation)
 	builder.WriteByte(')')
 	return builder.String()
 }

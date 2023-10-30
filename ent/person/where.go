@@ -130,6 +130,11 @@ func EndDate(v time.Time) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldEndDate, v))
 }
 
+// Occupation applies equality check predicate on the "occupation" field. It's identical to OccupationEQ.
+func Occupation(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldOccupation, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Person {
 	return predicate.Person(sql.FieldEQ(FieldCreatedAt, v))
@@ -1193,6 +1198,81 @@ func GenderIsNil() predicate.Person {
 // GenderNotNil applies the NotNil predicate on the "gender" field.
 func GenderNotNil() predicate.Person {
 	return predicate.Person(sql.FieldNotNull(FieldGender))
+}
+
+// OccupationEQ applies the EQ predicate on the "occupation" field.
+func OccupationEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldEQ(FieldOccupation, v))
+}
+
+// OccupationNEQ applies the NEQ predicate on the "occupation" field.
+func OccupationNEQ(v string) predicate.Person {
+	return predicate.Person(sql.FieldNEQ(FieldOccupation, v))
+}
+
+// OccupationIn applies the In predicate on the "occupation" field.
+func OccupationIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldIn(FieldOccupation, vs...))
+}
+
+// OccupationNotIn applies the NotIn predicate on the "occupation" field.
+func OccupationNotIn(vs ...string) predicate.Person {
+	return predicate.Person(sql.FieldNotIn(FieldOccupation, vs...))
+}
+
+// OccupationGT applies the GT predicate on the "occupation" field.
+func OccupationGT(v string) predicate.Person {
+	return predicate.Person(sql.FieldGT(FieldOccupation, v))
+}
+
+// OccupationGTE applies the GTE predicate on the "occupation" field.
+func OccupationGTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldGTE(FieldOccupation, v))
+}
+
+// OccupationLT applies the LT predicate on the "occupation" field.
+func OccupationLT(v string) predicate.Person {
+	return predicate.Person(sql.FieldLT(FieldOccupation, v))
+}
+
+// OccupationLTE applies the LTE predicate on the "occupation" field.
+func OccupationLTE(v string) predicate.Person {
+	return predicate.Person(sql.FieldLTE(FieldOccupation, v))
+}
+
+// OccupationContains applies the Contains predicate on the "occupation" field.
+func OccupationContains(v string) predicate.Person {
+	return predicate.Person(sql.FieldContains(FieldOccupation, v))
+}
+
+// OccupationHasPrefix applies the HasPrefix predicate on the "occupation" field.
+func OccupationHasPrefix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasPrefix(FieldOccupation, v))
+}
+
+// OccupationHasSuffix applies the HasSuffix predicate on the "occupation" field.
+func OccupationHasSuffix(v string) predicate.Person {
+	return predicate.Person(sql.FieldHasSuffix(FieldOccupation, v))
+}
+
+// OccupationIsNil applies the IsNil predicate on the "occupation" field.
+func OccupationIsNil() predicate.Person {
+	return predicate.Person(sql.FieldIsNull(FieldOccupation))
+}
+
+// OccupationNotNil applies the NotNil predicate on the "occupation" field.
+func OccupationNotNil() predicate.Person {
+	return predicate.Person(sql.FieldNotNull(FieldOccupation))
+}
+
+// OccupationEqualFold applies the EqualFold predicate on the "occupation" field.
+func OccupationEqualFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldEqualFold(FieldOccupation, v))
+}
+
+// OccupationContainsFold applies the ContainsFold predicate on the "occupation" field.
+func OccupationContainsFold(v string) predicate.Person {
+	return predicate.Person(sql.FieldContainsFold(FieldOccupation, v))
 }
 
 // HasCollections applies the HasEdge predicate on the "collections" edge.

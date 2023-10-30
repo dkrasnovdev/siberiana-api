@@ -3,20 +3,21 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 )
 
-// Period holds the schema definition for the Period entity.
-type Period struct {
+// Interview holds the schema definition for the Interview entity.
+type Interview struct {
 	ent.Schema
 }
 
-// Privacy policy of the Period.
-func (Period) Policy() ent.Policy {
+// Privacy policy of the Interview.
+func (Interview) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.DenyIfNoViewer(),
@@ -30,16 +31,16 @@ func (Period) Policy() ent.Policy {
 	}
 }
 
-// Mixin of the Period.
-func (Period) Mixin() []ent.Mixin {
+// Mixin of the Interview.
+func (Interview) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
 		mixin.DetailsMixin{},
 	}
 }
 
-// Annotations of the Period.
-func (Period) Annotations() []schema.Annotation {
+// Annotations of the Interview.
+func (Interview) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),
@@ -48,9 +49,18 @@ func (Period) Annotations() []schema.Annotation {
 	}
 }
 
-// Edges of the Period.
-func (Period) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("artifacts", Artifact.Type),
+// Fields of the Interview.
+func (Interview) Fields() []ent.Field {
+	return []ent.Field{
+		field.Time("date").
+			Optional().
+			SchemaType(map[string]string{
+				dialect.Postgres: "date",
+			}),
 	}
+}
+
+// Edges of the Interview.
+func (Interview) Edges() []ent.Edge {
+	return []ent.Edge{}
 }
