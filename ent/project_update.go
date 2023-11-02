@@ -196,6 +196,33 @@ func (pu *ProjectUpdate) ClearEndDate() *ProjectUpdate {
 	return pu
 }
 
+// SetYear sets the "year" field.
+func (pu *ProjectUpdate) SetYear(i int) *ProjectUpdate {
+	pu.mutation.ResetYear()
+	pu.mutation.SetYear(i)
+	return pu
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableYear(i *int) *ProjectUpdate {
+	if i != nil {
+		pu.SetYear(*i)
+	}
+	return pu
+}
+
+// AddYear adds i to the "year" field.
+func (pu *ProjectUpdate) AddYear(i int) *ProjectUpdate {
+	pu.mutation.AddYear(i)
+	return pu
+}
+
+// ClearYear clears the value of the "year" field.
+func (pu *ProjectUpdate) ClearYear() *ProjectUpdate {
+	pu.mutation.ClearYear()
+	return pu
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pu *ProjectUpdate) AddArtifactIDs(ids ...int) *ProjectUpdate {
 	pu.mutation.AddArtifactIDs(ids...)
@@ -315,7 +342,20 @@ func (pu *ProjectUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pu *ProjectUpdate) check() error {
+	if v, ok := pu.mutation.Year(); ok {
+		if err := project.YearValidator(v); err != nil {
+			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Project.year": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := pu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(project.Table, project.Columns, sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -374,6 +414,15 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.EndDateCleared() {
 		_spec.ClearField(project.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := pu.mutation.Year(); ok {
+		_spec.SetField(project.FieldYear, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedYear(); ok {
+		_spec.AddField(project.FieldYear, field.TypeInt, value)
+	}
+	if pu.mutation.YearCleared() {
+		_spec.ClearField(project.FieldYear, field.TypeInt)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -651,6 +700,33 @@ func (puo *ProjectUpdateOne) ClearEndDate() *ProjectUpdateOne {
 	return puo
 }
 
+// SetYear sets the "year" field.
+func (puo *ProjectUpdateOne) SetYear(i int) *ProjectUpdateOne {
+	puo.mutation.ResetYear()
+	puo.mutation.SetYear(i)
+	return puo
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableYear(i *int) *ProjectUpdateOne {
+	if i != nil {
+		puo.SetYear(*i)
+	}
+	return puo
+}
+
+// AddYear adds i to the "year" field.
+func (puo *ProjectUpdateOne) AddYear(i int) *ProjectUpdateOne {
+	puo.mutation.AddYear(i)
+	return puo
+}
+
+// ClearYear clears the value of the "year" field.
+func (puo *ProjectUpdateOne) ClearYear() *ProjectUpdateOne {
+	puo.mutation.ClearYear()
+	return puo
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (puo *ProjectUpdateOne) AddArtifactIDs(ids ...int) *ProjectUpdateOne {
 	puo.mutation.AddArtifactIDs(ids...)
@@ -783,7 +859,20 @@ func (puo *ProjectUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (puo *ProjectUpdateOne) check() error {
+	if v, ok := puo.mutation.Year(); ok {
+		if err := project.YearValidator(v); err != nil {
+			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Project.year": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err error) {
+	if err := puo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(project.Table, project.Columns, sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt))
 	id, ok := puo.mutation.ID()
 	if !ok {
@@ -859,6 +948,15 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 	}
 	if puo.mutation.EndDateCleared() {
 		_spec.ClearField(project.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := puo.mutation.Year(); ok {
+		_spec.SetField(project.FieldYear, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedYear(); ok {
+		_spec.AddField(project.FieldYear, field.TypeInt, value)
+	}
+	if puo.mutation.YearCleared() {
+		_spec.ClearField(project.FieldYear, field.TypeInt)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -162,6 +162,20 @@ func (pc *ProjectCreate) SetNillableEndDate(t *time.Time) *ProjectCreate {
 	return pc
 }
 
+// SetYear sets the "year" field.
+func (pc *ProjectCreate) SetYear(i int) *ProjectCreate {
+	pc.mutation.SetYear(i)
+	return pc
+}
+
+// SetNillableYear sets the "year" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableYear(i *int) *ProjectCreate {
+	if i != nil {
+		pc.SetYear(*i)
+	}
+	return pc
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (pc *ProjectCreate) AddArtifactIDs(ids ...int) *ProjectCreate {
 	pc.mutation.AddArtifactIDs(ids...)
@@ -254,6 +268,11 @@ func (pc *ProjectCreate) check() error {
 	if _, ok := pc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Project.updated_at"`)}
 	}
+	if v, ok := pc.mutation.Year(); ok {
+		if err := project.YearValidator(v); err != nil {
+			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Project.year": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -319,6 +338,10 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.EndDate(); ok {
 		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
+	}
+	if value, ok := pc.mutation.Year(); ok {
+		_spec.SetField(project.FieldYear, field.TypeInt, value)
+		_node.Year = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

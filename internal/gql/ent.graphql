@@ -2737,6 +2737,7 @@ input CreateProjectInput {
   externalLink: String
   beginData: Time
   endDate: Time
+  year: Int
   artifactIDs: [ID!]
   teamIDs: [ID!]
 }
@@ -5501,6 +5502,7 @@ type Project implements Node {
   externalLink: String
   beginData: Time
   endDate: Time
+  year: Int
   artifacts: [Artifact!]
   team: [Person!]
 }
@@ -5686,6 +5688,17 @@ input ProjectWhereInput {
   endDateLTE: Time
   endDateIsNil: Boolean
   endDateNotNil: Boolean
+  """year field predicates"""
+  year: Int
+  yearNEQ: Int
+  yearIn: [Int!]
+  yearNotIn: [Int!]
+  yearGT: Int
+  yearGTE: Int
+  yearLT: Int
+  yearLTE: Int
+  yearIsNil: Boolean
+  yearNotNil: Boolean
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -9034,6 +9047,8 @@ input UpdateProjectInput {
   clearBeginData: Boolean
   endDate: Time
   clearEndDate: Boolean
+  year: Int
+  clearYear: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

@@ -105,6 +105,11 @@ func EndDate(v time.Time) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldEndDate, v))
 }
 
+// Year applies equality check predicate on the "year" field. It's identical to YearEQ.
+func Year(v int) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldYear, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Project {
 	return predicate.Project(sql.FieldEQ(FieldCreatedAt, v))
@@ -733,6 +738,56 @@ func EndDateIsNil() predicate.Project {
 // EndDateNotNil applies the NotNil predicate on the "end_date" field.
 func EndDateNotNil() predicate.Project {
 	return predicate.Project(sql.FieldNotNull(FieldEndDate))
+}
+
+// YearEQ applies the EQ predicate on the "year" field.
+func YearEQ(v int) predicate.Project {
+	return predicate.Project(sql.FieldEQ(FieldYear, v))
+}
+
+// YearNEQ applies the NEQ predicate on the "year" field.
+func YearNEQ(v int) predicate.Project {
+	return predicate.Project(sql.FieldNEQ(FieldYear, v))
+}
+
+// YearIn applies the In predicate on the "year" field.
+func YearIn(vs ...int) predicate.Project {
+	return predicate.Project(sql.FieldIn(FieldYear, vs...))
+}
+
+// YearNotIn applies the NotIn predicate on the "year" field.
+func YearNotIn(vs ...int) predicate.Project {
+	return predicate.Project(sql.FieldNotIn(FieldYear, vs...))
+}
+
+// YearGT applies the GT predicate on the "year" field.
+func YearGT(v int) predicate.Project {
+	return predicate.Project(sql.FieldGT(FieldYear, v))
+}
+
+// YearGTE applies the GTE predicate on the "year" field.
+func YearGTE(v int) predicate.Project {
+	return predicate.Project(sql.FieldGTE(FieldYear, v))
+}
+
+// YearLT applies the LT predicate on the "year" field.
+func YearLT(v int) predicate.Project {
+	return predicate.Project(sql.FieldLT(FieldYear, v))
+}
+
+// YearLTE applies the LTE predicate on the "year" field.
+func YearLTE(v int) predicate.Project {
+	return predicate.Project(sql.FieldLTE(FieldYear, v))
+}
+
+// YearIsNil applies the IsNil predicate on the "year" field.
+func YearIsNil() predicate.Project {
+	return predicate.Project(sql.FieldIsNull(FieldYear))
+}
+
+// YearNotNil applies the NotNil predicate on the "year" field.
+func YearNotNil() predicate.Project {
+	return predicate.Project(sql.FieldNotNull(FieldYear))
 }
 
 // HasArtifacts applies the HasEdge predicate on the "artifacts" edge.

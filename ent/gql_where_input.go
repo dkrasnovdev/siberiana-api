@@ -16719,6 +16719,18 @@ type ProjectWhereInput struct {
 	EndDateIsNil  bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil bool        `json:"endDateNotNil,omitempty"`
 
+	// "year" field predicates.
+	Year       *int  `json:"year,omitempty"`
+	YearNEQ    *int  `json:"yearNEQ,omitempty"`
+	YearIn     []int `json:"yearIn,omitempty"`
+	YearNotIn  []int `json:"yearNotIn,omitempty"`
+	YearGT     *int  `json:"yearGT,omitempty"`
+	YearGTE    *int  `json:"yearGTE,omitempty"`
+	YearLT     *int  `json:"yearLT,omitempty"`
+	YearLTE    *int  `json:"yearLTE,omitempty"`
+	YearIsNil  bool  `json:"yearIsNil,omitempty"`
+	YearNotNil bool  `json:"yearNotNil,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -17200,6 +17212,36 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	}
 	if i.EndDateNotNil {
 		predicates = append(predicates, project.EndDateNotNil())
+	}
+	if i.Year != nil {
+		predicates = append(predicates, project.YearEQ(*i.Year))
+	}
+	if i.YearNEQ != nil {
+		predicates = append(predicates, project.YearNEQ(*i.YearNEQ))
+	}
+	if len(i.YearIn) > 0 {
+		predicates = append(predicates, project.YearIn(i.YearIn...))
+	}
+	if len(i.YearNotIn) > 0 {
+		predicates = append(predicates, project.YearNotIn(i.YearNotIn...))
+	}
+	if i.YearGT != nil {
+		predicates = append(predicates, project.YearGT(*i.YearGT))
+	}
+	if i.YearGTE != nil {
+		predicates = append(predicates, project.YearGTE(*i.YearGTE))
+	}
+	if i.YearLT != nil {
+		predicates = append(predicates, project.YearLT(*i.YearLT))
+	}
+	if i.YearLTE != nil {
+		predicates = append(predicates, project.YearLTE(*i.YearLTE))
+	}
+	if i.YearIsNil {
+		predicates = append(predicates, project.YearIsNil())
+	}
+	if i.YearNotNil {
+		predicates = append(predicates, project.YearNotNil())
 	}
 
 	if i.HasArtifacts != nil {

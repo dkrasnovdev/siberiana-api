@@ -723,6 +723,10 @@ func init() {
 	project.DefaultUpdatedAt = projectDescUpdatedAt.Default.(func() time.Time)
 	// project.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	project.UpdateDefaultUpdatedAt = projectDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// projectDescYear is the schema descriptor for year field.
+	projectDescYear := projectFields[2].Descriptor()
+	// project.YearValidator is a validator for the "year" field. It is called by the builders before save.
+	project.YearValidator = projectDescYear.Validators[0].(func(int) error)
 	protectedareaMixin := schema.ProtectedArea{}.Mixin()
 	protectedarea.Policy = privacy.NewPolicies(schema.ProtectedArea{})
 	protectedarea.Hooks[0] = func(next ent.Mutator) ent.Mutator {

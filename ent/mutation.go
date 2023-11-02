@@ -29161,6 +29161,8 @@ type ProjectMutation struct {
 	external_link    *string
 	begin_data       *time.Time
 	end_date         *time.Time
+	year             *int
+	addyear          *int
 	clearedFields    map[string]struct{}
 	artifacts        map[int]struct{}
 	removedartifacts map[int]struct{}
@@ -29735,6 +29737,76 @@ func (m *ProjectMutation) ResetEndDate() {
 	delete(m.clearedFields, project.FieldEndDate)
 }
 
+// SetYear sets the "year" field.
+func (m *ProjectMutation) SetYear(i int) {
+	m.year = &i
+	m.addyear = nil
+}
+
+// Year returns the value of the "year" field in the mutation.
+func (m *ProjectMutation) Year() (r int, exists bool) {
+	v := m.year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldYear returns the old "year" field's value of the Project entity.
+// If the Project object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProjectMutation) OldYear(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldYear is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldYear requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldYear: %w", err)
+	}
+	return oldValue.Year, nil
+}
+
+// AddYear adds i to the "year" field.
+func (m *ProjectMutation) AddYear(i int) {
+	if m.addyear != nil {
+		*m.addyear += i
+	} else {
+		m.addyear = &i
+	}
+}
+
+// AddedYear returns the value that was added to the "year" field in this mutation.
+func (m *ProjectMutation) AddedYear() (r int, exists bool) {
+	v := m.addyear
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearYear clears the value of the "year" field.
+func (m *ProjectMutation) ClearYear() {
+	m.year = nil
+	m.addyear = nil
+	m.clearedFields[project.FieldYear] = struct{}{}
+}
+
+// YearCleared returns if the "year" field was cleared in this mutation.
+func (m *ProjectMutation) YearCleared() bool {
+	_, ok := m.clearedFields[project.FieldYear]
+	return ok
+}
+
+// ResetYear resets all changes to the "year" field.
+func (m *ProjectMutation) ResetYear() {
+	m.year = nil
+	m.addyear = nil
+	delete(m.clearedFields, project.FieldYear)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
 func (m *ProjectMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
@@ -29877,7 +29949,7 @@ func (m *ProjectMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProjectMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, project.FieldCreatedAt)
 	}
@@ -29908,6 +29980,9 @@ func (m *ProjectMutation) Fields() []string {
 	if m.end_date != nil {
 		fields = append(fields, project.FieldEndDate)
 	}
+	if m.year != nil {
+		fields = append(fields, project.FieldYear)
+	}
 	return fields
 }
 
@@ -29936,6 +30011,8 @@ func (m *ProjectMutation) Field(name string) (ent.Value, bool) {
 		return m.BeginData()
 	case project.FieldEndDate:
 		return m.EndDate()
+	case project.FieldYear:
+		return m.Year()
 	}
 	return nil, false
 }
@@ -29965,6 +30042,8 @@ func (m *ProjectMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldBeginData(ctx)
 	case project.FieldEndDate:
 		return m.OldEndDate(ctx)
+	case project.FieldYear:
+		return m.OldYear(ctx)
 	}
 	return nil, fmt.Errorf("unknown Project field %s", name)
 }
@@ -30044,6 +30123,13 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEndDate(v)
 		return nil
+	case project.FieldYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetYear(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)
 }
@@ -30051,13 +30137,21 @@ func (m *ProjectMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ProjectMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addyear != nil {
+		fields = append(fields, project.FieldYear)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ProjectMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case project.FieldYear:
+		return m.AddedYear()
+	}
 	return nil, false
 }
 
@@ -30066,6 +30160,13 @@ func (m *ProjectMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ProjectMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case project.FieldYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddYear(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Project numeric field %s", name)
 }
@@ -30097,6 +30198,9 @@ func (m *ProjectMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(project.FieldEndDate) {
 		fields = append(fields, project.FieldEndDate)
+	}
+	if m.FieldCleared(project.FieldYear) {
+		fields = append(fields, project.FieldYear)
 	}
 	return fields
 }
@@ -30136,6 +30240,9 @@ func (m *ProjectMutation) ClearField(name string) error {
 	case project.FieldEndDate:
 		m.ClearEndDate()
 		return nil
+	case project.FieldYear:
+		m.ClearYear()
+		return nil
 	}
 	return fmt.Errorf("unknown Project nullable field %s", name)
 }
@@ -30173,6 +30280,9 @@ func (m *ProjectMutation) ResetField(name string) error {
 		return nil
 	case project.FieldEndDate:
 		m.ResetEndDate()
+		return nil
+	case project.FieldYear:
+		m.ResetYear()
 		return nil
 	}
 	return fmt.Errorf("unknown Project field %s", name)

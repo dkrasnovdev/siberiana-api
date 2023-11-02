@@ -4207,6 +4207,11 @@ func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, project.FieldEndDate)
 				fieldSeen[project.FieldEndDate] = struct{}{}
 			}
+		case "year":
+			if _, ok := fieldSeen[project.FieldYear]; !ok {
+				selectedFields = append(selectedFields, project.FieldYear)
+				fieldSeen[project.FieldYear] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

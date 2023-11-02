@@ -37,6 +37,8 @@ type Project struct {
 	BeginData time.Time `json:"begin_data,omitempty"`
 	// EndDate holds the value of the "end_date" field.
 	EndDate time.Time `json:"end_date,omitempty"`
+	// Year holds the value of the "year" field.
+	Year int `json:"year,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProjectQuery when eager-loading is set.
 	Edges        ProjectEdges `json:"edges"`
@@ -82,7 +84,7 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case project.FieldID:
+		case project.FieldID, project.FieldYear:
 			values[i] = new(sql.NullInt64)
 		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldAbbreviation, project.FieldDescription, project.FieldExternalLink:
 			values[i] = new(sql.NullString)
@@ -169,6 +171,12 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.EndDate = value.Time
 			}
+		case project.FieldYear:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field year", values[i])
+			} else if value.Valid {
+				pr.Year = int(value.Int64)
+			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
 		}
@@ -244,6 +252,9 @@ func (pr *Project) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(pr.EndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("year=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Year))
 	builder.WriteByte(')')
 	return builder.String()
 }

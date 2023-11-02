@@ -55,7 +55,7 @@ func (Book) Annotations() []schema.Annotation {
 func (Book) Fields() []ent.Field {
 	return []ent.Field{
 		field.JSON("files", []string{}).Optional(),
-		field.Int("year").Max(2023).Optional(),
+		field.Int("year").Max(2024).Optional(),
 	}
 
 }

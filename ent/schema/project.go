@@ -63,6 +63,7 @@ func (Project) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.Postgres: "date",
 			}),
+		field.Int("year").Max(2024).Optional(),
 	}
 }
 

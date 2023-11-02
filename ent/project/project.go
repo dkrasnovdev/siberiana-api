@@ -35,6 +35,8 @@ const (
 	FieldBeginData = "begin_data"
 	// FieldEndDate holds the string denoting the end_date field in the database.
 	FieldEndDate = "end_date"
+	// FieldYear holds the string denoting the year field in the database.
+	FieldYear = "year"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeTeam holds the string denoting the team edge name in mutations.
@@ -66,6 +68,7 @@ var Columns = []string{
 	FieldExternalLink,
 	FieldBeginData,
 	FieldEndDate,
+	FieldYear,
 }
 
 var (
@@ -101,6 +104,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// YearValidator is a validator for the "year" field. It is called by the builders before save.
+	YearValidator func(int) error
 )
 
 // OrderOption defines the ordering options for the Project queries.
@@ -159,6 +164,11 @@ func ByBeginData(opts ...sql.OrderTermOption) OrderOption {
 // ByEndDate orders the results by the end_date field.
 func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
+}
+
+// ByYear orders the results by the year field.
+func ByYear(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldYear, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.
