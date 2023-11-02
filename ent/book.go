@@ -12,11 +12,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
@@ -55,11 +58,14 @@ type Book struct {
 	// The values are being populated by the BookQuery when eager-loading is set.
 	Edges              BookEdges `json:"edges"`
 	collection_books   *int
+	country_books      *int
+	district_books     *int
 	license_books      *int
 	location_books     *int
 	organization_books *int
 	periodical_books   *int
 	publisher_books    *int
+	region_books       *int
 	settlement_books   *int
 	selectValues       sql.SelectValues
 }
@@ -80,15 +86,21 @@ type BookEdges struct {
 	License *License `json:"license,omitempty"`
 	// Location holds the value of the location edge.
 	Location *Location `json:"location,omitempty"`
-	// PlaceOfPublication holds the value of the place_of_publication edge.
-	PlaceOfPublication *Settlement `json:"place_of_publication,omitempty"`
 	// Library holds the value of the library edge.
 	Library *Organization `json:"library,omitempty"`
+	// Country holds the value of the country edge.
+	Country *Country `json:"country,omitempty"`
+	// Settlement holds the value of the settlement edge.
+	Settlement *Settlement `json:"settlement,omitempty"`
+	// District holds the value of the district edge.
+	District *District `json:"district,omitempty"`
+	// Region holds the value of the region edge.
+	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [12]map[string]int
 
 	namedAuthors    map[string][]*Person
 	namedBookGenres map[string][]*BookGenre
@@ -177,23 +189,10 @@ func (e BookEdges) LocationOrErr() (*Location, error) {
 	return nil, &NotLoadedError{edge: "location"}
 }
 
-// PlaceOfPublicationOrErr returns the PlaceOfPublication value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e BookEdges) PlaceOfPublicationOrErr() (*Settlement, error) {
-	if e.loadedTypes[7] {
-		if e.PlaceOfPublication == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: settlement.Label}
-		}
-		return e.PlaceOfPublication, nil
-	}
-	return nil, &NotLoadedError{edge: "place_of_publication"}
-}
-
 // LibraryOrErr returns the Library value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e BookEdges) LibraryOrErr() (*Organization, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[7] {
 		if e.Library == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: organization.Label}
@@ -201,6 +200,58 @@ func (e BookEdges) LibraryOrErr() (*Organization, error) {
 		return e.Library, nil
 	}
 	return nil, &NotLoadedError{edge: "library"}
+}
+
+// CountryOrErr returns the Country value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) CountryOrErr() (*Country, error) {
+	if e.loadedTypes[8] {
+		if e.Country == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: country.Label}
+		}
+		return e.Country, nil
+	}
+	return nil, &NotLoadedError{edge: "country"}
+}
+
+// SettlementOrErr returns the Settlement value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) SettlementOrErr() (*Settlement, error) {
+	if e.loadedTypes[9] {
+		if e.Settlement == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: settlement.Label}
+		}
+		return e.Settlement, nil
+	}
+	return nil, &NotLoadedError{edge: "settlement"}
+}
+
+// DistrictOrErr returns the District value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) DistrictOrErr() (*District, error) {
+	if e.loadedTypes[10] {
+		if e.District == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: district.Label}
+		}
+		return e.District, nil
+	}
+	return nil, &NotLoadedError{edge: "district"}
+}
+
+// RegionOrErr returns the Region value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e BookEdges) RegionOrErr() (*Region, error) {
+	if e.loadedTypes[11] {
+		if e.Region == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: region.Label}
+		}
+		return e.Region, nil
+	}
+	return nil, &NotLoadedError{edge: "region"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -218,17 +269,23 @@ func (*Book) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case book.ForeignKeys[0]: // collection_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[1]: // license_books
+		case book.ForeignKeys[1]: // country_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[2]: // location_books
+		case book.ForeignKeys[2]: // district_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[3]: // organization_books
+		case book.ForeignKeys[3]: // license_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[4]: // periodical_books
+		case book.ForeignKeys[4]: // location_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[5]: // publisher_books
+		case book.ForeignKeys[5]: // organization_books
 			values[i] = new(sql.NullInt64)
-		case book.ForeignKeys[6]: // settlement_books
+		case book.ForeignKeys[6]: // periodical_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[7]: // publisher_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[8]: // region_books
+			values[i] = new(sql.NullInt64)
+		case book.ForeignKeys[9]: // settlement_books
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -342,40 +399,61 @@ func (b *Book) assignValues(columns []string, values []any) error {
 			}
 		case book.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field country_books", value)
+			} else if value.Valid {
+				b.country_books = new(int)
+				*b.country_books = int(value.Int64)
+			}
+		case book.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field district_books", value)
+			} else if value.Valid {
+				b.district_books = new(int)
+				*b.district_books = int(value.Int64)
+			}
+		case book.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field license_books", value)
 			} else if value.Valid {
 				b.license_books = new(int)
 				*b.license_books = int(value.Int64)
 			}
-		case book.ForeignKeys[2]:
+		case book.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field location_books", value)
 			} else if value.Valid {
 				b.location_books = new(int)
 				*b.location_books = int(value.Int64)
 			}
-		case book.ForeignKeys[3]:
+		case book.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field organization_books", value)
 			} else if value.Valid {
 				b.organization_books = new(int)
 				*b.organization_books = int(value.Int64)
 			}
-		case book.ForeignKeys[4]:
+		case book.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field periodical_books", value)
 			} else if value.Valid {
 				b.periodical_books = new(int)
 				*b.periodical_books = int(value.Int64)
 			}
-		case book.ForeignKeys[5]:
+		case book.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field publisher_books", value)
 			} else if value.Valid {
 				b.publisher_books = new(int)
 				*b.publisher_books = int(value.Int64)
 			}
-		case book.ForeignKeys[6]:
+		case book.ForeignKeys[8]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field region_books", value)
+			} else if value.Valid {
+				b.region_books = new(int)
+				*b.region_books = int(value.Int64)
+			}
+		case book.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field settlement_books", value)
 			} else if value.Valid {
@@ -430,14 +508,29 @@ func (b *Book) QueryLocation() *LocationQuery {
 	return NewBookClient(b.config).QueryLocation(b)
 }
 
-// QueryPlaceOfPublication queries the "place_of_publication" edge of the Book entity.
-func (b *Book) QueryPlaceOfPublication() *SettlementQuery {
-	return NewBookClient(b.config).QueryPlaceOfPublication(b)
-}
-
 // QueryLibrary queries the "library" edge of the Book entity.
 func (b *Book) QueryLibrary() *OrganizationQuery {
 	return NewBookClient(b.config).QueryLibrary(b)
+}
+
+// QueryCountry queries the "country" edge of the Book entity.
+func (b *Book) QueryCountry() *CountryQuery {
+	return NewBookClient(b.config).QueryCountry(b)
+}
+
+// QuerySettlement queries the "settlement" edge of the Book entity.
+func (b *Book) QuerySettlement() *SettlementQuery {
+	return NewBookClient(b.config).QuerySettlement(b)
+}
+
+// QueryDistrict queries the "district" edge of the Book entity.
+func (b *Book) QueryDistrict() *DistrictQuery {
+	return NewBookClient(b.config).QueryDistrict(b)
+}
+
+// QueryRegion queries the "region" edge of the Book entity.
+func (b *Book) QueryRegion() *RegionQuery {
+	return NewBookClient(b.config).QueryRegion(b)
 }
 
 // Update returns a builder for updating this Book.

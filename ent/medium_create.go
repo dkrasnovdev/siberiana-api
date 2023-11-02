@@ -134,14 +134,14 @@ func (mc *MediumCreate) SetNillableExternalLink(s *string) *MediumCreate {
 	return mc
 }
 
-// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (mc *MediumCreate) AddArtIDs(ids ...int) *MediumCreate {
 	mc.mutation.AddArtIDs(ids...)
 	return mc
 }
 
-// AddArts adds the "arts" edges to the Art entity.
-func (mc *MediumCreate) AddArts(a ...*Art) *MediumCreate {
+// AddArt adds the "art" edges to the Art entity.
+func (mc *MediumCreate) AddArt(a ...*Art) *MediumCreate {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -284,12 +284,12 @@ func (mc *MediumCreate) createSpec() (*Medium, *sqlgraph.CreateSpec) {
 		_spec.SetField(medium.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if nodes := mc.mutation.ArtsIDs(); len(nodes) > 0 {
+	if nodes := mc.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   medium.ArtsTable,
-			Columns: medium.ArtsPrimaryKey,
+			Table:   medium.ArtTable,
+			Columns: medium.ArtPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),

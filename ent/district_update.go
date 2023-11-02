@@ -11,9 +11,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // DistrictUpdate is the builder for updating District entities.
@@ -155,6 +159,66 @@ func (du *DistrictUpdate) ClearExternalLink() *DistrictUpdate {
 	return du
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (du *DistrictUpdate) AddArtIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddArtIDs(ids...)
+	return du
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (du *DistrictUpdate) AddArt(a ...*Art) *DistrictUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return du.AddArtIDs(ids...)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (du *DistrictUpdate) AddArtifactIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddArtifactIDs(ids...)
+	return du
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (du *DistrictUpdate) AddArtifacts(a ...*Artifact) *DistrictUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return du.AddArtifactIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (du *DistrictUpdate) AddBookIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddBookIDs(ids...)
+	return du
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (du *DistrictUpdate) AddBooks(b ...*Book) *DistrictUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return du.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (du *DistrictUpdate) AddProtectedAreaPictureIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddProtectedAreaPictureIDs(ids...)
+	return du
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (du *DistrictUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *DistrictUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return du.AddProtectedAreaPictureIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (du *DistrictUpdate) AddLocationIDs(ids ...int) *DistrictUpdate {
 	du.mutation.AddLocationIDs(ids...)
@@ -173,6 +237,90 @@ func (du *DistrictUpdate) AddLocations(l ...*Location) *DistrictUpdate {
 // Mutation returns the DistrictMutation object of the builder.
 func (du *DistrictUpdate) Mutation() *DistrictMutation {
 	return du.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (du *DistrictUpdate) ClearArt() *DistrictUpdate {
+	du.mutation.ClearArt()
+	return du
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (du *DistrictUpdate) RemoveArtIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveArtIDs(ids...)
+	return du
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (du *DistrictUpdate) RemoveArt(a ...*Art) *DistrictUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return du.RemoveArtIDs(ids...)
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (du *DistrictUpdate) ClearArtifacts() *DistrictUpdate {
+	du.mutation.ClearArtifacts()
+	return du
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (du *DistrictUpdate) RemoveArtifactIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveArtifactIDs(ids...)
+	return du
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (du *DistrictUpdate) RemoveArtifacts(a ...*Artifact) *DistrictUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return du.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (du *DistrictUpdate) ClearBooks() *DistrictUpdate {
+	du.mutation.ClearBooks()
+	return du
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (du *DistrictUpdate) RemoveBookIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveBookIDs(ids...)
+	return du
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (du *DistrictUpdate) RemoveBooks(b ...*Book) *DistrictUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return du.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (du *DistrictUpdate) ClearProtectedAreaPictures() *DistrictUpdate {
+	du.mutation.ClearProtectedAreaPictures()
+	return du
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (du *DistrictUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return du
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (du *DistrictUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *DistrictUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return du.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -285,6 +433,186 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if du.mutation.ExternalLinkCleared() {
 		_spec.ClearField(district.FieldExternalLink, field.TypeString)
+	}
+	if du.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtTable,
+			Columns: []string{district.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedArtIDs(); len(nodes) > 0 && !du.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtTable,
+			Columns: []string{district.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtTable,
+			Columns: []string{district.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if du.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtifactsTable,
+			Columns: []string{district.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !du.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtifactsTable,
+			Columns: []string{district.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtifactsTable,
+			Columns: []string{district.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if du.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.BooksTable,
+			Columns: []string{district.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedBooksIDs(); len(nodes) > 0 && !du.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.BooksTable,
+			Columns: []string{district.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.BooksTable,
+			Columns: []string{district.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if du.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ProtectedAreaPicturesTable,
+			Columns: []string{district.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !du.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ProtectedAreaPicturesTable,
+			Columns: []string{district.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ProtectedAreaPicturesTable,
+			Columns: []string{district.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if du.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +805,66 @@ func (duo *DistrictUpdateOne) ClearExternalLink() *DistrictUpdateOne {
 	return duo
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (duo *DistrictUpdateOne) AddArtIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddArtIDs(ids...)
+	return duo
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (duo *DistrictUpdateOne) AddArt(a ...*Art) *DistrictUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return duo.AddArtIDs(ids...)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (duo *DistrictUpdateOne) AddArtifactIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddArtifactIDs(ids...)
+	return duo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (duo *DistrictUpdateOne) AddArtifacts(a ...*Artifact) *DistrictUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return duo.AddArtifactIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (duo *DistrictUpdateOne) AddBookIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddBookIDs(ids...)
+	return duo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (duo *DistrictUpdateOne) AddBooks(b ...*Book) *DistrictUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return duo.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (duo *DistrictUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return duo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (duo *DistrictUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *DistrictUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return duo.AddProtectedAreaPictureIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (duo *DistrictUpdateOne) AddLocationIDs(ids ...int) *DistrictUpdateOne {
 	duo.mutation.AddLocationIDs(ids...)
@@ -495,6 +883,90 @@ func (duo *DistrictUpdateOne) AddLocations(l ...*Location) *DistrictUpdateOne {
 // Mutation returns the DistrictMutation object of the builder.
 func (duo *DistrictUpdateOne) Mutation() *DistrictMutation {
 	return duo.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (duo *DistrictUpdateOne) ClearArt() *DistrictUpdateOne {
+	duo.mutation.ClearArt()
+	return duo
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (duo *DistrictUpdateOne) RemoveArtIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveArtIDs(ids...)
+	return duo
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (duo *DistrictUpdateOne) RemoveArt(a ...*Art) *DistrictUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return duo.RemoveArtIDs(ids...)
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (duo *DistrictUpdateOne) ClearArtifacts() *DistrictUpdateOne {
+	duo.mutation.ClearArtifacts()
+	return duo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (duo *DistrictUpdateOne) RemoveArtifactIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveArtifactIDs(ids...)
+	return duo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (duo *DistrictUpdateOne) RemoveArtifacts(a ...*Artifact) *DistrictUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return duo.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (duo *DistrictUpdateOne) ClearBooks() *DistrictUpdateOne {
+	duo.mutation.ClearBooks()
+	return duo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (duo *DistrictUpdateOne) RemoveBookIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveBookIDs(ids...)
+	return duo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (duo *DistrictUpdateOne) RemoveBooks(b ...*Book) *DistrictUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return duo.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (duo *DistrictUpdateOne) ClearProtectedAreaPictures() *DistrictUpdateOne {
+	duo.mutation.ClearProtectedAreaPictures()
+	return duo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (duo *DistrictUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return duo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (duo *DistrictUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *DistrictUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return duo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -637,6 +1109,186 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 	}
 	if duo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(district.FieldExternalLink, field.TypeString)
+	}
+	if duo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtTable,
+			Columns: []string{district.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedArtIDs(); len(nodes) > 0 && !duo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtTable,
+			Columns: []string{district.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtTable,
+			Columns: []string{district.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if duo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtifactsTable,
+			Columns: []string{district.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !duo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtifactsTable,
+			Columns: []string{district.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ArtifactsTable,
+			Columns: []string{district.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if duo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.BooksTable,
+			Columns: []string{district.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !duo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.BooksTable,
+			Columns: []string{district.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.BooksTable,
+			Columns: []string{district.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if duo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ProtectedAreaPicturesTable,
+			Columns: []string{district.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !duo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ProtectedAreaPicturesTable,
+			Columns: []string{district.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.ProtectedAreaPicturesTable,
+			Columns: []string{district.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if duo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{

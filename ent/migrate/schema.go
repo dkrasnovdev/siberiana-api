@@ -24,8 +24,12 @@ var (
 		{Name: "number", Type: field.TypeString, Nullable: true},
 		{Name: "dating", Type: field.TypeString, Nullable: true},
 		{Name: "dimensions", Type: field.TypeString, Nullable: true},
-		{Name: "collection_arts", Type: field.TypeInt},
-		{Name: "person_arts", Type: field.TypeInt, Nullable: true},
+		{Name: "collection_art", Type: field.TypeInt},
+		{Name: "country_art", Type: field.TypeInt, Nullable: true},
+		{Name: "district_art", Type: field.TypeInt, Nullable: true},
+		{Name: "person_art", Type: field.TypeInt, Nullable: true},
+		{Name: "region_art", Type: field.TypeInt, Nullable: true},
+		{Name: "settlement_art", Type: field.TypeInt, Nullable: true},
 	}
 	// ArtsTable holds the schema information for the "arts" table.
 	ArtsTable = &schema.Table{
@@ -34,15 +38,39 @@ var (
 		PrimaryKey: []*schema.Column{ArtsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "arts_collections_arts",
+				Symbol:     "arts_collections_art",
 				Columns:    []*schema.Column{ArtsColumns[14]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "arts_persons_arts",
+				Symbol:     "arts_countries_art",
 				Columns:    []*schema.Column{ArtsColumns[15]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "arts_districts_art",
+				Columns:    []*schema.Column{ArtsColumns[16]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "arts_persons_art",
+				Columns:    []*schema.Column{ArtsColumns[17]},
 				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "arts_regions_art",
+				Columns:    []*schema.Column{ArtsColumns[18]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "arts_settlements_art",
+				Columns:    []*schema.Column{ArtsColumns[19]},
+				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -115,12 +143,16 @@ var (
 		{Name: "typology", Type: field.TypeString, Nullable: true},
 		{Name: "admission_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "collection_artifacts", Type: field.TypeInt},
+		{Name: "country_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "culture_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "district_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "license_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "location_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "model_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "monument_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "region_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "set_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "settlement_artifacts", Type: field.TypeInt, Nullable: true},
 	}
 	// ArtifactsTable holds the schema information for the "artifacts" table.
 	ArtifactsTable = &schema.Table{
@@ -135,39 +167,63 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "artifacts_cultures_artifacts",
+				Symbol:     "artifacts_countries_artifacts",
 				Columns:    []*schema.Column{ArtifactsColumns[30]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "artifacts_cultures_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[31]},
 				RefColumns: []*schema.Column{CulturesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "artifacts_districts_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[32]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "artifacts_licenses_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[31]},
+				Columns:    []*schema.Column{ArtifactsColumns[33]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_locations_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[32]},
+				Columns:    []*schema.Column{ArtifactsColumns[34]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_models_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[33]},
+				Columns:    []*schema.Column{ArtifactsColumns[35]},
 				RefColumns: []*schema.Column{ModelsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_monuments_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[34]},
+				Columns:    []*schema.Column{ArtifactsColumns[36]},
 				RefColumns: []*schema.Column{MonumentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "artifacts_regions_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[37]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "artifacts_sets_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[35]},
+				Columns:    []*schema.Column{ArtifactsColumns[38]},
 				RefColumns: []*schema.Column{SetsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "artifacts_settlements_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[39]},
+				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -208,11 +264,14 @@ var (
 		{Name: "files", Type: field.TypeJSON, Nullable: true},
 		{Name: "year", Type: field.TypeInt, Nullable: true},
 		{Name: "collection_books", Type: field.TypeInt},
+		{Name: "country_books", Type: field.TypeInt, Nullable: true},
+		{Name: "district_books", Type: field.TypeInt, Nullable: true},
 		{Name: "license_books", Type: field.TypeInt, Nullable: true},
 		{Name: "location_books", Type: field.TypeInt, Nullable: true},
 		{Name: "organization_books", Type: field.TypeInt, Nullable: true},
 		{Name: "periodical_books", Type: field.TypeInt, Nullable: true},
 		{Name: "publisher_books", Type: field.TypeInt, Nullable: true},
+		{Name: "region_books", Type: field.TypeInt, Nullable: true},
 		{Name: "settlement_books", Type: field.TypeInt, Nullable: true},
 	}
 	// BooksTable holds the schema information for the "books" table.
@@ -228,38 +287,56 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "books_licenses_books",
+				Symbol:     "books_countries_books",
 				Columns:    []*schema.Column{BooksColumns[15]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_districts_books",
+				Columns:    []*schema.Column{BooksColumns[16]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "books_licenses_books",
+				Columns:    []*schema.Column{BooksColumns[17]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "books_locations_books",
-				Columns:    []*schema.Column{BooksColumns[16]},
+				Columns:    []*schema.Column{BooksColumns[18]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "books_organizations_books",
-				Columns:    []*schema.Column{BooksColumns[17]},
+				Columns:    []*schema.Column{BooksColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "books_periodicals_books",
-				Columns:    []*schema.Column{BooksColumns[18]},
+				Columns:    []*schema.Column{BooksColumns[20]},
 				RefColumns: []*schema.Column{PeriodicalsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "books_publishers_books",
-				Columns:    []*schema.Column{BooksColumns[19]},
+				Columns:    []*schema.Column{BooksColumns[21]},
 				RefColumns: []*schema.Column{PublishersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "books_regions_books",
+				Columns:    []*schema.Column{BooksColumns[22]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "books_settlements_books",
-				Columns:    []*schema.Column{BooksColumns[20]},
+				Columns:    []*schema.Column{BooksColumns[23]},
 				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -318,7 +395,7 @@ var (
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"artifacts", "books", "protected_area_pictures"}},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "protected_area_pictures"}},
 		{Name: "category_collections", Type: field.TypeInt},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.
@@ -667,9 +744,11 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
-		{Name: "begin_data", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "begin_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "year", Type: field.TypeInt, Nullable: true},
+		{Name: "begin_year", Type: field.TypeInt, Nullable: true},
+		{Name: "end_year", Type: field.TypeInt, Nullable: true},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
 	ProjectsTable = &schema.Table{
@@ -741,9 +820,13 @@ var (
 		{Name: "shooting_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "geometry", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "geometry"}},
 		{Name: "collection_protected_area_pictures", Type: field.TypeInt},
+		{Name: "country_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "district_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "license_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "location_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "protected_area_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "region_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "settlement_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 	}
 	// ProtectedAreaPicturesTable holds the schema information for the "protected_area_pictures" table.
 	ProtectedAreaPicturesTable = &schema.Table{
@@ -758,21 +841,45 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "protected_area_pictures_licenses_protected_area_pictures",
+				Symbol:     "protected_area_pictures_countries_protected_area_pictures",
 				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[15]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_districts_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[16]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_licenses_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[17]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "protected_area_pictures_locations_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[16]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[18]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "protected_area_pictures_protected_areas_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[17]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[19]},
 				RefColumns: []*schema.Column{ProtectedAreasColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_regions_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[20]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_settlements_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[21]},
+				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -993,26 +1100,26 @@ var (
 			},
 		},
 	}
-	// MediumArtsColumns holds the columns for the "medium_arts" table.
-	MediumArtsColumns = []*schema.Column{
+	// MediumArtColumns holds the columns for the "medium_art" table.
+	MediumArtColumns = []*schema.Column{
 		{Name: "medium_id", Type: field.TypeInt},
 		{Name: "art_id", Type: field.TypeInt},
 	}
-	// MediumArtsTable holds the schema information for the "medium_arts" table.
-	MediumArtsTable = &schema.Table{
-		Name:       "medium_arts",
-		Columns:    MediumArtsColumns,
-		PrimaryKey: []*schema.Column{MediumArtsColumns[0], MediumArtsColumns[1]},
+	// MediumArtTable holds the schema information for the "medium_art" table.
+	MediumArtTable = &schema.Table{
+		Name:       "medium_art",
+		Columns:    MediumArtColumns,
+		PrimaryKey: []*schema.Column{MediumArtColumns[0], MediumArtColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "medium_arts_medium_id",
-				Columns:    []*schema.Column{MediumArtsColumns[0]},
+				Symbol:     "medium_art_medium_id",
+				Columns:    []*schema.Column{MediumArtColumns[0]},
 				RefColumns: []*schema.Column{MediaColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "medium_arts_art_id",
-				Columns:    []*schema.Column{MediumArtsColumns[1]},
+				Symbol:     "medium_art_art_id",
+				Columns:    []*schema.Column{MediumArtColumns[1]},
 				RefColumns: []*schema.Column{ArtsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -1308,7 +1415,7 @@ var (
 		ArtGenreArtTable,
 		ArtStyleArtTable,
 		BookGenreBooksTable,
-		MediumArtsTable,
+		MediumArtTable,
 		MediumArtifactsTable,
 		MonumentSetsTable,
 		PersonCollectionsTable,
@@ -1324,21 +1431,32 @@ var (
 
 func init() {
 	ArtsTable.ForeignKeys[0].RefTable = CollectionsTable
-	ArtsTable.ForeignKeys[1].RefTable = PersonsTable
+	ArtsTable.ForeignKeys[1].RefTable = CountriesTable
+	ArtsTable.ForeignKeys[2].RefTable = DistrictsTable
+	ArtsTable.ForeignKeys[3].RefTable = PersonsTable
+	ArtsTable.ForeignKeys[4].RefTable = RegionsTable
+	ArtsTable.ForeignKeys[5].RefTable = SettlementsTable
 	ArtifactsTable.ForeignKeys[0].RefTable = CollectionsTable
-	ArtifactsTable.ForeignKeys[1].RefTable = CulturesTable
-	ArtifactsTable.ForeignKeys[2].RefTable = LicensesTable
-	ArtifactsTable.ForeignKeys[3].RefTable = LocationsTable
-	ArtifactsTable.ForeignKeys[4].RefTable = ModelsTable
-	ArtifactsTable.ForeignKeys[5].RefTable = MonumentsTable
-	ArtifactsTable.ForeignKeys[6].RefTable = SetsTable
+	ArtifactsTable.ForeignKeys[1].RefTable = CountriesTable
+	ArtifactsTable.ForeignKeys[2].RefTable = CulturesTable
+	ArtifactsTable.ForeignKeys[3].RefTable = DistrictsTable
+	ArtifactsTable.ForeignKeys[4].RefTable = LicensesTable
+	ArtifactsTable.ForeignKeys[5].RefTable = LocationsTable
+	ArtifactsTable.ForeignKeys[6].RefTable = ModelsTable
+	ArtifactsTable.ForeignKeys[7].RefTable = MonumentsTable
+	ArtifactsTable.ForeignKeys[8].RefTable = RegionsTable
+	ArtifactsTable.ForeignKeys[9].RefTable = SetsTable
+	ArtifactsTable.ForeignKeys[10].RefTable = SettlementsTable
 	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
-	BooksTable.ForeignKeys[1].RefTable = LicensesTable
-	BooksTable.ForeignKeys[2].RefTable = LocationsTable
-	BooksTable.ForeignKeys[3].RefTable = OrganizationsTable
-	BooksTable.ForeignKeys[4].RefTable = PeriodicalsTable
-	BooksTable.ForeignKeys[5].RefTable = PublishersTable
-	BooksTable.ForeignKeys[6].RefTable = SettlementsTable
+	BooksTable.ForeignKeys[1].RefTable = CountriesTable
+	BooksTable.ForeignKeys[2].RefTable = DistrictsTable
+	BooksTable.ForeignKeys[3].RefTable = LicensesTable
+	BooksTable.ForeignKeys[4].RefTable = LocationsTable
+	BooksTable.ForeignKeys[5].RefTable = OrganizationsTable
+	BooksTable.ForeignKeys[6].RefTable = PeriodicalsTable
+	BooksTable.ForeignKeys[7].RefTable = PublishersTable
+	BooksTable.ForeignKeys[8].RefTable = RegionsTable
+	BooksTable.ForeignKeys[9].RefTable = SettlementsTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	LocationsTable.ForeignKeys[0].RefTable = CountriesTable
 	LocationsTable.ForeignKeys[1].RefTable = DistrictsTable
@@ -1347,9 +1465,13 @@ func init() {
 	PersonsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ProtectedAreasTable.ForeignKeys[0].RefTable = ProtectedAreaCategoriesTable
 	ProtectedAreaPicturesTable.ForeignKeys[0].RefTable = CollectionsTable
-	ProtectedAreaPicturesTable.ForeignKeys[1].RefTable = LicensesTable
-	ProtectedAreaPicturesTable.ForeignKeys[2].RefTable = LocationsTable
-	ProtectedAreaPicturesTable.ForeignKeys[3].RefTable = ProtectedAreasTable
+	ProtectedAreaPicturesTable.ForeignKeys[1].RefTable = CountriesTable
+	ProtectedAreaPicturesTable.ForeignKeys[2].RefTable = DistrictsTable
+	ProtectedAreaPicturesTable.ForeignKeys[3].RefTable = LicensesTable
+	ProtectedAreaPicturesTable.ForeignKeys[4].RefTable = LocationsTable
+	ProtectedAreaPicturesTable.ForeignKeys[5].RefTable = ProtectedAreasTable
+	ProtectedAreaPicturesTable.ForeignKeys[6].RefTable = RegionsTable
+	ProtectedAreaPicturesTable.ForeignKeys[7].RefTable = SettlementsTable
 	ProxiesTable.ForeignKeys[0].RefTable = FavouritesTable
 	ProxiesTable.ForeignKeys[1].RefTable = PersonalsTable
 	ArtGenreArtTable.ForeignKeys[0].RefTable = ArtGenresTable
@@ -1358,8 +1480,8 @@ func init() {
 	ArtStyleArtTable.ForeignKeys[1].RefTable = ArtsTable
 	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable
 	BookGenreBooksTable.ForeignKeys[1].RefTable = BooksTable
-	MediumArtsTable.ForeignKeys[0].RefTable = MediaTable
-	MediumArtsTable.ForeignKeys[1].RefTable = ArtsTable
+	MediumArtTable.ForeignKeys[0].RefTable = MediaTable
+	MediumArtTable.ForeignKeys[1].RefTable = ArtsTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	MonumentSetsTable.ForeignKeys[0].RefTable = MonumentsTable

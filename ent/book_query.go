@@ -15,6 +15,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/bookgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
@@ -22,30 +24,34 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // BookQuery is the builder for querying Book entities.
 type BookQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []book.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.Book
-	withAuthors            *PersonQuery
-	withBookGenres         *BookGenreQuery
-	withCollection         *CollectionQuery
-	withPeriodical         *PeriodicalQuery
-	withPublisher          *PublisherQuery
-	withLicense            *LicenseQuery
-	withLocation           *LocationQuery
-	withPlaceOfPublication *SettlementQuery
-	withLibrary            *OrganizationQuery
-	withFKs                bool
-	modifiers              []func(*sql.Selector)
-	loadTotal              []func(context.Context, []*Book) error
-	withNamedAuthors       map[string]*PersonQuery
-	withNamedBookGenres    map[string]*BookGenreQuery
+	ctx                 *QueryContext
+	order               []book.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.Book
+	withAuthors         *PersonQuery
+	withBookGenres      *BookGenreQuery
+	withCollection      *CollectionQuery
+	withPeriodical      *PeriodicalQuery
+	withPublisher       *PublisherQuery
+	withLicense         *LicenseQuery
+	withLocation        *LocationQuery
+	withLibrary         *OrganizationQuery
+	withCountry         *CountryQuery
+	withSettlement      *SettlementQuery
+	withDistrict        *DistrictQuery
+	withRegion          *RegionQuery
+	withFKs             bool
+	modifiers           []func(*sql.Selector)
+	loadTotal           []func(context.Context, []*Book) error
+	withNamedAuthors    map[string]*PersonQuery
+	withNamedBookGenres map[string]*BookGenreQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -236,28 +242,6 @@ func (bq *BookQuery) QueryLocation() *LocationQuery {
 	return query
 }
 
-// QueryPlaceOfPublication chains the current query on the "place_of_publication" edge.
-func (bq *BookQuery) QueryPlaceOfPublication() *SettlementQuery {
-	query := (&SettlementClient{config: bq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := bq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := bq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(book.Table, book.FieldID, selector),
-			sqlgraph.To(settlement.Table, settlement.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, book.PlaceOfPublicationTable, book.PlaceOfPublicationColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryLibrary chains the current query on the "library" edge.
 func (bq *BookQuery) QueryLibrary() *OrganizationQuery {
 	query := (&OrganizationClient{config: bq.config}).Query()
@@ -273,6 +257,94 @@ func (bq *BookQuery) QueryLibrary() *OrganizationQuery {
 			sqlgraph.From(book.Table, book.FieldID, selector),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.LibraryTable, book.LibraryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCountry chains the current query on the "country" edge.
+func (bq *BookQuery) QueryCountry() *CountryQuery {
+	query := (&CountryClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.CountryTable, book.CountryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySettlement chains the current query on the "settlement" edge.
+func (bq *BookQuery) QuerySettlement() *SettlementQuery {
+	query := (&SettlementClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.SettlementTable, book.SettlementColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDistrict chains the current query on the "district" edge.
+func (bq *BookQuery) QueryDistrict() *DistrictQuery {
+	query := (&DistrictClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.DistrictTable, book.DistrictColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegion chains the current query on the "region" edge.
+func (bq *BookQuery) QueryRegion() *RegionQuery {
+	query := (&RegionClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.RegionTable, book.RegionColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -467,20 +539,23 @@ func (bq *BookQuery) Clone() *BookQuery {
 		return nil
 	}
 	return &BookQuery{
-		config:                 bq.config,
-		ctx:                    bq.ctx.Clone(),
-		order:                  append([]book.OrderOption{}, bq.order...),
-		inters:                 append([]Interceptor{}, bq.inters...),
-		predicates:             append([]predicate.Book{}, bq.predicates...),
-		withAuthors:            bq.withAuthors.Clone(),
-		withBookGenres:         bq.withBookGenres.Clone(),
-		withCollection:         bq.withCollection.Clone(),
-		withPeriodical:         bq.withPeriodical.Clone(),
-		withPublisher:          bq.withPublisher.Clone(),
-		withLicense:            bq.withLicense.Clone(),
-		withLocation:           bq.withLocation.Clone(),
-		withPlaceOfPublication: bq.withPlaceOfPublication.Clone(),
-		withLibrary:            bq.withLibrary.Clone(),
+		config:         bq.config,
+		ctx:            bq.ctx.Clone(),
+		order:          append([]book.OrderOption{}, bq.order...),
+		inters:         append([]Interceptor{}, bq.inters...),
+		predicates:     append([]predicate.Book{}, bq.predicates...),
+		withAuthors:    bq.withAuthors.Clone(),
+		withBookGenres: bq.withBookGenres.Clone(),
+		withCollection: bq.withCollection.Clone(),
+		withPeriodical: bq.withPeriodical.Clone(),
+		withPublisher:  bq.withPublisher.Clone(),
+		withLicense:    bq.withLicense.Clone(),
+		withLocation:   bq.withLocation.Clone(),
+		withLibrary:    bq.withLibrary.Clone(),
+		withCountry:    bq.withCountry.Clone(),
+		withSettlement: bq.withSettlement.Clone(),
+		withDistrict:   bq.withDistrict.Clone(),
+		withRegion:     bq.withRegion.Clone(),
 		// clone intermediate query.
 		sql:  bq.sql.Clone(),
 		path: bq.path,
@@ -564,17 +639,6 @@ func (bq *BookQuery) WithLocation(opts ...func(*LocationQuery)) *BookQuery {
 	return bq
 }
 
-// WithPlaceOfPublication tells the query-builder to eager-load the nodes that are connected to
-// the "place_of_publication" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BookQuery) WithPlaceOfPublication(opts ...func(*SettlementQuery)) *BookQuery {
-	query := (&SettlementClient{config: bq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	bq.withPlaceOfPublication = query
-	return bq
-}
-
 // WithLibrary tells the query-builder to eager-load the nodes that are connected to
 // the "library" edge. The optional arguments are used to configure the query builder of the edge.
 func (bq *BookQuery) WithLibrary(opts ...func(*OrganizationQuery)) *BookQuery {
@@ -583,6 +647,50 @@ func (bq *BookQuery) WithLibrary(opts ...func(*OrganizationQuery)) *BookQuery {
 		opt(query)
 	}
 	bq.withLibrary = query
+	return bq
+}
+
+// WithCountry tells the query-builder to eager-load the nodes that are connected to
+// the "country" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithCountry(opts ...func(*CountryQuery)) *BookQuery {
+	query := (&CountryClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withCountry = query
+	return bq
+}
+
+// WithSettlement tells the query-builder to eager-load the nodes that are connected to
+// the "settlement" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithSettlement(opts ...func(*SettlementQuery)) *BookQuery {
+	query := (&SettlementClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withSettlement = query
+	return bq
+}
+
+// WithDistrict tells the query-builder to eager-load the nodes that are connected to
+// the "district" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithDistrict(opts ...func(*DistrictQuery)) *BookQuery {
+	query := (&DistrictClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withDistrict = query
+	return bq
+}
+
+// WithRegion tells the query-builder to eager-load the nodes that are connected to
+// the "region" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithRegion(opts ...func(*RegionQuery)) *BookQuery {
+	query := (&RegionClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withRegion = query
 	return bq
 }
 
@@ -671,7 +779,7 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 		nodes       = []*Book{}
 		withFKs     = bq.withFKs
 		_spec       = bq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [12]bool{
 			bq.withAuthors != nil,
 			bq.withBookGenres != nil,
 			bq.withCollection != nil,
@@ -679,11 +787,14 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 			bq.withPublisher != nil,
 			bq.withLicense != nil,
 			bq.withLocation != nil,
-			bq.withPlaceOfPublication != nil,
 			bq.withLibrary != nil,
+			bq.withCountry != nil,
+			bq.withSettlement != nil,
+			bq.withDistrict != nil,
+			bq.withRegion != nil,
 		}
 	)
-	if bq.withCollection != nil || bq.withPeriodical != nil || bq.withPublisher != nil || bq.withLicense != nil || bq.withLocation != nil || bq.withPlaceOfPublication != nil || bq.withLibrary != nil {
+	if bq.withCollection != nil || bq.withPeriodical != nil || bq.withPublisher != nil || bq.withLicense != nil || bq.withLocation != nil || bq.withLibrary != nil || bq.withCountry != nil || bq.withSettlement != nil || bq.withDistrict != nil || bq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -754,15 +865,33 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 			return nil, err
 		}
 	}
-	if query := bq.withPlaceOfPublication; query != nil {
-		if err := bq.loadPlaceOfPublication(ctx, query, nodes, nil,
-			func(n *Book, e *Settlement) { n.Edges.PlaceOfPublication = e }); err != nil {
-			return nil, err
-		}
-	}
 	if query := bq.withLibrary; query != nil {
 		if err := bq.loadLibrary(ctx, query, nodes, nil,
 			func(n *Book, e *Organization) { n.Edges.Library = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withCountry; query != nil {
+		if err := bq.loadCountry(ctx, query, nodes, nil,
+			func(n *Book, e *Country) { n.Edges.Country = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withSettlement; query != nil {
+		if err := bq.loadSettlement(ctx, query, nodes, nil,
+			func(n *Book, e *Settlement) { n.Edges.Settlement = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withDistrict; query != nil {
+		if err := bq.loadDistrict(ctx, query, nodes, nil,
+			func(n *Book, e *District) { n.Edges.District = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := bq.withRegion; query != nil {
+		if err := bq.loadRegion(ctx, query, nodes, nil,
+			func(n *Book, e *Region) { n.Edges.Region = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1070,7 +1199,71 @@ func (bq *BookQuery) loadLocation(ctx context.Context, query *LocationQuery, nod
 	}
 	return nil
 }
-func (bq *BookQuery) loadPlaceOfPublication(ctx context.Context, query *SettlementQuery, nodes []*Book, init func(*Book), assign func(*Book, *Settlement)) error {
+func (bq *BookQuery) loadLibrary(ctx context.Context, query *OrganizationQuery, nodes []*Book, init func(*Book), assign func(*Book, *Organization)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Book)
+	for i := range nodes {
+		if nodes[i].organization_books == nil {
+			continue
+		}
+		fk := *nodes[i].organization_books
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "organization_books" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (bq *BookQuery) loadCountry(ctx context.Context, query *CountryQuery, nodes []*Book, init func(*Book), assign func(*Book, *Country)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Book)
+	for i := range nodes {
+		if nodes[i].country_books == nil {
+			continue
+		}
+		fk := *nodes[i].country_books
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(country.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "country_books" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (bq *BookQuery) loadSettlement(ctx context.Context, query *SettlementQuery, nodes []*Book, init func(*Book), assign func(*Book, *Settlement)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Book)
 	for i := range nodes {
@@ -1102,14 +1295,14 @@ func (bq *BookQuery) loadPlaceOfPublication(ctx context.Context, query *Settleme
 	}
 	return nil
 }
-func (bq *BookQuery) loadLibrary(ctx context.Context, query *OrganizationQuery, nodes []*Book, init func(*Book), assign func(*Book, *Organization)) error {
+func (bq *BookQuery) loadDistrict(ctx context.Context, query *DistrictQuery, nodes []*Book, init func(*Book), assign func(*Book, *District)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Book)
 	for i := range nodes {
-		if nodes[i].organization_books == nil {
+		if nodes[i].district_books == nil {
 			continue
 		}
-		fk := *nodes[i].organization_books
+		fk := *nodes[i].district_books
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1118,7 +1311,7 @@ func (bq *BookQuery) loadLibrary(ctx context.Context, query *OrganizationQuery, 
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(organization.IDIn(ids...))
+	query.Where(district.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1126,7 +1319,39 @@ func (bq *BookQuery) loadLibrary(ctx context.Context, query *OrganizationQuery, 
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "organization_books" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "district_books" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (bq *BookQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes []*Book, init func(*Book), assign func(*Book, *Region)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Book)
+	for i := range nodes {
+		if nodes[i].region_books == nil {
+			continue
+		}
+		fk := *nodes[i].region_books
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(region.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "region_books" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

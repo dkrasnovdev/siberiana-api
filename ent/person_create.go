@@ -298,14 +298,14 @@ func (pc *PersonCreate) AddCollections(c ...*Collection) *PersonCreate {
 	return pc.AddCollectionIDs(ids...)
 }
 
-// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (pc *PersonCreate) AddArtIDs(ids ...int) *PersonCreate {
 	pc.mutation.AddArtIDs(ids...)
 	return pc
 }
 
-// AddArts adds the "arts" edges to the Art entity.
-func (pc *PersonCreate) AddArts(a ...*Art) *PersonCreate {
+// AddArt adds the "art" edges to the Art entity.
+func (pc *PersonCreate) AddArt(a ...*Art) *PersonCreate {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -581,12 +581,12 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.ArtsIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   person.ArtsTable,
-			Columns: []string{person.ArtsColumn},
+			Table:   person.ArtTable,
+			Columns: []string{person.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),

@@ -134,16 +134,16 @@ func (pc *ProjectCreate) SetNillableExternalLink(s *string) *ProjectCreate {
 	return pc
 }
 
-// SetBeginData sets the "begin_data" field.
-func (pc *ProjectCreate) SetBeginData(t time.Time) *ProjectCreate {
-	pc.mutation.SetBeginData(t)
+// SetBeginDate sets the "begin_date" field.
+func (pc *ProjectCreate) SetBeginDate(t time.Time) *ProjectCreate {
+	pc.mutation.SetBeginDate(t)
 	return pc
 }
 
-// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
-func (pc *ProjectCreate) SetNillableBeginData(t *time.Time) *ProjectCreate {
+// SetNillableBeginDate sets the "begin_date" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableBeginDate(t *time.Time) *ProjectCreate {
 	if t != nil {
-		pc.SetBeginData(*t)
+		pc.SetBeginDate(*t)
 	}
 	return pc
 }
@@ -172,6 +172,34 @@ func (pc *ProjectCreate) SetYear(i int) *ProjectCreate {
 func (pc *ProjectCreate) SetNillableYear(i *int) *ProjectCreate {
 	if i != nil {
 		pc.SetYear(*i)
+	}
+	return pc
+}
+
+// SetBeginYear sets the "begin_year" field.
+func (pc *ProjectCreate) SetBeginYear(i int) *ProjectCreate {
+	pc.mutation.SetBeginYear(i)
+	return pc
+}
+
+// SetNillableBeginYear sets the "begin_year" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableBeginYear(i *int) *ProjectCreate {
+	if i != nil {
+		pc.SetBeginYear(*i)
+	}
+	return pc
+}
+
+// SetEndYear sets the "end_year" field.
+func (pc *ProjectCreate) SetEndYear(i int) *ProjectCreate {
+	pc.mutation.SetEndYear(i)
+	return pc
+}
+
+// SetNillableEndYear sets the "end_year" field if the given value is not nil.
+func (pc *ProjectCreate) SetNillableEndYear(i *int) *ProjectCreate {
+	if i != nil {
+		pc.SetEndYear(*i)
 	}
 	return pc
 }
@@ -273,6 +301,16 @@ func (pc *ProjectCreate) check() error {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Project.year": %w`, err)}
 		}
 	}
+	if v, ok := pc.mutation.BeginYear(); ok {
+		if err := project.BeginYearValidator(v); err != nil {
+			return &ValidationError{Name: "begin_year", err: fmt.Errorf(`ent: validator failed for field "Project.begin_year": %w`, err)}
+		}
+	}
+	if v, ok := pc.mutation.EndYear(); ok {
+		if err := project.EndYearValidator(v); err != nil {
+			return &ValidationError{Name: "end_year", err: fmt.Errorf(`ent: validator failed for field "Project.end_year": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -331,9 +369,9 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 		_spec.SetField(project.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
-	if value, ok := pc.mutation.BeginData(); ok {
-		_spec.SetField(project.FieldBeginData, field.TypeTime, value)
-		_node.BeginData = value
+	if value, ok := pc.mutation.BeginDate(); ok {
+		_spec.SetField(project.FieldBeginDate, field.TypeTime, value)
+		_node.BeginDate = value
 	}
 	if value, ok := pc.mutation.EndDate(); ok {
 		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
@@ -342,6 +380,14 @@ func (pc *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Year(); ok {
 		_spec.SetField(project.FieldYear, field.TypeInt, value)
 		_node.Year = value
+	}
+	if value, ok := pc.mutation.BeginYear(); ok {
+		_spec.SetField(project.FieldBeginYear, field.TypeInt, value)
+		_node.BeginYear = value
+	}
+	if value, ok := pc.mutation.EndYear(); ok {
+		_spec.SetField(project.FieldEndYear, field.TypeInt, value)
+		_node.EndYear = value
 	}
 	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

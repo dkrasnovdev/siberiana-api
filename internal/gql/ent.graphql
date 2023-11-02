@@ -20,6 +20,10 @@ type Art implements Node {
   artStyle: [ArtStyle!]
   mediums: [Medium!]
   collection: Collection!
+  country: Country
+  settlement: Settlement
+  district: District
+  region: Region
 }
 """A connection to a list of items."""
 type ArtConnection {
@@ -612,6 +616,18 @@ input ArtWhereInput {
   """collection edge predicates"""
   hasCollection: Boolean
   hasCollectionWith: [CollectionWhereInput!]
+  """country edge predicates"""
+  hasCountry: Boolean
+  hasCountryWith: [CountryWhereInput!]
+  """settlement edge predicates"""
+  hasSettlement: Boolean
+  hasSettlementWith: [SettlementWhereInput!]
+  """district edge predicates"""
+  hasDistrict: Boolean
+  hasDistrictWith: [DistrictWhereInput!]
+  """region edge predicates"""
+  hasRegion: Boolean
+  hasRegionWith: [RegionWhereInput!]
 }
 type Artifact implements Node {
   id: ID!
@@ -655,6 +671,10 @@ type Artifact implements Node {
   location: Location
   collection: Collection!
   license: License
+  country: Country
+  settlement: Settlement
+  district: District
+  region: Region
 }
 """A connection to a list of items."""
 type ArtifactConnection {
@@ -1108,6 +1128,18 @@ input ArtifactWhereInput {
   """license edge predicates"""
   hasLicense: Boolean
   hasLicenseWith: [LicenseWhereInput!]
+  """country edge predicates"""
+  hasCountry: Boolean
+  hasCountryWith: [CountryWhereInput!]
+  """settlement edge predicates"""
+  hasSettlement: Boolean
+  hasSettlementWith: [SettlementWhereInput!]
+  """district edge predicates"""
+  hasDistrict: Boolean
+  hasDistrictWith: [DistrictWhereInput!]
+  """region edge predicates"""
+  hasRegion: Boolean
+  hasRegionWith: [RegionWhereInput!]
 }
 type AuditLog implements Node {
   id: ID!
@@ -1256,8 +1288,11 @@ type Book implements Node {
   publisher: Publisher
   license: License
   location: Location
-  placeOfPublication: Settlement
   library: Organization
+  country: Country
+  settlement: Settlement
+  district: District
+  region: Region
 }
 """A connection to a list of items."""
 type BookConnection {
@@ -1656,12 +1691,21 @@ input BookWhereInput {
   """location edge predicates"""
   hasLocation: Boolean
   hasLocationWith: [LocationWhereInput!]
-  """place_of_publication edge predicates"""
-  hasPlaceOfPublication: Boolean
-  hasPlaceOfPublicationWith: [SettlementWhereInput!]
   """library edge predicates"""
   hasLibrary: Boolean
   hasLibraryWith: [OrganizationWhereInput!]
+  """country edge predicates"""
+  hasCountry: Boolean
+  hasCountryWith: [CountryWhereInput!]
+  """settlement edge predicates"""
+  hasSettlement: Boolean
+  hasSettlementWith: [SettlementWhereInput!]
+  """district edge predicates"""
+  hasDistrict: Boolean
+  hasDistrictWith: [DistrictWhereInput!]
+  """region edge predicates"""
+  hasRegion: Boolean
+  hasRegionWith: [RegionWhereInput!]
 }
 type Category implements Node {
   id: ID!
@@ -1886,7 +1930,7 @@ type Collection implements Node {
   additionalImagesUrls: [String!]
   slug: String!
   type: CollectionType
-  arts: [Art!]
+  art: [Art!]
   artifacts: [Artifact!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -1924,6 +1968,7 @@ enum CollectionOrderField {
 }
 """CollectionType is enum for the field type"""
 enum CollectionType @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/collection.Type") {
+  art
   artifacts
   books
   protected_area_pictures
@@ -2096,9 +2141,9 @@ input CollectionWhereInput {
   typeNotIn: [CollectionType!]
   typeIsNil: Boolean
   typeNotNil: Boolean
-  """arts edge predicates"""
-  hasArts: Boolean
-  hasArtsWith: [ArtWhereInput!]
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -2125,6 +2170,10 @@ type Country implements Node {
   abbreviation: String
   description: String
   externalLink: String
+  art: [Art!]
+  artifacts: [Artifact!]
+  books: [Book!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
   locations: [Location!]
 }
 """A connection to a list of items."""
@@ -2287,6 +2336,18 @@ input CountryWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
+  """artifacts edge predicates"""
+  hasArtifacts: Boolean
+  hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """locations edge predicates"""
   hasLocations: Boolean
   hasLocationsWith: [LocationWhereInput!]
@@ -2329,6 +2390,10 @@ input CreateArtInput {
   artStyleIDs: [ID!]
   mediumIDs: [ID!]
   collectionID: ID!
+  countryID: ID
+  settlementID: ID
+  districtID: ID
+  regionID: ID
 }
 """
 CreateArtStyleInput is used for create ArtStyle object.
@@ -2390,6 +2455,10 @@ input CreateArtifactInput {
   locationID: ID
   collectionID: ID!
   licenseID: ID
+  countryID: ID
+  settlementID: ID
+  districtID: ID
+  regionID: ID
 }
 """
 CreateBookGenreInput is used for create BookGenre object.
@@ -2431,8 +2500,11 @@ input CreateBookInput {
   publisherID: ID
   licenseID: ID
   locationID: ID
-  placeOfPublicationID: ID
   libraryID: ID
+  countryID: ID
+  settlementID: ID
+  districtID: ID
+  regionID: ID
 }
 """
 CreateCategoryInput is used for create Category object.
@@ -2489,6 +2561,10 @@ input CreateCountryInput {
   abbreviation: String
   description: String
   externalLink: String
+  artIDs: [ID!]
+  artifactIDs: [ID!]
+  bookIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
   locationIDs: [ID!]
 }
 """
@@ -2519,6 +2595,10 @@ input CreateDistrictInput {
   abbreviation: String
   description: String
   externalLink: String
+  artIDs: [ID!]
+  artifactIDs: [ID!]
+  bookIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
   locationIDs: [ID!]
 }
 """
@@ -2735,9 +2815,11 @@ input CreateProjectInput {
   abbreviation: String
   description: String
   externalLink: String
-  beginData: Time
+  beginDate: Time
   endDate: Time
   year: Int
+  beginYear: Int
+  endYear: Int
   artifactIDs: [ID!]
   teamIDs: [ID!]
 }
@@ -2796,6 +2878,10 @@ input CreateProtectedAreaPictureInput {
   protectedAreaID: ID
   locationID: ID
   licenseID: ID
+  countryID: ID
+  settlementID: ID
+  districtID: ID
+  regionID: ID
 }
 """
 CreateProxyInput is used for create Proxy object.
@@ -2856,6 +2942,10 @@ input CreateRegionInput {
   abbreviation: String
   description: String
   externalLink: String
+  artIDs: [ID!]
+  artifactIDs: [ID!]
+  bookIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
   locationIDs: [ID!]
 }
 """
@@ -2887,7 +2977,10 @@ input CreateSettlementInput {
   abbreviation: String
   description: String
   externalLink: String
+  artIDs: [ID!]
+  artifactIDs: [ID!]
   bookIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
   locationIDs: [ID!]
 }
 """
@@ -3096,6 +3189,10 @@ type District implements Node {
   abbreviation: String
   description: String
   externalLink: String
+  art: [Art!]
+  artifacts: [Artifact!]
+  books: [Book!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
   locations: [Location!]
 }
 """A connection to a list of items."""
@@ -3258,6 +3355,18 @@ input DistrictWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
+  """artifacts edge predicates"""
+  hasArtifacts: Boolean
+  hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """locations edge predicates"""
   hasLocations: Boolean
   hasLocationsWith: [LocationWhereInput!]
@@ -3995,7 +4104,7 @@ type Medium implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  arts: [Art!]
+  art: [Art!]
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -4158,9 +4267,9 @@ input MediumWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """arts edge predicates"""
-  hasArts: Boolean
-  hasArtsWith: [ArtWhereInput!]
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -5034,7 +5143,7 @@ type Person implements Node {
   gender: PersonGender
   occupation: String
   collections: [Collection!]
-  arts: [Art!]
+  art: [Art!]
   artifacts: [Artifact!]
   books: [Book!]
   projects: [Project!]
@@ -5334,9 +5443,9 @@ input PersonWhereInput {
   """collections edge predicates"""
   hasCollections: Boolean
   hasCollectionsWith: [CollectionWhereInput!]
-  """arts edge predicates"""
-  hasArts: Boolean
-  hasArtsWith: [ArtWhereInput!]
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -5500,9 +5609,11 @@ type Project implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  beginData: Time
+  beginDate: Time
   endDate: Time
   year: Int
+  beginYear: Int
+  endYear: Int
   artifacts: [Artifact!]
   team: [Person!]
 }
@@ -5666,17 +5777,17 @@ input ProjectWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """begin_data field predicates"""
-  beginData: Time
-  beginDataNEQ: Time
-  beginDataIn: [Time!]
-  beginDataNotIn: [Time!]
-  beginDataGT: Time
-  beginDataGTE: Time
-  beginDataLT: Time
-  beginDataLTE: Time
-  beginDataIsNil: Boolean
-  beginDataNotNil: Boolean
+  """begin_date field predicates"""
+  beginDate: Time
+  beginDateNEQ: Time
+  beginDateIn: [Time!]
+  beginDateNotIn: [Time!]
+  beginDateGT: Time
+  beginDateGTE: Time
+  beginDateLT: Time
+  beginDateLTE: Time
+  beginDateIsNil: Boolean
+  beginDateNotNil: Boolean
   """end_date field predicates"""
   endDate: Time
   endDateNEQ: Time
@@ -5699,6 +5810,28 @@ input ProjectWhereInput {
   yearLTE: Int
   yearIsNil: Boolean
   yearNotNil: Boolean
+  """begin_year field predicates"""
+  beginYear: Int
+  beginYearNEQ: Int
+  beginYearIn: [Int!]
+  beginYearNotIn: [Int!]
+  beginYearGT: Int
+  beginYearGTE: Int
+  beginYearLT: Int
+  beginYearLTE: Int
+  beginYearIsNil: Boolean
+  beginYearNotNil: Boolean
+  """end_year field predicates"""
+  endYear: Int
+  endYearNEQ: Int
+  endYearIn: [Int!]
+  endYearNotIn: [Int!]
+  endYearGT: Int
+  endYearGTE: Int
+  endYearLT: Int
+  endYearLTE: Int
+  endYearIsNil: Boolean
+  endYearNotNil: Boolean
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -5945,6 +6078,10 @@ type ProtectedAreaPicture implements Node {
   protectedArea: ProtectedArea
   location: Location
   license: License
+  country: Country
+  settlement: Settlement
+  district: District
+  region: Region
 }
 """A connection to a list of items."""
 type ProtectedAreaPictureConnection {
@@ -6169,6 +6306,18 @@ input ProtectedAreaPictureWhereInput {
   """license edge predicates"""
   hasLicense: Boolean
   hasLicenseWith: [LicenseWhereInput!]
+  """country edge predicates"""
+  hasCountry: Boolean
+  hasCountryWith: [CountryWhereInput!]
+  """settlement edge predicates"""
+  hasSettlement: Boolean
+  hasSettlementWith: [SettlementWhereInput!]
+  """district edge predicates"""
+  hasDistrict: Boolean
+  hasDistrictWith: [DistrictWhereInput!]
+  """region edge predicates"""
+  hasRegion: Boolean
+  hasRegionWith: [RegionWhereInput!]
 }
 """
 ProtectedAreaWhereInput is used for filtering ProtectedArea objects.
@@ -7614,6 +7763,10 @@ type Region implements Node {
   abbreviation: String
   description: String
   externalLink: String
+  art: [Art!]
+  artifacts: [Artifact!]
+  books: [Book!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
   locations: [Location!]
 }
 """A connection to a list of items."""
@@ -7776,6 +7929,18 @@ input RegionWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
+  """artifacts edge predicates"""
+  hasArtifacts: Boolean
+  hasArtifactsWith: [ArtifactWhereInput!]
+  """books edge predicates"""
+  hasBooks: Boolean
+  hasBooksWith: [BookWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """locations edge predicates"""
   hasLocations: Boolean
   hasLocationsWith: [LocationWhereInput!]
@@ -7970,7 +8135,10 @@ type Settlement implements Node {
   abbreviation: String
   description: String
   externalLink: String
+  art: [Art!]
+  artifacts: [Artifact!]
   books: [Book!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
   locations: [Location!]
 }
 """A connection to a list of items."""
@@ -8133,9 +8301,18 @@ input SettlementWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
+  """artifacts edge predicates"""
+  hasArtifacts: Boolean
+  hasArtifactsWith: [ArtifactWhereInput!]
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """locations edge predicates"""
   hasLocations: Boolean
   hasLocationsWith: [LocationWhereInput!]
@@ -8381,6 +8558,14 @@ input UpdateArtInput {
   removeMediumIDs: [ID!]
   clearMediums: Boolean
   collectionID: ID
+  countryID: ID
+  clearCountry: Boolean
+  settlementID: ID
+  clearSettlement: Boolean
+  districtID: ID
+  clearDistrict: Boolean
+  regionID: ID
+  clearRegion: Boolean
 }
 """
 UpdateArtStyleInput is used for update ArtStyle object.
@@ -8491,6 +8676,14 @@ input UpdateArtifactInput {
   collectionID: ID
   licenseID: ID
   clearLicense: Boolean
+  countryID: ID
+  clearCountry: Boolean
+  settlementID: ID
+  clearSettlement: Boolean
+  districtID: ID
+  clearDistrict: Boolean
+  regionID: ID
+  clearRegion: Boolean
 }
 """
 UpdateBookGenreInput is used for update BookGenre object.
@@ -8559,10 +8752,16 @@ input UpdateBookInput {
   clearLicense: Boolean
   locationID: ID
   clearLocation: Boolean
-  placeOfPublicationID: ID
-  clearPlaceOfPublication: Boolean
   libraryID: ID
   clearLibrary: Boolean
+  countryID: ID
+  clearCountry: Boolean
+  settlementID: ID
+  clearSettlement: Boolean
+  districtID: ID
+  clearDistrict: Boolean
+  regionID: ID
+  clearRegion: Boolean
 }
 """
 UpdateCategoryInput is used for update Category object.
@@ -8618,7 +8817,7 @@ input UpdateCollectionInput {
   slug: String
   addArtIDs: [ID!]
   removeArtIDs: [ID!]
-  clearArts: Boolean
+  clearArt: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8651,6 +8850,18 @@ input UpdateCountryInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArt: Boolean
+  addArtifactIDs: [ID!]
+  removeArtifactIDs: [ID!]
+  clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
   clearLocations: Boolean
@@ -8695,6 +8906,18 @@ input UpdateDistrictInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArt: Boolean
+  addArtifactIDs: [ID!]
+  removeArtifactIDs: [ID!]
+  clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
   clearLocations: Boolean
@@ -8820,7 +9043,7 @@ input UpdateMediumInput {
   clearExternalLink: Boolean
   addArtIDs: [ID!]
   removeArtIDs: [ID!]
-  clearArts: Boolean
+  clearArt: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -8994,7 +9217,7 @@ input UpdatePersonInput {
   clearCollections: Boolean
   addArtIDs: [ID!]
   removeArtIDs: [ID!]
-  clearArts: Boolean
+  clearArt: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9043,12 +9266,16 @@ input UpdateProjectInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  beginData: Time
-  clearBeginData: Boolean
+  beginDate: Time
+  clearBeginDate: Boolean
   endDate: Time
   clearEndDate: Boolean
   year: Int
   clearYear: Boolean
+  beginYear: Int
+  clearBeginYear: Boolean
+  endYear: Int
+  clearEndYear: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -9142,6 +9369,14 @@ input UpdateProtectedAreaPictureInput {
   clearLocation: Boolean
   licenseID: ID
   clearLicense: Boolean
+  countryID: ID
+  clearCountry: Boolean
+  settlementID: ID
+  clearSettlement: Boolean
+  districtID: ID
+  clearDistrict: Boolean
+  regionID: ID
+  clearRegion: Boolean
 }
 """
 UpdateProxyInput is used for update Proxy object.
@@ -9225,6 +9460,18 @@ input UpdateRegionInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArt: Boolean
+  addArtifactIDs: [ID!]
+  removeArtifactIDs: [ID!]
+  clearArtifacts: Boolean
+  addBookIDs: [ID!]
+  removeBookIDs: [ID!]
+  clearBooks: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
   clearLocations: Boolean
@@ -9272,9 +9519,18 @@ input UpdateSettlementInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArt: Boolean
+  addArtifactIDs: [ID!]
+  removeArtifactIDs: [ID!]
+  clearArtifacts: Boolean
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
   clearLocations: Boolean

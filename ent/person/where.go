@@ -1298,21 +1298,21 @@ func HasCollectionsWith(preds ...predicate.Collection) predicate.Person {
 	})
 }
 
-// HasArts applies the HasEdge predicate on the "arts" edge.
-func HasArts() predicate.Person {
+// HasArt applies the HasEdge predicate on the "art" edge.
+func HasArt() predicate.Person {
 	return predicate.Person(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ArtsTable, ArtsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, ArtTable, ArtColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasArtsWith applies the HasEdge predicate on the "arts" edge with a given conditions (other predicates).
-func HasArtsWith(preds ...predicate.Art) predicate.Person {
+// HasArtWith applies the HasEdge predicate on the "art" edge with a given conditions (other predicates).
+func HasArtWith(preds ...predicate.Art) predicate.Person {
 	return predicate.Person(func(s *sql.Selector) {
-		step := newArtsStep()
+		step := newArtStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

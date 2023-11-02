@@ -36,6 +36,10 @@ type CreateArtInput struct {
 	ArtStyleIDs          []int
 	MediumIDs            []int
 	CollectionID         int
+	CountryID            *int
+	SettlementID         *int
+	DistrictID           *int
+	RegionID             *int
 }
 
 // Mutate applies the CreateArtInput on the ArtMutation builder.
@@ -92,6 +96,18 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 		m.AddMediumIDs(v...)
 	}
 	m.SetCollectionID(i.CollectionID)
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateArtInput on the ArtCreate builder.
@@ -138,6 +154,14 @@ type UpdateArtInput struct {
 	AddMediumIDs               []int
 	RemoveMediumIDs            []int
 	CollectionID               *int
+	ClearCountry               bool
+	CountryID                  *int
+	ClearSettlement            bool
+	SettlementID               *int
+	ClearDistrict              bool
+	DistrictID                 *int
+	ClearRegion                bool
+	RegionID                   *int
 }
 
 // Mutate applies the UpdateArtInput on the ArtMutation builder.
@@ -249,6 +273,30 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
+	}
+	if i.ClearCountry {
+		m.ClearCountry()
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if i.ClearSettlement {
+		m.ClearSettlement()
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if i.ClearDistrict {
+		m.ClearDistrict()
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
 	}
 }
 
@@ -574,6 +622,10 @@ type CreateArtifactInput struct {
 	LocationID            *int
 	CollectionID          int
 	LicenseID             *int
+	CountryID             *int
+	SettlementID          *int
+	DistrictID            *int
+	RegionID              *int
 }
 
 // Mutate applies the CreateArtifactInput on the ArtifactMutation builder.
@@ -696,6 +748,18 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.LicenseID; v != nil {
 		m.SetLicenseID(*v)
 	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateArtifactInput on the ArtifactCreate builder.
@@ -788,6 +852,14 @@ type UpdateArtifactInput struct {
 	CollectionID               *int
 	ClearLicense               bool
 	LicenseID                  *int
+	ClearCountry               bool
+	CountryID                  *int
+	ClearSettlement            bool
+	SettlementID               *int
+	ClearDistrict              bool
+	DistrictID                 *int
+	ClearRegion                bool
+	RegionID                   *int
 }
 
 // Mutate applies the UpdateArtifactInput on the ArtifactMutation builder.
@@ -1038,6 +1110,30 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.LicenseID; v != nil {
 		m.SetLicenseID(*v)
 	}
+	if i.ClearCountry {
+		m.ClearCountry()
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if i.ClearSettlement {
+		m.ClearSettlement()
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if i.ClearDistrict {
+		m.ClearDistrict()
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
 }
 
 // SetInput applies the change-set in the UpdateArtifactInput on the ArtifactUpdate builder.
@@ -1074,8 +1170,11 @@ type CreateBookInput struct {
 	PublisherID          *int
 	LicenseID            *int
 	LocationID           *int
-	PlaceOfPublicationID *int
 	LibraryID            *int
+	CountryID            *int
+	SettlementID         *int
+	DistrictID           *int
+	RegionID             *int
 }
 
 // Mutate applies the CreateBookInput on the BookMutation builder.
@@ -1138,11 +1237,20 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
-	if v := i.PlaceOfPublicationID; v != nil {
-		m.SetPlaceOfPublicationID(*v)
-	}
 	if v := i.LibraryID; v != nil {
 		m.SetLibraryID(*v)
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
 	}
 }
 
@@ -1194,10 +1302,16 @@ type UpdateBookInput struct {
 	LicenseID                  *int
 	ClearLocation              bool
 	LocationID                 *int
-	ClearPlaceOfPublication    bool
-	PlaceOfPublicationID       *int
 	ClearLibrary               bool
 	LibraryID                  *int
+	ClearCountry               bool
+	CountryID                  *int
+	ClearSettlement            bool
+	SettlementID               *int
+	ClearDistrict              bool
+	DistrictID                 *int
+	ClearRegion                bool
+	RegionID                   *int
 }
 
 // Mutate applies the UpdateBookInput on the BookMutation builder.
@@ -1322,17 +1436,35 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	if v := i.LocationID; v != nil {
 		m.SetLocationID(*v)
 	}
-	if i.ClearPlaceOfPublication {
-		m.ClearPlaceOfPublication()
-	}
-	if v := i.PlaceOfPublicationID; v != nil {
-		m.SetPlaceOfPublicationID(*v)
-	}
 	if i.ClearLibrary {
 		m.ClearLibrary()
 	}
 	if v := i.LibraryID; v != nil {
 		m.SetLibraryID(*v)
+	}
+	if i.ClearCountry {
+		m.ClearCountry()
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if i.ClearSettlement {
+		m.ClearSettlement()
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if i.ClearDistrict {
+		m.ClearDistrict()
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
 	}
 }
 
@@ -1753,7 +1885,7 @@ type UpdateCollectionInput struct {
 	AdditionalImagesUrls          []string
 	AppendAdditionalImagesUrls    []string
 	Slug                          *string
-	ClearArts                     bool
+	ClearArt                      bool
 	AddArtIDs                     []int
 	RemoveArtIDs                  []int
 	ClearArtifacts                bool
@@ -1830,8 +1962,8 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.Slug; v != nil {
 		m.SetSlug(*v)
 	}
-	if i.ClearArts {
-		m.ClearArts()
+	if i.ClearArt {
+		m.ClearArt()
 	}
 	if v := i.AddArtIDs; len(v) > 0 {
 		m.AddArtIDs(v...)
@@ -1894,15 +2026,19 @@ func (c *CollectionUpdateOne) SetInput(i UpdateCollectionInput) *CollectionUpdat
 
 // CreateCountryInput represents a mutation input for creating countries.
 type CreateCountryInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	LocationIDs  []int
+	CreatedAt               *time.Time
+	CreatedBy               *string
+	UpdatedAt               *time.Time
+	UpdatedBy               *string
+	DisplayName             *string
+	Abbreviation            *string
+	Description             *string
+	ExternalLink            *string
+	ArtIDs                  []int
+	ArtifactIDs             []int
+	BookIDs                 []int
+	ProtectedAreaPictureIDs []int
+	LocationIDs             []int
 }
 
 // Mutate applies the CreateCountryInput on the CountryMutation builder.
@@ -1931,6 +2067,18 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
@@ -1944,22 +2092,34 @@ func (c *CountryCreate) SetInput(i CreateCountryInput) *CountryCreate {
 
 // UpdateCountryInput represents a mutation input for updating countries.
 type UpdateCountryInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearLocations    bool
-	AddLocationIDs    []int
-	RemoveLocationIDs []int
+	ClearCreatedBy                bool
+	CreatedBy                     *string
+	UpdatedAt                     *time.Time
+	ClearUpdatedBy                bool
+	UpdatedBy                     *string
+	ClearDisplayName              bool
+	DisplayName                   *string
+	ClearAbbreviation             bool
+	Abbreviation                  *string
+	ClearDescription              bool
+	Description                   *string
+	ClearExternalLink             bool
+	ExternalLink                  *string
+	ClearArt                      bool
+	AddArtIDs                     []int
+	RemoveArtIDs                  []int
+	ClearArtifacts                bool
+	AddArtifactIDs                []int
+	RemoveArtifactIDs             []int
+	ClearBooks                    bool
+	AddBookIDs                    []int
+	RemoveBookIDs                 []int
+	ClearProtectedAreaPictures    bool
+	AddProtectedAreaPictureIDs    []int
+	RemoveProtectedAreaPictureIDs []int
+	ClearLocations                bool
+	AddLocationIDs                []int
+	RemoveLocationIDs             []int
 }
 
 // Mutate applies the UpdateCountryInput on the CountryMutation builder.
@@ -2002,6 +2162,42 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
+	}
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
+	}
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
+	}
+	if i.ClearProtectedAreaPictures {
+		m.ClearProtectedAreaPictures()
+	}
+	if v := i.AddProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
+	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
+		m.RemoveProtectedAreaPictureIDs(v...)
 	}
 	if i.ClearLocations {
 		m.ClearLocations()
@@ -2162,15 +2358,19 @@ func (c *CultureUpdateOne) SetInput(i UpdateCultureInput) *CultureUpdateOne {
 
 // CreateDistrictInput represents a mutation input for creating districts.
 type CreateDistrictInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	LocationIDs  []int
+	CreatedAt               *time.Time
+	CreatedBy               *string
+	UpdatedAt               *time.Time
+	UpdatedBy               *string
+	DisplayName             *string
+	Abbreviation            *string
+	Description             *string
+	ExternalLink            *string
+	ArtIDs                  []int
+	ArtifactIDs             []int
+	BookIDs                 []int
+	ProtectedAreaPictureIDs []int
+	LocationIDs             []int
 }
 
 // Mutate applies the CreateDistrictInput on the DistrictMutation builder.
@@ -2199,6 +2399,18 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
@@ -2212,22 +2424,34 @@ func (c *DistrictCreate) SetInput(i CreateDistrictInput) *DistrictCreate {
 
 // UpdateDistrictInput represents a mutation input for updating districts.
 type UpdateDistrictInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearLocations    bool
-	AddLocationIDs    []int
-	RemoveLocationIDs []int
+	ClearCreatedBy                bool
+	CreatedBy                     *string
+	UpdatedAt                     *time.Time
+	ClearUpdatedBy                bool
+	UpdatedBy                     *string
+	ClearDisplayName              bool
+	DisplayName                   *string
+	ClearAbbreviation             bool
+	Abbreviation                  *string
+	ClearDescription              bool
+	Description                   *string
+	ClearExternalLink             bool
+	ExternalLink                  *string
+	ClearArt                      bool
+	AddArtIDs                     []int
+	RemoveArtIDs                  []int
+	ClearArtifacts                bool
+	AddArtifactIDs                []int
+	RemoveArtifactIDs             []int
+	ClearBooks                    bool
+	AddBookIDs                    []int
+	RemoveBookIDs                 []int
+	ClearProtectedAreaPictures    bool
+	AddProtectedAreaPictureIDs    []int
+	RemoveProtectedAreaPictureIDs []int
+	ClearLocations                bool
+	AddLocationIDs                []int
+	RemoveLocationIDs             []int
 }
 
 // Mutate applies the UpdateDistrictInput on the DistrictMutation builder.
@@ -2270,6 +2494,42 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
+	}
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
+	}
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
+	}
+	if i.ClearProtectedAreaPictures {
+		m.ClearProtectedAreaPictures()
+	}
+	if v := i.AddProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
+	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
+		m.RemoveProtectedAreaPictureIDs(v...)
 	}
 	if i.ClearLocations {
 		m.ClearLocations()
@@ -2973,7 +3233,7 @@ type UpdateMediumInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearArts         bool
+	ClearArt          bool
 	AddArtIDs         []int
 	RemoveArtIDs      []int
 	ClearArtifacts    bool
@@ -3022,8 +3282,8 @@ func (i *UpdateMediumInput) Mutate(m *MediumMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearArts {
-		m.ClearArts()
+	if i.ClearArt {
+		m.ClearArt()
 	}
 	if v := i.AddArtIDs; len(v) > 0 {
 		m.AddArtIDs(v...)
@@ -3931,7 +4191,7 @@ type UpdatePersonInput struct {
 	ClearCollections           bool
 	AddCollectionIDs           []int
 	RemoveCollectionIDs        []int
-	ClearArts                  bool
+	ClearArt                   bool
 	AddArtIDs                  []int
 	RemoveArtIDs               []int
 	ClearArtifacts             bool
@@ -4081,8 +4341,8 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.RemoveCollectionIDs; len(v) > 0 {
 		m.RemoveCollectionIDs(v...)
 	}
-	if i.ClearArts {
-		m.ClearArts()
+	if i.ClearArt {
+		m.ClearArt()
 	}
 	if v := i.AddArtIDs; len(v) > 0 {
 		m.AddArtIDs(v...)
@@ -4250,9 +4510,11 @@ type CreateProjectInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
-	BeginData    *time.Time
+	BeginDate    *time.Time
 	EndDate      *time.Time
 	Year         *int
+	BeginYear    *int
+	EndYear      *int
 	ArtifactIDs  []int
 	TeamIDs      []int
 }
@@ -4283,14 +4545,20 @@ func (i *CreateProjectInput) Mutate(m *ProjectMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.BeginData; v != nil {
-		m.SetBeginData(*v)
+	if v := i.BeginDate; v != nil {
+		m.SetBeginDate(*v)
 	}
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
 	}
 	if v := i.Year; v != nil {
 		m.SetYear(*v)
+	}
+	if v := i.BeginYear; v != nil {
+		m.SetBeginYear(*v)
+	}
+	if v := i.EndYear; v != nil {
+		m.SetEndYear(*v)
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
@@ -4321,12 +4589,16 @@ type UpdateProjectInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearBeginData    bool
-	BeginData         *time.Time
+	ClearBeginDate    bool
+	BeginDate         *time.Time
 	ClearEndDate      bool
 	EndDate           *time.Time
 	ClearYear         bool
 	Year              *int
+	ClearBeginYear    bool
+	BeginYear         *int
+	ClearEndYear      bool
+	EndYear           *int
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -4376,11 +4648,11 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if i.ClearBeginData {
-		m.ClearBeginData()
+	if i.ClearBeginDate {
+		m.ClearBeginDate()
 	}
-	if v := i.BeginData; v != nil {
-		m.SetBeginData(*v)
+	if v := i.BeginDate; v != nil {
+		m.SetBeginDate(*v)
 	}
 	if i.ClearEndDate {
 		m.ClearEndDate()
@@ -4393,6 +4665,18 @@ func (i *UpdateProjectInput) Mutate(m *ProjectMutation) {
 	}
 	if v := i.Year; v != nil {
 		m.SetYear(*v)
+	}
+	if i.ClearBeginYear {
+		m.ClearBeginYear()
+	}
+	if v := i.BeginYear; v != nil {
+		m.SetBeginYear(*v)
+	}
+	if i.ClearEndYear {
+		m.ClearEndYear()
+	}
+	if v := i.EndYear; v != nil {
+		m.SetEndYear(*v)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -4749,6 +5033,10 @@ type CreateProtectedAreaPictureInput struct {
 	ProtectedAreaID      *int
 	LocationID           *int
 	LicenseID            *int
+	CountryID            *int
+	SettlementID         *int
+	DistrictID           *int
+	RegionID             *int
 }
 
 // Mutate applies the CreateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
@@ -4802,6 +5090,18 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.LicenseID; v != nil {
 		m.SetLicenseID(*v)
 	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateProtectedAreaPictureInput on the ProtectedAreaPictureCreate builder.
@@ -4843,6 +5143,14 @@ type UpdateProtectedAreaPictureInput struct {
 	LocationID                 *int
 	ClearLicense               bool
 	LicenseID                  *int
+	ClearCountry               bool
+	CountryID                  *int
+	ClearSettlement            bool
+	SettlementID               *int
+	ClearDistrict              bool
+	DistrictID                 *int
+	ClearRegion                bool
+	RegionID                   *int
 }
 
 // Mutate applies the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
@@ -4939,6 +5247,30 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.LicenseID; v != nil {
 		m.SetLicenseID(*v)
+	}
+	if i.ClearCountry {
+		m.ClearCountry()
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if i.ClearSettlement {
+		m.ClearSettlement()
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if i.ClearDistrict {
+		m.ClearDistrict()
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
 	}
 }
 
@@ -5348,15 +5680,19 @@ func (c *PublisherUpdateOne) SetInput(i UpdatePublisherInput) *PublisherUpdateOn
 
 // CreateRegionInput represents a mutation input for creating regions.
 type CreateRegionInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	LocationIDs  []int
+	CreatedAt               *time.Time
+	CreatedBy               *string
+	UpdatedAt               *time.Time
+	UpdatedBy               *string
+	DisplayName             *string
+	Abbreviation            *string
+	Description             *string
+	ExternalLink            *string
+	ArtIDs                  []int
+	ArtifactIDs             []int
+	BookIDs                 []int
+	ProtectedAreaPictureIDs []int
+	LocationIDs             []int
 }
 
 // Mutate applies the CreateRegionInput on the RegionMutation builder.
@@ -5385,6 +5721,18 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
@@ -5398,22 +5746,34 @@ func (c *RegionCreate) SetInput(i CreateRegionInput) *RegionCreate {
 
 // UpdateRegionInput represents a mutation input for updating regions.
 type UpdateRegionInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearLocations    bool
-	AddLocationIDs    []int
-	RemoveLocationIDs []int
+	ClearCreatedBy                bool
+	CreatedBy                     *string
+	UpdatedAt                     *time.Time
+	ClearUpdatedBy                bool
+	UpdatedBy                     *string
+	ClearDisplayName              bool
+	DisplayName                   *string
+	ClearAbbreviation             bool
+	Abbreviation                  *string
+	ClearDescription              bool
+	Description                   *string
+	ClearExternalLink             bool
+	ExternalLink                  *string
+	ClearArt                      bool
+	AddArtIDs                     []int
+	RemoveArtIDs                  []int
+	ClearArtifacts                bool
+	AddArtifactIDs                []int
+	RemoveArtifactIDs             []int
+	ClearBooks                    bool
+	AddBookIDs                    []int
+	RemoveBookIDs                 []int
+	ClearProtectedAreaPictures    bool
+	AddProtectedAreaPictureIDs    []int
+	RemoveProtectedAreaPictureIDs []int
+	ClearLocations                bool
+	AddLocationIDs                []int
+	RemoveLocationIDs             []int
 }
 
 // Mutate applies the UpdateRegionInput on the RegionMutation builder.
@@ -5456,6 +5816,42 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
+	}
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
+	}
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
+	}
+	if i.ClearProtectedAreaPictures {
+		m.ClearProtectedAreaPictures()
+	}
+	if v := i.AddProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
+	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
+		m.RemoveProtectedAreaPictureIDs(v...)
 	}
 	if i.ClearLocations {
 		m.ClearLocations()
@@ -5632,16 +6028,19 @@ func (c *SetUpdateOne) SetInput(i UpdateSetInput) *SetUpdateOne {
 
 // CreateSettlementInput represents a mutation input for creating settlements.
 type CreateSettlementInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	BookIDs      []int
-	LocationIDs  []int
+	CreatedAt               *time.Time
+	CreatedBy               *string
+	UpdatedAt               *time.Time
+	UpdatedBy               *string
+	DisplayName             *string
+	Abbreviation            *string
+	Description             *string
+	ExternalLink            *string
+	ArtIDs                  []int
+	ArtifactIDs             []int
+	BookIDs                 []int
+	ProtectedAreaPictureIDs []int
+	LocationIDs             []int
 }
 
 // Mutate applies the CreateSettlementInput on the SettlementMutation builder.
@@ -5670,8 +6069,17 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
+	}
+	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
 	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
@@ -5686,25 +6094,34 @@ func (c *SettlementCreate) SetInput(i CreateSettlementInput) *SettlementCreate {
 
 // UpdateSettlementInput represents a mutation input for updating settlements.
 type UpdateSettlementInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearBooks        bool
-	AddBookIDs        []int
-	RemoveBookIDs     []int
-	ClearLocations    bool
-	AddLocationIDs    []int
-	RemoveLocationIDs []int
+	ClearCreatedBy                bool
+	CreatedBy                     *string
+	UpdatedAt                     *time.Time
+	ClearUpdatedBy                bool
+	UpdatedBy                     *string
+	ClearDisplayName              bool
+	DisplayName                   *string
+	ClearAbbreviation             bool
+	Abbreviation                  *string
+	ClearDescription              bool
+	Description                   *string
+	ClearExternalLink             bool
+	ExternalLink                  *string
+	ClearArt                      bool
+	AddArtIDs                     []int
+	RemoveArtIDs                  []int
+	ClearArtifacts                bool
+	AddArtifactIDs                []int
+	RemoveArtifactIDs             []int
+	ClearBooks                    bool
+	AddBookIDs                    []int
+	RemoveBookIDs                 []int
+	ClearProtectedAreaPictures    bool
+	AddProtectedAreaPictureIDs    []int
+	RemoveProtectedAreaPictureIDs []int
+	ClearLocations                bool
+	AddLocationIDs                []int
+	RemoveLocationIDs             []int
 }
 
 // Mutate applies the UpdateSettlementInput on the SettlementMutation builder.
@@ -5748,6 +6165,24 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
+	}
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
+	}
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
+	}
 	if i.ClearBooks {
 		m.ClearBooks()
 	}
@@ -5756,6 +6191,15 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	}
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
+	}
+	if i.ClearProtectedAreaPictures {
+		m.ClearProtectedAreaPictures()
+	}
+	if v := i.AddProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
+	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
+		m.RemoveProtectedAreaPictureIDs(v...)
 	}
 	if i.ClearLocations {
 		m.ClearLocations()

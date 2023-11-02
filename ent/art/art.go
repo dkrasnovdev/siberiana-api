@@ -51,6 +51,14 @@ const (
 	EdgeMediums = "mediums"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
 	EdgeCollection = "collection"
+	// EdgeCountry holds the string denoting the country edge name in mutations.
+	EdgeCountry = "country"
+	// EdgeSettlement holds the string denoting the settlement edge name in mutations.
+	EdgeSettlement = "settlement"
+	// EdgeDistrict holds the string denoting the district edge name in mutations.
+	EdgeDistrict = "district"
+	// EdgeRegion holds the string denoting the region edge name in mutations.
+	EdgeRegion = "region"
 	// Table holds the table name of the art in the database.
 	Table = "arts"
 	// AuthorTable is the table that holds the author relation/edge.
@@ -59,7 +67,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "person" package.
 	AuthorInverseTable = "persons"
 	// AuthorColumn is the table column denoting the author relation/edge.
-	AuthorColumn = "person_arts"
+	AuthorColumn = "person_art"
 	// ArtGenreTable is the table that holds the art_genre relation/edge. The primary key declared below.
 	ArtGenreTable = "art_genre_art"
 	// ArtGenreInverseTable is the table name for the ArtGenre entity.
@@ -71,7 +79,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "artstyle" package.
 	ArtStyleInverseTable = "art_styles"
 	// MediumsTable is the table that holds the mediums relation/edge. The primary key declared below.
-	MediumsTable = "medium_arts"
+	MediumsTable = "medium_art"
 	// MediumsInverseTable is the table name for the Medium entity.
 	// It exists in this package in order to avoid circular dependency with the "medium" package.
 	MediumsInverseTable = "media"
@@ -81,7 +89,35 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "collection" package.
 	CollectionInverseTable = "collections"
 	// CollectionColumn is the table column denoting the collection relation/edge.
-	CollectionColumn = "collection_arts"
+	CollectionColumn = "collection_art"
+	// CountryTable is the table that holds the country relation/edge.
+	CountryTable = "arts"
+	// CountryInverseTable is the table name for the Country entity.
+	// It exists in this package in order to avoid circular dependency with the "country" package.
+	CountryInverseTable = "countries"
+	// CountryColumn is the table column denoting the country relation/edge.
+	CountryColumn = "country_art"
+	// SettlementTable is the table that holds the settlement relation/edge.
+	SettlementTable = "arts"
+	// SettlementInverseTable is the table name for the Settlement entity.
+	// It exists in this package in order to avoid circular dependency with the "settlement" package.
+	SettlementInverseTable = "settlements"
+	// SettlementColumn is the table column denoting the settlement relation/edge.
+	SettlementColumn = "settlement_art"
+	// DistrictTable is the table that holds the district relation/edge.
+	DistrictTable = "arts"
+	// DistrictInverseTable is the table name for the District entity.
+	// It exists in this package in order to avoid circular dependency with the "district" package.
+	DistrictInverseTable = "districts"
+	// DistrictColumn is the table column denoting the district relation/edge.
+	DistrictColumn = "district_art"
+	// RegionTable is the table that holds the region relation/edge.
+	RegionTable = "arts"
+	// RegionInverseTable is the table name for the Region entity.
+	// It exists in this package in order to avoid circular dependency with the "region" package.
+	RegionInverseTable = "regions"
+	// RegionColumn is the table column denoting the region relation/edge.
+	RegionColumn = "region_art"
 )
 
 // Columns holds all SQL columns for art fields.
@@ -105,8 +141,12 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "arts"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"collection_arts",
-	"person_arts",
+	"collection_art",
+	"country_art",
+	"district_art",
+	"person_art",
+	"region_art",
+	"settlement_art",
 }
 
 var (
@@ -275,6 +315,34 @@ func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newCollectionStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByCountryField orders the results by country field.
+func ByCountryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCountryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySettlementField orders the results by settlement field.
+func BySettlementField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSettlementStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDistrictField orders the results by district field.
+func ByDistrictField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDistrictStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRegionField orders the results by region field.
+func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newAuthorStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -308,5 +376,33 @@ func newCollectionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CollectionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+	)
+}
+func newCountryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CountryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CountryTable, CountryColumn),
+	)
+}
+func newSettlementStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SettlementInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SettlementTable, SettlementColumn),
+	)
+}
+func newDistrictStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DistrictInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, DistrictTable, DistrictColumn),
+	)
+}
+func newRegionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RegionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
 	)
 }

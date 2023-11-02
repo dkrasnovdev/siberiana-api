@@ -16,9 +16,13 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // ArtQuery is the builder for querying Art entities.
@@ -33,6 +37,10 @@ type ArtQuery struct {
 	withArtStyle      *ArtStyleQuery
 	withMediums       *MediumQuery
 	withCollection    *CollectionQuery
+	withCountry       *CountryQuery
+	withSettlement    *SettlementQuery
+	withDistrict      *DistrictQuery
+	withRegion        *RegionQuery
 	withFKs           bool
 	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*Art) error
@@ -178,6 +186,94 @@ func (aq *ArtQuery) QueryCollection() *CollectionQuery {
 			sqlgraph.From(art.Table, art.FieldID, selector),
 			sqlgraph.To(collection.Table, collection.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, art.CollectionTable, art.CollectionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCountry chains the current query on the "country" edge.
+func (aq *ArtQuery) QueryCountry() *CountryQuery {
+	query := (&CountryClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.CountryTable, art.CountryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySettlement chains the current query on the "settlement" edge.
+func (aq *ArtQuery) QuerySettlement() *SettlementQuery {
+	query := (&SettlementClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.SettlementTable, art.SettlementColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDistrict chains the current query on the "district" edge.
+func (aq *ArtQuery) QueryDistrict() *DistrictQuery {
+	query := (&DistrictClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.DistrictTable, art.DistrictColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegion chains the current query on the "region" edge.
+func (aq *ArtQuery) QueryRegion() *RegionQuery {
+	query := (&RegionClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.RegionTable, art.RegionColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -382,6 +478,10 @@ func (aq *ArtQuery) Clone() *ArtQuery {
 		withArtStyle:   aq.withArtStyle.Clone(),
 		withMediums:    aq.withMediums.Clone(),
 		withCollection: aq.withCollection.Clone(),
+		withCountry:    aq.withCountry.Clone(),
+		withSettlement: aq.withSettlement.Clone(),
+		withDistrict:   aq.withDistrict.Clone(),
+		withRegion:     aq.withRegion.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
@@ -440,6 +540,50 @@ func (aq *ArtQuery) WithCollection(opts ...func(*CollectionQuery)) *ArtQuery {
 		opt(query)
 	}
 	aq.withCollection = query
+	return aq
+}
+
+// WithCountry tells the query-builder to eager-load the nodes that are connected to
+// the "country" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithCountry(opts ...func(*CountryQuery)) *ArtQuery {
+	query := (&CountryClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withCountry = query
+	return aq
+}
+
+// WithSettlement tells the query-builder to eager-load the nodes that are connected to
+// the "settlement" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithSettlement(opts ...func(*SettlementQuery)) *ArtQuery {
+	query := (&SettlementClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withSettlement = query
+	return aq
+}
+
+// WithDistrict tells the query-builder to eager-load the nodes that are connected to
+// the "district" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithDistrict(opts ...func(*DistrictQuery)) *ArtQuery {
+	query := (&DistrictClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withDistrict = query
+	return aq
+}
+
+// WithRegion tells the query-builder to eager-load the nodes that are connected to
+// the "region" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithRegion(opts ...func(*RegionQuery)) *ArtQuery {
+	query := (&RegionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withRegion = query
 	return aq
 }
 
@@ -528,15 +672,19 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 		nodes       = []*Art{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [9]bool{
 			aq.withAuthor != nil,
 			aq.withArtGenre != nil,
 			aq.withArtStyle != nil,
 			aq.withMediums != nil,
 			aq.withCollection != nil,
+			aq.withCountry != nil,
+			aq.withSettlement != nil,
+			aq.withDistrict != nil,
+			aq.withRegion != nil,
 		}
 	)
-	if aq.withAuthor != nil || aq.withCollection != nil {
+	if aq.withAuthor != nil || aq.withCollection != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -596,6 +744,30 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 			return nil, err
 		}
 	}
+	if query := aq.withCountry; query != nil {
+		if err := aq.loadCountry(ctx, query, nodes, nil,
+			func(n *Art, e *Country) { n.Edges.Country = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withSettlement; query != nil {
+		if err := aq.loadSettlement(ctx, query, nodes, nil,
+			func(n *Art, e *Settlement) { n.Edges.Settlement = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withDistrict; query != nil {
+		if err := aq.loadDistrict(ctx, query, nodes, nil,
+			func(n *Art, e *District) { n.Edges.District = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withRegion; query != nil {
+		if err := aq.loadRegion(ctx, query, nodes, nil,
+			func(n *Art, e *Region) { n.Edges.Region = e }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range aq.withNamedArtGenre {
 		if err := aq.loadArtGenre(ctx, query, nodes,
 			func(n *Art) { n.appendNamedArtGenre(name) },
@@ -629,10 +801,10 @@ func (aq *ArtQuery) loadAuthor(ctx context.Context, query *PersonQuery, nodes []
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Art)
 	for i := range nodes {
-		if nodes[i].person_arts == nil {
+		if nodes[i].person_art == nil {
 			continue
 		}
-		fk := *nodes[i].person_arts
+		fk := *nodes[i].person_art
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -649,7 +821,7 @@ func (aq *ArtQuery) loadAuthor(ctx context.Context, query *PersonQuery, nodes []
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "person_arts" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "person_art" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -844,10 +1016,10 @@ func (aq *ArtQuery) loadCollection(ctx context.Context, query *CollectionQuery, 
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*Art)
 	for i := range nodes {
-		if nodes[i].collection_arts == nil {
+		if nodes[i].collection_art == nil {
 			continue
 		}
-		fk := *nodes[i].collection_arts
+		fk := *nodes[i].collection_art
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -864,7 +1036,135 @@ func (aq *ArtQuery) loadCollection(ctx context.Context, query *CollectionQuery, 
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "collection_arts" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "collection_art" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtQuery) loadCountry(ctx context.Context, query *CountryQuery, nodes []*Art, init func(*Art), assign func(*Art, *Country)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Art)
+	for i := range nodes {
+		if nodes[i].country_art == nil {
+			continue
+		}
+		fk := *nodes[i].country_art
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(country.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "country_art" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtQuery) loadSettlement(ctx context.Context, query *SettlementQuery, nodes []*Art, init func(*Art), assign func(*Art, *Settlement)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Art)
+	for i := range nodes {
+		if nodes[i].settlement_art == nil {
+			continue
+		}
+		fk := *nodes[i].settlement_art
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(settlement.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "settlement_art" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtQuery) loadDistrict(ctx context.Context, query *DistrictQuery, nodes []*Art, init func(*Art), assign func(*Art, *District)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Art)
+	for i := range nodes {
+		if nodes[i].district_art == nil {
+			continue
+		}
+		fk := *nodes[i].district_art
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(district.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "district_art" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes []*Art, init func(*Art), assign func(*Art, *Region)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Art)
+	for i := range nodes {
+		if nodes[i].region_art == nil {
+			continue
+		}
+		fk := *nodes[i].region_art
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(region.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "region_art" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

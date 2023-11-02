@@ -70,8 +70,8 @@ type Person struct {
 type PersonEdges struct {
 	// Collections holds the value of the collections edge.
 	Collections []*Collection `json:"collections,omitempty"`
-	// Arts holds the value of the arts edge.
-	Arts []*Art `json:"arts,omitempty"`
+	// Art holds the value of the art edge.
+	Art []*Art `json:"art,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
@@ -89,7 +89,7 @@ type PersonEdges struct {
 	totalCount [7]map[string]int
 
 	namedCollections  map[string][]*Collection
-	namedArts         map[string][]*Art
+	namedArt          map[string][]*Art
 	namedArtifacts    map[string][]*Artifact
 	namedBooks        map[string][]*Book
 	namedProjects     map[string][]*Project
@@ -105,13 +105,13 @@ func (e PersonEdges) CollectionsOrErr() ([]*Collection, error) {
 	return nil, &NotLoadedError{edge: "collections"}
 }
 
-// ArtsOrErr returns the Arts value or an error if the edge
+// ArtOrErr returns the Art value or an error if the edge
 // was not loaded in eager-loading.
-func (e PersonEdges) ArtsOrErr() ([]*Art, error) {
+func (e PersonEdges) ArtOrErr() ([]*Art, error) {
 	if e.loadedTypes[1] {
-		return e.Arts, nil
+		return e.Art, nil
 	}
-	return nil, &NotLoadedError{edge: "arts"}
+	return nil, &NotLoadedError{edge: "art"}
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -350,9 +350,9 @@ func (pe *Person) QueryCollections() *CollectionQuery {
 	return NewPersonClient(pe.config).QueryCollections(pe)
 }
 
-// QueryArts queries the "arts" edge of the Person entity.
-func (pe *Person) QueryArts() *ArtQuery {
-	return NewPersonClient(pe.config).QueryArts(pe)
+// QueryArt queries the "art" edge of the Person entity.
+func (pe *Person) QueryArt() *ArtQuery {
+	return NewPersonClient(pe.config).QueryArt(pe)
 }
 
 // QueryArtifacts queries the "artifacts" edge of the Person entity.
@@ -490,27 +490,27 @@ func (pe *Person) appendNamedCollections(name string, edges ...*Collection) {
 	}
 }
 
-// NamedArts returns the Arts named value or an error if the edge was not
+// NamedArt returns the Art named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pe *Person) NamedArts(name string) ([]*Art, error) {
-	if pe.Edges.namedArts == nil {
+func (pe *Person) NamedArt(name string) ([]*Art, error) {
+	if pe.Edges.namedArt == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pe.Edges.namedArts[name]
+	nodes, ok := pe.Edges.namedArt[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pe *Person) appendNamedArts(name string, edges ...*Art) {
-	if pe.Edges.namedArts == nil {
-		pe.Edges.namedArts = make(map[string][]*Art)
+func (pe *Person) appendNamedArt(name string, edges ...*Art) {
+	if pe.Edges.namedArt == nil {
+		pe.Edges.namedArt = make(map[string][]*Art)
 	}
 	if len(edges) == 0 {
-		pe.Edges.namedArts[name] = []*Art{}
+		pe.Edges.namedArt[name] = []*Art{}
 	} else {
-		pe.Edges.namedArts[name] = append(pe.Edges.namedArts[name], edges...)
+		pe.Edges.namedArt[name] = append(pe.Edges.namedArt[name], edges...)
 	}
 }
 

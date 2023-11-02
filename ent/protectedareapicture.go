@@ -11,10 +11,14 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
@@ -53,9 +57,13 @@ type ProtectedAreaPicture struct {
 	// The values are being populated by the ProtectedAreaPictureQuery when eager-loading is set.
 	Edges                                  ProtectedAreaPictureEdges `json:"edges"`
 	collection_protected_area_pictures     *int
+	country_protected_area_pictures        *int
+	district_protected_area_pictures       *int
 	license_protected_area_pictures        *int
 	location_protected_area_pictures       *int
 	protected_area_protected_area_pictures *int
+	region_protected_area_pictures         *int
+	settlement_protected_area_pictures     *int
 	selectValues                           sql.SelectValues
 }
 
@@ -69,11 +77,19 @@ type ProtectedAreaPictureEdges struct {
 	Location *Location `json:"location,omitempty"`
 	// License holds the value of the license edge.
 	License *License `json:"license,omitempty"`
+	// Country holds the value of the country edge.
+	Country *Country `json:"country,omitempty"`
+	// Settlement holds the value of the settlement edge.
+	Settlement *Settlement `json:"settlement,omitempty"`
+	// District holds the value of the district edge.
+	District *District `json:"district,omitempty"`
+	// Region holds the value of the region edge.
+	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [8]map[string]int
 }
 
 // CollectionOrErr returns the Collection value or an error if the edge
@@ -128,6 +144,58 @@ func (e ProtectedAreaPictureEdges) LicenseOrErr() (*License, error) {
 	return nil, &NotLoadedError{edge: "license"}
 }
 
+// CountryOrErr returns the Country value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) CountryOrErr() (*Country, error) {
+	if e.loadedTypes[4] {
+		if e.Country == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: country.Label}
+		}
+		return e.Country, nil
+	}
+	return nil, &NotLoadedError{edge: "country"}
+}
+
+// SettlementOrErr returns the Settlement value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) SettlementOrErr() (*Settlement, error) {
+	if e.loadedTypes[5] {
+		if e.Settlement == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: settlement.Label}
+		}
+		return e.Settlement, nil
+	}
+	return nil, &NotLoadedError{edge: "settlement"}
+}
+
+// DistrictOrErr returns the District value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) DistrictOrErr() (*District, error) {
+	if e.loadedTypes[6] {
+		if e.District == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: district.Label}
+		}
+		return e.District, nil
+	}
+	return nil, &NotLoadedError{edge: "district"}
+}
+
+// RegionOrErr returns the Region value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) RegionOrErr() (*Region, error) {
+	if e.loadedTypes[7] {
+		if e.Region == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: region.Label}
+		}
+		return e.Region, nil
+	}
+	return nil, &NotLoadedError{edge: "region"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -145,11 +213,19 @@ func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case protectedareapicture.ForeignKeys[0]: // collection_protected_area_pictures
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.ForeignKeys[1]: // license_protected_area_pictures
+		case protectedareapicture.ForeignKeys[1]: // country_protected_area_pictures
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.ForeignKeys[2]: // location_protected_area_pictures
+		case protectedareapicture.ForeignKeys[2]: // district_protected_area_pictures
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.ForeignKeys[3]: // protected_area_protected_area_pictures
+		case protectedareapicture.ForeignKeys[3]: // license_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[4]: // location_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[5]: // protected_area_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[6]: // region_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[7]: // settlement_protected_area_pictures
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -262,24 +338,52 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 			}
 		case protectedareapicture.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field country_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.country_protected_area_pictures = new(int)
+				*pap.country_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field district_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.district_protected_area_pictures = new(int)
+				*pap.district_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field license_protected_area_pictures", value)
 			} else if value.Valid {
 				pap.license_protected_area_pictures = new(int)
 				*pap.license_protected_area_pictures = int(value.Int64)
 			}
-		case protectedareapicture.ForeignKeys[2]:
+		case protectedareapicture.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field location_protected_area_pictures", value)
 			} else if value.Valid {
 				pap.location_protected_area_pictures = new(int)
 				*pap.location_protected_area_pictures = int(value.Int64)
 			}
-		case protectedareapicture.ForeignKeys[3]:
+		case protectedareapicture.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field protected_area_protected_area_pictures", value)
 			} else if value.Valid {
 				pap.protected_area_protected_area_pictures = new(int)
 				*pap.protected_area_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field region_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.region_protected_area_pictures = new(int)
+				*pap.region_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[7]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field settlement_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.settlement_protected_area_pictures = new(int)
+				*pap.settlement_protected_area_pictures = int(value.Int64)
 			}
 		default:
 			pap.selectValues.Set(columns[i], values[i])
@@ -312,6 +416,26 @@ func (pap *ProtectedAreaPicture) QueryLocation() *LocationQuery {
 // QueryLicense queries the "license" edge of the ProtectedAreaPicture entity.
 func (pap *ProtectedAreaPicture) QueryLicense() *LicenseQuery {
 	return NewProtectedAreaPictureClient(pap.config).QueryLicense(pap)
+}
+
+// QueryCountry queries the "country" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryCountry() *CountryQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryCountry(pap)
+}
+
+// QuerySettlement queries the "settlement" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QuerySettlement() *SettlementQuery {
+	return NewProtectedAreaPictureClient(pap.config).QuerySettlement(pap)
+}
+
+// QueryDistrict queries the "district" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryDistrict() *DistrictQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryDistrict(pap)
+}
+
+// QueryRegion queries the "region" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryRegion() *RegionQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryRegion(pap)
 }
 
 // Update returns a builder for updating this ProtectedAreaPicture.

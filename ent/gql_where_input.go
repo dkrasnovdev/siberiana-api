@@ -272,6 +272,22 @@ type ArtWhereInput struct {
 	// "collection" edge predicates.
 	HasCollection     *bool                   `json:"hasCollection,omitempty"`
 	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
+
+	// "country" edge predicates.
+	HasCountry     *bool                `json:"hasCountry,omitempty"`
+	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
+
+	// "settlement" edge predicates.
+	HasSettlement     *bool                   `json:"hasSettlement,omitempty"`
+	HasSettlementWith []*SettlementWhereInput `json:"hasSettlementWith,omitempty"`
+
+	// "district" edge predicates.
+	HasDistrict     *bool                 `json:"hasDistrict,omitempty"`
+	HasDistrictWith []*DistrictWhereInput `json:"hasDistrictWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -957,6 +973,78 @@ func (i *ArtWhereInput) P() (predicate.Art, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, art.HasCollectionWith(with...))
+	}
+	if i.HasCountry != nil {
+		p := art.HasCountry()
+		if !*i.HasCountry {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCountryWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasCountryWith))
+		for _, w := range i.HasCountryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCountryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasCountryWith(with...))
+	}
+	if i.HasSettlement != nil {
+		p := art.HasSettlement()
+		if !*i.HasSettlement {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSettlementWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasSettlementWith))
+		for _, w := range i.HasSettlementWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSettlementWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasSettlementWith(with...))
+	}
+	if i.HasDistrict != nil {
+		p := art.HasDistrict()
+		if !*i.HasDistrict {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDistrictWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasDistrictWith))
+		for _, w := range i.HasDistrictWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDistrictWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasDistrictWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := art.HasRegion()
+		if !*i.HasRegion {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasRegionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -2595,6 +2683,22 @@ type ArtifactWhereInput struct {
 	// "license" edge predicates.
 	HasLicense     *bool                `json:"hasLicense,omitempty"`
 	HasLicenseWith []*LicenseWhereInput `json:"hasLicenseWith,omitempty"`
+
+	// "country" edge predicates.
+	HasCountry     *bool                `json:"hasCountry,omitempty"`
+	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
+
+	// "settlement" edge predicates.
+	HasSettlement     *bool                   `json:"hasSettlement,omitempty"`
+	HasSettlementWith []*SettlementWhereInput `json:"hasSettlementWith,omitempty"`
+
+	// "district" edge predicates.
+	HasDistrict     *bool                 `json:"hasDistrict,omitempty"`
+	HasDistrictWith []*DistrictWhereInput `json:"hasDistrictWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3920,6 +4024,78 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 		}
 		predicates = append(predicates, artifact.HasLicenseWith(with...))
 	}
+	if i.HasCountry != nil {
+		p := artifact.HasCountry()
+		if !*i.HasCountry {
+			p = artifact.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCountryWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasCountryWith))
+		for _, w := range i.HasCountryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCountryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, artifact.HasCountryWith(with...))
+	}
+	if i.HasSettlement != nil {
+		p := artifact.HasSettlement()
+		if !*i.HasSettlement {
+			p = artifact.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSettlementWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasSettlementWith))
+		for _, w := range i.HasSettlementWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSettlementWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, artifact.HasSettlementWith(with...))
+	}
+	if i.HasDistrict != nil {
+		p := artifact.HasDistrict()
+		if !*i.HasDistrict {
+			p = artifact.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDistrictWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasDistrictWith))
+		for _, w := range i.HasDistrictWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDistrictWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, artifact.HasDistrictWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := artifact.HasRegion()
+		if !*i.HasRegion {
+			p = artifact.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, artifact.HasRegionWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyArtifactWhereInput
@@ -4520,13 +4696,25 @@ type BookWhereInput struct {
 	HasLocation     *bool                 `json:"hasLocation,omitempty"`
 	HasLocationWith []*LocationWhereInput `json:"hasLocationWith,omitempty"`
 
-	// "place_of_publication" edge predicates.
-	HasPlaceOfPublication     *bool                   `json:"hasPlaceOfPublication,omitempty"`
-	HasPlaceOfPublicationWith []*SettlementWhereInput `json:"hasPlaceOfPublicationWith,omitempty"`
-
 	// "library" edge predicates.
 	HasLibrary     *bool                     `json:"hasLibrary,omitempty"`
 	HasLibraryWith []*OrganizationWhereInput `json:"hasLibraryWith,omitempty"`
+
+	// "country" edge predicates.
+	HasCountry     *bool                `json:"hasCountry,omitempty"`
+	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
+
+	// "settlement" edge predicates.
+	HasSettlement     *bool                   `json:"hasSettlement,omitempty"`
+	HasSettlementWith []*SettlementWhereInput `json:"hasSettlementWith,omitempty"`
+
+	// "district" edge predicates.
+	HasDistrict     *bool                 `json:"hasDistrict,omitempty"`
+	HasDistrictWith []*DistrictWhereInput `json:"hasDistrictWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -5162,24 +5350,6 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 		}
 		predicates = append(predicates, book.HasLocationWith(with...))
 	}
-	if i.HasPlaceOfPublication != nil {
-		p := book.HasPlaceOfPublication()
-		if !*i.HasPlaceOfPublication {
-			p = book.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasPlaceOfPublicationWith) > 0 {
-		with := make([]predicate.Settlement, 0, len(i.HasPlaceOfPublicationWith))
-		for _, w := range i.HasPlaceOfPublicationWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPlaceOfPublicationWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, book.HasPlaceOfPublicationWith(with...))
-	}
 	if i.HasLibrary != nil {
 		p := book.HasLibrary()
 		if !*i.HasLibrary {
@@ -5197,6 +5367,78 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, book.HasLibraryWith(with...))
+	}
+	if i.HasCountry != nil {
+		p := book.HasCountry()
+		if !*i.HasCountry {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCountryWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasCountryWith))
+		for _, w := range i.HasCountryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCountryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasCountryWith(with...))
+	}
+	if i.HasSettlement != nil {
+		p := book.HasSettlement()
+		if !*i.HasSettlement {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSettlementWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasSettlementWith))
+		for _, w := range i.HasSettlementWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSettlementWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasSettlementWith(with...))
+	}
+	if i.HasDistrict != nil {
+		p := book.HasDistrict()
+		if !*i.HasDistrict {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDistrictWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasDistrictWith))
+		for _, w := range i.HasDistrictWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDistrictWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasDistrictWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := book.HasRegion()
+		if !*i.HasRegion {
+			p = book.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, book.HasRegionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -6675,9 +6917,9 @@ type CollectionWhereInput struct {
 	TypeIsNil  bool              `json:"typeIsNil,omitempty"`
 	TypeNotNil bool              `json:"typeNotNil,omitempty"`
 
-	// "arts" edge predicates.
-	HasArts     *bool            `json:"hasArts,omitempty"`
-	HasArtsWith []*ArtWhereInput `json:"hasArtsWith,omitempty"`
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -7216,23 +7458,23 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 		predicates = append(predicates, collection.TypeNotNil())
 	}
 
-	if i.HasArts != nil {
-		p := collection.HasArts()
-		if !*i.HasArts {
+	if i.HasArt != nil {
+		p := collection.HasArt()
+		if !*i.HasArt {
 			p = collection.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasArtsWith) > 0 {
-		with := make([]predicate.Art, 0, len(i.HasArtsWith))
-		for _, w := range i.HasArtsWith {
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasArtsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, collection.HasArtsWith(with...))
+		predicates = append(predicates, collection.HasArtWith(with...))
 	}
 	if i.HasArtifacts != nil {
 		p := collection.HasArtifacts()
@@ -7472,6 +7714,22 @@ type CountryWhereInput struct {
 	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
+
+	// "artifacts" edge predicates.
+	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
+	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
@@ -7892,6 +8150,78 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 		predicates = append(predicates, country.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
+	if i.HasArt != nil {
+		p := country.HasArt()
+		if !*i.HasArt {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasArtWith(with...))
+	}
+	if i.HasArtifacts != nil {
+		p := country.HasArtifacts()
+		if !*i.HasArtifacts {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtifactsWith) > 0 {
+		with := make([]predicate.Artifact, 0, len(i.HasArtifactsWith))
+		for _, w := range i.HasArtifactsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtifactsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := country.HasBooks()
+		if !*i.HasBooks {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasBooksWith(with...))
+	}
+	if i.HasProtectedAreaPictures != nil {
+		p := country.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasProtectedAreaPicturesWith(with...))
+	}
 	if i.HasLocations != nil {
 		p := country.HasLocations()
 		if !*i.HasLocations {
@@ -8645,6 +8975,22 @@ type DistrictWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
+
+	// "artifacts" edge predicates.
+	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
+	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
+
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
@@ -9064,6 +9410,78 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 		predicates = append(predicates, district.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
+	if i.HasArt != nil {
+		p := district.HasArt()
+		if !*i.HasArt {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasArtWith(with...))
+	}
+	if i.HasArtifacts != nil {
+		p := district.HasArtifacts()
+		if !*i.HasArtifacts {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtifactsWith) > 0 {
+		with := make([]predicate.Artifact, 0, len(i.HasArtifactsWith))
+		for _, w := range i.HasArtifactsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtifactsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := district.HasBooks()
+		if !*i.HasBooks {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasBooksWith(with...))
+	}
+	if i.HasProtectedAreaPictures != nil {
+		p := district.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasProtectedAreaPicturesWith(with...))
+	}
 	if i.HasLocations != nil {
 		p := district.HasLocations()
 		if !*i.HasLocations {
@@ -11743,9 +12161,9 @@ type MediumWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "arts" edge predicates.
-	HasArts     *bool            `json:"hasArts,omitempty"`
-	HasArtsWith []*ArtWhereInput `json:"hasArtsWith,omitempty"`
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -12166,23 +12584,23 @@ func (i *MediumWhereInput) P() (predicate.Medium, error) {
 		predicates = append(predicates, medium.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
-	if i.HasArts != nil {
-		p := medium.HasArts()
-		if !*i.HasArts {
+	if i.HasArt != nil {
+		p := medium.HasArt()
+		if !*i.HasArt {
 			p = medium.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasArtsWith) > 0 {
-		with := make([]predicate.Art, 0, len(i.HasArtsWith))
-		for _, w := range i.HasArtsWith {
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasArtsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, medium.HasArtsWith(with...))
+		predicates = append(predicates, medium.HasArtWith(with...))
 	}
 	if i.HasArtifacts != nil {
 		p := medium.HasArtifacts()
@@ -15187,9 +15605,9 @@ type PersonWhereInput struct {
 	HasCollections     *bool                   `json:"hasCollections,omitempty"`
 	HasCollectionsWith []*CollectionWhereInput `json:"hasCollectionsWith,omitempty"`
 
-	// "arts" edge predicates.
-	HasArts     *bool            `json:"hasArts,omitempty"`
-	HasArtsWith []*ArtWhereInput `json:"hasArtsWith,omitempty"`
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -15992,23 +16410,23 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 		}
 		predicates = append(predicates, person.HasCollectionsWith(with...))
 	}
-	if i.HasArts != nil {
-		p := person.HasArts()
-		if !*i.HasArts {
+	if i.HasArt != nil {
+		p := person.HasArt()
+		if !*i.HasArt {
 			p = person.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasArtsWith) > 0 {
-		with := make([]predicate.Art, 0, len(i.HasArtsWith))
-		for _, w := range i.HasArtsWith {
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasArtsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, person.HasArtsWith(with...))
+		predicates = append(predicates, person.HasArtWith(with...))
 	}
 	if i.HasArtifacts != nil {
 		p := person.HasArtifacts()
@@ -16695,17 +17113,17 @@ type ProjectWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "begin_data" field predicates.
-	BeginData       *time.Time  `json:"beginData,omitempty"`
-	BeginDataNEQ    *time.Time  `json:"beginDataNEQ,omitempty"`
-	BeginDataIn     []time.Time `json:"beginDataIn,omitempty"`
-	BeginDataNotIn  []time.Time `json:"beginDataNotIn,omitempty"`
-	BeginDataGT     *time.Time  `json:"beginDataGT,omitempty"`
-	BeginDataGTE    *time.Time  `json:"beginDataGTE,omitempty"`
-	BeginDataLT     *time.Time  `json:"beginDataLT,omitempty"`
-	BeginDataLTE    *time.Time  `json:"beginDataLTE,omitempty"`
-	BeginDataIsNil  bool        `json:"beginDataIsNil,omitempty"`
-	BeginDataNotNil bool        `json:"beginDataNotNil,omitempty"`
+	// "begin_date" field predicates.
+	BeginDate       *time.Time  `json:"beginDate,omitempty"`
+	BeginDateNEQ    *time.Time  `json:"beginDateNEQ,omitempty"`
+	BeginDateIn     []time.Time `json:"beginDateIn,omitempty"`
+	BeginDateNotIn  []time.Time `json:"beginDateNotIn,omitempty"`
+	BeginDateGT     *time.Time  `json:"beginDateGT,omitempty"`
+	BeginDateGTE    *time.Time  `json:"beginDateGTE,omitempty"`
+	BeginDateLT     *time.Time  `json:"beginDateLT,omitempty"`
+	BeginDateLTE    *time.Time  `json:"beginDateLTE,omitempty"`
+	BeginDateIsNil  bool        `json:"beginDateIsNil,omitempty"`
+	BeginDateNotNil bool        `json:"beginDateNotNil,omitempty"`
 
 	// "end_date" field predicates.
 	EndDate       *time.Time  `json:"endDate,omitempty"`
@@ -16730,6 +17148,30 @@ type ProjectWhereInput struct {
 	YearLTE    *int  `json:"yearLTE,omitempty"`
 	YearIsNil  bool  `json:"yearIsNil,omitempty"`
 	YearNotNil bool  `json:"yearNotNil,omitempty"`
+
+	// "begin_year" field predicates.
+	BeginYear       *int  `json:"beginYear,omitempty"`
+	BeginYearNEQ    *int  `json:"beginYearNEQ,omitempty"`
+	BeginYearIn     []int `json:"beginYearIn,omitempty"`
+	BeginYearNotIn  []int `json:"beginYearNotIn,omitempty"`
+	BeginYearGT     *int  `json:"beginYearGT,omitempty"`
+	BeginYearGTE    *int  `json:"beginYearGTE,omitempty"`
+	BeginYearLT     *int  `json:"beginYearLT,omitempty"`
+	BeginYearLTE    *int  `json:"beginYearLTE,omitempty"`
+	BeginYearIsNil  bool  `json:"beginYearIsNil,omitempty"`
+	BeginYearNotNil bool  `json:"beginYearNotNil,omitempty"`
+
+	// "end_year" field predicates.
+	EndYear       *int  `json:"endYear,omitempty"`
+	EndYearNEQ    *int  `json:"endYearNEQ,omitempty"`
+	EndYearIn     []int `json:"endYearIn,omitempty"`
+	EndYearNotIn  []int `json:"endYearNotIn,omitempty"`
+	EndYearGT     *int  `json:"endYearGT,omitempty"`
+	EndYearGTE    *int  `json:"endYearGTE,omitempty"`
+	EndYearLT     *int  `json:"endYearLT,omitempty"`
+	EndYearLTE    *int  `json:"endYearLTE,omitempty"`
+	EndYearIsNil  bool  `json:"endYearIsNil,omitempty"`
+	EndYearNotNil bool  `json:"endYearNotNil,omitempty"`
 
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
@@ -17153,35 +17595,35 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	if i.ExternalLinkContainsFold != nil {
 		predicates = append(predicates, project.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
-	if i.BeginData != nil {
-		predicates = append(predicates, project.BeginDataEQ(*i.BeginData))
+	if i.BeginDate != nil {
+		predicates = append(predicates, project.BeginDateEQ(*i.BeginDate))
 	}
-	if i.BeginDataNEQ != nil {
-		predicates = append(predicates, project.BeginDataNEQ(*i.BeginDataNEQ))
+	if i.BeginDateNEQ != nil {
+		predicates = append(predicates, project.BeginDateNEQ(*i.BeginDateNEQ))
 	}
-	if len(i.BeginDataIn) > 0 {
-		predicates = append(predicates, project.BeginDataIn(i.BeginDataIn...))
+	if len(i.BeginDateIn) > 0 {
+		predicates = append(predicates, project.BeginDateIn(i.BeginDateIn...))
 	}
-	if len(i.BeginDataNotIn) > 0 {
-		predicates = append(predicates, project.BeginDataNotIn(i.BeginDataNotIn...))
+	if len(i.BeginDateNotIn) > 0 {
+		predicates = append(predicates, project.BeginDateNotIn(i.BeginDateNotIn...))
 	}
-	if i.BeginDataGT != nil {
-		predicates = append(predicates, project.BeginDataGT(*i.BeginDataGT))
+	if i.BeginDateGT != nil {
+		predicates = append(predicates, project.BeginDateGT(*i.BeginDateGT))
 	}
-	if i.BeginDataGTE != nil {
-		predicates = append(predicates, project.BeginDataGTE(*i.BeginDataGTE))
+	if i.BeginDateGTE != nil {
+		predicates = append(predicates, project.BeginDateGTE(*i.BeginDateGTE))
 	}
-	if i.BeginDataLT != nil {
-		predicates = append(predicates, project.BeginDataLT(*i.BeginDataLT))
+	if i.BeginDateLT != nil {
+		predicates = append(predicates, project.BeginDateLT(*i.BeginDateLT))
 	}
-	if i.BeginDataLTE != nil {
-		predicates = append(predicates, project.BeginDataLTE(*i.BeginDataLTE))
+	if i.BeginDateLTE != nil {
+		predicates = append(predicates, project.BeginDateLTE(*i.BeginDateLTE))
 	}
-	if i.BeginDataIsNil {
-		predicates = append(predicates, project.BeginDataIsNil())
+	if i.BeginDateIsNil {
+		predicates = append(predicates, project.BeginDateIsNil())
 	}
-	if i.BeginDataNotNil {
-		predicates = append(predicates, project.BeginDataNotNil())
+	if i.BeginDateNotNil {
+		predicates = append(predicates, project.BeginDateNotNil())
 	}
 	if i.EndDate != nil {
 		predicates = append(predicates, project.EndDateEQ(*i.EndDate))
@@ -17242,6 +17684,66 @@ func (i *ProjectWhereInput) P() (predicate.Project, error) {
 	}
 	if i.YearNotNil {
 		predicates = append(predicates, project.YearNotNil())
+	}
+	if i.BeginYear != nil {
+		predicates = append(predicates, project.BeginYearEQ(*i.BeginYear))
+	}
+	if i.BeginYearNEQ != nil {
+		predicates = append(predicates, project.BeginYearNEQ(*i.BeginYearNEQ))
+	}
+	if len(i.BeginYearIn) > 0 {
+		predicates = append(predicates, project.BeginYearIn(i.BeginYearIn...))
+	}
+	if len(i.BeginYearNotIn) > 0 {
+		predicates = append(predicates, project.BeginYearNotIn(i.BeginYearNotIn...))
+	}
+	if i.BeginYearGT != nil {
+		predicates = append(predicates, project.BeginYearGT(*i.BeginYearGT))
+	}
+	if i.BeginYearGTE != nil {
+		predicates = append(predicates, project.BeginYearGTE(*i.BeginYearGTE))
+	}
+	if i.BeginYearLT != nil {
+		predicates = append(predicates, project.BeginYearLT(*i.BeginYearLT))
+	}
+	if i.BeginYearLTE != nil {
+		predicates = append(predicates, project.BeginYearLTE(*i.BeginYearLTE))
+	}
+	if i.BeginYearIsNil {
+		predicates = append(predicates, project.BeginYearIsNil())
+	}
+	if i.BeginYearNotNil {
+		predicates = append(predicates, project.BeginYearNotNil())
+	}
+	if i.EndYear != nil {
+		predicates = append(predicates, project.EndYearEQ(*i.EndYear))
+	}
+	if i.EndYearNEQ != nil {
+		predicates = append(predicates, project.EndYearNEQ(*i.EndYearNEQ))
+	}
+	if len(i.EndYearIn) > 0 {
+		predicates = append(predicates, project.EndYearIn(i.EndYearIn...))
+	}
+	if len(i.EndYearNotIn) > 0 {
+		predicates = append(predicates, project.EndYearNotIn(i.EndYearNotIn...))
+	}
+	if i.EndYearGT != nil {
+		predicates = append(predicates, project.EndYearGT(*i.EndYearGT))
+	}
+	if i.EndYearGTE != nil {
+		predicates = append(predicates, project.EndYearGTE(*i.EndYearGTE))
+	}
+	if i.EndYearLT != nil {
+		predicates = append(predicates, project.EndYearLT(*i.EndYearLT))
+	}
+	if i.EndYearLTE != nil {
+		predicates = append(predicates, project.EndYearLTE(*i.EndYearLTE))
+	}
+	if i.EndYearIsNil {
+		predicates = append(predicates, project.EndYearIsNil())
+	}
+	if i.EndYearNotNil {
+		predicates = append(predicates, project.EndYearNotNil())
 	}
 
 	if i.HasArtifacts != nil {
@@ -18791,6 +19293,22 @@ type ProtectedAreaPictureWhereInput struct {
 	// "license" edge predicates.
 	HasLicense     *bool                `json:"hasLicense,omitempty"`
 	HasLicenseWith []*LicenseWhereInput `json:"hasLicenseWith,omitempty"`
+
+	// "country" edge predicates.
+	HasCountry     *bool                `json:"hasCountry,omitempty"`
+	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
+
+	// "settlement" edge predicates.
+	HasSettlement     *bool                   `json:"hasSettlement,omitempty"`
+	HasSettlementWith []*SettlementWhereInput `json:"hasSettlementWith,omitempty"`
+
+	// "district" edge predicates.
+	HasDistrict     *bool                 `json:"hasDistrict,omitempty"`
+	HasDistrictWith []*DistrictWhereInput `json:"hasDistrictWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -19401,6 +19919,78 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 			with = append(with, p)
 		}
 		predicates = append(predicates, protectedareapicture.HasLicenseWith(with...))
+	}
+	if i.HasCountry != nil {
+		p := protectedareapicture.HasCountry()
+		if !*i.HasCountry {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCountryWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasCountryWith))
+		for _, w := range i.HasCountryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCountryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasCountryWith(with...))
+	}
+	if i.HasSettlement != nil {
+		p := protectedareapicture.HasSettlement()
+		if !*i.HasSettlement {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSettlementWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasSettlementWith))
+		for _, w := range i.HasSettlementWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSettlementWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasSettlementWith(with...))
+	}
+	if i.HasDistrict != nil {
+		p := protectedareapicture.HasDistrict()
+		if !*i.HasDistrict {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDistrictWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasDistrictWith))
+		for _, w := range i.HasDistrictWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDistrictWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasDistrictWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := protectedareapicture.HasRegion()
+		if !*i.HasRegion {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasRegionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -21231,6 +21821,22 @@ type RegionWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
+
+	// "artifacts" edge predicates.
+	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
+	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "books" edge predicates.
+	HasBooks     *bool             `json:"hasBooks,omitempty"`
+	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
+
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
@@ -21650,6 +22256,78 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 		predicates = append(predicates, region.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
+	if i.HasArt != nil {
+		p := region.HasArt()
+		if !*i.HasArt {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasArtWith(with...))
+	}
+	if i.HasArtifacts != nil {
+		p := region.HasArtifacts()
+		if !*i.HasArtifacts {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtifactsWith) > 0 {
+		with := make([]predicate.Artifact, 0, len(i.HasArtifactsWith))
+		for _, w := range i.HasArtifactsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtifactsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasArtifactsWith(with...))
+	}
+	if i.HasBooks != nil {
+		p := region.HasBooks()
+		if !*i.HasBooks {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBooksWith) > 0 {
+		with := make([]predicate.Book, 0, len(i.HasBooksWith))
+		for _, w := range i.HasBooksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBooksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasBooksWith(with...))
+	}
+	if i.HasProtectedAreaPictures != nil {
+		p := region.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasProtectedAreaPicturesWith(with...))
+	}
 	if i.HasLocations != nil {
 		p := region.HasLocations()
 		if !*i.HasLocations {
@@ -22425,9 +23103,21 @@ type SettlementWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
+
+	// "artifacts" edge predicates.
+	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
+	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
@@ -22848,6 +23538,42 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 		predicates = append(predicates, settlement.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
+	if i.HasArt != nil {
+		p := settlement.HasArt()
+		if !*i.HasArt {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasArtWith(with...))
+	}
+	if i.HasArtifacts != nil {
+		p := settlement.HasArtifacts()
+		if !*i.HasArtifacts {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtifactsWith) > 0 {
+		with := make([]predicate.Artifact, 0, len(i.HasArtifactsWith))
+		for _, w := range i.HasArtifactsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtifactsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasArtifactsWith(with...))
+	}
 	if i.HasBooks != nil {
 		p := settlement.HasBooks()
 		if !*i.HasBooks {
@@ -22865,6 +23591,24 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, settlement.HasBooksWith(with...))
+	}
+	if i.HasProtectedAreaPictures != nil {
+		p := settlement.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasProtectedAreaPicturesWith(with...))
 	}
 	if i.HasLocations != nil {
 		p := settlement.HasLocations()

@@ -12,22 +12,34 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // CountryQuery is the builder for querying Country entities.
 type CountryQuery struct {
 	config
-	ctx                *QueryContext
-	order              []country.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Country
-	withLocations      *LocationQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Country) error
-	withNamedLocations map[string]*LocationQuery
+	ctx                            *QueryContext
+	order                          []country.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.Country
+	withArt                        *ArtQuery
+	withArtifacts                  *ArtifactQuery
+	withBooks                      *BookQuery
+	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	withLocations                  *LocationQuery
+	modifiers                      []func(*sql.Selector)
+	loadTotal                      []func(context.Context, []*Country) error
+	withNamedArt                   map[string]*ArtQuery
+	withNamedArtifacts             map[string]*ArtifactQuery
+	withNamedBooks                 map[string]*BookQuery
+	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
+	withNamedLocations             map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,6 +74,94 @@ func (cq *CountryQuery) Unique(unique bool) *CountryQuery {
 func (cq *CountryQuery) Order(o ...country.OrderOption) *CountryQuery {
 	cq.order = append(cq.order, o...)
 	return cq
+}
+
+// QueryArt chains the current query on the "art" edge.
+func (cq *CountryQuery) QueryArt() *ArtQuery {
+	query := (&ArtClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.ArtTable, country.ArtColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (cq *CountryQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.ArtifactsTable, country.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (cq *CountryQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.BooksTable, country.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (cq *CountryQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.ProtectedAreaPicturesTable, country.ProtectedAreaPicturesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryLocations chains the current query on the "locations" edge.
@@ -273,16 +373,64 @@ func (cq *CountryQuery) Clone() *CountryQuery {
 		return nil
 	}
 	return &CountryQuery{
-		config:        cq.config,
-		ctx:           cq.ctx.Clone(),
-		order:         append([]country.OrderOption{}, cq.order...),
-		inters:        append([]Interceptor{}, cq.inters...),
-		predicates:    append([]predicate.Country{}, cq.predicates...),
-		withLocations: cq.withLocations.Clone(),
+		config:                    cq.config,
+		ctx:                       cq.ctx.Clone(),
+		order:                     append([]country.OrderOption{}, cq.order...),
+		inters:                    append([]Interceptor{}, cq.inters...),
+		predicates:                append([]predicate.Country{}, cq.predicates...),
+		withArt:                   cq.withArt.Clone(),
+		withArtifacts:             cq.withArtifacts.Clone(),
+		withBooks:                 cq.withBooks.Clone(),
+		withProtectedAreaPictures: cq.withProtectedAreaPictures.Clone(),
+		withLocations:             cq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
 	}
+}
+
+// WithArt tells the query-builder to eager-load the nodes that are connected to
+// the "art" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithArt(opts ...func(*ArtQuery)) *CountryQuery {
+	query := (&ArtClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withArt = query
+	return cq
+}
+
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *CountryQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withArtifacts = query
+	return cq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithBooks(opts ...func(*BookQuery)) *CountryQuery {
+	query := (&BookClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withBooks = query
+	return cq
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *CountryQuery {
+	query := (&ProtectedAreaPictureClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withProtectedAreaPictures = query
+	return cq
 }
 
 // WithLocations tells the query-builder to eager-load the nodes that are connected to
@@ -380,7 +528,11 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	var (
 		nodes       = []*Country{}
 		_spec       = cq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [5]bool{
+			cq.withArt != nil,
+			cq.withArtifacts != nil,
+			cq.withBooks != nil,
+			cq.withProtectedAreaPictures != nil,
 			cq.withLocations != nil,
 		}
 	)
@@ -405,10 +557,68 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := cq.withArt; query != nil {
+		if err := cq.loadArt(ctx, query, nodes,
+			func(n *Country) { n.Edges.Art = []*Art{} },
+			func(n *Country, e *Art) { n.Edges.Art = append(n.Edges.Art, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withArtifacts; query != nil {
+		if err := cq.loadArtifacts(ctx, query, nodes,
+			func(n *Country) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Country, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withBooks; query != nil {
+		if err := cq.loadBooks(ctx, query, nodes,
+			func(n *Country) { n.Edges.Books = []*Book{} },
+			func(n *Country, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withProtectedAreaPictures; query != nil {
+		if err := cq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Country) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *Country, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := cq.withLocations; query != nil {
 		if err := cq.loadLocations(ctx, query, nodes,
 			func(n *Country) { n.Edges.Locations = []*Location{} },
 			func(n *Country, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedArt {
+		if err := cq.loadArt(ctx, query, nodes,
+			func(n *Country) { n.appendNamedArt(name) },
+			func(n *Country, e *Art) { n.appendNamedArt(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedArtifacts {
+		if err := cq.loadArtifacts(ctx, query, nodes,
+			func(n *Country) { n.appendNamedArtifacts(name) },
+			func(n *Country, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedBooks {
+		if err := cq.loadBooks(ctx, query, nodes,
+			func(n *Country) { n.appendNamedBooks(name) },
+			func(n *Country, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedProtectedAreaPictures {
+		if err := cq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Country) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *Country, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,6 +637,130 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	return nodes, nil
 }
 
+func (cq *CountryQuery) loadArt(ctx context.Context, query *ArtQuery, nodes []*Country, init func(*Country), assign func(*Country, *Art)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Country)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Art(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(country.ArtColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.country_art
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "country_art" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "country_art" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CountryQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Country, init func(*Country), assign func(*Country, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Country)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(country.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.country_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "country_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "country_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CountryQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Country, init func(*Country), assign func(*Country, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Country)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(country.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.country_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "country_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "country_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CountryQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*Country, init func(*Country), assign func(*Country, *ProtectedAreaPicture)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Country)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(country.ProtectedAreaPicturesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.country_protected_area_pictures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "country_protected_area_pictures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "country_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (cq *CountryQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*Country, init func(*Country), assign func(*Country, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Country)
@@ -541,6 +875,62 @@ func (cq *CountryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArt tells the query-builder to eager-load the nodes that are connected to the "art"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedArt(name string, opts ...func(*ArtQuery)) *CountryQuery {
+	query := (&ArtClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedArt == nil {
+		cq.withNamedArt = make(map[string]*ArtQuery)
+	}
+	cq.withNamedArt[name] = query
+	return cq
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *CountryQuery {
+	query := (&ArtifactClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedArtifacts == nil {
+		cq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	cq.withNamedArtifacts[name] = query
+	return cq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *CountryQuery {
+	query := (&BookClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedBooks == nil {
+		cq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	cq.withNamedBooks[name] = query
+	return cq
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *CountryQuery {
+	query := (&ProtectedAreaPictureClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedProtectedAreaPictures == nil {
+		cq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	cq.withNamedProtectedAreaPictures[name] = query
+	return cq
 }
 
 // WithNamedLocations tells the query-builder to eager-load the nodes that are connected to the "locations"

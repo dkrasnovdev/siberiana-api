@@ -60,6 +60,38 @@ func (a *Art) Collection(ctx context.Context) (*Collection, error) {
 	return result, err
 }
 
+func (a *Art) Country(ctx context.Context) (*Country, error) {
+	result, err := a.Edges.CountryOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryCountry().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (a *Art) Settlement(ctx context.Context) (*Settlement, error) {
+	result, err := a.Edges.SettlementOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QuerySettlement().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (a *Art) District(ctx context.Context) (*District, error) {
+	result, err := a.Edges.DistrictOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryDistrict().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (a *Art) Region(ctx context.Context) (*Region, error) {
+	result, err := a.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryRegion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (ag *ArtGenre) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = ag.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
@@ -200,6 +232,38 @@ func (a *Artifact) License(ctx context.Context) (*License, error) {
 	return result, MaskNotFound(err)
 }
 
+func (a *Artifact) Country(ctx context.Context) (*Country, error) {
+	result, err := a.Edges.CountryOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryCountry().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (a *Artifact) Settlement(ctx context.Context) (*Settlement, error) {
+	result, err := a.Edges.SettlementOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QuerySettlement().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (a *Artifact) District(ctx context.Context) (*District, error) {
+	result, err := a.Edges.DistrictOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryDistrict().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (a *Artifact) Region(ctx context.Context) (*Region, error) {
+	result, err := a.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryRegion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (b *Book) Authors(ctx context.Context) (result []*Person, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = b.NamedAuthors(graphql.GetFieldContext(ctx).Field.Alias)
@@ -264,18 +328,42 @@ func (b *Book) Location(ctx context.Context) (*Location, error) {
 	return result, MaskNotFound(err)
 }
 
-func (b *Book) PlaceOfPublication(ctx context.Context) (*Settlement, error) {
-	result, err := b.Edges.PlaceOfPublicationOrErr()
-	if IsNotLoaded(err) {
-		result, err = b.QueryPlaceOfPublication().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (b *Book) Library(ctx context.Context) (*Organization, error) {
 	result, err := b.Edges.LibraryOrErr()
 	if IsNotLoaded(err) {
 		result, err = b.QueryLibrary().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) Country(ctx context.Context) (*Country, error) {
+	result, err := b.Edges.CountryOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryCountry().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) Settlement(ctx context.Context) (*Settlement, error) {
+	result, err := b.Edges.SettlementOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QuerySettlement().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) District(ctx context.Context) (*District, error) {
+	result, err := b.Edges.DistrictOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryDistrict().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (b *Book) Region(ctx context.Context) (*Region, error) {
+	result, err := b.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = b.QueryRegion().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -304,14 +392,14 @@ func (c *Category) Collections(ctx context.Context) (result []*Collection, err e
 	return result, err
 }
 
-func (c *Collection) Arts(ctx context.Context) (result []*Art, err error) {
+func (c *Collection) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = c.NamedArts(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = c.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = c.Edges.ArtsOrErr()
+		result, err = c.Edges.ArtOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = c.QueryArts().All(ctx)
+		result, err = c.QueryArt().All(ctx)
 	}
 	return result, err
 }
@@ -372,6 +460,54 @@ func (c *Collection) Authors(ctx context.Context) (result []*Person, err error) 
 	return result, err
 }
 
+func (c *Country) Art(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ArtOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryArt().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Country) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Country) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Country) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryProtectedAreaPictures().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Country) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
@@ -392,6 +528,54 @@ func (c *Culture) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	}
 	if IsNotLoaded(err) {
 		result, err = c.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (d *District) Art(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.ArtOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryArt().All(ctx)
+	}
+	return result, err
+}
+
+func (d *District) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.ArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (d *District) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (d *District) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryProtectedAreaPictures().All(ctx)
 	}
 	return result, err
 }
@@ -524,14 +708,14 @@ func (l *Location) Region(ctx context.Context) (*Region, error) {
 	return result, MaskNotFound(err)
 }
 
-func (m *Medium) Arts(ctx context.Context) (result []*Art, err error) {
+func (m *Medium) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = m.NamedArts(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = m.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = m.Edges.ArtsOrErr()
+		result, err = m.Edges.ArtOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = m.QueryArts().All(ctx)
+		result, err = m.QueryArt().All(ctx)
 	}
 	return result, err
 }
@@ -632,14 +816,14 @@ func (pe *Person) Collections(ctx context.Context) (result []*Collection, err er
 	return result, err
 }
 
-func (pe *Person) Arts(ctx context.Context) (result []*Art, err error) {
+func (pe *Person) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedArts(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = pe.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pe.Edges.ArtsOrErr()
+		result, err = pe.Edges.ArtOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pe.QueryArts().All(ctx)
+		result, err = pe.QueryArt().All(ctx)
 	}
 	return result, err
 }
@@ -800,6 +984,38 @@ func (pap *ProtectedAreaPicture) License(ctx context.Context) (*License, error) 
 	return result, MaskNotFound(err)
 }
 
+func (pap *ProtectedAreaPicture) Country(ctx context.Context) (*Country, error) {
+	result, err := pap.Edges.CountryOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryCountry().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pap *ProtectedAreaPicture) Settlement(ctx context.Context) (*Settlement, error) {
+	result, err := pap.Edges.SettlementOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QuerySettlement().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pap *ProtectedAreaPicture) District(ctx context.Context) (*District, error) {
+	result, err := pap.Edges.DistrictOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryDistrict().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pap *ProtectedAreaPicture) Region(ctx context.Context) (*Region, error) {
+	result, err := pap.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryRegion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (pr *Proxy) Favourite(ctx context.Context) (*Favourite, error) {
 	result, err := pr.Edges.FavouriteOrErr()
 	if IsNotLoaded(err) {
@@ -852,6 +1068,54 @@ func (pu *Publisher) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
+func (r *Region) Art(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.ArtOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryArt().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Region) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.ArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Region) Books(ctx context.Context) (result []*Book, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.BooksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Region) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryProtectedAreaPictures().All(ctx)
+	}
+	return result, err
+}
+
 func (r *Region) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = r.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
@@ -888,6 +1152,30 @@ func (s *Set) Monuments(ctx context.Context) (result []*Monument, err error) {
 	return result, err
 }
 
+func (s *Settlement) Art(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.ArtOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryArt().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Settlement) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.ArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
 func (s *Settlement) Books(ctx context.Context) (result []*Book, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = s.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
@@ -896,6 +1184,18 @@ func (s *Settlement) Books(ctx context.Context) (result []*Book, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = s.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Settlement) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryProtectedAreaPictures().All(ctx)
 	}
 	return result, err
 }

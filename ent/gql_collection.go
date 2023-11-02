@@ -121,6 +121,46 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				return err
 			}
 			a.withCollection = query
+		case "country":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			a.withCountry = query
+		case "settlement":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			a.withSettlement = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			a.withDistrict = query
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			a.withRegion = query
 		case "createdAt":
 			if _, ok := fieldSeen[art.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, art.FieldCreatedAt)
@@ -690,6 +730,46 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			a.withLicense = query
+		case "country":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			a.withCountry = query
+		case "settlement":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			a.withSettlement = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			a.withDistrict = query
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			a.withRegion = query
 		case "createdAt":
 			if _, ok := fieldSeen[artifact.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldCreatedAt)
@@ -1129,16 +1209,6 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				return err
 			}
 			b.withLocation = query
-		case "placeOfPublication":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&SettlementClient{config: b.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
-				return err
-			}
-			b.withPlaceOfPublication = query
 		case "library":
 			var (
 				alias = field.Alias
@@ -1149,6 +1219,46 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				return err
 			}
 			b.withLibrary = query
+		case "country":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			b.withCountry = query
+		case "settlement":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			b.withSettlement = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			b.withDistrict = query
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: b.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			b.withRegion = query
 		case "createdAt":
 			if _, ok := fieldSeen[book.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, book.FieldCreatedAt)
@@ -1603,7 +1713,7 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "arts":
+		case "art":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -1612,7 +1722,7 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedArts(alias, func(wq *ArtQuery) {
+			c.WithNamedArt(alias, func(wq *ArtQuery) {
 				*wq = *query
 			})
 		case "artifacts":
@@ -1823,6 +1933,54 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+				*wq = *query
+			})
 		case "locations":
 			var (
 				alias = field.Alias
@@ -2107,6 +2265,54 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+				*wq = *query
+			})
 		case "locations":
 			var (
 				alias = field.Alias
@@ -2934,7 +3140,7 @@ func (m *MediumQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "arts":
+		case "art":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -2943,7 +3149,7 @@ func (m *MediumQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
 				return err
 			}
-			m.WithNamedArts(alias, func(wq *ArtQuery) {
+			m.WithNamedArt(alias, func(wq *ArtQuery) {
 				*wq = *query
 			})
 		case "artifacts":
@@ -3741,7 +3947,7 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			pe.WithNamedCollections(alias, func(wq *CollectionQuery) {
 				*wq = *query
 			})
-		case "arts":
+		case "art":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -3750,7 +3956,7 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
 				return err
 			}
-			pe.WithNamedArts(alias, func(wq *ArtQuery) {
+			pe.WithNamedArt(alias, func(wq *ArtQuery) {
 				*wq = *query
 			})
 		case "artifacts":
@@ -4197,10 +4403,10 @@ func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, project.FieldExternalLink)
 				fieldSeen[project.FieldExternalLink] = struct{}{}
 			}
-		case "beginData":
-			if _, ok := fieldSeen[project.FieldBeginData]; !ok {
-				selectedFields = append(selectedFields, project.FieldBeginData)
-				fieldSeen[project.FieldBeginData] = struct{}{}
+		case "beginDate":
+			if _, ok := fieldSeen[project.FieldBeginDate]; !ok {
+				selectedFields = append(selectedFields, project.FieldBeginDate)
+				fieldSeen[project.FieldBeginDate] = struct{}{}
 			}
 		case "endDate":
 			if _, ok := fieldSeen[project.FieldEndDate]; !ok {
@@ -4211,6 +4417,16 @@ func (pr *ProjectQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[project.FieldYear]; !ok {
 				selectedFields = append(selectedFields, project.FieldYear)
 				fieldSeen[project.FieldYear] = struct{}{}
+			}
+		case "beginYear":
+			if _, ok := fieldSeen[project.FieldBeginYear]; !ok {
+				selectedFields = append(selectedFields, project.FieldBeginYear)
+				fieldSeen[project.FieldBeginYear] = struct{}{}
+			}
+		case "endYear":
+			if _, ok := fieldSeen[project.FieldEndYear]; !ok {
+				selectedFields = append(selectedFields, project.FieldEndYear)
+				fieldSeen[project.FieldEndYear] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -4646,6 +4862,46 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 				return err
 			}
 			pap.withLicense = query
+		case "country":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			pap.withCountry = query
+		case "settlement":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			pap.withSettlement = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			pap.withDistrict = query
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			pap.withRegion = query
 		case "createdAt":
 			if _, ok := fieldSeen[protectedareapicture.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, protectedareapicture.FieldCreatedAt)
@@ -5242,6 +5498,54 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "books":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&BookClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+				*wq = *query
+			})
 		case "locations":
 			var (
 				alias = field.Alias
@@ -5538,6 +5842,30 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
 		case "books":
 			var (
 				alias = field.Alias
@@ -5548,6 +5876,18 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				return err
 			}
 			s.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
 				*wq = *query
 			})
 		case "locations":

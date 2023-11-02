@@ -672,6 +672,70 @@ func (c *ArtClient) QueryCollection(a *Art) *CollectionQuery {
 	return query
 }
 
+// QueryCountry queries the country edge of a Art.
+func (c *ArtClient) QueryCountry(a *Art) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.CountryTable, art.CountryColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettlement queries the settlement edge of a Art.
+func (c *ArtClient) QuerySettlement(a *Art) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.SettlementTable, art.SettlementColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a Art.
+func (c *ArtClient) QueryDistrict(a *Art) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.DistrictTable, art.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a Art.
+func (c *ArtClient) QueryRegion(a *Art) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, art.RegionTable, art.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ArtClient) Hooks() []Hook {
 	hooks := c.hooks.Art
@@ -1298,6 +1362,70 @@ func (c *ArtifactClient) QueryLicense(a *Artifact) *LicenseQuery {
 	return query
 }
 
+// QueryCountry queries the country edge of a Artifact.
+func (c *ArtifactClient) QueryCountry(a *Artifact) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CountryTable, artifact.CountryColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettlement queries the settlement edge of a Artifact.
+func (c *ArtifactClient) QuerySettlement(a *Artifact) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.SettlementTable, artifact.SettlementColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a Artifact.
+func (c *ArtifactClient) QueryDistrict(a *Artifact) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.DistrictTable, artifact.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a Artifact.
+func (c *ArtifactClient) QueryRegion(a *Artifact) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.RegionTable, artifact.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ArtifactClient) Hooks() []Hook {
 	hooks := c.hooks.Artifact
@@ -1679,22 +1807,6 @@ func (c *BookClient) QueryLocation(b *Book) *LocationQuery {
 	return query
 }
 
-// QueryPlaceOfPublication queries the place_of_publication edge of a Book.
-func (c *BookClient) QueryPlaceOfPublication(b *Book) *SettlementQuery {
-	query := (&SettlementClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := b.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(book.Table, book.FieldID, id),
-			sqlgraph.To(settlement.Table, settlement.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, book.PlaceOfPublicationTable, book.PlaceOfPublicationColumn),
-		)
-		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryLibrary queries the library edge of a Book.
 func (c *BookClient) QueryLibrary(b *Book) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -1704,6 +1816,70 @@ func (c *BookClient) QueryLibrary(b *Book) *OrganizationQuery {
 			sqlgraph.From(book.Table, book.FieldID, id),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.LibraryTable, book.LibraryColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCountry queries the country edge of a Book.
+func (c *BookClient) QueryCountry(b *Book) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.CountryTable, book.CountryColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettlement queries the settlement edge of a Book.
+func (c *BookClient) QuerySettlement(b *Book) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.SettlementTable, book.SettlementColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a Book.
+func (c *BookClient) QueryDistrict(b *Book) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.DistrictTable, book.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a Book.
+func (c *BookClient) QueryRegion(b *Book) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, book.RegionTable, book.RegionColumn),
 		)
 		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
@@ -2145,15 +2321,15 @@ func (c *CollectionClient) GetX(ctx context.Context, id int) *Collection {
 	return obj
 }
 
-// QueryArts queries the arts edge of a Collection.
-func (c *CollectionClient) QueryArts(co *Collection) *ArtQuery {
+// QueryArt queries the art edge of a Collection.
+func (c *CollectionClient) QueryArt(co *Collection) *ArtQuery {
 	query := (&ArtClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(collection.Table, collection.FieldID, id),
 			sqlgraph.To(art.Table, art.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtsTable, collection.ArtsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtTable, collection.ArtColumn),
 		)
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -2373,6 +2549,70 @@ func (c *CountryClient) GetX(ctx context.Context, id int) *Country {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryArt queries the art edge of a Country.
+func (c *CountryClient) QueryArt(co *Country) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.ArtTable, country.ArtColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryArtifacts queries the artifacts edge of a Country.
+func (c *CountryClient) QueryArtifacts(co *Country) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.ArtifactsTable, country.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBooks queries the books edge of a Country.
+func (c *CountryClient) QueryBooks(co *Country) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.BooksTable, country.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Country.
+func (c *CountryClient) QueryProtectedAreaPictures(co *Country) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.ProtectedAreaPicturesTable, country.ProtectedAreaPicturesColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryLocations queries the locations edge of a Country.
@@ -2673,6 +2913,70 @@ func (c *DistrictClient) GetX(ctx context.Context, id int) *District {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryArt queries the art edge of a District.
+func (c *DistrictClient) QueryArt(d *District) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.ArtTable, district.ArtColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryArtifacts queries the artifacts edge of a District.
+func (c *DistrictClient) QueryArtifacts(d *District) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.ArtifactsTable, district.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBooks queries the books edge of a District.
+func (c *DistrictClient) QueryBooks(d *District) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.BooksTable, district.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a District.
+func (c *DistrictClient) QueryProtectedAreaPictures(d *District) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.ProtectedAreaPicturesTable, district.ProtectedAreaPicturesColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryLocations queries the locations edge of a District.
@@ -3670,15 +3974,15 @@ func (c *MediumClient) GetX(ctx context.Context, id int) *Medium {
 	return obj
 }
 
-// QueryArts queries the arts edge of a Medium.
-func (c *MediumClient) QueryArts(m *Medium) *ArtQuery {
+// QueryArt queries the art edge of a Medium.
+func (c *MediumClient) QueryArt(m *Medium) *ArtQuery {
 	query := (&ArtClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(medium.Table, medium.FieldID, id),
 			sqlgraph.To(art.Table, art.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtsTable, medium.ArtsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtTable, medium.ArtPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
 		return fromV, nil
@@ -4484,15 +4788,15 @@ func (c *PersonClient) QueryCollections(pe *Person) *CollectionQuery {
 	return query
 }
 
-// QueryArts queries the arts edge of a Person.
-func (c *PersonClient) QueryArts(pe *Person) *ArtQuery {
+// QueryArt queries the art edge of a Person.
+func (c *PersonClient) QueryArt(pe *Person) *ArtQuery {
 	query := (&ArtClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pe.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(person.Table, person.FieldID, id),
 			sqlgraph.To(art.Table, art.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, person.ArtsTable, person.ArtsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.ArtTable, person.ArtColumn),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -5410,6 +5714,70 @@ func (c *ProtectedAreaPictureClient) QueryLicense(pap *ProtectedAreaPicture) *Li
 	return query
 }
 
+// QueryCountry queries the country edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryCountry(pap *ProtectedAreaPicture) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.CountryTable, protectedareapicture.CountryColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettlement queries the settlement edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QuerySettlement(pap *ProtectedAreaPicture) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.SettlementTable, protectedareapicture.SettlementColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryDistrict(pap *ProtectedAreaPicture) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.DistrictTable, protectedareapicture.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryRegion(pap *ProtectedAreaPicture) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.RegionTable, protectedareapicture.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProtectedAreaPictureClient) Hooks() []Hook {
 	hooks := c.hooks.ProtectedAreaPicture
@@ -6026,6 +6394,70 @@ func (c *RegionClient) GetX(ctx context.Context, id int) *Region {
 	return obj
 }
 
+// QueryArt queries the art edge of a Region.
+func (c *RegionClient) QueryArt(r *Region) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.ArtTable, region.ArtColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryArtifacts queries the artifacts edge of a Region.
+func (c *RegionClient) QueryArtifacts(r *Region) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.ArtifactsTable, region.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBooks queries the books edge of a Region.
+func (c *RegionClient) QueryBooks(r *Region) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.BooksTable, region.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Region.
+func (c *RegionClient) QueryProtectedAreaPictures(r *Region) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.ProtectedAreaPicturesTable, region.ProtectedAreaPicturesColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryLocations queries the locations edge of a Region.
 func (c *RegionClient) QueryLocations(r *Region) *LocationQuery {
 	query := (&LocationClient{config: c.config}).Query()
@@ -6342,6 +6774,38 @@ func (c *SettlementClient) GetX(ctx context.Context, id int) *Settlement {
 	return obj
 }
 
+// QueryArt queries the art edge of a Settlement.
+func (c *SettlementClient) QueryArt(s *Settlement) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.ArtTable, settlement.ArtColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryArtifacts queries the artifacts edge of a Settlement.
+func (c *SettlementClient) QueryArtifacts(s *Settlement) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.ArtifactsTable, settlement.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBooks queries the books edge of a Settlement.
 func (c *SettlementClient) QueryBooks(s *Settlement) *BookQuery {
 	query := (&BookClient{config: c.config}).Query()
@@ -6351,6 +6815,22 @@ func (c *SettlementClient) QueryBooks(s *Settlement) *BookQuery {
 			sqlgraph.From(settlement.Table, settlement.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, settlement.BooksTable, settlement.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Settlement.
+func (c *SettlementClient) QueryProtectedAreaPictures(s *Settlement) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.ProtectedAreaPicturesTable, settlement.ProtectedAreaPicturesColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

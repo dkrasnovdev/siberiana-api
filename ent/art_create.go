@@ -14,8 +14,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/artstyle"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // ArtCreate is the builder for creating a Art entity.
@@ -274,6 +278,82 @@ func (ac *ArtCreate) SetCollection(c *Collection) *ArtCreate {
 	return ac.SetCollectionID(c.ID)
 }
 
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (ac *ArtCreate) SetCountryID(id int) *ArtCreate {
+	ac.mutation.SetCountryID(id)
+	return ac
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (ac *ArtCreate) SetNillableCountryID(id *int) *ArtCreate {
+	if id != nil {
+		ac = ac.SetCountryID(*id)
+	}
+	return ac
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (ac *ArtCreate) SetCountry(c *Country) *ArtCreate {
+	return ac.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (ac *ArtCreate) SetSettlementID(id int) *ArtCreate {
+	ac.mutation.SetSettlementID(id)
+	return ac
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (ac *ArtCreate) SetNillableSettlementID(id *int) *ArtCreate {
+	if id != nil {
+		ac = ac.SetSettlementID(*id)
+	}
+	return ac
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (ac *ArtCreate) SetSettlement(s *Settlement) *ArtCreate {
+	return ac.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (ac *ArtCreate) SetDistrictID(id int) *ArtCreate {
+	ac.mutation.SetDistrictID(id)
+	return ac
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (ac *ArtCreate) SetNillableDistrictID(id *int) *ArtCreate {
+	if id != nil {
+		ac = ac.SetDistrictID(*id)
+	}
+	return ac
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (ac *ArtCreate) SetDistrict(d *District) *ArtCreate {
+	return ac.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (ac *ArtCreate) SetRegionID(id int) *ArtCreate {
+	ac.mutation.SetRegionID(id)
+	return ac
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (ac *ArtCreate) SetNillableRegionID(id *int) *ArtCreate {
+	if id != nil {
+		ac = ac.SetRegionID(*id)
+	}
+	return ac
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (ac *ArtCreate) SetRegion(r *Region) *ArtCreate {
+	return ac.SetRegionID(r.ID)
+}
+
 // Mutation returns the ArtMutation object of the builder.
 func (ac *ArtCreate) Mutation() *ArtMutation {
 	return ac.mutation
@@ -431,7 +511,7 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.person_arts = &nodes[0]
+		_node.person_art = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.ArtGenreIDs(); len(nodes) > 0 {
@@ -496,7 +576,75 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.collection_arts = &nodes[0]
+		_node.collection_art = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.CountryTable,
+			Columns: []string{art.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.country_art = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.SettlementTable,
+			Columns: []string{art.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.settlement_art = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.DistrictTable,
+			Columns: []string{art.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.district_art = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   art.RegionTable,
+			Columns: []string{art.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.region_art = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -12,22 +12,34 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // DistrictQuery is the builder for querying District entities.
 type DistrictQuery struct {
 	config
-	ctx                *QueryContext
-	order              []district.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.District
-	withLocations      *LocationQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*District) error
-	withNamedLocations map[string]*LocationQuery
+	ctx                            *QueryContext
+	order                          []district.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.District
+	withArt                        *ArtQuery
+	withArtifacts                  *ArtifactQuery
+	withBooks                      *BookQuery
+	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	withLocations                  *LocationQuery
+	modifiers                      []func(*sql.Selector)
+	loadTotal                      []func(context.Context, []*District) error
+	withNamedArt                   map[string]*ArtQuery
+	withNamedArtifacts             map[string]*ArtifactQuery
+	withNamedBooks                 map[string]*BookQuery
+	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
+	withNamedLocations             map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,6 +74,94 @@ func (dq *DistrictQuery) Unique(unique bool) *DistrictQuery {
 func (dq *DistrictQuery) Order(o ...district.OrderOption) *DistrictQuery {
 	dq.order = append(dq.order, o...)
 	return dq
+}
+
+// QueryArt chains the current query on the "art" edge.
+func (dq *DistrictQuery) QueryArt() *ArtQuery {
+	query := (&ArtClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.ArtTable, district.ArtColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (dq *DistrictQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.ArtifactsTable, district.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (dq *DistrictQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.BooksTable, district.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (dq *DistrictQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.ProtectedAreaPicturesTable, district.ProtectedAreaPicturesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryLocations chains the current query on the "locations" edge.
@@ -273,16 +373,64 @@ func (dq *DistrictQuery) Clone() *DistrictQuery {
 		return nil
 	}
 	return &DistrictQuery{
-		config:        dq.config,
-		ctx:           dq.ctx.Clone(),
-		order:         append([]district.OrderOption{}, dq.order...),
-		inters:        append([]Interceptor{}, dq.inters...),
-		predicates:    append([]predicate.District{}, dq.predicates...),
-		withLocations: dq.withLocations.Clone(),
+		config:                    dq.config,
+		ctx:                       dq.ctx.Clone(),
+		order:                     append([]district.OrderOption{}, dq.order...),
+		inters:                    append([]Interceptor{}, dq.inters...),
+		predicates:                append([]predicate.District{}, dq.predicates...),
+		withArt:                   dq.withArt.Clone(),
+		withArtifacts:             dq.withArtifacts.Clone(),
+		withBooks:                 dq.withBooks.Clone(),
+		withProtectedAreaPictures: dq.withProtectedAreaPictures.Clone(),
+		withLocations:             dq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
 		path: dq.path,
 	}
+}
+
+// WithArt tells the query-builder to eager-load the nodes that are connected to
+// the "art" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithArt(opts ...func(*ArtQuery)) *DistrictQuery {
+	query := (&ArtClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withArt = query
+	return dq
+}
+
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *DistrictQuery {
+	query := (&ArtifactClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withArtifacts = query
+	return dq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithBooks(opts ...func(*BookQuery)) *DistrictQuery {
+	query := (&BookClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withBooks = query
+	return dq
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *DistrictQuery {
+	query := (&ProtectedAreaPictureClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withProtectedAreaPictures = query
+	return dq
 }
 
 // WithLocations tells the query-builder to eager-load the nodes that are connected to
@@ -380,7 +528,11 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 	var (
 		nodes       = []*District{}
 		_spec       = dq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [5]bool{
+			dq.withArt != nil,
+			dq.withArtifacts != nil,
+			dq.withBooks != nil,
+			dq.withProtectedAreaPictures != nil,
 			dq.withLocations != nil,
 		}
 	)
@@ -405,10 +557,68 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := dq.withArt; query != nil {
+		if err := dq.loadArt(ctx, query, nodes,
+			func(n *District) { n.Edges.Art = []*Art{} },
+			func(n *District, e *Art) { n.Edges.Art = append(n.Edges.Art, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := dq.withArtifacts; query != nil {
+		if err := dq.loadArtifacts(ctx, query, nodes,
+			func(n *District) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *District, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := dq.withBooks; query != nil {
+		if err := dq.loadBooks(ctx, query, nodes,
+			func(n *District) { n.Edges.Books = []*Book{} },
+			func(n *District, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := dq.withProtectedAreaPictures; query != nil {
+		if err := dq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *District) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *District, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := dq.withLocations; query != nil {
 		if err := dq.loadLocations(ctx, query, nodes,
 			func(n *District) { n.Edges.Locations = []*Location{} },
 			func(n *District, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedArt {
+		if err := dq.loadArt(ctx, query, nodes,
+			func(n *District) { n.appendNamedArt(name) },
+			func(n *District, e *Art) { n.appendNamedArt(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedArtifacts {
+		if err := dq.loadArtifacts(ctx, query, nodes,
+			func(n *District) { n.appendNamedArtifacts(name) },
+			func(n *District, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedBooks {
+		if err := dq.loadBooks(ctx, query, nodes,
+			func(n *District) { n.appendNamedBooks(name) },
+			func(n *District, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedProtectedAreaPictures {
+		if err := dq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *District) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *District, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,6 +637,130 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 	return nodes, nil
 }
 
+func (dq *DistrictQuery) loadArt(ctx context.Context, query *ArtQuery, nodes []*District, init func(*District), assign func(*District, *Art)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*District)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Art(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(district.ArtColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.district_art
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "district_art" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "district_art" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (dq *DistrictQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*District, init func(*District), assign func(*District, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*District)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(district.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.district_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "district_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "district_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (dq *DistrictQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*District, init func(*District), assign func(*District, *Book)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*District)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Book(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(district.BooksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.district_books
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "district_books" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "district_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (dq *DistrictQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*District, init func(*District), assign func(*District, *ProtectedAreaPicture)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*District)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(district.ProtectedAreaPicturesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.district_protected_area_pictures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "district_protected_area_pictures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "district_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (dq *DistrictQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*District, init func(*District), assign func(*District, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*District)
@@ -541,6 +875,62 @@ func (dq *DistrictQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArt tells the query-builder to eager-load the nodes that are connected to the "art"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedArt(name string, opts ...func(*ArtQuery)) *DistrictQuery {
+	query := (&ArtClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedArt == nil {
+		dq.withNamedArt = make(map[string]*ArtQuery)
+	}
+	dq.withNamedArt[name] = query
+	return dq
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *DistrictQuery {
+	query := (&ArtifactClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedArtifacts == nil {
+		dq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	dq.withNamedArtifacts[name] = query
+	return dq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *DistrictQuery {
+	query := (&BookClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedBooks == nil {
+		dq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	dq.withNamedBooks[name] = query
+	return dq
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *DistrictQuery {
+	query := (&ProtectedAreaPictureClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedProtectedAreaPictures == nil {
+		dq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	dq.withNamedProtectedAreaPictures[name] = query
+	return dq
 }
 
 // WithNamedLocations tells the query-builder to eager-load the nodes that are connected to the "locations"

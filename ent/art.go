@@ -12,7 +12,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // Art is the model entity for the Art schema.
@@ -48,10 +52,14 @@ type Art struct {
 	Dimensions string `json:"dimensions,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArtQuery when eager-loading is set.
-	Edges           ArtEdges `json:"edges"`
-	collection_arts *int
-	person_arts     *int
-	selectValues    sql.SelectValues
+	Edges          ArtEdges `json:"edges"`
+	collection_art *int
+	country_art    *int
+	district_art   *int
+	person_art     *int
+	region_art     *int
+	settlement_art *int
+	selectValues   sql.SelectValues
 }
 
 // ArtEdges holds the relations/edges for other nodes in the graph.
@@ -66,11 +74,19 @@ type ArtEdges struct {
 	Mediums []*Medium `json:"mediums,omitempty"`
 	// Collection holds the value of the collection edge.
 	Collection *Collection `json:"collection,omitempty"`
+	// Country holds the value of the country edge.
+	Country *Country `json:"country,omitempty"`
+	// Settlement holds the value of the settlement edge.
+	Settlement *Settlement `json:"settlement,omitempty"`
+	// District holds the value of the district edge.
+	District *District `json:"district,omitempty"`
+	// Region holds the value of the region edge.
+	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [9]map[string]int
 
 	namedArtGenre map[string][]*ArtGenre
 	namedArtStyle map[string][]*ArtStyle
@@ -130,6 +146,58 @@ func (e ArtEdges) CollectionOrErr() (*Collection, error) {
 	return nil, &NotLoadedError{edge: "collection"}
 }
 
+// CountryOrErr returns the Country value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtEdges) CountryOrErr() (*Country, error) {
+	if e.loadedTypes[5] {
+		if e.Country == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: country.Label}
+		}
+		return e.Country, nil
+	}
+	return nil, &NotLoadedError{edge: "country"}
+}
+
+// SettlementOrErr returns the Settlement value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtEdges) SettlementOrErr() (*Settlement, error) {
+	if e.loadedTypes[6] {
+		if e.Settlement == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: settlement.Label}
+		}
+		return e.Settlement, nil
+	}
+	return nil, &NotLoadedError{edge: "settlement"}
+}
+
+// DistrictOrErr returns the District value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtEdges) DistrictOrErr() (*District, error) {
+	if e.loadedTypes[7] {
+		if e.District == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: district.Label}
+		}
+		return e.District, nil
+	}
+	return nil, &NotLoadedError{edge: "district"}
+}
+
+// RegionOrErr returns the Region value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtEdges) RegionOrErr() (*Region, error) {
+	if e.loadedTypes[8] {
+		if e.Region == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: region.Label}
+		}
+		return e.Region, nil
+	}
+	return nil, &NotLoadedError{edge: "region"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Art) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -143,9 +211,17 @@ func (*Art) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case art.FieldCreatedAt, art.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
-		case art.ForeignKeys[0]: // collection_arts
+		case art.ForeignKeys[0]: // collection_art
 			values[i] = new(sql.NullInt64)
-		case art.ForeignKeys[1]: // person_arts
+		case art.ForeignKeys[1]: // country_art
+			values[i] = new(sql.NullInt64)
+		case art.ForeignKeys[2]: // district_art
+			values[i] = new(sql.NullInt64)
+		case art.ForeignKeys[3]: // person_art
+			values[i] = new(sql.NullInt64)
+		case art.ForeignKeys[4]: // region_art
+			values[i] = new(sql.NullInt64)
+		case art.ForeignKeys[5]: // settlement_art
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -250,17 +326,45 @@ func (a *Art) assignValues(columns []string, values []any) error {
 			}
 		case art.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field collection_arts", value)
+				return fmt.Errorf("unexpected type %T for edge-field collection_art", value)
 			} else if value.Valid {
-				a.collection_arts = new(int)
-				*a.collection_arts = int(value.Int64)
+				a.collection_art = new(int)
+				*a.collection_art = int(value.Int64)
 			}
 		case art.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field person_arts", value)
+				return fmt.Errorf("unexpected type %T for edge-field country_art", value)
 			} else if value.Valid {
-				a.person_arts = new(int)
-				*a.person_arts = int(value.Int64)
+				a.country_art = new(int)
+				*a.country_art = int(value.Int64)
+			}
+		case art.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field district_art", value)
+			} else if value.Valid {
+				a.district_art = new(int)
+				*a.district_art = int(value.Int64)
+			}
+		case art.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field person_art", value)
+			} else if value.Valid {
+				a.person_art = new(int)
+				*a.person_art = int(value.Int64)
+			}
+		case art.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field region_art", value)
+			} else if value.Valid {
+				a.region_art = new(int)
+				*a.region_art = int(value.Int64)
+			}
+		case art.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field settlement_art", value)
+			} else if value.Valid {
+				a.settlement_art = new(int)
+				*a.settlement_art = int(value.Int64)
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -298,6 +402,26 @@ func (a *Art) QueryMediums() *MediumQuery {
 // QueryCollection queries the "collection" edge of the Art entity.
 func (a *Art) QueryCollection() *CollectionQuery {
 	return NewArtClient(a.config).QueryCollection(a)
+}
+
+// QueryCountry queries the "country" edge of the Art entity.
+func (a *Art) QueryCountry() *CountryQuery {
+	return NewArtClient(a.config).QueryCountry(a)
+}
+
+// QuerySettlement queries the "settlement" edge of the Art entity.
+func (a *Art) QuerySettlement() *SettlementQuery {
+	return NewArtClient(a.config).QuerySettlement(a)
+}
+
+// QueryDistrict queries the "district" edge of the Art entity.
+func (a *Art) QueryDistrict() *DistrictQuery {
+	return NewArtClient(a.config).QueryDistrict(a)
+}
+
+// QueryRegion queries the "region" edge of the Art entity.
+func (a *Art) QueryRegion() *RegionQuery {
+	return NewArtClient(a.config).QueryRegion(a)
 }
 
 // Update returns a builder for updating this Art.

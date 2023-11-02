@@ -41,21 +41,69 @@ type District struct {
 
 // DistrictEdges holds the relations/edges for other nodes in the graph.
 type DistrictEdges struct {
+	// Art holds the value of the art edge.
+	Art []*Art `json:"art,omitempty"`
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [5]map[string]int
 
-	namedLocations map[string][]*Location
+	namedArt                   map[string][]*Art
+	namedArtifacts             map[string][]*Artifact
+	namedBooks                 map[string][]*Book
+	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+	namedLocations             map[string][]*Location
+}
+
+// ArtOrErr returns the Art value or an error if the edge
+// was not loaded in eager-loading.
+func (e DistrictEdges) ArtOrErr() ([]*Art, error) {
+	if e.loadedTypes[0] {
+		return e.Art, nil
+	}
+	return nil, &NotLoadedError{edge: "art"}
+}
+
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e DistrictEdges) ArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[1] {
+		return e.Artifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e DistrictEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[2] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
+}
+
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e DistrictEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[3] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
 }
 
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e DistrictEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[4] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
@@ -154,6 +202,26 @@ func (d *District) Value(name string) (ent.Value, error) {
 	return d.selectValues.Get(name)
 }
 
+// QueryArt queries the "art" edge of the District entity.
+func (d *District) QueryArt() *ArtQuery {
+	return NewDistrictClient(d.config).QueryArt(d)
+}
+
+// QueryArtifacts queries the "artifacts" edge of the District entity.
+func (d *District) QueryArtifacts() *ArtifactQuery {
+	return NewDistrictClient(d.config).QueryArtifacts(d)
+}
+
+// QueryBooks queries the "books" edge of the District entity.
+func (d *District) QueryBooks() *BookQuery {
+	return NewDistrictClient(d.config).QueryBooks(d)
+}
+
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the District entity.
+func (d *District) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewDistrictClient(d.config).QueryProtectedAreaPictures(d)
+}
+
 // QueryLocations queries the "locations" edge of the District entity.
 func (d *District) QueryLocations() *LocationQuery {
 	return NewDistrictClient(d.config).QueryLocations(d)
@@ -207,6 +275,102 @@ func (d *District) String() string {
 	builder.WriteString(d.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArt returns the Art named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (d *District) NamedArt(name string) ([]*Art, error) {
+	if d.Edges.namedArt == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := d.Edges.namedArt[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (d *District) appendNamedArt(name string, edges ...*Art) {
+	if d.Edges.namedArt == nil {
+		d.Edges.namedArt = make(map[string][]*Art)
+	}
+	if len(edges) == 0 {
+		d.Edges.namedArt[name] = []*Art{}
+	} else {
+		d.Edges.namedArt[name] = append(d.Edges.namedArt[name], edges...)
+	}
+}
+
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (d *District) NamedArtifacts(name string) ([]*Artifact, error) {
+	if d.Edges.namedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := d.Edges.namedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (d *District) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if d.Edges.namedArtifacts == nil {
+		d.Edges.namedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		d.Edges.namedArtifacts[name] = []*Artifact{}
+	} else {
+		d.Edges.namedArtifacts[name] = append(d.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (d *District) NamedBooks(name string) ([]*Book, error) {
+	if d.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := d.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (d *District) appendNamedBooks(name string, edges ...*Book) {
+	if d.Edges.namedBooks == nil {
+		d.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		d.Edges.namedBooks[name] = []*Book{}
+	} else {
+		d.Edges.namedBooks[name] = append(d.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (d *District) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if d.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := d.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (d *District) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if d.Edges.namedProtectedAreaPictures == nil {
+		d.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		d.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		d.Edges.namedProtectedAreaPictures[name] = append(d.Edges.namedProtectedAreaPictures[name], edges...)
+	}
 }
 
 // NamedLocations returns the Locations named value or an error if the edge was not

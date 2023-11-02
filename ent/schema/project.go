@@ -53,7 +53,7 @@ func (Project) Annotations() []schema.Annotation {
 // Fields of the Project.
 func (Project) Fields() []ent.Field {
 	return []ent.Field{
-		field.Time("begin_data").
+		field.Time("begin_date").
 			Optional().
 			SchemaType(map[string]string{
 				dialect.Postgres: "date",
@@ -64,6 +64,8 @@ func (Project) Fields() []ent.Field {
 				dialect.Postgres: "date",
 			}),
 		field.Int("year").Max(2024).Optional(),
+		field.Int("begin_year").Max(2024).Optional(),
+		field.Int("end_year").Max(2024).Optional(),
 	}
 }
 

@@ -178,14 +178,14 @@ func (cc *CollectionCreate) SetNillableType(c *collection.Type) *CollectionCreat
 	return cc
 }
 
-// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (cc *CollectionCreate) AddArtIDs(ids ...int) *CollectionCreate {
 	cc.mutation.AddArtIDs(ids...)
 	return cc
 }
 
-// AddArts adds the "arts" edges to the Art entity.
-func (cc *CollectionCreate) AddArts(a ...*Art) *CollectionCreate {
+// AddArt adds the "art" edges to the Art entity.
+func (cc *CollectionCreate) AddArt(a ...*Art) *CollectionCreate {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -411,12 +411,12 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 		_spec.SetField(collection.FieldType, field.TypeEnum, value)
 		_node.Type = value
 	}
-	if nodes := cc.mutation.ArtsIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   collection.ArtsTable,
-			Columns: []string{collection.ArtsColumn},
+			Table:   collection.ArtTable,
+			Columns: []string{collection.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),

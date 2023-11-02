@@ -727,6 +727,14 @@ func init() {
 	projectDescYear := projectFields[2].Descriptor()
 	// project.YearValidator is a validator for the "year" field. It is called by the builders before save.
 	project.YearValidator = projectDescYear.Validators[0].(func(int) error)
+	// projectDescBeginYear is the schema descriptor for begin_year field.
+	projectDescBeginYear := projectFields[3].Descriptor()
+	// project.BeginYearValidator is a validator for the "begin_year" field. It is called by the builders before save.
+	project.BeginYearValidator = projectDescBeginYear.Validators[0].(func(int) error)
+	// projectDescEndYear is the schema descriptor for end_year field.
+	projectDescEndYear := projectFields[4].Descriptor()
+	// project.EndYearValidator is a validator for the "end_year" field. It is called by the builders before save.
+	project.EndYearValidator = projectDescEndYear.Validators[0].(func(int) error)
 	protectedareaMixin := schema.ProtectedArea{}.Mixin()
 	protectedarea.Policy = privacy.NewPolicies(schema.ProtectedArea{})
 	protectedarea.Hooks[0] = func(next ent.Mutator) ent.Mutator {

@@ -29,7 +29,7 @@ type CollectionQuery struct {
 	order                          []collection.OrderOption
 	inters                         []Interceptor
 	predicates                     []predicate.Collection
-	withArts                       *ArtQuery
+	withArt                        *ArtQuery
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
@@ -38,7 +38,7 @@ type CollectionQuery struct {
 	withFKs                        bool
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*Collection) error
-	withNamedArts                  map[string]*ArtQuery
+	withNamedArt                   map[string]*ArtQuery
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
@@ -79,8 +79,8 @@ func (cq *CollectionQuery) Order(o ...collection.OrderOption) *CollectionQuery {
 	return cq
 }
 
-// QueryArts chains the current query on the "arts" edge.
-func (cq *CollectionQuery) QueryArts() *ArtQuery {
+// QueryArt chains the current query on the "art" edge.
+func (cq *CollectionQuery) QueryArt() *ArtQuery {
 	query := (&ArtClient{config: cq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := cq.prepareQuery(ctx); err != nil {
@@ -93,7 +93,7 @@ func (cq *CollectionQuery) QueryArts() *ArtQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(collection.Table, collection.FieldID, selector),
 			sqlgraph.To(art.Table, art.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtsTable, collection.ArtsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtTable, collection.ArtColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -403,7 +403,7 @@ func (cq *CollectionQuery) Clone() *CollectionQuery {
 		order:                     append([]collection.OrderOption{}, cq.order...),
 		inters:                    append([]Interceptor{}, cq.inters...),
 		predicates:                append([]predicate.Collection{}, cq.predicates...),
-		withArts:                  cq.withArts.Clone(),
+		withArt:                   cq.withArt.Clone(),
 		withArtifacts:             cq.withArtifacts.Clone(),
 		withBooks:                 cq.withBooks.Clone(),
 		withProtectedAreaPictures: cq.withProtectedAreaPictures.Clone(),
@@ -415,14 +415,14 @@ func (cq *CollectionQuery) Clone() *CollectionQuery {
 	}
 }
 
-// WithArts tells the query-builder to eager-load the nodes that are connected to
-// the "arts" edge. The optional arguments are used to configure the query builder of the edge.
-func (cq *CollectionQuery) WithArts(opts ...func(*ArtQuery)) *CollectionQuery {
+// WithArt tells the query-builder to eager-load the nodes that are connected to
+// the "art" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithArt(opts ...func(*ArtQuery)) *CollectionQuery {
 	query := (&ArtClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	cq.withArts = query
+	cq.withArt = query
 	return cq
 }
 
@@ -567,7 +567,7 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
 		loadedTypes = [6]bool{
-			cq.withArts != nil,
+			cq.withArt != nil,
 			cq.withArtifacts != nil,
 			cq.withBooks != nil,
 			cq.withProtectedAreaPictures != nil,
@@ -602,10 +602,10 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := cq.withArts; query != nil {
-		if err := cq.loadArts(ctx, query, nodes,
-			func(n *Collection) { n.Edges.Arts = []*Art{} },
-			func(n *Collection, e *Art) { n.Edges.Arts = append(n.Edges.Arts, e) }); err != nil {
+	if query := cq.withArt; query != nil {
+		if err := cq.loadArt(ctx, query, nodes,
+			func(n *Collection) { n.Edges.Art = []*Art{} },
+			func(n *Collection, e *Art) { n.Edges.Art = append(n.Edges.Art, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -645,10 +645,10 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 			return nil, err
 		}
 	}
-	for name, query := range cq.withNamedArts {
-		if err := cq.loadArts(ctx, query, nodes,
-			func(n *Collection) { n.appendNamedArts(name) },
-			func(n *Collection, e *Art) { n.appendNamedArts(name, e) }); err != nil {
+	for name, query := range cq.withNamedArt {
+		if err := cq.loadArt(ctx, query, nodes,
+			func(n *Collection) { n.appendNamedArt(name) },
+			func(n *Collection, e *Art) { n.appendNamedArt(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -688,7 +688,7 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 	return nodes, nil
 }
 
-func (cq *CollectionQuery) loadArts(ctx context.Context, query *ArtQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Art)) error {
+func (cq *CollectionQuery) loadArt(ctx context.Context, query *ArtQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Art)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Collection)
 	for i := range nodes {
@@ -700,20 +700,20 @@ func (cq *CollectionQuery) loadArts(ctx context.Context, query *ArtQuery, nodes 
 	}
 	query.withFKs = true
 	query.Where(predicate.Art(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(collection.ArtsColumn), fks...))
+		s.Where(sql.InValues(s.C(collection.ArtColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.collection_arts
+		fk := n.collection_art
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "collection_arts" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "collection_art" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "collection_arts" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "collection_art" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -990,17 +990,17 @@ func (cq *CollectionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// WithNamedArts tells the query-builder to eager-load the nodes that are connected to the "arts"
+// WithNamedArt tells the query-builder to eager-load the nodes that are connected to the "art"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (cq *CollectionQuery) WithNamedArts(name string, opts ...func(*ArtQuery)) *CollectionQuery {
+func (cq *CollectionQuery) WithNamedArt(name string, opts ...func(*ArtQuery)) *CollectionQuery {
 	query := (&ArtClient{config: cq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if cq.withNamedArts == nil {
-		cq.withNamedArts = make(map[string]*ArtQuery)
+	if cq.withNamedArt == nil {
+		cq.withNamedArt = make(map[string]*ArtQuery)
 	}
-	cq.withNamedArts[name] = query
+	cq.withNamedArt[name] = query
 	return cq
 }
 

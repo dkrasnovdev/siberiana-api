@@ -10,8 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // CountryCreate is the builder for creating a Country entity.
@@ -131,6 +135,66 @@ func (cc *CountryCreate) SetNillableExternalLink(s *string) *CountryCreate {
 		cc.SetExternalLink(*s)
 	}
 	return cc
+}
+
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (cc *CountryCreate) AddArtIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddArtIDs(ids...)
+	return cc
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (cc *CountryCreate) AddArt(a ...*Art) *CountryCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cc.AddArtIDs(ids...)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cc *CountryCreate) AddArtifactIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddArtifactIDs(ids...)
+	return cc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cc *CountryCreate) AddArtifacts(a ...*Artifact) *CountryCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cc.AddArtifactIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (cc *CountryCreate) AddBookIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddBookIDs(ids...)
+	return cc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (cc *CountryCreate) AddBooks(b ...*Book) *CountryCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cc.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (cc *CountryCreate) AddProtectedAreaPictureIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddProtectedAreaPictureIDs(ids...)
+	return cc
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cc *CountryCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *CountryCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cc.AddProtectedAreaPictureIDs(ids...)
 }
 
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
@@ -267,6 +331,70 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.ExternalLink(); ok {
 		_spec.SetField(country.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
+	}
+	if nodes := cc.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtTable,
+			Columns: []string{country.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtifactsTable,
+			Columns: []string{country.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.BooksTable,
+			Columns: []string{country.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ProtectedAreaPicturesTable,
+			Columns: []string{country.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

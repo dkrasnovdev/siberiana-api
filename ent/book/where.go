@@ -971,29 +971,6 @@ func HasLocationWith(preds ...predicate.Location) predicate.Book {
 	})
 }
 
-// HasPlaceOfPublication applies the HasEdge predicate on the "place_of_publication" edge.
-func HasPlaceOfPublication() predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, PlaceOfPublicationTable, PlaceOfPublicationColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasPlaceOfPublicationWith applies the HasEdge predicate on the "place_of_publication" edge with a given conditions (other predicates).
-func HasPlaceOfPublicationWith(preds ...predicate.Settlement) predicate.Book {
-	return predicate.Book(func(s *sql.Selector) {
-		step := newPlaceOfPublicationStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasLibrary applies the HasEdge predicate on the "library" edge.
 func HasLibrary() predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
@@ -1009,6 +986,98 @@ func HasLibrary() predicate.Book {
 func HasLibraryWith(preds ...predicate.Organization) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		step := newLibraryStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCountry applies the HasEdge predicate on the "country" edge.
+func HasCountry() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CountryTable, CountryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCountryWith applies the HasEdge predicate on the "country" edge with a given conditions (other predicates).
+func HasCountryWith(preds ...predicate.Country) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newCountryStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSettlement applies the HasEdge predicate on the "settlement" edge.
+func HasSettlement() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, SettlementTable, SettlementColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSettlementWith applies the HasEdge predicate on the "settlement" edge with a given conditions (other predicates).
+func HasSettlementWith(preds ...predicate.Settlement) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newSettlementStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDistrict applies the HasEdge predicate on the "district" edge.
+func HasDistrict() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, DistrictTable, DistrictColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDistrictWith applies the HasEdge predicate on the "district" edge with a given conditions (other predicates).
+func HasDistrictWith(preds ...predicate.District) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newDistrictStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRegion applies the HasEdge predicate on the "region" edge.
+func HasRegion() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRegionWith applies the HasEdge predicate on the "region" edge with a given conditions (other predicates).
+func HasRegionWith(preds ...predicate.Region) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newRegionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

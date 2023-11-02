@@ -25,11 +25,11 @@ type MediumQuery struct {
 	order              []medium.OrderOption
 	inters             []Interceptor
 	predicates         []predicate.Medium
-	withArts           *ArtQuery
+	withArt            *ArtQuery
 	withArtifacts      *ArtifactQuery
 	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Medium) error
-	withNamedArts      map[string]*ArtQuery
+	withNamedArt       map[string]*ArtQuery
 	withNamedArtifacts map[string]*ArtifactQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -67,8 +67,8 @@ func (mq *MediumQuery) Order(o ...medium.OrderOption) *MediumQuery {
 	return mq
 }
 
-// QueryArts chains the current query on the "arts" edge.
-func (mq *MediumQuery) QueryArts() *ArtQuery {
+// QueryArt chains the current query on the "art" edge.
+func (mq *MediumQuery) QueryArt() *ArtQuery {
 	query := (&ArtClient{config: mq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := mq.prepareQuery(ctx); err != nil {
@@ -81,7 +81,7 @@ func (mq *MediumQuery) QueryArts() *ArtQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(medium.Table, medium.FieldID, selector),
 			sqlgraph.To(art.Table, art.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtsTable, medium.ArtsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtTable, medium.ArtPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -303,7 +303,7 @@ func (mq *MediumQuery) Clone() *MediumQuery {
 		order:         append([]medium.OrderOption{}, mq.order...),
 		inters:        append([]Interceptor{}, mq.inters...),
 		predicates:    append([]predicate.Medium{}, mq.predicates...),
-		withArts:      mq.withArts.Clone(),
+		withArt:       mq.withArt.Clone(),
 		withArtifacts: mq.withArtifacts.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
@@ -311,14 +311,14 @@ func (mq *MediumQuery) Clone() *MediumQuery {
 	}
 }
 
-// WithArts tells the query-builder to eager-load the nodes that are connected to
-// the "arts" edge. The optional arguments are used to configure the query builder of the edge.
-func (mq *MediumQuery) WithArts(opts ...func(*ArtQuery)) *MediumQuery {
+// WithArt tells the query-builder to eager-load the nodes that are connected to
+// the "art" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *MediumQuery) WithArt(opts ...func(*ArtQuery)) *MediumQuery {
 	query := (&ArtClient{config: mq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	mq.withArts = query
+	mq.withArt = query
 	return mq
 }
 
@@ -418,7 +418,7 @@ func (mq *MediumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mediu
 		nodes       = []*Medium{}
 		_spec       = mq.querySpec()
 		loadedTypes = [2]bool{
-			mq.withArts != nil,
+			mq.withArt != nil,
 			mq.withArtifacts != nil,
 		}
 	)
@@ -443,10 +443,10 @@ func (mq *MediumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mediu
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := mq.withArts; query != nil {
-		if err := mq.loadArts(ctx, query, nodes,
-			func(n *Medium) { n.Edges.Arts = []*Art{} },
-			func(n *Medium, e *Art) { n.Edges.Arts = append(n.Edges.Arts, e) }); err != nil {
+	if query := mq.withArt; query != nil {
+		if err := mq.loadArt(ctx, query, nodes,
+			func(n *Medium) { n.Edges.Art = []*Art{} },
+			func(n *Medium, e *Art) { n.Edges.Art = append(n.Edges.Art, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -457,10 +457,10 @@ func (mq *MediumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mediu
 			return nil, err
 		}
 	}
-	for name, query := range mq.withNamedArts {
-		if err := mq.loadArts(ctx, query, nodes,
-			func(n *Medium) { n.appendNamedArts(name) },
-			func(n *Medium, e *Art) { n.appendNamedArts(name, e) }); err != nil {
+	for name, query := range mq.withNamedArt {
+		if err := mq.loadArt(ctx, query, nodes,
+			func(n *Medium) { n.appendNamedArt(name) },
+			func(n *Medium, e *Art) { n.appendNamedArt(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -479,7 +479,7 @@ func (mq *MediumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Mediu
 	return nodes, nil
 }
 
-func (mq *MediumQuery) loadArts(ctx context.Context, query *ArtQuery, nodes []*Medium, init func(*Medium), assign func(*Medium, *Art)) error {
+func (mq *MediumQuery) loadArt(ctx context.Context, query *ArtQuery, nodes []*Medium, init func(*Medium), assign func(*Medium, *Art)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Medium)
 	nids := make(map[int]map[*Medium]struct{})
@@ -491,11 +491,11 @@ func (mq *MediumQuery) loadArts(ctx context.Context, query *ArtQuery, nodes []*M
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(medium.ArtsTable)
-		s.Join(joinT).On(s.C(art.FieldID), joinT.C(medium.ArtsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(medium.ArtsPrimaryKey[0]), edgeIDs...))
+		joinT := sql.Table(medium.ArtTable)
+		s.Join(joinT).On(s.C(art.FieldID), joinT.C(medium.ArtPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(medium.ArtPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(medium.ArtsPrimaryKey[0]))
+		s.Select(joinT.C(medium.ArtPrimaryKey[0]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -532,7 +532,7 @@ func (mq *MediumQuery) loadArts(ctx context.Context, query *ArtQuery, nodes []*M
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "arts" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "art" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -686,17 +686,17 @@ func (mq *MediumQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// WithNamedArts tells the query-builder to eager-load the nodes that are connected to the "arts"
+// WithNamedArt tells the query-builder to eager-load the nodes that are connected to the "art"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (mq *MediumQuery) WithNamedArts(name string, opts ...func(*ArtQuery)) *MediumQuery {
+func (mq *MediumQuery) WithNamedArt(name string, opts ...func(*ArtQuery)) *MediumQuery {
 	query := (&ArtClient{config: mq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if mq.withNamedArts == nil {
-		mq.withNamedArts = make(map[string]*ArtQuery)
+	if mq.withNamedArt == nil {
+		mq.withNamedArt = make(map[string]*ArtQuery)
 	}
-	mq.withNamedArts[name] = query
+	mq.withNamedArt[name] = query
 	return mq
 }
 

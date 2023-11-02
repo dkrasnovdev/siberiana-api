@@ -205,14 +205,14 @@ func (cu *CollectionUpdate) SetSlug(s string) *CollectionUpdate {
 	return cu
 }
 
-// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (cu *CollectionUpdate) AddArtIDs(ids ...int) *CollectionUpdate {
 	cu.mutation.AddArtIDs(ids...)
 	return cu
 }
 
-// AddArts adds the "arts" edges to the Art entity.
-func (cu *CollectionUpdate) AddArts(a ...*Art) *CollectionUpdate {
+// AddArt adds the "art" edges to the Art entity.
+func (cu *CollectionUpdate) AddArt(a ...*Art) *CollectionUpdate {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -296,20 +296,20 @@ func (cu *CollectionUpdate) Mutation() *CollectionMutation {
 	return cu.mutation
 }
 
-// ClearArts clears all "arts" edges to the Art entity.
-func (cu *CollectionUpdate) ClearArts() *CollectionUpdate {
-	cu.mutation.ClearArts()
+// ClearArt clears all "art" edges to the Art entity.
+func (cu *CollectionUpdate) ClearArt() *CollectionUpdate {
+	cu.mutation.ClearArt()
 	return cu
 }
 
-// RemoveArtIDs removes the "arts" edge to Art entities by IDs.
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
 func (cu *CollectionUpdate) RemoveArtIDs(ids ...int) *CollectionUpdate {
 	cu.mutation.RemoveArtIDs(ids...)
 	return cu
 }
 
-// RemoveArts removes "arts" edges to Art entities.
-func (cu *CollectionUpdate) RemoveArts(a ...*Art) *CollectionUpdate {
+// RemoveArt removes "art" edges to Art entities.
+func (cu *CollectionUpdate) RemoveArt(a ...*Art) *CollectionUpdate {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -531,12 +531,12 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.TypeCleared() {
 		_spec.ClearField(collection.FieldType, field.TypeEnum)
 	}
-	if cu.mutation.ArtsCleared() {
+	if cu.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   collection.ArtsTable,
-			Columns: []string{collection.ArtsColumn},
+			Table:   collection.ArtTable,
+			Columns: []string{collection.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -544,12 +544,12 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedArtsIDs(); len(nodes) > 0 && !cu.mutation.ArtsCleared() {
+	if nodes := cu.mutation.RemovedArtIDs(); len(nodes) > 0 && !cu.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   collection.ArtsTable,
-			Columns: []string{collection.ArtsColumn},
+			Table:   collection.ArtTable,
+			Columns: []string{collection.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -560,12 +560,12 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.ArtsIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   collection.ArtsTable,
-			Columns: []string{collection.ArtsColumn},
+			Table:   collection.ArtTable,
+			Columns: []string{collection.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -975,14 +975,14 @@ func (cuo *CollectionUpdateOne) SetSlug(s string) *CollectionUpdateOne {
 	return cuo
 }
 
-// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (cuo *CollectionUpdateOne) AddArtIDs(ids ...int) *CollectionUpdateOne {
 	cuo.mutation.AddArtIDs(ids...)
 	return cuo
 }
 
-// AddArts adds the "arts" edges to the Art entity.
-func (cuo *CollectionUpdateOne) AddArts(a ...*Art) *CollectionUpdateOne {
+// AddArt adds the "art" edges to the Art entity.
+func (cuo *CollectionUpdateOne) AddArt(a ...*Art) *CollectionUpdateOne {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -1066,20 +1066,20 @@ func (cuo *CollectionUpdateOne) Mutation() *CollectionMutation {
 	return cuo.mutation
 }
 
-// ClearArts clears all "arts" edges to the Art entity.
-func (cuo *CollectionUpdateOne) ClearArts() *CollectionUpdateOne {
-	cuo.mutation.ClearArts()
+// ClearArt clears all "art" edges to the Art entity.
+func (cuo *CollectionUpdateOne) ClearArt() *CollectionUpdateOne {
+	cuo.mutation.ClearArt()
 	return cuo
 }
 
-// RemoveArtIDs removes the "arts" edge to Art entities by IDs.
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
 func (cuo *CollectionUpdateOne) RemoveArtIDs(ids ...int) *CollectionUpdateOne {
 	cuo.mutation.RemoveArtIDs(ids...)
 	return cuo
 }
 
-// RemoveArts removes "arts" edges to Art entities.
-func (cuo *CollectionUpdateOne) RemoveArts(a ...*Art) *CollectionUpdateOne {
+// RemoveArt removes "art" edges to Art entities.
+func (cuo *CollectionUpdateOne) RemoveArt(a ...*Art) *CollectionUpdateOne {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -1331,12 +1331,12 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 	if cuo.mutation.TypeCleared() {
 		_spec.ClearField(collection.FieldType, field.TypeEnum)
 	}
-	if cuo.mutation.ArtsCleared() {
+	if cuo.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   collection.ArtsTable,
-			Columns: []string{collection.ArtsColumn},
+			Table:   collection.ArtTable,
+			Columns: []string{collection.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -1344,12 +1344,12 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedArtsIDs(); len(nodes) > 0 && !cuo.mutation.ArtsCleared() {
+	if nodes := cuo.mutation.RemovedArtIDs(); len(nodes) > 0 && !cuo.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   collection.ArtsTable,
-			Columns: []string{collection.ArtsColumn},
+			Table:   collection.ArtTable,
+			Columns: []string{collection.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -1360,12 +1360,12 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.ArtsIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   collection.ArtsTable,
-			Columns: []string{collection.ArtsColumn},
+			Table:   collection.ArtTable,
+			Columns: []string{collection.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),

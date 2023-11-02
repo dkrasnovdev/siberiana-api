@@ -15,6 +15,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/bookgenre"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
@@ -22,6 +24,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
@@ -384,25 +387,6 @@ func (bu *BookUpdate) SetLocation(l *Location) *BookUpdate {
 	return bu.SetLocationID(l.ID)
 }
 
-// SetPlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID.
-func (bu *BookUpdate) SetPlaceOfPublicationID(id int) *BookUpdate {
-	bu.mutation.SetPlaceOfPublicationID(id)
-	return bu
-}
-
-// SetNillablePlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID if the given value is not nil.
-func (bu *BookUpdate) SetNillablePlaceOfPublicationID(id *int) *BookUpdate {
-	if id != nil {
-		bu = bu.SetPlaceOfPublicationID(*id)
-	}
-	return bu
-}
-
-// SetPlaceOfPublication sets the "place_of_publication" edge to the Settlement entity.
-func (bu *BookUpdate) SetPlaceOfPublication(s *Settlement) *BookUpdate {
-	return bu.SetPlaceOfPublicationID(s.ID)
-}
-
 // SetLibraryID sets the "library" edge to the Organization entity by ID.
 func (bu *BookUpdate) SetLibraryID(id int) *BookUpdate {
 	bu.mutation.SetLibraryID(id)
@@ -420,6 +404,82 @@ func (bu *BookUpdate) SetNillableLibraryID(id *int) *BookUpdate {
 // SetLibrary sets the "library" edge to the Organization entity.
 func (bu *BookUpdate) SetLibrary(o *Organization) *BookUpdate {
 	return bu.SetLibraryID(o.ID)
+}
+
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (bu *BookUpdate) SetCountryID(id int) *BookUpdate {
+	bu.mutation.SetCountryID(id)
+	return bu
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableCountryID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetCountryID(*id)
+	}
+	return bu
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (bu *BookUpdate) SetCountry(c *Country) *BookUpdate {
+	return bu.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (bu *BookUpdate) SetSettlementID(id int) *BookUpdate {
+	bu.mutation.SetSettlementID(id)
+	return bu
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableSettlementID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetSettlementID(*id)
+	}
+	return bu
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (bu *BookUpdate) SetSettlement(s *Settlement) *BookUpdate {
+	return bu.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (bu *BookUpdate) SetDistrictID(id int) *BookUpdate {
+	bu.mutation.SetDistrictID(id)
+	return bu
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableDistrictID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetDistrictID(*id)
+	}
+	return bu
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (bu *BookUpdate) SetDistrict(d *District) *BookUpdate {
+	return bu.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (bu *BookUpdate) SetRegionID(id int) *BookUpdate {
+	bu.mutation.SetRegionID(id)
+	return bu
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (bu *BookUpdate) SetNillableRegionID(id *int) *BookUpdate {
+	if id != nil {
+		bu = bu.SetRegionID(*id)
+	}
+	return bu
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (bu *BookUpdate) SetRegion(r *Region) *BookUpdate {
+	return bu.SetRegionID(r.ID)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -499,15 +559,33 @@ func (bu *BookUpdate) ClearLocation() *BookUpdate {
 	return bu
 }
 
-// ClearPlaceOfPublication clears the "place_of_publication" edge to the Settlement entity.
-func (bu *BookUpdate) ClearPlaceOfPublication() *BookUpdate {
-	bu.mutation.ClearPlaceOfPublication()
-	return bu
-}
-
 // ClearLibrary clears the "library" edge to the Organization entity.
 func (bu *BookUpdate) ClearLibrary() *BookUpdate {
 	bu.mutation.ClearLibrary()
+	return bu
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (bu *BookUpdate) ClearCountry() *BookUpdate {
+	bu.mutation.ClearCountry()
+	return bu
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (bu *BookUpdate) ClearSettlement() *BookUpdate {
+	bu.mutation.ClearSettlement()
+	return bu
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (bu *BookUpdate) ClearDistrict() *BookUpdate {
+	bu.mutation.ClearDistrict()
+	return bu
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (bu *BookUpdate) ClearRegion() *BookUpdate {
+	bu.mutation.ClearRegion()
 	return bu
 }
 
@@ -900,35 +978,6 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if bu.mutation.PlaceOfPublicationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   book.PlaceOfPublicationTable,
-			Columns: []string{book.PlaceOfPublicationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := bu.mutation.PlaceOfPublicationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   book.PlaceOfPublicationTable,
-			Columns: []string{book.PlaceOfPublicationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if bu.mutation.LibraryCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -951,6 +1000,122 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CountryTable,
+			Columns: []string{book.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CountryTable,
+			Columns: []string{book.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.SettlementTable,
+			Columns: []string{book.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.SettlementTable,
+			Columns: []string{book.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.DistrictTable,
+			Columns: []string{book.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.DistrictTable,
+			Columns: []string{book.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if bu.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.RegionTable,
+			Columns: []string{book.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.RegionTable,
+			Columns: []string{book.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1324,25 +1489,6 @@ func (buo *BookUpdateOne) SetLocation(l *Location) *BookUpdateOne {
 	return buo.SetLocationID(l.ID)
 }
 
-// SetPlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID.
-func (buo *BookUpdateOne) SetPlaceOfPublicationID(id int) *BookUpdateOne {
-	buo.mutation.SetPlaceOfPublicationID(id)
-	return buo
-}
-
-// SetNillablePlaceOfPublicationID sets the "place_of_publication" edge to the Settlement entity by ID if the given value is not nil.
-func (buo *BookUpdateOne) SetNillablePlaceOfPublicationID(id *int) *BookUpdateOne {
-	if id != nil {
-		buo = buo.SetPlaceOfPublicationID(*id)
-	}
-	return buo
-}
-
-// SetPlaceOfPublication sets the "place_of_publication" edge to the Settlement entity.
-func (buo *BookUpdateOne) SetPlaceOfPublication(s *Settlement) *BookUpdateOne {
-	return buo.SetPlaceOfPublicationID(s.ID)
-}
-
 // SetLibraryID sets the "library" edge to the Organization entity by ID.
 func (buo *BookUpdateOne) SetLibraryID(id int) *BookUpdateOne {
 	buo.mutation.SetLibraryID(id)
@@ -1360,6 +1506,82 @@ func (buo *BookUpdateOne) SetNillableLibraryID(id *int) *BookUpdateOne {
 // SetLibrary sets the "library" edge to the Organization entity.
 func (buo *BookUpdateOne) SetLibrary(o *Organization) *BookUpdateOne {
 	return buo.SetLibraryID(o.ID)
+}
+
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (buo *BookUpdateOne) SetCountryID(id int) *BookUpdateOne {
+	buo.mutation.SetCountryID(id)
+	return buo
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableCountryID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetCountryID(*id)
+	}
+	return buo
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (buo *BookUpdateOne) SetCountry(c *Country) *BookUpdateOne {
+	return buo.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (buo *BookUpdateOne) SetSettlementID(id int) *BookUpdateOne {
+	buo.mutation.SetSettlementID(id)
+	return buo
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableSettlementID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetSettlementID(*id)
+	}
+	return buo
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (buo *BookUpdateOne) SetSettlement(s *Settlement) *BookUpdateOne {
+	return buo.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (buo *BookUpdateOne) SetDistrictID(id int) *BookUpdateOne {
+	buo.mutation.SetDistrictID(id)
+	return buo
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableDistrictID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetDistrictID(*id)
+	}
+	return buo
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (buo *BookUpdateOne) SetDistrict(d *District) *BookUpdateOne {
+	return buo.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (buo *BookUpdateOne) SetRegionID(id int) *BookUpdateOne {
+	buo.mutation.SetRegionID(id)
+	return buo
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (buo *BookUpdateOne) SetNillableRegionID(id *int) *BookUpdateOne {
+	if id != nil {
+		buo = buo.SetRegionID(*id)
+	}
+	return buo
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (buo *BookUpdateOne) SetRegion(r *Region) *BookUpdateOne {
+	return buo.SetRegionID(r.ID)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -1439,15 +1661,33 @@ func (buo *BookUpdateOne) ClearLocation() *BookUpdateOne {
 	return buo
 }
 
-// ClearPlaceOfPublication clears the "place_of_publication" edge to the Settlement entity.
-func (buo *BookUpdateOne) ClearPlaceOfPublication() *BookUpdateOne {
-	buo.mutation.ClearPlaceOfPublication()
-	return buo
-}
-
 // ClearLibrary clears the "library" edge to the Organization entity.
 func (buo *BookUpdateOne) ClearLibrary() *BookUpdateOne {
 	buo.mutation.ClearLibrary()
+	return buo
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (buo *BookUpdateOne) ClearCountry() *BookUpdateOne {
+	buo.mutation.ClearCountry()
+	return buo
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (buo *BookUpdateOne) ClearSettlement() *BookUpdateOne {
+	buo.mutation.ClearSettlement()
+	return buo
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (buo *BookUpdateOne) ClearDistrict() *BookUpdateOne {
+	buo.mutation.ClearDistrict()
+	return buo
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (buo *BookUpdateOne) ClearRegion() *BookUpdateOne {
+	buo.mutation.ClearRegion()
 	return buo
 }
 
@@ -1870,35 +2110,6 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if buo.mutation.PlaceOfPublicationCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   book.PlaceOfPublicationTable,
-			Columns: []string{book.PlaceOfPublicationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := buo.mutation.PlaceOfPublicationIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   book.PlaceOfPublicationTable,
-			Columns: []string{book.PlaceOfPublicationColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if buo.mutation.LibraryCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1921,6 +2132,122 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CountryTable,
+			Columns: []string{book.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.CountryTable,
+			Columns: []string{book.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.SettlementTable,
+			Columns: []string{book.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.SettlementTable,
+			Columns: []string{book.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.DistrictTable,
+			Columns: []string{book.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.DistrictTable,
+			Columns: []string{book.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.RegionTable,
+			Columns: []string{book.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   book.RegionTable,
+			Columns: []string{book.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

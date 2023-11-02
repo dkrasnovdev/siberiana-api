@@ -75,5 +75,9 @@ func (ProtectedAreaPicture) Edges() []ent.Edge {
 		edge.From("protected_area", ProtectedArea.Type).Ref("protected_area_pictures").Unique(),
 		edge.From("location", Location.Type).Ref("protected_area_pictures").Unique(),
 		edge.From("license", License.Type).Ref("protected_area_pictures").Unique(),
+		edge.From("country", Country.Type).Ref("protected_area_pictures").Unique(),
+		edge.From("settlement", Settlement.Type).Ref("protected_area_pictures").Unique(),
+		edge.From("district", District.Type).Ref("protected_area_pictures").Unique(),
+		edge.From("region", Region.Type).Ref("protected_area_pictures").Unique(),
 	}
 }

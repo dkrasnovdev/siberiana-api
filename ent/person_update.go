@@ -411,14 +411,14 @@ func (pu *PersonUpdate) AddCollections(c ...*Collection) *PersonUpdate {
 	return pu.AddCollectionIDs(ids...)
 }
 
-// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (pu *PersonUpdate) AddArtIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddArtIDs(ids...)
 	return pu
 }
 
-// AddArts adds the "arts" edges to the Art entity.
-func (pu *PersonUpdate) AddArts(a ...*Art) *PersonUpdate {
+// AddArt adds the "art" edges to the Art entity.
+func (pu *PersonUpdate) AddArt(a ...*Art) *PersonUpdate {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -531,20 +531,20 @@ func (pu *PersonUpdate) RemoveCollections(c ...*Collection) *PersonUpdate {
 	return pu.RemoveCollectionIDs(ids...)
 }
 
-// ClearArts clears all "arts" edges to the Art entity.
-func (pu *PersonUpdate) ClearArts() *PersonUpdate {
-	pu.mutation.ClearArts()
+// ClearArt clears all "art" edges to the Art entity.
+func (pu *PersonUpdate) ClearArt() *PersonUpdate {
+	pu.mutation.ClearArt()
 	return pu
 }
 
-// RemoveArtIDs removes the "arts" edge to Art entities by IDs.
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
 func (pu *PersonUpdate) RemoveArtIDs(ids ...int) *PersonUpdate {
 	pu.mutation.RemoveArtIDs(ids...)
 	return pu
 }
 
-// RemoveArts removes "arts" edges to Art entities.
-func (pu *PersonUpdate) RemoveArts(a ...*Art) *PersonUpdate {
+// RemoveArt removes "art" edges to Art entities.
+func (pu *PersonUpdate) RemoveArt(a ...*Art) *PersonUpdate {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -877,12 +877,12 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ArtsCleared() {
+	if pu.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   person.ArtsTable,
-			Columns: []string{person.ArtsColumn},
+			Table:   person.ArtTable,
+			Columns: []string{person.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -890,12 +890,12 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedArtsIDs(); len(nodes) > 0 && !pu.mutation.ArtsCleared() {
+	if nodes := pu.mutation.RemovedArtIDs(); len(nodes) > 0 && !pu.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   person.ArtsTable,
-			Columns: []string{person.ArtsColumn},
+			Table:   person.ArtTable,
+			Columns: []string{person.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -906,12 +906,12 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ArtsIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   person.ArtsTable,
-			Columns: []string{person.ArtsColumn},
+			Table:   person.ArtTable,
+			Columns: []string{person.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -1526,14 +1526,14 @@ func (puo *PersonUpdateOne) AddCollections(c ...*Collection) *PersonUpdateOne {
 	return puo.AddCollectionIDs(ids...)
 }
 
-// AddArtIDs adds the "arts" edge to the Art entity by IDs.
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
 func (puo *PersonUpdateOne) AddArtIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddArtIDs(ids...)
 	return puo
 }
 
-// AddArts adds the "arts" edges to the Art entity.
-func (puo *PersonUpdateOne) AddArts(a ...*Art) *PersonUpdateOne {
+// AddArt adds the "art" edges to the Art entity.
+func (puo *PersonUpdateOne) AddArt(a ...*Art) *PersonUpdateOne {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -1646,20 +1646,20 @@ func (puo *PersonUpdateOne) RemoveCollections(c ...*Collection) *PersonUpdateOne
 	return puo.RemoveCollectionIDs(ids...)
 }
 
-// ClearArts clears all "arts" edges to the Art entity.
-func (puo *PersonUpdateOne) ClearArts() *PersonUpdateOne {
-	puo.mutation.ClearArts()
+// ClearArt clears all "art" edges to the Art entity.
+func (puo *PersonUpdateOne) ClearArt() *PersonUpdateOne {
+	puo.mutation.ClearArt()
 	return puo
 }
 
-// RemoveArtIDs removes the "arts" edge to Art entities by IDs.
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
 func (puo *PersonUpdateOne) RemoveArtIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.RemoveArtIDs(ids...)
 	return puo
 }
 
-// RemoveArts removes "arts" edges to Art entities.
-func (puo *PersonUpdateOne) RemoveArts(a ...*Art) *PersonUpdateOne {
+// RemoveArt removes "art" edges to Art entities.
+func (puo *PersonUpdateOne) RemoveArt(a ...*Art) *PersonUpdateOne {
 	ids := make([]int, len(a))
 	for i := range a {
 		ids[i] = a[i].ID
@@ -2022,12 +2022,12 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if puo.mutation.ArtsCleared() {
+	if puo.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   person.ArtsTable,
-			Columns: []string{person.ArtsColumn},
+			Table:   person.ArtTable,
+			Columns: []string{person.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -2035,12 +2035,12 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedArtsIDs(); len(nodes) > 0 && !puo.mutation.ArtsCleared() {
+	if nodes := puo.mutation.RemovedArtIDs(); len(nodes) > 0 && !puo.mutation.ArtCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   person.ArtsTable,
-			Columns: []string{person.ArtsColumn},
+			Table:   person.ArtTable,
+			Columns: []string{person.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
@@ -2051,12 +2051,12 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ArtsIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.ArtIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   person.ArtsTable,
-			Columns: []string{person.ArtsColumn},
+			Table:   person.ArtTable,
+			Columns: []string{person.ArtColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),

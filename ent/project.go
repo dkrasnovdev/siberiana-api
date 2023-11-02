@@ -33,12 +33,16 @@ type Project struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
-	// BeginData holds the value of the "begin_data" field.
-	BeginData time.Time `json:"begin_data,omitempty"`
+	// BeginDate holds the value of the "begin_date" field.
+	BeginDate time.Time `json:"begin_date,omitempty"`
 	// EndDate holds the value of the "end_date" field.
 	EndDate time.Time `json:"end_date,omitempty"`
 	// Year holds the value of the "year" field.
 	Year int `json:"year,omitempty"`
+	// BeginYear holds the value of the "begin_year" field.
+	BeginYear int `json:"begin_year,omitempty"`
+	// EndYear holds the value of the "end_year" field.
+	EndYear int `json:"end_year,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProjectQuery when eager-loading is set.
 	Edges        ProjectEdges `json:"edges"`
@@ -84,11 +88,11 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case project.FieldID, project.FieldYear:
+		case project.FieldID, project.FieldYear, project.FieldBeginYear, project.FieldEndYear:
 			values[i] = new(sql.NullInt64)
 		case project.FieldCreatedBy, project.FieldUpdatedBy, project.FieldDisplayName, project.FieldAbbreviation, project.FieldDescription, project.FieldExternalLink:
 			values[i] = new(sql.NullString)
-		case project.FieldCreatedAt, project.FieldUpdatedAt, project.FieldBeginData, project.FieldEndDate:
+		case project.FieldCreatedAt, project.FieldUpdatedAt, project.FieldBeginDate, project.FieldEndDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -159,11 +163,11 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.ExternalLink = value.String
 			}
-		case project.FieldBeginData:
+		case project.FieldBeginDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field begin_data", values[i])
+				return fmt.Errorf("unexpected type %T for field begin_date", values[i])
 			} else if value.Valid {
-				pr.BeginData = value.Time
+				pr.BeginDate = value.Time
 			}
 		case project.FieldEndDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -176,6 +180,18 @@ func (pr *Project) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field year", values[i])
 			} else if value.Valid {
 				pr.Year = int(value.Int64)
+			}
+		case project.FieldBeginYear:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field begin_year", values[i])
+			} else if value.Valid {
+				pr.BeginYear = int(value.Int64)
+			}
+		case project.FieldEndYear:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field end_year", values[i])
+			} else if value.Valid {
+				pr.EndYear = int(value.Int64)
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
@@ -247,14 +263,20 @@ func (pr *Project) String() string {
 	builder.WriteString("external_link=")
 	builder.WriteString(pr.ExternalLink)
 	builder.WriteString(", ")
-	builder.WriteString("begin_data=")
-	builder.WriteString(pr.BeginData.Format(time.ANSIC))
+	builder.WriteString("begin_date=")
+	builder.WriteString(pr.BeginDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(pr.EndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("year=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Year))
+	builder.WriteString(", ")
+	builder.WriteString("begin_year=")
+	builder.WriteString(fmt.Sprintf("%v", pr.BeginYear))
+	builder.WriteString(", ")
+	builder.WriteString("end_year=")
+	builder.WriteString(fmt.Sprintf("%v", pr.EndYear))
 	builder.WriteByte(')')
 	return builder.String()
 }

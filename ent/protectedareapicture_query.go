@@ -12,11 +12,15 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // ProtectedAreaPictureQuery is the builder for querying ProtectedAreaPicture entities.
@@ -30,6 +34,10 @@ type ProtectedAreaPictureQuery struct {
 	withProtectedArea *ProtectedAreaQuery
 	withLocation      *LocationQuery
 	withLicense       *LicenseQuery
+	withCountry       *CountryQuery
+	withSettlement    *SettlementQuery
+	withDistrict      *DistrictQuery
+	withRegion        *RegionQuery
 	withFKs           bool
 	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*ProtectedAreaPicture) error
@@ -150,6 +158,94 @@ func (papq *ProtectedAreaPictureQuery) QueryLicense() *LicenseQuery {
 			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
 			sqlgraph.To(license.Table, license.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.LicenseTable, protectedareapicture.LicenseColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCountry chains the current query on the "country" edge.
+func (papq *ProtectedAreaPictureQuery) QueryCountry() *CountryQuery {
+	query := (&CountryClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.CountryTable, protectedareapicture.CountryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySettlement chains the current query on the "settlement" edge.
+func (papq *ProtectedAreaPictureQuery) QuerySettlement() *SettlementQuery {
+	query := (&SettlementClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.SettlementTable, protectedareapicture.SettlementColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDistrict chains the current query on the "district" edge.
+func (papq *ProtectedAreaPictureQuery) QueryDistrict() *DistrictQuery {
+	query := (&DistrictClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.DistrictTable, protectedareapicture.DistrictColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegion chains the current query on the "region" edge.
+func (papq *ProtectedAreaPictureQuery) QueryRegion() *RegionQuery {
+	query := (&RegionClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.RegionTable, protectedareapicture.RegionColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
 		return fromU, nil
@@ -353,6 +449,10 @@ func (papq *ProtectedAreaPictureQuery) Clone() *ProtectedAreaPictureQuery {
 		withProtectedArea: papq.withProtectedArea.Clone(),
 		withLocation:      papq.withLocation.Clone(),
 		withLicense:       papq.withLicense.Clone(),
+		withCountry:       papq.withCountry.Clone(),
+		withSettlement:    papq.withSettlement.Clone(),
+		withDistrict:      papq.withDistrict.Clone(),
+		withRegion:        papq.withRegion.Clone(),
 		// clone intermediate query.
 		sql:  papq.sql.Clone(),
 		path: papq.path,
@@ -400,6 +500,50 @@ func (papq *ProtectedAreaPictureQuery) WithLicense(opts ...func(*LicenseQuery)) 
 		opt(query)
 	}
 	papq.withLicense = query
+	return papq
+}
+
+// WithCountry tells the query-builder to eager-load the nodes that are connected to
+// the "country" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithCountry(opts ...func(*CountryQuery)) *ProtectedAreaPictureQuery {
+	query := (&CountryClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withCountry = query
+	return papq
+}
+
+// WithSettlement tells the query-builder to eager-load the nodes that are connected to
+// the "settlement" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithSettlement(opts ...func(*SettlementQuery)) *ProtectedAreaPictureQuery {
+	query := (&SettlementClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withSettlement = query
+	return papq
+}
+
+// WithDistrict tells the query-builder to eager-load the nodes that are connected to
+// the "district" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithDistrict(opts ...func(*DistrictQuery)) *ProtectedAreaPictureQuery {
+	query := (&DistrictClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withDistrict = query
+	return papq
+}
+
+// WithRegion tells the query-builder to eager-load the nodes that are connected to
+// the "region" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithRegion(opts ...func(*RegionQuery)) *ProtectedAreaPictureQuery {
+	query := (&RegionClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withRegion = query
 	return papq
 }
 
@@ -488,14 +632,18 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 		nodes       = []*ProtectedAreaPicture{}
 		withFKs     = papq.withFKs
 		_spec       = papq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [8]bool{
 			papq.withCollection != nil,
 			papq.withProtectedArea != nil,
 			papq.withLocation != nil,
 			papq.withLicense != nil,
+			papq.withCountry != nil,
+			papq.withSettlement != nil,
+			papq.withDistrict != nil,
+			papq.withRegion != nil,
 		}
 	)
-	if papq.withCollection != nil || papq.withProtectedArea != nil || papq.withLocation != nil || papq.withLicense != nil {
+	if papq.withCollection != nil || papq.withProtectedArea != nil || papq.withLocation != nil || papq.withLicense != nil || papq.withCountry != nil || papq.withSettlement != nil || papq.withDistrict != nil || papq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -543,6 +691,30 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 	if query := papq.withLicense; query != nil {
 		if err := papq.loadLicense(ctx, query, nodes, nil,
 			func(n *ProtectedAreaPicture, e *License) { n.Edges.License = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withCountry; query != nil {
+		if err := papq.loadCountry(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *Country) { n.Edges.Country = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withSettlement; query != nil {
+		if err := papq.loadSettlement(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *Settlement) { n.Edges.Settlement = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withDistrict; query != nil {
+		if err := papq.loadDistrict(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *District) { n.Edges.District = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withRegion; query != nil {
+		if err := papq.loadRegion(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *Region) { n.Edges.Region = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -675,6 +847,134 @@ func (papq *ProtectedAreaPictureQuery) loadLicense(ctx context.Context, query *L
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "license_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (papq *ProtectedAreaPictureQuery) loadCountry(ctx context.Context, query *CountryQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Country)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].country_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].country_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(country.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "country_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (papq *ProtectedAreaPictureQuery) loadSettlement(ctx context.Context, query *SettlementQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Settlement)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].settlement_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].settlement_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(settlement.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "settlement_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (papq *ProtectedAreaPictureQuery) loadDistrict(ctx context.Context, query *DistrictQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *District)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].district_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].district_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(district.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "district_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (papq *ProtectedAreaPictureQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Region)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].region_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].region_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(region.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "region_protected_area_pictures" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

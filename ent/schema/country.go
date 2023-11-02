@@ -51,6 +51,10 @@ func (Country) Annotations() []schema.Annotation {
 // Edges of the Country.
 func (Country) Edges() []ent.Edge {
 	return []ent.Edge{
+		edge.To("art", Art.Type),
+		edge.To("artifacts", Artifact.Type),
+		edge.To("books", Book.Type),
+		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
 		edge.From("locations", Location.Type).Ref("country"),
 	}
 }

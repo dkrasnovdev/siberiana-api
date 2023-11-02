@@ -14,7 +14,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -24,7 +26,9 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
 
@@ -814,6 +818,82 @@ func (au *ArtifactUpdate) SetLicense(l *License) *ArtifactUpdate {
 	return au.SetLicenseID(l.ID)
 }
 
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (au *ArtifactUpdate) SetCountryID(id int) *ArtifactUpdate {
+	au.mutation.SetCountryID(id)
+	return au
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableCountryID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetCountryID(*id)
+	}
+	return au
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (au *ArtifactUpdate) SetCountry(c *Country) *ArtifactUpdate {
+	return au.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (au *ArtifactUpdate) SetSettlementID(id int) *ArtifactUpdate {
+	au.mutation.SetSettlementID(id)
+	return au
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableSettlementID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetSettlementID(*id)
+	}
+	return au
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (au *ArtifactUpdate) SetSettlement(s *Settlement) *ArtifactUpdate {
+	return au.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (au *ArtifactUpdate) SetDistrictID(id int) *ArtifactUpdate {
+	au.mutation.SetDistrictID(id)
+	return au
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDistrictID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetDistrictID(*id)
+	}
+	return au
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (au *ArtifactUpdate) SetDistrict(d *District) *ArtifactUpdate {
+	return au.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (au *ArtifactUpdate) SetRegionID(id int) *ArtifactUpdate {
+	au.mutation.SetRegionID(id)
+	return au
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableRegionID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetRegionID(*id)
+	}
+	return au
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (au *ArtifactUpdate) SetRegion(r *Region) *ArtifactUpdate {
+	return au.SetRegionID(r.ID)
+}
+
 // Mutation returns the ArtifactMutation object of the builder.
 func (au *ArtifactUpdate) Mutation() *ArtifactMutation {
 	return au.mutation
@@ -963,6 +1043,30 @@ func (au *ArtifactUpdate) ClearCollection() *ArtifactUpdate {
 // ClearLicense clears the "license" edge to the License entity.
 func (au *ArtifactUpdate) ClearLicense() *ArtifactUpdate {
 	au.mutation.ClearLicense()
+	return au
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (au *ArtifactUpdate) ClearCountry() *ArtifactUpdate {
+	au.mutation.ClearCountry()
+	return au
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (au *ArtifactUpdate) ClearSettlement() *ArtifactUpdate {
+	au.mutation.ClearSettlement()
+	return au
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (au *ArtifactUpdate) ClearDistrict() *ArtifactUpdate {
+	au.mutation.ClearDistrict()
+	return au
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (au *ArtifactUpdate) ClearRegion() *ArtifactUpdate {
+	au.mutation.ClearRegion()
 	return au
 }
 
@@ -1639,6 +1743,122 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CountryTable,
+			Columns: []string{artifact.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CountryTable,
+			Columns: []string{artifact.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SettlementTable,
+			Columns: []string{artifact.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SettlementTable,
+			Columns: []string{artifact.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DistrictTable,
+			Columns: []string{artifact.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DistrictTable,
+			Columns: []string{artifact.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.RegionTable,
+			Columns: []string{artifact.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.RegionTable,
+			Columns: []string{artifact.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2439,6 +2659,82 @@ func (auo *ArtifactUpdateOne) SetLicense(l *License) *ArtifactUpdateOne {
 	return auo.SetLicenseID(l.ID)
 }
 
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (auo *ArtifactUpdateOne) SetCountryID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetCountryID(id)
+	return auo
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableCountryID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetCountryID(*id)
+	}
+	return auo
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (auo *ArtifactUpdateOne) SetCountry(c *Country) *ArtifactUpdateOne {
+	return auo.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (auo *ArtifactUpdateOne) SetSettlementID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetSettlementID(id)
+	return auo
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableSettlementID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetSettlementID(*id)
+	}
+	return auo
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (auo *ArtifactUpdateOne) SetSettlement(s *Settlement) *ArtifactUpdateOne {
+	return auo.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (auo *ArtifactUpdateOne) SetDistrictID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetDistrictID(id)
+	return auo
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDistrictID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetDistrictID(*id)
+	}
+	return auo
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (auo *ArtifactUpdateOne) SetDistrict(d *District) *ArtifactUpdateOne {
+	return auo.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (auo *ArtifactUpdateOne) SetRegionID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetRegionID(id)
+	return auo
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableRegionID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetRegionID(*id)
+	}
+	return auo
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (auo *ArtifactUpdateOne) SetRegion(r *Region) *ArtifactUpdateOne {
+	return auo.SetRegionID(r.ID)
+}
+
 // Mutation returns the ArtifactMutation object of the builder.
 func (auo *ArtifactUpdateOne) Mutation() *ArtifactMutation {
 	return auo.mutation
@@ -2588,6 +2884,30 @@ func (auo *ArtifactUpdateOne) ClearCollection() *ArtifactUpdateOne {
 // ClearLicense clears the "license" edge to the License entity.
 func (auo *ArtifactUpdateOne) ClearLicense() *ArtifactUpdateOne {
 	auo.mutation.ClearLicense()
+	return auo
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (auo *ArtifactUpdateOne) ClearCountry() *ArtifactUpdateOne {
+	auo.mutation.ClearCountry()
+	return auo
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (auo *ArtifactUpdateOne) ClearSettlement() *ArtifactUpdateOne {
+	auo.mutation.ClearSettlement()
+	return auo
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (auo *ArtifactUpdateOne) ClearDistrict() *ArtifactUpdateOne {
+	auo.mutation.ClearDistrict()
+	return auo
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (auo *ArtifactUpdateOne) ClearRegion() *ArtifactUpdateOne {
+	auo.mutation.ClearRegion()
 	return auo
 }
 
@@ -3294,6 +3614,122 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CountryTable,
+			Columns: []string{artifact.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.CountryTable,
+			Columns: []string{artifact.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SettlementTable,
+			Columns: []string{artifact.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.SettlementTable,
+			Columns: []string{artifact.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DistrictTable,
+			Columns: []string{artifact.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DistrictTable,
+			Columns: []string{artifact.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.RegionTable,
+			Columns: []string{artifact.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.RegionTable,
+			Columns: []string{artifact.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

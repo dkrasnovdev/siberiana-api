@@ -12,12 +12,16 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // Artifact is the model entity for the Artifact schema.
@@ -85,12 +89,16 @@ type Artifact struct {
 	// The values are being populated by the ArtifactQuery when eager-loading is set.
 	Edges                ArtifactEdges `json:"edges"`
 	collection_artifacts *int
+	country_artifacts    *int
 	culture_artifacts    *int
+	district_artifacts   *int
 	license_artifacts    *int
 	location_artifacts   *int
 	model_artifacts      *int
 	monument_artifacts   *int
+	region_artifacts     *int
 	set_artifacts        *int
+	settlement_artifacts *int
 	selectValues         sql.SelectValues
 }
 
@@ -120,11 +128,19 @@ type ArtifactEdges struct {
 	Collection *Collection `json:"collection,omitempty"`
 	// License holds the value of the license edge.
 	License *License `json:"license,omitempty"`
+	// Country holds the value of the country edge.
+	Country *Country `json:"country,omitempty"`
+	// Settlement holds the value of the settlement edge.
+	Settlement *Settlement `json:"settlement,omitempty"`
+	// District holds the value of the district edge.
+	District *District `json:"district,omitempty"`
+	// Region holds the value of the region edge.
+	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [16]map[string]int
 
 	namedAuthors      map[string][]*Person
 	namedMediums      map[string][]*Medium
@@ -269,6 +285,58 @@ func (e ArtifactEdges) LicenseOrErr() (*License, error) {
 	return nil, &NotLoadedError{edge: "license"}
 }
 
+// CountryOrErr returns the Country value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtifactEdges) CountryOrErr() (*Country, error) {
+	if e.loadedTypes[12] {
+		if e.Country == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: country.Label}
+		}
+		return e.Country, nil
+	}
+	return nil, &NotLoadedError{edge: "country"}
+}
+
+// SettlementOrErr returns the Settlement value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtifactEdges) SettlementOrErr() (*Settlement, error) {
+	if e.loadedTypes[13] {
+		if e.Settlement == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: settlement.Label}
+		}
+		return e.Settlement, nil
+	}
+	return nil, &NotLoadedError{edge: "settlement"}
+}
+
+// DistrictOrErr returns the District value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtifactEdges) DistrictOrErr() (*District, error) {
+	if e.loadedTypes[14] {
+		if e.District == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: district.Label}
+		}
+		return e.District, nil
+	}
+	return nil, &NotLoadedError{edge: "district"}
+}
+
+// RegionOrErr returns the Region value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtifactEdges) RegionOrErr() (*Region, error) {
+	if e.loadedTypes[15] {
+		if e.Region == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: region.Label}
+		}
+		return e.Region, nil
+	}
+	return nil, &NotLoadedError{edge: "region"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Artifact) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -286,17 +354,25 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case artifact.ForeignKeys[0]: // collection_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[1]: // culture_artifacts
+		case artifact.ForeignKeys[1]: // country_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[2]: // license_artifacts
+		case artifact.ForeignKeys[2]: // culture_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[3]: // location_artifacts
+		case artifact.ForeignKeys[3]: // district_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[4]: // model_artifacts
+		case artifact.ForeignKeys[4]: // license_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[5]: // monument_artifacts
+		case artifact.ForeignKeys[5]: // location_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[6]: // set_artifacts
+		case artifact.ForeignKeys[6]: // model_artifacts
+			values[i] = new(sql.NullInt64)
+		case artifact.ForeignKeys[7]: // monument_artifacts
+			values[i] = new(sql.NullInt64)
+		case artifact.ForeignKeys[8]: // region_artifacts
+			values[i] = new(sql.NullInt64)
+		case artifact.ForeignKeys[9]: // set_artifacts
+			values[i] = new(sql.NullInt64)
+		case artifact.ForeignKeys[10]: // settlement_artifacts
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -498,45 +574,73 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			}
 		case artifact.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field country_artifacts", value)
+			} else if value.Valid {
+				a.country_artifacts = new(int)
+				*a.country_artifacts = int(value.Int64)
+			}
+		case artifact.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field culture_artifacts", value)
 			} else if value.Valid {
 				a.culture_artifacts = new(int)
 				*a.culture_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[2]:
+		case artifact.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field district_artifacts", value)
+			} else if value.Valid {
+				a.district_artifacts = new(int)
+				*a.district_artifacts = int(value.Int64)
+			}
+		case artifact.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field license_artifacts", value)
 			} else if value.Valid {
 				a.license_artifacts = new(int)
 				*a.license_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[3]:
+		case artifact.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field location_artifacts", value)
 			} else if value.Valid {
 				a.location_artifacts = new(int)
 				*a.location_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[4]:
+		case artifact.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field model_artifacts", value)
 			} else if value.Valid {
 				a.model_artifacts = new(int)
 				*a.model_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[5]:
+		case artifact.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field monument_artifacts", value)
 			} else if value.Valid {
 				a.monument_artifacts = new(int)
 				*a.monument_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[6]:
+		case artifact.ForeignKeys[8]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field region_artifacts", value)
+			} else if value.Valid {
+				a.region_artifacts = new(int)
+				*a.region_artifacts = int(value.Int64)
+			}
+		case artifact.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field set_artifacts", value)
 			} else if value.Valid {
 				a.set_artifacts = new(int)
 				*a.set_artifacts = int(value.Int64)
+			}
+		case artifact.ForeignKeys[10]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field settlement_artifacts", value)
+			} else if value.Valid {
+				a.settlement_artifacts = new(int)
+				*a.settlement_artifacts = int(value.Int64)
 			}
 		default:
 			a.selectValues.Set(columns[i], values[i])
@@ -609,6 +713,26 @@ func (a *Artifact) QueryCollection() *CollectionQuery {
 // QueryLicense queries the "license" edge of the Artifact entity.
 func (a *Artifact) QueryLicense() *LicenseQuery {
 	return NewArtifactClient(a.config).QueryLicense(a)
+}
+
+// QueryCountry queries the "country" edge of the Artifact entity.
+func (a *Artifact) QueryCountry() *CountryQuery {
+	return NewArtifactClient(a.config).QueryCountry(a)
+}
+
+// QuerySettlement queries the "settlement" edge of the Artifact entity.
+func (a *Artifact) QuerySettlement() *SettlementQuery {
+	return NewArtifactClient(a.config).QuerySettlement(a)
+}
+
+// QueryDistrict queries the "district" edge of the Artifact entity.
+func (a *Artifact) QueryDistrict() *DistrictQuery {
+	return NewArtifactClient(a.config).QueryDistrict(a)
+}
+
+// QueryRegion queries the "region" edge of the Artifact entity.
+func (a *Artifact) QueryRegion() *RegionQuery {
+	return NewArtifactClient(a.config).QueryRegion(a)
 }
 
 // Update returns a builder for updating this Artifact.

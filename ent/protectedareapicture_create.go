@@ -11,10 +11,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
@@ -267,6 +271,82 @@ func (papc *ProtectedAreaPictureCreate) SetLicense(l *License) *ProtectedAreaPic
 	return papc.SetLicenseID(l.ID)
 }
 
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetCountryID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetCountryID(id)
+	return papc
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableCountryID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetCountryID(*id)
+	}
+	return papc
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (papc *ProtectedAreaPictureCreate) SetCountry(c *Country) *ProtectedAreaPictureCreate {
+	return papc.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetSettlementID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetSettlementID(id)
+	return papc
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableSettlementID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetSettlementID(*id)
+	}
+	return papc
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (papc *ProtectedAreaPictureCreate) SetSettlement(s *Settlement) *ProtectedAreaPictureCreate {
+	return papc.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetDistrictID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetDistrictID(id)
+	return papc
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableDistrictID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetDistrictID(*id)
+	}
+	return papc
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (papc *ProtectedAreaPictureCreate) SetDistrict(d *District) *ProtectedAreaPictureCreate {
+	return papc.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetRegionID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetRegionID(id)
+	return papc
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableRegionID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetRegionID(*id)
+	}
+	return papc
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (papc *ProtectedAreaPictureCreate) SetRegion(r *Region) *ProtectedAreaPictureCreate {
+	return papc.SetRegionID(r.ID)
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papc *ProtectedAreaPictureCreate) Mutation() *ProtectedAreaPictureMutation {
 	return papc.mutation
@@ -485,6 +565,74 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.license_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CountryTable,
+			Columns: []string{protectedareapicture.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.country_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.SettlementTable,
+			Columns: []string{protectedareapicture.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.settlement_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.DistrictTable,
+			Columns: []string{protectedareapicture.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.district_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.RegionTable,
+			Columns: []string{protectedareapicture.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.region_protected_area_pictures = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

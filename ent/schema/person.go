@@ -83,7 +83,7 @@ func (Person) Fields() []ent.Field {
 func (Person) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("collections", Collection.Type),
-		edge.To("arts", Art.Type),
+		edge.To("art", Art.Type),
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
 		edge.To("projects", Project.Type),

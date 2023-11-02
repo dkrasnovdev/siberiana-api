@@ -625,6 +625,52 @@ func ExternalLinkContainsFold(v string) predicate.Settlement {
 	return predicate.Settlement(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
+// HasArt applies the HasEdge predicate on the "art" edge.
+func HasArt() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ArtTable, ArtColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtWith applies the HasEdge predicate on the "art" edge with a given conditions (other predicates).
+func HasArtWith(preds ...predicate.Art) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newArtStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasArtifacts applies the HasEdge predicate on the "artifacts" edge.
+func HasArtifacts() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtifactsWith applies the HasEdge predicate on the "artifacts" edge with a given conditions (other predicates).
+func HasArtifactsWith(preds ...predicate.Artifact) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newArtifactsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasBooks applies the HasEdge predicate on the "books" edge.
 func HasBooks() predicate.Settlement {
 	return predicate.Settlement(func(s *sql.Selector) {
@@ -640,6 +686,29 @@ func HasBooks() predicate.Settlement {
 func HasBooksWith(preds ...predicate.Book) predicate.Settlement {
 	return predicate.Settlement(func(s *sql.Selector) {
 		step := newBooksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProtectedAreaPictures applies the HasEdge predicate on the "protected_area_pictures" edge.
+func HasProtectedAreaPictures() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaPicturesWith applies the HasEdge predicate on the "protected_area_pictures" edge with a given conditions (other predicates).
+func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newProtectedAreaPicturesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

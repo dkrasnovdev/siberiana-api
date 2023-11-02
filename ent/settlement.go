@@ -41,33 +41,69 @@ type Settlement struct {
 
 // SettlementEdges holds the relations/edges for other nodes in the graph.
 type SettlementEdges struct {
+	// Art holds the value of the art edge.
+	Art []*Art `json:"art,omitempty"`
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [5]map[string]int
 
-	namedBooks     map[string][]*Book
-	namedLocations map[string][]*Location
+	namedArt                   map[string][]*Art
+	namedArtifacts             map[string][]*Artifact
+	namedBooks                 map[string][]*Book
+	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+	namedLocations             map[string][]*Location
+}
+
+// ArtOrErr returns the Art value or an error if the edge
+// was not loaded in eager-loading.
+func (e SettlementEdges) ArtOrErr() ([]*Art, error) {
+	if e.loadedTypes[0] {
+		return e.Art, nil
+	}
+	return nil, &NotLoadedError{edge: "art"}
+}
+
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e SettlementEdges) ArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[1] {
+		return e.Artifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e SettlementEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[2] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
 }
 
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e SettlementEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[3] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
+}
+
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e SettlementEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[4] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
@@ -166,9 +202,24 @@ func (s *Settlement) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
+// QueryArt queries the "art" edge of the Settlement entity.
+func (s *Settlement) QueryArt() *ArtQuery {
+	return NewSettlementClient(s.config).QueryArt(s)
+}
+
+// QueryArtifacts queries the "artifacts" edge of the Settlement entity.
+func (s *Settlement) QueryArtifacts() *ArtifactQuery {
+	return NewSettlementClient(s.config).QueryArtifacts(s)
+}
+
 // QueryBooks queries the "books" edge of the Settlement entity.
 func (s *Settlement) QueryBooks() *BookQuery {
 	return NewSettlementClient(s.config).QueryBooks(s)
+}
+
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Settlement entity.
+func (s *Settlement) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewSettlementClient(s.config).QueryProtectedAreaPictures(s)
 }
 
 // QueryLocations queries the "locations" edge of the Settlement entity.
@@ -226,6 +277,54 @@ func (s *Settlement) String() string {
 	return builder.String()
 }
 
+// NamedArt returns the Art named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Settlement) NamedArt(name string) ([]*Art, error) {
+	if s.Edges.namedArt == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedArt[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Settlement) appendNamedArt(name string, edges ...*Art) {
+	if s.Edges.namedArt == nil {
+		s.Edges.namedArt = make(map[string][]*Art)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedArt[name] = []*Art{}
+	} else {
+		s.Edges.namedArt[name] = append(s.Edges.namedArt[name], edges...)
+	}
+}
+
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Settlement) NamedArtifacts(name string) ([]*Artifact, error) {
+	if s.Edges.namedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Settlement) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if s.Edges.namedArtifacts == nil {
+		s.Edges.namedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedArtifacts[name] = []*Artifact{}
+	} else {
+		s.Edges.namedArtifacts[name] = append(s.Edges.namedArtifacts[name], edges...)
+	}
+}
+
 // NamedBooks returns the Books named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (s *Settlement) NamedBooks(name string) ([]*Book, error) {
@@ -247,6 +346,30 @@ func (s *Settlement) appendNamedBooks(name string, edges ...*Book) {
 		s.Edges.namedBooks[name] = []*Book{}
 	} else {
 		s.Edges.namedBooks[name] = append(s.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Settlement) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if s.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Settlement) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if s.Edges.namedProtectedAreaPictures == nil {
+		s.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		s.Edges.namedProtectedAreaPictures[name] = append(s.Edges.namedProtectedAreaPictures[name], edges...)
 	}
 }
 

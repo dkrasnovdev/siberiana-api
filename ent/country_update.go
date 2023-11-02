@@ -11,9 +11,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // CountryUpdate is the builder for updating Country entities.
@@ -155,6 +159,66 @@ func (cu *CountryUpdate) ClearExternalLink() *CountryUpdate {
 	return cu
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (cu *CountryUpdate) AddArtIDs(ids ...int) *CountryUpdate {
+	cu.mutation.AddArtIDs(ids...)
+	return cu
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (cu *CountryUpdate) AddArt(a ...*Art) *CountryUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.AddArtIDs(ids...)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cu *CountryUpdate) AddArtifactIDs(ids ...int) *CountryUpdate {
+	cu.mutation.AddArtifactIDs(ids...)
+	return cu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cu *CountryUpdate) AddArtifacts(a ...*Artifact) *CountryUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.AddArtifactIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (cu *CountryUpdate) AddBookIDs(ids ...int) *CountryUpdate {
+	cu.mutation.AddBookIDs(ids...)
+	return cu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (cu *CountryUpdate) AddBooks(b ...*Book) *CountryUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cu.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (cu *CountryUpdate) AddProtectedAreaPictureIDs(ids ...int) *CountryUpdate {
+	cu.mutation.AddProtectedAreaPictureIDs(ids...)
+	return cu
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cu *CountryUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *CountryUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.AddProtectedAreaPictureIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (cu *CountryUpdate) AddLocationIDs(ids ...int) *CountryUpdate {
 	cu.mutation.AddLocationIDs(ids...)
@@ -173,6 +237,90 @@ func (cu *CountryUpdate) AddLocations(l ...*Location) *CountryUpdate {
 // Mutation returns the CountryMutation object of the builder.
 func (cu *CountryUpdate) Mutation() *CountryMutation {
 	return cu.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (cu *CountryUpdate) ClearArt() *CountryUpdate {
+	cu.mutation.ClearArt()
+	return cu
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (cu *CountryUpdate) RemoveArtIDs(ids ...int) *CountryUpdate {
+	cu.mutation.RemoveArtIDs(ids...)
+	return cu
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (cu *CountryUpdate) RemoveArt(a ...*Art) *CountryUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.RemoveArtIDs(ids...)
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (cu *CountryUpdate) ClearArtifacts() *CountryUpdate {
+	cu.mutation.ClearArtifacts()
+	return cu
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (cu *CountryUpdate) RemoveArtifactIDs(ids ...int) *CountryUpdate {
+	cu.mutation.RemoveArtifactIDs(ids...)
+	return cu
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (cu *CountryUpdate) RemoveArtifacts(a ...*Artifact) *CountryUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (cu *CountryUpdate) ClearBooks() *CountryUpdate {
+	cu.mutation.ClearBooks()
+	return cu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (cu *CountryUpdate) RemoveBookIDs(ids ...int) *CountryUpdate {
+	cu.mutation.RemoveBookIDs(ids...)
+	return cu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (cu *CountryUpdate) RemoveBooks(b ...*Book) *CountryUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cu.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cu *CountryUpdate) ClearProtectedAreaPictures() *CountryUpdate {
+	cu.mutation.ClearProtectedAreaPictures()
+	return cu
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (cu *CountryUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *CountryUpdate {
+	cu.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return cu
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (cu *CountryUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *CountryUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -285,6 +433,186 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(country.FieldExternalLink, field.TypeString)
+	}
+	if cu.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtTable,
+			Columns: []string{country.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedArtIDs(); len(nodes) > 0 && !cu.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtTable,
+			Columns: []string{country.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtTable,
+			Columns: []string{country.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtifactsTable,
+			Columns: []string{country.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !cu.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtifactsTable,
+			Columns: []string{country.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtifactsTable,
+			Columns: []string{country.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.BooksTable,
+			Columns: []string{country.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !cu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.BooksTable,
+			Columns: []string{country.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.BooksTable,
+			Columns: []string{country.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ProtectedAreaPicturesTable,
+			Columns: []string{country.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !cu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ProtectedAreaPicturesTable,
+			Columns: []string{country.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ProtectedAreaPicturesTable,
+			Columns: []string{country.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cu.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -477,6 +805,66 @@ func (cuo *CountryUpdateOne) ClearExternalLink() *CountryUpdateOne {
 	return cuo
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (cuo *CountryUpdateOne) AddArtIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.AddArtIDs(ids...)
+	return cuo
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (cuo *CountryUpdateOne) AddArt(a ...*Art) *CountryUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.AddArtIDs(ids...)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (cuo *CountryUpdateOne) AddArtifactIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.AddArtifactIDs(ids...)
+	return cuo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (cuo *CountryUpdateOne) AddArtifacts(a ...*Artifact) *CountryUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.AddArtifactIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (cuo *CountryUpdateOne) AddBookIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.AddBookIDs(ids...)
+	return cuo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (cuo *CountryUpdateOne) AddBooks(b ...*Book) *CountryUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cuo.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (cuo *CountryUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return cuo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cuo *CountryUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *CountryUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.AddProtectedAreaPictureIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (cuo *CountryUpdateOne) AddLocationIDs(ids ...int) *CountryUpdateOne {
 	cuo.mutation.AddLocationIDs(ids...)
@@ -495,6 +883,90 @@ func (cuo *CountryUpdateOne) AddLocations(l ...*Location) *CountryUpdateOne {
 // Mutation returns the CountryMutation object of the builder.
 func (cuo *CountryUpdateOne) Mutation() *CountryMutation {
 	return cuo.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (cuo *CountryUpdateOne) ClearArt() *CountryUpdateOne {
+	cuo.mutation.ClearArt()
+	return cuo
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (cuo *CountryUpdateOne) RemoveArtIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.RemoveArtIDs(ids...)
+	return cuo
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (cuo *CountryUpdateOne) RemoveArt(a ...*Art) *CountryUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.RemoveArtIDs(ids...)
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (cuo *CountryUpdateOne) ClearArtifacts() *CountryUpdateOne {
+	cuo.mutation.ClearArtifacts()
+	return cuo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (cuo *CountryUpdateOne) RemoveArtifactIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.RemoveArtifactIDs(ids...)
+	return cuo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (cuo *CountryUpdateOne) RemoveArtifacts(a ...*Artifact) *CountryUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.RemoveArtifactIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (cuo *CountryUpdateOne) ClearBooks() *CountryUpdateOne {
+	cuo.mutation.ClearBooks()
+	return cuo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (cuo *CountryUpdateOne) RemoveBookIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.RemoveBookIDs(ids...)
+	return cuo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (cuo *CountryUpdateOne) RemoveBooks(b ...*Book) *CountryUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return cuo.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (cuo *CountryUpdateOne) ClearProtectedAreaPictures() *CountryUpdateOne {
+	cuo.mutation.ClearProtectedAreaPictures()
+	return cuo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (cuo *CountryUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return cuo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (cuo *CountryUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *CountryUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -637,6 +1109,186 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 	}
 	if cuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(country.FieldExternalLink, field.TypeString)
+	}
+	if cuo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtTable,
+			Columns: []string{country.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedArtIDs(); len(nodes) > 0 && !cuo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtTable,
+			Columns: []string{country.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtTable,
+			Columns: []string{country.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtifactsTable,
+			Columns: []string{country.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !cuo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtifactsTable,
+			Columns: []string{country.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ArtifactsTable,
+			Columns: []string{country.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.BooksTable,
+			Columns: []string{country.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !cuo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.BooksTable,
+			Columns: []string{country.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.BooksTable,
+			Columns: []string{country.BooksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ProtectedAreaPicturesTable,
+			Columns: []string{country.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !cuo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ProtectedAreaPicturesTable,
+			Columns: []string{country.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.ProtectedAreaPicturesTable,
+			Columns: []string{country.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cuo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{

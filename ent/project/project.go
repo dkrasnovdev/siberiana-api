@@ -31,12 +31,16 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
-	// FieldBeginData holds the string denoting the begin_data field in the database.
-	FieldBeginData = "begin_data"
+	// FieldBeginDate holds the string denoting the begin_date field in the database.
+	FieldBeginDate = "begin_date"
 	// FieldEndDate holds the string denoting the end_date field in the database.
 	FieldEndDate = "end_date"
 	// FieldYear holds the string denoting the year field in the database.
 	FieldYear = "year"
+	// FieldBeginYear holds the string denoting the begin_year field in the database.
+	FieldBeginYear = "begin_year"
+	// FieldEndYear holds the string denoting the end_year field in the database.
+	FieldEndYear = "end_year"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeTeam holds the string denoting the team edge name in mutations.
@@ -66,9 +70,11 @@ var Columns = []string{
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
-	FieldBeginData,
+	FieldBeginDate,
 	FieldEndDate,
 	FieldYear,
+	FieldBeginYear,
+	FieldEndYear,
 }
 
 var (
@@ -106,6 +112,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// YearValidator is a validator for the "year" field. It is called by the builders before save.
 	YearValidator func(int) error
+	// BeginYearValidator is a validator for the "begin_year" field. It is called by the builders before save.
+	BeginYearValidator func(int) error
+	// EndYearValidator is a validator for the "end_year" field. It is called by the builders before save.
+	EndYearValidator func(int) error
 )
 
 // OrderOption defines the ordering options for the Project queries.
@@ -156,9 +166,9 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
-// ByBeginData orders the results by the begin_data field.
-func ByBeginData(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldBeginData, opts...).ToFunc()
+// ByBeginDate orders the results by the begin_date field.
+func ByBeginDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBeginDate, opts...).ToFunc()
 }
 
 // ByEndDate orders the results by the end_date field.
@@ -169,6 +179,16 @@ func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
 // ByYear orders the results by the year field.
 func ByYear(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldYear, opts...).ToFunc()
+}
+
+// ByBeginYear orders the results by the begin_year field.
+func ByBeginYear(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBeginYear, opts...).ToFunc()
+}
+
+// ByEndYear orders the results by the end_year field.
+func ByEndYear(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndYear, opts...).ToFunc()
 }
 
 // ByArtifactsCount orders the results by artifacts count.

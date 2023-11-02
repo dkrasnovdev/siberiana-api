@@ -14,7 +14,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -24,7 +26,9 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
 
@@ -47,6 +51,10 @@ type ArtifactQuery struct {
 	withLocation            *LocationQuery
 	withCollection          *CollectionQuery
 	withLicense             *LicenseQuery
+	withCountry             *CountryQuery
+	withSettlement          *SettlementQuery
+	withDistrict            *DistrictQuery
+	withRegion              *RegionQuery
 	withFKs                 bool
 	modifiers               []func(*sql.Selector)
 	loadTotal               []func(context.Context, []*Artifact) error
@@ -355,6 +363,94 @@ func (aq *ArtifactQuery) QueryLicense() *LicenseQuery {
 	return query
 }
 
+// QueryCountry chains the current query on the "country" edge.
+func (aq *ArtifactQuery) QueryCountry() *CountryQuery {
+	query := (&CountryClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CountryTable, artifact.CountryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySettlement chains the current query on the "settlement" edge.
+func (aq *ArtifactQuery) QuerySettlement() *SettlementQuery {
+	query := (&SettlementClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.SettlementTable, artifact.SettlementColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDistrict chains the current query on the "district" edge.
+func (aq *ArtifactQuery) QueryDistrict() *DistrictQuery {
+	query := (&DistrictClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.DistrictTable, artifact.DistrictColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegion chains the current query on the "region" edge.
+func (aq *ArtifactQuery) QueryRegion() *RegionQuery {
+	query := (&RegionClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.RegionTable, artifact.RegionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Artifact entity from the query.
 // Returns a *NotFoundError when no Artifact was found.
 func (aq *ArtifactQuery) First(ctx context.Context) (*Artifact, error) {
@@ -559,6 +655,10 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		withLocation:            aq.withLocation.Clone(),
 		withCollection:          aq.withCollection.Clone(),
 		withLicense:             aq.withLicense.Clone(),
+		withCountry:             aq.withCountry.Clone(),
+		withSettlement:          aq.withSettlement.Clone(),
+		withDistrict:            aq.withDistrict.Clone(),
+		withRegion:              aq.withRegion.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
@@ -697,6 +797,50 @@ func (aq *ArtifactQuery) WithLicense(opts ...func(*LicenseQuery)) *ArtifactQuery
 	return aq
 }
 
+// WithCountry tells the query-builder to eager-load the nodes that are connected to
+// the "country" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithCountry(opts ...func(*CountryQuery)) *ArtifactQuery {
+	query := (&CountryClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withCountry = query
+	return aq
+}
+
+// WithSettlement tells the query-builder to eager-load the nodes that are connected to
+// the "settlement" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithSettlement(opts ...func(*SettlementQuery)) *ArtifactQuery {
+	query := (&SettlementClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withSettlement = query
+	return aq
+}
+
+// WithDistrict tells the query-builder to eager-load the nodes that are connected to
+// the "district" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithDistrict(opts ...func(*DistrictQuery)) *ArtifactQuery {
+	query := (&DistrictClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withDistrict = query
+	return aq
+}
+
+// WithRegion tells the query-builder to eager-load the nodes that are connected to
+// the "region" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithRegion(opts ...func(*RegionQuery)) *ArtifactQuery {
+	query := (&RegionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withRegion = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -782,7 +926,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		nodes       = []*Artifact{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [12]bool{
+		loadedTypes = [16]bool{
 			aq.withAuthors != nil,
 			aq.withMediums != nil,
 			aq.withTechniques != nil,
@@ -795,9 +939,13 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withLocation != nil,
 			aq.withCollection != nil,
 			aq.withLicense != nil,
+			aq.withCountry != nil,
+			aq.withSettlement != nil,
+			aq.withDistrict != nil,
+			aq.withRegion != nil,
 		}
 	)
-	if aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil {
+	if aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -898,6 +1046,30 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 	if query := aq.withLicense; query != nil {
 		if err := aq.loadLicense(ctx, query, nodes, nil,
 			func(n *Artifact, e *License) { n.Edges.License = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withCountry; query != nil {
+		if err := aq.loadCountry(ctx, query, nodes, nil,
+			func(n *Artifact, e *Country) { n.Edges.Country = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withSettlement; query != nil {
+		if err := aq.loadSettlement(ctx, query, nodes, nil,
+			func(n *Artifact, e *Settlement) { n.Edges.Settlement = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withDistrict; query != nil {
+		if err := aq.loadDistrict(ctx, query, nodes, nil,
+			func(n *Artifact, e *District) { n.Edges.District = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withRegion; query != nil {
+		if err := aq.loadRegion(ctx, query, nodes, nil,
+			func(n *Artifact, e *Region) { n.Edges.Region = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1466,6 +1638,134 @@ func (aq *ArtifactQuery) loadLicense(ctx context.Context, query *LicenseQuery, n
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "license_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadCountry(ctx context.Context, query *CountryQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Country)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].country_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].country_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(country.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "country_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadSettlement(ctx context.Context, query *SettlementQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Settlement)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].settlement_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].settlement_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(settlement.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "settlement_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadDistrict(ctx context.Context, query *DistrictQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *District)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].district_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].district_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(district.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "district_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Region)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].region_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].region_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(region.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "region_artifacts" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

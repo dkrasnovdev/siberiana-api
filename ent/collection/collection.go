@@ -42,8 +42,8 @@ const (
 	FieldSlug = "slug"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
-	// EdgeArts holds the string denoting the arts edge name in mutations.
-	EdgeArts = "arts"
+	// EdgeArt holds the string denoting the art edge name in mutations.
+	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
@@ -56,13 +56,13 @@ const (
 	EdgeAuthors = "authors"
 	// Table holds the table name of the collection in the database.
 	Table = "collections"
-	// ArtsTable is the table that holds the arts relation/edge.
-	ArtsTable = "arts"
-	// ArtsInverseTable is the table name for the Art entity.
+	// ArtTable is the table that holds the art relation/edge.
+	ArtTable = "arts"
+	// ArtInverseTable is the table name for the Art entity.
 	// It exists in this package in order to avoid circular dependency with the "art" package.
-	ArtsInverseTable = "arts"
-	// ArtsColumn is the table column denoting the arts relation/edge.
-	ArtsColumn = "collection_arts"
+	ArtInverseTable = "arts"
+	// ArtColumn is the table column denoting the art relation/edge.
+	ArtColumn = "collection_art"
 	// ArtifactsTable is the table that holds the artifacts relation/edge.
 	ArtifactsTable = "artifacts"
 	// ArtifactsInverseTable is the table name for the Artifact entity.
@@ -163,6 +163,7 @@ type Type string
 
 // Type values.
 const (
+	TypeArt                   Type = "art"
 	TypeArtifacts             Type = "artifacts"
 	TypeBooks                 Type = "books"
 	TypeProtectedAreaPictures Type = "protected_area_pictures"
@@ -175,7 +176,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeArtifacts, TypeBooks, TypeProtectedAreaPictures:
+	case TypeArt, TypeArtifacts, TypeBooks, TypeProtectedAreaPictures:
 		return nil
 	default:
 		return fmt.Errorf("collection: invalid enum value for type field: %q", _type)
@@ -245,17 +246,17 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
-// ByArtsCount orders the results by arts count.
-func ByArtsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByArtCount orders the results by art count.
+func ByArtCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newArtsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newArtStep(), opts...)
 	}
 }
 
-// ByArts orders the results by arts terms.
-func ByArts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByArt orders the results by art terms.
+func ByArt(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newArtsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newArtStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -321,11 +322,11 @@ func ByAuthors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newAuthorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newArtsStep() *sqlgraph.Step {
+func newArtStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ArtsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ArtsTable, ArtsColumn),
+		sqlgraph.To(ArtInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ArtTable, ArtColumn),
 	)
 }
 func newArtifactsStep() *sqlgraph.Step {

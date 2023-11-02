@@ -58,10 +58,16 @@ const (
 	EdgeLicense = "license"
 	// EdgeLocation holds the string denoting the location edge name in mutations.
 	EdgeLocation = "location"
-	// EdgePlaceOfPublication holds the string denoting the place_of_publication edge name in mutations.
-	EdgePlaceOfPublication = "place_of_publication"
 	// EdgeLibrary holds the string denoting the library edge name in mutations.
 	EdgeLibrary = "library"
+	// EdgeCountry holds the string denoting the country edge name in mutations.
+	EdgeCountry = "country"
+	// EdgeSettlement holds the string denoting the settlement edge name in mutations.
+	EdgeSettlement = "settlement"
+	// EdgeDistrict holds the string denoting the district edge name in mutations.
+	EdgeDistrict = "district"
+	// EdgeRegion holds the string denoting the region edge name in mutations.
+	EdgeRegion = "region"
 	// Table holds the table name of the book in the database.
 	Table = "books"
 	// AuthorsTable is the table that holds the authors relation/edge. The primary key declared below.
@@ -109,13 +115,6 @@ const (
 	LocationInverseTable = "locations"
 	// LocationColumn is the table column denoting the location relation/edge.
 	LocationColumn = "location_books"
-	// PlaceOfPublicationTable is the table that holds the place_of_publication relation/edge.
-	PlaceOfPublicationTable = "books"
-	// PlaceOfPublicationInverseTable is the table name for the Settlement entity.
-	// It exists in this package in order to avoid circular dependency with the "settlement" package.
-	PlaceOfPublicationInverseTable = "settlements"
-	// PlaceOfPublicationColumn is the table column denoting the place_of_publication relation/edge.
-	PlaceOfPublicationColumn = "settlement_books"
 	// LibraryTable is the table that holds the library relation/edge.
 	LibraryTable = "books"
 	// LibraryInverseTable is the table name for the Organization entity.
@@ -123,6 +122,34 @@ const (
 	LibraryInverseTable = "organizations"
 	// LibraryColumn is the table column denoting the library relation/edge.
 	LibraryColumn = "organization_books"
+	// CountryTable is the table that holds the country relation/edge.
+	CountryTable = "books"
+	// CountryInverseTable is the table name for the Country entity.
+	// It exists in this package in order to avoid circular dependency with the "country" package.
+	CountryInverseTable = "countries"
+	// CountryColumn is the table column denoting the country relation/edge.
+	CountryColumn = "country_books"
+	// SettlementTable is the table that holds the settlement relation/edge.
+	SettlementTable = "books"
+	// SettlementInverseTable is the table name for the Settlement entity.
+	// It exists in this package in order to avoid circular dependency with the "settlement" package.
+	SettlementInverseTable = "settlements"
+	// SettlementColumn is the table column denoting the settlement relation/edge.
+	SettlementColumn = "settlement_books"
+	// DistrictTable is the table that holds the district relation/edge.
+	DistrictTable = "books"
+	// DistrictInverseTable is the table name for the District entity.
+	// It exists in this package in order to avoid circular dependency with the "district" package.
+	DistrictInverseTable = "districts"
+	// DistrictColumn is the table column denoting the district relation/edge.
+	DistrictColumn = "district_books"
+	// RegionTable is the table that holds the region relation/edge.
+	RegionTable = "books"
+	// RegionInverseTable is the table name for the Region entity.
+	// It exists in this package in order to avoid circular dependency with the "region" package.
+	RegionInverseTable = "regions"
+	// RegionColumn is the table column denoting the region relation/edge.
+	RegionColumn = "region_books"
 )
 
 // Columns holds all SQL columns for book fields.
@@ -147,11 +174,14 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"collection_books",
+	"country_books",
+	"district_books",
 	"license_books",
 	"location_books",
 	"organization_books",
 	"periodical_books",
 	"publisher_books",
+	"region_books",
 	"settlement_books",
 }
 
@@ -350,17 +380,38 @@ func ByLocationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByPlaceOfPublicationField orders the results by place_of_publication field.
-func ByPlaceOfPublicationField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPlaceOfPublicationStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByLibraryField orders the results by library field.
 func ByLibraryField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newLibraryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCountryField orders the results by country field.
+func ByCountryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCountryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySettlementField orders the results by settlement field.
+func BySettlementField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSettlementStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDistrictField orders the results by district field.
+func ByDistrictField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDistrictStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByRegionField orders the results by region field.
+func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newAuthorsStep() *sqlgraph.Step {
@@ -412,18 +463,39 @@ func newLocationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, LocationTable, LocationColumn),
 	)
 }
-func newPlaceOfPublicationStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PlaceOfPublicationInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, PlaceOfPublicationTable, PlaceOfPublicationColumn),
-	)
-}
 func newLibraryStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LibraryInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, LibraryTable, LibraryColumn),
+	)
+}
+func newCountryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CountryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CountryTable, CountryColumn),
+	)
+}
+func newSettlementStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SettlementInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SettlementTable, SettlementColumn),
+	)
+}
+func newDistrictStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DistrictInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, DistrictTable, DistrictColumn),
+	)
+}
+func newRegionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RegionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
 	)
 }
 

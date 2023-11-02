@@ -12,25 +12,34 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // SettlementQuery is the builder for querying Settlement entities.
 type SettlementQuery struct {
 	config
-	ctx                *QueryContext
-	order              []settlement.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Settlement
-	withBooks          *BookQuery
-	withLocations      *LocationQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Settlement) error
-	withNamedBooks     map[string]*BookQuery
-	withNamedLocations map[string]*LocationQuery
+	ctx                            *QueryContext
+	order                          []settlement.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.Settlement
+	withArt                        *ArtQuery
+	withArtifacts                  *ArtifactQuery
+	withBooks                      *BookQuery
+	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	withLocations                  *LocationQuery
+	modifiers                      []func(*sql.Selector)
+	loadTotal                      []func(context.Context, []*Settlement) error
+	withNamedArt                   map[string]*ArtQuery
+	withNamedArtifacts             map[string]*ArtifactQuery
+	withNamedBooks                 map[string]*BookQuery
+	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
+	withNamedLocations             map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -67,6 +76,50 @@ func (sq *SettlementQuery) Order(o ...settlement.OrderOption) *SettlementQuery {
 	return sq
 }
 
+// QueryArt chains the current query on the "art" edge.
+func (sq *SettlementQuery) QueryArt() *ArtQuery {
+	query := (&ArtClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.ArtTable, settlement.ArtColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (sq *SettlementQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.ArtifactsTable, settlement.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryBooks chains the current query on the "books" edge.
 func (sq *SettlementQuery) QueryBooks() *BookQuery {
 	query := (&BookClient{config: sq.config}).Query()
@@ -82,6 +135,28 @@ func (sq *SettlementQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, settlement.BooksTable, settlement.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (sq *SettlementQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.ProtectedAreaPicturesTable, settlement.ProtectedAreaPicturesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -298,17 +373,42 @@ func (sq *SettlementQuery) Clone() *SettlementQuery {
 		return nil
 	}
 	return &SettlementQuery{
-		config:        sq.config,
-		ctx:           sq.ctx.Clone(),
-		order:         append([]settlement.OrderOption{}, sq.order...),
-		inters:        append([]Interceptor{}, sq.inters...),
-		predicates:    append([]predicate.Settlement{}, sq.predicates...),
-		withBooks:     sq.withBooks.Clone(),
-		withLocations: sq.withLocations.Clone(),
+		config:                    sq.config,
+		ctx:                       sq.ctx.Clone(),
+		order:                     append([]settlement.OrderOption{}, sq.order...),
+		inters:                    append([]Interceptor{}, sq.inters...),
+		predicates:                append([]predicate.Settlement{}, sq.predicates...),
+		withArt:                   sq.withArt.Clone(),
+		withArtifacts:             sq.withArtifacts.Clone(),
+		withBooks:                 sq.withBooks.Clone(),
+		withProtectedAreaPictures: sq.withProtectedAreaPictures.Clone(),
+		withLocations:             sq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
 	}
+}
+
+// WithArt tells the query-builder to eager-load the nodes that are connected to
+// the "art" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithArt(opts ...func(*ArtQuery)) *SettlementQuery {
+	query := (&ArtClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withArt = query
+	return sq
+}
+
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *SettlementQuery {
+	query := (&ArtifactClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withArtifacts = query
+	return sq
 }
 
 // WithBooks tells the query-builder to eager-load the nodes that are connected to
@@ -319,6 +419,17 @@ func (sq *SettlementQuery) WithBooks(opts ...func(*BookQuery)) *SettlementQuery 
 		opt(query)
 	}
 	sq.withBooks = query
+	return sq
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *SettlementQuery {
+	query := (&ProtectedAreaPictureClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withProtectedAreaPictures = query
 	return sq
 }
 
@@ -417,8 +528,11 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	var (
 		nodes       = []*Settlement{}
 		_spec       = sq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [5]bool{
+			sq.withArt != nil,
+			sq.withArtifacts != nil,
 			sq.withBooks != nil,
+			sq.withProtectedAreaPictures != nil,
 			sq.withLocations != nil,
 		}
 	)
@@ -443,10 +557,33 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := sq.withArt; query != nil {
+		if err := sq.loadArt(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.Art = []*Art{} },
+			func(n *Settlement, e *Art) { n.Edges.Art = append(n.Edges.Art, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withArtifacts; query != nil {
+		if err := sq.loadArtifacts(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Settlement, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := sq.withBooks; query != nil {
 		if err := sq.loadBooks(ctx, query, nodes,
 			func(n *Settlement) { n.Edges.Books = []*Book{} },
 			func(n *Settlement, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withProtectedAreaPictures; query != nil {
+		if err := sq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *Settlement, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -457,10 +594,31 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	for name, query := range sq.withNamedArt {
+		if err := sq.loadArt(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedArt(name) },
+			func(n *Settlement, e *Art) { n.appendNamedArt(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedArtifacts {
+		if err := sq.loadArtifacts(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedArtifacts(name) },
+			func(n *Settlement, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range sq.withNamedBooks {
 		if err := sq.loadBooks(ctx, query, nodes,
 			func(n *Settlement) { n.appendNamedBooks(name) },
 			func(n *Settlement, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedProtectedAreaPictures {
+		if err := sq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *Settlement, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -479,6 +637,68 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	return nodes, nil
 }
 
+func (sq *SettlementQuery) loadArt(ctx context.Context, query *ArtQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Art)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Settlement)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Art(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(settlement.ArtColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.settlement_art
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "settlement_art" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "settlement_art" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SettlementQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Settlement)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(settlement.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.settlement_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "settlement_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "settlement_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (sq *SettlementQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Book)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Settlement)
@@ -505,6 +725,37 @@ func (sq *SettlementQuery) loadBooks(ctx context.Context, query *BookQuery, node
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "settlement_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (sq *SettlementQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *ProtectedAreaPicture)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Settlement)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(settlement.ProtectedAreaPicturesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.settlement_protected_area_pictures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "settlement_protected_area_pictures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "settlement_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -626,6 +877,34 @@ func (sq *SettlementQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
+// WithNamedArt tells the query-builder to eager-load the nodes that are connected to the "art"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithNamedArt(name string, opts ...func(*ArtQuery)) *SettlementQuery {
+	query := (&ArtClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedArt == nil {
+		sq.withNamedArt = make(map[string]*ArtQuery)
+	}
+	sq.withNamedArt[name] = query
+	return sq
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *SettlementQuery {
+	query := (&ArtifactClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedArtifacts == nil {
+		sq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	sq.withNamedArtifacts[name] = query
+	return sq
+}
+
 // WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (sq *SettlementQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *SettlementQuery {
@@ -637,6 +916,20 @@ func (sq *SettlementQuery) WithNamedBooks(name string, opts ...func(*BookQuery))
 		sq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	sq.withNamedBooks[name] = query
+	return sq
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *SettlementQuery {
+	query := (&ProtectedAreaPictureClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedProtectedAreaPictures == nil {
+		sq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	sq.withNamedProtectedAreaPictures[name] = query
 	return sq
 }
 

@@ -11,9 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
@@ -156,6 +159,36 @@ func (su *SettlementUpdate) ClearExternalLink() *SettlementUpdate {
 	return su
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (su *SettlementUpdate) AddArtIDs(ids ...int) *SettlementUpdate {
+	su.mutation.AddArtIDs(ids...)
+	return su
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (su *SettlementUpdate) AddArt(a ...*Art) *SettlementUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return su.AddArtIDs(ids...)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (su *SettlementUpdate) AddArtifactIDs(ids ...int) *SettlementUpdate {
+	su.mutation.AddArtifactIDs(ids...)
+	return su
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (su *SettlementUpdate) AddArtifacts(a ...*Artifact) *SettlementUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return su.AddArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (su *SettlementUpdate) AddBookIDs(ids ...int) *SettlementUpdate {
 	su.mutation.AddBookIDs(ids...)
@@ -169,6 +202,21 @@ func (su *SettlementUpdate) AddBooks(b ...*Book) *SettlementUpdate {
 		ids[i] = b[i].ID
 	}
 	return su.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (su *SettlementUpdate) AddProtectedAreaPictureIDs(ids ...int) *SettlementUpdate {
+	su.mutation.AddProtectedAreaPictureIDs(ids...)
+	return su
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (su *SettlementUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *SettlementUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return su.AddProtectedAreaPictureIDs(ids...)
 }
 
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
@@ -191,6 +239,48 @@ func (su *SettlementUpdate) Mutation() *SettlementMutation {
 	return su.mutation
 }
 
+// ClearArt clears all "art" edges to the Art entity.
+func (su *SettlementUpdate) ClearArt() *SettlementUpdate {
+	su.mutation.ClearArt()
+	return su
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (su *SettlementUpdate) RemoveArtIDs(ids ...int) *SettlementUpdate {
+	su.mutation.RemoveArtIDs(ids...)
+	return su
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (su *SettlementUpdate) RemoveArt(a ...*Art) *SettlementUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return su.RemoveArtIDs(ids...)
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (su *SettlementUpdate) ClearArtifacts() *SettlementUpdate {
+	su.mutation.ClearArtifacts()
+	return su
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (su *SettlementUpdate) RemoveArtifactIDs(ids ...int) *SettlementUpdate {
+	su.mutation.RemoveArtifactIDs(ids...)
+	return su
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (su *SettlementUpdate) RemoveArtifacts(a ...*Artifact) *SettlementUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return su.RemoveArtifactIDs(ids...)
+}
+
 // ClearBooks clears all "books" edges to the Book entity.
 func (su *SettlementUpdate) ClearBooks() *SettlementUpdate {
 	su.mutation.ClearBooks()
@@ -210,6 +300,27 @@ func (su *SettlementUpdate) RemoveBooks(b ...*Book) *SettlementUpdate {
 		ids[i] = b[i].ID
 	}
 	return su.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (su *SettlementUpdate) ClearProtectedAreaPictures() *SettlementUpdate {
+	su.mutation.ClearProtectedAreaPictures()
+	return su
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (su *SettlementUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *SettlementUpdate {
+	su.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return su
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (su *SettlementUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *SettlementUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return su.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -323,6 +434,96 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
 	}
+	if su.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtTable,
+			Columns: []string{settlement.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedArtIDs(); len(nodes) > 0 && !su.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtTable,
+			Columns: []string{settlement.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtTable,
+			Columns: []string{settlement.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtifactsTable,
+			Columns: []string{settlement.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !su.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtifactsTable,
+			Columns: []string{settlement.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtifactsTable,
+			Columns: []string{settlement.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if su.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -361,6 +562,51 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ProtectedAreaPicturesTable,
+			Columns: []string{settlement.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !su.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ProtectedAreaPicturesTable,
+			Columns: []string{settlement.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ProtectedAreaPicturesTable,
+			Columns: []string{settlement.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -559,6 +805,36 @@ func (suo *SettlementUpdateOne) ClearExternalLink() *SettlementUpdateOne {
 	return suo
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (suo *SettlementUpdateOne) AddArtIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.AddArtIDs(ids...)
+	return suo
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (suo *SettlementUpdateOne) AddArt(a ...*Art) *SettlementUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return suo.AddArtIDs(ids...)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (suo *SettlementUpdateOne) AddArtifactIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.AddArtifactIDs(ids...)
+	return suo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (suo *SettlementUpdateOne) AddArtifacts(a ...*Artifact) *SettlementUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return suo.AddArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (suo *SettlementUpdateOne) AddBookIDs(ids ...int) *SettlementUpdateOne {
 	suo.mutation.AddBookIDs(ids...)
@@ -572,6 +848,21 @@ func (suo *SettlementUpdateOne) AddBooks(b ...*Book) *SettlementUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return suo.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (suo *SettlementUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return suo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (suo *SettlementUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *SettlementUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return suo.AddProtectedAreaPictureIDs(ids...)
 }
 
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
@@ -594,6 +885,48 @@ func (suo *SettlementUpdateOne) Mutation() *SettlementMutation {
 	return suo.mutation
 }
 
+// ClearArt clears all "art" edges to the Art entity.
+func (suo *SettlementUpdateOne) ClearArt() *SettlementUpdateOne {
+	suo.mutation.ClearArt()
+	return suo
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (suo *SettlementUpdateOne) RemoveArtIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.RemoveArtIDs(ids...)
+	return suo
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (suo *SettlementUpdateOne) RemoveArt(a ...*Art) *SettlementUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return suo.RemoveArtIDs(ids...)
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (suo *SettlementUpdateOne) ClearArtifacts() *SettlementUpdateOne {
+	suo.mutation.ClearArtifacts()
+	return suo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (suo *SettlementUpdateOne) RemoveArtifactIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.RemoveArtifactIDs(ids...)
+	return suo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (suo *SettlementUpdateOne) RemoveArtifacts(a ...*Artifact) *SettlementUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return suo.RemoveArtifactIDs(ids...)
+}
+
 // ClearBooks clears all "books" edges to the Book entity.
 func (suo *SettlementUpdateOne) ClearBooks() *SettlementUpdateOne {
 	suo.mutation.ClearBooks()
@@ -613,6 +946,27 @@ func (suo *SettlementUpdateOne) RemoveBooks(b ...*Book) *SettlementUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return suo.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (suo *SettlementUpdateOne) ClearProtectedAreaPictures() *SettlementUpdateOne {
+	suo.mutation.ClearProtectedAreaPictures()
+	return suo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (suo *SettlementUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return suo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (suo *SettlementUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *SettlementUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return suo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -756,6 +1110,96 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 	if suo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(settlement.FieldExternalLink, field.TypeString)
 	}
+	if suo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtTable,
+			Columns: []string{settlement.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedArtIDs(); len(nodes) > 0 && !suo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtTable,
+			Columns: []string{settlement.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtTable,
+			Columns: []string{settlement.ArtColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtifactsTable,
+			Columns: []string{settlement.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !suo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtifactsTable,
+			Columns: []string{settlement.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ArtifactsTable,
+			Columns: []string{settlement.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if suo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -794,6 +1238,51 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ProtectedAreaPicturesTable,
+			Columns: []string{settlement.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !suo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ProtectedAreaPicturesTable,
+			Columns: []string{settlement.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   settlement.ProtectedAreaPicturesTable,
+			Columns: []string{settlement.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

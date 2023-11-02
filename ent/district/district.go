@@ -31,10 +31,46 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// EdgeArt holds the string denoting the art edge name in mutations.
+	EdgeArt = "art"
+	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
+	EdgeArtifacts = "artifacts"
+	// EdgeBooks holds the string denoting the books edge name in mutations.
+	EdgeBooks = "books"
+	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
+	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeLocations holds the string denoting the locations edge name in mutations.
 	EdgeLocations = "locations"
 	// Table holds the table name of the district in the database.
 	Table = "districts"
+	// ArtTable is the table that holds the art relation/edge.
+	ArtTable = "arts"
+	// ArtInverseTable is the table name for the Art entity.
+	// It exists in this package in order to avoid circular dependency with the "art" package.
+	ArtInverseTable = "arts"
+	// ArtColumn is the table column denoting the art relation/edge.
+	ArtColumn = "district_art"
+	// ArtifactsTable is the table that holds the artifacts relation/edge.
+	ArtifactsTable = "artifacts"
+	// ArtifactsInverseTable is the table name for the Artifact entity.
+	// It exists in this package in order to avoid circular dependency with the "artifact" package.
+	ArtifactsInverseTable = "artifacts"
+	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
+	ArtifactsColumn = "district_artifacts"
+	// BooksTable is the table that holds the books relation/edge.
+	BooksTable = "books"
+	// BooksInverseTable is the table name for the Book entity.
+	// It exists in this package in order to avoid circular dependency with the "book" package.
+	BooksInverseTable = "books"
+	// BooksColumn is the table column denoting the books relation/edge.
+	BooksColumn = "district_books"
+	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesTable = "protected_area_pictures"
+	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedareapicture" package.
+	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
+	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesColumn = "district_protected_area_pictures"
 	// LocationsTable is the table that holds the locations relation/edge.
 	LocationsTable = "locations"
 	// LocationsInverseTable is the table name for the Location entity.
@@ -131,6 +167,62 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
+// ByArtCount orders the results by art count.
+func ByArtCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newArtStep(), opts...)
+	}
+}
+
+// ByArt orders the results by art terms.
+func ByArt(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newArtStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByArtifactsCount orders the results by artifacts count.
+func ByArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newArtifactsStep(), opts...)
+	}
+}
+
+// ByArtifacts orders the results by artifacts terms.
+func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByBooksCount orders the results by books count.
+func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBooksStep(), opts...)
+	}
+}
+
+// ByBooks orders the results by books terms.
+func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBooksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
+func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProtectedAreaPicturesStep(), opts...)
+	}
+}
+
+// ByProtectedAreaPictures orders the results by protected_area_pictures terms.
+func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaPicturesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByLocationsCount orders the results by locations count.
 func ByLocationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -143,6 +235,34 @@ func ByLocations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newLocationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newArtStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ArtInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ArtTable, ArtColumn),
+	)
+}
+func newArtifactsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ArtifactsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newBooksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BooksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+	)
+}
+func newProtectedAreaPicturesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+	)
 }
 func newLocationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

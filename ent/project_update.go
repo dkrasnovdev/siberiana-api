@@ -156,23 +156,23 @@ func (pu *ProjectUpdate) ClearExternalLink() *ProjectUpdate {
 	return pu
 }
 
-// SetBeginData sets the "begin_data" field.
-func (pu *ProjectUpdate) SetBeginData(t time.Time) *ProjectUpdate {
-	pu.mutation.SetBeginData(t)
+// SetBeginDate sets the "begin_date" field.
+func (pu *ProjectUpdate) SetBeginDate(t time.Time) *ProjectUpdate {
+	pu.mutation.SetBeginDate(t)
 	return pu
 }
 
-// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
-func (pu *ProjectUpdate) SetNillableBeginData(t *time.Time) *ProjectUpdate {
+// SetNillableBeginDate sets the "begin_date" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableBeginDate(t *time.Time) *ProjectUpdate {
 	if t != nil {
-		pu.SetBeginData(*t)
+		pu.SetBeginDate(*t)
 	}
 	return pu
 }
 
-// ClearBeginData clears the value of the "begin_data" field.
-func (pu *ProjectUpdate) ClearBeginData() *ProjectUpdate {
-	pu.mutation.ClearBeginData()
+// ClearBeginDate clears the value of the "begin_date" field.
+func (pu *ProjectUpdate) ClearBeginDate() *ProjectUpdate {
+	pu.mutation.ClearBeginDate()
 	return pu
 }
 
@@ -220,6 +220,60 @@ func (pu *ProjectUpdate) AddYear(i int) *ProjectUpdate {
 // ClearYear clears the value of the "year" field.
 func (pu *ProjectUpdate) ClearYear() *ProjectUpdate {
 	pu.mutation.ClearYear()
+	return pu
+}
+
+// SetBeginYear sets the "begin_year" field.
+func (pu *ProjectUpdate) SetBeginYear(i int) *ProjectUpdate {
+	pu.mutation.ResetBeginYear()
+	pu.mutation.SetBeginYear(i)
+	return pu
+}
+
+// SetNillableBeginYear sets the "begin_year" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableBeginYear(i *int) *ProjectUpdate {
+	if i != nil {
+		pu.SetBeginYear(*i)
+	}
+	return pu
+}
+
+// AddBeginYear adds i to the "begin_year" field.
+func (pu *ProjectUpdate) AddBeginYear(i int) *ProjectUpdate {
+	pu.mutation.AddBeginYear(i)
+	return pu
+}
+
+// ClearBeginYear clears the value of the "begin_year" field.
+func (pu *ProjectUpdate) ClearBeginYear() *ProjectUpdate {
+	pu.mutation.ClearBeginYear()
+	return pu
+}
+
+// SetEndYear sets the "end_year" field.
+func (pu *ProjectUpdate) SetEndYear(i int) *ProjectUpdate {
+	pu.mutation.ResetEndYear()
+	pu.mutation.SetEndYear(i)
+	return pu
+}
+
+// SetNillableEndYear sets the "end_year" field if the given value is not nil.
+func (pu *ProjectUpdate) SetNillableEndYear(i *int) *ProjectUpdate {
+	if i != nil {
+		pu.SetEndYear(*i)
+	}
+	return pu
+}
+
+// AddEndYear adds i to the "end_year" field.
+func (pu *ProjectUpdate) AddEndYear(i int) *ProjectUpdate {
+	pu.mutation.AddEndYear(i)
+	return pu
+}
+
+// ClearEndYear clears the value of the "end_year" field.
+func (pu *ProjectUpdate) ClearEndYear() *ProjectUpdate {
+	pu.mutation.ClearEndYear()
 	return pu
 }
 
@@ -349,6 +403,16 @@ func (pu *ProjectUpdate) check() error {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Project.year": %w`, err)}
 		}
 	}
+	if v, ok := pu.mutation.BeginYear(); ok {
+		if err := project.BeginYearValidator(v); err != nil {
+			return &ValidationError{Name: "begin_year", err: fmt.Errorf(`ent: validator failed for field "Project.begin_year": %w`, err)}
+		}
+	}
+	if v, ok := pu.mutation.EndYear(); ok {
+		if err := project.EndYearValidator(v); err != nil {
+			return &ValidationError{Name: "end_year", err: fmt.Errorf(`ent: validator failed for field "Project.end_year": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -403,11 +467,11 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(project.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := pu.mutation.BeginData(); ok {
-		_spec.SetField(project.FieldBeginData, field.TypeTime, value)
+	if value, ok := pu.mutation.BeginDate(); ok {
+		_spec.SetField(project.FieldBeginDate, field.TypeTime, value)
 	}
-	if pu.mutation.BeginDataCleared() {
-		_spec.ClearField(project.FieldBeginData, field.TypeTime)
+	if pu.mutation.BeginDateCleared() {
+		_spec.ClearField(project.FieldBeginDate, field.TypeTime)
 	}
 	if value, ok := pu.mutation.EndDate(); ok {
 		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
@@ -423,6 +487,24 @@ func (pu *ProjectUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.YearCleared() {
 		_spec.ClearField(project.FieldYear, field.TypeInt)
+	}
+	if value, ok := pu.mutation.BeginYear(); ok {
+		_spec.SetField(project.FieldBeginYear, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedBeginYear(); ok {
+		_spec.AddField(project.FieldBeginYear, field.TypeInt, value)
+	}
+	if pu.mutation.BeginYearCleared() {
+		_spec.ClearField(project.FieldBeginYear, field.TypeInt)
+	}
+	if value, ok := pu.mutation.EndYear(); ok {
+		_spec.SetField(project.FieldEndYear, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedEndYear(); ok {
+		_spec.AddField(project.FieldEndYear, field.TypeInt, value)
+	}
+	if pu.mutation.EndYearCleared() {
+		_spec.ClearField(project.FieldEndYear, field.TypeInt)
 	}
 	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -660,23 +742,23 @@ func (puo *ProjectUpdateOne) ClearExternalLink() *ProjectUpdateOne {
 	return puo
 }
 
-// SetBeginData sets the "begin_data" field.
-func (puo *ProjectUpdateOne) SetBeginData(t time.Time) *ProjectUpdateOne {
-	puo.mutation.SetBeginData(t)
+// SetBeginDate sets the "begin_date" field.
+func (puo *ProjectUpdateOne) SetBeginDate(t time.Time) *ProjectUpdateOne {
+	puo.mutation.SetBeginDate(t)
 	return puo
 }
 
-// SetNillableBeginData sets the "begin_data" field if the given value is not nil.
-func (puo *ProjectUpdateOne) SetNillableBeginData(t *time.Time) *ProjectUpdateOne {
+// SetNillableBeginDate sets the "begin_date" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableBeginDate(t *time.Time) *ProjectUpdateOne {
 	if t != nil {
-		puo.SetBeginData(*t)
+		puo.SetBeginDate(*t)
 	}
 	return puo
 }
 
-// ClearBeginData clears the value of the "begin_data" field.
-func (puo *ProjectUpdateOne) ClearBeginData() *ProjectUpdateOne {
-	puo.mutation.ClearBeginData()
+// ClearBeginDate clears the value of the "begin_date" field.
+func (puo *ProjectUpdateOne) ClearBeginDate() *ProjectUpdateOne {
+	puo.mutation.ClearBeginDate()
 	return puo
 }
 
@@ -724,6 +806,60 @@ func (puo *ProjectUpdateOne) AddYear(i int) *ProjectUpdateOne {
 // ClearYear clears the value of the "year" field.
 func (puo *ProjectUpdateOne) ClearYear() *ProjectUpdateOne {
 	puo.mutation.ClearYear()
+	return puo
+}
+
+// SetBeginYear sets the "begin_year" field.
+func (puo *ProjectUpdateOne) SetBeginYear(i int) *ProjectUpdateOne {
+	puo.mutation.ResetBeginYear()
+	puo.mutation.SetBeginYear(i)
+	return puo
+}
+
+// SetNillableBeginYear sets the "begin_year" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableBeginYear(i *int) *ProjectUpdateOne {
+	if i != nil {
+		puo.SetBeginYear(*i)
+	}
+	return puo
+}
+
+// AddBeginYear adds i to the "begin_year" field.
+func (puo *ProjectUpdateOne) AddBeginYear(i int) *ProjectUpdateOne {
+	puo.mutation.AddBeginYear(i)
+	return puo
+}
+
+// ClearBeginYear clears the value of the "begin_year" field.
+func (puo *ProjectUpdateOne) ClearBeginYear() *ProjectUpdateOne {
+	puo.mutation.ClearBeginYear()
+	return puo
+}
+
+// SetEndYear sets the "end_year" field.
+func (puo *ProjectUpdateOne) SetEndYear(i int) *ProjectUpdateOne {
+	puo.mutation.ResetEndYear()
+	puo.mutation.SetEndYear(i)
+	return puo
+}
+
+// SetNillableEndYear sets the "end_year" field if the given value is not nil.
+func (puo *ProjectUpdateOne) SetNillableEndYear(i *int) *ProjectUpdateOne {
+	if i != nil {
+		puo.SetEndYear(*i)
+	}
+	return puo
+}
+
+// AddEndYear adds i to the "end_year" field.
+func (puo *ProjectUpdateOne) AddEndYear(i int) *ProjectUpdateOne {
+	puo.mutation.AddEndYear(i)
+	return puo
+}
+
+// ClearEndYear clears the value of the "end_year" field.
+func (puo *ProjectUpdateOne) ClearEndYear() *ProjectUpdateOne {
+	puo.mutation.ClearEndYear()
 	return puo
 }
 
@@ -866,6 +1002,16 @@ func (puo *ProjectUpdateOne) check() error {
 			return &ValidationError{Name: "year", err: fmt.Errorf(`ent: validator failed for field "Project.year": %w`, err)}
 		}
 	}
+	if v, ok := puo.mutation.BeginYear(); ok {
+		if err := project.BeginYearValidator(v); err != nil {
+			return &ValidationError{Name: "begin_year", err: fmt.Errorf(`ent: validator failed for field "Project.begin_year": %w`, err)}
+		}
+	}
+	if v, ok := puo.mutation.EndYear(); ok {
+		if err := project.EndYearValidator(v); err != nil {
+			return &ValidationError{Name: "end_year", err: fmt.Errorf(`ent: validator failed for field "Project.end_year": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -937,11 +1083,11 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 	if puo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(project.FieldExternalLink, field.TypeString)
 	}
-	if value, ok := puo.mutation.BeginData(); ok {
-		_spec.SetField(project.FieldBeginData, field.TypeTime, value)
+	if value, ok := puo.mutation.BeginDate(); ok {
+		_spec.SetField(project.FieldBeginDate, field.TypeTime, value)
 	}
-	if puo.mutation.BeginDataCleared() {
-		_spec.ClearField(project.FieldBeginData, field.TypeTime)
+	if puo.mutation.BeginDateCleared() {
+		_spec.ClearField(project.FieldBeginDate, field.TypeTime)
 	}
 	if value, ok := puo.mutation.EndDate(); ok {
 		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
@@ -957,6 +1103,24 @@ func (puo *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err e
 	}
 	if puo.mutation.YearCleared() {
 		_spec.ClearField(project.FieldYear, field.TypeInt)
+	}
+	if value, ok := puo.mutation.BeginYear(); ok {
+		_spec.SetField(project.FieldBeginYear, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedBeginYear(); ok {
+		_spec.AddField(project.FieldBeginYear, field.TypeInt, value)
+	}
+	if puo.mutation.BeginYearCleared() {
+		_spec.ClearField(project.FieldBeginYear, field.TypeInt)
+	}
+	if value, ok := puo.mutation.EndYear(); ok {
+		_spec.SetField(project.FieldEndYear, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedEndYear(); ok {
+		_spec.AddField(project.FieldEndYear, field.TypeInt, value)
+	}
+	if puo.mutation.EndYearCleared() {
+		_spec.ClearField(project.FieldEndYear, field.TypeInt)
 	}
 	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -13,11 +13,15 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
@@ -326,6 +330,82 @@ func (papu *ProtectedAreaPictureUpdate) SetLicense(l *License) *ProtectedAreaPic
 	return papu.SetLicenseID(l.ID)
 }
 
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetCountryID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetCountryID(id)
+	return papu
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableCountryID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetCountryID(*id)
+	}
+	return papu
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (papu *ProtectedAreaPictureUpdate) SetCountry(c *Country) *ProtectedAreaPictureUpdate {
+	return papu.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetSettlementID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetSettlementID(id)
+	return papu
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableSettlementID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetSettlementID(*id)
+	}
+	return papu
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (papu *ProtectedAreaPictureUpdate) SetSettlement(s *Settlement) *ProtectedAreaPictureUpdate {
+	return papu.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetDistrictID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetDistrictID(id)
+	return papu
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableDistrictID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetDistrictID(*id)
+	}
+	return papu
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (papu *ProtectedAreaPictureUpdate) SetDistrict(d *District) *ProtectedAreaPictureUpdate {
+	return papu.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetRegionID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetRegionID(id)
+	return papu
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableRegionID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetRegionID(*id)
+	}
+	return papu
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (papu *ProtectedAreaPictureUpdate) SetRegion(r *Region) *ProtectedAreaPictureUpdate {
+	return papu.SetRegionID(r.ID)
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papu *ProtectedAreaPictureUpdate) Mutation() *ProtectedAreaPictureMutation {
 	return papu.mutation
@@ -352,6 +432,30 @@ func (papu *ProtectedAreaPictureUpdate) ClearLocation() *ProtectedAreaPictureUpd
 // ClearLicense clears the "license" edge to the License entity.
 func (papu *ProtectedAreaPictureUpdate) ClearLicense() *ProtectedAreaPictureUpdate {
 	papu.mutation.ClearLicense()
+	return papu
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (papu *ProtectedAreaPictureUpdate) ClearCountry() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearCountry()
+	return papu
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (papu *ProtectedAreaPictureUpdate) ClearSettlement() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearSettlement()
+	return papu
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (papu *ProtectedAreaPictureUpdate) ClearDistrict() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearDistrict()
+	return papu
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (papu *ProtectedAreaPictureUpdate) ClearRegion() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearRegion()
 	return papu
 }
 
@@ -605,6 +709,122 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papu.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CountryTable,
+			Columns: []string{protectedareapicture.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CountryTable,
+			Columns: []string{protectedareapicture.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papu.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.SettlementTable,
+			Columns: []string{protectedareapicture.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.SettlementTable,
+			Columns: []string{protectedareapicture.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papu.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.DistrictTable,
+			Columns: []string{protectedareapicture.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.DistrictTable,
+			Columns: []string{protectedareapicture.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papu.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.RegionTable,
+			Columns: []string{protectedareapicture.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.RegionTable,
+			Columns: []string{protectedareapicture.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -924,6 +1144,82 @@ func (papuo *ProtectedAreaPictureUpdateOne) SetLicense(l *License) *ProtectedAre
 	return papuo.SetLicenseID(l.ID)
 }
 
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetCountryID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetCountryID(id)
+	return papuo
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableCountryID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetCountryID(*id)
+	}
+	return papuo
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetCountry(c *Country) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetCountryID(c.ID)
+}
+
+// SetSettlementID sets the "settlement" edge to the Settlement entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetSettlementID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetSettlementID(id)
+	return papuo
+}
+
+// SetNillableSettlementID sets the "settlement" edge to the Settlement entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableSettlementID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetSettlementID(*id)
+	}
+	return papuo
+}
+
+// SetSettlement sets the "settlement" edge to the Settlement entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetSettlement(s *Settlement) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetSettlementID(s.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetDistrictID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetDistrictID(id)
+	return papuo
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableDistrictID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetDistrictID(*id)
+	}
+	return papuo
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetDistrict(d *District) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetDistrictID(d.ID)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetRegionID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetRegionID(id)
+	return papuo
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableRegionID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetRegionID(*id)
+	}
+	return papuo
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetRegion(r *Region) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetRegionID(r.ID)
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papuo *ProtectedAreaPictureUpdateOne) Mutation() *ProtectedAreaPictureMutation {
 	return papuo.mutation
@@ -950,6 +1246,30 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearLocation() *ProtectedAreaPictur
 // ClearLicense clears the "license" edge to the License entity.
 func (papuo *ProtectedAreaPictureUpdateOne) ClearLicense() *ProtectedAreaPictureUpdateOne {
 	papuo.mutation.ClearLicense()
+	return papuo
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearCountry() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearCountry()
+	return papuo
+}
+
+// ClearSettlement clears the "settlement" edge to the Settlement entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearSettlement() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearSettlement()
+	return papuo
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearDistrict() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearDistrict()
+	return papuo
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearRegion() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearRegion()
 	return papuo
 }
 
@@ -1233,6 +1553,122 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(license.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papuo.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CountryTable,
+			Columns: []string{protectedareapicture.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.CountryTable,
+			Columns: []string{protectedareapicture.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papuo.mutation.SettlementCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.SettlementTable,
+			Columns: []string{protectedareapicture.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.SettlementIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.SettlementTable,
+			Columns: []string{protectedareapicture.SettlementColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papuo.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.DistrictTable,
+			Columns: []string{protectedareapicture.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.DistrictTable,
+			Columns: []string{protectedareapicture.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if papuo.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.RegionTable,
+			Columns: []string{protectedareapicture.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.RegionTable,
+			Columns: []string{protectedareapicture.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

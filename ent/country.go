@@ -41,21 +41,69 @@ type Country struct {
 
 // CountryEdges holds the relations/edges for other nodes in the graph.
 type CountryEdges struct {
+	// Art holds the value of the art edge.
+	Art []*Art `json:"art,omitempty"`
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [5]map[string]int
 
-	namedLocations map[string][]*Location
+	namedArt                   map[string][]*Art
+	namedArtifacts             map[string][]*Artifact
+	namedBooks                 map[string][]*Book
+	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+	namedLocations             map[string][]*Location
+}
+
+// ArtOrErr returns the Art value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) ArtOrErr() ([]*Art, error) {
+	if e.loadedTypes[0] {
+		return e.Art, nil
+	}
+	return nil, &NotLoadedError{edge: "art"}
+}
+
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) ArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[1] {
+		return e.Artifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[2] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
+}
+
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[3] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
 }
 
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e CountryEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[4] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
@@ -154,6 +202,26 @@ func (c *Country) Value(name string) (ent.Value, error) {
 	return c.selectValues.Get(name)
 }
 
+// QueryArt queries the "art" edge of the Country entity.
+func (c *Country) QueryArt() *ArtQuery {
+	return NewCountryClient(c.config).QueryArt(c)
+}
+
+// QueryArtifacts queries the "artifacts" edge of the Country entity.
+func (c *Country) QueryArtifacts() *ArtifactQuery {
+	return NewCountryClient(c.config).QueryArtifacts(c)
+}
+
+// QueryBooks queries the "books" edge of the Country entity.
+func (c *Country) QueryBooks() *BookQuery {
+	return NewCountryClient(c.config).QueryBooks(c)
+}
+
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Country entity.
+func (c *Country) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewCountryClient(c.config).QueryProtectedAreaPictures(c)
+}
+
 // QueryLocations queries the "locations" edge of the Country entity.
 func (c *Country) QueryLocations() *LocationQuery {
 	return NewCountryClient(c.config).QueryLocations(c)
@@ -207,6 +275,102 @@ func (c *Country) String() string {
 	builder.WriteString(c.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArt returns the Art named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedArt(name string) ([]*Art, error) {
+	if c.Edges.namedArt == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedArt[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedArt(name string, edges ...*Art) {
+	if c.Edges.namedArt == nil {
+		c.Edges.namedArt = make(map[string][]*Art)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedArt[name] = []*Art{}
+	} else {
+		c.Edges.namedArt[name] = append(c.Edges.namedArt[name], edges...)
+	}
+}
+
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedArtifacts(name string) ([]*Artifact, error) {
+	if c.Edges.namedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if c.Edges.namedArtifacts == nil {
+		c.Edges.namedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedArtifacts[name] = []*Artifact{}
+	} else {
+		c.Edges.namedArtifacts[name] = append(c.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedBooks(name string) ([]*Book, error) {
+	if c.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedBooks(name string, edges ...*Book) {
+	if c.Edges.namedBooks == nil {
+		c.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedBooks[name] = []*Book{}
+	} else {
+		c.Edges.namedBooks[name] = append(c.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if c.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if c.Edges.namedProtectedAreaPictures == nil {
+		c.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		c.Edges.namedProtectedAreaPictures[name] = append(c.Edges.namedProtectedAreaPictures[name], edges...)
+	}
 }
 
 // NamedLocations returns the Locations named value or an error if the edge was not
