@@ -153,6 +153,18 @@ func (f DistrictFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DistrictMutation", m)
 }
 
+// The EthnosFunc type is an adapter to allow the use of ordinary
+// function as Ethnos mutator.
+type EthnosFunc func(context.Context, *ent.EthnosMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f EthnosFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.EthnosMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EthnosMutation", m)
+}
+
 // The FavouriteFunc type is an adapter to allow the use of ordinary
 // function as Favourite mutator.
 type FavouriteFunc func(context.Context, *ent.FavouriteMutation) (ent.Value, error)

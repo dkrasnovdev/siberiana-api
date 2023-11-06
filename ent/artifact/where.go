@@ -165,6 +165,11 @@ func ChemicalComposition(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldChemicalComposition, v))
 }
 
+// KpNumber applies equality check predicate on the "kp_number" field. It's identical to KpNumberEQ.
+func KpNumber(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldKpNumber, v))
+}
+
 // GoskatalogNumber applies equality check predicate on the "goskatalog_number" field. It's identical to GoskatalogNumberEQ.
 func GoskatalogNumber(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldGoskatalogNumber, v))
@@ -1605,6 +1610,81 @@ func ChemicalCompositionContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldChemicalComposition, v))
 }
 
+// KpNumberEQ applies the EQ predicate on the "kp_number" field.
+func KpNumberEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldKpNumber, v))
+}
+
+// KpNumberNEQ applies the NEQ predicate on the "kp_number" field.
+func KpNumberNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldKpNumber, v))
+}
+
+// KpNumberIn applies the In predicate on the "kp_number" field.
+func KpNumberIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldKpNumber, vs...))
+}
+
+// KpNumberNotIn applies the NotIn predicate on the "kp_number" field.
+func KpNumberNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldKpNumber, vs...))
+}
+
+// KpNumberGT applies the GT predicate on the "kp_number" field.
+func KpNumberGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldKpNumber, v))
+}
+
+// KpNumberGTE applies the GTE predicate on the "kp_number" field.
+func KpNumberGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldKpNumber, v))
+}
+
+// KpNumberLT applies the LT predicate on the "kp_number" field.
+func KpNumberLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldKpNumber, v))
+}
+
+// KpNumberLTE applies the LTE predicate on the "kp_number" field.
+func KpNumberLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldKpNumber, v))
+}
+
+// KpNumberContains applies the Contains predicate on the "kp_number" field.
+func KpNumberContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldKpNumber, v))
+}
+
+// KpNumberHasPrefix applies the HasPrefix predicate on the "kp_number" field.
+func KpNumberHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldKpNumber, v))
+}
+
+// KpNumberHasSuffix applies the HasSuffix predicate on the "kp_number" field.
+func KpNumberHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldKpNumber, v))
+}
+
+// KpNumberIsNil applies the IsNil predicate on the "kp_number" field.
+func KpNumberIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldKpNumber))
+}
+
+// KpNumberNotNil applies the NotNil predicate on the "kp_number" field.
+func KpNumberNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldKpNumber))
+}
+
+// KpNumberEqualFold applies the EqualFold predicate on the "kp_number" field.
+func KpNumberEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldKpNumber, v))
+}
+
+// KpNumberContainsFold applies the ContainsFold predicate on the "kp_number" field.
+func KpNumberContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldKpNumber, v))
+}
+
 // GoskatalogNumberEQ applies the EQ predicate on the "goskatalog_number" field.
 func GoskatalogNumberEQ(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldGoskatalogNumber, v))
@@ -1895,6 +1975,29 @@ func HasAuthors() predicate.Artifact {
 func HasAuthorsWith(preds ...predicate.Person) predicate.Artifact {
 	return predicate.Artifact(func(s *sql.Selector) {
 		step := newAuthorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDonor applies the HasEdge predicate on the "donor" edge.
+func HasDonor() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, DonorTable, DonorColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDonorWith applies the HasEdge predicate on the "donor" edge with a given conditions (other predicates).
+func HasDonorWith(preds ...predicate.Person) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newDonorStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

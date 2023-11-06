@@ -24,6 +24,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -119,6 +120,7 @@ func checkColumn(table, column string) error {
 			country.Table:               country.ValidColumn,
 			culture.Table:               culture.ValidColumn,
 			district.Table:              district.ValidColumn,
+			ethnos.Table:                ethnos.ValidColumn,
 			favourite.Table:             favourite.ValidColumn,
 			interview.Table:             interview.ValidColumn,
 			keyword.Table:               keyword.ValidColumn,

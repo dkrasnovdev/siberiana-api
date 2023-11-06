@@ -26,26 +26,28 @@ import (
 // PersonQuery is the builder for querying Person entities.
 type PersonQuery struct {
 	config
-	ctx                   *QueryContext
-	order                 []person.OrderOption
-	inters                []Interceptor
-	predicates            []predicate.Person
-	withCollections       *CollectionQuery
-	withArt               *ArtQuery
-	withArtifacts         *ArtifactQuery
-	withBooks             *BookQuery
-	withProjects          *ProjectQuery
-	withPublications      *PublicationQuery
-	withAffiliation       *OrganizationQuery
-	withFKs               bool
-	modifiers             []func(*sql.Selector)
-	loadTotal             []func(context.Context, []*Person) error
-	withNamedCollections  map[string]*CollectionQuery
-	withNamedArt          map[string]*ArtQuery
-	withNamedArtifacts    map[string]*ArtifactQuery
-	withNamedBooks        map[string]*BookQuery
-	withNamedProjects     map[string]*ProjectQuery
-	withNamedPublications map[string]*PublicationQuery
+	ctx                       *QueryContext
+	order                     []person.OrderOption
+	inters                    []Interceptor
+	predicates                []predicate.Person
+	withCollections           *CollectionQuery
+	withArt                   *ArtQuery
+	withArtifacts             *ArtifactQuery
+	withDonatedArtifacts      *ArtifactQuery
+	withBooks                 *BookQuery
+	withProjects              *ProjectQuery
+	withPublications          *PublicationQuery
+	withAffiliation           *OrganizationQuery
+	withFKs                   bool
+	modifiers                 []func(*sql.Selector)
+	loadTotal                 []func(context.Context, []*Person) error
+	withNamedCollections      map[string]*CollectionQuery
+	withNamedArt              map[string]*ArtQuery
+	withNamedArtifacts        map[string]*ArtifactQuery
+	withNamedDonatedArtifacts map[string]*ArtifactQuery
+	withNamedBooks            map[string]*BookQuery
+	withNamedProjects         map[string]*ProjectQuery
+	withNamedPublications     map[string]*PublicationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -141,6 +143,28 @@ func (pq *PersonQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.ArtifactsTable, person.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDonatedArtifacts chains the current query on the "donated_artifacts" edge.
+func (pq *PersonQuery) QueryDonatedArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.DonatedArtifactsTable, person.DonatedArtifactsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -423,18 +447,19 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		return nil
 	}
 	return &PersonQuery{
-		config:           pq.config,
-		ctx:              pq.ctx.Clone(),
-		order:            append([]person.OrderOption{}, pq.order...),
-		inters:           append([]Interceptor{}, pq.inters...),
-		predicates:       append([]predicate.Person{}, pq.predicates...),
-		withCollections:  pq.withCollections.Clone(),
-		withArt:          pq.withArt.Clone(),
-		withArtifacts:    pq.withArtifacts.Clone(),
-		withBooks:        pq.withBooks.Clone(),
-		withProjects:     pq.withProjects.Clone(),
-		withPublications: pq.withPublications.Clone(),
-		withAffiliation:  pq.withAffiliation.Clone(),
+		config:               pq.config,
+		ctx:                  pq.ctx.Clone(),
+		order:                append([]person.OrderOption{}, pq.order...),
+		inters:               append([]Interceptor{}, pq.inters...),
+		predicates:           append([]predicate.Person{}, pq.predicates...),
+		withCollections:      pq.withCollections.Clone(),
+		withArt:              pq.withArt.Clone(),
+		withArtifacts:        pq.withArtifacts.Clone(),
+		withDonatedArtifacts: pq.withDonatedArtifacts.Clone(),
+		withBooks:            pq.withBooks.Clone(),
+		withProjects:         pq.withProjects.Clone(),
+		withPublications:     pq.withPublications.Clone(),
+		withAffiliation:      pq.withAffiliation.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -471,6 +496,17 @@ func (pq *PersonQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *PersonQuery 
 		opt(query)
 	}
 	pq.withArtifacts = query
+	return pq
+}
+
+// WithDonatedArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "donated_artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithDonatedArtifacts(opts ...func(*ArtifactQuery)) *PersonQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withDonatedArtifacts = query
 	return pq
 }
 
@@ -603,10 +639,11 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			pq.withCollections != nil,
 			pq.withArt != nil,
 			pq.withArtifacts != nil,
+			pq.withDonatedArtifacts != nil,
 			pq.withBooks != nil,
 			pq.withProjects != nil,
 			pq.withPublications != nil,
@@ -661,6 +698,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 			return nil, err
 		}
 	}
+	if query := pq.withDonatedArtifacts; query != nil {
+		if err := pq.loadDonatedArtifacts(ctx, query, nodes,
+			func(n *Person) { n.Edges.DonatedArtifacts = []*Artifact{} },
+			func(n *Person, e *Artifact) { n.Edges.DonatedArtifacts = append(n.Edges.DonatedArtifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withBooks; query != nil {
 		if err := pq.loadBooks(ctx, query, nodes,
 			func(n *Person) { n.Edges.Books = []*Book{} },
@@ -706,6 +750,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.appendNamedArtifacts(name) },
 			func(n *Person, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedDonatedArtifacts {
+		if err := pq.loadDonatedArtifacts(ctx, query, nodes,
+			func(n *Person) { n.appendNamedDonatedArtifacts(name) },
+			func(n *Person, e *Artifact) { n.appendNamedDonatedArtifacts(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -888,6 +939,37 @@ func (pq *PersonQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, 
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (pq *PersonQuery) loadDonatedArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Person, init func(*Person), assign func(*Person, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Person)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(person.DonatedArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.person_donated_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "person_donated_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "person_donated_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1230,6 +1312,20 @@ func (pq *PersonQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQue
 		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedDonatedArtifacts tells the query-builder to eager-load the nodes that are connected to the "donated_artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedDonatedArtifacts(name string, opts ...func(*ArtifactQuery)) *PersonQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedDonatedArtifacts == nil {
+		pq.withNamedDonatedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	pq.withNamedDonatedArtifacts[name] = query
 	return pq
 }
 

@@ -36,6 +36,8 @@ type Tx struct {
 	Culture *CultureClient
 	// District is the client for interacting with the District builders.
 	District *DistrictClient
+	// Ethnos is the client for interacting with the Ethnos builders.
+	Ethnos *EthnosClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
 	// Interview is the client for interacting with the Interview builders.
@@ -225,6 +227,7 @@ func (tx *Tx) init() {
 	tx.Country = NewCountryClient(tx.config)
 	tx.Culture = NewCultureClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
+	tx.Ethnos = NewEthnosClient(tx.config)
 	tx.Favourite = NewFavouriteClient(tx.config)
 	tx.Interview = NewInterviewClient(tx.config)
 	tx.Keyword = NewKeywordClient(tx.config)

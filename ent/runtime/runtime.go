@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -375,6 +376,33 @@ func init() {
 	district.DefaultUpdatedAt = districtDescUpdatedAt.Default.(func() time.Time)
 	// district.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	district.UpdateDefaultUpdatedAt = districtDescUpdatedAt.UpdateDefault.(func() time.Time)
+	ethnosMixin := schema.Ethnos{}.Mixin()
+	ethnos.Policy = privacy.NewPolicies(schema.Ethnos{})
+	ethnos.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := ethnos.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	ethnosMixinHooks0 := ethnosMixin[0].Hooks()
+
+	ethnos.Hooks[1] = ethnosMixinHooks0[0]
+	ethnosMixinFields0 := ethnosMixin[0].Fields()
+	_ = ethnosMixinFields0
+	ethnosFields := schema.Ethnos{}.Fields()
+	_ = ethnosFields
+	// ethnosDescCreatedAt is the schema descriptor for created_at field.
+	ethnosDescCreatedAt := ethnosMixinFields0[0].Descriptor()
+	// ethnos.DefaultCreatedAt holds the default value on creation for the created_at field.
+	ethnos.DefaultCreatedAt = ethnosDescCreatedAt.Default.(func() time.Time)
+	// ethnosDescUpdatedAt is the schema descriptor for updated_at field.
+	ethnosDescUpdatedAt := ethnosMixinFields0[2].Descriptor()
+	// ethnos.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	ethnos.DefaultUpdatedAt = ethnosDescUpdatedAt.Default.(func() time.Time)
+	// ethnos.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	ethnos.UpdateDefaultUpdatedAt = ethnosDescUpdatedAt.UpdateDefault.(func() time.Time)
 	favouriteMixin := schema.Favourite{}.Mixin()
 	favourite.Policy = privacy.NewPolicies(schema.Favourite{})
 	favourite.Hooks[0] = func(next ent.Mutator) ent.Mutator {

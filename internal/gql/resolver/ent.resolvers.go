@@ -83,6 +83,11 @@ func (r *queryResolver) Districts(ctx context.Context, after *entgql.Cursor[int]
 	return r.client.District.Query().Paginate(ctx, after, first, before, last, offset, ent.WithDistrictOrder(orderBy), ent.WithDistrictFilter(where.Filter))
 }
 
+// EthnosSlice is the resolver for the ethnosSlice field.
+func (r *queryResolver) EthnosSlice(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.EthnosOrder, where *ent.EthnosWhereInput) (*ent.EthnosConnection, error) {
+	return r.client.Ethnos.Query().Paginate(ctx, after, first, before, last, offset, ent.WithEthnosOrder(orderBy), ent.WithEthnosFilter(where.Filter))
+}
+
 // Favourites is the resolver for the favourites field.
 func (r *queryResolver) Favourites(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.FavouriteOrder, where *ent.FavouriteWhereInput) (*ent.FavouriteConnection, error) {
 	return r.client.Favourite.Query().Paginate(ctx, after, first, before, last, offset, ent.WithFavouriteOrder(orderBy), ent.WithFavouriteFilter(where.Filter))

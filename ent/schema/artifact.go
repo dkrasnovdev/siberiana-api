@@ -70,6 +70,7 @@ func (Artifact) Fields() []ent.Field {
 		field.String("dimensions").Optional(),
 		field.String("chemical_composition").Optional(),
 
+		field.String("kp_number").Optional(),
 		field.String("goskatalog_number").Optional(),
 		field.String("inventory_number").Optional(),
 
@@ -86,6 +87,7 @@ func (Artifact) Fields() []ent.Field {
 func (Artifact) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("authors", Person.Type).Ref("artifacts"),
+		edge.From("donor", Person.Type).Ref("donated_artifacts").Unique(),
 		edge.From("mediums", Medium.Type).Ref("artifacts"),
 		edge.From("techniques", Technique.Type).Ref("artifacts"),
 		edge.From("projects", Project.Type).Ref("artifacts"),

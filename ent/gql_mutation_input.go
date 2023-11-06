@@ -606,11 +606,13 @@ type CreateArtifactInput struct {
 	Weight                *string
 	Dimensions            *string
 	ChemicalComposition   *string
+	KpNumber              *string
 	GoskatalogNumber      *string
 	InventoryNumber       *string
 	Typology              *string
 	AdmissionDate         *time.Time
 	AuthorIDs             []int
+	DonorID               *int
 	MediumIDs             []int
 	TechniqueIDs          []int
 	ProjectIDs            []int
@@ -702,6 +704,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
 	}
+	if v := i.KpNumber; v != nil {
+		m.SetKpNumber(*v)
+	}
 	if v := i.GoskatalogNumber; v != nil {
 		m.SetGoskatalogNumber(*v)
 	}
@@ -716,6 +721,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.AuthorIDs; len(v) > 0 {
 		m.AddAuthorIDs(v...)
+	}
+	if v := i.DonorID; v != nil {
+		m.SetDonorID(*v)
 	}
 	if v := i.MediumIDs; len(v) > 0 {
 		m.AddMediumIDs(v...)
@@ -816,6 +824,8 @@ type UpdateArtifactInput struct {
 	Dimensions                 *string
 	ClearChemicalComposition   bool
 	ChemicalComposition        *string
+	ClearKpNumber              bool
+	KpNumber                   *string
 	ClearGoskatalogNumber      bool
 	GoskatalogNumber           *string
 	ClearInventoryNumber       bool
@@ -827,6 +837,8 @@ type UpdateArtifactInput struct {
 	ClearAuthors               bool
 	AddAuthorIDs               []int
 	RemoveAuthorIDs            []int
+	ClearDonor                 bool
+	DonorID                    *int
 	ClearMediums               bool
 	AddMediumIDs               []int
 	RemoveMediumIDs            []int
@@ -1002,6 +1014,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
 	}
+	if i.ClearKpNumber {
+		m.ClearKpNumber()
+	}
+	if v := i.KpNumber; v != nil {
+		m.SetKpNumber(*v)
+	}
 	if i.ClearGoskatalogNumber {
 		m.ClearGoskatalogNumber()
 	}
@@ -1034,6 +1052,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.RemoveAuthorIDs; len(v) > 0 {
 		m.RemoveAuthorIDs(v...)
+	}
+	if i.ClearDonor {
+		m.ClearDonor()
+	}
+	if v := i.DonorID; v != nil {
+		m.SetDonorID(*v)
 	}
 	if i.ClearMediums {
 		m.ClearMediums()
@@ -2554,6 +2578,140 @@ func (c *DistrictUpdateOne) SetInput(i UpdateDistrictInput) *DistrictUpdateOne {
 	return c
 }
 
+// CreateEthnosInput represents a mutation input for creating ethnosslice.
+type CreateEthnosInput struct {
+	CreatedAt    *time.Time
+	CreatedBy    *string
+	UpdatedAt    *time.Time
+	UpdatedBy    *string
+	DisplayName  *string
+	Abbreviation *string
+	Description  *string
+	ExternalLink *string
+	ArtifactIDs  []int
+}
+
+// Mutate applies the CreateEthnosInput on the EthnosMutation builder.
+func (i *CreateEthnosInput) Mutate(m *EthnosMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateEthnosInput on the EthnosCreate builder.
+func (c *EthnosCreate) SetInput(i CreateEthnosInput) *EthnosCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateEthnosInput represents a mutation input for updating ethnosslice.
+type UpdateEthnosInput struct {
+	ClearCreatedBy    bool
+	CreatedBy         *string
+	UpdatedAt         *time.Time
+	ClearUpdatedBy    bool
+	UpdatedBy         *string
+	ClearDisplayName  bool
+	DisplayName       *string
+	ClearAbbreviation bool
+	Abbreviation      *string
+	ClearDescription  bool
+	Description       *string
+	ClearExternalLink bool
+	ExternalLink      *string
+	ClearArtifacts    bool
+	AddArtifactIDs    []int
+	RemoveArtifactIDs []int
+}
+
+// Mutate applies the UpdateEthnosInput on the EthnosMutation builder.
+func (i *UpdateEthnosInput) Mutate(m *EthnosMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
+	}
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateEthnosInput on the EthnosUpdate builder.
+func (c *EthnosUpdate) SetInput(i UpdateEthnosInput) *EthnosUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateEthnosInput on the EthnosUpdateOne builder.
+func (c *EthnosUpdateOne) SetInput(i UpdateEthnosInput) *EthnosUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateFavouriteInput represents a mutation input for creating favourites.
 type CreateFavouriteInput struct {
 	CreatedAt *time.Time
@@ -4049,6 +4207,7 @@ type CreatePersonInput struct {
 	CollectionIDs        []int
 	ArtIDs               []int
 	ArtifactIDs          []int
+	DonatedArtifactIDs   []int
 	BookIDs              []int
 	ProjectIDs           []int
 	PublicationIDs       []int
@@ -4126,6 +4285,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.DonatedArtifactIDs; len(v) > 0 {
+		m.AddDonatedArtifactIDs(v...)
+	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
@@ -4197,6 +4359,9 @@ type UpdatePersonInput struct {
 	ClearArtifacts             bool
 	AddArtifactIDs             []int
 	RemoveArtifactIDs          []int
+	ClearDonatedArtifacts      bool
+	AddDonatedArtifactIDs      []int
+	RemoveDonatedArtifactIDs   []int
 	ClearBooks                 bool
 	AddBookIDs                 []int
 	RemoveBookIDs              []int
@@ -4358,6 +4523,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearDonatedArtifacts {
+		m.ClearDonatedArtifacts()
+	}
+	if v := i.AddDonatedArtifactIDs; len(v) > 0 {
+		m.AddDonatedArtifactIDs(v...)
+	}
+	if v := i.RemoveDonatedArtifactIDs; len(v) > 0 {
+		m.RemoveDonatedArtifactIDs(v...)
 	}
 	if i.ClearBooks {
 		m.ClearBooks()

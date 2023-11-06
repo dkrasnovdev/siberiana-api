@@ -40,6 +40,7 @@ type ArtifactQuery struct {
 	inters                  []Interceptor
 	predicates              []predicate.Artifact
 	withAuthors             *PersonQuery
+	withDonor               *PersonQuery
 	withMediums             *MediumQuery
 	withTechniques          *TechniqueQuery
 	withProjects            *ProjectQuery
@@ -114,6 +115,28 @@ func (aq *ArtifactQuery) QueryAuthors() *PersonQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
 			sqlgraph.To(person.Table, person.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, artifact.AuthorsTable, artifact.AuthorsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDonor chains the current query on the "donor" edge.
+func (aq *ArtifactQuery) QueryDonor() *PersonQuery {
+	query := (&PersonClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.DonorTable, artifact.DonorColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -644,6 +667,7 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		inters:                  append([]Interceptor{}, aq.inters...),
 		predicates:              append([]predicate.Artifact{}, aq.predicates...),
 		withAuthors:             aq.withAuthors.Clone(),
+		withDonor:               aq.withDonor.Clone(),
 		withMediums:             aq.withMediums.Clone(),
 		withTechniques:          aq.withTechniques.Clone(),
 		withProjects:            aq.withProjects.Clone(),
@@ -673,6 +697,17 @@ func (aq *ArtifactQuery) WithAuthors(opts ...func(*PersonQuery)) *ArtifactQuery 
 		opt(query)
 	}
 	aq.withAuthors = query
+	return aq
+}
+
+// WithDonor tells the query-builder to eager-load the nodes that are connected to
+// the "donor" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithDonor(opts ...func(*PersonQuery)) *ArtifactQuery {
+	query := (&PersonClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withDonor = query
 	return aq
 }
 
@@ -926,8 +961,9 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		nodes       = []*Artifact{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [17]bool{
 			aq.withAuthors != nil,
+			aq.withDonor != nil,
 			aq.withMediums != nil,
 			aq.withTechniques != nil,
 			aq.withProjects != nil,
@@ -945,7 +981,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withRegion != nil,
 		}
 	)
-	if aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
+	if aq.withDonor != nil || aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -976,6 +1012,12 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		if err := aq.loadAuthors(ctx, query, nodes,
 			func(n *Artifact) { n.Edges.Authors = []*Person{} },
 			func(n *Artifact, e *Person) { n.Edges.Authors = append(n.Edges.Authors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withDonor; query != nil {
+		if err := aq.loadDonor(ctx, query, nodes, nil,
+			func(n *Artifact, e *Person) { n.Edges.Donor = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1173,6 +1215,38 @@ func (aq *ArtifactQuery) loadAuthors(ctx context.Context, query *PersonQuery, no
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadDonor(ctx context.Context, query *PersonQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Person)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].person_donated_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].person_donated_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(person.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "person_donated_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil

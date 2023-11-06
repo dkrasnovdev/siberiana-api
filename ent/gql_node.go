@@ -25,6 +25,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -116,6 +117,11 @@ var districtImplementors = []string{"District", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*District) IsNode() {}
+
+var ethnosImplementors = []string{"Ethnos", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Ethnos) IsNode() {}
 
 var favouriteImplementors = []string{"Favourite", "Node"}
 
@@ -426,6 +432,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.District.Query().
 			Where(district.ID(id))
 		query, err := query.CollectFields(ctx, districtImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case ethnos.Table:
+		query := c.Ethnos.Query().
+			Where(ethnos.ID(id))
+		query, err := query.CollectFields(ctx, ethnosImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -963,6 +981,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.District.Query().
 			Where(district.IDIn(ids...))
 		query, err := query.CollectFields(ctx, districtImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case ethnos.Table:
+		query := c.Ethnos.Query().
+			Where(ethnos.IDIn(ids...))
+		query, err := query.CollectFields(ctx, ethnosImplementors...)
 		if err != nil {
 			return nil, err
 		}

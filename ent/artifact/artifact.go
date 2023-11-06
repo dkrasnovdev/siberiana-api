@@ -66,6 +66,8 @@ const (
 	FieldDimensions = "dimensions"
 	// FieldChemicalComposition holds the string denoting the chemical_composition field in the database.
 	FieldChemicalComposition = "chemical_composition"
+	// FieldKpNumber holds the string denoting the kp_number field in the database.
+	FieldKpNumber = "kp_number"
 	// FieldGoskatalogNumber holds the string denoting the goskatalog_number field in the database.
 	FieldGoskatalogNumber = "goskatalog_number"
 	// FieldInventoryNumber holds the string denoting the inventory_number field in the database.
@@ -76,6 +78,8 @@ const (
 	FieldAdmissionDate = "admission_date"
 	// EdgeAuthors holds the string denoting the authors edge name in mutations.
 	EdgeAuthors = "authors"
+	// EdgeDonor holds the string denoting the donor edge name in mutations.
+	EdgeDonor = "donor"
 	// EdgeMediums holds the string denoting the mediums edge name in mutations.
 	EdgeMediums = "mediums"
 	// EdgeTechniques holds the string denoting the techniques edge name in mutations.
@@ -113,6 +117,13 @@ const (
 	// AuthorsInverseTable is the table name for the Person entity.
 	// It exists in this package in order to avoid circular dependency with the "person" package.
 	AuthorsInverseTable = "persons"
+	// DonorTable is the table that holds the donor relation/edge.
+	DonorTable = "artifacts"
+	// DonorInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	DonorInverseTable = "persons"
+	// DonorColumn is the table column denoting the donor relation/edge.
+	DonorColumn = "person_donated_artifacts"
 	// MediumsTable is the table that holds the mediums relation/edge. The primary key declared below.
 	MediumsTable = "medium_artifacts"
 	// MediumsInverseTable is the table name for the Medium entity.
@@ -239,6 +250,7 @@ var Columns = []string{
 	FieldWeight,
 	FieldDimensions,
 	FieldChemicalComposition,
+	FieldKpNumber,
 	FieldGoskatalogNumber,
 	FieldInventoryNumber,
 	FieldTypology,
@@ -252,10 +264,12 @@ var ForeignKeys = []string{
 	"country_artifacts",
 	"culture_artifacts",
 	"district_artifacts",
+	"ethnos_artifacts",
 	"license_artifacts",
 	"location_artifacts",
 	"model_artifacts",
 	"monument_artifacts",
+	"person_donated_artifacts",
 	"region_artifacts",
 	"set_artifacts",
 	"settlement_artifacts",
@@ -461,6 +475,11 @@ func ByChemicalComposition(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChemicalComposition, opts...).ToFunc()
 }
 
+// ByKpNumber orders the results by the kp_number field.
+func ByKpNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldKpNumber, opts...).ToFunc()
+}
+
 // ByGoskatalogNumber orders the results by the goskatalog_number field.
 func ByGoskatalogNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGoskatalogNumber, opts...).ToFunc()
@@ -492,6 +511,13 @@ func ByAuthorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAuthors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAuthorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDonorField orders the results by donor field.
+func ByDonorField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDonorStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -632,6 +658,13 @@ func newAuthorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AuthorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, AuthorsTable, AuthorsPrimaryKey...),
+	)
+}
+func newDonorStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DonorInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, DonorTable, DonorColumn),
 	)
 }
 func newMediumsStep() *sqlgraph.Step {

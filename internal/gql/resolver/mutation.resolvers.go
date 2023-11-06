@@ -275,6 +275,28 @@ func (r *mutationResolver) DeleteDistrict(ctx context.Context, id int) (string, 
 	return "District has been deleted", nil
 }
 
+// CreateEthnos is the resolver for the createEthnos field.
+func (r *mutationResolver) CreateEthnos(ctx context.Context, input ent.CreateEthnosInput) (*ent.Ethnos, error) {
+	client := ent.FromContext(ctx)
+	return client.Ethnos.Create().SetInput(input).Save(ctx)
+}
+
+// UpdateEthnos is the resolver for the updateEthnos field.
+func (r *mutationResolver) UpdateEthnos(ctx context.Context, id int, input ent.UpdateEthnosInput) (*ent.Ethnos, error) {
+	client := ent.FromContext(ctx)
+	return client.Ethnos.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteEthnos is the resolver for the deleteEthnos field.
+func (r *mutationResolver) DeleteEthnos(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Ethnos.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Ethnos has been deleted", nil
+}
+
 // CreateLicense is the resolver for the createLicense field.
 func (r *mutationResolver) CreateLicense(ctx context.Context, input ent.CreateLicenseInput) (*ent.License, error) {
 	client := ent.FromContext(ctx)

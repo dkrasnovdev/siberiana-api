@@ -328,6 +328,21 @@ func (pc *PersonCreate) AddArtifacts(a ...*Artifact) *PersonCreate {
 	return pc.AddArtifactIDs(ids...)
 }
 
+// AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by IDs.
+func (pc *PersonCreate) AddDonatedArtifactIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddDonatedArtifactIDs(ids...)
+	return pc
+}
+
+// AddDonatedArtifacts adds the "donated_artifacts" edges to the Artifact entity.
+func (pc *PersonCreate) AddDonatedArtifacts(a ...*Artifact) *PersonCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pc.AddDonatedArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pc *PersonCreate) AddBookIDs(ids ...int) *PersonCreate {
 	pc.mutation.AddBookIDs(ids...)
@@ -603,6 +618,22 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 			Inverse: false,
 			Table:   person.ArtifactsTable,
 			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.DonatedArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.DonatedArtifactsTable,
+			Columns: []string{person.DonatedArtifactsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),

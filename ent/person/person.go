@@ -64,6 +64,8 @@ const (
 	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeDonatedArtifacts holds the string denoting the donated_artifacts edge name in mutations.
+	EdgeDonatedArtifacts = "donated_artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
 	// EdgeProjects holds the string denoting the projects edge name in mutations.
@@ -91,6 +93,13 @@ const (
 	// ArtifactsInverseTable is the table name for the Artifact entity.
 	// It exists in this package in order to avoid circular dependency with the "artifact" package.
 	ArtifactsInverseTable = "artifacts"
+	// DonatedArtifactsTable is the table that holds the donated_artifacts relation/edge.
+	DonatedArtifactsTable = "artifacts"
+	// DonatedArtifactsInverseTable is the table name for the Artifact entity.
+	// It exists in this package in order to avoid circular dependency with the "artifact" package.
+	DonatedArtifactsInverseTable = "artifacts"
+	// DonatedArtifactsColumn is the table column denoting the donated_artifacts relation/edge.
+	DonatedArtifactsColumn = "person_donated_artifacts"
 	// BooksTable is the table that holds the books relation/edge. The primary key declared below.
 	BooksTable = "person_books"
 	// BooksInverseTable is the table name for the Book entity.
@@ -353,6 +362,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByDonatedArtifactsCount orders the results by donated_artifacts count.
+func ByDonatedArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDonatedArtifactsStep(), opts...)
+	}
+}
+
+// ByDonatedArtifacts orders the results by donated_artifacts terms.
+func ByDonatedArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDonatedArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByBooksCount orders the results by books count.
 func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -420,6 +443,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
+	)
+}
+func newDonatedArtifactsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DonatedArtifactsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DonatedArtifactsTable, DonatedArtifactsColumn),
 	)
 }
 func newBooksStep() *sqlgraph.Step {

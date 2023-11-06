@@ -538,6 +538,26 @@ func (au *ArtifactUpdate) ClearChemicalComposition() *ArtifactUpdate {
 	return au
 }
 
+// SetKpNumber sets the "kp_number" field.
+func (au *ArtifactUpdate) SetKpNumber(s string) *ArtifactUpdate {
+	au.mutation.SetKpNumber(s)
+	return au
+}
+
+// SetNillableKpNumber sets the "kp_number" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableKpNumber(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetKpNumber(*s)
+	}
+	return au
+}
+
+// ClearKpNumber clears the value of the "kp_number" field.
+func (au *ArtifactUpdate) ClearKpNumber() *ArtifactUpdate {
+	au.mutation.ClearKpNumber()
+	return au
+}
+
 // SetGoskatalogNumber sets the "goskatalog_number" field.
 func (au *ArtifactUpdate) SetGoskatalogNumber(s string) *ArtifactUpdate {
 	au.mutation.SetGoskatalogNumber(s)
@@ -631,6 +651,25 @@ func (au *ArtifactUpdate) AddAuthors(p ...*Person) *ArtifactUpdate {
 		ids[i] = p[i].ID
 	}
 	return au.AddAuthorIDs(ids...)
+}
+
+// SetDonorID sets the "donor" edge to the Person entity by ID.
+func (au *ArtifactUpdate) SetDonorID(id int) *ArtifactUpdate {
+	au.mutation.SetDonorID(id)
+	return au
+}
+
+// SetNillableDonorID sets the "donor" edge to the Person entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDonorID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetDonorID(*id)
+	}
+	return au
+}
+
+// SetDonor sets the "donor" edge to the Person entity.
+func (au *ArtifactUpdate) SetDonor(p *Person) *ArtifactUpdate {
+	return au.SetDonorID(p.ID)
 }
 
 // AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
@@ -918,6 +957,12 @@ func (au *ArtifactUpdate) RemoveAuthors(p ...*Person) *ArtifactUpdate {
 		ids[i] = p[i].ID
 	}
 	return au.RemoveAuthorIDs(ids...)
+}
+
+// ClearDonor clears the "donor" edge to the Person entity.
+func (au *ArtifactUpdate) ClearDonor() *ArtifactUpdate {
+	au.mutation.ClearDonor()
+	return au
 }
 
 // ClearMediums clears all "mediums" edges to the Medium entity.
@@ -1298,6 +1343,12 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.ChemicalCompositionCleared() {
 		_spec.ClearField(artifact.FieldChemicalComposition, field.TypeString)
 	}
+	if value, ok := au.mutation.KpNumber(); ok {
+		_spec.SetField(artifact.FieldKpNumber, field.TypeString, value)
+	}
+	if au.mutation.KpNumberCleared() {
+		_spec.ClearField(artifact.FieldKpNumber, field.TypeString)
+	}
 	if value, ok := au.mutation.GoskatalogNumber(); ok {
 		_spec.SetField(artifact.FieldGoskatalogNumber, field.TypeString, value)
 	}
@@ -1357,6 +1408,35 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Inverse: true,
 			Table:   artifact.AuthorsTable,
 			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.DonorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DonorTable,
+			Columns: []string{artifact.DonorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.DonorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DonorTable,
+			Columns: []string{artifact.DonorColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
@@ -2379,6 +2459,26 @@ func (auo *ArtifactUpdateOne) ClearChemicalComposition() *ArtifactUpdateOne {
 	return auo
 }
 
+// SetKpNumber sets the "kp_number" field.
+func (auo *ArtifactUpdateOne) SetKpNumber(s string) *ArtifactUpdateOne {
+	auo.mutation.SetKpNumber(s)
+	return auo
+}
+
+// SetNillableKpNumber sets the "kp_number" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableKpNumber(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetKpNumber(*s)
+	}
+	return auo
+}
+
+// ClearKpNumber clears the value of the "kp_number" field.
+func (auo *ArtifactUpdateOne) ClearKpNumber() *ArtifactUpdateOne {
+	auo.mutation.ClearKpNumber()
+	return auo
+}
+
 // SetGoskatalogNumber sets the "goskatalog_number" field.
 func (auo *ArtifactUpdateOne) SetGoskatalogNumber(s string) *ArtifactUpdateOne {
 	auo.mutation.SetGoskatalogNumber(s)
@@ -2472,6 +2572,25 @@ func (auo *ArtifactUpdateOne) AddAuthors(p ...*Person) *ArtifactUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return auo.AddAuthorIDs(ids...)
+}
+
+// SetDonorID sets the "donor" edge to the Person entity by ID.
+func (auo *ArtifactUpdateOne) SetDonorID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetDonorID(id)
+	return auo
+}
+
+// SetNillableDonorID sets the "donor" edge to the Person entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDonorID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetDonorID(*id)
+	}
+	return auo
+}
+
+// SetDonor sets the "donor" edge to the Person entity.
+func (auo *ArtifactUpdateOne) SetDonor(p *Person) *ArtifactUpdateOne {
+	return auo.SetDonorID(p.ID)
 }
 
 // AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
@@ -2759,6 +2878,12 @@ func (auo *ArtifactUpdateOne) RemoveAuthors(p ...*Person) *ArtifactUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return auo.RemoveAuthorIDs(ids...)
+}
+
+// ClearDonor clears the "donor" edge to the Person entity.
+func (auo *ArtifactUpdateOne) ClearDonor() *ArtifactUpdateOne {
+	auo.mutation.ClearDonor()
+	return auo
 }
 
 // ClearMediums clears all "mediums" edges to the Medium entity.
@@ -3169,6 +3294,12 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.ChemicalCompositionCleared() {
 		_spec.ClearField(artifact.FieldChemicalComposition, field.TypeString)
 	}
+	if value, ok := auo.mutation.KpNumber(); ok {
+		_spec.SetField(artifact.FieldKpNumber, field.TypeString, value)
+	}
+	if auo.mutation.KpNumberCleared() {
+		_spec.ClearField(artifact.FieldKpNumber, field.TypeString)
+	}
 	if value, ok := auo.mutation.GoskatalogNumber(); ok {
 		_spec.SetField(artifact.FieldGoskatalogNumber, field.TypeString, value)
 	}
@@ -3228,6 +3359,35 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 			Inverse: true,
 			Table:   artifact.AuthorsTable,
 			Columns: artifact.AuthorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.DonorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DonorTable,
+			Columns: []string{artifact.DonorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.DonorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DonorTable,
+			Columns: []string{artifact.DonorColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),

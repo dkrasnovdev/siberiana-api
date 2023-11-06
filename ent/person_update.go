@@ -441,6 +441,21 @@ func (pu *PersonUpdate) AddArtifacts(a ...*Artifact) *PersonUpdate {
 	return pu.AddArtifactIDs(ids...)
 }
 
+// AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by IDs.
+func (pu *PersonUpdate) AddDonatedArtifactIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddDonatedArtifactIDs(ids...)
+	return pu
+}
+
+// AddDonatedArtifacts adds the "donated_artifacts" edges to the Artifact entity.
+func (pu *PersonUpdate) AddDonatedArtifacts(a ...*Artifact) *PersonUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.AddDonatedArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pu *PersonUpdate) AddBookIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddBookIDs(ids...)
@@ -571,6 +586,27 @@ func (pu *PersonUpdate) RemoveArtifacts(a ...*Artifact) *PersonUpdate {
 		ids[i] = a[i].ID
 	}
 	return pu.RemoveArtifactIDs(ids...)
+}
+
+// ClearDonatedArtifacts clears all "donated_artifacts" edges to the Artifact entity.
+func (pu *PersonUpdate) ClearDonatedArtifacts() *PersonUpdate {
+	pu.mutation.ClearDonatedArtifacts()
+	return pu
+}
+
+// RemoveDonatedArtifactIDs removes the "donated_artifacts" edge to Artifact entities by IDs.
+func (pu *PersonUpdate) RemoveDonatedArtifactIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemoveDonatedArtifactIDs(ids...)
+	return pu
+}
+
+// RemoveDonatedArtifacts removes "donated_artifacts" edges to Artifact entities.
+func (pu *PersonUpdate) RemoveDonatedArtifacts(a ...*Artifact) *PersonUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.RemoveDonatedArtifactIDs(ids...)
 }
 
 // ClearBooks clears all "books" edges to the Book entity.
@@ -957,6 +993,51 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Inverse: false,
 			Table:   person.ArtifactsTable,
 			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.DonatedArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.DonatedArtifactsTable,
+			Columns: []string{person.DonatedArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedDonatedArtifactsIDs(); len(nodes) > 0 && !pu.mutation.DonatedArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.DonatedArtifactsTable,
+			Columns: []string{person.DonatedArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.DonatedArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.DonatedArtifactsTable,
+			Columns: []string{person.DonatedArtifactsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
@@ -1556,6 +1637,21 @@ func (puo *PersonUpdateOne) AddArtifacts(a ...*Artifact) *PersonUpdateOne {
 	return puo.AddArtifactIDs(ids...)
 }
 
+// AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by IDs.
+func (puo *PersonUpdateOne) AddDonatedArtifactIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddDonatedArtifactIDs(ids...)
+	return puo
+}
+
+// AddDonatedArtifacts adds the "donated_artifacts" edges to the Artifact entity.
+func (puo *PersonUpdateOne) AddDonatedArtifacts(a ...*Artifact) *PersonUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.AddDonatedArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (puo *PersonUpdateOne) AddBookIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddBookIDs(ids...)
@@ -1686,6 +1782,27 @@ func (puo *PersonUpdateOne) RemoveArtifacts(a ...*Artifact) *PersonUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return puo.RemoveArtifactIDs(ids...)
+}
+
+// ClearDonatedArtifacts clears all "donated_artifacts" edges to the Artifact entity.
+func (puo *PersonUpdateOne) ClearDonatedArtifacts() *PersonUpdateOne {
+	puo.mutation.ClearDonatedArtifacts()
+	return puo
+}
+
+// RemoveDonatedArtifactIDs removes the "donated_artifacts" edge to Artifact entities by IDs.
+func (puo *PersonUpdateOne) RemoveDonatedArtifactIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemoveDonatedArtifactIDs(ids...)
+	return puo
+}
+
+// RemoveDonatedArtifacts removes "donated_artifacts" edges to Artifact entities.
+func (puo *PersonUpdateOne) RemoveDonatedArtifacts(a ...*Artifact) *PersonUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.RemoveDonatedArtifactIDs(ids...)
 }
 
 // ClearBooks clears all "books" edges to the Book entity.
@@ -2102,6 +2219,51 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 			Inverse: false,
 			Table:   person.ArtifactsTable,
 			Columns: person.ArtifactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.DonatedArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.DonatedArtifactsTable,
+			Columns: []string{person.DonatedArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedDonatedArtifactsIDs(); len(nodes) > 0 && !puo.mutation.DonatedArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.DonatedArtifactsTable,
+			Columns: []string{person.DonatedArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.DonatedArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.DonatedArtifactsTable,
+			Columns: []string{person.DonatedArtifactsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),

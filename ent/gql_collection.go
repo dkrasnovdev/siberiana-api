@@ -20,6 +20,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -612,6 +613,16 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			a.WithNamedAuthors(alias, func(wq *PersonQuery) {
 				*wq = *query
 			})
+		case "donor":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			a.withDonor = query
 		case "mediums":
 			var (
 				alias = field.Alias
@@ -889,6 +900,11 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[artifact.FieldChemicalComposition]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldChemicalComposition)
 				fieldSeen[artifact.FieldChemicalComposition] = struct{}{}
+			}
+		case "kpNumber":
+			if _, ok := fieldSeen[artifact.FieldKpNumber]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldKpNumber)
+				fieldSeen[artifact.FieldKpNumber] = struct{}{}
 			}
 		case "goskatalogNumber":
 			if _, ok := fieldSeen[artifact.FieldGoskatalogNumber]; !ok {
@@ -2435,6 +2451,148 @@ func newDistrictPaginateArgs(rv map[string]any) *districtPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (e *EthnosQuery) CollectFields(ctx context.Context, satisfies ...string) (*EthnosQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return e, nil
+	}
+	if err := e.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return e, nil
+}
+
+func (e *EthnosQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(ethnos.Columns))
+		selectedFields = []string{ethnos.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "artifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[ethnos.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldCreatedAt)
+				fieldSeen[ethnos.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[ethnos.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldCreatedBy)
+				fieldSeen[ethnos.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[ethnos.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldUpdatedAt)
+				fieldSeen[ethnos.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[ethnos.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldUpdatedBy)
+				fieldSeen[ethnos.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[ethnos.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldDisplayName)
+				fieldSeen[ethnos.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[ethnos.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldAbbreviation)
+				fieldSeen[ethnos.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[ethnos.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldDescription)
+				fieldSeen[ethnos.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[ethnos.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, ethnos.FieldExternalLink)
+				fieldSeen[ethnos.FieldExternalLink] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		e.Select(selectedFields...)
+	}
+	return nil
+}
+
+type ethnosPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []EthnosPaginateOption
+}
+
+func newEthnosPaginateArgs(rv map[string]any) *ethnosPaginateArgs {
+	args := &ethnosPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*EthnosOrder:
+			args.opts = append(args.opts, WithEthnosOrder(v))
+		case []any:
+			var orders []*EthnosOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &EthnosOrder{Field: &EthnosOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithEthnosOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*EthnosWhereInput); ok {
+		args.opts = append(args.opts, WithEthnosFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (f *FavouriteQuery) CollectFields(ctx context.Context, satisfies ...string) (*FavouriteQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -3969,6 +4127,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				return err
 			}
 			pe.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+				*wq = *query
+			})
+		case "donatedArtifacts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtifactClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedDonatedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
 		case "books":

@@ -138,6 +138,7 @@ var (
 		{Name: "weight", Type: field.TypeString, Nullable: true},
 		{Name: "dimensions", Type: field.TypeString, Nullable: true},
 		{Name: "chemical_composition", Type: field.TypeString, Nullable: true},
+		{Name: "kp_number", Type: field.TypeString, Nullable: true},
 		{Name: "goskatalog_number", Type: field.TypeString, Nullable: true},
 		{Name: "inventory_number", Type: field.TypeString, Nullable: true},
 		{Name: "typology", Type: field.TypeString, Nullable: true},
@@ -146,10 +147,12 @@ var (
 		{Name: "country_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "culture_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "district_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "ethnos_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "license_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "location_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "model_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "monument_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "person_donated_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "region_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "set_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "settlement_artifacts", Type: field.TypeInt, Nullable: true},
@@ -162,67 +165,79 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "artifacts_collections_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[29]},
+				Columns:    []*schema.Column{ArtifactsColumns[30]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "artifacts_countries_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[30]},
+				Columns:    []*schema.Column{ArtifactsColumns[31]},
 				RefColumns: []*schema.Column{CountriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_cultures_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[31]},
+				Columns:    []*schema.Column{ArtifactsColumns[32]},
 				RefColumns: []*schema.Column{CulturesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_districts_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[32]},
+				Columns:    []*schema.Column{ArtifactsColumns[33]},
 				RefColumns: []*schema.Column{DistrictsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "artifacts_ethnos_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[34]},
+				RefColumns: []*schema.Column{EthnosColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "artifacts_licenses_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[33]},
+				Columns:    []*schema.Column{ArtifactsColumns[35]},
 				RefColumns: []*schema.Column{LicensesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_locations_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[34]},
+				Columns:    []*schema.Column{ArtifactsColumns[36]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_models_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[35]},
+				Columns:    []*schema.Column{ArtifactsColumns[37]},
 				RefColumns: []*schema.Column{ModelsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_monuments_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[36]},
+				Columns:    []*schema.Column{ArtifactsColumns[38]},
 				RefColumns: []*schema.Column{MonumentsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "artifacts_persons_donated_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[39]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "artifacts_regions_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[37]},
+				Columns:    []*schema.Column{ArtifactsColumns[40]},
 				RefColumns: []*schema.Column{RegionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_sets_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[38]},
+				Columns:    []*schema.Column{ArtifactsColumns[41]},
 				RefColumns: []*schema.Column{SetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_settlements_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[39]},
+				Columns:    []*schema.Column{ArtifactsColumns[42]},
 				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -465,6 +480,24 @@ var (
 		Name:       "districts",
 		Columns:    DistrictsColumns,
 		PrimaryKey: []*schema.Column{DistrictsColumns[0]},
+	}
+	// EthnosColumns holds the columns for the "ethnos" table.
+	EthnosColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+	}
+	// EthnosTable holds the schema information for the "ethnos" table.
+	EthnosTable = &schema.Table{
+		Name:       "ethnos",
+		Columns:    EthnosColumns,
+		PrimaryKey: []*schema.Column{EthnosColumns[0]},
 	}
 	// FavouritesColumns holds the columns for the "favourites" table.
 	FavouritesColumns = []*schema.Column{
@@ -1389,6 +1422,7 @@ var (
 		CountriesTable,
 		CulturesTable,
 		DistrictsTable,
+		EthnosTable,
 		FavouritesTable,
 		InterviewsTable,
 		KeywordsTable,
@@ -1440,13 +1474,15 @@ func init() {
 	ArtifactsTable.ForeignKeys[1].RefTable = CountriesTable
 	ArtifactsTable.ForeignKeys[2].RefTable = CulturesTable
 	ArtifactsTable.ForeignKeys[3].RefTable = DistrictsTable
-	ArtifactsTable.ForeignKeys[4].RefTable = LicensesTable
-	ArtifactsTable.ForeignKeys[5].RefTable = LocationsTable
-	ArtifactsTable.ForeignKeys[6].RefTable = ModelsTable
-	ArtifactsTable.ForeignKeys[7].RefTable = MonumentsTable
-	ArtifactsTable.ForeignKeys[8].RefTable = RegionsTable
-	ArtifactsTable.ForeignKeys[9].RefTable = SetsTable
-	ArtifactsTable.ForeignKeys[10].RefTable = SettlementsTable
+	ArtifactsTable.ForeignKeys[4].RefTable = EthnosTable
+	ArtifactsTable.ForeignKeys[5].RefTable = LicensesTable
+	ArtifactsTable.ForeignKeys[6].RefTable = LocationsTable
+	ArtifactsTable.ForeignKeys[7].RefTable = ModelsTable
+	ArtifactsTable.ForeignKeys[8].RefTable = MonumentsTable
+	ArtifactsTable.ForeignKeys[9].RefTable = PersonsTable
+	ArtifactsTable.ForeignKeys[10].RefTable = RegionsTable
+	ArtifactsTable.ForeignKeys[11].RefTable = SetsTable
+	ArtifactsTable.ForeignKeys[12].RefTable = SettlementsTable
 	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
 	BooksTable.ForeignKeys[1].RefTable = CountriesTable
 	BooksTable.ForeignKeys[2].RefTable = DistrictsTable

@@ -74,6 +74,8 @@ type PersonEdges struct {
 	Art []*Art `json:"art,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// DonatedArtifacts holds the value of the donated_artifacts edge.
+	DonatedArtifacts []*Artifact `json:"donated_artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
 	// Projects holds the value of the projects edge.
@@ -84,16 +86,17 @@ type PersonEdges struct {
 	Affiliation *Organization `json:"affiliation,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
-	namedCollections  map[string][]*Collection
-	namedArt          map[string][]*Art
-	namedArtifacts    map[string][]*Artifact
-	namedBooks        map[string][]*Book
-	namedProjects     map[string][]*Project
-	namedPublications map[string][]*Publication
+	namedCollections      map[string][]*Collection
+	namedArt              map[string][]*Art
+	namedArtifacts        map[string][]*Artifact
+	namedDonatedArtifacts map[string][]*Artifact
+	namedBooks            map[string][]*Book
+	namedProjects         map[string][]*Project
+	namedPublications     map[string][]*Publication
 }
 
 // CollectionsOrErr returns the Collections value or an error if the edge
@@ -123,10 +126,19 @@ func (e PersonEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// DonatedArtifactsOrErr returns the DonatedArtifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonEdges) DonatedArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[3] {
+		return e.DonatedArtifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "donated_artifacts"}
+}
+
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
@@ -135,7 +147,7 @@ func (e PersonEdges) BooksOrErr() ([]*Book, error) {
 // ProjectsOrErr returns the Projects value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Projects, nil
 	}
 	return nil, &NotLoadedError{edge: "projects"}
@@ -144,7 +156,7 @@ func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
 // PublicationsOrErr returns the Publications value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Publications, nil
 	}
 	return nil, &NotLoadedError{edge: "publications"}
@@ -153,7 +165,7 @@ func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
 // AffiliationOrErr returns the Affiliation value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PersonEdges) AffiliationOrErr() (*Organization, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		if e.Affiliation == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: organization.Label}
@@ -360,6 +372,11 @@ func (pe *Person) QueryArtifacts() *ArtifactQuery {
 	return NewPersonClient(pe.config).QueryArtifacts(pe)
 }
 
+// QueryDonatedArtifacts queries the "donated_artifacts" edge of the Person entity.
+func (pe *Person) QueryDonatedArtifacts() *ArtifactQuery {
+	return NewPersonClient(pe.config).QueryDonatedArtifacts(pe)
+}
+
 // QueryBooks queries the "books" edge of the Person entity.
 func (pe *Person) QueryBooks() *BookQuery {
 	return NewPersonClient(pe.config).QueryBooks(pe)
@@ -535,6 +552,30 @@ func (pe *Person) appendNamedArtifacts(name string, edges ...*Artifact) {
 		pe.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		pe.Edges.namedArtifacts[name] = append(pe.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedDonatedArtifacts returns the DonatedArtifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Person) NamedDonatedArtifacts(name string) ([]*Artifact, error) {
+	if pe.Edges.namedDonatedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedDonatedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Person) appendNamedDonatedArtifacts(name string, edges ...*Artifact) {
+	if pe.Edges.namedDonatedArtifacts == nil {
+		pe.Edges.namedDonatedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedDonatedArtifacts[name] = []*Artifact{}
+	} else {
+		pe.Edges.namedDonatedArtifacts[name] = append(pe.Edges.namedDonatedArtifacts[name], edges...)
 	}
 }
 

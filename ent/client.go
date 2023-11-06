@@ -27,6 +27,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -81,6 +82,8 @@ type Client struct {
 	Culture *CultureClient
 	// District is the client for interacting with the District builders.
 	District *DistrictClient
+	// Ethnos is the client for interacting with the Ethnos builders.
+	Ethnos *EthnosClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
 	// Interview is the client for interacting with the Interview builders.
@@ -154,6 +157,7 @@ func (c *Client) init() {
 	c.Country = NewCountryClient(c.config)
 	c.Culture = NewCultureClient(c.config)
 	c.District = NewDistrictClient(c.config)
+	c.Ethnos = NewEthnosClient(c.config)
 	c.Favourite = NewFavouriteClient(c.config)
 	c.Interview = NewInterviewClient(c.config)
 	c.Keyword = NewKeywordClient(c.config)
@@ -274,6 +278,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Country:               NewCountryClient(cfg),
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
+		Ethnos:                NewEthnosClient(cfg),
 		Favourite:             NewFavouriteClient(cfg),
 		Interview:             NewInterviewClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
@@ -328,6 +333,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Country:               NewCountryClient(cfg),
 		Culture:               NewCultureClient(cfg),
 		District:              NewDistrictClient(cfg),
+		Ethnos:                NewEthnosClient(cfg),
 		Favourite:             NewFavouriteClient(cfg),
 		Interview:             NewInterviewClient(cfg),
 		Keyword:               NewKeywordClient(cfg),
@@ -381,11 +387,11 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
-		c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Periodical, c.Person, c.Personal, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
-		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Ethnos,
+		c.Favourite, c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model,
+		c.Monument, c.Organization, c.Periodical, c.Person, c.Personal, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Use(hooks...)
 	}
@@ -396,11 +402,11 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Favourite,
-		c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model, c.Monument,
-		c.Organization, c.Periodical, c.Person, c.Personal, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
-		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Ethnos,
+		c.Favourite, c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model,
+		c.Monument, c.Organization, c.Periodical, c.Person, c.Personal, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -433,6 +439,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Culture.mutate(ctx, m)
 	case *DistrictMutation:
 		return c.District.mutate(ctx, m)
+	case *EthnosMutation:
+		return c.Ethnos.mutate(ctx, m)
 	case *FavouriteMutation:
 		return c.Favourite.mutate(ctx, m)
 	case *InterviewMutation:
@@ -1179,6 +1187,22 @@ func (c *ArtifactClient) QueryAuthors(a *Artifact) *PersonQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, id),
 			sqlgraph.To(person.Table, person.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, artifact.AuthorsTable, artifact.AuthorsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDonor queries the donor edge of a Artifact.
+func (c *ArtifactClient) QueryDonor(a *Artifact) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.DonorTable, artifact.DonorColumn),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -3021,6 +3045,156 @@ func (c *DistrictClient) mutate(ctx context.Context, m *DistrictMutation) (Value
 	}
 }
 
+// EthnosClient is a client for the Ethnos schema.
+type EthnosClient struct {
+	config
+}
+
+// NewEthnosClient returns a client for the Ethnos from the given config.
+func NewEthnosClient(c config) *EthnosClient {
+	return &EthnosClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `ethnos.Hooks(f(g(h())))`.
+func (c *EthnosClient) Use(hooks ...Hook) {
+	c.hooks.Ethnos = append(c.hooks.Ethnos, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `ethnos.Intercept(f(g(h())))`.
+func (c *EthnosClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Ethnos = append(c.inters.Ethnos, interceptors...)
+}
+
+// Create returns a builder for creating a Ethnos entity.
+func (c *EthnosClient) Create() *EthnosCreate {
+	mutation := newEthnosMutation(c.config, OpCreate)
+	return &EthnosCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Ethnos entities.
+func (c *EthnosClient) CreateBulk(builders ...*EthnosCreate) *EthnosCreateBulk {
+	return &EthnosCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *EthnosClient) MapCreateBulk(slice any, setFunc func(*EthnosCreate, int)) *EthnosCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &EthnosCreateBulk{err: fmt.Errorf("calling to EthnosClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*EthnosCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &EthnosCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Ethnos.
+func (c *EthnosClient) Update() *EthnosUpdate {
+	mutation := newEthnosMutation(c.config, OpUpdate)
+	return &EthnosUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *EthnosClient) UpdateOne(e *Ethnos) *EthnosUpdateOne {
+	mutation := newEthnosMutation(c.config, OpUpdateOne, withEthnos(e))
+	return &EthnosUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *EthnosClient) UpdateOneID(id int) *EthnosUpdateOne {
+	mutation := newEthnosMutation(c.config, OpUpdateOne, withEthnosID(id))
+	return &EthnosUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Ethnos.
+func (c *EthnosClient) Delete() *EthnosDelete {
+	mutation := newEthnosMutation(c.config, OpDelete)
+	return &EthnosDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *EthnosClient) DeleteOne(e *Ethnos) *EthnosDeleteOne {
+	return c.DeleteOneID(e.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *EthnosClient) DeleteOneID(id int) *EthnosDeleteOne {
+	builder := c.Delete().Where(ethnos.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &EthnosDeleteOne{builder}
+}
+
+// Query returns a query builder for Ethnos.
+func (c *EthnosClient) Query() *EthnosQuery {
+	return &EthnosQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeEthnos},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Ethnos entity by its id.
+func (c *EthnosClient) Get(ctx context.Context, id int) (*Ethnos, error) {
+	return c.Query().Where(ethnos.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *EthnosClient) GetX(ctx context.Context, id int) *Ethnos {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryArtifacts queries the artifacts edge of a Ethnos.
+func (c *EthnosClient) QueryArtifacts(e *Ethnos) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(ethnos.Table, ethnos.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ethnos.ArtifactsTable, ethnos.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *EthnosClient) Hooks() []Hook {
+	hooks := c.hooks.Ethnos
+	return append(hooks[:len(hooks):len(hooks)], ethnos.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *EthnosClient) Interceptors() []Interceptor {
+	return c.inters.Ethnos
+}
+
+func (c *EthnosClient) mutate(ctx context.Context, m *EthnosMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&EthnosCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&EthnosUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&EthnosUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&EthnosDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Ethnos mutation op: %q", m.Op())
+	}
+}
+
 // FavouriteClient is a client for the Favourite schema.
 type FavouriteClient struct {
 	config
@@ -4813,6 +4987,22 @@ func (c *PersonClient) QueryArtifacts(pe *Person) *ArtifactQuery {
 			sqlgraph.From(person.Table, person.FieldID, id),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.ArtifactsTable, person.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDonatedArtifacts queries the donated_artifacts edge of a Person.
+func (c *PersonClient) QueryDonatedArtifacts(pe *Person) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.DonatedArtifactsTable, person.DonatedArtifactsColumn),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -7034,16 +7224,17 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Favourite, Interview, Keyword, License,
-		Location, Medium, Model, Monument, Organization, Periodical, Person, Personal,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
-		Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
+		Collection, Country, Culture, District, Ethnos, Favourite, Interview, Keyword,
+		License, Location, Medium, Model, Monument, Organization, Periodical, Person,
+		Personal, Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
+		Proxy, Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Favourite, Interview, Keyword, License,
-		Location, Medium, Model, Monument, Organization, Periodical, Person, Personal,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
-		Publication, Publisher, Region, Set, Settlement, Technique []ent.Interceptor
+		Collection, Country, Culture, District, Ethnos, Favourite, Interview, Keyword,
+		License, Location, Medium, Model, Monument, Organization, Periodical, Person,
+		Personal, Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
+		Proxy, Publication, Publisher, Region, Set, Settlement,
+		Technique []ent.Interceptor
 	}
 )

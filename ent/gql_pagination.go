@@ -26,6 +26,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
@@ -4557,6 +4558,378 @@ func (d *District) ToEdge(order *DistrictOrder) *DistrictEdge {
 	return &DistrictEdge{
 		Node:   d,
 		Cursor: order.Field.toCursor(d),
+	}
+}
+
+// EthnosEdge is the edge representation of Ethnos.
+type EthnosEdge struct {
+	Node   *Ethnos `json:"node"`
+	Cursor Cursor  `json:"cursor"`
+}
+
+// EthnosConnection is the connection containing edges to Ethnos.
+type EthnosConnection struct {
+	Edges      []*EthnosEdge `json:"edges"`
+	PageInfo   PageInfo      `json:"pageInfo"`
+	TotalCount int           `json:"totalCount"`
+}
+
+func (c *EthnosConnection) build(nodes []*Ethnos, pager *ethnosPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Ethnos
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Ethnos {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Ethnos {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*EthnosEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &EthnosEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// EthnosPaginateOption enables pagination customization.
+type EthnosPaginateOption func(*ethnosPager) error
+
+// WithEthnosOrder configures pagination ordering.
+func WithEthnosOrder(order []*EthnosOrder) EthnosPaginateOption {
+	return func(pager *ethnosPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithEthnosFilter configures pagination filter.
+func WithEthnosFilter(filter func(*EthnosQuery) (*EthnosQuery, error)) EthnosPaginateOption {
+	return func(pager *ethnosPager) error {
+		if filter == nil {
+			return errors.New("EthnosQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type ethnosPager struct {
+	reverse bool
+	order   []*EthnosOrder
+	filter  func(*EthnosQuery) (*EthnosQuery, error)
+}
+
+func newEthnosPager(opts []EthnosPaginateOption, reverse bool) (*ethnosPager, error) {
+	pager := &ethnosPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *ethnosPager) applyFilter(query *EthnosQuery) (*EthnosQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *ethnosPager) toCursor(e *Ethnos) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(e).Value)
+	}
+	return Cursor{ID: e.ID, Value: cs}
+}
+
+func (p *ethnosPager) applyCursors(query *EthnosQuery, after, before *Cursor) (*EthnosQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultEthnosOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *ethnosPager) applyOrder(query *EthnosQuery) *EthnosQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultEthnosOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultEthnosOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *ethnosPager) orderExpr(query *EthnosQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultEthnosOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Ethnos.
+func (e *EthnosQuery) Paginate(
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...EthnosPaginateOption,
+) (*EthnosConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newEthnosPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if e, err = pager.applyFilter(e); err != nil {
+		return nil, err
+	}
+	conn := &EthnosConnection{Edges: []*EthnosEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
+		if hasPagination || ignoredEdges {
+			c := e.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if e, err = pager.applyCursors(e, after, before); err != nil {
+		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		e.Offset(*offset)
+
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		e.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := e.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	e = pager.applyOrder(e)
+	nodes, err := e.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// EthnosOrderFieldCreatedAt orders Ethnos by created_at.
+	EthnosOrderFieldCreatedAt = &EthnosOrderField{
+		Value: func(e *Ethnos) (ent.Value, error) {
+			return e.CreatedAt, nil
+		},
+		column: ethnos.FieldCreatedAt,
+		toTerm: ethnos.ByCreatedAt,
+		toCursor: func(e *Ethnos) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.CreatedAt,
+			}
+		},
+	}
+	// EthnosOrderFieldUpdatedAt orders Ethnos by updated_at.
+	EthnosOrderFieldUpdatedAt = &EthnosOrderField{
+		Value: func(e *Ethnos) (ent.Value, error) {
+			return e.UpdatedAt, nil
+		},
+		column: ethnos.FieldUpdatedAt,
+		toTerm: ethnos.ByUpdatedAt,
+		toCursor: func(e *Ethnos) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.UpdatedAt,
+			}
+		},
+	}
+	// EthnosOrderFieldDisplayName orders Ethnos by display_name.
+	EthnosOrderFieldDisplayName = &EthnosOrderField{
+		Value: func(e *Ethnos) (ent.Value, error) {
+			return e.DisplayName, nil
+		},
+		column: ethnos.FieldDisplayName,
+		toTerm: ethnos.ByDisplayName,
+		toCursor: func(e *Ethnos) Cursor {
+			return Cursor{
+				ID:    e.ID,
+				Value: e.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f EthnosOrderField) String() string {
+	var str string
+	switch f.column {
+	case EthnosOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case EthnosOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	case EthnosOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f EthnosOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *EthnosOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("EthnosOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *EthnosOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *EthnosOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *EthnosOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid EthnosOrderField", str)
+	}
+	return nil
+}
+
+// EthnosOrderField defines the ordering field of Ethnos.
+type EthnosOrderField struct {
+	// Value extracts the ordering value from the given Ethnos.
+	Value    func(*Ethnos) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) ethnos.OrderOption
+	toCursor func(*Ethnos) Cursor
+}
+
+// EthnosOrder defines the ordering of Ethnos.
+type EthnosOrder struct {
+	Direction OrderDirection    `json:"direction"`
+	Field     *EthnosOrderField `json:"field"`
+}
+
+// DefaultEthnosOrder is the default ordering of Ethnos.
+var DefaultEthnosOrder = &EthnosOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &EthnosOrderField{
+		Value: func(e *Ethnos) (ent.Value, error) {
+			return e.ID, nil
+		},
+		column: ethnos.FieldID,
+		toTerm: ethnos.ByID,
+		toCursor: func(e *Ethnos) Cursor {
+			return Cursor{ID: e.ID}
+		},
+	},
+}
+
+// ToEdge converts Ethnos into EthnosEdge.
+func (e *Ethnos) ToEdge(order *EthnosOrder) *EthnosEdge {
+	if order == nil {
+		order = DefaultEthnosOrder
+	}
+	return &EthnosEdge{
+		Node:   e,
+		Cursor: order.Field.toCursor(e),
 	}
 }
 

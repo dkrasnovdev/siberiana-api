@@ -42,6 +42,9 @@ type Culture func(*sql.Selector)
 // District is the predicate function for district builders.
 type District func(*sql.Selector)
 
+// Ethnos is the predicate function for ethnos builders.
+type Ethnos func(*sql.Selector)
+
 // Favourite is the predicate function for favourite builders.
 type Favourite func(*sql.Selector)
 

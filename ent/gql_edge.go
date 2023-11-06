@@ -128,6 +128,14 @@ func (a *Artifact) Authors(ctx context.Context) (result []*Person, err error) {
 	return result, err
 }
 
+func (a *Artifact) Donor(ctx context.Context) (*Person, error) {
+	result, err := a.Edges.DonorOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryDonor().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (a *Artifact) Mediums(ctx context.Context) (result []*Medium, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = a.NamedMediums(graphql.GetFieldContext(ctx).Field.Alias)
@@ -592,6 +600,18 @@ func (d *District) Locations(ctx context.Context) (result []*Location, err error
 	return result, err
 }
 
+func (e *Ethnos) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = e.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = e.Edges.ArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = e.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
 func (f *Favourite) Proxies(ctx context.Context) (result []*Proxy, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = f.NamedProxies(graphql.GetFieldContext(ctx).Field.Alias)
@@ -836,6 +856,18 @@ func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	}
 	if IsNotLoaded(err) {
 		result, err = pe.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (pe *Person) DonatedArtifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedDonatedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.DonatedArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryDonatedArtifacts().All(ctx)
 	}
 	return result, err
 }

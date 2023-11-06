@@ -398,6 +398,30 @@ func (f DistrictMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutati
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.DistrictMutation", m)
 }
 
+// The EthnosQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type EthnosQueryRuleFunc func(context.Context, *ent.EthnosQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f EthnosQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.EthnosQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.EthnosQuery", q)
+}
+
+// The EthnosMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type EthnosMutationRuleFunc func(context.Context, *ent.EthnosMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f EthnosMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.EthnosMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.EthnosMutation", m)
+}
+
 // The FavouriteQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type FavouriteQueryRuleFunc func(context.Context, *ent.FavouriteQuery) error

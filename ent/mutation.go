@@ -23,6 +23,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -70,6 +71,7 @@ const (
 	TypeCountry               = "Country"
 	TypeCulture               = "Culture"
 	TypeDistrict              = "District"
+	TypeEthnos                = "Ethnos"
 	TypeFavourite             = "Favourite"
 	TypeInterview             = "Interview"
 	TypeKeyword               = "Keyword"
@@ -3777,6 +3779,7 @@ type ArtifactMutation struct {
 	weight                       *string
 	dimensions                   *string
 	chemical_composition         *string
+	kp_number                    *string
 	goskatalog_number            *string
 	inventory_number             *string
 	typology                     *string
@@ -3785,6 +3788,8 @@ type ArtifactMutation struct {
 	authors                      map[int]struct{}
 	removedauthors               map[int]struct{}
 	clearedauthors               bool
+	donor                        *int
+	cleareddonor                 bool
 	mediums                      map[int]struct{}
 	removedmediums               map[int]struct{}
 	clearedmediums               bool
@@ -5235,6 +5240,55 @@ func (m *ArtifactMutation) ResetChemicalComposition() {
 	delete(m.clearedFields, artifact.FieldChemicalComposition)
 }
 
+// SetKpNumber sets the "kp_number" field.
+func (m *ArtifactMutation) SetKpNumber(s string) {
+	m.kp_number = &s
+}
+
+// KpNumber returns the value of the "kp_number" field in the mutation.
+func (m *ArtifactMutation) KpNumber() (r string, exists bool) {
+	v := m.kp_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKpNumber returns the old "kp_number" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldKpNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldKpNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldKpNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKpNumber: %w", err)
+	}
+	return oldValue.KpNumber, nil
+}
+
+// ClearKpNumber clears the value of the "kp_number" field.
+func (m *ArtifactMutation) ClearKpNumber() {
+	m.kp_number = nil
+	m.clearedFields[artifact.FieldKpNumber] = struct{}{}
+}
+
+// KpNumberCleared returns if the "kp_number" field was cleared in this mutation.
+func (m *ArtifactMutation) KpNumberCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldKpNumber]
+	return ok
+}
+
+// ResetKpNumber resets all changes to the "kp_number" field.
+func (m *ArtifactMutation) ResetKpNumber() {
+	m.kp_number = nil
+	delete(m.clearedFields, artifact.FieldKpNumber)
+}
+
 // SetGoskatalogNumber sets the "goskatalog_number" field.
 func (m *ArtifactMutation) SetGoskatalogNumber(s string) {
 	m.goskatalog_number = &s
@@ -5483,6 +5537,45 @@ func (m *ArtifactMutation) ResetAuthors() {
 	m.authors = nil
 	m.clearedauthors = false
 	m.removedauthors = nil
+}
+
+// SetDonorID sets the "donor" edge to the Person entity by id.
+func (m *ArtifactMutation) SetDonorID(id int) {
+	m.donor = &id
+}
+
+// ClearDonor clears the "donor" edge to the Person entity.
+func (m *ArtifactMutation) ClearDonor() {
+	m.cleareddonor = true
+}
+
+// DonorCleared reports if the "donor" edge to the Person entity was cleared.
+func (m *ArtifactMutation) DonorCleared() bool {
+	return m.cleareddonor
+}
+
+// DonorID returns the "donor" edge ID in the mutation.
+func (m *ArtifactMutation) DonorID() (id int, exists bool) {
+	if m.donor != nil {
+		return *m.donor, true
+	}
+	return
+}
+
+// DonorIDs returns the "donor" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// DonorID instead. It exists only for internal usage by the builders.
+func (m *ArtifactMutation) DonorIDs() (ids []int) {
+	if id := m.donor; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetDonor resets all changes to the "donor" edge.
+func (m *ArtifactMutation) ResetDonor() {
+	m.donor = nil
+	m.cleareddonor = false
 }
 
 // AddMediumIDs adds the "mediums" edge to the Medium entity by ids.
@@ -6164,7 +6257,7 @@ func (m *ArtifactMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtifactMutation) Fields() []string {
-	fields := make([]string, 0, 28)
+	fields := make([]string, 0, 29)
 	if m.created_at != nil {
 		fields = append(fields, artifact.FieldCreatedAt)
 	}
@@ -6237,6 +6330,9 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.chemical_composition != nil {
 		fields = append(fields, artifact.FieldChemicalComposition)
 	}
+	if m.kp_number != nil {
+		fields = append(fields, artifact.FieldKpNumber)
+	}
 	if m.goskatalog_number != nil {
 		fields = append(fields, artifact.FieldGoskatalogNumber)
 	}
@@ -6305,6 +6401,8 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.Dimensions()
 	case artifact.FieldChemicalComposition:
 		return m.ChemicalComposition()
+	case artifact.FieldKpNumber:
+		return m.KpNumber()
 	case artifact.FieldGoskatalogNumber:
 		return m.GoskatalogNumber()
 	case artifact.FieldInventoryNumber:
@@ -6370,6 +6468,8 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldDimensions(ctx)
 	case artifact.FieldChemicalComposition:
 		return m.OldChemicalComposition(ctx)
+	case artifact.FieldKpNumber:
+		return m.OldKpNumber(ctx)
 	case artifact.FieldGoskatalogNumber:
 		return m.OldGoskatalogNumber(ctx)
 	case artifact.FieldInventoryNumber:
@@ -6554,6 +6654,13 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetChemicalComposition(v)
+		return nil
+	case artifact.FieldKpNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKpNumber(v)
 		return nil
 	case artifact.FieldGoskatalogNumber:
 		v, ok := value.(string)
@@ -6766,6 +6873,9 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldChemicalComposition) {
 		fields = append(fields, artifact.FieldChemicalComposition)
 	}
+	if m.FieldCleared(artifact.FieldKpNumber) {
+		fields = append(fields, artifact.FieldKpNumber)
+	}
 	if m.FieldCleared(artifact.FieldGoskatalogNumber) {
 		fields = append(fields, artifact.FieldGoskatalogNumber)
 	}
@@ -6857,6 +6967,9 @@ func (m *ArtifactMutation) ClearField(name string) error {
 		return nil
 	case artifact.FieldChemicalComposition:
 		m.ClearChemicalComposition()
+		return nil
+	case artifact.FieldKpNumber:
+		m.ClearKpNumber()
 		return nil
 	case artifact.FieldGoskatalogNumber:
 		m.ClearGoskatalogNumber()
@@ -6950,6 +7063,9 @@ func (m *ArtifactMutation) ResetField(name string) error {
 	case artifact.FieldChemicalComposition:
 		m.ResetChemicalComposition()
 		return nil
+	case artifact.FieldKpNumber:
+		m.ResetKpNumber()
+		return nil
 	case artifact.FieldGoskatalogNumber:
 		m.ResetGoskatalogNumber()
 		return nil
@@ -6968,9 +7084,12 @@ func (m *ArtifactMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtifactMutation) AddedEdges() []string {
-	edges := make([]string, 0, 16)
+	edges := make([]string, 0, 17)
 	if m.authors != nil {
 		edges = append(edges, artifact.EdgeAuthors)
+	}
+	if m.donor != nil {
+		edges = append(edges, artifact.EdgeDonor)
 	}
 	if m.mediums != nil {
 		edges = append(edges, artifact.EdgeMediums)
@@ -7030,6 +7149,10 @@ func (m *ArtifactMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case artifact.EdgeDonor:
+		if id := m.donor; id != nil {
+			return []ent.Value{*id}
+		}
 	case artifact.EdgeMediums:
 		ids := make([]ent.Value, 0, len(m.mediums))
 		for id := range m.mediums {
@@ -7104,7 +7227,7 @@ func (m *ArtifactMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtifactMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 16)
+	edges := make([]string, 0, 17)
 	if m.removedauthors != nil {
 		edges = append(edges, artifact.EdgeAuthors)
 	}
@@ -7163,9 +7286,12 @@ func (m *ArtifactMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtifactMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 16)
+	edges := make([]string, 0, 17)
 	if m.clearedauthors {
 		edges = append(edges, artifact.EdgeAuthors)
+	}
+	if m.cleareddonor {
+		edges = append(edges, artifact.EdgeDonor)
 	}
 	if m.clearedmediums {
 		edges = append(edges, artifact.EdgeMediums)
@@ -7221,6 +7347,8 @@ func (m *ArtifactMutation) EdgeCleared(name string) bool {
 	switch name {
 	case artifact.EdgeAuthors:
 		return m.clearedauthors
+	case artifact.EdgeDonor:
+		return m.cleareddonor
 	case artifact.EdgeMediums:
 		return m.clearedmediums
 	case artifact.EdgeTechniques:
@@ -7259,6 +7387,9 @@ func (m *ArtifactMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *ArtifactMutation) ClearEdge(name string) error {
 	switch name {
+	case artifact.EdgeDonor:
+		m.ClearDonor()
+		return nil
 	case artifact.EdgeCulturalAffiliation:
 		m.ClearCulturalAffiliation()
 		return nil
@@ -7302,6 +7433,9 @@ func (m *ArtifactMutation) ResetEdge(name string) error {
 	switch name {
 	case artifact.EdgeAuthors:
 		m.ResetAuthors()
+		return nil
+	case artifact.EdgeDonor:
+		m.ResetDonor()
 		return nil
 	case artifact.EdgeMediums:
 		m.ResetMediums()
@@ -17439,6 +17573,920 @@ func (m *DistrictMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown District edge %s", name)
 }
 
+// EthnosMutation represents an operation that mutates the Ethnos nodes in the graph.
+type EthnosMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *int
+	created_at       *time.Time
+	created_by       *string
+	updated_at       *time.Time
+	updated_by       *string
+	display_name     *string
+	abbreviation     *string
+	description      *string
+	external_link    *string
+	clearedFields    map[string]struct{}
+	artifacts        map[int]struct{}
+	removedartifacts map[int]struct{}
+	clearedartifacts bool
+	done             bool
+	oldValue         func(context.Context) (*Ethnos, error)
+	predicates       []predicate.Ethnos
+}
+
+var _ ent.Mutation = (*EthnosMutation)(nil)
+
+// ethnosOption allows management of the mutation configuration using functional options.
+type ethnosOption func(*EthnosMutation)
+
+// newEthnosMutation creates new mutation for the Ethnos entity.
+func newEthnosMutation(c config, op Op, opts ...ethnosOption) *EthnosMutation {
+	m := &EthnosMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeEthnos,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withEthnosID sets the ID field of the mutation.
+func withEthnosID(id int) ethnosOption {
+	return func(m *EthnosMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Ethnos
+		)
+		m.oldValue = func(ctx context.Context) (*Ethnos, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Ethnos.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withEthnos sets the old Ethnos of the mutation.
+func withEthnos(node *Ethnos) ethnosOption {
+	return func(m *EthnosMutation) {
+		m.oldValue = func(context.Context) (*Ethnos, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m EthnosMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m EthnosMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *EthnosMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *EthnosMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Ethnos.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *EthnosMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *EthnosMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *EthnosMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *EthnosMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *EthnosMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *EthnosMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[ethnos.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *EthnosMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[ethnos.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *EthnosMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, ethnos.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *EthnosMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *EthnosMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *EthnosMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *EthnosMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *EthnosMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *EthnosMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[ethnos.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *EthnosMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[ethnos.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *EthnosMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, ethnos.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *EthnosMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *EthnosMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *EthnosMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[ethnos.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *EthnosMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[ethnos.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *EthnosMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, ethnos.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *EthnosMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *EthnosMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *EthnosMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[ethnos.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *EthnosMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[ethnos.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *EthnosMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, ethnos.FieldAbbreviation)
+}
+
+// SetDescription sets the "description" field.
+func (m *EthnosMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *EthnosMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *EthnosMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[ethnos.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *EthnosMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[ethnos.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *EthnosMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, ethnos.FieldDescription)
+}
+
+// SetExternalLink sets the "external_link" field.
+func (m *EthnosMutation) SetExternalLink(s string) {
+	m.external_link = &s
+}
+
+// ExternalLink returns the value of the "external_link" field in the mutation.
+func (m *EthnosMutation) ExternalLink() (r string, exists bool) {
+	v := m.external_link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLink returns the old "external_link" field's value of the Ethnos entity.
+// If the Ethnos object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EthnosMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+	}
+	return oldValue.ExternalLink, nil
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (m *EthnosMutation) ClearExternalLink() {
+	m.external_link = nil
+	m.clearedFields[ethnos.FieldExternalLink] = struct{}{}
+}
+
+// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
+func (m *EthnosMutation) ExternalLinkCleared() bool {
+	_, ok := m.clearedFields[ethnos.FieldExternalLink]
+	return ok
+}
+
+// ResetExternalLink resets all changes to the "external_link" field.
+func (m *EthnosMutation) ResetExternalLink() {
+	m.external_link = nil
+	delete(m.clearedFields, ethnos.FieldExternalLink)
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
+func (m *EthnosMutation) AddArtifactIDs(ids ...int) {
+	if m.artifacts == nil {
+		m.artifacts = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.artifacts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArtifacts clears the "artifacts" edge to the Artifact entity.
+func (m *EthnosMutation) ClearArtifacts() {
+	m.clearedartifacts = true
+}
+
+// ArtifactsCleared reports if the "artifacts" edge to the Artifact entity was cleared.
+func (m *EthnosMutation) ArtifactsCleared() bool {
+	return m.clearedartifacts
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to the Artifact entity by IDs.
+func (m *EthnosMutation) RemoveArtifactIDs(ids ...int) {
+	if m.removedartifacts == nil {
+		m.removedartifacts = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.artifacts, ids[i])
+		m.removedartifacts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArtifacts returns the removed IDs of the "artifacts" edge to the Artifact entity.
+func (m *EthnosMutation) RemovedArtifactsIDs() (ids []int) {
+	for id := range m.removedartifacts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtifactsIDs returns the "artifacts" edge IDs in the mutation.
+func (m *EthnosMutation) ArtifactsIDs() (ids []int) {
+	for id := range m.artifacts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArtifacts resets all changes to the "artifacts" edge.
+func (m *EthnosMutation) ResetArtifacts() {
+	m.artifacts = nil
+	m.clearedartifacts = false
+	m.removedartifacts = nil
+}
+
+// Where appends a list predicates to the EthnosMutation builder.
+func (m *EthnosMutation) Where(ps ...predicate.Ethnos) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the EthnosMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *EthnosMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Ethnos, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *EthnosMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *EthnosMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Ethnos).
+func (m *EthnosMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *EthnosMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.created_at != nil {
+		fields = append(fields, ethnos.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, ethnos.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, ethnos.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, ethnos.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, ethnos.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, ethnos.FieldAbbreviation)
+	}
+	if m.description != nil {
+		fields = append(fields, ethnos.FieldDescription)
+	}
+	if m.external_link != nil {
+		fields = append(fields, ethnos.FieldExternalLink)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *EthnosMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case ethnos.FieldCreatedAt:
+		return m.CreatedAt()
+	case ethnos.FieldCreatedBy:
+		return m.CreatedBy()
+	case ethnos.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case ethnos.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case ethnos.FieldDisplayName:
+		return m.DisplayName()
+	case ethnos.FieldAbbreviation:
+		return m.Abbreviation()
+	case ethnos.FieldDescription:
+		return m.Description()
+	case ethnos.FieldExternalLink:
+		return m.ExternalLink()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *EthnosMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case ethnos.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case ethnos.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case ethnos.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case ethnos.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case ethnos.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case ethnos.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
+	case ethnos.FieldDescription:
+		return m.OldDescription(ctx)
+	case ethnos.FieldExternalLink:
+		return m.OldExternalLink(ctx)
+	}
+	return nil, fmt.Errorf("unknown Ethnos field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EthnosMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case ethnos.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case ethnos.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case ethnos.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case ethnos.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case ethnos.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case ethnos.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
+		return nil
+	case ethnos.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case ethnos.FieldExternalLink:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLink(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Ethnos field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *EthnosMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *EthnosMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *EthnosMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Ethnos numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *EthnosMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(ethnos.FieldCreatedBy) {
+		fields = append(fields, ethnos.FieldCreatedBy)
+	}
+	if m.FieldCleared(ethnos.FieldUpdatedBy) {
+		fields = append(fields, ethnos.FieldUpdatedBy)
+	}
+	if m.FieldCleared(ethnos.FieldDisplayName) {
+		fields = append(fields, ethnos.FieldDisplayName)
+	}
+	if m.FieldCleared(ethnos.FieldAbbreviation) {
+		fields = append(fields, ethnos.FieldAbbreviation)
+	}
+	if m.FieldCleared(ethnos.FieldDescription) {
+		fields = append(fields, ethnos.FieldDescription)
+	}
+	if m.FieldCleared(ethnos.FieldExternalLink) {
+		fields = append(fields, ethnos.FieldExternalLink)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *EthnosMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *EthnosMutation) ClearField(name string) error {
+	switch name {
+	case ethnos.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case ethnos.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case ethnos.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case ethnos.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
+	case ethnos.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case ethnos.FieldExternalLink:
+		m.ClearExternalLink()
+		return nil
+	}
+	return fmt.Errorf("unknown Ethnos nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *EthnosMutation) ResetField(name string) error {
+	switch name {
+	case ethnos.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case ethnos.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case ethnos.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case ethnos.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case ethnos.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case ethnos.FieldAbbreviation:
+		m.ResetAbbreviation()
+		return nil
+	case ethnos.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case ethnos.FieldExternalLink:
+		m.ResetExternalLink()
+		return nil
+	}
+	return fmt.Errorf("unknown Ethnos field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *EthnosMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.artifacts != nil {
+		edges = append(edges, ethnos.EdgeArtifacts)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *EthnosMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case ethnos.EdgeArtifacts:
+		ids := make([]ent.Value, 0, len(m.artifacts))
+		for id := range m.artifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *EthnosMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedartifacts != nil {
+		edges = append(edges, ethnos.EdgeArtifacts)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *EthnosMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case ethnos.EdgeArtifacts:
+		ids := make([]ent.Value, 0, len(m.removedartifacts))
+		for id := range m.removedartifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *EthnosMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedartifacts {
+		edges = append(edges, ethnos.EdgeArtifacts)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *EthnosMutation) EdgeCleared(name string) bool {
+	switch name {
+	case ethnos.EdgeArtifacts:
+		return m.clearedartifacts
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *EthnosMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Ethnos unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *EthnosMutation) ResetEdge(name string) error {
+	switch name {
+	case ethnos.EdgeArtifacts:
+		m.ResetArtifacts()
+		return nil
+	}
+	return fmt.Errorf("unknown Ethnos edge %s", name)
+}
+
 // FavouriteMutation represents an operation that mutates the Favourite nodes in the graph.
 type FavouriteMutation struct {
 	config
@@ -27452,6 +28500,9 @@ type PersonMutation struct {
 	artifacts                    map[int]struct{}
 	removedartifacts             map[int]struct{}
 	clearedartifacts             bool
+	donated_artifacts            map[int]struct{}
+	removeddonated_artifacts     map[int]struct{}
+	cleareddonated_artifacts     bool
 	books                        map[int]struct{}
 	removedbooks                 map[int]struct{}
 	clearedbooks                 bool
@@ -28730,6 +29781,60 @@ func (m *PersonMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by ids.
+func (m *PersonMutation) AddDonatedArtifactIDs(ids ...int) {
+	if m.donated_artifacts == nil {
+		m.donated_artifacts = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.donated_artifacts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearDonatedArtifacts clears the "donated_artifacts" edge to the Artifact entity.
+func (m *PersonMutation) ClearDonatedArtifacts() {
+	m.cleareddonated_artifacts = true
+}
+
+// DonatedArtifactsCleared reports if the "donated_artifacts" edge to the Artifact entity was cleared.
+func (m *PersonMutation) DonatedArtifactsCleared() bool {
+	return m.cleareddonated_artifacts
+}
+
+// RemoveDonatedArtifactIDs removes the "donated_artifacts" edge to the Artifact entity by IDs.
+func (m *PersonMutation) RemoveDonatedArtifactIDs(ids ...int) {
+	if m.removeddonated_artifacts == nil {
+		m.removeddonated_artifacts = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.donated_artifacts, ids[i])
+		m.removeddonated_artifacts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedDonatedArtifacts returns the removed IDs of the "donated_artifacts" edge to the Artifact entity.
+func (m *PersonMutation) RemovedDonatedArtifactsIDs() (ids []int) {
+	for id := range m.removeddonated_artifacts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// DonatedArtifactsIDs returns the "donated_artifacts" edge IDs in the mutation.
+func (m *PersonMutation) DonatedArtifactsIDs() (ids []int) {
+	for id := range m.donated_artifacts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetDonatedArtifacts resets all changes to the "donated_artifacts" edge.
+func (m *PersonMutation) ResetDonatedArtifacts() {
+	m.donated_artifacts = nil
+	m.cleareddonated_artifacts = false
+	m.removeddonated_artifacts = nil
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by ids.
 func (m *PersonMutation) AddBookIDs(ids ...int) {
 	if m.books == nil {
@@ -29498,7 +30603,7 @@ func (m *PersonMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.collections != nil {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -29507,6 +30612,9 @@ func (m *PersonMutation) AddedEdges() []string {
 	}
 	if m.artifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
+	}
+	if m.donated_artifacts != nil {
+		edges = append(edges, person.EdgeDonatedArtifacts)
 	}
 	if m.books != nil {
 		edges = append(edges, person.EdgeBooks)
@@ -29545,6 +30653,12 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case person.EdgeDonatedArtifacts:
+		ids := make([]ent.Value, 0, len(m.donated_artifacts))
+		for id := range m.donated_artifacts {
+			ids = append(ids, id)
+		}
+		return ids
 	case person.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.books))
 		for id := range m.books {
@@ -29573,7 +30687,7 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.removedcollections != nil {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -29582,6 +30696,9 @@ func (m *PersonMutation) RemovedEdges() []string {
 	}
 	if m.removedartifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
+	}
+	if m.removeddonated_artifacts != nil {
+		edges = append(edges, person.EdgeDonatedArtifacts)
 	}
 	if m.removedbooks != nil {
 		edges = append(edges, person.EdgeBooks)
@@ -29617,6 +30734,12 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case person.EdgeDonatedArtifacts:
+		ids := make([]ent.Value, 0, len(m.removeddonated_artifacts))
+		for id := range m.removeddonated_artifacts {
+			ids = append(ids, id)
+		}
+		return ids
 	case person.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.removedbooks))
 		for id := range m.removedbooks {
@@ -29641,7 +30764,7 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.clearedcollections {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -29650,6 +30773,9 @@ func (m *PersonMutation) ClearedEdges() []string {
 	}
 	if m.clearedartifacts {
 		edges = append(edges, person.EdgeArtifacts)
+	}
+	if m.cleareddonated_artifacts {
+		edges = append(edges, person.EdgeDonatedArtifacts)
 	}
 	if m.clearedbooks {
 		edges = append(edges, person.EdgeBooks)
@@ -29676,6 +30802,8 @@ func (m *PersonMutation) EdgeCleared(name string) bool {
 		return m.clearedart
 	case person.EdgeArtifacts:
 		return m.clearedartifacts
+	case person.EdgeDonatedArtifacts:
+		return m.cleareddonated_artifacts
 	case person.EdgeBooks:
 		return m.clearedbooks
 	case person.EdgeProjects:
@@ -29711,6 +30839,9 @@ func (m *PersonMutation) ResetEdge(name string) error {
 		return nil
 	case person.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case person.EdgeDonatedArtifacts:
+		m.ResetDonatedArtifacts()
 		return nil
 	case person.EdgeBooks:
 		m.ResetBooks()

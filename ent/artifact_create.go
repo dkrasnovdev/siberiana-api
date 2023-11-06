@@ -364,6 +364,20 @@ func (ac *ArtifactCreate) SetNillableChemicalComposition(s *string) *ArtifactCre
 	return ac
 }
 
+// SetKpNumber sets the "kp_number" field.
+func (ac *ArtifactCreate) SetKpNumber(s string) *ArtifactCreate {
+	ac.mutation.SetKpNumber(s)
+	return ac
+}
+
+// SetNillableKpNumber sets the "kp_number" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableKpNumber(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetKpNumber(*s)
+	}
+	return ac
+}
+
 // SetGoskatalogNumber sets the "goskatalog_number" field.
 func (ac *ArtifactCreate) SetGoskatalogNumber(s string) *ArtifactCreate {
 	ac.mutation.SetGoskatalogNumber(s)
@@ -433,6 +447,25 @@ func (ac *ArtifactCreate) AddAuthors(p ...*Person) *ArtifactCreate {
 		ids[i] = p[i].ID
 	}
 	return ac.AddAuthorIDs(ids...)
+}
+
+// SetDonorID sets the "donor" edge to the Person entity by ID.
+func (ac *ArtifactCreate) SetDonorID(id int) *ArtifactCreate {
+	ac.mutation.SetDonorID(id)
+	return ac
+}
+
+// SetNillableDonorID sets the "donor" edge to the Person entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDonorID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetDonorID(*id)
+	}
+	return ac
+}
+
+// SetDonor sets the "donor" edge to the Person entity.
+func (ac *ArtifactCreate) SetDonor(p *Person) *ArtifactCreate {
+	return ac.SetDonorID(p.ID)
 }
 
 // AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
@@ -892,6 +925,10 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
 		_node.ChemicalComposition = value
 	}
+	if value, ok := ac.mutation.KpNumber(); ok {
+		_spec.SetField(artifact.FieldKpNumber, field.TypeString, value)
+		_node.KpNumber = value
+	}
 	if value, ok := ac.mutation.GoskatalogNumber(); ok {
 		_spec.SetField(artifact.FieldGoskatalogNumber, field.TypeString, value)
 		_node.GoskatalogNumber = value
@@ -922,6 +959,23 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.DonorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.DonorTable,
+			Columns: []string{artifact.DonorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.person_donated_artifacts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.MediumsIDs(); len(nodes) > 0 {
