@@ -2903,6 +2903,7 @@ input CreatePetroglyphInput {
   dimensions: String
   planePreservation: String
   photoCode: String
+  accountingDocumentationInformation: String
   accountingDocumentationDate: Time
   geometry: Geometry
   culturalAffiliationID: ID
@@ -6159,6 +6160,7 @@ type Petroglyph implements Node {
   dimensions: String
   planePreservation: String
   photoCode: String
+  accountingDocumentationInformation: String
   accountingDocumentationDate: Time
   geometry: Geometry
   culturalAffiliation: Culture
@@ -6607,6 +6609,22 @@ input PetroglyphWhereInput {
   photoCodeNotNil: Boolean
   photoCodeEqualFold: String
   photoCodeContainsFold: String
+  """accounting_documentation_information field predicates"""
+  accountingDocumentationInformation: String
+  accountingDocumentationInformationNEQ: String
+  accountingDocumentationInformationIn: [String!]
+  accountingDocumentationInformationNotIn: [String!]
+  accountingDocumentationInformationGT: String
+  accountingDocumentationInformationGTE: String
+  accountingDocumentationInformationLT: String
+  accountingDocumentationInformationLTE: String
+  accountingDocumentationInformationContains: String
+  accountingDocumentationInformationHasPrefix: String
+  accountingDocumentationInformationHasSuffix: String
+  accountingDocumentationInformationIsNil: Boolean
+  accountingDocumentationInformationNotNil: Boolean
+  accountingDocumentationInformationEqualFold: String
+  accountingDocumentationInformationContainsFold: String
   """accounting_documentation_date field predicates"""
   accountingDocumentationDate: Time
   accountingDocumentationDateNEQ: Time
@@ -10540,6 +10558,8 @@ input UpdatePetroglyphInput {
   clearPlanePreservation: Boolean
   photoCode: String
   clearPhotoCode: Boolean
+  accountingDocumentationInformation: String
+  clearAccountingDocumentationInformation: Boolean
   accountingDocumentationDate: Time
   clearAccountingDocumentationDate: Boolean
   geometry: Geometry

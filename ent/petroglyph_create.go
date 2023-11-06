@@ -427,6 +427,20 @@ func (pc *PetroglyphCreate) SetNillablePhotoCode(s *string) *PetroglyphCreate {
 	return pc
 }
 
+// SetAccountingDocumentationInformation sets the "accounting_documentation_information" field.
+func (pc *PetroglyphCreate) SetAccountingDocumentationInformation(s string) *PetroglyphCreate {
+	pc.mutation.SetAccountingDocumentationInformation(s)
+	return pc
+}
+
+// SetNillableAccountingDocumentationInformation sets the "accounting_documentation_information" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableAccountingDocumentationInformation(s *string) *PetroglyphCreate {
+	if s != nil {
+		pc.SetAccountingDocumentationInformation(*s)
+	}
+	return pc
+}
+
 // SetAccountingDocumentationDate sets the "accounting_documentation_date" field.
 func (pc *PetroglyphCreate) SetAccountingDocumentationDate(t time.Time) *PetroglyphCreate {
 	pc.mutation.SetAccountingDocumentationDate(t)
@@ -811,6 +825,10 @@ func (pc *PetroglyphCreate) createSpec() (*Petroglyph, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.PhotoCode(); ok {
 		_spec.SetField(petroglyph.FieldPhotoCode, field.TypeString, value)
 		_node.PhotoCode = value
+	}
+	if value, ok := pc.mutation.AccountingDocumentationInformation(); ok {
+		_spec.SetField(petroglyph.FieldAccountingDocumentationInformation, field.TypeString, value)
+		_node.AccountingDocumentationInformation = value
 	}
 	if value, ok := pc.mutation.AccountingDocumentationDate(); ok {
 		_spec.SetField(petroglyph.FieldAccountingDocumentationDate, field.TypeTime, value)

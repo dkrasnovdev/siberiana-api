@@ -191,6 +191,11 @@ func PhotoCode(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldEQ(FieldPhotoCode, v))
 }
 
+// AccountingDocumentationInformation applies equality check predicate on the "accounting_documentation_information" field. It's identical to AccountingDocumentationInformationEQ.
+func AccountingDocumentationInformation(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldAccountingDocumentationInformation, v))
+}
+
 // AccountingDocumentationDate applies equality check predicate on the "accounting_documentation_date" field. It's identical to AccountingDocumentationDateEQ.
 func AccountingDocumentationDate(v time.Time) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldEQ(FieldAccountingDocumentationDate, v))
@@ -1994,6 +1999,81 @@ func PhotoCodeEqualFold(v string) predicate.Petroglyph {
 // PhotoCodeContainsFold applies the ContainsFold predicate on the "photo_code" field.
 func PhotoCodeContainsFold(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldContainsFold(FieldPhotoCode, v))
+}
+
+// AccountingDocumentationInformationEQ applies the EQ predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationNEQ applies the NEQ predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationNEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationIn applies the In predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldAccountingDocumentationInformation, vs...))
+}
+
+// AccountingDocumentationInformationNotIn applies the NotIn predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationNotIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldAccountingDocumentationInformation, vs...))
+}
+
+// AccountingDocumentationInformationGT applies the GT predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationGT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationGTE applies the GTE predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationGTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationLT applies the LT predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationLT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationLTE applies the LTE predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationLTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationContains applies the Contains predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationContains(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContains(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationHasPrefix applies the HasPrefix predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationHasPrefix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasPrefix(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationHasSuffix applies the HasSuffix predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationHasSuffix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasSuffix(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationIsNil applies the IsNil predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldAccountingDocumentationInformation))
+}
+
+// AccountingDocumentationInformationNotNil applies the NotNil predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldAccountingDocumentationInformation))
+}
+
+// AccountingDocumentationInformationEqualFold applies the EqualFold predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationEqualFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEqualFold(FieldAccountingDocumentationInformation, v))
+}
+
+// AccountingDocumentationInformationContainsFold applies the ContainsFold predicate on the "accounting_documentation_information" field.
+func AccountingDocumentationInformationContainsFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContainsFold(FieldAccountingDocumentationInformation, v))
 }
 
 // AccountingDocumentationDateEQ applies the EQ predicate on the "accounting_documentation_date" field.

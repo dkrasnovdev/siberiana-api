@@ -83,6 +83,8 @@ type Petroglyph struct {
 	PlanePreservation string `json:"plane_preservation,omitempty"`
 	// PhotoCode holds the value of the "photo_code" field.
 	PhotoCode string `json:"photo_code,omitempty"`
+	// AccountingDocumentationInformation holds the value of the "accounting_documentation_information" field.
+	AccountingDocumentationInformation string `json:"accounting_documentation_information,omitempty"`
 	// AccountingDocumentationDate holds the value of the "accounting_documentation_date" field.
 	AccountingDocumentationDate time.Time `json:"accounting_documentation_date,omitempty"`
 	// Geometry holds the value of the "geometry" field.
@@ -236,7 +238,7 @@ func (*Petroglyph) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case petroglyph.FieldID, petroglyph.FieldDatingStart, petroglyph.FieldDatingEnd:
 			values[i] = new(sql.NullInt64)
-		case petroglyph.FieldCreatedBy, petroglyph.FieldUpdatedBy, petroglyph.FieldDisplayName, petroglyph.FieldAbbreviation, petroglyph.FieldDescription, petroglyph.FieldExternalLink, petroglyph.FieldStatus, petroglyph.FieldPrimaryImageURL, petroglyph.FieldDeletedBy, petroglyph.FieldNumber, petroglyph.FieldDating, petroglyph.FieldOrientation, petroglyph.FieldPosition, petroglyph.FieldGeometricShape, petroglyph.FieldWeight, petroglyph.FieldDimensions, petroglyph.FieldPlanePreservation, petroglyph.FieldPhotoCode:
+		case petroglyph.FieldCreatedBy, petroglyph.FieldUpdatedBy, petroglyph.FieldDisplayName, petroglyph.FieldAbbreviation, petroglyph.FieldDescription, petroglyph.FieldExternalLink, petroglyph.FieldStatus, petroglyph.FieldPrimaryImageURL, petroglyph.FieldDeletedBy, petroglyph.FieldNumber, petroglyph.FieldDating, petroglyph.FieldOrientation, petroglyph.FieldPosition, petroglyph.FieldGeometricShape, petroglyph.FieldWeight, petroglyph.FieldDimensions, petroglyph.FieldPlanePreservation, petroglyph.FieldPhotoCode, petroglyph.FieldAccountingDocumentationInformation:
 			values[i] = new(sql.NullString)
 		case petroglyph.FieldCreatedAt, petroglyph.FieldUpdatedAt, petroglyph.FieldDeletedAt, petroglyph.FieldAccountingDocumentationDate:
 			values[i] = new(sql.NullTime)
@@ -448,6 +450,12 @@ func (pe *Petroglyph) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field photo_code", values[i])
 			} else if value.Valid {
 				pe.PhotoCode = value.String
+			}
+		case petroglyph.FieldAccountingDocumentationInformation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field accounting_documentation_information", values[i])
+			} else if value.Valid {
+				pe.AccountingDocumentationInformation = value.String
 			}
 		case petroglyph.FieldAccountingDocumentationDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -666,6 +674,9 @@ func (pe *Petroglyph) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("photo_code=")
 	builder.WriteString(pe.PhotoCode)
+	builder.WriteString(", ")
+	builder.WriteString("accounting_documentation_information=")
+	builder.WriteString(pe.AccountingDocumentationInformation)
 	builder.WriteString(", ")
 	builder.WriteString("accounting_documentation_date=")
 	builder.WriteString(pe.AccountingDocumentationDate.Format(time.ANSIC))

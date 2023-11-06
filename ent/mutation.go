@@ -33265,6 +33265,7 @@ type PetroglyphMutation struct {
 	dimensions                              *string
 	plane_preservation                      *string
 	photo_code                              *string
+	accounting_documentation_information    *string
 	accounting_documentation_date           *time.Time
 	geometry                                *types.Geometry
 	clearedFields                           map[string]struct{}
@@ -34947,6 +34948,55 @@ func (m *PetroglyphMutation) ResetPhotoCode() {
 	delete(m.clearedFields, petroglyph.FieldPhotoCode)
 }
 
+// SetAccountingDocumentationInformation sets the "accounting_documentation_information" field.
+func (m *PetroglyphMutation) SetAccountingDocumentationInformation(s string) {
+	m.accounting_documentation_information = &s
+}
+
+// AccountingDocumentationInformation returns the value of the "accounting_documentation_information" field in the mutation.
+func (m *PetroglyphMutation) AccountingDocumentationInformation() (r string, exists bool) {
+	v := m.accounting_documentation_information
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAccountingDocumentationInformation returns the old "accounting_documentation_information" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldAccountingDocumentationInformation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAccountingDocumentationInformation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAccountingDocumentationInformation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAccountingDocumentationInformation: %w", err)
+	}
+	return oldValue.AccountingDocumentationInformation, nil
+}
+
+// ClearAccountingDocumentationInformation clears the value of the "accounting_documentation_information" field.
+func (m *PetroglyphMutation) ClearAccountingDocumentationInformation() {
+	m.accounting_documentation_information = nil
+	m.clearedFields[petroglyph.FieldAccountingDocumentationInformation] = struct{}{}
+}
+
+// AccountingDocumentationInformationCleared returns if the "accounting_documentation_information" field was cleared in this mutation.
+func (m *PetroglyphMutation) AccountingDocumentationInformationCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldAccountingDocumentationInformation]
+	return ok
+}
+
+// ResetAccountingDocumentationInformation resets all changes to the "accounting_documentation_information" field.
+func (m *PetroglyphMutation) ResetAccountingDocumentationInformation() {
+	m.accounting_documentation_information = nil
+	delete(m.clearedFields, petroglyph.FieldAccountingDocumentationInformation)
+}
+
 // SetAccountingDocumentationDate sets the "accounting_documentation_date" field.
 func (m *PetroglyphMutation) SetAccountingDocumentationDate(t time.Time) {
 	m.accounting_documentation_date = &t
@@ -35421,7 +35471,7 @@ func (m *PetroglyphMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PetroglyphMutation) Fields() []string {
-	fields := make([]string, 0, 31)
+	fields := make([]string, 0, 32)
 	if m.created_at != nil {
 		fields = append(fields, petroglyph.FieldCreatedAt)
 	}
@@ -35509,6 +35559,9 @@ func (m *PetroglyphMutation) Fields() []string {
 	if m.photo_code != nil {
 		fields = append(fields, petroglyph.FieldPhotoCode)
 	}
+	if m.accounting_documentation_information != nil {
+		fields = append(fields, petroglyph.FieldAccountingDocumentationInformation)
+	}
 	if m.accounting_documentation_date != nil {
 		fields = append(fields, petroglyph.FieldAccountingDocumentationDate)
 	}
@@ -35581,6 +35634,8 @@ func (m *PetroglyphMutation) Field(name string) (ent.Value, bool) {
 		return m.PlanePreservation()
 	case petroglyph.FieldPhotoCode:
 		return m.PhotoCode()
+	case petroglyph.FieldAccountingDocumentationInformation:
+		return m.AccountingDocumentationInformation()
 	case petroglyph.FieldAccountingDocumentationDate:
 		return m.AccountingDocumentationDate()
 	case petroglyph.FieldGeometry:
@@ -35652,6 +35707,8 @@ func (m *PetroglyphMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldPlanePreservation(ctx)
 	case petroglyph.FieldPhotoCode:
 		return m.OldPhotoCode(ctx)
+	case petroglyph.FieldAccountingDocumentationInformation:
+		return m.OldAccountingDocumentationInformation(ctx)
 	case petroglyph.FieldAccountingDocumentationDate:
 		return m.OldAccountingDocumentationDate(ctx)
 	case petroglyph.FieldGeometry:
@@ -35868,6 +35925,13 @@ func (m *PetroglyphMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPhotoCode(v)
 		return nil
+	case petroglyph.FieldAccountingDocumentationInformation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAccountingDocumentationInformation(v)
+		return nil
 	case petroglyph.FieldAccountingDocumentationDate:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -36080,6 +36144,9 @@ func (m *PetroglyphMutation) ClearedFields() []string {
 	if m.FieldCleared(petroglyph.FieldPhotoCode) {
 		fields = append(fields, petroglyph.FieldPhotoCode)
 	}
+	if m.FieldCleared(petroglyph.FieldAccountingDocumentationInformation) {
+		fields = append(fields, petroglyph.FieldAccountingDocumentationInformation)
+	}
 	if m.FieldCleared(petroglyph.FieldAccountingDocumentationDate) {
 		fields = append(fields, petroglyph.FieldAccountingDocumentationDate)
 	}
@@ -36181,6 +36248,9 @@ func (m *PetroglyphMutation) ClearField(name string) error {
 	case petroglyph.FieldPhotoCode:
 		m.ClearPhotoCode()
 		return nil
+	case petroglyph.FieldAccountingDocumentationInformation:
+		m.ClearAccountingDocumentationInformation()
+		return nil
 	case petroglyph.FieldAccountingDocumentationDate:
 		m.ClearAccountingDocumentationDate()
 		return nil
@@ -36281,6 +36351,9 @@ func (m *PetroglyphMutation) ResetField(name string) error {
 		return nil
 	case petroglyph.FieldPhotoCode:
 		m.ResetPhotoCode()
+		return nil
+	case petroglyph.FieldAccountingDocumentationInformation:
+		m.ResetAccountingDocumentationInformation()
 		return nil
 	case petroglyph.FieldAccountingDocumentationDate:
 		m.ResetAccountingDocumentationDate()

@@ -73,6 +73,7 @@ func (Petroglyph) Fields() []ent.Field {
 		field.String("dimensions").Optional(),
 		field.String("plane_preservation").Optional(),
 		field.String("photo_code").Optional(),
+		field.String("accounting_documentation_information").Optional(),
 		field.Time("accounting_documentation_date").
 			Optional().
 			SchemaType(map[string]string{

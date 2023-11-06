@@ -631,6 +631,26 @@ func (pu *PetroglyphUpdate) ClearPhotoCode() *PetroglyphUpdate {
 	return pu
 }
 
+// SetAccountingDocumentationInformation sets the "accounting_documentation_information" field.
+func (pu *PetroglyphUpdate) SetAccountingDocumentationInformation(s string) *PetroglyphUpdate {
+	pu.mutation.SetAccountingDocumentationInformation(s)
+	return pu
+}
+
+// SetNillableAccountingDocumentationInformation sets the "accounting_documentation_information" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableAccountingDocumentationInformation(s *string) *PetroglyphUpdate {
+	if s != nil {
+		pu.SetAccountingDocumentationInformation(*s)
+	}
+	return pu
+}
+
+// ClearAccountingDocumentationInformation clears the value of the "accounting_documentation_information" field.
+func (pu *PetroglyphUpdate) ClearAccountingDocumentationInformation() *PetroglyphUpdate {
+	pu.mutation.ClearAccountingDocumentationInformation()
+	return pu
+}
+
 // SetAccountingDocumentationDate sets the "accounting_documentation_date" field.
 func (pu *PetroglyphUpdate) SetAccountingDocumentationDate(t time.Time) *PetroglyphUpdate {
 	pu.mutation.SetAccountingDocumentationDate(t)
@@ -1152,6 +1172,12 @@ func (pu *PetroglyphUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.PhotoCodeCleared() {
 		_spec.ClearField(petroglyph.FieldPhotoCode, field.TypeString)
+	}
+	if value, ok := pu.mutation.AccountingDocumentationInformation(); ok {
+		_spec.SetField(petroglyph.FieldAccountingDocumentationInformation, field.TypeString, value)
+	}
+	if pu.mutation.AccountingDocumentationInformationCleared() {
+		_spec.ClearField(petroglyph.FieldAccountingDocumentationInformation, field.TypeString)
 	}
 	if value, ok := pu.mutation.AccountingDocumentationDate(); ok {
 		_spec.SetField(petroglyph.FieldAccountingDocumentationDate, field.TypeTime, value)
@@ -2042,6 +2068,26 @@ func (puo *PetroglyphUpdateOne) ClearPhotoCode() *PetroglyphUpdateOne {
 	return puo
 }
 
+// SetAccountingDocumentationInformation sets the "accounting_documentation_information" field.
+func (puo *PetroglyphUpdateOne) SetAccountingDocumentationInformation(s string) *PetroglyphUpdateOne {
+	puo.mutation.SetAccountingDocumentationInformation(s)
+	return puo
+}
+
+// SetNillableAccountingDocumentationInformation sets the "accounting_documentation_information" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableAccountingDocumentationInformation(s *string) *PetroglyphUpdateOne {
+	if s != nil {
+		puo.SetAccountingDocumentationInformation(*s)
+	}
+	return puo
+}
+
+// ClearAccountingDocumentationInformation clears the value of the "accounting_documentation_information" field.
+func (puo *PetroglyphUpdateOne) ClearAccountingDocumentationInformation() *PetroglyphUpdateOne {
+	puo.mutation.ClearAccountingDocumentationInformation()
+	return puo
+}
+
 // SetAccountingDocumentationDate sets the "accounting_documentation_date" field.
 func (puo *PetroglyphUpdateOne) SetAccountingDocumentationDate(t time.Time) *PetroglyphUpdateOne {
 	puo.mutation.SetAccountingDocumentationDate(t)
@@ -2593,6 +2639,12 @@ func (puo *PetroglyphUpdateOne) sqlSave(ctx context.Context) (_node *Petroglyph,
 	}
 	if puo.mutation.PhotoCodeCleared() {
 		_spec.ClearField(petroglyph.FieldPhotoCode, field.TypeString)
+	}
+	if value, ok := puo.mutation.AccountingDocumentationInformation(); ok {
+		_spec.SetField(petroglyph.FieldAccountingDocumentationInformation, field.TypeString, value)
+	}
+	if puo.mutation.AccountingDocumentationInformationCleared() {
+		_spec.ClearField(petroglyph.FieldAccountingDocumentationInformation, field.TypeString)
 	}
 	if value, ok := puo.mutation.AccountingDocumentationDate(); ok {
 		_spec.SetField(petroglyph.FieldAccountingDocumentationDate, field.TypeTime, value)

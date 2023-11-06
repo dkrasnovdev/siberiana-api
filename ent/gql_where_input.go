@@ -18924,6 +18924,23 @@ type PetroglyphWhereInput struct {
 	PhotoCodeEqualFold    *string  `json:"photoCodeEqualFold,omitempty"`
 	PhotoCodeContainsFold *string  `json:"photoCodeContainsFold,omitempty"`
 
+	// "accounting_documentation_information" field predicates.
+	AccountingDocumentationInformation             *string  `json:"accountingDocumentationInformation,omitempty"`
+	AccountingDocumentationInformationNEQ          *string  `json:"accountingDocumentationInformationNEQ,omitempty"`
+	AccountingDocumentationInformationIn           []string `json:"accountingDocumentationInformationIn,omitempty"`
+	AccountingDocumentationInformationNotIn        []string `json:"accountingDocumentationInformationNotIn,omitempty"`
+	AccountingDocumentationInformationGT           *string  `json:"accountingDocumentationInformationGT,omitempty"`
+	AccountingDocumentationInformationGTE          *string  `json:"accountingDocumentationInformationGTE,omitempty"`
+	AccountingDocumentationInformationLT           *string  `json:"accountingDocumentationInformationLT,omitempty"`
+	AccountingDocumentationInformationLTE          *string  `json:"accountingDocumentationInformationLTE,omitempty"`
+	AccountingDocumentationInformationContains     *string  `json:"accountingDocumentationInformationContains,omitempty"`
+	AccountingDocumentationInformationHasPrefix    *string  `json:"accountingDocumentationInformationHasPrefix,omitempty"`
+	AccountingDocumentationInformationHasSuffix    *string  `json:"accountingDocumentationInformationHasSuffix,omitempty"`
+	AccountingDocumentationInformationIsNil        bool     `json:"accountingDocumentationInformationIsNil,omitempty"`
+	AccountingDocumentationInformationNotNil       bool     `json:"accountingDocumentationInformationNotNil,omitempty"`
+	AccountingDocumentationInformationEqualFold    *string  `json:"accountingDocumentationInformationEqualFold,omitempty"`
+	AccountingDocumentationInformationContainsFold *string  `json:"accountingDocumentationInformationContainsFold,omitempty"`
+
 	// "accounting_documentation_date" field predicates.
 	AccountingDocumentationDate       *time.Time  `json:"accountingDocumentationDate,omitempty"`
 	AccountingDocumentationDateNEQ    *time.Time  `json:"accountingDocumentationDateNEQ,omitempty"`
@@ -20146,6 +20163,51 @@ func (i *PetroglyphWhereInput) P() (predicate.Petroglyph, error) {
 	}
 	if i.PhotoCodeContainsFold != nil {
 		predicates = append(predicates, petroglyph.PhotoCodeContainsFold(*i.PhotoCodeContainsFold))
+	}
+	if i.AccountingDocumentationInformation != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationEQ(*i.AccountingDocumentationInformation))
+	}
+	if i.AccountingDocumentationInformationNEQ != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationNEQ(*i.AccountingDocumentationInformationNEQ))
+	}
+	if len(i.AccountingDocumentationInformationIn) > 0 {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationIn(i.AccountingDocumentationInformationIn...))
+	}
+	if len(i.AccountingDocumentationInformationNotIn) > 0 {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationNotIn(i.AccountingDocumentationInformationNotIn...))
+	}
+	if i.AccountingDocumentationInformationGT != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationGT(*i.AccountingDocumentationInformationGT))
+	}
+	if i.AccountingDocumentationInformationGTE != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationGTE(*i.AccountingDocumentationInformationGTE))
+	}
+	if i.AccountingDocumentationInformationLT != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationLT(*i.AccountingDocumentationInformationLT))
+	}
+	if i.AccountingDocumentationInformationLTE != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationLTE(*i.AccountingDocumentationInformationLTE))
+	}
+	if i.AccountingDocumentationInformationContains != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationContains(*i.AccountingDocumentationInformationContains))
+	}
+	if i.AccountingDocumentationInformationHasPrefix != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationHasPrefix(*i.AccountingDocumentationInformationHasPrefix))
+	}
+	if i.AccountingDocumentationInformationHasSuffix != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationHasSuffix(*i.AccountingDocumentationInformationHasSuffix))
+	}
+	if i.AccountingDocumentationInformationIsNil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationIsNil())
+	}
+	if i.AccountingDocumentationInformationNotNil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationNotNil())
+	}
+	if i.AccountingDocumentationInformationEqualFold != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationEqualFold(*i.AccountingDocumentationInformationEqualFold))
+	}
+	if i.AccountingDocumentationInformationContainsFold != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationInformationContainsFold(*i.AccountingDocumentationInformationContainsFold))
 	}
 	if i.AccountingDocumentationDate != nil {
 		predicates = append(predicates, petroglyph.AccountingDocumentationDateEQ(*i.AccountingDocumentationDate))

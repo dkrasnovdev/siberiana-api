@@ -76,6 +76,8 @@ const (
 	FieldPlanePreservation = "plane_preservation"
 	// FieldPhotoCode holds the string denoting the photo_code field in the database.
 	FieldPhotoCode = "photo_code"
+	// FieldAccountingDocumentationInformation holds the string denoting the accounting_documentation_information field in the database.
+	FieldAccountingDocumentationInformation = "accounting_documentation_information"
 	// FieldAccountingDocumentationDate holds the string denoting the accounting_documentation_date field in the database.
 	FieldAccountingDocumentationDate = "accounting_documentation_date"
 	// FieldGeometry holds the string denoting the geometry field in the database.
@@ -184,6 +186,7 @@ var Columns = []string{
 	FieldDimensions,
 	FieldPlanePreservation,
 	FieldPhotoCode,
+	FieldAccountingDocumentationInformation,
 	FieldAccountingDocumentationDate,
 	FieldGeometry,
 }
@@ -413,6 +416,11 @@ func ByPlanePreservation(opts ...sql.OrderTermOption) OrderOption {
 // ByPhotoCode orders the results by the photo_code field.
 func ByPhotoCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPhotoCode, opts...).ToFunc()
+}
+
+// ByAccountingDocumentationInformation orders the results by the accounting_documentation_information field.
+func ByAccountingDocumentationInformation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccountingDocumentationInformation, opts...).ToFunc()
 }
 
 // ByAccountingDocumentationDate orders the results by the accounting_documentation_date field.

@@ -4947,45 +4947,46 @@ func (c *PersonalUpdateOne) SetInput(i UpdatePersonalInput) *PersonalUpdateOne {
 
 // CreatePetroglyphInput represents a mutation input for creating petroglyphs.
 type CreatePetroglyphInput struct {
-	CreatedAt                        *time.Time
-	CreatedBy                        *string
-	UpdatedAt                        *time.Time
-	UpdatedBy                        *string
-	DisplayName                      *string
-	Abbreviation                     *string
-	Description                      *string
-	ExternalLink                     *string
-	Status                           *petroglyph.Status
-	PrimaryImageURL                  *string
-	AdditionalImagesUrls             []string
-	DeletedAt                        *time.Time
-	DeletedBy                        *string
-	Number                           *string
-	Dating                           *string
-	DatingStart                      *int
-	DatingEnd                        *int
-	Orientation                      *string
-	Position                         *string
-	GeometricShape                   *string
-	Height                           *float64
-	Width                            *float64
-	Length                           *float64
-	Depth                            *float64
-	Diameter                         *float64
-	Weight                           *string
-	Dimensions                       *string
-	PlanePreservation                *string
-	PhotoCode                        *string
-	AccountingDocumentationDate      *time.Time
-	Geometry                         *types.Geometry
-	CulturalAffiliationID            *int
-	ModelID                          *int
-	MoundID                          *int
-	PublicationIDs                   []int
-	TechniqueIDs                     []int
-	RegionID                         *int
-	AccountingDocumentationAddressID *int
-	AccountingDocumentationAuthorID  *int
+	CreatedAt                          *time.Time
+	CreatedBy                          *string
+	UpdatedAt                          *time.Time
+	UpdatedBy                          *string
+	DisplayName                        *string
+	Abbreviation                       *string
+	Description                        *string
+	ExternalLink                       *string
+	Status                             *petroglyph.Status
+	PrimaryImageURL                    *string
+	AdditionalImagesUrls               []string
+	DeletedAt                          *time.Time
+	DeletedBy                          *string
+	Number                             *string
+	Dating                             *string
+	DatingStart                        *int
+	DatingEnd                          *int
+	Orientation                        *string
+	Position                           *string
+	GeometricShape                     *string
+	Height                             *float64
+	Width                              *float64
+	Length                             *float64
+	Depth                              *float64
+	Diameter                           *float64
+	Weight                             *string
+	Dimensions                         *string
+	PlanePreservation                  *string
+	PhotoCode                          *string
+	AccountingDocumentationInformation *string
+	AccountingDocumentationDate        *time.Time
+	Geometry                           *types.Geometry
+	CulturalAffiliationID              *int
+	ModelID                            *int
+	MoundID                            *int
+	PublicationIDs                     []int
+	TechniqueIDs                       []int
+	RegionID                           *int
+	AccountingDocumentationAddressID   *int
+	AccountingDocumentationAuthorID    *int
 }
 
 // Mutate applies the CreatePetroglyphInput on the PetroglyphMutation builder.
@@ -5077,6 +5078,9 @@ func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	if v := i.PhotoCode; v != nil {
 		m.SetPhotoCode(*v)
 	}
+	if v := i.AccountingDocumentationInformation; v != nil {
+		m.SetAccountingDocumentationInformation(*v)
+	}
 	if v := i.AccountingDocumentationDate; v != nil {
 		m.SetAccountingDocumentationDate(*v)
 	}
@@ -5117,84 +5121,86 @@ func (c *PetroglyphCreate) SetInput(i CreatePetroglyphInput) *PetroglyphCreate {
 
 // UpdatePetroglyphInput represents a mutation input for updating petroglyphs.
 type UpdatePetroglyphInput struct {
-	ClearCreatedBy                      bool
-	CreatedBy                           *string
-	UpdatedAt                           *time.Time
-	ClearUpdatedBy                      bool
-	UpdatedBy                           *string
-	ClearDisplayName                    bool
-	DisplayName                         *string
-	ClearAbbreviation                   bool
-	Abbreviation                        *string
-	ClearDescription                    bool
-	Description                         *string
-	ClearExternalLink                   bool
-	ExternalLink                        *string
-	ClearStatus                         bool
-	Status                              *petroglyph.Status
-	ClearPrimaryImageURL                bool
-	PrimaryImageURL                     *string
-	ClearAdditionalImagesUrls           bool
-	AdditionalImagesUrls                []string
-	AppendAdditionalImagesUrls          []string
-	ClearDeletedAt                      bool
-	DeletedAt                           *time.Time
-	ClearDeletedBy                      bool
-	DeletedBy                           *string
-	ClearNumber                         bool
-	Number                              *string
-	ClearDating                         bool
-	Dating                              *string
-	ClearDatingStart                    bool
-	DatingStart                         *int
-	ClearDatingEnd                      bool
-	DatingEnd                           *int
-	ClearOrientation                    bool
-	Orientation                         *string
-	ClearPosition                       bool
-	Position                            *string
-	ClearGeometricShape                 bool
-	GeometricShape                      *string
-	ClearHeight                         bool
-	Height                              *float64
-	ClearWidth                          bool
-	Width                               *float64
-	ClearLength                         bool
-	Length                              *float64
-	ClearDepth                          bool
-	Depth                               *float64
-	ClearDiameter                       bool
-	Diameter                            *float64
-	ClearWeight                         bool
-	Weight                              *string
-	ClearDimensions                     bool
-	Dimensions                          *string
-	ClearPlanePreservation              bool
-	PlanePreservation                   *string
-	ClearPhotoCode                      bool
-	PhotoCode                           *string
-	ClearAccountingDocumentationDate    bool
-	AccountingDocumentationDate         *time.Time
-	ClearGeometry                       bool
-	Geometry                            *types.Geometry
-	ClearCulturalAffiliation            bool
-	CulturalAffiliationID               *int
-	ClearModel                          bool
-	ModelID                             *int
-	ClearMound                          bool
-	MoundID                             *int
-	ClearPublications                   bool
-	AddPublicationIDs                   []int
-	RemovePublicationIDs                []int
-	ClearTechniques                     bool
-	AddTechniqueIDs                     []int
-	RemoveTechniqueIDs                  []int
-	ClearRegion                         bool
-	RegionID                            *int
-	ClearAccountingDocumentationAddress bool
-	AccountingDocumentationAddressID    *int
-	ClearAccountingDocumentationAuthor  bool
-	AccountingDocumentationAuthorID     *int
+	ClearCreatedBy                          bool
+	CreatedBy                               *string
+	UpdatedAt                               *time.Time
+	ClearUpdatedBy                          bool
+	UpdatedBy                               *string
+	ClearDisplayName                        bool
+	DisplayName                             *string
+	ClearAbbreviation                       bool
+	Abbreviation                            *string
+	ClearDescription                        bool
+	Description                             *string
+	ClearExternalLink                       bool
+	ExternalLink                            *string
+	ClearStatus                             bool
+	Status                                  *petroglyph.Status
+	ClearPrimaryImageURL                    bool
+	PrimaryImageURL                         *string
+	ClearAdditionalImagesUrls               bool
+	AdditionalImagesUrls                    []string
+	AppendAdditionalImagesUrls              []string
+	ClearDeletedAt                          bool
+	DeletedAt                               *time.Time
+	ClearDeletedBy                          bool
+	DeletedBy                               *string
+	ClearNumber                             bool
+	Number                                  *string
+	ClearDating                             bool
+	Dating                                  *string
+	ClearDatingStart                        bool
+	DatingStart                             *int
+	ClearDatingEnd                          bool
+	DatingEnd                               *int
+	ClearOrientation                        bool
+	Orientation                             *string
+	ClearPosition                           bool
+	Position                                *string
+	ClearGeometricShape                     bool
+	GeometricShape                          *string
+	ClearHeight                             bool
+	Height                                  *float64
+	ClearWidth                              bool
+	Width                                   *float64
+	ClearLength                             bool
+	Length                                  *float64
+	ClearDepth                              bool
+	Depth                                   *float64
+	ClearDiameter                           bool
+	Diameter                                *float64
+	ClearWeight                             bool
+	Weight                                  *string
+	ClearDimensions                         bool
+	Dimensions                              *string
+	ClearPlanePreservation                  bool
+	PlanePreservation                       *string
+	ClearPhotoCode                          bool
+	PhotoCode                               *string
+	ClearAccountingDocumentationInformation bool
+	AccountingDocumentationInformation      *string
+	ClearAccountingDocumentationDate        bool
+	AccountingDocumentationDate             *time.Time
+	ClearGeometry                           bool
+	Geometry                                *types.Geometry
+	ClearCulturalAffiliation                bool
+	CulturalAffiliationID                   *int
+	ClearModel                              bool
+	ModelID                                 *int
+	ClearMound                              bool
+	MoundID                                 *int
+	ClearPublications                       bool
+	AddPublicationIDs                       []int
+	RemovePublicationIDs                    []int
+	ClearTechniques                         bool
+	AddTechniqueIDs                         []int
+	RemoveTechniqueIDs                      []int
+	ClearRegion                             bool
+	RegionID                                *int
+	ClearAccountingDocumentationAddress     bool
+	AccountingDocumentationAddressID        *int
+	ClearAccountingDocumentationAuthor      bool
+	AccountingDocumentationAuthorID         *int
 }
 
 // Mutate applies the UpdatePetroglyphInput on the PetroglyphMutation builder.
@@ -5366,6 +5372,12 @@ func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	}
 	if v := i.PhotoCode; v != nil {
 		m.SetPhotoCode(*v)
+	}
+	if i.ClearAccountingDocumentationInformation {
+		m.ClearAccountingDocumentationInformation()
+	}
+	if v := i.AccountingDocumentationInformation; v != nil {
+		m.SetAccountingDocumentationInformation(*v)
 	}
 	if i.ClearAccountingDocumentationDate {
 		m.ClearAccountingDocumentationDate()

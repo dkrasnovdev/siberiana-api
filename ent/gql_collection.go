@@ -4982,6 +4982,11 @@ func (pe *PetroglyphQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 				selectedFields = append(selectedFields, petroglyph.FieldPhotoCode)
 				fieldSeen[petroglyph.FieldPhotoCode] = struct{}{}
 			}
+		case "accountingDocumentationInformation":
+			if _, ok := fieldSeen[petroglyph.FieldAccountingDocumentationInformation]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldAccountingDocumentationInformation)
+				fieldSeen[petroglyph.FieldAccountingDocumentationInformation] = struct{}{}
+			}
 		case "accountingDocumentationDate":
 			if _, ok := fieldSeen[petroglyph.FieldAccountingDocumentationDate]; !ok {
 				selectedFields = append(selectedFields, petroglyph.FieldAccountingDocumentationDate)
