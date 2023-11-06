@@ -2682,6 +2682,10 @@ type ArtifactWhereInput struct {
 	HasCulturalAffiliation     *bool                `json:"hasCulturalAffiliation,omitempty"`
 	HasCulturalAffiliationWith []*CultureWhereInput `json:"hasCulturalAffiliationWith,omitempty"`
 
+	// "organization" edge predicates.
+	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
+	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
+
 	// "monument" edge predicates.
 	HasMonument     *bool                 `json:"hasMonument,omitempty"`
 	HasMonumentWith []*MonumentWhereInput `json:"hasMonumentWith,omitempty"`
@@ -4000,6 +4004,24 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, artifact.HasCulturalAffiliationWith(with...))
+	}
+	if i.HasOrganization != nil {
+		p := artifact.HasOrganization()
+		if !*i.HasOrganization {
+			p = artifact.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrganizationWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		for _, w := range i.HasOrganizationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrganizationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, artifact.HasOrganizationWith(with...))
 	}
 	if i.HasMonument != nil {
 		p := artifact.HasMonument()
@@ -14779,6 +14801,10 @@ type OrganizationWhereInput struct {
 	TypeIsNil  bool                `json:"typeIsNil,omitempty"`
 	TypeNotNil bool                `json:"typeNotNil,omitempty"`
 
+	// "artifacts" edge predicates.
+	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
+	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
@@ -15367,6 +15393,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		predicates = append(predicates, organization.TypeNotNil())
 	}
 
+	if i.HasArtifacts != nil {
+		p := organization.HasArtifacts()
+		if !*i.HasArtifacts {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtifactsWith) > 0 {
+		with := make([]predicate.Artifact, 0, len(i.HasArtifactsWith))
+		for _, w := range i.HasArtifactsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtifactsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasArtifactsWith(with...))
+	}
 	if i.HasBooks != nil {
 		p := organization.HasBooks()
 		if !*i.HasBooks {

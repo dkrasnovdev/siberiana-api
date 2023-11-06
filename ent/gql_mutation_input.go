@@ -618,6 +618,7 @@ type CreateArtifactInput struct {
 	ProjectIDs            []int
 	PublicationIDs        []int
 	CulturalAffiliationID *int
+	OrganizationID        *int
 	MonumentID            *int
 	ModelID               *int
 	SetID                 *int
@@ -740,6 +741,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.CulturalAffiliationID; v != nil {
 		m.SetCulturalAffiliationID(*v)
 	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
+	}
 	if v := i.MonumentID; v != nil {
 		m.SetMonumentID(*v)
 	}
@@ -853,6 +857,8 @@ type UpdateArtifactInput struct {
 	RemovePublicationIDs       []int
 	ClearCulturalAffiliation   bool
 	CulturalAffiliationID      *int
+	ClearOrganization          bool
+	OrganizationID             *int
 	ClearMonument              bool
 	MonumentID                 *int
 	ClearModel                 bool
@@ -1100,6 +1106,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.CulturalAffiliationID; v != nil {
 		m.SetCulturalAffiliationID(*v)
+	}
+	if i.ClearOrganization {
+		m.ClearOrganization()
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
 	}
 	if i.ClearMonument {
 		m.ClearMonument()
@@ -3793,6 +3805,7 @@ type CreateOrganizationInput struct {
 	IsInAConsortium       *bool
 	ConsortiumDocumentURL *string
 	Type                  *organization.Type
+	ArtifactIDs           []int
 	BookIDs               []int
 	PersonIDs             []int
 }
@@ -3850,6 +3863,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.Type; v != nil {
 		m.SetType(*v)
 	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
@@ -3901,6 +3917,9 @@ type UpdateOrganizationInput struct {
 	ConsortiumDocumentURL      *string
 	ClearType                  bool
 	Type                       *organization.Type
+	ClearArtifacts             bool
+	AddArtifactIDs             []int
+	RemoveArtifactIDs          []int
 	ClearBooks                 bool
 	AddBookIDs                 []int
 	RemoveBookIDs              []int
@@ -4015,6 +4034,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.Type; v != nil {
 		m.SetType(*v)
+	}
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
+	}
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
 	}
 	if i.ClearBooks {
 		m.ClearBooks()

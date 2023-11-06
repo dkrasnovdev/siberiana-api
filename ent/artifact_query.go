@@ -22,6 +22,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -46,6 +47,7 @@ type ArtifactQuery struct {
 	withProjects            *ProjectQuery
 	withPublications        *PublicationQuery
 	withCulturalAffiliation *CultureQuery
+	withOrganization        *OrganizationQuery
 	withMonument            *MonumentQuery
 	withModel               *ModelQuery
 	withSet                 *SetQuery
@@ -247,6 +249,28 @@ func (aq *ArtifactQuery) QueryCulturalAffiliation() *CultureQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
 			sqlgraph.To(culture.Table, culture.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CulturalAffiliationTable, artifact.CulturalAffiliationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrganization chains the current query on the "organization" edge.
+func (aq *ArtifactQuery) QueryOrganization() *OrganizationQuery {
+	query := (&OrganizationClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.OrganizationTable, artifact.OrganizationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -673,6 +697,7 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		withProjects:            aq.withProjects.Clone(),
 		withPublications:        aq.withPublications.Clone(),
 		withCulturalAffiliation: aq.withCulturalAffiliation.Clone(),
+		withOrganization:        aq.withOrganization.Clone(),
 		withMonument:            aq.withMonument.Clone(),
 		withModel:               aq.withModel.Clone(),
 		withSet:                 aq.withSet.Clone(),
@@ -763,6 +788,17 @@ func (aq *ArtifactQuery) WithCulturalAffiliation(opts ...func(*CultureQuery)) *A
 		opt(query)
 	}
 	aq.withCulturalAffiliation = query
+	return aq
+}
+
+// WithOrganization tells the query-builder to eager-load the nodes that are connected to
+// the "organization" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithOrganization(opts ...func(*OrganizationQuery)) *ArtifactQuery {
+	query := (&OrganizationClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withOrganization = query
 	return aq
 }
 
@@ -961,7 +997,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		nodes       = []*Artifact{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [17]bool{
+		loadedTypes = [18]bool{
 			aq.withAuthors != nil,
 			aq.withDonor != nil,
 			aq.withMediums != nil,
@@ -969,6 +1005,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withProjects != nil,
 			aq.withPublications != nil,
 			aq.withCulturalAffiliation != nil,
+			aq.withOrganization != nil,
 			aq.withMonument != nil,
 			aq.withModel != nil,
 			aq.withSet != nil,
@@ -981,7 +1018,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withRegion != nil,
 		}
 	)
-	if aq.withDonor != nil || aq.withCulturalAffiliation != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
+	if aq.withDonor != nil || aq.withCulturalAffiliation != nil || aq.withOrganization != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -1052,6 +1089,12 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 	if query := aq.withCulturalAffiliation; query != nil {
 		if err := aq.loadCulturalAffiliation(ctx, query, nodes, nil,
 			func(n *Artifact, e *Culture) { n.Edges.CulturalAffiliation = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withOrganization; query != nil {
+		if err := aq.loadOrganization(ctx, query, nodes, nil,
+			func(n *Artifact, e *Organization) { n.Edges.Organization = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1520,6 +1563,38 @@ func (aq *ArtifactQuery) loadCulturalAffiliation(ctx context.Context, query *Cul
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "culture_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Organization)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].organization_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].organization_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "organization_artifacts" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

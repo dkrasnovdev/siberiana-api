@@ -22,6 +22,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -751,6 +752,25 @@ func (au *ArtifactUpdate) SetCulturalAffiliation(c *Culture) *ArtifactUpdate {
 	return au.SetCulturalAffiliationID(c.ID)
 }
 
+// SetOrganizationID sets the "organization" edge to the Organization entity by ID.
+func (au *ArtifactUpdate) SetOrganizationID(id int) *ArtifactUpdate {
+	au.mutation.SetOrganizationID(id)
+	return au
+}
+
+// SetNillableOrganizationID sets the "organization" edge to the Organization entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableOrganizationID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetOrganizationID(*id)
+	}
+	return au
+}
+
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (au *ArtifactUpdate) SetOrganization(o *Organization) *ArtifactUpdate {
+	return au.SetOrganizationID(o.ID)
+}
+
 // SetMonumentID sets the "monument" edge to the Monument entity by ID.
 func (au *ArtifactUpdate) SetMonumentID(id int) *ArtifactUpdate {
 	au.mutation.SetMonumentID(id)
@@ -1052,6 +1072,12 @@ func (au *ArtifactUpdate) RemovePublications(p ...*Publication) *ArtifactUpdate 
 // ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
 func (au *ArtifactUpdate) ClearCulturalAffiliation() *ArtifactUpdate {
 	au.mutation.ClearCulturalAffiliation()
+	return au
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (au *ArtifactUpdate) ClearOrganization() *ArtifactUpdate {
+	au.mutation.ClearOrganization()
 	return au
 }
 
@@ -1649,6 +1675,35 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.OrganizationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.OrganizationTable,
+			Columns: []string{artifact.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.OrganizationTable,
+			Columns: []string{artifact.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2672,6 +2727,25 @@ func (auo *ArtifactUpdateOne) SetCulturalAffiliation(c *Culture) *ArtifactUpdate
 	return auo.SetCulturalAffiliationID(c.ID)
 }
 
+// SetOrganizationID sets the "organization" edge to the Organization entity by ID.
+func (auo *ArtifactUpdateOne) SetOrganizationID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetOrganizationID(id)
+	return auo
+}
+
+// SetNillableOrganizationID sets the "organization" edge to the Organization entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableOrganizationID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetOrganizationID(*id)
+	}
+	return auo
+}
+
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (auo *ArtifactUpdateOne) SetOrganization(o *Organization) *ArtifactUpdateOne {
+	return auo.SetOrganizationID(o.ID)
+}
+
 // SetMonumentID sets the "monument" edge to the Monument entity by ID.
 func (auo *ArtifactUpdateOne) SetMonumentID(id int) *ArtifactUpdateOne {
 	auo.mutation.SetMonumentID(id)
@@ -2973,6 +3047,12 @@ func (auo *ArtifactUpdateOne) RemovePublications(p ...*Publication) *ArtifactUpd
 // ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
 func (auo *ArtifactUpdateOne) ClearCulturalAffiliation() *ArtifactUpdateOne {
 	auo.mutation.ClearCulturalAffiliation()
+	return auo
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (auo *ArtifactUpdateOne) ClearOrganization() *ArtifactUpdateOne {
+	auo.mutation.ClearOrganization()
 	return auo
 }
 
@@ -3600,6 +3680,35 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.OrganizationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.OrganizationTable,
+			Columns: []string{artifact.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.OrganizationTable,
+			Columns: []string{artifact.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

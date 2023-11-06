@@ -1290,6 +1290,22 @@ func (c *ArtifactClient) QueryCulturalAffiliation(a *Artifact) *CultureQuery {
 	return query
 }
 
+// QueryOrganization queries the organization edge of a Artifact.
+func (c *ArtifactClient) QueryOrganization(a *Artifact) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.OrganizationTable, artifact.OrganizationColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMonument queries the monument edge of a Artifact.
 func (c *ArtifactClient) QueryMonument(a *Artifact) *MonumentQuery {
 	query := (&MonumentClient{config: c.config}).Query()
@@ -4628,6 +4644,22 @@ func (c *OrganizationClient) GetX(ctx context.Context, id int) *Organization {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryArtifacts queries the artifacts edge of a Organization.
+func (c *OrganizationClient) QueryArtifacts(o *Organization) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ArtifactsTable, organization.ArtifactsColumn),
+		)
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryBooks queries the books edge of a Organization.

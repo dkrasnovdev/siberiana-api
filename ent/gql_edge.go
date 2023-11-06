@@ -192,6 +192,14 @@ func (a *Artifact) CulturalAffiliation(ctx context.Context) (*Culture, error) {
 	return result, MaskNotFound(err)
 }
 
+func (a *Artifact) Organization(ctx context.Context) (*Organization, error) {
+	result, err := a.Edges.OrganizationOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryOrganization().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (a *Artifact) Monument(ctx context.Context) (*Monument, error) {
 	result, err := a.Edges.MonumentOrErr()
 	if IsNotLoaded(err) {
@@ -784,6 +792,18 @@ func (m *Monument) Sets(ctx context.Context) (result []*Set, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = m.QuerySets().All(ctx)
+	}
+	return result, err
+}
+
+func (o *Organization) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.ArtifactsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryArtifacts().All(ctx)
 	}
 	return result, err
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -547,6 +548,25 @@ func (ac *ArtifactCreate) SetCulturalAffiliation(c *Culture) *ArtifactCreate {
 	return ac.SetCulturalAffiliationID(c.ID)
 }
 
+// SetOrganizationID sets the "organization" edge to the Organization entity by ID.
+func (ac *ArtifactCreate) SetOrganizationID(id int) *ArtifactCreate {
+	ac.mutation.SetOrganizationID(id)
+	return ac
+}
+
+// SetNillableOrganizationID sets the "organization" edge to the Organization entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableOrganizationID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetOrganizationID(*id)
+	}
+	return ac
+}
+
+// SetOrganization sets the "organization" edge to the Organization entity.
+func (ac *ArtifactCreate) SetOrganization(o *Organization) *ArtifactCreate {
+	return ac.SetOrganizationID(o.ID)
+}
+
 // SetMonumentID sets the "monument" edge to the Monument entity by ID.
 func (ac *ArtifactCreate) SetMonumentID(id int) *ArtifactCreate {
 	ac.mutation.SetMonumentID(id)
@@ -1057,6 +1077,23 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.culture_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.OrganizationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.OrganizationTable,
+			Columns: []string{artifact.OrganizationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.organization_artifacts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.MonumentIDs(); len(nodes) > 0 {

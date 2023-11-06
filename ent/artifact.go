@@ -19,6 +19,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
@@ -100,6 +101,7 @@ type Artifact struct {
 	location_artifacts       *int
 	model_artifacts          *int
 	monument_artifacts       *int
+	organization_artifacts   *int
 	person_donated_artifacts *int
 	region_artifacts         *int
 	set_artifacts            *int
@@ -123,6 +125,8 @@ type ArtifactEdges struct {
 	Publications []*Publication `json:"publications,omitempty"`
 	// CulturalAffiliation holds the value of the cultural_affiliation edge.
 	CulturalAffiliation *Culture `json:"cultural_affiliation,omitempty"`
+	// Organization holds the value of the organization edge.
+	Organization *Organization `json:"organization,omitempty"`
 	// Monument holds the value of the monument edge.
 	Monument *Monument `json:"monument,omitempty"`
 	// Model holds the value of the model edge.
@@ -145,9 +149,9 @@ type ArtifactEdges struct {
 	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [18]map[string]int
 
 	namedAuthors      map[string][]*Person
 	namedMediums      map[string][]*Medium
@@ -227,10 +231,23 @@ func (e ArtifactEdges) CulturalAffiliationOrErr() (*Culture, error) {
 	return nil, &NotLoadedError{edge: "cultural_affiliation"}
 }
 
+// OrganizationOrErr returns the Organization value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ArtifactEdges) OrganizationOrErr() (*Organization, error) {
+	if e.loadedTypes[7] {
+		if e.Organization == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: organization.Label}
+		}
+		return e.Organization, nil
+	}
+	return nil, &NotLoadedError{edge: "organization"}
+}
+
 // MonumentOrErr returns the Monument value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) MonumentOrErr() (*Monument, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		if e.Monument == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: monument.Label}
@@ -243,7 +260,7 @@ func (e ArtifactEdges) MonumentOrErr() (*Monument, error) {
 // ModelOrErr returns the Model value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) ModelOrErr() (*Model, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		if e.Model == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: model.Label}
@@ -256,7 +273,7 @@ func (e ArtifactEdges) ModelOrErr() (*Model, error) {
 // SetOrErr returns the Set value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) SetOrErr() (*Set, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		if e.Set == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: set.Label}
@@ -269,7 +286,7 @@ func (e ArtifactEdges) SetOrErr() (*Set, error) {
 // LocationOrErr returns the Location value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) LocationOrErr() (*Location, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		if e.Location == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: location.Label}
@@ -282,7 +299,7 @@ func (e ArtifactEdges) LocationOrErr() (*Location, error) {
 // CollectionOrErr returns the Collection value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) CollectionOrErr() (*Collection, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		if e.Collection == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: collection.Label}
@@ -295,7 +312,7 @@ func (e ArtifactEdges) CollectionOrErr() (*Collection, error) {
 // LicenseOrErr returns the License value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) LicenseOrErr() (*License, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		if e.License == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: license.Label}
@@ -308,7 +325,7 @@ func (e ArtifactEdges) LicenseOrErr() (*License, error) {
 // CountryOrErr returns the Country value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) CountryOrErr() (*Country, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		if e.Country == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: country.Label}
@@ -321,7 +338,7 @@ func (e ArtifactEdges) CountryOrErr() (*Country, error) {
 // SettlementOrErr returns the Settlement value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) SettlementOrErr() (*Settlement, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		if e.Settlement == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: settlement.Label}
@@ -334,7 +351,7 @@ func (e ArtifactEdges) SettlementOrErr() (*Settlement, error) {
 // DistrictOrErr returns the District value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) DistrictOrErr() (*District, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		if e.District == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: district.Label}
@@ -347,7 +364,7 @@ func (e ArtifactEdges) DistrictOrErr() (*District, error) {
 // RegionOrErr returns the Region value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ArtifactEdges) RegionOrErr() (*Region, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		if e.Region == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: region.Label}
@@ -390,13 +407,15 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case artifact.ForeignKeys[8]: // monument_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[9]: // person_donated_artifacts
+		case artifact.ForeignKeys[9]: // organization_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[10]: // region_artifacts
+		case artifact.ForeignKeys[10]: // person_donated_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[11]: // set_artifacts
+		case artifact.ForeignKeys[11]: // region_artifacts
 			values[i] = new(sql.NullInt64)
-		case artifact.ForeignKeys[12]: // settlement_artifacts
+		case artifact.ForeignKeys[12]: // set_artifacts
+			values[i] = new(sql.NullInt64)
+		case artifact.ForeignKeys[13]: // settlement_artifacts
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -660,26 +679,33 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			}
 		case artifact.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field organization_artifacts", value)
+			} else if value.Valid {
+				a.organization_artifacts = new(int)
+				*a.organization_artifacts = int(value.Int64)
+			}
+		case artifact.ForeignKeys[10]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field person_donated_artifacts", value)
 			} else if value.Valid {
 				a.person_donated_artifacts = new(int)
 				*a.person_donated_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[10]:
+		case artifact.ForeignKeys[11]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field region_artifacts", value)
 			} else if value.Valid {
 				a.region_artifacts = new(int)
 				*a.region_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[11]:
+		case artifact.ForeignKeys[12]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field set_artifacts", value)
 			} else if value.Valid {
 				a.set_artifacts = new(int)
 				*a.set_artifacts = int(value.Int64)
 			}
-		case artifact.ForeignKeys[12]:
+		case artifact.ForeignKeys[13]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field settlement_artifacts", value)
 			} else if value.Valid {
@@ -732,6 +758,11 @@ func (a *Artifact) QueryPublications() *PublicationQuery {
 // QueryCulturalAffiliation queries the "cultural_affiliation" edge of the Artifact entity.
 func (a *Artifact) QueryCulturalAffiliation() *CultureQuery {
 	return NewArtifactClient(a.config).QueryCulturalAffiliation(a)
+}
+
+// QueryOrganization queries the "organization" edge of the Artifact entity.
+func (a *Artifact) QueryOrganization() *OrganizationQuery {
+	return NewArtifactClient(a.config).QueryOrganization(a)
 }
 
 // QueryMonument queries the "monument" edge of the Artifact entity.

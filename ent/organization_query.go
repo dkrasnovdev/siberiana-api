@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -21,16 +22,18 @@ import (
 // OrganizationQuery is the builder for querying Organization entities.
 type OrganizationQuery struct {
 	config
-	ctx             *QueryContext
-	order           []organization.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.Organization
-	withBooks       *BookQuery
-	withPeople      *PersonQuery
-	modifiers       []func(*sql.Selector)
-	loadTotal       []func(context.Context, []*Organization) error
-	withNamedBooks  map[string]*BookQuery
-	withNamedPeople map[string]*PersonQuery
+	ctx                *QueryContext
+	order              []organization.OrderOption
+	inters             []Interceptor
+	predicates         []predicate.Organization
+	withArtifacts      *ArtifactQuery
+	withBooks          *BookQuery
+	withPeople         *PersonQuery
+	modifiers          []func(*sql.Selector)
+	loadTotal          []func(context.Context, []*Organization) error
+	withNamedArtifacts map[string]*ArtifactQuery
+	withNamedBooks     map[string]*BookQuery
+	withNamedPeople    map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -65,6 +68,28 @@ func (oq *OrganizationQuery) Unique(unique bool) *OrganizationQuery {
 func (oq *OrganizationQuery) Order(o ...organization.OrderOption) *OrganizationQuery {
 	oq.order = append(oq.order, o...)
 	return oq
+}
+
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (oq *OrganizationQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ArtifactsTable, organization.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryBooks chains the current query on the "books" edge.
@@ -298,17 +323,29 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		return nil
 	}
 	return &OrganizationQuery{
-		config:     oq.config,
-		ctx:        oq.ctx.Clone(),
-		order:      append([]organization.OrderOption{}, oq.order...),
-		inters:     append([]Interceptor{}, oq.inters...),
-		predicates: append([]predicate.Organization{}, oq.predicates...),
-		withBooks:  oq.withBooks.Clone(),
-		withPeople: oq.withPeople.Clone(),
+		config:        oq.config,
+		ctx:           oq.ctx.Clone(),
+		order:         append([]organization.OrderOption{}, oq.order...),
+		inters:        append([]Interceptor{}, oq.inters...),
+		predicates:    append([]predicate.Organization{}, oq.predicates...),
+		withArtifacts: oq.withArtifacts.Clone(),
+		withBooks:     oq.withBooks.Clone(),
+		withPeople:    oq.withPeople.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
 		path: oq.path,
 	}
+}
+
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *OrganizationQuery {
+	query := (&ArtifactClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withArtifacts = query
+	return oq
 }
 
 // WithBooks tells the query-builder to eager-load the nodes that are connected to
@@ -417,7 +454,8 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
+			oq.withArtifacts != nil,
 			oq.withBooks != nil,
 			oq.withPeople != nil,
 		}
@@ -443,6 +481,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := oq.withArtifacts; query != nil {
+		if err := oq.loadArtifacts(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Organization, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withBooks; query != nil {
 		if err := oq.loadBooks(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Books = []*Book{} },
@@ -454,6 +499,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadPeople(ctx, query, nodes,
 			func(n *Organization) { n.Edges.People = []*Person{} },
 			func(n *Organization, e *Person) { n.Edges.People = append(n.Edges.People, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedArtifacts {
+		if err := oq.loadArtifacts(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedArtifacts(name) },
+			func(n *Organization, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -479,6 +531,37 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	return nodes, nil
 }
 
+func (oq *OrganizationQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Artifact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Artifact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ArtifactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_artifacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_artifacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Book)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Organization)
@@ -624,6 +707,20 @@ func (oq *OrganizationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *OrganizationQuery {
+	query := (&ArtifactClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedArtifacts == nil {
+		oq.withNamedArtifacts = make(map[string]*ArtifactQuery)
+	}
+	oq.withNamedArtifacts[name] = query
+	return oq
 }
 
 // WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"

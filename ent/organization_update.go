@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -329,6 +330,21 @@ func (ou *OrganizationUpdate) ClearType() *OrganizationUpdate {
 	return ou
 }
 
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (ou *OrganizationUpdate) AddArtifactIDs(ids ...int) *OrganizationUpdate {
+	ou.mutation.AddArtifactIDs(ids...)
+	return ou
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (ou *OrganizationUpdate) AddArtifacts(a ...*Artifact) *OrganizationUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ou.AddArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (ou *OrganizationUpdate) AddBookIDs(ids ...int) *OrganizationUpdate {
 	ou.mutation.AddBookIDs(ids...)
@@ -362,6 +378,27 @@ func (ou *OrganizationUpdate) AddPeople(p ...*Person) *OrganizationUpdate {
 // Mutation returns the OrganizationMutation object of the builder.
 func (ou *OrganizationUpdate) Mutation() *OrganizationMutation {
 	return ou.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (ou *OrganizationUpdate) ClearArtifacts() *OrganizationUpdate {
+	ou.mutation.ClearArtifacts()
+	return ou
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (ou *OrganizationUpdate) RemoveArtifactIDs(ids ...int) *OrganizationUpdate {
+	ou.mutation.RemoveArtifactIDs(ids...)
+	return ou
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (ou *OrganizationUpdate) RemoveArtifacts(a ...*Artifact) *OrganizationUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ou.RemoveArtifactIDs(ids...)
 }
 
 // ClearBooks clears all "books" edges to the Book entity.
@@ -582,6 +619,51 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ou.mutation.TypeCleared() {
 		_spec.ClearField(organization.FieldType, field.TypeEnum)
+	}
+	if ou.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ArtifactsTable,
+			Columns: []string{organization.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !ou.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ArtifactsTable,
+			Columns: []string{organization.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ArtifactsTable,
+			Columns: []string{organization.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ou.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -991,6 +1073,21 @@ func (ouo *OrganizationUpdateOne) ClearType() *OrganizationUpdateOne {
 	return ouo
 }
 
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (ouo *OrganizationUpdateOne) AddArtifactIDs(ids ...int) *OrganizationUpdateOne {
+	ouo.mutation.AddArtifactIDs(ids...)
+	return ouo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (ouo *OrganizationUpdateOne) AddArtifacts(a ...*Artifact) *OrganizationUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ouo.AddArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (ouo *OrganizationUpdateOne) AddBookIDs(ids ...int) *OrganizationUpdateOne {
 	ouo.mutation.AddBookIDs(ids...)
@@ -1024,6 +1121,27 @@ func (ouo *OrganizationUpdateOne) AddPeople(p ...*Person) *OrganizationUpdateOne
 // Mutation returns the OrganizationMutation object of the builder.
 func (ouo *OrganizationUpdateOne) Mutation() *OrganizationMutation {
 	return ouo.mutation
+}
+
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (ouo *OrganizationUpdateOne) ClearArtifacts() *OrganizationUpdateOne {
+	ouo.mutation.ClearArtifacts()
+	return ouo
+}
+
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveArtifactIDs(ids ...int) *OrganizationUpdateOne {
+	ouo.mutation.RemoveArtifactIDs(ids...)
+	return ouo
+}
+
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (ouo *OrganizationUpdateOne) RemoveArtifacts(a ...*Artifact) *OrganizationUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ouo.RemoveArtifactIDs(ids...)
 }
 
 // ClearBooks clears all "books" edges to the Book entity.
@@ -1274,6 +1392,51 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 	}
 	if ouo.mutation.TypeCleared() {
 		_spec.ClearField(organization.FieldType, field.TypeEnum)
+	}
+	if ouo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ArtifactsTable,
+			Columns: []string{organization.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !ouo.mutation.ArtifactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ArtifactsTable,
+			Columns: []string{organization.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ArtifactsTable,
+			Columns: []string{organization.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ouo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{

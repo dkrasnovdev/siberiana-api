@@ -90,6 +90,8 @@ const (
 	EdgePublications = "publications"
 	// EdgeCulturalAffiliation holds the string denoting the cultural_affiliation edge name in mutations.
 	EdgeCulturalAffiliation = "cultural_affiliation"
+	// EdgeOrganization holds the string denoting the organization edge name in mutations.
+	EdgeOrganization = "organization"
 	// EdgeMonument holds the string denoting the monument edge name in mutations.
 	EdgeMonument = "monument"
 	// EdgeModel holds the string denoting the model edge name in mutations.
@@ -151,6 +153,13 @@ const (
 	CulturalAffiliationInverseTable = "cultures"
 	// CulturalAffiliationColumn is the table column denoting the cultural_affiliation relation/edge.
 	CulturalAffiliationColumn = "culture_artifacts"
+	// OrganizationTable is the table that holds the organization relation/edge.
+	OrganizationTable = "artifacts"
+	// OrganizationInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OrganizationInverseTable = "organizations"
+	// OrganizationColumn is the table column denoting the organization relation/edge.
+	OrganizationColumn = "organization_artifacts"
 	// MonumentTable is the table that holds the monument relation/edge.
 	MonumentTable = "artifacts"
 	// MonumentInverseTable is the table name for the Monument entity.
@@ -269,6 +278,7 @@ var ForeignKeys = []string{
 	"location_artifacts",
 	"model_artifacts",
 	"monument_artifacts",
+	"organization_artifacts",
 	"person_donated_artifacts",
 	"region_artifacts",
 	"set_artifacts",
@@ -584,6 +594,13 @@ func ByCulturalAffiliationField(field string, opts ...sql.OrderTermOption) Order
 	}
 }
 
+// ByOrganizationField orders the results by organization field.
+func ByOrganizationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrganizationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByMonumentField orders the results by monument field.
 func ByMonumentField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -700,6 +717,13 @@ func newCulturalAffiliationStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CulturalAffiliationInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, CulturalAffiliationTable, CulturalAffiliationColumn),
+	)
+}
+func newOrganizationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrganizationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTable, OrganizationColumn),
 	)
 }
 func newMonumentStep() *sqlgraph.Step {

@@ -60,24 +60,36 @@ type Organization struct {
 
 // OrganizationEdges holds the relations/edges for other nodes in the graph.
 type OrganizationEdges struct {
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
 	// People holds the value of the people edge.
 	People []*Person `json:"people,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
-	namedBooks  map[string][]*Book
-	namedPeople map[string][]*Person
+	namedArtifacts map[string][]*Artifact
+	namedBooks     map[string][]*Book
+	namedPeople    map[string][]*Person
+}
+
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ArtifactsOrErr() ([]*Artifact, error) {
+	if e.loadedTypes[0] {
+		return e.Artifacts, nil
+	}
+	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
@@ -86,7 +98,7 @@ func (e OrganizationEdges) BooksOrErr() ([]*Book, error) {
 // PeopleOrErr returns the People value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) PeopleOrErr() ([]*Person, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.People, nil
 	}
 	return nil, &NotLoadedError{edge: "people"}
@@ -251,6 +263,11 @@ func (o *Organization) Value(name string) (ent.Value, error) {
 	return o.selectValues.Get(name)
 }
 
+// QueryArtifacts queries the "artifacts" edge of the Organization entity.
+func (o *Organization) QueryArtifacts() *ArtifactQuery {
+	return NewOrganizationClient(o.config).QueryArtifacts(o)
+}
+
 // QueryBooks queries the "books" edge of the Organization entity.
 func (o *Organization) QueryBooks() *BookQuery {
 	return NewOrganizationClient(o.config).QueryBooks(o)
@@ -336,6 +353,30 @@ func (o *Organization) String() string {
 	builder.WriteString(fmt.Sprintf("%v", o.Type))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedArtifacts(name string) ([]*Artifact, error) {
+	if o.Edges.namedArtifacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedArtifacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if o.Edges.namedArtifacts == nil {
+		o.Edges.namedArtifacts = make(map[string][]*Artifact)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedArtifacts[name] = []*Artifact{}
+	} else {
+		o.Edges.namedArtifacts[name] = append(o.Edges.namedArtifacts[name], edges...)
+	}
 }
 
 // NamedBooks returns the Books named value or an error if the edge was not

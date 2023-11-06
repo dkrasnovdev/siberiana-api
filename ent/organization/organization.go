@@ -52,12 +52,21 @@ const (
 	FieldConsortiumDocumentURL = "consortium_document_url"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
+	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
+	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
 	// EdgePeople holds the string denoting the people edge name in mutations.
 	EdgePeople = "people"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
+	// ArtifactsTable is the table that holds the artifacts relation/edge.
+	ArtifactsTable = "artifacts"
+	// ArtifactsInverseTable is the table name for the Artifact entity.
+	// It exists in this package in order to avoid circular dependency with the "artifact" package.
+	ArtifactsInverseTable = "artifacts"
+	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
+	ArtifactsColumn = "organization_artifacts"
 	// BooksTable is the table that holds the books relation/edge.
 	BooksTable = "books"
 	// BooksInverseTable is the table name for the Book entity.
@@ -220,6 +229,20 @@ func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
+// ByArtifactsCount orders the results by artifacts count.
+func ByArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newArtifactsStep(), opts...)
+	}
+}
+
+// ByArtifacts orders the results by artifacts terms.
+func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByBooksCount orders the results by books count.
 func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -246,6 +269,13 @@ func ByPeople(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newPeopleStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newArtifactsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ArtifactsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
 }
 func newBooksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

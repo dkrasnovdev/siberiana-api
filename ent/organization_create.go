@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -228,6 +229,21 @@ func (oc *OrganizationCreate) SetNillableType(o *organization.Type) *Organizatio
 	return oc
 }
 
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (oc *OrganizationCreate) AddArtifactIDs(ids ...int) *OrganizationCreate {
+	oc.mutation.AddArtifactIDs(ids...)
+	return oc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (oc *OrganizationCreate) AddArtifacts(a ...*Artifact) *OrganizationCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return oc.AddArtifactIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (oc *OrganizationCreate) AddBookIDs(ids ...int) *OrganizationCreate {
 	oc.mutation.AddBookIDs(ids...)
@@ -418,6 +434,22 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := oc.mutation.GetType(); ok {
 		_spec.SetField(organization.FieldType, field.TypeEnum, value)
 		_node.Type = value
+	}
+	if nodes := oc.mutation.ArtifactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ArtifactsTable,
+			Columns: []string{organization.ArtifactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := oc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

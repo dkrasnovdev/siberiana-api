@@ -960,6 +960,29 @@ func TypeNotNil() predicate.Organization {
 	return predicate.Organization(sql.FieldNotNull(FieldType))
 }
 
+// HasArtifacts applies the HasEdge predicate on the "artifacts" edge.
+func HasArtifacts() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasArtifactsWith applies the HasEdge predicate on the "artifacts" edge with a given conditions (other predicates).
+func HasArtifactsWith(preds ...predicate.Artifact) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newArtifactsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasBooks applies the HasEdge predicate on the "books" edge.
 func HasBooks() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

@@ -152,6 +152,7 @@ var (
 		{Name: "location_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "model_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "monument_artifacts", Type: field.TypeInt, Nullable: true},
+		{Name: "organization_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "person_donated_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "region_artifacts", Type: field.TypeInt, Nullable: true},
 		{Name: "set_artifacts", Type: field.TypeInt, Nullable: true},
@@ -218,26 +219,32 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "artifacts_persons_donated_artifacts",
+				Symbol:     "artifacts_organizations_artifacts",
 				Columns:    []*schema.Column{ArtifactsColumns[39]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "artifacts_persons_donated_artifacts",
+				Columns:    []*schema.Column{ArtifactsColumns[40]},
 				RefColumns: []*schema.Column{PersonsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_regions_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[40]},
+				Columns:    []*schema.Column{ArtifactsColumns[41]},
 				RefColumns: []*schema.Column{RegionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_sets_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[41]},
+				Columns:    []*schema.Column{ArtifactsColumns[42]},
 				RefColumns: []*schema.Column{SetsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "artifacts_settlements_artifacts",
-				Columns:    []*schema.Column{ArtifactsColumns[42]},
+				Columns:    []*schema.Column{ArtifactsColumns[43]},
 				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1479,10 +1486,11 @@ func init() {
 	ArtifactsTable.ForeignKeys[6].RefTable = LocationsTable
 	ArtifactsTable.ForeignKeys[7].RefTable = ModelsTable
 	ArtifactsTable.ForeignKeys[8].RefTable = MonumentsTable
-	ArtifactsTable.ForeignKeys[9].RefTable = PersonsTable
-	ArtifactsTable.ForeignKeys[10].RefTable = RegionsTable
-	ArtifactsTable.ForeignKeys[11].RefTable = SetsTable
-	ArtifactsTable.ForeignKeys[12].RefTable = SettlementsTable
+	ArtifactsTable.ForeignKeys[9].RefTable = OrganizationsTable
+	ArtifactsTable.ForeignKeys[10].RefTable = PersonsTable
+	ArtifactsTable.ForeignKeys[11].RefTable = RegionsTable
+	ArtifactsTable.ForeignKeys[12].RefTable = SetsTable
+	ArtifactsTable.ForeignKeys[13].RefTable = SettlementsTable
 	BooksTable.ForeignKeys[0].RefTable = CollectionsTable
 	BooksTable.ForeignKeys[1].RefTable = CountriesTable
 	BooksTable.ForeignKeys[2].RefTable = DistrictsTable
