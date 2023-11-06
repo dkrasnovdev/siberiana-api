@@ -47,19 +47,22 @@ type RegionEdges struct {
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// Petroglyphs holds the value of the petroglyphs edge.
+	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
+	namedPetroglyphs           map[string][]*Petroglyph
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedLocations             map[string][]*Location
 }
@@ -91,10 +94,19 @@ func (e RegionEdges) BooksOrErr() ([]*Book, error) {
 	return nil, &NotLoadedError{edge: "books"}
 }
 
+// PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
+// was not loaded in eager-loading.
+func (e RegionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
+	if e.loadedTypes[3] {
+		return e.Petroglyphs, nil
+	}
+	return nil, &NotLoadedError{edge: "petroglyphs"}
+}
+
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -103,7 +115,7 @@ func (e RegionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, erro
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
@@ -215,6 +227,11 @@ func (r *Region) QueryArtifacts() *ArtifactQuery {
 // QueryBooks queries the "books" edge of the Region entity.
 func (r *Region) QueryBooks() *BookQuery {
 	return NewRegionClient(r.config).QueryBooks(r)
+}
+
+// QueryPetroglyphs queries the "petroglyphs" edge of the Region entity.
+func (r *Region) QueryPetroglyphs() *PetroglyphQuery {
+	return NewRegionClient(r.config).QueryPetroglyphs(r)
 }
 
 // QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Region entity.
@@ -346,6 +363,30 @@ func (r *Region) appendNamedBooks(name string, edges ...*Book) {
 		r.Edges.namedBooks[name] = []*Book{}
 	} else {
 		r.Edges.namedBooks[name] = append(r.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedPetroglyphs returns the Petroglyphs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Region) NamedPetroglyphs(name string) ([]*Petroglyph, error) {
+	if r.Edges.namedPetroglyphs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedPetroglyphs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Region) appendNamedPetroglyphs(name string, edges ...*Petroglyph) {
+	if r.Edges.namedPetroglyphs == nil {
+		r.Edges.namedPetroglyphs = make(map[string][]*Petroglyph)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedPetroglyphs[name] = []*Petroglyph{}
+	} else {
+		r.Edges.namedPetroglyphs[name] = append(r.Edges.namedPetroglyphs[name], edges...)
 	}
 }
 

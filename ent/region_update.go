@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -204,6 +205,21 @@ func (ru *RegionUpdate) AddBooks(b ...*Book) *RegionUpdate {
 	return ru.AddBookIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (ru *RegionUpdate) AddPetroglyphIDs(ids ...int) *RegionUpdate {
+	ru.mutation.AddPetroglyphIDs(ids...)
+	return ru
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (ru *RegionUpdate) AddPetroglyphs(p ...*Petroglyph) *RegionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ru.AddPetroglyphIDs(ids...)
+}
+
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
 func (ru *RegionUpdate) AddProtectedAreaPictureIDs(ids ...int) *RegionUpdate {
 	ru.mutation.AddProtectedAreaPictureIDs(ids...)
@@ -300,6 +316,27 @@ func (ru *RegionUpdate) RemoveBooks(b ...*Book) *RegionUpdate {
 		ids[i] = b[i].ID
 	}
 	return ru.RemoveBookIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (ru *RegionUpdate) ClearPetroglyphs() *RegionUpdate {
+	ru.mutation.ClearPetroglyphs()
+	return ru
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (ru *RegionUpdate) RemovePetroglyphIDs(ids ...int) *RegionUpdate {
+	ru.mutation.RemovePetroglyphIDs(ids...)
+	return ru
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (ru *RegionUpdate) RemovePetroglyphs(p ...*Petroglyph) *RegionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ru.RemovePetroglyphIDs(ids...)
 }
 
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
@@ -562,6 +599,51 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.PetroglyphsTable,
+			Columns: []string{region.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !ru.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.PetroglyphsTable,
+			Columns: []string{region.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.PetroglyphsTable,
+			Columns: []string{region.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -850,6 +932,21 @@ func (ruo *RegionUpdateOne) AddBooks(b ...*Book) *RegionUpdateOne {
 	return ruo.AddBookIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (ruo *RegionUpdateOne) AddPetroglyphIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.AddPetroglyphIDs(ids...)
+	return ruo
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (ruo *RegionUpdateOne) AddPetroglyphs(p ...*Petroglyph) *RegionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ruo.AddPetroglyphIDs(ids...)
+}
+
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
 func (ruo *RegionUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *RegionUpdateOne {
 	ruo.mutation.AddProtectedAreaPictureIDs(ids...)
@@ -946,6 +1043,27 @@ func (ruo *RegionUpdateOne) RemoveBooks(b ...*Book) *RegionUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return ruo.RemoveBookIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (ruo *RegionUpdateOne) ClearPetroglyphs() *RegionUpdateOne {
+	ruo.mutation.ClearPetroglyphs()
+	return ruo
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (ruo *RegionUpdateOne) RemovePetroglyphIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.RemovePetroglyphIDs(ids...)
+	return ruo
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (ruo *RegionUpdateOne) RemovePetroglyphs(p ...*Petroglyph) *RegionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ruo.RemovePetroglyphIDs(ids...)
 }
 
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
@@ -1238,6 +1356,51 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.PetroglyphsTable,
+			Columns: []string{region.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !ruo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.PetroglyphsTable,
+			Columns: []string{region.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.PetroglyphsTable,
+			Columns: []string{region.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -26,23 +27,25 @@ import (
 // LocationQuery is the builder for querying Location entities.
 type LocationQuery struct {
 	config
-	ctx                            *QueryContext
-	order                          []location.OrderOption
-	inters                         []Interceptor
-	predicates                     []predicate.Location
-	withArtifacts                  *ArtifactQuery
-	withBooks                      *BookQuery
-	withProtectedAreaPictures      *ProtectedAreaPictureQuery
-	withCountry                    *CountryQuery
-	withDistrict                   *DistrictQuery
-	withSettlement                 *SettlementQuery
-	withRegion                     *RegionQuery
-	withFKs                        bool
-	modifiers                      []func(*sql.Selector)
-	loadTotal                      []func(context.Context, []*Location) error
-	withNamedArtifacts             map[string]*ArtifactQuery
-	withNamedBooks                 map[string]*BookQuery
-	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
+	ctx                                         *QueryContext
+	order                                       []location.OrderOption
+	inters                                      []Interceptor
+	predicates                                  []predicate.Location
+	withArtifacts                               *ArtifactQuery
+	withBooks                                   *BookQuery
+	withProtectedAreaPictures                   *ProtectedAreaPictureQuery
+	withPetroglyphsAccountingDocumentation      *PetroglyphQuery
+	withCountry                                 *CountryQuery
+	withDistrict                                *DistrictQuery
+	withSettlement                              *SettlementQuery
+	withRegion                                  *RegionQuery
+	withFKs                                     bool
+	modifiers                                   []func(*sql.Selector)
+	loadTotal                                   []func(context.Context, []*Location) error
+	withNamedArtifacts                          map[string]*ArtifactQuery
+	withNamedBooks                              map[string]*BookQuery
+	withNamedProtectedAreaPictures              map[string]*ProtectedAreaPictureQuery
+	withNamedPetroglyphsAccountingDocumentation map[string]*PetroglyphQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -138,6 +141,28 @@ func (lq *LocationQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery
 			sqlgraph.From(location.Table, location.FieldID, selector),
 			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, location.ProtectedAreaPicturesTable, location.ProtectedAreaPicturesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphsAccountingDocumentation chains the current query on the "petroglyphs_accounting_documentation" edge.
+func (lq *LocationQuery) QueryPetroglyphsAccountingDocumentation() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: lq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := lq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := lq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.PetroglyphsAccountingDocumentationTable, location.PetroglyphsAccountingDocumentationColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(lq.driver.Dialect(), step)
 		return fromU, nil
@@ -420,18 +445,19 @@ func (lq *LocationQuery) Clone() *LocationQuery {
 		return nil
 	}
 	return &LocationQuery{
-		config:                    lq.config,
-		ctx:                       lq.ctx.Clone(),
-		order:                     append([]location.OrderOption{}, lq.order...),
-		inters:                    append([]Interceptor{}, lq.inters...),
-		predicates:                append([]predicate.Location{}, lq.predicates...),
-		withArtifacts:             lq.withArtifacts.Clone(),
-		withBooks:                 lq.withBooks.Clone(),
-		withProtectedAreaPictures: lq.withProtectedAreaPictures.Clone(),
-		withCountry:               lq.withCountry.Clone(),
-		withDistrict:              lq.withDistrict.Clone(),
-		withSettlement:            lq.withSettlement.Clone(),
-		withRegion:                lq.withRegion.Clone(),
+		config:                                 lq.config,
+		ctx:                                    lq.ctx.Clone(),
+		order:                                  append([]location.OrderOption{}, lq.order...),
+		inters:                                 append([]Interceptor{}, lq.inters...),
+		predicates:                             append([]predicate.Location{}, lq.predicates...),
+		withArtifacts:                          lq.withArtifacts.Clone(),
+		withBooks:                              lq.withBooks.Clone(),
+		withProtectedAreaPictures:              lq.withProtectedAreaPictures.Clone(),
+		withPetroglyphsAccountingDocumentation: lq.withPetroglyphsAccountingDocumentation.Clone(),
+		withCountry:                            lq.withCountry.Clone(),
+		withDistrict:                           lq.withDistrict.Clone(),
+		withSettlement:                         lq.withSettlement.Clone(),
+		withRegion:                             lq.withRegion.Clone(),
 		// clone intermediate query.
 		sql:  lq.sql.Clone(),
 		path: lq.path,
@@ -468,6 +494,17 @@ func (lq *LocationQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPi
 		opt(query)
 	}
 	lq.withProtectedAreaPictures = query
+	return lq
+}
+
+// WithPetroglyphsAccountingDocumentation tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs_accounting_documentation" edge. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithPetroglyphsAccountingDocumentation(opts ...func(*PetroglyphQuery)) *LocationQuery {
+	query := (&PetroglyphClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	lq.withPetroglyphsAccountingDocumentation = query
 	return lq
 }
 
@@ -600,10 +637,11 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 		nodes       = []*Location{}
 		withFKs     = lq.withFKs
 		_spec       = lq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			lq.withArtifacts != nil,
 			lq.withBooks != nil,
 			lq.withProtectedAreaPictures != nil,
+			lq.withPetroglyphsAccountingDocumentation != nil,
 			lq.withCountry != nil,
 			lq.withDistrict != nil,
 			lq.withSettlement != nil,
@@ -660,6 +698,15 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 			return nil, err
 		}
 	}
+	if query := lq.withPetroglyphsAccountingDocumentation; query != nil {
+		if err := lq.loadPetroglyphsAccountingDocumentation(ctx, query, nodes,
+			func(n *Location) { n.Edges.PetroglyphsAccountingDocumentation = []*Petroglyph{} },
+			func(n *Location, e *Petroglyph) {
+				n.Edges.PetroglyphsAccountingDocumentation = append(n.Edges.PetroglyphsAccountingDocumentation, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := lq.withCountry; query != nil {
 		if err := lq.loadCountry(ctx, query, nodes, nil,
 			func(n *Location, e *Country) { n.Edges.Country = e }); err != nil {
@@ -702,6 +749,13 @@ func (lq *LocationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Loc
 		if err := lq.loadProtectedAreaPictures(ctx, query, nodes,
 			func(n *Location) { n.appendNamedProtectedAreaPictures(name) },
 			func(n *Location, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range lq.withNamedPetroglyphsAccountingDocumentation {
+		if err := lq.loadPetroglyphsAccountingDocumentation(ctx, query, nodes,
+			func(n *Location) { n.appendNamedPetroglyphsAccountingDocumentation(name) },
+			func(n *Location, e *Petroglyph) { n.appendNamedPetroglyphsAccountingDocumentation(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -801,6 +855,37 @@ func (lq *LocationQuery) loadProtectedAreaPictures(ctx context.Context, query *P
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "location_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (lq *LocationQuery) loadPetroglyphsAccountingDocumentation(ctx context.Context, query *PetroglyphQuery, nodes []*Location, init func(*Location), assign func(*Location, *Petroglyph)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Location)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Petroglyph(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(location.PetroglyphsAccountingDocumentationColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.location_petroglyphs_accounting_documentation
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "location_petroglyphs_accounting_documentation" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "location_petroglyphs_accounting_documentation" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -1058,6 +1143,20 @@ func (lq *LocationQuery) WithNamedProtectedAreaPictures(name string, opts ...fun
 		lq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
 	}
 	lq.withNamedProtectedAreaPictures[name] = query
+	return lq
+}
+
+// WithNamedPetroglyphsAccountingDocumentation tells the query-builder to eager-load the nodes that are connected to the "petroglyphs_accounting_documentation"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (lq *LocationQuery) WithNamedPetroglyphsAccountingDocumentation(name string, opts ...func(*PetroglyphQuery)) *LocationQuery {
+	query := (&PetroglyphClient{config: lq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if lq.withNamedPetroglyphsAccountingDocumentation == nil {
+		lq.withNamedPetroglyphsAccountingDocumentation = make(map[string]*PetroglyphQuery)
+	}
+	lq.withNamedPetroglyphsAccountingDocumentation[name] = query
 	return lq
 }
 

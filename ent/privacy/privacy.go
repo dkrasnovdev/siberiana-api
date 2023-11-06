@@ -614,6 +614,30 @@ func (f MonumentMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutati
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.MonumentMutation", m)
 }
 
+// The MoundQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type MoundQueryRuleFunc func(context.Context, *ent.MoundQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f MoundQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.MoundQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.MoundQuery", q)
+}
+
+// The MoundMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type MoundMutationRuleFunc func(context.Context, *ent.MoundMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f MoundMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.MoundMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.MoundMutation", m)
+}
+
 // The OrganizationQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OrganizationQueryRuleFunc func(context.Context, *ent.OrganizationQuery) error
@@ -708,6 +732,30 @@ func (f PersonalMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutati
 		return f(ctx, m)
 	}
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PersonalMutation", m)
+}
+
+// The PetroglyphQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type PetroglyphQueryRuleFunc func(context.Context, *ent.PetroglyphQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f PetroglyphQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PetroglyphQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.PetroglyphQuery", q)
+}
+
+// The PetroglyphMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type PetroglyphMutationRuleFunc func(context.Context, *ent.PetroglyphMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f PetroglyphMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.PetroglyphMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PetroglyphMutation", m)
 }
 
 // The ProjectQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -972,4 +1020,28 @@ func (f TechniqueMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutat
 		return f(ctx, m)
 	}
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.TechniqueMutation", m)
+}
+
+// The VisitQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type VisitQueryRuleFunc func(context.Context, *ent.VisitQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f VisitQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.VisitQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.VisitQuery", q)
+}
+
+// The VisitMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type VisitMutationRuleFunc func(context.Context, *ent.VisitMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f VisitMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.VisitMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.VisitMutation", m)
 }

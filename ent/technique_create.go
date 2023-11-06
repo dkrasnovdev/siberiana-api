@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
 
@@ -148,6 +149,21 @@ func (tc *TechniqueCreate) AddArtifacts(a ...*Artifact) *TechniqueCreate {
 	return tc.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (tc *TechniqueCreate) AddPetroglyphIDs(ids ...int) *TechniqueCreate {
+	tc.mutation.AddPetroglyphIDs(ids...)
+	return tc
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (tc *TechniqueCreate) AddPetroglyphs(p ...*Petroglyph) *TechniqueCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tc.AddPetroglyphIDs(ids...)
+}
+
 // Mutation returns the TechniqueMutation object of the builder.
 func (tc *TechniqueCreate) Mutation() *TechniqueMutation {
 	return tc.mutation
@@ -277,6 +293,22 @@ func (tc *TechniqueCreate) createSpec() (*Technique, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.PetroglyphsTable,
+			Columns: technique.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

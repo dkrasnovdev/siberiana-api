@@ -37,6 +37,8 @@ const (
 	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
+	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
+	EdgePetroglyphs = "petroglyphs"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeLocations holds the string denoting the locations edge name in mutations.
@@ -64,6 +66,13 @@ const (
 	BooksInverseTable = "books"
 	// BooksColumn is the table column denoting the books relation/edge.
 	BooksColumn = "region_books"
+	// PetroglyphsTable is the table that holds the petroglyphs relation/edge.
+	PetroglyphsTable = "petroglyphs"
+	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsInverseTable = "petroglyphs"
+	// PetroglyphsColumn is the table column denoting the petroglyphs relation/edge.
+	PetroglyphsColumn = "region_petroglyphs"
 	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesTable = "protected_area_pictures"
 	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
@@ -209,6 +218,20 @@ func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPetroglyphsCount orders the results by petroglyphs count.
+func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsStep(), opts...)
+	}
+}
+
+// ByPetroglyphs orders the results by petroglyphs terms.
+func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
 func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -255,6 +278,13 @@ func newBooksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BooksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+	)
+}
+func newPetroglyphsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PetroglyphsTable, PetroglyphsColumn),
 	)
 }
 func newProtectedAreaPicturesStep() *sqlgraph.Step {

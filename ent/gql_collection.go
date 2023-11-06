@@ -28,10 +28,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
@@ -43,6 +45,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
@@ -2161,6 +2164,18 @@ func (c *CultureQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[culture.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, culture.FieldCreatedAt)
@@ -3133,6 +3148,18 @@ func (l *LocationQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			l.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
 				*wq = *query
 			})
+		case "petroglyphsAccountingDocumentation":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: l.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			l.WithNamedPetroglyphsAccountingDocumentation(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
 		case "country":
 			var (
 				alias = field.Alias
@@ -3474,6 +3501,18 @@ func (m *ModelQuery) collectField(ctx context.Context, opCtx *graphql.OperationC
 			m.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[model.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, model.FieldCreatedAt)
@@ -3743,6 +3782,165 @@ func newMonumentPaginateArgs(rv map[string]any) *monumentPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*MonumentWhereInput); ok {
 		args.opts = append(args.opts, WithMonumentFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (m *MoundQuery) CollectFields(ctx context.Context, satisfies ...string) (*MoundQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return m, nil
+	}
+	if err := m.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (m *MoundQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(mound.Columns))
+		selectedFields = []string{mound.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
+		case "visits":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VisitClient{config: m.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, visitImplementors)...); err != nil {
+				return err
+			}
+			m.WithNamedVisits(alias, func(wq *VisitQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[mound.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, mound.FieldCreatedAt)
+				fieldSeen[mound.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[mound.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, mound.FieldCreatedBy)
+				fieldSeen[mound.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[mound.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, mound.FieldUpdatedAt)
+				fieldSeen[mound.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[mound.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, mound.FieldUpdatedBy)
+				fieldSeen[mound.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[mound.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, mound.FieldDisplayName)
+				fieldSeen[mound.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[mound.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, mound.FieldAbbreviation)
+				fieldSeen[mound.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[mound.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, mound.FieldDescription)
+				fieldSeen[mound.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[mound.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, mound.FieldExternalLink)
+				fieldSeen[mound.FieldExternalLink] = struct{}{}
+			}
+		case "number":
+			if _, ok := fieldSeen[mound.FieldNumber]; !ok {
+				selectedFields = append(selectedFields, mound.FieldNumber)
+				fieldSeen[mound.FieldNumber] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		m.Select(selectedFields...)
+	}
+	return nil
+}
+
+type moundPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []MoundPaginateOption
+}
+
+func newMoundPaginateArgs(rv map[string]any) *moundPaginateArgs {
+	args := &moundPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*MoundOrder:
+			args.opts = append(args.opts, WithMoundOrder(v))
+		case []any:
+			var orders []*MoundOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &MoundOrder{Field: &MoundOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithMoundOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*MoundWhereInput); ok {
+		args.opts = append(args.opts, WithMoundFilter(v.Filter))
 	}
 	return args
 }
@@ -4163,6 +4361,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			pe.WithNamedDonatedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "petroglyphsAccountingDocumentation":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedPetroglyphsAccountingDocumentation(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
 		case "books":
 			var (
 				alias = field.Alias
@@ -4173,6 +4383,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				return err
 			}
 			pe.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "visits":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&VisitClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, visitImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedVisits(alias, func(wq *VisitQuery) {
 				*wq = *query
 			})
 		case "projects":
@@ -4506,6 +4728,335 @@ func newPersonalPaginateArgs(rv map[string]any) *personalPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*PersonalWhereInput); ok {
 		args.opts = append(args.opts, WithPersonalFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pe *PetroglyphQuery) CollectFields(ctx context.Context, satisfies ...string) (*PetroglyphQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pe, nil
+	}
+	if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pe, nil
+}
+
+func (pe *PetroglyphQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(petroglyph.Columns))
+		selectedFields = []string{petroglyph.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "culturalAffiliation":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CultureClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, cultureImplementors)...); err != nil {
+				return err
+			}
+			pe.withCulturalAffiliation = query
+		case "model":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ModelClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, modelImplementors)...); err != nil {
+				return err
+			}
+			pe.withModel = query
+		case "mound":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MoundClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, moundImplementors)...); err != nil {
+				return err
+			}
+			pe.withMound = query
+		case "publications":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PublicationClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, publicationImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedPublications(alias, func(wq *PublicationQuery) {
+				*wq = *query
+			})
+		case "techniques":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TechniqueClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, techniqueImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedTechniques(alias, func(wq *TechniqueQuery) {
+				*wq = *query
+			})
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			pe.withRegion = query
+		case "accountingDocumentationAddress":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&LocationClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, locationImplementors)...); err != nil {
+				return err
+			}
+			pe.withAccountingDocumentationAddress = query
+		case "accountingDocumentationAuthor":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			pe.withAccountingDocumentationAuthor = query
+		case "createdAt":
+			if _, ok := fieldSeen[petroglyph.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldCreatedAt)
+				fieldSeen[petroglyph.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[petroglyph.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldCreatedBy)
+				fieldSeen[petroglyph.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[petroglyph.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldUpdatedAt)
+				fieldSeen[petroglyph.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[petroglyph.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldUpdatedBy)
+				fieldSeen[petroglyph.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[petroglyph.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDisplayName)
+				fieldSeen[petroglyph.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[petroglyph.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldAbbreviation)
+				fieldSeen[petroglyph.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[petroglyph.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDescription)
+				fieldSeen[petroglyph.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[petroglyph.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldExternalLink)
+				fieldSeen[petroglyph.FieldExternalLink] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[petroglyph.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldStatus)
+				fieldSeen[petroglyph.FieldStatus] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[petroglyph.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldPrimaryImageURL)
+				fieldSeen[petroglyph.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[petroglyph.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldAdditionalImagesUrls)
+				fieldSeen[petroglyph.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[petroglyph.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDeletedAt)
+				fieldSeen[petroglyph.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[petroglyph.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDeletedBy)
+				fieldSeen[petroglyph.FieldDeletedBy] = struct{}{}
+			}
+		case "number":
+			if _, ok := fieldSeen[petroglyph.FieldNumber]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldNumber)
+				fieldSeen[petroglyph.FieldNumber] = struct{}{}
+			}
+		case "dating":
+			if _, ok := fieldSeen[petroglyph.FieldDating]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDating)
+				fieldSeen[petroglyph.FieldDating] = struct{}{}
+			}
+		case "datingStart":
+			if _, ok := fieldSeen[petroglyph.FieldDatingStart]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDatingStart)
+				fieldSeen[petroglyph.FieldDatingStart] = struct{}{}
+			}
+		case "datingEnd":
+			if _, ok := fieldSeen[petroglyph.FieldDatingEnd]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDatingEnd)
+				fieldSeen[petroglyph.FieldDatingEnd] = struct{}{}
+			}
+		case "orientation":
+			if _, ok := fieldSeen[petroglyph.FieldOrientation]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldOrientation)
+				fieldSeen[petroglyph.FieldOrientation] = struct{}{}
+			}
+		case "position":
+			if _, ok := fieldSeen[petroglyph.FieldPosition]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldPosition)
+				fieldSeen[petroglyph.FieldPosition] = struct{}{}
+			}
+		case "geometricShape":
+			if _, ok := fieldSeen[petroglyph.FieldGeometricShape]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldGeometricShape)
+				fieldSeen[petroglyph.FieldGeometricShape] = struct{}{}
+			}
+		case "height":
+			if _, ok := fieldSeen[petroglyph.FieldHeight]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldHeight)
+				fieldSeen[petroglyph.FieldHeight] = struct{}{}
+			}
+		case "width":
+			if _, ok := fieldSeen[petroglyph.FieldWidth]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldWidth)
+				fieldSeen[petroglyph.FieldWidth] = struct{}{}
+			}
+		case "length":
+			if _, ok := fieldSeen[petroglyph.FieldLength]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldLength)
+				fieldSeen[petroglyph.FieldLength] = struct{}{}
+			}
+		case "depth":
+			if _, ok := fieldSeen[petroglyph.FieldDepth]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDepth)
+				fieldSeen[petroglyph.FieldDepth] = struct{}{}
+			}
+		case "diameter":
+			if _, ok := fieldSeen[petroglyph.FieldDiameter]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDiameter)
+				fieldSeen[petroglyph.FieldDiameter] = struct{}{}
+			}
+		case "weight":
+			if _, ok := fieldSeen[petroglyph.FieldWeight]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldWeight)
+				fieldSeen[petroglyph.FieldWeight] = struct{}{}
+			}
+		case "dimensions":
+			if _, ok := fieldSeen[petroglyph.FieldDimensions]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDimensions)
+				fieldSeen[petroglyph.FieldDimensions] = struct{}{}
+			}
+		case "planePreservation":
+			if _, ok := fieldSeen[petroglyph.FieldPlanePreservation]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldPlanePreservation)
+				fieldSeen[petroglyph.FieldPlanePreservation] = struct{}{}
+			}
+		case "photoCode":
+			if _, ok := fieldSeen[petroglyph.FieldPhotoCode]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldPhotoCode)
+				fieldSeen[petroglyph.FieldPhotoCode] = struct{}{}
+			}
+		case "accountingDocumentationDate":
+			if _, ok := fieldSeen[petroglyph.FieldAccountingDocumentationDate]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldAccountingDocumentationDate)
+				fieldSeen[petroglyph.FieldAccountingDocumentationDate] = struct{}{}
+			}
+		case "geometry":
+			if _, ok := fieldSeen[petroglyph.FieldGeometry]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldGeometry)
+				fieldSeen[petroglyph.FieldGeometry] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pe.Select(selectedFields...)
+	}
+	return nil
+}
+
+type petroglyphPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []PetroglyphPaginateOption
+}
+
+func newPetroglyphPaginateArgs(rv map[string]any) *petroglyphPaginateArgs {
+	args := &petroglyphPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*PetroglyphOrder:
+			args.opts = append(args.opts, WithPetroglyphOrder(v))
+		case []any:
+			var orders []*PetroglyphOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &PetroglyphOrder{Field: &PetroglyphOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithPetroglyphOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*PetroglyphWhereInput); ok {
+		args.opts = append(args.opts, WithPetroglyphFilter(v.Filter))
 	}
 	return args
 }
@@ -5406,6 +5957,18 @@ func (pu *PublicationQuery) collectField(ctx context.Context, opCtx *graphql.Ope
 			pu.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: pu.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			pu.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
 		case "authors":
 			var (
 				alias = field.Alias
@@ -5724,6 +6287,18 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 				return err
 			}
 			r.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
 				*wq = *query
 			})
 		case "protectedAreaPictures":
@@ -6236,6 +6811,18 @@ func (t *TechniqueQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 			t.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[technique.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, technique.FieldCreatedAt)
@@ -6341,6 +6928,145 @@ func newTechniquePaginateArgs(rv map[string]any) *techniquePaginateArgs {
 	}
 	if v, ok := rv[whereField].(*TechniqueWhereInput); ok {
 		args.opts = append(args.opts, WithTechniqueFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (v *VisitQuery) CollectFields(ctx context.Context, satisfies ...string) (*VisitQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return v, nil
+	}
+	if err := v.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return v, nil
+}
+
+func (v *VisitQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(visit.Columns))
+		selectedFields = []string{visit.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "mounds":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&MoundClient{config: v.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, moundImplementors)...); err != nil {
+				return err
+			}
+			v.WithNamedMounds(alias, func(wq *MoundQuery) {
+				*wq = *query
+			})
+		case "visitors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: v.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			v.WithNamedVisitors(alias, func(wq *PersonQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[visit.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, visit.FieldCreatedAt)
+				fieldSeen[visit.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[visit.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, visit.FieldCreatedBy)
+				fieldSeen[visit.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[visit.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, visit.FieldUpdatedAt)
+				fieldSeen[visit.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[visit.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, visit.FieldUpdatedBy)
+				fieldSeen[visit.FieldUpdatedBy] = struct{}{}
+			}
+		case "year":
+			if _, ok := fieldSeen[visit.FieldYear]; !ok {
+				selectedFields = append(selectedFields, visit.FieldYear)
+				fieldSeen[visit.FieldYear] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		v.Select(selectedFields...)
+	}
+	return nil
+}
+
+type visitPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []VisitPaginateOption
+}
+
+func newVisitPaginateArgs(rv map[string]any) *visitPaginateArgs {
+	args := &visitPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*VisitOrder:
+			args.opts = append(args.opts, WithVisitOrder(v))
+		case []any:
+			var orders []*VisitOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &VisitOrder{Field: &VisitOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithVisitOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*VisitWhereInput); ok {
+		args.opts = append(args.opts, WithVisitFilter(v.Filter))
 	}
 	return args
 }

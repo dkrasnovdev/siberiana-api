@@ -14,20 +14,23 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // ModelQuery is the builder for querying Model entities.
 type ModelQuery struct {
 	config
-	ctx                *QueryContext
-	order              []model.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Model
-	withArtifacts      *ArtifactQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Model) error
-	withNamedArtifacts map[string]*ArtifactQuery
+	ctx                  *QueryContext
+	order                []model.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Model
+	withArtifacts        *ArtifactQuery
+	withPetroglyphs      *PetroglyphQuery
+	modifiers            []func(*sql.Selector)
+	loadTotal            []func(context.Context, []*Model) error
+	withNamedArtifacts   map[string]*ArtifactQuery
+	withNamedPetroglyphs map[string]*PetroglyphQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -79,6 +82,28 @@ func (mq *ModelQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(model.Table, model.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, model.ArtifactsTable, model.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
+func (mq *ModelQuery) QueryPetroglyphs() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: mq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := mq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := mq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(model.Table, model.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, model.PetroglyphsTable, model.PetroglyphsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(mq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,12 +298,13 @@ func (mq *ModelQuery) Clone() *ModelQuery {
 		return nil
 	}
 	return &ModelQuery{
-		config:        mq.config,
-		ctx:           mq.ctx.Clone(),
-		order:         append([]model.OrderOption{}, mq.order...),
-		inters:        append([]Interceptor{}, mq.inters...),
-		predicates:    append([]predicate.Model{}, mq.predicates...),
-		withArtifacts: mq.withArtifacts.Clone(),
+		config:          mq.config,
+		ctx:             mq.ctx.Clone(),
+		order:           append([]model.OrderOption{}, mq.order...),
+		inters:          append([]Interceptor{}, mq.inters...),
+		predicates:      append([]predicate.Model{}, mq.predicates...),
+		withArtifacts:   mq.withArtifacts.Clone(),
+		withPetroglyphs: mq.withPetroglyphs.Clone(),
 		// clone intermediate query.
 		sql:  mq.sql.Clone(),
 		path: mq.path,
@@ -293,6 +319,17 @@ func (mq *ModelQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *ModelQuery {
 		opt(query)
 	}
 	mq.withArtifacts = query
+	return mq
+}
+
+// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
+func (mq *ModelQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *ModelQuery {
+	query := (&PetroglyphClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	mq.withPetroglyphs = query
 	return mq
 }
 
@@ -380,8 +417,9 @@ func (mq *ModelQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Model,
 	var (
 		nodes       = []*Model{}
 		_spec       = mq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			mq.withArtifacts != nil,
+			mq.withPetroglyphs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -412,10 +450,24 @@ func (mq *ModelQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Model,
 			return nil, err
 		}
 	}
+	if query := mq.withPetroglyphs; query != nil {
+		if err := mq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Model) { n.Edges.Petroglyphs = []*Petroglyph{} },
+			func(n *Model, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range mq.withNamedArtifacts {
 		if err := mq.loadArtifacts(ctx, query, nodes,
 			func(n *Model) { n.appendNamedArtifacts(name) },
 			func(n *Model, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range mq.withNamedPetroglyphs {
+		if err := mq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Model) { n.appendNamedPetroglyphs(name) },
+			func(n *Model, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -453,6 +505,37 @@ func (mq *ModelQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, n
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "model_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (mq *ModelQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*Model, init func(*Model), assign func(*Model, *Petroglyph)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Model)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Petroglyph(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(model.PetroglyphsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.model_petroglyphs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "model_petroglyphs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "model_petroglyphs" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -554,6 +637,20 @@ func (mq *ModelQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuer
 		mq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	mq.withNamedArtifacts[name] = query
+	return mq
+}
+
+// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (mq *ModelQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *ModelQuery {
+	query := (&PetroglyphClient{config: mq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if mq.withNamedPetroglyphs == nil {
+		mq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
+	}
+	mq.withNamedPetroglyphs[name] = query
 	return mq
 }
 

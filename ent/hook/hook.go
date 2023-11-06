@@ -261,6 +261,18 @@ func (f MonumentFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MonumentMutation", m)
 }
 
+// The MoundFunc type is an adapter to allow the use of ordinary
+// function as Mound mutator.
+type MoundFunc func(context.Context, *ent.MoundMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MoundFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MoundMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MoundMutation", m)
+}
+
 // The OrganizationFunc type is an adapter to allow the use of ordinary
 // function as Organization mutator.
 type OrganizationFunc func(context.Context, *ent.OrganizationMutation) (ent.Value, error)
@@ -307,6 +319,18 @@ func (f PersonalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonalMutation", m)
+}
+
+// The PetroglyphFunc type is an adapter to allow the use of ordinary
+// function as Petroglyph mutator.
+type PetroglyphFunc func(context.Context, *ent.PetroglyphMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PetroglyphFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PetroglyphMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PetroglyphMutation", m)
 }
 
 // The ProjectFunc type is an adapter to allow the use of ordinary
@@ -439,6 +463,18 @@ func (f TechniqueFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, e
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TechniqueMutation", m)
+}
+
+// The VisitFunc type is an adapter to allow the use of ordinary
+// function as Visit mutator.
+type VisitFunc func(context.Context, *ent.VisitMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VisitFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.VisitMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.VisitMutation", m)
 }
 
 // Condition is a hook condition function.

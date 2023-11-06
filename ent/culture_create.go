@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 )
 
 // CultureCreate is the builder for creating a Culture entity.
@@ -148,6 +149,21 @@ func (cc *CultureCreate) AddArtifacts(a ...*Artifact) *CultureCreate {
 	return cc.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (cc *CultureCreate) AddPetroglyphIDs(ids ...int) *CultureCreate {
+	cc.mutation.AddPetroglyphIDs(ids...)
+	return cc
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (cc *CultureCreate) AddPetroglyphs(p ...*Petroglyph) *CultureCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cc.AddPetroglyphIDs(ids...)
+}
+
 // Mutation returns the CultureMutation object of the builder.
 func (cc *CultureCreate) Mutation() *CultureMutation {
 	return cc.mutation
@@ -277,6 +293,22 @@ func (cc *CultureCreate) createSpec() (*Culture, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.PetroglyphsTable,
+			Columns: []string{culture.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

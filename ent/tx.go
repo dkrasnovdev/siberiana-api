@@ -54,6 +54,8 @@ type Tx struct {
 	Model *ModelClient
 	// Monument is the client for interacting with the Monument builders.
 	Monument *MonumentClient
+	// Mound is the client for interacting with the Mound builders.
+	Mound *MoundClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
 	// Periodical is the client for interacting with the Periodical builders.
@@ -62,6 +64,8 @@ type Tx struct {
 	Person *PersonClient
 	// Personal is the client for interacting with the Personal builders.
 	Personal *PersonalClient
+	// Petroglyph is the client for interacting with the Petroglyph builders.
+	Petroglyph *PetroglyphClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
 	// ProtectedArea is the client for interacting with the ProtectedArea builders.
@@ -84,6 +88,8 @@ type Tx struct {
 	Settlement *SettlementClient
 	// Technique is the client for interacting with the Technique builders.
 	Technique *TechniqueClient
+	// Visit is the client for interacting with the Visit builders.
+	Visit *VisitClient
 
 	// lazily loaded.
 	client     *Client
@@ -236,10 +242,12 @@ func (tx *Tx) init() {
 	tx.Medium = NewMediumClient(tx.config)
 	tx.Model = NewModelClient(tx.config)
 	tx.Monument = NewMonumentClient(tx.config)
+	tx.Mound = NewMoundClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
 	tx.Periodical = NewPeriodicalClient(tx.config)
 	tx.Person = NewPersonClient(tx.config)
 	tx.Personal = NewPersonalClient(tx.config)
+	tx.Petroglyph = NewPetroglyphClient(tx.config)
 	tx.Project = NewProjectClient(tx.config)
 	tx.ProtectedArea = NewProtectedAreaClient(tx.config)
 	tx.ProtectedAreaCategory = NewProtectedAreaCategoryClient(tx.config)
@@ -251,6 +259,7 @@ func (tx *Tx) init() {
 	tx.Set = NewSetClient(tx.config)
 	tx.Settlement = NewSettlementClient(tx.config)
 	tx.Technique = NewTechniqueClient(tx.config)
+	tx.Visit = NewVisitClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

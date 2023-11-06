@@ -16,8 +16,10 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
 
 // PersonCreate is the builder for creating a Person entity.
@@ -343,6 +345,21 @@ func (pc *PersonCreate) AddDonatedArtifacts(a ...*Artifact) *PersonCreate {
 	return pc.AddDonatedArtifactIDs(ids...)
 }
 
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (pc *PersonCreate) AddPetroglyphsAccountingDocumentationIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddPetroglyphsAccountingDocumentationIDs(ids...)
+	return pc
+}
+
+// AddPetroglyphsAccountingDocumentation adds the "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (pc *PersonCreate) AddPetroglyphsAccountingDocumentation(p ...*Petroglyph) *PersonCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddPetroglyphsAccountingDocumentationIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pc *PersonCreate) AddBookIDs(ids ...int) *PersonCreate {
 	pc.mutation.AddBookIDs(ids...)
@@ -356,6 +373,21 @@ func (pc *PersonCreate) AddBooks(b ...*Book) *PersonCreate {
 		ids[i] = b[i].ID
 	}
 	return pc.AddBookIDs(ids...)
+}
+
+// AddVisitIDs adds the "visits" edge to the Visit entity by IDs.
+func (pc *PersonCreate) AddVisitIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddVisitIDs(ids...)
+	return pc
+}
+
+// AddVisits adds the "visits" edges to the Visit entity.
+func (pc *PersonCreate) AddVisits(v ...*Visit) *PersonCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return pc.AddVisitIDs(ids...)
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
@@ -644,6 +676,22 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := pc.mutation.PetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{person.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := pc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -653,6 +701,22 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.VisitsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.VisitsTable,
+			Columns: person.VisitsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(visit.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

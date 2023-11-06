@@ -648,6 +648,29 @@ func HasArtifactsWith(preds ...predicate.Artifact) predicate.Technique {
 	})
 }
 
+// HasPetroglyphs applies the HasEdge predicate on the "petroglyphs" edge.
+func HasPetroglyphs() predicate.Technique {
+	return predicate.Technique(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPetroglyphsWith applies the HasEdge predicate on the "petroglyphs" edge with a given conditions (other predicates).
+func HasPetroglyphsWith(preds ...predicate.Petroglyph) predicate.Technique {
+	return predicate.Technique(func(s *sql.Selector) {
+		step := newPetroglyphsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Technique) predicate.Technique {
 	return predicate.Technique(sql.AndPredicates(predicates...))

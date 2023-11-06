@@ -52,6 +52,7 @@ func (Publication) Annotations() []schema.Annotation {
 func (Publication) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
+		edge.To("petroglyphs", Petroglyph.Type),
 		edge.From("authors", Person.Type).Ref("publications"),
 	}
 }

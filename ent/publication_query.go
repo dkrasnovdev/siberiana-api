@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 )
@@ -21,16 +22,18 @@ import (
 // PublicationQuery is the builder for querying Publication entities.
 type PublicationQuery struct {
 	config
-	ctx                *QueryContext
-	order              []publication.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Publication
-	withArtifacts      *ArtifactQuery
-	withAuthors        *PersonQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Publication) error
-	withNamedArtifacts map[string]*ArtifactQuery
-	withNamedAuthors   map[string]*PersonQuery
+	ctx                  *QueryContext
+	order                []publication.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Publication
+	withArtifacts        *ArtifactQuery
+	withPetroglyphs      *PetroglyphQuery
+	withAuthors          *PersonQuery
+	modifiers            []func(*sql.Selector)
+	loadTotal            []func(context.Context, []*Publication) error
+	withNamedArtifacts   map[string]*ArtifactQuery
+	withNamedPetroglyphs map[string]*PetroglyphQuery
+	withNamedAuthors     map[string]*PersonQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -82,6 +85,28 @@ func (pq *PublicationQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(publication.Table, publication.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, publication.ArtifactsTable, publication.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
+func (pq *PublicationQuery) QueryPetroglyphs() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publication.Table, publication.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, publication.PetroglyphsTable, publication.PetroglyphsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -298,13 +323,14 @@ func (pq *PublicationQuery) Clone() *PublicationQuery {
 		return nil
 	}
 	return &PublicationQuery{
-		config:        pq.config,
-		ctx:           pq.ctx.Clone(),
-		order:         append([]publication.OrderOption{}, pq.order...),
-		inters:        append([]Interceptor{}, pq.inters...),
-		predicates:    append([]predicate.Publication{}, pq.predicates...),
-		withArtifacts: pq.withArtifacts.Clone(),
-		withAuthors:   pq.withAuthors.Clone(),
+		config:          pq.config,
+		ctx:             pq.ctx.Clone(),
+		order:           append([]publication.OrderOption{}, pq.order...),
+		inters:          append([]Interceptor{}, pq.inters...),
+		predicates:      append([]predicate.Publication{}, pq.predicates...),
+		withArtifacts:   pq.withArtifacts.Clone(),
+		withPetroglyphs: pq.withPetroglyphs.Clone(),
+		withAuthors:     pq.withAuthors.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -319,6 +345,17 @@ func (pq *PublicationQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *Publica
 		opt(query)
 	}
 	pq.withArtifacts = query
+	return pq
+}
+
+// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublicationQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *PublicationQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPetroglyphs = query
 	return pq
 }
 
@@ -417,8 +454,9 @@ func (pq *PublicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*Publication{}
 		_spec       = pq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			pq.withArtifacts != nil,
+			pq.withPetroglyphs != nil,
 			pq.withAuthors != nil,
 		}
 	)
@@ -450,6 +488,13 @@ func (pq *PublicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := pq.withPetroglyphs; query != nil {
+		if err := pq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Publication) { n.Edges.Petroglyphs = []*Petroglyph{} },
+			func(n *Publication, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withAuthors; query != nil {
 		if err := pq.loadAuthors(ctx, query, nodes,
 			func(n *Publication) { n.Edges.Authors = []*Person{} },
@@ -461,6 +506,13 @@ func (pq *PublicationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Publication) { n.appendNamedArtifacts(name) },
 			func(n *Publication, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedPetroglyphs {
+		if err := pq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Publication) { n.appendNamedPetroglyphs(name) },
+			func(n *Publication, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -533,6 +585,67 @@ func (pq *PublicationQuery) loadArtifacts(ctx context.Context, query *ArtifactQu
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *PublicationQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*Publication, init func(*Publication), assign func(*Publication, *Petroglyph)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Publication)
+	nids := make(map[int]map[*Publication]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(publication.PetroglyphsTable)
+		s.Join(joinT).On(s.C(petroglyph.FieldID), joinT.C(publication.PetroglyphsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(publication.PetroglyphsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(publication.PetroglyphsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Publication]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Petroglyph](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "petroglyphs" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -697,6 +810,20 @@ func (pq *PublicationQuery) WithNamedArtifacts(name string, opts ...func(*Artifa
 		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PublicationQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *PublicationQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedPetroglyphs == nil {
+		pq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
+	}
+	pq.withNamedPetroglyphs[name] = query
 	return pq
 }
 

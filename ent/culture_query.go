@@ -14,20 +14,23 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
 // CultureQuery is the builder for querying Culture entities.
 type CultureQuery struct {
 	config
-	ctx                *QueryContext
-	order              []culture.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Culture
-	withArtifacts      *ArtifactQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Culture) error
-	withNamedArtifacts map[string]*ArtifactQuery
+	ctx                  *QueryContext
+	order                []culture.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Culture
+	withArtifacts        *ArtifactQuery
+	withPetroglyphs      *PetroglyphQuery
+	modifiers            []func(*sql.Selector)
+	loadTotal            []func(context.Context, []*Culture) error
+	withNamedArtifacts   map[string]*ArtifactQuery
+	withNamedPetroglyphs map[string]*PetroglyphQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -79,6 +82,28 @@ func (cq *CultureQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(culture.Table, culture.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, culture.ArtifactsTable, culture.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
+func (cq *CultureQuery) QueryPetroglyphs() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(culture.Table, culture.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, culture.PetroglyphsTable, culture.PetroglyphsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,12 +298,13 @@ func (cq *CultureQuery) Clone() *CultureQuery {
 		return nil
 	}
 	return &CultureQuery{
-		config:        cq.config,
-		ctx:           cq.ctx.Clone(),
-		order:         append([]culture.OrderOption{}, cq.order...),
-		inters:        append([]Interceptor{}, cq.inters...),
-		predicates:    append([]predicate.Culture{}, cq.predicates...),
-		withArtifacts: cq.withArtifacts.Clone(),
+		config:          cq.config,
+		ctx:             cq.ctx.Clone(),
+		order:           append([]culture.OrderOption{}, cq.order...),
+		inters:          append([]Interceptor{}, cq.inters...),
+		predicates:      append([]predicate.Culture{}, cq.predicates...),
+		withArtifacts:   cq.withArtifacts.Clone(),
+		withPetroglyphs: cq.withPetroglyphs.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
@@ -293,6 +319,17 @@ func (cq *CultureQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *CultureQuer
 		opt(query)
 	}
 	cq.withArtifacts = query
+	return cq
+}
+
+// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CultureQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *CultureQuery {
+	query := (&PetroglyphClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withPetroglyphs = query
 	return cq
 }
 
@@ -380,8 +417,9 @@ func (cq *CultureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cult
 	var (
 		nodes       = []*Culture{}
 		_spec       = cq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			cq.withArtifacts != nil,
+			cq.withPetroglyphs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -412,10 +450,24 @@ func (cq *CultureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cult
 			return nil, err
 		}
 	}
+	if query := cq.withPetroglyphs; query != nil {
+		if err := cq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Culture) { n.Edges.Petroglyphs = []*Petroglyph{} },
+			func(n *Culture, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedArtifacts {
 		if err := cq.loadArtifacts(ctx, query, nodes,
 			func(n *Culture) { n.appendNamedArtifacts(name) },
 			func(n *Culture, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedPetroglyphs {
+		if err := cq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Culture) { n.appendNamedPetroglyphs(name) },
+			func(n *Culture, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -453,6 +505,37 @@ func (cq *CultureQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery,
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "culture_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CultureQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*Culture, init func(*Culture), assign func(*Culture, *Petroglyph)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Culture)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Petroglyph(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(culture.PetroglyphsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.culture_petroglyphs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "culture_petroglyphs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "culture_petroglyphs" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -554,6 +637,20 @@ func (cq *CultureQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQu
 		cq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	cq.withNamedArtifacts[name] = query
+	return cq
+}
+
+// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CultureQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *CultureQuery {
+	query := (&PetroglyphClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedPetroglyphs == nil {
+		cq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
+	}
+	cq.withNamedPetroglyphs[name] = query
 	return cq
 }
 

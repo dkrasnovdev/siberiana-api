@@ -35,10 +35,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
@@ -50,6 +52,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -7772,6 +7775,378 @@ func (m *Monument) ToEdge(order *MonumentOrder) *MonumentEdge {
 	}
 }
 
+// MoundEdge is the edge representation of Mound.
+type MoundEdge struct {
+	Node   *Mound `json:"node"`
+	Cursor Cursor `json:"cursor"`
+}
+
+// MoundConnection is the connection containing edges to Mound.
+type MoundConnection struct {
+	Edges      []*MoundEdge `json:"edges"`
+	PageInfo   PageInfo     `json:"pageInfo"`
+	TotalCount int          `json:"totalCount"`
+}
+
+func (c *MoundConnection) build(nodes []*Mound, pager *moundPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Mound
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Mound {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Mound {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*MoundEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &MoundEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// MoundPaginateOption enables pagination customization.
+type MoundPaginateOption func(*moundPager) error
+
+// WithMoundOrder configures pagination ordering.
+func WithMoundOrder(order []*MoundOrder) MoundPaginateOption {
+	return func(pager *moundPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithMoundFilter configures pagination filter.
+func WithMoundFilter(filter func(*MoundQuery) (*MoundQuery, error)) MoundPaginateOption {
+	return func(pager *moundPager) error {
+		if filter == nil {
+			return errors.New("MoundQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type moundPager struct {
+	reverse bool
+	order   []*MoundOrder
+	filter  func(*MoundQuery) (*MoundQuery, error)
+}
+
+func newMoundPager(opts []MoundPaginateOption, reverse bool) (*moundPager, error) {
+	pager := &moundPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *moundPager) applyFilter(query *MoundQuery) (*MoundQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *moundPager) toCursor(m *Mound) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(m).Value)
+	}
+	return Cursor{ID: m.ID, Value: cs}
+}
+
+func (p *moundPager) applyCursors(query *MoundQuery, after, before *Cursor) (*MoundQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultMoundOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *moundPager) applyOrder(query *MoundQuery) *MoundQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultMoundOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultMoundOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *moundPager) orderExpr(query *MoundQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultMoundOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Mound.
+func (m *MoundQuery) Paginate(
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...MoundPaginateOption,
+) (*MoundConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newMoundPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if m, err = pager.applyFilter(m); err != nil {
+		return nil, err
+	}
+	conn := &MoundConnection{Edges: []*MoundEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
+		if hasPagination || ignoredEdges {
+			c := m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if m, err = pager.applyCursors(m, after, before); err != nil {
+		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		m.Offset(*offset)
+
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := m.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	m = pager.applyOrder(m)
+	nodes, err := m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// MoundOrderFieldCreatedAt orders Mound by created_at.
+	MoundOrderFieldCreatedAt = &MoundOrderField{
+		Value: func(m *Mound) (ent.Value, error) {
+			return m.CreatedAt, nil
+		},
+		column: mound.FieldCreatedAt,
+		toTerm: mound.ByCreatedAt,
+		toCursor: func(m *Mound) Cursor {
+			return Cursor{
+				ID:    m.ID,
+				Value: m.CreatedAt,
+			}
+		},
+	}
+	// MoundOrderFieldUpdatedAt orders Mound by updated_at.
+	MoundOrderFieldUpdatedAt = &MoundOrderField{
+		Value: func(m *Mound) (ent.Value, error) {
+			return m.UpdatedAt, nil
+		},
+		column: mound.FieldUpdatedAt,
+		toTerm: mound.ByUpdatedAt,
+		toCursor: func(m *Mound) Cursor {
+			return Cursor{
+				ID:    m.ID,
+				Value: m.UpdatedAt,
+			}
+		},
+	}
+	// MoundOrderFieldDisplayName orders Mound by display_name.
+	MoundOrderFieldDisplayName = &MoundOrderField{
+		Value: func(m *Mound) (ent.Value, error) {
+			return m.DisplayName, nil
+		},
+		column: mound.FieldDisplayName,
+		toTerm: mound.ByDisplayName,
+		toCursor: func(m *Mound) Cursor {
+			return Cursor{
+				ID:    m.ID,
+				Value: m.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f MoundOrderField) String() string {
+	var str string
+	switch f.column {
+	case MoundOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case MoundOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	case MoundOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f MoundOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *MoundOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("MoundOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *MoundOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *MoundOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *MoundOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid MoundOrderField", str)
+	}
+	return nil
+}
+
+// MoundOrderField defines the ordering field of Mound.
+type MoundOrderField struct {
+	// Value extracts the ordering value from the given Mound.
+	Value    func(*Mound) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) mound.OrderOption
+	toCursor func(*Mound) Cursor
+}
+
+// MoundOrder defines the ordering of Mound.
+type MoundOrder struct {
+	Direction OrderDirection   `json:"direction"`
+	Field     *MoundOrderField `json:"field"`
+}
+
+// DefaultMoundOrder is the default ordering of Mound.
+var DefaultMoundOrder = &MoundOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &MoundOrderField{
+		Value: func(m *Mound) (ent.Value, error) {
+			return m.ID, nil
+		},
+		column: mound.FieldID,
+		toTerm: mound.ByID,
+		toCursor: func(m *Mound) Cursor {
+			return Cursor{ID: m.ID}
+		},
+	},
+}
+
+// ToEdge converts Mound into MoundEdge.
+func (m *Mound) ToEdge(order *MoundOrder) *MoundEdge {
+	if order == nil {
+		order = DefaultMoundOrder
+	}
+	return &MoundEdge{
+		Node:   m,
+		Cursor: order.Field.toCursor(m),
+	}
+}
+
 // OrganizationEdge is the edge representation of Organization.
 type OrganizationEdge struct {
 	Node   *Organization `json:"node"`
@@ -9201,6 +9576,378 @@ func (pe *Personal) ToEdge(order *PersonalOrder) *PersonalEdge {
 		order = DefaultPersonalOrder
 	}
 	return &PersonalEdge{
+		Node:   pe,
+		Cursor: order.Field.toCursor(pe),
+	}
+}
+
+// PetroglyphEdge is the edge representation of Petroglyph.
+type PetroglyphEdge struct {
+	Node   *Petroglyph `json:"node"`
+	Cursor Cursor      `json:"cursor"`
+}
+
+// PetroglyphConnection is the connection containing edges to Petroglyph.
+type PetroglyphConnection struct {
+	Edges      []*PetroglyphEdge `json:"edges"`
+	PageInfo   PageInfo          `json:"pageInfo"`
+	TotalCount int               `json:"totalCount"`
+}
+
+func (c *PetroglyphConnection) build(nodes []*Petroglyph, pager *petroglyphPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Petroglyph
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Petroglyph {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Petroglyph {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PetroglyphEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PetroglyphEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PetroglyphPaginateOption enables pagination customization.
+type PetroglyphPaginateOption func(*petroglyphPager) error
+
+// WithPetroglyphOrder configures pagination ordering.
+func WithPetroglyphOrder(order []*PetroglyphOrder) PetroglyphPaginateOption {
+	return func(pager *petroglyphPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithPetroglyphFilter configures pagination filter.
+func WithPetroglyphFilter(filter func(*PetroglyphQuery) (*PetroglyphQuery, error)) PetroglyphPaginateOption {
+	return func(pager *petroglyphPager) error {
+		if filter == nil {
+			return errors.New("PetroglyphQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type petroglyphPager struct {
+	reverse bool
+	order   []*PetroglyphOrder
+	filter  func(*PetroglyphQuery) (*PetroglyphQuery, error)
+}
+
+func newPetroglyphPager(opts []PetroglyphPaginateOption, reverse bool) (*petroglyphPager, error) {
+	pager := &petroglyphPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *petroglyphPager) applyFilter(query *PetroglyphQuery) (*PetroglyphQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *petroglyphPager) toCursor(pe *Petroglyph) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(pe).Value)
+	}
+	return Cursor{ID: pe.ID, Value: cs}
+}
+
+func (p *petroglyphPager) applyCursors(query *PetroglyphQuery, after, before *Cursor) (*PetroglyphQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultPetroglyphOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *petroglyphPager) applyOrder(query *PetroglyphQuery) *PetroglyphQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultPetroglyphOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultPetroglyphOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *petroglyphPager) orderExpr(query *PetroglyphQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultPetroglyphOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Petroglyph.
+func (pe *PetroglyphQuery) Paginate(
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...PetroglyphPaginateOption,
+) (*PetroglyphConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPetroglyphPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pe, err = pager.applyFilter(pe); err != nil {
+		return nil, err
+	}
+	conn := &PetroglyphConnection{Edges: []*PetroglyphEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
+		if hasPagination || ignoredEdges {
+			c := pe.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pe, err = pager.applyCursors(pe, after, before); err != nil {
+		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		pe.Offset(*offset)
+
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		pe.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pe = pager.applyOrder(pe)
+	nodes, err := pe.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PetroglyphOrderFieldCreatedAt orders Petroglyph by created_at.
+	PetroglyphOrderFieldCreatedAt = &PetroglyphOrderField{
+		Value: func(pe *Petroglyph) (ent.Value, error) {
+			return pe.CreatedAt, nil
+		},
+		column: petroglyph.FieldCreatedAt,
+		toTerm: petroglyph.ByCreatedAt,
+		toCursor: func(pe *Petroglyph) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.CreatedAt,
+			}
+		},
+	}
+	// PetroglyphOrderFieldUpdatedAt orders Petroglyph by updated_at.
+	PetroglyphOrderFieldUpdatedAt = &PetroglyphOrderField{
+		Value: func(pe *Petroglyph) (ent.Value, error) {
+			return pe.UpdatedAt, nil
+		},
+		column: petroglyph.FieldUpdatedAt,
+		toTerm: petroglyph.ByUpdatedAt,
+		toCursor: func(pe *Petroglyph) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.UpdatedAt,
+			}
+		},
+	}
+	// PetroglyphOrderFieldDisplayName orders Petroglyph by display_name.
+	PetroglyphOrderFieldDisplayName = &PetroglyphOrderField{
+		Value: func(pe *Petroglyph) (ent.Value, error) {
+			return pe.DisplayName, nil
+		},
+		column: petroglyph.FieldDisplayName,
+		toTerm: petroglyph.ByDisplayName,
+		toCursor: func(pe *Petroglyph) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PetroglyphOrderField) String() string {
+	var str string
+	switch f.column {
+	case PetroglyphOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case PetroglyphOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	case PetroglyphOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PetroglyphOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PetroglyphOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PetroglyphOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *PetroglyphOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *PetroglyphOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *PetroglyphOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid PetroglyphOrderField", str)
+	}
+	return nil
+}
+
+// PetroglyphOrderField defines the ordering field of Petroglyph.
+type PetroglyphOrderField struct {
+	// Value extracts the ordering value from the given Petroglyph.
+	Value    func(*Petroglyph) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) petroglyph.OrderOption
+	toCursor func(*Petroglyph) Cursor
+}
+
+// PetroglyphOrder defines the ordering of Petroglyph.
+type PetroglyphOrder struct {
+	Direction OrderDirection        `json:"direction"`
+	Field     *PetroglyphOrderField `json:"field"`
+}
+
+// DefaultPetroglyphOrder is the default ordering of Petroglyph.
+var DefaultPetroglyphOrder = &PetroglyphOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PetroglyphOrderField{
+		Value: func(pe *Petroglyph) (ent.Value, error) {
+			return pe.ID, nil
+		},
+		column: petroglyph.FieldID,
+		toTerm: petroglyph.ByID,
+		toCursor: func(pe *Petroglyph) Cursor {
+			return Cursor{ID: pe.ID}
+		},
+	},
+}
+
+// ToEdge converts Petroglyph into PetroglyphEdge.
+func (pe *Petroglyph) ToEdge(order *PetroglyphOrder) *PetroglyphEdge {
+	if order == nil {
+		order = DefaultPetroglyphOrder
+	}
+	return &PetroglyphEdge{
 		Node:   pe,
 		Cursor: order.Field.toCursor(pe),
 	}
@@ -13277,5 +14024,359 @@ func (t *Technique) ToEdge(order *TechniqueOrder) *TechniqueEdge {
 	return &TechniqueEdge{
 		Node:   t,
 		Cursor: order.Field.toCursor(t),
+	}
+}
+
+// VisitEdge is the edge representation of Visit.
+type VisitEdge struct {
+	Node   *Visit `json:"node"`
+	Cursor Cursor `json:"cursor"`
+}
+
+// VisitConnection is the connection containing edges to Visit.
+type VisitConnection struct {
+	Edges      []*VisitEdge `json:"edges"`
+	PageInfo   PageInfo     `json:"pageInfo"`
+	TotalCount int          `json:"totalCount"`
+}
+
+func (c *VisitConnection) build(nodes []*Visit, pager *visitPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Visit
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Visit {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Visit {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VisitEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VisitEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VisitPaginateOption enables pagination customization.
+type VisitPaginateOption func(*visitPager) error
+
+// WithVisitOrder configures pagination ordering.
+func WithVisitOrder(order []*VisitOrder) VisitPaginateOption {
+	return func(pager *visitPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithVisitFilter configures pagination filter.
+func WithVisitFilter(filter func(*VisitQuery) (*VisitQuery, error)) VisitPaginateOption {
+	return func(pager *visitPager) error {
+		if filter == nil {
+			return errors.New("VisitQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type visitPager struct {
+	reverse bool
+	order   []*VisitOrder
+	filter  func(*VisitQuery) (*VisitQuery, error)
+}
+
+func newVisitPager(opts []VisitPaginateOption, reverse bool) (*visitPager, error) {
+	pager := &visitPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *visitPager) applyFilter(query *VisitQuery) (*VisitQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *visitPager) toCursor(v *Visit) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(v).Value)
+	}
+	return Cursor{ID: v.ID, Value: cs}
+}
+
+func (p *visitPager) applyCursors(query *VisitQuery, after, before *Cursor) (*VisitQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultVisitOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *visitPager) applyOrder(query *VisitQuery) *VisitQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultVisitOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultVisitOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *visitPager) orderExpr(query *VisitQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultVisitOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Visit.
+func (v *VisitQuery) Paginate(
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...VisitPaginateOption,
+) (*VisitConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVisitPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if v, err = pager.applyFilter(v); err != nil {
+		return nil, err
+	}
+	conn := &VisitConnection{Edges: []*VisitEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
+		if hasPagination || ignoredEdges {
+			c := v.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if v, err = pager.applyCursors(v, after, before); err != nil {
+		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		v.Offset(*offset)
+
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		v.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := v.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	v = pager.applyOrder(v)
+	nodes, err := v.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// VisitOrderFieldCreatedAt orders Visit by created_at.
+	VisitOrderFieldCreatedAt = &VisitOrderField{
+		Value: func(v *Visit) (ent.Value, error) {
+			return v.CreatedAt, nil
+		},
+		column: visit.FieldCreatedAt,
+		toTerm: visit.ByCreatedAt,
+		toCursor: func(v *Visit) Cursor {
+			return Cursor{
+				ID:    v.ID,
+				Value: v.CreatedAt,
+			}
+		},
+	}
+	// VisitOrderFieldUpdatedAt orders Visit by updated_at.
+	VisitOrderFieldUpdatedAt = &VisitOrderField{
+		Value: func(v *Visit) (ent.Value, error) {
+			return v.UpdatedAt, nil
+		},
+		column: visit.FieldUpdatedAt,
+		toTerm: visit.ByUpdatedAt,
+		toCursor: func(v *Visit) Cursor {
+			return Cursor{
+				ID:    v.ID,
+				Value: v.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f VisitOrderField) String() string {
+	var str string
+	switch f.column {
+	case VisitOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case VisitOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f VisitOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *VisitOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("VisitOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *VisitOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *VisitOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid VisitOrderField", str)
+	}
+	return nil
+}
+
+// VisitOrderField defines the ordering field of Visit.
+type VisitOrderField struct {
+	// Value extracts the ordering value from the given Visit.
+	Value    func(*Visit) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) visit.OrderOption
+	toCursor func(*Visit) Cursor
+}
+
+// VisitOrder defines the ordering of Visit.
+type VisitOrder struct {
+	Direction OrderDirection   `json:"direction"`
+	Field     *VisitOrderField `json:"field"`
+}
+
+// DefaultVisitOrder is the default ordering of Visit.
+var DefaultVisitOrder = &VisitOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VisitOrderField{
+		Value: func(v *Visit) (ent.Value, error) {
+			return v.ID, nil
+		},
+		column: visit.FieldID,
+		toTerm: visit.ByID,
+		toCursor: func(v *Visit) Cursor {
+			return Cursor{ID: v.ID}
+		},
+	},
+}
+
+// ToEdge converts Visit into VisitEdge.
+func (v *Visit) ToEdge(order *VisitOrder) *VisitEdge {
+	if order == nil {
+		order = DefaultVisitOrder
+	}
+	return &VisitEdge{
+		Node:   v,
+		Cursor: order.Field.toCursor(v),
 	}
 }

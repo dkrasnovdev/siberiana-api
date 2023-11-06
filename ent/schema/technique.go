@@ -52,5 +52,6 @@ func (Technique) Annotations() []schema.Annotation {
 func (Technique) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("artifacts", Artifact.Type),
+		edge.To("petroglyphs", Petroglyph.Type),
 	}
 }

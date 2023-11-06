@@ -67,6 +67,7 @@ func (Location) Edges() []ent.Edge {
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
 		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
+		edge.To("petroglyphs_accounting_documentation", Petroglyph.Type),
 		edge.To("country", Country.Type).Unique(),
 		edge.To("district", District.Type).Unique(),
 		edge.To("settlement", Settlement.Type).Unique(),

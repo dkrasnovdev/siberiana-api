@@ -18,9 +18,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
 
 // PersonUpdate is the builder for updating Person entities.
@@ -456,6 +458,21 @@ func (pu *PersonUpdate) AddDonatedArtifacts(a ...*Artifact) *PersonUpdate {
 	return pu.AddDonatedArtifactIDs(ids...)
 }
 
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (pu *PersonUpdate) AddPetroglyphsAccountingDocumentationIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddPetroglyphsAccountingDocumentationIDs(ids...)
+	return pu
+}
+
+// AddPetroglyphsAccountingDocumentation adds the "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (pu *PersonUpdate) AddPetroglyphsAccountingDocumentation(p ...*Petroglyph) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddPetroglyphsAccountingDocumentationIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pu *PersonUpdate) AddBookIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddBookIDs(ids...)
@@ -469,6 +486,21 @@ func (pu *PersonUpdate) AddBooks(b ...*Book) *PersonUpdate {
 		ids[i] = b[i].ID
 	}
 	return pu.AddBookIDs(ids...)
+}
+
+// AddVisitIDs adds the "visits" edge to the Visit entity by IDs.
+func (pu *PersonUpdate) AddVisitIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddVisitIDs(ids...)
+	return pu
+}
+
+// AddVisits adds the "visits" edges to the Visit entity.
+func (pu *PersonUpdate) AddVisits(v ...*Visit) *PersonUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return pu.AddVisitIDs(ids...)
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
@@ -609,6 +641,27 @@ func (pu *PersonUpdate) RemoveDonatedArtifacts(a ...*Artifact) *PersonUpdate {
 	return pu.RemoveDonatedArtifactIDs(ids...)
 }
 
+// ClearPetroglyphsAccountingDocumentation clears all "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (pu *PersonUpdate) ClearPetroglyphsAccountingDocumentation() *PersonUpdate {
+	pu.mutation.ClearPetroglyphsAccountingDocumentation()
+	return pu
+}
+
+// RemovePetroglyphsAccountingDocumentationIDs removes the "petroglyphs_accounting_documentation" edge to Petroglyph entities by IDs.
+func (pu *PersonUpdate) RemovePetroglyphsAccountingDocumentationIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemovePetroglyphsAccountingDocumentationIDs(ids...)
+	return pu
+}
+
+// RemovePetroglyphsAccountingDocumentation removes "petroglyphs_accounting_documentation" edges to Petroglyph entities.
+func (pu *PersonUpdate) RemovePetroglyphsAccountingDocumentation(p ...*Petroglyph) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemovePetroglyphsAccountingDocumentationIDs(ids...)
+}
+
 // ClearBooks clears all "books" edges to the Book entity.
 func (pu *PersonUpdate) ClearBooks() *PersonUpdate {
 	pu.mutation.ClearBooks()
@@ -628,6 +681,27 @@ func (pu *PersonUpdate) RemoveBooks(b ...*Book) *PersonUpdate {
 		ids[i] = b[i].ID
 	}
 	return pu.RemoveBookIDs(ids...)
+}
+
+// ClearVisits clears all "visits" edges to the Visit entity.
+func (pu *PersonUpdate) ClearVisits() *PersonUpdate {
+	pu.mutation.ClearVisits()
+	return pu
+}
+
+// RemoveVisitIDs removes the "visits" edge to Visit entities by IDs.
+func (pu *PersonUpdate) RemoveVisitIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemoveVisitIDs(ids...)
+	return pu
+}
+
+// RemoveVisits removes "visits" edges to Visit entities.
+func (pu *PersonUpdate) RemoveVisits(v ...*Visit) *PersonUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return pu.RemoveVisitIDs(ids...)
 }
 
 // ClearProjects clears all "projects" edges to the Project entity.
@@ -1048,6 +1122,51 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{person.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedPetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 && !pu.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{person.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.PetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{person.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if pu.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1086,6 +1205,51 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.VisitsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.VisitsTable,
+			Columns: person.VisitsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(visit.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedVisitsIDs(); len(nodes) > 0 && !pu.mutation.VisitsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.VisitsTable,
+			Columns: person.VisitsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(visit.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.VisitsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.VisitsTable,
+			Columns: person.VisitsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(visit.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1652,6 +1816,21 @@ func (puo *PersonUpdateOne) AddDonatedArtifacts(a ...*Artifact) *PersonUpdateOne
 	return puo.AddDonatedArtifactIDs(ids...)
 }
 
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (puo *PersonUpdateOne) AddPetroglyphsAccountingDocumentationIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddPetroglyphsAccountingDocumentationIDs(ids...)
+	return puo
+}
+
+// AddPetroglyphsAccountingDocumentation adds the "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (puo *PersonUpdateOne) AddPetroglyphsAccountingDocumentation(p ...*Petroglyph) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddPetroglyphsAccountingDocumentationIDs(ids...)
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (puo *PersonUpdateOne) AddBookIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddBookIDs(ids...)
@@ -1665,6 +1844,21 @@ func (puo *PersonUpdateOne) AddBooks(b ...*Book) *PersonUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return puo.AddBookIDs(ids...)
+}
+
+// AddVisitIDs adds the "visits" edge to the Visit entity by IDs.
+func (puo *PersonUpdateOne) AddVisitIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddVisitIDs(ids...)
+	return puo
+}
+
+// AddVisits adds the "visits" edges to the Visit entity.
+func (puo *PersonUpdateOne) AddVisits(v ...*Visit) *PersonUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return puo.AddVisitIDs(ids...)
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by IDs.
@@ -1805,6 +1999,27 @@ func (puo *PersonUpdateOne) RemoveDonatedArtifacts(a ...*Artifact) *PersonUpdate
 	return puo.RemoveDonatedArtifactIDs(ids...)
 }
 
+// ClearPetroglyphsAccountingDocumentation clears all "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (puo *PersonUpdateOne) ClearPetroglyphsAccountingDocumentation() *PersonUpdateOne {
+	puo.mutation.ClearPetroglyphsAccountingDocumentation()
+	return puo
+}
+
+// RemovePetroglyphsAccountingDocumentationIDs removes the "petroglyphs_accounting_documentation" edge to Petroglyph entities by IDs.
+func (puo *PersonUpdateOne) RemovePetroglyphsAccountingDocumentationIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemovePetroglyphsAccountingDocumentationIDs(ids...)
+	return puo
+}
+
+// RemovePetroglyphsAccountingDocumentation removes "petroglyphs_accounting_documentation" edges to Petroglyph entities.
+func (puo *PersonUpdateOne) RemovePetroglyphsAccountingDocumentation(p ...*Petroglyph) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemovePetroglyphsAccountingDocumentationIDs(ids...)
+}
+
 // ClearBooks clears all "books" edges to the Book entity.
 func (puo *PersonUpdateOne) ClearBooks() *PersonUpdateOne {
 	puo.mutation.ClearBooks()
@@ -1824,6 +2039,27 @@ func (puo *PersonUpdateOne) RemoveBooks(b ...*Book) *PersonUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return puo.RemoveBookIDs(ids...)
+}
+
+// ClearVisits clears all "visits" edges to the Visit entity.
+func (puo *PersonUpdateOne) ClearVisits() *PersonUpdateOne {
+	puo.mutation.ClearVisits()
+	return puo
+}
+
+// RemoveVisitIDs removes the "visits" edge to Visit entities by IDs.
+func (puo *PersonUpdateOne) RemoveVisitIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemoveVisitIDs(ids...)
+	return puo
+}
+
+// RemoveVisits removes "visits" edges to Visit entities.
+func (puo *PersonUpdateOne) RemoveVisits(v ...*Visit) *PersonUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return puo.RemoveVisitIDs(ids...)
 }
 
 // ClearProjects clears all "projects" edges to the Project entity.
@@ -2274,6 +2510,51 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if puo.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{person.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedPetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 && !puo.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{person.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.PetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{person.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if puo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2312,6 +2593,51 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.VisitsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.VisitsTable,
+			Columns: person.VisitsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(visit.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedVisitsIDs(); len(nodes) > 0 && !puo.mutation.VisitsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.VisitsTable,
+			Columns: person.VisitsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(visit.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.VisitsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   person.VisitsTable,
+			Columns: person.VisitsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(visit.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

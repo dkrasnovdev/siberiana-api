@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
@@ -197,6 +198,21 @@ func (lc *LocationCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *
 		ids[i] = p[i].ID
 	}
 	return lc.AddProtectedAreaPictureIDs(ids...)
+}
+
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (lc *LocationCreate) AddPetroglyphsAccountingDocumentationIDs(ids ...int) *LocationCreate {
+	lc.mutation.AddPetroglyphsAccountingDocumentationIDs(ids...)
+	return lc
+}
+
+// AddPetroglyphsAccountingDocumentation adds the "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (lc *LocationCreate) AddPetroglyphsAccountingDocumentation(p ...*Petroglyph) *LocationCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lc.AddPetroglyphsAccountingDocumentationIDs(ids...)
 }
 
 // SetCountryID sets the "country" edge to the Country entity by ID.
@@ -440,6 +456,22 @@ func (lc *LocationCreate) createSpec() (*Location, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := lc.mutation.PetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{location.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

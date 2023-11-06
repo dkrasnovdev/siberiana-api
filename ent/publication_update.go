@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 )
@@ -171,6 +172,21 @@ func (pu *PublicationUpdate) AddArtifacts(a ...*Artifact) *PublicationUpdate {
 	return pu.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (pu *PublicationUpdate) AddPetroglyphIDs(ids ...int) *PublicationUpdate {
+	pu.mutation.AddPetroglyphIDs(ids...)
+	return pu
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (pu *PublicationUpdate) AddPetroglyphs(p ...*Petroglyph) *PublicationUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddPetroglyphIDs(ids...)
+}
+
 // AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
 func (pu *PublicationUpdate) AddAuthorIDs(ids ...int) *PublicationUpdate {
 	pu.mutation.AddAuthorIDs(ids...)
@@ -210,6 +226,27 @@ func (pu *PublicationUpdate) RemoveArtifacts(a ...*Artifact) *PublicationUpdate 
 		ids[i] = a[i].ID
 	}
 	return pu.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (pu *PublicationUpdate) ClearPetroglyphs() *PublicationUpdate {
+	pu.mutation.ClearPetroglyphs()
+	return pu
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (pu *PublicationUpdate) RemovePetroglyphIDs(ids ...int) *PublicationUpdate {
+	pu.mutation.RemovePetroglyphIDs(ids...)
+	return pu
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (pu *PublicationUpdate) RemovePetroglyphs(p ...*Petroglyph) *PublicationUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemovePetroglyphIDs(ids...)
 }
 
 // ClearAuthors clears all "authors" edges to the Person entity.
@@ -361,6 +398,51 @@ func (pu *PublicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   publication.PetroglyphsTable,
+			Columns: publication.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !pu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   publication.PetroglyphsTable,
+			Columns: publication.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   publication.PetroglyphsTable,
+			Columns: publication.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -574,6 +656,21 @@ func (puo *PublicationUpdateOne) AddArtifacts(a ...*Artifact) *PublicationUpdate
 	return puo.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (puo *PublicationUpdateOne) AddPetroglyphIDs(ids ...int) *PublicationUpdateOne {
+	puo.mutation.AddPetroglyphIDs(ids...)
+	return puo
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (puo *PublicationUpdateOne) AddPetroglyphs(p ...*Petroglyph) *PublicationUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddPetroglyphIDs(ids...)
+}
+
 // AddAuthorIDs adds the "authors" edge to the Person entity by IDs.
 func (puo *PublicationUpdateOne) AddAuthorIDs(ids ...int) *PublicationUpdateOne {
 	puo.mutation.AddAuthorIDs(ids...)
@@ -613,6 +710,27 @@ func (puo *PublicationUpdateOne) RemoveArtifacts(a ...*Artifact) *PublicationUpd
 		ids[i] = a[i].ID
 	}
 	return puo.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (puo *PublicationUpdateOne) ClearPetroglyphs() *PublicationUpdateOne {
+	puo.mutation.ClearPetroglyphs()
+	return puo
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (puo *PublicationUpdateOne) RemovePetroglyphIDs(ids ...int) *PublicationUpdateOne {
+	puo.mutation.RemovePetroglyphIDs(ids...)
+	return puo
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (puo *PublicationUpdateOne) RemovePetroglyphs(p ...*Petroglyph) *PublicationUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemovePetroglyphIDs(ids...)
 }
 
 // ClearAuthors clears all "authors" edges to the Person entity.
@@ -794,6 +912,51 @@ func (puo *PublicationUpdateOne) sqlSave(ctx context.Context) (_node *Publicatio
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   publication.PetroglyphsTable,
+			Columns: publication.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !puo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   publication.PetroglyphsTable,
+			Columns: publication.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   publication.PetroglyphsTable,
+			Columns: publication.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

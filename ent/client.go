@@ -36,10 +36,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
@@ -51,6 +53,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
 
 // Client is the client that holds all ent builders.
@@ -100,6 +103,8 @@ type Client struct {
 	Model *ModelClient
 	// Monument is the client for interacting with the Monument builders.
 	Monument *MonumentClient
+	// Mound is the client for interacting with the Mound builders.
+	Mound *MoundClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
 	// Periodical is the client for interacting with the Periodical builders.
@@ -108,6 +113,8 @@ type Client struct {
 	Person *PersonClient
 	// Personal is the client for interacting with the Personal builders.
 	Personal *PersonalClient
+	// Petroglyph is the client for interacting with the Petroglyph builders.
+	Petroglyph *PetroglyphClient
 	// Project is the client for interacting with the Project builders.
 	Project *ProjectClient
 	// ProtectedArea is the client for interacting with the ProtectedArea builders.
@@ -130,6 +137,8 @@ type Client struct {
 	Settlement *SettlementClient
 	// Technique is the client for interacting with the Technique builders.
 	Technique *TechniqueClient
+	// Visit is the client for interacting with the Visit builders.
+	Visit *VisitClient
 	// additional fields for node api
 	tables tables
 }
@@ -166,10 +175,12 @@ func (c *Client) init() {
 	c.Medium = NewMediumClient(c.config)
 	c.Model = NewModelClient(c.config)
 	c.Monument = NewMonumentClient(c.config)
+	c.Mound = NewMoundClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
 	c.Periodical = NewPeriodicalClient(c.config)
 	c.Person = NewPersonClient(c.config)
 	c.Personal = NewPersonalClient(c.config)
+	c.Petroglyph = NewPetroglyphClient(c.config)
 	c.Project = NewProjectClient(c.config)
 	c.ProtectedArea = NewProtectedAreaClient(c.config)
 	c.ProtectedAreaCategory = NewProtectedAreaCategoryClient(c.config)
@@ -181,6 +192,7 @@ func (c *Client) init() {
 	c.Set = NewSetClient(c.config)
 	c.Settlement = NewSettlementClient(c.config)
 	c.Technique = NewTechniqueClient(c.config)
+	c.Visit = NewVisitClient(c.config)
 }
 
 type (
@@ -287,10 +299,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Medium:                NewMediumClient(cfg),
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
+		Mound:                 NewMoundClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		Periodical:            NewPeriodicalClient(cfg),
 		Person:                NewPersonClient(cfg),
 		Personal:              NewPersonalClient(cfg),
+		Petroglyph:            NewPetroglyphClient(cfg),
 		Project:               NewProjectClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
@@ -302,6 +316,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Set:                   NewSetClient(cfg),
 		Settlement:            NewSettlementClient(cfg),
 		Technique:             NewTechniqueClient(cfg),
+		Visit:                 NewVisitClient(cfg),
 	}, nil
 }
 
@@ -342,10 +357,12 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Medium:                NewMediumClient(cfg),
 		Model:                 NewModelClient(cfg),
 		Monument:              NewMonumentClient(cfg),
+		Mound:                 NewMoundClient(cfg),
 		Organization:          NewOrganizationClient(cfg),
 		Periodical:            NewPeriodicalClient(cfg),
 		Person:                NewPersonClient(cfg),
 		Personal:              NewPersonalClient(cfg),
+		Petroglyph:            NewPetroglyphClient(cfg),
 		Project:               NewProjectClient(cfg),
 		ProtectedArea:         NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
@@ -357,6 +374,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Set:                   NewSetClient(cfg),
 		Settlement:            NewSettlementClient(cfg),
 		Technique:             NewTechniqueClient(cfg),
+		Visit:                 NewVisitClient(cfg),
 	}, nil
 }
 
@@ -389,9 +407,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Ethnos,
 		c.Favourite, c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model,
-		c.Monument, c.Organization, c.Periodical, c.Person, c.Personal, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Monument, c.Mound, c.Organization, c.Periodical, c.Person, c.Personal,
+		c.Petroglyph, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
+		c.ProtectedAreaPicture, c.Proxy, c.Publication, c.Publisher, c.Region, c.Set,
+		c.Settlement, c.Technique, c.Visit,
 	} {
 		n.Use(hooks...)
 	}
@@ -404,9 +423,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Ethnos,
 		c.Favourite, c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model,
-		c.Monument, c.Organization, c.Periodical, c.Person, c.Personal, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Monument, c.Mound, c.Organization, c.Periodical, c.Person, c.Personal,
+		c.Petroglyph, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
+		c.ProtectedAreaPicture, c.Proxy, c.Publication, c.Publisher, c.Region, c.Set,
+		c.Settlement, c.Technique, c.Visit,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -457,6 +477,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Model.mutate(ctx, m)
 	case *MonumentMutation:
 		return c.Monument.mutate(ctx, m)
+	case *MoundMutation:
+		return c.Mound.mutate(ctx, m)
 	case *OrganizationMutation:
 		return c.Organization.mutate(ctx, m)
 	case *PeriodicalMutation:
@@ -465,6 +487,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Person.mutate(ctx, m)
 	case *PersonalMutation:
 		return c.Personal.mutate(ctx, m)
+	case *PetroglyphMutation:
+		return c.Petroglyph.mutate(ctx, m)
 	case *ProjectMutation:
 		return c.Project.mutate(ctx, m)
 	case *ProtectedAreaMutation:
@@ -487,6 +511,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Settlement.mutate(ctx, m)
 	case *TechniqueMutation:
 		return c.Technique.mutate(ctx, m)
+	case *VisitMutation:
+		return c.Visit.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -2821,6 +2847,22 @@ func (c *CultureClient) QueryArtifacts(cu *Culture) *ArtifactQuery {
 	return query
 }
 
+// QueryPetroglyphs queries the petroglyphs edge of a Culture.
+func (c *CultureClient) QueryPetroglyphs(cu *Culture) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := cu.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(culture.Table, culture.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, culture.PetroglyphsTable, culture.PetroglyphsColumn),
+		)
+		fromV = sqlgraph.Neighbors(cu.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CultureClient) Hooks() []Hook {
 	hooks := c.hooks.Culture
@@ -3966,6 +4008,22 @@ func (c *LocationClient) QueryProtectedAreaPictures(l *Location) *ProtectedAreaP
 	return query
 }
 
+// QueryPetroglyphsAccountingDocumentation queries the petroglyphs_accounting_documentation edge of a Location.
+func (c *LocationClient) QueryPetroglyphsAccountingDocumentation(l *Location) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := l.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(location.Table, location.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, location.PetroglyphsAccountingDocumentationTable, location.PetroglyphsAccountingDocumentationColumn),
+		)
+		fromV = sqlgraph.Neighbors(l.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryCountry queries the country edge of a Location.
 func (c *LocationClient) QueryCountry(l *Location) *CountryQuery {
 	query := (&CountryClient{config: c.config}).Query()
@@ -4346,6 +4404,22 @@ func (c *ModelClient) QueryArtifacts(m *Model) *ArtifactQuery {
 	return query
 }
 
+// QueryPetroglyphs queries the petroglyphs edge of a Model.
+func (c *ModelClient) QueryPetroglyphs(m *Model) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(model.Table, model.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, model.PetroglyphsTable, model.PetroglyphsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ModelClient) Hooks() []Hook {
 	hooks := c.hooks.Model
@@ -4535,6 +4609,172 @@ func (c *MonumentClient) mutate(ctx context.Context, m *MonumentMutation) (Value
 		return (&MonumentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Monument mutation op: %q", m.Op())
+	}
+}
+
+// MoundClient is a client for the Mound schema.
+type MoundClient struct {
+	config
+}
+
+// NewMoundClient returns a client for the Mound from the given config.
+func NewMoundClient(c config) *MoundClient {
+	return &MoundClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `mound.Hooks(f(g(h())))`.
+func (c *MoundClient) Use(hooks ...Hook) {
+	c.hooks.Mound = append(c.hooks.Mound, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `mound.Intercept(f(g(h())))`.
+func (c *MoundClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Mound = append(c.inters.Mound, interceptors...)
+}
+
+// Create returns a builder for creating a Mound entity.
+func (c *MoundClient) Create() *MoundCreate {
+	mutation := newMoundMutation(c.config, OpCreate)
+	return &MoundCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Mound entities.
+func (c *MoundClient) CreateBulk(builders ...*MoundCreate) *MoundCreateBulk {
+	return &MoundCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MoundClient) MapCreateBulk(slice any, setFunc func(*MoundCreate, int)) *MoundCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MoundCreateBulk{err: fmt.Errorf("calling to MoundClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MoundCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &MoundCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Mound.
+func (c *MoundClient) Update() *MoundUpdate {
+	mutation := newMoundMutation(c.config, OpUpdate)
+	return &MoundUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MoundClient) UpdateOne(m *Mound) *MoundUpdateOne {
+	mutation := newMoundMutation(c.config, OpUpdateOne, withMound(m))
+	return &MoundUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MoundClient) UpdateOneID(id int) *MoundUpdateOne {
+	mutation := newMoundMutation(c.config, OpUpdateOne, withMoundID(id))
+	return &MoundUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Mound.
+func (c *MoundClient) Delete() *MoundDelete {
+	mutation := newMoundMutation(c.config, OpDelete)
+	return &MoundDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MoundClient) DeleteOne(m *Mound) *MoundDeleteOne {
+	return c.DeleteOneID(m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MoundClient) DeleteOneID(id int) *MoundDeleteOne {
+	builder := c.Delete().Where(mound.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MoundDeleteOne{builder}
+}
+
+// Query returns a query builder for Mound.
+func (c *MoundClient) Query() *MoundQuery {
+	return &MoundQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMound},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Mound entity by its id.
+func (c *MoundClient) Get(ctx context.Context, id int) (*Mound, error) {
+	return c.Query().Where(mound.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MoundClient) GetX(ctx context.Context, id int) *Mound {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryPetroglyphs queries the petroglyphs edge of a Mound.
+func (c *MoundClient) QueryPetroglyphs(m *Mound) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mound.Table, mound.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, mound.PetroglyphsTable, mound.PetroglyphsColumn),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVisits queries the visits edge of a Mound.
+func (c *MoundClient) QueryVisits(m *Mound) *VisitQuery {
+	query := (&VisitClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mound.Table, mound.FieldID, id),
+			sqlgraph.To(visit.Table, visit.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, mound.VisitsTable, mound.VisitsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *MoundClient) Hooks() []Hook {
+	hooks := c.hooks.Mound
+	return append(hooks[:len(hooks):len(hooks)], mound.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *MoundClient) Interceptors() []Interceptor {
+	return c.inters.Mound
+}
+
+func (c *MoundClient) mutate(ctx context.Context, m *MoundMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MoundCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MoundUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MoundUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MoundDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Mound mutation op: %q", m.Op())
 	}
 }
 
@@ -5042,6 +5282,22 @@ func (c *PersonClient) QueryDonatedArtifacts(pe *Person) *ArtifactQuery {
 	return query
 }
 
+// QueryPetroglyphsAccountingDocumentation queries the petroglyphs_accounting_documentation edge of a Person.
+func (c *PersonClient) QueryPetroglyphsAccountingDocumentation(pe *Person) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.PetroglyphsAccountingDocumentationTable, person.PetroglyphsAccountingDocumentationColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBooks queries the books edge of a Person.
 func (c *PersonClient) QueryBooks(pe *Person) *BookQuery {
 	query := (&BookClient{config: c.config}).Query()
@@ -5051,6 +5307,22 @@ func (c *PersonClient) QueryBooks(pe *Person) *BookQuery {
 			sqlgraph.From(person.Table, person.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.BooksTable, person.BooksPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVisits queries the visits edge of a Person.
+func (c *PersonClient) QueryVisits(pe *Person) *VisitQuery {
+	query := (&VisitClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(visit.Table, visit.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.VisitsTable, person.VisitsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -5279,6 +5551,269 @@ func (c *PersonalClient) mutate(ctx context.Context, m *PersonalMutation) (Value
 		return (&PersonalDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Personal mutation op: %q", m.Op())
+	}
+}
+
+// PetroglyphClient is a client for the Petroglyph schema.
+type PetroglyphClient struct {
+	config
+}
+
+// NewPetroglyphClient returns a client for the Petroglyph from the given config.
+func NewPetroglyphClient(c config) *PetroglyphClient {
+	return &PetroglyphClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `petroglyph.Hooks(f(g(h())))`.
+func (c *PetroglyphClient) Use(hooks ...Hook) {
+	c.hooks.Petroglyph = append(c.hooks.Petroglyph, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `petroglyph.Intercept(f(g(h())))`.
+func (c *PetroglyphClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Petroglyph = append(c.inters.Petroglyph, interceptors...)
+}
+
+// Create returns a builder for creating a Petroglyph entity.
+func (c *PetroglyphClient) Create() *PetroglyphCreate {
+	mutation := newPetroglyphMutation(c.config, OpCreate)
+	return &PetroglyphCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Petroglyph entities.
+func (c *PetroglyphClient) CreateBulk(builders ...*PetroglyphCreate) *PetroglyphCreateBulk {
+	return &PetroglyphCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *PetroglyphClient) MapCreateBulk(slice any, setFunc func(*PetroglyphCreate, int)) *PetroglyphCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &PetroglyphCreateBulk{err: fmt.Errorf("calling to PetroglyphClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*PetroglyphCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &PetroglyphCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Petroglyph.
+func (c *PetroglyphClient) Update() *PetroglyphUpdate {
+	mutation := newPetroglyphMutation(c.config, OpUpdate)
+	return &PetroglyphUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *PetroglyphClient) UpdateOne(pe *Petroglyph) *PetroglyphUpdateOne {
+	mutation := newPetroglyphMutation(c.config, OpUpdateOne, withPetroglyph(pe))
+	return &PetroglyphUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *PetroglyphClient) UpdateOneID(id int) *PetroglyphUpdateOne {
+	mutation := newPetroglyphMutation(c.config, OpUpdateOne, withPetroglyphID(id))
+	return &PetroglyphUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Petroglyph.
+func (c *PetroglyphClient) Delete() *PetroglyphDelete {
+	mutation := newPetroglyphMutation(c.config, OpDelete)
+	return &PetroglyphDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *PetroglyphClient) DeleteOne(pe *Petroglyph) *PetroglyphDeleteOne {
+	return c.DeleteOneID(pe.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *PetroglyphClient) DeleteOneID(id int) *PetroglyphDeleteOne {
+	builder := c.Delete().Where(petroglyph.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &PetroglyphDeleteOne{builder}
+}
+
+// Query returns a query builder for Petroglyph.
+func (c *PetroglyphClient) Query() *PetroglyphQuery {
+	return &PetroglyphQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypePetroglyph},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Petroglyph entity by its id.
+func (c *PetroglyphClient) Get(ctx context.Context, id int) (*Petroglyph, error) {
+	return c.Query().Where(petroglyph.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *PetroglyphClient) GetX(ctx context.Context, id int) *Petroglyph {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryCulturalAffiliation queries the cultural_affiliation edge of a Petroglyph.
+func (c *PetroglyphClient) QueryCulturalAffiliation(pe *Petroglyph) *CultureQuery {
+	query := (&CultureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(culture.Table, culture.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.CulturalAffiliationTable, petroglyph.CulturalAffiliationColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryModel queries the model edge of a Petroglyph.
+func (c *PetroglyphClient) QueryModel(pe *Petroglyph) *ModelQuery {
+	query := (&ModelClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(model.Table, model.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.ModelTable, petroglyph.ModelColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMound queries the mound edge of a Petroglyph.
+func (c *PetroglyphClient) QueryMound(pe *Petroglyph) *MoundQuery {
+	query := (&MoundClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(mound.Table, mound.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.MoundTable, petroglyph.MoundColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPublications queries the publications edge of a Petroglyph.
+func (c *PetroglyphClient) QueryPublications(pe *Petroglyph) *PublicationQuery {
+	query := (&PublicationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(publication.Table, publication.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, petroglyph.PublicationsTable, petroglyph.PublicationsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTechniques queries the techniques edge of a Petroglyph.
+func (c *PetroglyphClient) QueryTechniques(pe *Petroglyph) *TechniqueQuery {
+	query := (&TechniqueClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(technique.Table, technique.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, petroglyph.TechniquesTable, petroglyph.TechniquesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a Petroglyph.
+func (c *PetroglyphClient) QueryRegion(pe *Petroglyph) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.RegionTable, petroglyph.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccountingDocumentationAddress queries the accounting_documentation_address edge of a Petroglyph.
+func (c *PetroglyphClient) QueryAccountingDocumentationAddress(pe *Petroglyph) *LocationQuery {
+	query := (&LocationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(location.Table, location.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.AccountingDocumentationAddressTable, petroglyph.AccountingDocumentationAddressColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccountingDocumentationAuthor queries the accounting_documentation_author edge of a Petroglyph.
+func (c *PetroglyphClient) QueryAccountingDocumentationAuthor(pe *Petroglyph) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.AccountingDocumentationAuthorTable, petroglyph.AccountingDocumentationAuthorColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *PetroglyphClient) Hooks() []Hook {
+	hooks := c.hooks.Petroglyph
+	return append(hooks[:len(hooks):len(hooks)], petroglyph.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *PetroglyphClient) Interceptors() []Interceptor {
+	inters := c.inters.Petroglyph
+	return append(inters[:len(inters):len(inters)], petroglyph.Interceptors[:]...)
+}
+
+func (c *PetroglyphClient) mutate(ctx context.Context, m *PetroglyphMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&PetroglyphCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&PetroglyphUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&PetroglyphUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&PetroglyphDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Petroglyph mutation op: %q", m.Op())
 	}
 }
 
@@ -6316,6 +6851,22 @@ func (c *PublicationClient) QueryArtifacts(pu *Publication) *ArtifactQuery {
 	return query
 }
 
+// QueryPetroglyphs queries the petroglyphs edge of a Publication.
+func (c *PublicationClient) QueryPetroglyphs(pu *Publication) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pu.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(publication.Table, publication.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, publication.PetroglyphsTable, publication.PetroglyphsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pu.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAuthors queries the authors edge of a Publication.
 func (c *PublicationClient) QueryAuthors(pu *Publication) *PersonQuery {
 	query := (&PersonClient{config: c.config}).Query()
@@ -6657,6 +7208,22 @@ func (c *RegionClient) QueryBooks(r *Region) *BookQuery {
 			sqlgraph.From(region.Table, region.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, region.BooksTable, region.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs queries the petroglyphs edge of a Region.
+func (c *RegionClient) QueryPetroglyphs(r *Region) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.PetroglyphsTable, region.PetroglyphsColumn),
 		)
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
@@ -7226,6 +7793,22 @@ func (c *TechniqueClient) QueryArtifacts(t *Technique) *ArtifactQuery {
 	return query
 }
 
+// QueryPetroglyphs queries the petroglyphs edge of a Technique.
+func (c *TechniqueClient) QueryPetroglyphs(t *Technique) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(technique.Table, technique.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, technique.PetroglyphsTable, technique.PetroglyphsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TechniqueClient) Hooks() []Hook {
 	hooks := c.hooks.Technique
@@ -7252,21 +7835,188 @@ func (c *TechniqueClient) mutate(ctx context.Context, m *TechniqueMutation) (Val
 	}
 }
 
+// VisitClient is a client for the Visit schema.
+type VisitClient struct {
+	config
+}
+
+// NewVisitClient returns a client for the Visit from the given config.
+func NewVisitClient(c config) *VisitClient {
+	return &VisitClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `visit.Hooks(f(g(h())))`.
+func (c *VisitClient) Use(hooks ...Hook) {
+	c.hooks.Visit = append(c.hooks.Visit, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `visit.Intercept(f(g(h())))`.
+func (c *VisitClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Visit = append(c.inters.Visit, interceptors...)
+}
+
+// Create returns a builder for creating a Visit entity.
+func (c *VisitClient) Create() *VisitCreate {
+	mutation := newVisitMutation(c.config, OpCreate)
+	return &VisitCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Visit entities.
+func (c *VisitClient) CreateBulk(builders ...*VisitCreate) *VisitCreateBulk {
+	return &VisitCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VisitClient) MapCreateBulk(slice any, setFunc func(*VisitCreate, int)) *VisitCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VisitCreateBulk{err: fmt.Errorf("calling to VisitClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VisitCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VisitCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Visit.
+func (c *VisitClient) Update() *VisitUpdate {
+	mutation := newVisitMutation(c.config, OpUpdate)
+	return &VisitUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VisitClient) UpdateOne(v *Visit) *VisitUpdateOne {
+	mutation := newVisitMutation(c.config, OpUpdateOne, withVisit(v))
+	return &VisitUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VisitClient) UpdateOneID(id int) *VisitUpdateOne {
+	mutation := newVisitMutation(c.config, OpUpdateOne, withVisitID(id))
+	return &VisitUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Visit.
+func (c *VisitClient) Delete() *VisitDelete {
+	mutation := newVisitMutation(c.config, OpDelete)
+	return &VisitDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VisitClient) DeleteOne(v *Visit) *VisitDeleteOne {
+	return c.DeleteOneID(v.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VisitClient) DeleteOneID(id int) *VisitDeleteOne {
+	builder := c.Delete().Where(visit.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VisitDeleteOne{builder}
+}
+
+// Query returns a query builder for Visit.
+func (c *VisitClient) Query() *VisitQuery {
+	return &VisitQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVisit},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Visit entity by its id.
+func (c *VisitClient) Get(ctx context.Context, id int) (*Visit, error) {
+	return c.Query().Where(visit.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VisitClient) GetX(ctx context.Context, id int) *Visit {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryMounds queries the mounds edge of a Visit.
+func (c *VisitClient) QueryMounds(v *Visit) *MoundQuery {
+	query := (&MoundClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(visit.Table, visit.FieldID, id),
+			sqlgraph.To(mound.Table, mound.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, visit.MoundsTable, visit.MoundsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVisitors queries the visitors edge of a Visit.
+func (c *VisitClient) QueryVisitors(v *Visit) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := v.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(visit.Table, visit.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, visit.VisitorsTable, visit.VisitorsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(v.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VisitClient) Hooks() []Hook {
+	hooks := c.hooks.Visit
+	return append(hooks[:len(hooks):len(hooks)], visit.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VisitClient) Interceptors() []Interceptor {
+	return c.inters.Visit
+}
+
+func (c *VisitClient) mutate(ctx context.Context, m *VisitMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VisitCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VisitUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VisitUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VisitDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Visit mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, District, Ethnos, Favourite, Interview, Keyword,
-		License, Location, Medium, Model, Monument, Organization, Periodical, Person,
-		Personal, Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
-		Proxy, Publication, Publisher, Region, Set, Settlement, Technique []ent.Hook
+		License, Location, Medium, Model, Monument, Mound, Organization, Periodical,
+		Person, Personal, Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
+		ProtectedAreaPicture, Proxy, Publication, Publisher, Region, Set, Settlement,
+		Technique, Visit []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, District, Ethnos, Favourite, Interview, Keyword,
-		License, Location, Medium, Model, Monument, Organization, Periodical, Person,
-		Personal, Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
-		Proxy, Publication, Publisher, Region, Set, Settlement,
-		Technique []ent.Interceptor
+		License, Location, Medium, Model, Monument, Mound, Organization, Periodical,
+		Person, Personal, Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
+		ProtectedAreaPicture, Proxy, Publication, Publisher, Region, Set, Settlement,
+		Technique, Visit []ent.Interceptor
 	}
 )

@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -31,6 +32,7 @@ type RegionQuery struct {
 	withArt                        *ArtQuery
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
+	withPetroglyphs                *PetroglyphQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	withLocations                  *LocationQuery
 	modifiers                      []func(*sql.Selector)
@@ -38,6 +40,7 @@ type RegionQuery struct {
 	withNamedArt                   map[string]*ArtQuery
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
+	withNamedPetroglyphs           map[string]*PetroglyphQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	withNamedLocations             map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
@@ -135,6 +138,28 @@ func (rq *RegionQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(region.Table, region.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, region.BooksTable, region.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
+func (rq *RegionQuery) QueryPetroglyphs() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.PetroglyphsTable, region.PetroglyphsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
@@ -381,6 +406,7 @@ func (rq *RegionQuery) Clone() *RegionQuery {
 		withArt:                   rq.withArt.Clone(),
 		withArtifacts:             rq.withArtifacts.Clone(),
 		withBooks:                 rq.withBooks.Clone(),
+		withPetroglyphs:           rq.withPetroglyphs.Clone(),
 		withProtectedAreaPictures: rq.withProtectedAreaPictures.Clone(),
 		withLocations:             rq.withLocations.Clone(),
 		// clone intermediate query.
@@ -419,6 +445,17 @@ func (rq *RegionQuery) WithBooks(opts ...func(*BookQuery)) *RegionQuery {
 		opt(query)
 	}
 	rq.withBooks = query
+	return rq
+}
+
+// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *RegionQuery {
+	query := (&PetroglyphClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withPetroglyphs = query
 	return rq
 }
 
@@ -528,10 +565,11 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 	var (
 		nodes       = []*Region{}
 		_spec       = rq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			rq.withArt != nil,
 			rq.withArtifacts != nil,
 			rq.withBooks != nil,
+			rq.withPetroglyphs != nil,
 			rq.withProtectedAreaPictures != nil,
 			rq.withLocations != nil,
 		}
@@ -578,6 +616,13 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 			return nil, err
 		}
 	}
+	if query := rq.withPetroglyphs; query != nil {
+		if err := rq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Region) { n.Edges.Petroglyphs = []*Petroglyph{} },
+			func(n *Region, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := rq.withProtectedAreaPictures; query != nil {
 		if err := rq.loadProtectedAreaPictures(ctx, query, nodes,
 			func(n *Region) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
@@ -612,6 +657,13 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 		if err := rq.loadBooks(ctx, query, nodes,
 			func(n *Region) { n.appendNamedBooks(name) },
 			func(n *Region, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedPetroglyphs {
+		if err := rq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Region) { n.appendNamedPetroglyphs(name) },
+			func(n *Region, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -725,6 +777,37 @@ func (rq *RegionQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "region_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (rq *RegionQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*Region, init func(*Region), assign func(*Region, *Petroglyph)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Region)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Petroglyph(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(region.PetroglyphsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.region_petroglyphs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "region_petroglyphs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "region_petroglyphs" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -916,6 +999,20 @@ func (rq *RegionQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *Re
 		rq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	rq.withNamedBooks[name] = query
+	return rq
+}
+
+// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *RegionQuery {
+	query := (&PetroglyphClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedPetroglyphs == nil {
+		rq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
+	}
+	rq.withNamedPetroglyphs[name] = query
 	return rq
 }
 

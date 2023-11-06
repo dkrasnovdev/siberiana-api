@@ -63,6 +63,10 @@ type Mutation {
   createMedium(input: CreateMediumInput!): Medium!
   updateMedium(id: ID!, input: UpdateMediumInput!): Medium!
   deleteMedium(id: ID!): String!
+  # Mound
+  createMound(input: CreateMoundInput!): Mound!
+  updateMound(id: ID!, input: UpdateMoundInput!): Mound!
+  deleteMound(id: ID!): String!
   # Model
   createModel(input: CreateModelInput!): Model!
   updateModel(id: ID!, input: UpdateModelInput!): Model!
@@ -79,6 +83,10 @@ type Mutation {
   createPeriodical(input: CreatePeriodicalInput!): Periodical!
   updatePeriodical(id: ID!, input: UpdatePeriodicalInput!): Periodical!
   deletePeriodical(id: ID!): String!
+  # Petroglyph
+  createPetroglyph(input: CreatePetroglyphInput!): Petroglyph!
+  updatePetroglyph(id: ID!, input: UpdatePetroglyphInput!): Petroglyph!
+  deletePetroglyph(id: ID!): String!
   # Person
   createPerson(input: CreatePersonInput!): Person!
   updatePerson(id: ID!, input: UpdatePersonInput!): Person!

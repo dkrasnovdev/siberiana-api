@@ -33,6 +33,8 @@ const (
 	FieldExternalLink = "external_link"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
+	EdgePetroglyphs = "petroglyphs"
 	// EdgeAuthors holds the string denoting the authors edge name in mutations.
 	EdgeAuthors = "authors"
 	// Table holds the table name of the publication in the database.
@@ -42,6 +44,11 @@ const (
 	// ArtifactsInverseTable is the table name for the Artifact entity.
 	// It exists in this package in order to avoid circular dependency with the "artifact" package.
 	ArtifactsInverseTable = "artifacts"
+	// PetroglyphsTable is the table that holds the petroglyphs relation/edge. The primary key declared below.
+	PetroglyphsTable = "publication_petroglyphs"
+	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsInverseTable = "petroglyphs"
 	// AuthorsTable is the table that holds the authors relation/edge. The primary key declared below.
 	AuthorsTable = "person_publications"
 	// AuthorsInverseTable is the table name for the Person entity.
@@ -66,6 +73,9 @@ var (
 	// ArtifactsPrimaryKey and ArtifactsColumn2 are the table columns denoting the
 	// primary key for the artifacts relation (M2M).
 	ArtifactsPrimaryKey = []string{"publication_id", "artifact_id"}
+	// PetroglyphsPrimaryKey and PetroglyphsColumn2 are the table columns denoting the
+	// primary key for the petroglyphs relation (M2M).
+	PetroglyphsPrimaryKey = []string{"publication_id", "petroglyph_id"}
 	// AuthorsPrimaryKey and AuthorsColumn2 are the table columns denoting the
 	// primary key for the authors relation (M2M).
 	AuthorsPrimaryKey = []string{"person_id", "publication_id"}
@@ -159,6 +169,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPetroglyphsCount orders the results by petroglyphs count.
+func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsStep(), opts...)
+	}
+}
+
+// ByPetroglyphs orders the results by petroglyphs terms.
+func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByAuthorsCount orders the results by authors count.
 func ByAuthorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -177,6 +201,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
+	)
+}
+func newPetroglyphsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
 	)
 }
 func newAuthorsStep() *sqlgraph.Step {

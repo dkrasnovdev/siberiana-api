@@ -34,10 +34,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
@@ -49,6 +51,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 	"github.com/hashicorp/go-multierror"
 	"golang.org/x/sync/semaphore"
 )
@@ -163,6 +166,11 @@ var monumentImplementors = []string{"Monument", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Monument) IsNode() {}
 
+var moundImplementors = []string{"Mound", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Mound) IsNode() {}
+
 var organizationImplementors = []string{"Organization", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -182,6 +190,11 @@ var personalImplementors = []string{"Personal", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Personal) IsNode() {}
+
+var petroglyphImplementors = []string{"Petroglyph", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Petroglyph) IsNode() {}
 
 var projectImplementors = []string{"Project", "Node"}
 
@@ -237,6 +250,11 @@ var techniqueImplementors = []string{"Technique", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Technique) IsNode() {}
+
+var visitImplementors = []string{"Visit", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Visit) IsNode() {}
 
 var errNodeInvalidID = &NotFoundError{"node"}
 
@@ -548,6 +566,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
+	case mound.Table:
+		query := c.Mound.Query().
+			Where(mound.ID(id))
+		query, err := query.CollectFields(ctx, moundImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case organization.Table:
 		query := c.Organization.Query().
 			Where(organization.ID(id))
@@ -588,6 +618,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Personal.Query().
 			Where(personal.ID(id))
 		query, err := query.CollectFields(ctx, personalImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case petroglyph.Table:
+		query := c.Petroglyph.Query().
+			Where(petroglyph.ID(id))
+		query, err := query.CollectFields(ctx, petroglyphImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -720,6 +762,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Technique.Query().
 			Where(technique.ID(id))
 		query, err := query.CollectFields(ctx, techniqueImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case visit.Table:
+		query := c.Visit.Query().
+			Where(visit.ID(id))
+		query, err := query.CollectFields(ctx, visitImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1137,6 +1191,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
+	case mound.Table:
+		query := c.Mound.Query().
+			Where(mound.IDIn(ids...))
+		query, err := query.CollectFields(ctx, moundImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case organization.Table:
 		query := c.Organization.Query().
 			Where(organization.IDIn(ids...))
@@ -1189,6 +1259,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Personal.Query().
 			Where(personal.IDIn(ids...))
 		query, err := query.CollectFields(ctx, personalImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case petroglyph.Table:
+		query := c.Petroglyph.Query().
+			Where(petroglyph.IDIn(ids...))
+		query, err := query.CollectFields(ctx, petroglyphImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1365,6 +1451,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Technique.Query().
 			Where(technique.IDIn(ids...))
 		query, err := query.CollectFields(ctx, techniqueImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case visit.Table:
+		query := c.Visit.Query().
+			Where(visit.IDIn(ids...))
+		query, err := query.CollectFields(ctx, visitImplementors...)
 		if err != nil {
 			return nil, err
 		}

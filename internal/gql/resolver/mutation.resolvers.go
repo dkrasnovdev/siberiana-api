@@ -363,6 +363,28 @@ func (r *mutationResolver) DeleteMedium(ctx context.Context, id int) (string, er
 	return "Medium has been deleted", nil
 }
 
+// CreateMound is the resolver for the createMound field.
+func (r *mutationResolver) CreateMound(ctx context.Context, input ent.CreateMoundInput) (*ent.Mound, error) {
+	client := ent.FromContext(ctx)
+	return client.Mound.Create().SetInput(input).Save(ctx)
+}
+
+// UpdateMound is the resolver for the updateMound field.
+func (r *mutationResolver) UpdateMound(ctx context.Context, id int, input ent.UpdateMoundInput) (*ent.Mound, error) {
+	client := ent.FromContext(ctx)
+	return client.Mound.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteMound is the resolver for the deleteMound field.
+func (r *mutationResolver) DeleteMound(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Mound.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Mound has been deleted", nil
+}
+
 // CreateModel is the resolver for the createModel field.
 func (r *mutationResolver) CreateModel(ctx context.Context, input ent.CreateModelInput) (*ent.Model, error) {
 	client := ent.FromContext(ctx)
@@ -449,6 +471,28 @@ func (r *mutationResolver) DeletePeriodical(ctx context.Context, id int) (string
 		return "", err
 	}
 	return "Periodical has been deleted", nil
+}
+
+// CreatePetroglyph is the resolver for the createPetroglyph field.
+func (r *mutationResolver) CreatePetroglyph(ctx context.Context, input ent.CreatePetroglyphInput) (*ent.Petroglyph, error) {
+	client := ent.FromContext(ctx)
+	return client.Petroglyph.Create().SetInput(input).Save(ctx)
+}
+
+// UpdatePetroglyph is the resolver for the updatePetroglyph field.
+func (r *mutationResolver) UpdatePetroglyph(ctx context.Context, id int, input ent.UpdatePetroglyphInput) (*ent.Petroglyph, error) {
+	client := ent.FromContext(ctx)
+	return client.Petroglyph.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeletePetroglyph is the resolver for the deletePetroglyph field.
+func (r *mutationResolver) DeletePetroglyph(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Petroglyph.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Petroglyph has been deleted", nil
 }
 
 // CreatePerson is the resolver for the createPerson field.

@@ -1367,6 +1367,29 @@ func HasDonatedArtifactsWith(preds ...predicate.Artifact) predicate.Person {
 	})
 }
 
+// HasPetroglyphsAccountingDocumentation applies the HasEdge predicate on the "petroglyphs_accounting_documentation" edge.
+func HasPetroglyphsAccountingDocumentation() predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PetroglyphsAccountingDocumentationTable, PetroglyphsAccountingDocumentationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPetroglyphsAccountingDocumentationWith applies the HasEdge predicate on the "petroglyphs_accounting_documentation" edge with a given conditions (other predicates).
+func HasPetroglyphsAccountingDocumentationWith(preds ...predicate.Petroglyph) predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := newPetroglyphsAccountingDocumentationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasBooks applies the HasEdge predicate on the "books" edge.
 func HasBooks() predicate.Person {
 	return predicate.Person(func(s *sql.Selector) {
@@ -1382,6 +1405,29 @@ func HasBooks() predicate.Person {
 func HasBooksWith(preds ...predicate.Book) predicate.Person {
 	return predicate.Person(func(s *sql.Selector) {
 		step := newBooksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVisits applies the HasEdge predicate on the "visits" edge.
+func HasVisits() predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, VisitsTable, VisitsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVisitsWith applies the HasEdge predicate on the "visits" edge with a given conditions (other predicates).
+func HasVisitsWith(preds ...predicate.Visit) predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := newVisitsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

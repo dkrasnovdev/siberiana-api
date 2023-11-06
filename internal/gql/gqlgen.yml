@@ -33,9 +33,11 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/location
   - github.com/dkrasnovdev/siberiana-api/ent/medium
   - github.com/dkrasnovdev/siberiana-api/ent/model
+  - github.com/dkrasnovdev/siberiana-api/ent/mound
   - github.com/dkrasnovdev/siberiana-api/ent/monument
   - github.com/dkrasnovdev/siberiana-api/ent/organization
   - github.com/dkrasnovdev/siberiana-api/ent/periodical
+  - github.com/dkrasnovdev/siberiana-api/ent/petroglyph
   - github.com/dkrasnovdev/siberiana-api/ent/person
   - github.com/dkrasnovdev/siberiana-api/ent/personal
   - github.com/dkrasnovdev/siberiana-api/ent/project

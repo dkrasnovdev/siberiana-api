@@ -43,13 +43,16 @@ type Technique struct {
 type TechniqueEdges struct {
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Petroglyphs holds the value of the petroglyphs edge.
+	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 
-	namedArtifacts map[string][]*Artifact
+	namedArtifacts   map[string][]*Artifact
+	namedPetroglyphs map[string][]*Petroglyph
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -59,6 +62,15 @@ func (e TechniqueEdges) ArtifactsOrErr() ([]*Artifact, error) {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
+// was not loaded in eager-loading.
+func (e TechniqueEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
+	if e.loadedTypes[1] {
+		return e.Petroglyphs, nil
+	}
+	return nil, &NotLoadedError{edge: "petroglyphs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -159,6 +171,11 @@ func (t *Technique) QueryArtifacts() *ArtifactQuery {
 	return NewTechniqueClient(t.config).QueryArtifacts(t)
 }
 
+// QueryPetroglyphs queries the "petroglyphs" edge of the Technique entity.
+func (t *Technique) QueryPetroglyphs() *PetroglyphQuery {
+	return NewTechniqueClient(t.config).QueryPetroglyphs(t)
+}
+
 // Update returns a builder for updating this Technique.
 // Note that you need to call Technique.Unwrap() before calling this method if this Technique
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -230,6 +247,30 @@ func (t *Technique) appendNamedArtifacts(name string, edges ...*Artifact) {
 		t.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		t.Edges.namedArtifacts[name] = append(t.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedPetroglyphs returns the Petroglyphs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (t *Technique) NamedPetroglyphs(name string) ([]*Petroglyph, error) {
+	if t.Edges.namedPetroglyphs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := t.Edges.namedPetroglyphs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (t *Technique) appendNamedPetroglyphs(name string, edges ...*Petroglyph) {
+	if t.Edges.namedPetroglyphs == nil {
+		t.Edges.namedPetroglyphs = make(map[string][]*Petroglyph)
+	}
+	if len(edges) == 0 {
+		t.Edges.namedPetroglyphs[name] = []*Petroglyph{}
+	} else {
+		t.Edges.namedPetroglyphs[name] = append(t.Edges.namedPetroglyphs[name], edges...)
 	}
 }
 

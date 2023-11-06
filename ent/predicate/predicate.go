@@ -69,6 +69,9 @@ type Model func(*sql.Selector)
 // Monument is the predicate function for monument builders.
 type Monument func(*sql.Selector)
 
+// Mound is the predicate function for mound builders.
+type Mound func(*sql.Selector)
+
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
 
@@ -80,6 +83,9 @@ type Person func(*sql.Selector)
 
 // Personal is the predicate function for personal builders.
 type Personal func(*sql.Selector)
+
+// Petroglyph is the predicate function for petroglyph builders.
+type Petroglyph func(*sql.Selector)
 
 // Project is the predicate function for project builders.
 type Project func(*sql.Selector)
@@ -113,3 +119,6 @@ type Settlement func(*sql.Selector)
 
 // Technique is the predicate function for technique builders.
 type Technique func(*sql.Selector)
+
+// Visit is the predicate function for visit builders.
+type Visit func(*sql.Selector)

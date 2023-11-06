@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -227,6 +228,21 @@ func (lu *LocationUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *
 	return lu.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (lu *LocationUpdate) AddPetroglyphsAccountingDocumentationIDs(ids ...int) *LocationUpdate {
+	lu.mutation.AddPetroglyphsAccountingDocumentationIDs(ids...)
+	return lu
+}
+
+// AddPetroglyphsAccountingDocumentation adds the "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (lu *LocationUpdate) AddPetroglyphsAccountingDocumentation(p ...*Petroglyph) *LocationUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lu.AddPetroglyphsAccountingDocumentationIDs(ids...)
+}
+
 // SetCountryID sets the "country" edge to the Country entity by ID.
 func (lu *LocationUpdate) SetCountryID(id int) *LocationUpdate {
 	lu.mutation.SetCountryID(id)
@@ -369,6 +385,27 @@ func (lu *LocationUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture
 		ids[i] = p[i].ID
 	}
 	return lu.RemoveProtectedAreaPictureIDs(ids...)
+}
+
+// ClearPetroglyphsAccountingDocumentation clears all "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (lu *LocationUpdate) ClearPetroglyphsAccountingDocumentation() *LocationUpdate {
+	lu.mutation.ClearPetroglyphsAccountingDocumentation()
+	return lu
+}
+
+// RemovePetroglyphsAccountingDocumentationIDs removes the "petroglyphs_accounting_documentation" edge to Petroglyph entities by IDs.
+func (lu *LocationUpdate) RemovePetroglyphsAccountingDocumentationIDs(ids ...int) *LocationUpdate {
+	lu.mutation.RemovePetroglyphsAccountingDocumentationIDs(ids...)
+	return lu
+}
+
+// RemovePetroglyphsAccountingDocumentation removes "petroglyphs_accounting_documentation" edges to Petroglyph entities.
+func (lu *LocationUpdate) RemovePetroglyphsAccountingDocumentation(p ...*Petroglyph) *LocationUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return lu.RemovePetroglyphsAccountingDocumentationIDs(ids...)
 }
 
 // ClearCountry clears the "country" edge to the Country entity.
@@ -619,6 +656,51 @@ func (lu *LocationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if lu.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{location.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.RemovedPetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 && !lu.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{location.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := lu.mutation.PetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{location.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -953,6 +1035,21 @@ func (luo *LocationUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPictur
 	return luo.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (luo *LocationUpdateOne) AddPetroglyphsAccountingDocumentationIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.AddPetroglyphsAccountingDocumentationIDs(ids...)
+	return luo
+}
+
+// AddPetroglyphsAccountingDocumentation adds the "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (luo *LocationUpdateOne) AddPetroglyphsAccountingDocumentation(p ...*Petroglyph) *LocationUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return luo.AddPetroglyphsAccountingDocumentationIDs(ids...)
+}
+
 // SetCountryID sets the "country" edge to the Country entity by ID.
 func (luo *LocationUpdateOne) SetCountryID(id int) *LocationUpdateOne {
 	luo.mutation.SetCountryID(id)
@@ -1095,6 +1192,27 @@ func (luo *LocationUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPic
 		ids[i] = p[i].ID
 	}
 	return luo.RemoveProtectedAreaPictureIDs(ids...)
+}
+
+// ClearPetroglyphsAccountingDocumentation clears all "petroglyphs_accounting_documentation" edges to the Petroglyph entity.
+func (luo *LocationUpdateOne) ClearPetroglyphsAccountingDocumentation() *LocationUpdateOne {
+	luo.mutation.ClearPetroglyphsAccountingDocumentation()
+	return luo
+}
+
+// RemovePetroglyphsAccountingDocumentationIDs removes the "petroglyphs_accounting_documentation" edge to Petroglyph entities by IDs.
+func (luo *LocationUpdateOne) RemovePetroglyphsAccountingDocumentationIDs(ids ...int) *LocationUpdateOne {
+	luo.mutation.RemovePetroglyphsAccountingDocumentationIDs(ids...)
+	return luo
+}
+
+// RemovePetroglyphsAccountingDocumentation removes "petroglyphs_accounting_documentation" edges to Petroglyph entities.
+func (luo *LocationUpdateOne) RemovePetroglyphsAccountingDocumentation(p ...*Petroglyph) *LocationUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return luo.RemovePetroglyphsAccountingDocumentationIDs(ids...)
 }
 
 // ClearCountry clears the "country" edge to the Country entity.
@@ -1375,6 +1493,51 @@ func (luo *LocationUpdateOne) sqlSave(ctx context.Context) (_node *Location, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if luo.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{location.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.RemovedPetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 && !luo.mutation.PetroglyphsAccountingDocumentationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{location.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := luo.mutation.PetroglyphsAccountingDocumentationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   location.PetroglyphsAccountingDocumentationTable,
+			Columns: []string{location.PetroglyphsAccountingDocumentationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

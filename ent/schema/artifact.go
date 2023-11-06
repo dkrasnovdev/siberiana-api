@@ -66,8 +66,8 @@ func (Artifact) Fields() []ent.Field {
 		field.Float("depth").Optional(),
 		field.Float("diameter").Optional(),
 		field.String("weight").Optional(),
-
 		field.String("dimensions").Optional(),
+
 		field.String("chemical_composition").Optional(),
 
 		field.String("kp_number").Optional(),

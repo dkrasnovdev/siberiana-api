@@ -39,6 +39,8 @@ const (
 	EdgeBooks = "books"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
+	// EdgePetroglyphsAccountingDocumentation holds the string denoting the petroglyphs_accounting_documentation edge name in mutations.
+	EdgePetroglyphsAccountingDocumentation = "petroglyphs_accounting_documentation"
 	// EdgeCountry holds the string denoting the country edge name in mutations.
 	EdgeCountry = "country"
 	// EdgeDistrict holds the string denoting the district edge name in mutations.
@@ -70,6 +72,13 @@ const (
 	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
 	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesColumn = "location_protected_area_pictures"
+	// PetroglyphsAccountingDocumentationTable is the table that holds the petroglyphs_accounting_documentation relation/edge.
+	PetroglyphsAccountingDocumentationTable = "petroglyphs"
+	// PetroglyphsAccountingDocumentationInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsAccountingDocumentationInverseTable = "petroglyphs"
+	// PetroglyphsAccountingDocumentationColumn is the table column denoting the petroglyphs_accounting_documentation relation/edge.
+	PetroglyphsAccountingDocumentationColumn = "location_petroglyphs_accounting_documentation"
 	// CountryTable is the table that holds the country relation/edge.
 	CountryTable = "locations"
 	// CountryInverseTable is the table name for the Country entity.
@@ -249,6 +258,20 @@ func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOp
 	}
 }
 
+// ByPetroglyphsAccountingDocumentationCount orders the results by petroglyphs_accounting_documentation count.
+func ByPetroglyphsAccountingDocumentationCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsAccountingDocumentationStep(), opts...)
+	}
+}
+
+// ByPetroglyphsAccountingDocumentation orders the results by petroglyphs_accounting_documentation terms.
+func ByPetroglyphsAccountingDocumentation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsAccountingDocumentationStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCountryField orders the results by country field.
 func ByCountryField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -295,6 +318,13 @@ func newProtectedAreaPicturesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+	)
+}
+func newPetroglyphsAccountingDocumentationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsAccountingDocumentationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PetroglyphsAccountingDocumentationTable, PetroglyphsAccountingDocumentationColumn),
 	)
 }
 func newCountryStep() *sqlgraph.Step {

@@ -750,6 +750,29 @@ func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predi
 	})
 }
 
+// HasPetroglyphsAccountingDocumentation applies the HasEdge predicate on the "petroglyphs_accounting_documentation" edge.
+func HasPetroglyphsAccountingDocumentation() predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, PetroglyphsAccountingDocumentationTable, PetroglyphsAccountingDocumentationColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPetroglyphsAccountingDocumentationWith applies the HasEdge predicate on the "petroglyphs_accounting_documentation" edge with a given conditions (other predicates).
+func HasPetroglyphsAccountingDocumentationWith(preds ...predicate.Petroglyph) predicate.Location {
+	return predicate.Location(func(s *sql.Selector) {
+		step := newPetroglyphsAccountingDocumentationStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasCountry applies the HasEdge predicate on the "country" edge.
 func HasCountry() predicate.Location {
 	return predicate.Location(func(s *sql.Selector) {

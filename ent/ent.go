@@ -33,10 +33,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
@@ -48,6 +50,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -129,10 +132,12 @@ func checkColumn(table, column string) error {
 			medium.Table:                medium.ValidColumn,
 			model.Table:                 model.ValidColumn,
 			monument.Table:              monument.ValidColumn,
+			mound.Table:                 mound.ValidColumn,
 			organization.Table:          organization.ValidColumn,
 			periodical.Table:            periodical.ValidColumn,
 			person.Table:                person.ValidColumn,
 			personal.Table:              personal.ValidColumn,
+			petroglyph.Table:            petroglyph.ValidColumn,
 			project.Table:               project.ValidColumn,
 			protectedarea.Table:         protectedarea.ValidColumn,
 			protectedareacategory.Table: protectedareacategory.ValidColumn,
@@ -144,6 +149,7 @@ func checkColumn(table, column string) error {
 			set.Table:                   set.ValidColumn,
 			settlement.Table:            settlement.ValidColumn,
 			technique.Table:             technique.ValidColumn,
+			visit.Table:                 visit.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

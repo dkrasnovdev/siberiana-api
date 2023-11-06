@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
@@ -170,6 +171,21 @@ func (tu *TechniqueUpdate) AddArtifacts(a ...*Artifact) *TechniqueUpdate {
 	return tu.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (tu *TechniqueUpdate) AddPetroglyphIDs(ids ...int) *TechniqueUpdate {
+	tu.mutation.AddPetroglyphIDs(ids...)
+	return tu
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (tu *TechniqueUpdate) AddPetroglyphs(p ...*Petroglyph) *TechniqueUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tu.AddPetroglyphIDs(ids...)
+}
+
 // Mutation returns the TechniqueMutation object of the builder.
 func (tu *TechniqueUpdate) Mutation() *TechniqueMutation {
 	return tu.mutation
@@ -194,6 +210,27 @@ func (tu *TechniqueUpdate) RemoveArtifacts(a ...*Artifact) *TechniqueUpdate {
 		ids[i] = a[i].ID
 	}
 	return tu.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (tu *TechniqueUpdate) ClearPetroglyphs() *TechniqueUpdate {
+	tu.mutation.ClearPetroglyphs()
+	return tu
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (tu *TechniqueUpdate) RemovePetroglyphIDs(ids ...int) *TechniqueUpdate {
+	tu.mutation.RemovePetroglyphIDs(ids...)
+	return tu
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (tu *TechniqueUpdate) RemovePetroglyphs(p ...*Petroglyph) *TechniqueUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tu.RemovePetroglyphIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -324,6 +361,51 @@ func (tu *TechniqueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.PetroglyphsTable,
+			Columns: technique.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !tu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.PetroglyphsTable,
+			Columns: technique.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.PetroglyphsTable,
+			Columns: technique.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -492,6 +574,21 @@ func (tuo *TechniqueUpdateOne) AddArtifacts(a ...*Artifact) *TechniqueUpdateOne 
 	return tuo.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (tuo *TechniqueUpdateOne) AddPetroglyphIDs(ids ...int) *TechniqueUpdateOne {
+	tuo.mutation.AddPetroglyphIDs(ids...)
+	return tuo
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (tuo *TechniqueUpdateOne) AddPetroglyphs(p ...*Petroglyph) *TechniqueUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tuo.AddPetroglyphIDs(ids...)
+}
+
 // Mutation returns the TechniqueMutation object of the builder.
 func (tuo *TechniqueUpdateOne) Mutation() *TechniqueMutation {
 	return tuo.mutation
@@ -516,6 +613,27 @@ func (tuo *TechniqueUpdateOne) RemoveArtifacts(a ...*Artifact) *TechniqueUpdateO
 		ids[i] = a[i].ID
 	}
 	return tuo.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (tuo *TechniqueUpdateOne) ClearPetroglyphs() *TechniqueUpdateOne {
+	tuo.mutation.ClearPetroglyphs()
+	return tuo
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (tuo *TechniqueUpdateOne) RemovePetroglyphIDs(ids ...int) *TechniqueUpdateOne {
+	tuo.mutation.RemovePetroglyphIDs(ids...)
+	return tuo
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (tuo *TechniqueUpdateOne) RemovePetroglyphs(p ...*Petroglyph) *TechniqueUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tuo.RemovePetroglyphIDs(ids...)
 }
 
 // Where appends a list predicates to the TechniqueUpdate builder.
@@ -676,6 +794,51 @@ func (tuo *TechniqueUpdateOne) sqlSave(ctx context.Context) (_node *Technique, e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.PetroglyphsTable,
+			Columns: technique.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !tuo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.PetroglyphsTable,
+			Columns: technique.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.PetroglyphsTable,
+			Columns: technique.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

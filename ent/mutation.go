@@ -31,10 +31,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -47,6 +49,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
@@ -80,10 +83,12 @@ const (
 	TypeMedium                = "Medium"
 	TypeModel                 = "Model"
 	TypeMonument              = "Monument"
+	TypeMound                 = "Mound"
 	TypeOrganization          = "Organization"
 	TypePeriodical            = "Periodical"
 	TypePerson                = "Person"
 	TypePersonal              = "Personal"
+	TypePetroglyph            = "Petroglyph"
 	TypeProject               = "Project"
 	TypeProtectedArea         = "ProtectedArea"
 	TypeProtectedAreaCategory = "ProtectedAreaCategory"
@@ -95,6 +100,7 @@ const (
 	TypeSet                   = "Set"
 	TypeSettlement            = "Settlement"
 	TypeTechnique             = "Technique"
+	TypeVisit                 = "Visit"
 )
 
 // ArtMutation represents an operation that mutates the Art nodes in the graph.
@@ -15475,24 +15481,27 @@ func (m *CountryMutation) ResetEdge(name string) error {
 // CultureMutation represents an operation that mutates the Culture nodes in the graph.
 type CultureMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	abbreviation     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Culture, error)
-	predicates       []predicate.Culture
+	op                 Op
+	typ                string
+	id                 *int
+	created_at         *time.Time
+	created_by         *string
+	updated_at         *time.Time
+	updated_by         *string
+	display_name       *string
+	abbreviation       *string
+	description        *string
+	external_link      *string
+	clearedFields      map[string]struct{}
+	artifacts          map[int]struct{}
+	removedartifacts   map[int]struct{}
+	clearedartifacts   bool
+	petroglyphs        map[int]struct{}
+	removedpetroglyphs map[int]struct{}
+	clearedpetroglyphs bool
+	done               bool
+	oldValue           func(context.Context) (*Culture, error)
+	predicates         []predicate.Culture
 }
 
 var _ ent.Mutation = (*CultureMutation)(nil)
@@ -16013,6 +16022,60 @@ func (m *CultureMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *CultureMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *CultureMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *CultureMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *CultureMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *CultureMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *CultureMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *CultureMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
 // Where appends a list predicates to the CultureMutation builder.
 func (m *CultureMutation) Where(ps ...predicate.Culture) {
 	m.predicates = append(m.predicates, ps...)
@@ -16304,9 +16367,12 @@ func (m *CultureMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CultureMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.artifacts != nil {
 		edges = append(edges, culture.EdgeArtifacts)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, culture.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -16321,15 +16387,24 @@ func (m *CultureMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case culture.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CultureMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedartifacts != nil {
 		edges = append(edges, culture.EdgeArtifacts)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, culture.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -16344,15 +16419,24 @@ func (m *CultureMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case culture.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CultureMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedartifacts {
 		edges = append(edges, culture.EdgeArtifacts)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, culture.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -16363,6 +16447,8 @@ func (m *CultureMutation) EdgeCleared(name string) bool {
 	switch name {
 	case culture.EdgeArtifacts:
 		return m.clearedartifacts
+	case culture.EdgePetroglyphs:
+		return m.clearedpetroglyphs
 	}
 	return false
 }
@@ -16381,6 +16467,9 @@ func (m *CultureMutation) ResetEdge(name string) error {
 	switch name {
 	case culture.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case culture.EdgePetroglyphs:
+		m.ResetPetroglyphs()
 		return nil
 	}
 	return fmt.Errorf("unknown Culture edge %s", name)
@@ -21463,39 +21552,42 @@ func (m *LicenseMutation) ResetEdge(name string) error {
 // LocationMutation represents an operation that mutates the Location nodes in the graph.
 type LocationMutation struct {
 	config
-	op                             Op
-	typ                            string
-	id                             *int
-	created_at                     *time.Time
-	created_by                     *string
-	updated_at                     *time.Time
-	updated_by                     *string
-	display_name                   *string
-	abbreviation                   *string
-	description                    *string
-	external_link                  *string
-	geometry                       *types.Geometry
-	clearedFields                  map[string]struct{}
-	artifacts                      map[int]struct{}
-	removedartifacts               map[int]struct{}
-	clearedartifacts               bool
-	books                          map[int]struct{}
-	removedbooks                   map[int]struct{}
-	clearedbooks                   bool
-	protected_area_pictures        map[int]struct{}
-	removedprotected_area_pictures map[int]struct{}
-	clearedprotected_area_pictures bool
-	country                        *int
-	clearedcountry                 bool
-	district                       *int
-	cleareddistrict                bool
-	settlement                     *int
-	clearedsettlement              bool
-	region                         *int
-	clearedregion                  bool
-	done                           bool
-	oldValue                       func(context.Context) (*Location, error)
-	predicates                     []predicate.Location
+	op                                          Op
+	typ                                         string
+	id                                          *int
+	created_at                                  *time.Time
+	created_by                                  *string
+	updated_at                                  *time.Time
+	updated_by                                  *string
+	display_name                                *string
+	abbreviation                                *string
+	description                                 *string
+	external_link                               *string
+	geometry                                    *types.Geometry
+	clearedFields                               map[string]struct{}
+	artifacts                                   map[int]struct{}
+	removedartifacts                            map[int]struct{}
+	clearedartifacts                            bool
+	books                                       map[int]struct{}
+	removedbooks                                map[int]struct{}
+	clearedbooks                                bool
+	protected_area_pictures                     map[int]struct{}
+	removedprotected_area_pictures              map[int]struct{}
+	clearedprotected_area_pictures              bool
+	petroglyphs_accounting_documentation        map[int]struct{}
+	removedpetroglyphs_accounting_documentation map[int]struct{}
+	clearedpetroglyphs_accounting_documentation bool
+	country                                     *int
+	clearedcountry                              bool
+	district                                    *int
+	cleareddistrict                             bool
+	settlement                                  *int
+	clearedsettlement                           bool
+	region                                      *int
+	clearedregion                               bool
+	done                                        bool
+	oldValue                                    func(context.Context) (*Location, error)
+	predicates                                  []predicate.Location
 }
 
 var _ ent.Mutation = (*LocationMutation)(nil)
@@ -22173,6 +22265,60 @@ func (m *LocationMutation) ResetProtectedAreaPictures() {
 	m.removedprotected_area_pictures = nil
 }
 
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by ids.
+func (m *LocationMutation) AddPetroglyphsAccountingDocumentationIDs(ids ...int) {
+	if m.petroglyphs_accounting_documentation == nil {
+		m.petroglyphs_accounting_documentation = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs_accounting_documentation[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphsAccountingDocumentation clears the "petroglyphs_accounting_documentation" edge to the Petroglyph entity.
+func (m *LocationMutation) ClearPetroglyphsAccountingDocumentation() {
+	m.clearedpetroglyphs_accounting_documentation = true
+}
+
+// PetroglyphsAccountingDocumentationCleared reports if the "petroglyphs_accounting_documentation" edge to the Petroglyph entity was cleared.
+func (m *LocationMutation) PetroglyphsAccountingDocumentationCleared() bool {
+	return m.clearedpetroglyphs_accounting_documentation
+}
+
+// RemovePetroglyphsAccountingDocumentationIDs removes the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (m *LocationMutation) RemovePetroglyphsAccountingDocumentationIDs(ids ...int) {
+	if m.removedpetroglyphs_accounting_documentation == nil {
+		m.removedpetroglyphs_accounting_documentation = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs_accounting_documentation, ids[i])
+		m.removedpetroglyphs_accounting_documentation[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphsAccountingDocumentation returns the removed IDs of the "petroglyphs_accounting_documentation" edge to the Petroglyph entity.
+func (m *LocationMutation) RemovedPetroglyphsAccountingDocumentationIDs() (ids []int) {
+	for id := range m.removedpetroglyphs_accounting_documentation {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsAccountingDocumentationIDs returns the "petroglyphs_accounting_documentation" edge IDs in the mutation.
+func (m *LocationMutation) PetroglyphsAccountingDocumentationIDs() (ids []int) {
+	for id := range m.petroglyphs_accounting_documentation {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphsAccountingDocumentation resets all changes to the "petroglyphs_accounting_documentation" edge.
+func (m *LocationMutation) ResetPetroglyphsAccountingDocumentation() {
+	m.petroglyphs_accounting_documentation = nil
+	m.clearedpetroglyphs_accounting_documentation = false
+	m.removedpetroglyphs_accounting_documentation = nil
+}
+
 // SetCountryID sets the "country" edge to the Country entity by id.
 func (m *LocationMutation) SetCountryID(id int) {
 	m.country = &id
@@ -22643,7 +22789,7 @@ func (m *LocationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *LocationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.artifacts != nil {
 		edges = append(edges, location.EdgeArtifacts)
 	}
@@ -22652,6 +22798,9 @@ func (m *LocationMutation) AddedEdges() []string {
 	}
 	if m.protected_area_pictures != nil {
 		edges = append(edges, location.EdgeProtectedAreaPictures)
+	}
+	if m.petroglyphs_accounting_documentation != nil {
+		edges = append(edges, location.EdgePetroglyphsAccountingDocumentation)
 	}
 	if m.country != nil {
 		edges = append(edges, location.EdgeCountry)
@@ -22690,6 +22839,12 @@ func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case location.EdgePetroglyphsAccountingDocumentation:
+		ids := make([]ent.Value, 0, len(m.petroglyphs_accounting_documentation))
+		for id := range m.petroglyphs_accounting_documentation {
+			ids = append(ids, id)
+		}
+		return ids
 	case location.EdgeCountry:
 		if id := m.country; id != nil {
 			return []ent.Value{*id}
@@ -22712,7 +22867,7 @@ func (m *LocationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *LocationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.removedartifacts != nil {
 		edges = append(edges, location.EdgeArtifacts)
 	}
@@ -22721,6 +22876,9 @@ func (m *LocationMutation) RemovedEdges() []string {
 	}
 	if m.removedprotected_area_pictures != nil {
 		edges = append(edges, location.EdgeProtectedAreaPictures)
+	}
+	if m.removedpetroglyphs_accounting_documentation != nil {
+		edges = append(edges, location.EdgePetroglyphsAccountingDocumentation)
 	}
 	return edges
 }
@@ -22747,13 +22905,19 @@ func (m *LocationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case location.EdgePetroglyphsAccountingDocumentation:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs_accounting_documentation))
+		for id := range m.removedpetroglyphs_accounting_documentation {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *LocationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.clearedartifacts {
 		edges = append(edges, location.EdgeArtifacts)
 	}
@@ -22762,6 +22926,9 @@ func (m *LocationMutation) ClearedEdges() []string {
 	}
 	if m.clearedprotected_area_pictures {
 		edges = append(edges, location.EdgeProtectedAreaPictures)
+	}
+	if m.clearedpetroglyphs_accounting_documentation {
+		edges = append(edges, location.EdgePetroglyphsAccountingDocumentation)
 	}
 	if m.clearedcountry {
 		edges = append(edges, location.EdgeCountry)
@@ -22788,6 +22955,8 @@ func (m *LocationMutation) EdgeCleared(name string) bool {
 		return m.clearedbooks
 	case location.EdgeProtectedAreaPictures:
 		return m.clearedprotected_area_pictures
+	case location.EdgePetroglyphsAccountingDocumentation:
+		return m.clearedpetroglyphs_accounting_documentation
 	case location.EdgeCountry:
 		return m.clearedcountry
 	case location.EdgeDistrict:
@@ -22832,6 +23001,9 @@ func (m *LocationMutation) ResetEdge(name string) error {
 		return nil
 	case location.EdgeProtectedAreaPictures:
 		m.ResetProtectedAreaPictures()
+		return nil
+	case location.EdgePetroglyphsAccountingDocumentation:
+		m.ResetPetroglyphsAccountingDocumentation()
 		return nil
 	case location.EdgeCountry:
 		m.ResetCountry()
@@ -23849,26 +24021,29 @@ func (m *MediumMutation) ResetEdge(name string) error {
 // ModelMutation represents an operation that mutates the Model nodes in the graph.
 type ModelMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	abbreviation     *string
-	description      *string
-	external_link    *string
-	status           *model.Status
-	file_url         *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Model, error)
-	predicates       []predicate.Model
+	op                 Op
+	typ                string
+	id                 *int
+	created_at         *time.Time
+	created_by         *string
+	updated_at         *time.Time
+	updated_by         *string
+	display_name       *string
+	abbreviation       *string
+	description        *string
+	external_link      *string
+	status             *model.Status
+	file_url           *string
+	clearedFields      map[string]struct{}
+	artifacts          map[int]struct{}
+	removedartifacts   map[int]struct{}
+	clearedartifacts   bool
+	petroglyphs        map[int]struct{}
+	removedpetroglyphs map[int]struct{}
+	clearedpetroglyphs bool
+	done               bool
+	oldValue           func(context.Context) (*Model, error)
+	predicates         []predicate.Model
 }
 
 var _ ent.Mutation = (*ModelMutation)(nil)
@@ -24474,6 +24649,60 @@ func (m *ModelMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *ModelMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *ModelMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *ModelMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *ModelMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *ModelMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *ModelMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *ModelMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
 // Where appends a list predicates to the ModelMutation builder.
 func (m *ModelMutation) Where(ps ...predicate.Model) {
 	m.predicates = append(m.predicates, ps...)
@@ -24805,9 +25034,12 @@ func (m *ModelMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ModelMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.artifacts != nil {
 		edges = append(edges, model.EdgeArtifacts)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, model.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -24822,15 +25054,24 @@ func (m *ModelMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case model.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ModelMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedartifacts != nil {
 		edges = append(edges, model.EdgeArtifacts)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, model.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -24845,15 +25086,24 @@ func (m *ModelMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case model.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ModelMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedartifacts {
 		edges = append(edges, model.EdgeArtifacts)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, model.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -24864,6 +25114,8 @@ func (m *ModelMutation) EdgeCleared(name string) bool {
 	switch name {
 	case model.EdgeArtifacts:
 		return m.clearedartifacts
+	case model.EdgePetroglyphs:
+		return m.clearedpetroglyphs
 	}
 	return false
 }
@@ -24882,6 +25134,9 @@ func (m *ModelMutation) ResetEdge(name string) error {
 	switch name {
 	case model.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case model.EdgePetroglyphs:
+		m.ResetPetroglyphs()
 		return nil
 	}
 	return fmt.Errorf("unknown Model edge %s", name)
@@ -25882,6 +26137,1076 @@ func (m *MonumentMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Monument edge %s", name)
+}
+
+// MoundMutation represents an operation that mutates the Mound nodes in the graph.
+type MoundMutation struct {
+	config
+	op                 Op
+	typ                string
+	id                 *int
+	created_at         *time.Time
+	created_by         *string
+	updated_at         *time.Time
+	updated_by         *string
+	display_name       *string
+	abbreviation       *string
+	description        *string
+	external_link      *string
+	number             *string
+	clearedFields      map[string]struct{}
+	petroglyphs        map[int]struct{}
+	removedpetroglyphs map[int]struct{}
+	clearedpetroglyphs bool
+	visits             map[int]struct{}
+	removedvisits      map[int]struct{}
+	clearedvisits      bool
+	done               bool
+	oldValue           func(context.Context) (*Mound, error)
+	predicates         []predicate.Mound
+}
+
+var _ ent.Mutation = (*MoundMutation)(nil)
+
+// moundOption allows management of the mutation configuration using functional options.
+type moundOption func(*MoundMutation)
+
+// newMoundMutation creates new mutation for the Mound entity.
+func newMoundMutation(c config, op Op, opts ...moundOption) *MoundMutation {
+	m := &MoundMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMound,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMoundID sets the ID field of the mutation.
+func withMoundID(id int) moundOption {
+	return func(m *MoundMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Mound
+		)
+		m.oldValue = func(ctx context.Context) (*Mound, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Mound.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMound sets the old Mound of the mutation.
+func withMound(node *Mound) moundOption {
+	return func(m *MoundMutation) {
+		m.oldValue = func(context.Context) (*Mound, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MoundMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MoundMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MoundMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MoundMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Mound.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *MoundMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *MoundMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *MoundMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *MoundMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *MoundMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *MoundMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[mound.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *MoundMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[mound.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *MoundMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, mound.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *MoundMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *MoundMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *MoundMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *MoundMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *MoundMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *MoundMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[mound.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *MoundMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[mound.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *MoundMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, mound.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *MoundMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *MoundMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *MoundMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[mound.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *MoundMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[mound.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *MoundMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, mound.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *MoundMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *MoundMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *MoundMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[mound.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *MoundMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[mound.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *MoundMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, mound.FieldAbbreviation)
+}
+
+// SetDescription sets the "description" field.
+func (m *MoundMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *MoundMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *MoundMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[mound.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *MoundMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[mound.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *MoundMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, mound.FieldDescription)
+}
+
+// SetExternalLink sets the "external_link" field.
+func (m *MoundMutation) SetExternalLink(s string) {
+	m.external_link = &s
+}
+
+// ExternalLink returns the value of the "external_link" field in the mutation.
+func (m *MoundMutation) ExternalLink() (r string, exists bool) {
+	v := m.external_link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLink returns the old "external_link" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+	}
+	return oldValue.ExternalLink, nil
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (m *MoundMutation) ClearExternalLink() {
+	m.external_link = nil
+	m.clearedFields[mound.FieldExternalLink] = struct{}{}
+}
+
+// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
+func (m *MoundMutation) ExternalLinkCleared() bool {
+	_, ok := m.clearedFields[mound.FieldExternalLink]
+	return ok
+}
+
+// ResetExternalLink resets all changes to the "external_link" field.
+func (m *MoundMutation) ResetExternalLink() {
+	m.external_link = nil
+	delete(m.clearedFields, mound.FieldExternalLink)
+}
+
+// SetNumber sets the "number" field.
+func (m *MoundMutation) SetNumber(s string) {
+	m.number = &s
+}
+
+// Number returns the value of the "number" field in the mutation.
+func (m *MoundMutation) Number() (r string, exists bool) {
+	v := m.number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumber returns the old "number" field's value of the Mound entity.
+// If the Mound object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MoundMutation) OldNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+	}
+	return oldValue.Number, nil
+}
+
+// ClearNumber clears the value of the "number" field.
+func (m *MoundMutation) ClearNumber() {
+	m.number = nil
+	m.clearedFields[mound.FieldNumber] = struct{}{}
+}
+
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *MoundMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[mound.FieldNumber]
+	return ok
+}
+
+// ResetNumber resets all changes to the "number" field.
+func (m *MoundMutation) ResetNumber() {
+	m.number = nil
+	delete(m.clearedFields, mound.FieldNumber)
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *MoundMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *MoundMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *MoundMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *MoundMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *MoundMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *MoundMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *MoundMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
+// AddVisitIDs adds the "visits" edge to the Visit entity by ids.
+func (m *MoundMutation) AddVisitIDs(ids ...int) {
+	if m.visits == nil {
+		m.visits = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.visits[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVisits clears the "visits" edge to the Visit entity.
+func (m *MoundMutation) ClearVisits() {
+	m.clearedvisits = true
+}
+
+// VisitsCleared reports if the "visits" edge to the Visit entity was cleared.
+func (m *MoundMutation) VisitsCleared() bool {
+	return m.clearedvisits
+}
+
+// RemoveVisitIDs removes the "visits" edge to the Visit entity by IDs.
+func (m *MoundMutation) RemoveVisitIDs(ids ...int) {
+	if m.removedvisits == nil {
+		m.removedvisits = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.visits, ids[i])
+		m.removedvisits[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVisits returns the removed IDs of the "visits" edge to the Visit entity.
+func (m *MoundMutation) RemovedVisitsIDs() (ids []int) {
+	for id := range m.removedvisits {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VisitsIDs returns the "visits" edge IDs in the mutation.
+func (m *MoundMutation) VisitsIDs() (ids []int) {
+	for id := range m.visits {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVisits resets all changes to the "visits" edge.
+func (m *MoundMutation) ResetVisits() {
+	m.visits = nil
+	m.clearedvisits = false
+	m.removedvisits = nil
+}
+
+// Where appends a list predicates to the MoundMutation builder.
+func (m *MoundMutation) Where(ps ...predicate.Mound) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MoundMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MoundMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Mound, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MoundMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MoundMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Mound).
+func (m *MoundMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MoundMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.created_at != nil {
+		fields = append(fields, mound.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, mound.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, mound.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, mound.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, mound.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, mound.FieldAbbreviation)
+	}
+	if m.description != nil {
+		fields = append(fields, mound.FieldDescription)
+	}
+	if m.external_link != nil {
+		fields = append(fields, mound.FieldExternalLink)
+	}
+	if m.number != nil {
+		fields = append(fields, mound.FieldNumber)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MoundMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case mound.FieldCreatedAt:
+		return m.CreatedAt()
+	case mound.FieldCreatedBy:
+		return m.CreatedBy()
+	case mound.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case mound.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case mound.FieldDisplayName:
+		return m.DisplayName()
+	case mound.FieldAbbreviation:
+		return m.Abbreviation()
+	case mound.FieldDescription:
+		return m.Description()
+	case mound.FieldExternalLink:
+		return m.ExternalLink()
+	case mound.FieldNumber:
+		return m.Number()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MoundMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case mound.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case mound.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case mound.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case mound.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case mound.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case mound.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
+	case mound.FieldDescription:
+		return m.OldDescription(ctx)
+	case mound.FieldExternalLink:
+		return m.OldExternalLink(ctx)
+	case mound.FieldNumber:
+		return m.OldNumber(ctx)
+	}
+	return nil, fmt.Errorf("unknown Mound field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MoundMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case mound.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case mound.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case mound.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case mound.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case mound.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case mound.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
+		return nil
+	case mound.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case mound.FieldExternalLink:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLink(v)
+		return nil
+	case mound.FieldNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumber(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Mound field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MoundMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MoundMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MoundMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Mound numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MoundMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(mound.FieldCreatedBy) {
+		fields = append(fields, mound.FieldCreatedBy)
+	}
+	if m.FieldCleared(mound.FieldUpdatedBy) {
+		fields = append(fields, mound.FieldUpdatedBy)
+	}
+	if m.FieldCleared(mound.FieldDisplayName) {
+		fields = append(fields, mound.FieldDisplayName)
+	}
+	if m.FieldCleared(mound.FieldAbbreviation) {
+		fields = append(fields, mound.FieldAbbreviation)
+	}
+	if m.FieldCleared(mound.FieldDescription) {
+		fields = append(fields, mound.FieldDescription)
+	}
+	if m.FieldCleared(mound.FieldExternalLink) {
+		fields = append(fields, mound.FieldExternalLink)
+	}
+	if m.FieldCleared(mound.FieldNumber) {
+		fields = append(fields, mound.FieldNumber)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MoundMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MoundMutation) ClearField(name string) error {
+	switch name {
+	case mound.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case mound.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case mound.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case mound.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
+	case mound.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case mound.FieldExternalLink:
+		m.ClearExternalLink()
+		return nil
+	case mound.FieldNumber:
+		m.ClearNumber()
+		return nil
+	}
+	return fmt.Errorf("unknown Mound nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MoundMutation) ResetField(name string) error {
+	switch name {
+	case mound.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case mound.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case mound.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case mound.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case mound.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case mound.FieldAbbreviation:
+		m.ResetAbbreviation()
+		return nil
+	case mound.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case mound.FieldExternalLink:
+		m.ResetExternalLink()
+		return nil
+	case mound.FieldNumber:
+		m.ResetNumber()
+		return nil
+	}
+	return fmt.Errorf("unknown Mound field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MoundMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.petroglyphs != nil {
+		edges = append(edges, mound.EdgePetroglyphs)
+	}
+	if m.visits != nil {
+		edges = append(edges, mound.EdgeVisits)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MoundMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case mound.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
+	case mound.EdgeVisits:
+		ids := make([]ent.Value, 0, len(m.visits))
+		for id := range m.visits {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MoundMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, mound.EdgePetroglyphs)
+	}
+	if m.removedvisits != nil {
+		edges = append(edges, mound.EdgeVisits)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MoundMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case mound.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
+	case mound.EdgeVisits:
+		ids := make([]ent.Value, 0, len(m.removedvisits))
+		for id := range m.removedvisits {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MoundMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedpetroglyphs {
+		edges = append(edges, mound.EdgePetroglyphs)
+	}
+	if m.clearedvisits {
+		edges = append(edges, mound.EdgeVisits)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MoundMutation) EdgeCleared(name string) bool {
+	switch name {
+	case mound.EdgePetroglyphs:
+		return m.clearedpetroglyphs
+	case mound.EdgeVisits:
+		return m.clearedvisits
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MoundMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Mound unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MoundMutation) ResetEdge(name string) error {
+	switch name {
+	case mound.EdgePetroglyphs:
+		m.ResetPetroglyphs()
+		return nil
+	case mound.EdgeVisits:
+		m.ResetVisits()
+		return nil
+	}
+	return fmt.Errorf("unknown Mound edge %s", name)
 }
 
 // OrganizationMutation represents an operation that mutates the Organization nodes in the graph.
@@ -28606,59 +29931,65 @@ func (m *PeriodicalMutation) ResetEdge(name string) error {
 // PersonMutation represents an operation that mutates the Person nodes in the graph.
 type PersonMutation struct {
 	config
-	op                           Op
-	typ                          string
-	id                           *int
-	created_at                   *time.Time
-	created_by                   *string
-	updated_at                   *time.Time
-	updated_by                   *string
-	address                      *string
-	phone_numbers                *[]string
-	appendphone_numbers          []string
-	emails                       *[]string
-	appendemails                 []string
-	display_name                 *string
-	abbreviation                 *string
-	description                  *string
-	external_link                *string
-	primary_image_url            *string
-	additional_images_urls       *[]string
-	appendadditional_images_urls []string
-	given_name                   *string
-	family_name                  *string
-	patronymic_name              *string
-	begin_data                   *time.Time
-	end_date                     *time.Time
-	gender                       *person.Gender
-	occupation                   *string
-	clearedFields                map[string]struct{}
-	collections                  map[int]struct{}
-	removedcollections           map[int]struct{}
-	clearedcollections           bool
-	art                          map[int]struct{}
-	removedart                   map[int]struct{}
-	clearedart                   bool
-	artifacts                    map[int]struct{}
-	removedartifacts             map[int]struct{}
-	clearedartifacts             bool
-	donated_artifacts            map[int]struct{}
-	removeddonated_artifacts     map[int]struct{}
-	cleareddonated_artifacts     bool
-	books                        map[int]struct{}
-	removedbooks                 map[int]struct{}
-	clearedbooks                 bool
-	projects                     map[int]struct{}
-	removedprojects              map[int]struct{}
-	clearedprojects              bool
-	publications                 map[int]struct{}
-	removedpublications          map[int]struct{}
-	clearedpublications          bool
-	affiliation                  *int
-	clearedaffiliation           bool
-	done                         bool
-	oldValue                     func(context.Context) (*Person, error)
-	predicates                   []predicate.Person
+	op                                          Op
+	typ                                         string
+	id                                          *int
+	created_at                                  *time.Time
+	created_by                                  *string
+	updated_at                                  *time.Time
+	updated_by                                  *string
+	address                                     *string
+	phone_numbers                               *[]string
+	appendphone_numbers                         []string
+	emails                                      *[]string
+	appendemails                                []string
+	display_name                                *string
+	abbreviation                                *string
+	description                                 *string
+	external_link                               *string
+	primary_image_url                           *string
+	additional_images_urls                      *[]string
+	appendadditional_images_urls                []string
+	given_name                                  *string
+	family_name                                 *string
+	patronymic_name                             *string
+	begin_data                                  *time.Time
+	end_date                                    *time.Time
+	gender                                      *person.Gender
+	occupation                                  *string
+	clearedFields                               map[string]struct{}
+	collections                                 map[int]struct{}
+	removedcollections                          map[int]struct{}
+	clearedcollections                          bool
+	art                                         map[int]struct{}
+	removedart                                  map[int]struct{}
+	clearedart                                  bool
+	artifacts                                   map[int]struct{}
+	removedartifacts                            map[int]struct{}
+	clearedartifacts                            bool
+	donated_artifacts                           map[int]struct{}
+	removeddonated_artifacts                    map[int]struct{}
+	cleareddonated_artifacts                    bool
+	petroglyphs_accounting_documentation        map[int]struct{}
+	removedpetroglyphs_accounting_documentation map[int]struct{}
+	clearedpetroglyphs_accounting_documentation bool
+	books                                       map[int]struct{}
+	removedbooks                                map[int]struct{}
+	clearedbooks                                bool
+	visits                                      map[int]struct{}
+	removedvisits                               map[int]struct{}
+	clearedvisits                               bool
+	projects                                    map[int]struct{}
+	removedprojects                             map[int]struct{}
+	clearedprojects                             bool
+	publications                                map[int]struct{}
+	removedpublications                         map[int]struct{}
+	clearedpublications                         bool
+	affiliation                                 *int
+	clearedaffiliation                          bool
+	done                                        bool
+	oldValue                                    func(context.Context) (*Person, error)
+	predicates                                  []predicate.Person
 }
 
 var _ ent.Mutation = (*PersonMutation)(nil)
@@ -29977,6 +31308,60 @@ func (m *PersonMutation) ResetDonatedArtifacts() {
 	m.removeddonated_artifacts = nil
 }
 
+// AddPetroglyphsAccountingDocumentationIDs adds the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by ids.
+func (m *PersonMutation) AddPetroglyphsAccountingDocumentationIDs(ids ...int) {
+	if m.petroglyphs_accounting_documentation == nil {
+		m.petroglyphs_accounting_documentation = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs_accounting_documentation[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphsAccountingDocumentation clears the "petroglyphs_accounting_documentation" edge to the Petroglyph entity.
+func (m *PersonMutation) ClearPetroglyphsAccountingDocumentation() {
+	m.clearedpetroglyphs_accounting_documentation = true
+}
+
+// PetroglyphsAccountingDocumentationCleared reports if the "petroglyphs_accounting_documentation" edge to the Petroglyph entity was cleared.
+func (m *PersonMutation) PetroglyphsAccountingDocumentationCleared() bool {
+	return m.clearedpetroglyphs_accounting_documentation
+}
+
+// RemovePetroglyphsAccountingDocumentationIDs removes the "petroglyphs_accounting_documentation" edge to the Petroglyph entity by IDs.
+func (m *PersonMutation) RemovePetroglyphsAccountingDocumentationIDs(ids ...int) {
+	if m.removedpetroglyphs_accounting_documentation == nil {
+		m.removedpetroglyphs_accounting_documentation = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs_accounting_documentation, ids[i])
+		m.removedpetroglyphs_accounting_documentation[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphsAccountingDocumentation returns the removed IDs of the "petroglyphs_accounting_documentation" edge to the Petroglyph entity.
+func (m *PersonMutation) RemovedPetroglyphsAccountingDocumentationIDs() (ids []int) {
+	for id := range m.removedpetroglyphs_accounting_documentation {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsAccountingDocumentationIDs returns the "petroglyphs_accounting_documentation" edge IDs in the mutation.
+func (m *PersonMutation) PetroglyphsAccountingDocumentationIDs() (ids []int) {
+	for id := range m.petroglyphs_accounting_documentation {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphsAccountingDocumentation resets all changes to the "petroglyphs_accounting_documentation" edge.
+func (m *PersonMutation) ResetPetroglyphsAccountingDocumentation() {
+	m.petroglyphs_accounting_documentation = nil
+	m.clearedpetroglyphs_accounting_documentation = false
+	m.removedpetroglyphs_accounting_documentation = nil
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by ids.
 func (m *PersonMutation) AddBookIDs(ids ...int) {
 	if m.books == nil {
@@ -30029,6 +31414,60 @@ func (m *PersonMutation) ResetBooks() {
 	m.books = nil
 	m.clearedbooks = false
 	m.removedbooks = nil
+}
+
+// AddVisitIDs adds the "visits" edge to the Visit entity by ids.
+func (m *PersonMutation) AddVisitIDs(ids ...int) {
+	if m.visits == nil {
+		m.visits = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.visits[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVisits clears the "visits" edge to the Visit entity.
+func (m *PersonMutation) ClearVisits() {
+	m.clearedvisits = true
+}
+
+// VisitsCleared reports if the "visits" edge to the Visit entity was cleared.
+func (m *PersonMutation) VisitsCleared() bool {
+	return m.clearedvisits
+}
+
+// RemoveVisitIDs removes the "visits" edge to the Visit entity by IDs.
+func (m *PersonMutation) RemoveVisitIDs(ids ...int) {
+	if m.removedvisits == nil {
+		m.removedvisits = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.visits, ids[i])
+		m.removedvisits[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVisits returns the removed IDs of the "visits" edge to the Visit entity.
+func (m *PersonMutation) RemovedVisitsIDs() (ids []int) {
+	for id := range m.removedvisits {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VisitsIDs returns the "visits" edge IDs in the mutation.
+func (m *PersonMutation) VisitsIDs() (ids []int) {
+	for id := range m.visits {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVisits resets all changes to the "visits" edge.
+func (m *PersonMutation) ResetVisits() {
+	m.visits = nil
+	m.clearedvisits = false
+	m.removedvisits = nil
 }
 
 // AddProjectIDs adds the "projects" edge to the Project entity by ids.
@@ -30745,7 +32184,7 @@ func (m *PersonMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonMutation) AddedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 10)
 	if m.collections != nil {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -30758,8 +32197,14 @@ func (m *PersonMutation) AddedEdges() []string {
 	if m.donated_artifacts != nil {
 		edges = append(edges, person.EdgeDonatedArtifacts)
 	}
+	if m.petroglyphs_accounting_documentation != nil {
+		edges = append(edges, person.EdgePetroglyphsAccountingDocumentation)
+	}
 	if m.books != nil {
 		edges = append(edges, person.EdgeBooks)
+	}
+	if m.visits != nil {
+		edges = append(edges, person.EdgeVisits)
 	}
 	if m.projects != nil {
 		edges = append(edges, person.EdgeProjects)
@@ -30801,9 +32246,21 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case person.EdgePetroglyphsAccountingDocumentation:
+		ids := make([]ent.Value, 0, len(m.petroglyphs_accounting_documentation))
+		for id := range m.petroglyphs_accounting_documentation {
+			ids = append(ids, id)
+		}
+		return ids
 	case person.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.books))
 		for id := range m.books {
+			ids = append(ids, id)
+		}
+		return ids
+	case person.EdgeVisits:
+		ids := make([]ent.Value, 0, len(m.visits))
+		for id := range m.visits {
 			ids = append(ids, id)
 		}
 		return ids
@@ -30829,7 +32286,7 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 10)
 	if m.removedcollections != nil {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -30842,8 +32299,14 @@ func (m *PersonMutation) RemovedEdges() []string {
 	if m.removeddonated_artifacts != nil {
 		edges = append(edges, person.EdgeDonatedArtifacts)
 	}
+	if m.removedpetroglyphs_accounting_documentation != nil {
+		edges = append(edges, person.EdgePetroglyphsAccountingDocumentation)
+	}
 	if m.removedbooks != nil {
 		edges = append(edges, person.EdgeBooks)
+	}
+	if m.removedvisits != nil {
+		edges = append(edges, person.EdgeVisits)
 	}
 	if m.removedprojects != nil {
 		edges = append(edges, person.EdgeProjects)
@@ -30882,9 +32345,21 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case person.EdgePetroglyphsAccountingDocumentation:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs_accounting_documentation))
+		for id := range m.removedpetroglyphs_accounting_documentation {
+			ids = append(ids, id)
+		}
+		return ids
 	case person.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.removedbooks))
 		for id := range m.removedbooks {
+			ids = append(ids, id)
+		}
+		return ids
+	case person.EdgeVisits:
+		ids := make([]ent.Value, 0, len(m.removedvisits))
+		for id := range m.removedvisits {
 			ids = append(ids, id)
 		}
 		return ids
@@ -30906,7 +32381,7 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 10)
 	if m.clearedcollections {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -30919,8 +32394,14 @@ func (m *PersonMutation) ClearedEdges() []string {
 	if m.cleareddonated_artifacts {
 		edges = append(edges, person.EdgeDonatedArtifacts)
 	}
+	if m.clearedpetroglyphs_accounting_documentation {
+		edges = append(edges, person.EdgePetroglyphsAccountingDocumentation)
+	}
 	if m.clearedbooks {
 		edges = append(edges, person.EdgeBooks)
+	}
+	if m.clearedvisits {
+		edges = append(edges, person.EdgeVisits)
 	}
 	if m.clearedprojects {
 		edges = append(edges, person.EdgeProjects)
@@ -30946,8 +32427,12 @@ func (m *PersonMutation) EdgeCleared(name string) bool {
 		return m.clearedartifacts
 	case person.EdgeDonatedArtifacts:
 		return m.cleareddonated_artifacts
+	case person.EdgePetroglyphsAccountingDocumentation:
+		return m.clearedpetroglyphs_accounting_documentation
 	case person.EdgeBooks:
 		return m.clearedbooks
+	case person.EdgeVisits:
+		return m.clearedvisits
 	case person.EdgeProjects:
 		return m.clearedprojects
 	case person.EdgePublications:
@@ -30985,8 +32470,14 @@ func (m *PersonMutation) ResetEdge(name string) error {
 	case person.EdgeDonatedArtifacts:
 		m.ResetDonatedArtifacts()
 		return nil
+	case person.EdgePetroglyphsAccountingDocumentation:
+		m.ResetPetroglyphsAccountingDocumentation()
+		return nil
 	case person.EdgeBooks:
 		m.ResetBooks()
+		return nil
+	case person.EdgeVisits:
+		m.ResetVisits()
 		return nil
 	case person.EdgeProjects:
 		m.ResetProjects()
@@ -31729,6 +33220,3294 @@ func (m *PersonalMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Personal edge %s", name)
+}
+
+// PetroglyphMutation represents an operation that mutates the Petroglyph nodes in the graph.
+type PetroglyphMutation struct {
+	config
+	op                                      Op
+	typ                                     string
+	id                                      *int
+	created_at                              *time.Time
+	created_by                              *string
+	updated_at                              *time.Time
+	updated_by                              *string
+	display_name                            *string
+	abbreviation                            *string
+	description                             *string
+	external_link                           *string
+	status                                  *petroglyph.Status
+	primary_image_url                       *string
+	additional_images_urls                  *[]string
+	appendadditional_images_urls            []string
+	deleted_at                              *time.Time
+	deleted_by                              *string
+	number                                  *string
+	dating                                  *string
+	dating_start                            *int
+	adddating_start                         *int
+	dating_end                              *int
+	adddating_end                           *int
+	orientation                             *string
+	position                                *string
+	geometric_shape                         *string
+	height                                  *float64
+	addheight                               *float64
+	width                                   *float64
+	addwidth                                *float64
+	length                                  *float64
+	addlength                               *float64
+	depth                                   *float64
+	adddepth                                *float64
+	diameter                                *float64
+	adddiameter                             *float64
+	weight                                  *string
+	dimensions                              *string
+	plane_preservation                      *string
+	photo_code                              *string
+	accounting_documentation_date           *time.Time
+	geometry                                *types.Geometry
+	clearedFields                           map[string]struct{}
+	cultural_affiliation                    *int
+	clearedcultural_affiliation             bool
+	model                                   *int
+	clearedmodel                            bool
+	mound                                   *int
+	clearedmound                            bool
+	publications                            map[int]struct{}
+	removedpublications                     map[int]struct{}
+	clearedpublications                     bool
+	techniques                              map[int]struct{}
+	removedtechniques                       map[int]struct{}
+	clearedtechniques                       bool
+	region                                  *int
+	clearedregion                           bool
+	accounting_documentation_address        *int
+	clearedaccounting_documentation_address bool
+	accounting_documentation_author         *int
+	clearedaccounting_documentation_author  bool
+	done                                    bool
+	oldValue                                func(context.Context) (*Petroglyph, error)
+	predicates                              []predicate.Petroglyph
+}
+
+var _ ent.Mutation = (*PetroglyphMutation)(nil)
+
+// petroglyphOption allows management of the mutation configuration using functional options.
+type petroglyphOption func(*PetroglyphMutation)
+
+// newPetroglyphMutation creates new mutation for the Petroglyph entity.
+func newPetroglyphMutation(c config, op Op, opts ...petroglyphOption) *PetroglyphMutation {
+	m := &PetroglyphMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePetroglyph,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPetroglyphID sets the ID field of the mutation.
+func withPetroglyphID(id int) petroglyphOption {
+	return func(m *PetroglyphMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Petroglyph
+		)
+		m.oldValue = func(ctx context.Context) (*Petroglyph, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Petroglyph.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPetroglyph sets the old Petroglyph of the mutation.
+func withPetroglyph(node *Petroglyph) petroglyphOption {
+	return func(m *PetroglyphMutation) {
+		m.oldValue = func(context.Context) (*Petroglyph, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PetroglyphMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PetroglyphMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PetroglyphMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PetroglyphMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Petroglyph.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *PetroglyphMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *PetroglyphMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *PetroglyphMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *PetroglyphMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *PetroglyphMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *PetroglyphMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[petroglyph.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *PetroglyphMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *PetroglyphMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, petroglyph.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *PetroglyphMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *PetroglyphMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *PetroglyphMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *PetroglyphMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *PetroglyphMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *PetroglyphMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[petroglyph.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *PetroglyphMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *PetroglyphMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, petroglyph.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *PetroglyphMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *PetroglyphMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *PetroglyphMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[petroglyph.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *PetroglyphMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *PetroglyphMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, petroglyph.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *PetroglyphMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *PetroglyphMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *PetroglyphMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[petroglyph.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *PetroglyphMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *PetroglyphMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, petroglyph.FieldAbbreviation)
+}
+
+// SetDescription sets the "description" field.
+func (m *PetroglyphMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *PetroglyphMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *PetroglyphMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[petroglyph.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *PetroglyphMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *PetroglyphMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, petroglyph.FieldDescription)
+}
+
+// SetExternalLink sets the "external_link" field.
+func (m *PetroglyphMutation) SetExternalLink(s string) {
+	m.external_link = &s
+}
+
+// ExternalLink returns the value of the "external_link" field in the mutation.
+func (m *PetroglyphMutation) ExternalLink() (r string, exists bool) {
+	v := m.external_link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLink returns the old "external_link" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+	}
+	return oldValue.ExternalLink, nil
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (m *PetroglyphMutation) ClearExternalLink() {
+	m.external_link = nil
+	m.clearedFields[petroglyph.FieldExternalLink] = struct{}{}
+}
+
+// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
+func (m *PetroglyphMutation) ExternalLinkCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldExternalLink]
+	return ok
+}
+
+// ResetExternalLink resets all changes to the "external_link" field.
+func (m *PetroglyphMutation) ResetExternalLink() {
+	m.external_link = nil
+	delete(m.clearedFields, petroglyph.FieldExternalLink)
+}
+
+// SetStatus sets the "status" field.
+func (m *PetroglyphMutation) SetStatus(pe petroglyph.Status) {
+	m.status = &pe
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *PetroglyphMutation) Status() (r petroglyph.Status, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldStatus(ctx context.Context) (v petroglyph.Status, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *PetroglyphMutation) ClearStatus() {
+	m.status = nil
+	m.clearedFields[petroglyph.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *PetroglyphMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *PetroglyphMutation) ResetStatus() {
+	m.status = nil
+	delete(m.clearedFields, petroglyph.FieldStatus)
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *PetroglyphMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *PetroglyphMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *PetroglyphMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[petroglyph.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *PetroglyphMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *PetroglyphMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, petroglyph.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *PetroglyphMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *PetroglyphMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *PetroglyphMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *PetroglyphMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *PetroglyphMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[petroglyph.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *PetroglyphMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *PetroglyphMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, petroglyph.FieldAdditionalImagesUrls)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *PetroglyphMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *PetroglyphMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *PetroglyphMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[petroglyph.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *PetroglyphMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *PetroglyphMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, petroglyph.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *PetroglyphMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *PetroglyphMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *PetroglyphMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[petroglyph.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *PetroglyphMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *PetroglyphMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, petroglyph.FieldDeletedBy)
+}
+
+// SetNumber sets the "number" field.
+func (m *PetroglyphMutation) SetNumber(s string) {
+	m.number = &s
+}
+
+// Number returns the value of the "number" field in the mutation.
+func (m *PetroglyphMutation) Number() (r string, exists bool) {
+	v := m.number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumber returns the old "number" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+	}
+	return oldValue.Number, nil
+}
+
+// ClearNumber clears the value of the "number" field.
+func (m *PetroglyphMutation) ClearNumber() {
+	m.number = nil
+	m.clearedFields[petroglyph.FieldNumber] = struct{}{}
+}
+
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *PetroglyphMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldNumber]
+	return ok
+}
+
+// ResetNumber resets all changes to the "number" field.
+func (m *PetroglyphMutation) ResetNumber() {
+	m.number = nil
+	delete(m.clearedFields, petroglyph.FieldNumber)
+}
+
+// SetDating sets the "dating" field.
+func (m *PetroglyphMutation) SetDating(s string) {
+	m.dating = &s
+}
+
+// Dating returns the value of the "dating" field in the mutation.
+func (m *PetroglyphMutation) Dating() (r string, exists bool) {
+	v := m.dating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDating returns the old "dating" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDating(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDating is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDating: %w", err)
+	}
+	return oldValue.Dating, nil
+}
+
+// ClearDating clears the value of the "dating" field.
+func (m *PetroglyphMutation) ClearDating() {
+	m.dating = nil
+	m.clearedFields[petroglyph.FieldDating] = struct{}{}
+}
+
+// DatingCleared returns if the "dating" field was cleared in this mutation.
+func (m *PetroglyphMutation) DatingCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDating]
+	return ok
+}
+
+// ResetDating resets all changes to the "dating" field.
+func (m *PetroglyphMutation) ResetDating() {
+	m.dating = nil
+	delete(m.clearedFields, petroglyph.FieldDating)
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (m *PetroglyphMutation) SetDatingStart(i int) {
+	m.dating_start = &i
+	m.adddating_start = nil
+}
+
+// DatingStart returns the value of the "dating_start" field in the mutation.
+func (m *PetroglyphMutation) DatingStart() (r int, exists bool) {
+	v := m.dating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingStart returns the old "dating_start" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDatingStart(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingStart is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingStart requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingStart: %w", err)
+	}
+	return oldValue.DatingStart, nil
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (m *PetroglyphMutation) AddDatingStart(i int) {
+	if m.adddating_start != nil {
+		*m.adddating_start += i
+	} else {
+		m.adddating_start = &i
+	}
+}
+
+// AddedDatingStart returns the value that was added to the "dating_start" field in this mutation.
+func (m *PetroglyphMutation) AddedDatingStart() (r int, exists bool) {
+	v := m.adddating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (m *PetroglyphMutation) ClearDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	m.clearedFields[petroglyph.FieldDatingStart] = struct{}{}
+}
+
+// DatingStartCleared returns if the "dating_start" field was cleared in this mutation.
+func (m *PetroglyphMutation) DatingStartCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDatingStart]
+	return ok
+}
+
+// ResetDatingStart resets all changes to the "dating_start" field.
+func (m *PetroglyphMutation) ResetDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	delete(m.clearedFields, petroglyph.FieldDatingStart)
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (m *PetroglyphMutation) SetDatingEnd(i int) {
+	m.dating_end = &i
+	m.adddating_end = nil
+}
+
+// DatingEnd returns the value of the "dating_end" field in the mutation.
+func (m *PetroglyphMutation) DatingEnd() (r int, exists bool) {
+	v := m.dating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingEnd returns the old "dating_end" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDatingEnd(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingEnd is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingEnd requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingEnd: %w", err)
+	}
+	return oldValue.DatingEnd, nil
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (m *PetroglyphMutation) AddDatingEnd(i int) {
+	if m.adddating_end != nil {
+		*m.adddating_end += i
+	} else {
+		m.adddating_end = &i
+	}
+}
+
+// AddedDatingEnd returns the value that was added to the "dating_end" field in this mutation.
+func (m *PetroglyphMutation) AddedDatingEnd() (r int, exists bool) {
+	v := m.adddating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (m *PetroglyphMutation) ClearDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	m.clearedFields[petroglyph.FieldDatingEnd] = struct{}{}
+}
+
+// DatingEndCleared returns if the "dating_end" field was cleared in this mutation.
+func (m *PetroglyphMutation) DatingEndCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDatingEnd]
+	return ok
+}
+
+// ResetDatingEnd resets all changes to the "dating_end" field.
+func (m *PetroglyphMutation) ResetDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	delete(m.clearedFields, petroglyph.FieldDatingEnd)
+}
+
+// SetOrientation sets the "orientation" field.
+func (m *PetroglyphMutation) SetOrientation(s string) {
+	m.orientation = &s
+}
+
+// Orientation returns the value of the "orientation" field in the mutation.
+func (m *PetroglyphMutation) Orientation() (r string, exists bool) {
+	v := m.orientation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrientation returns the old "orientation" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldOrientation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrientation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrientation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrientation: %w", err)
+	}
+	return oldValue.Orientation, nil
+}
+
+// ClearOrientation clears the value of the "orientation" field.
+func (m *PetroglyphMutation) ClearOrientation() {
+	m.orientation = nil
+	m.clearedFields[petroglyph.FieldOrientation] = struct{}{}
+}
+
+// OrientationCleared returns if the "orientation" field was cleared in this mutation.
+func (m *PetroglyphMutation) OrientationCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldOrientation]
+	return ok
+}
+
+// ResetOrientation resets all changes to the "orientation" field.
+func (m *PetroglyphMutation) ResetOrientation() {
+	m.orientation = nil
+	delete(m.clearedFields, petroglyph.FieldOrientation)
+}
+
+// SetPosition sets the "position" field.
+func (m *PetroglyphMutation) SetPosition(s string) {
+	m.position = &s
+}
+
+// Position returns the value of the "position" field in the mutation.
+func (m *PetroglyphMutation) Position() (r string, exists bool) {
+	v := m.position
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPosition returns the old "position" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldPosition(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPosition is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPosition requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
+	}
+	return oldValue.Position, nil
+}
+
+// ClearPosition clears the value of the "position" field.
+func (m *PetroglyphMutation) ClearPosition() {
+	m.position = nil
+	m.clearedFields[petroglyph.FieldPosition] = struct{}{}
+}
+
+// PositionCleared returns if the "position" field was cleared in this mutation.
+func (m *PetroglyphMutation) PositionCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldPosition]
+	return ok
+}
+
+// ResetPosition resets all changes to the "position" field.
+func (m *PetroglyphMutation) ResetPosition() {
+	m.position = nil
+	delete(m.clearedFields, petroglyph.FieldPosition)
+}
+
+// SetGeometricShape sets the "geometric_shape" field.
+func (m *PetroglyphMutation) SetGeometricShape(s string) {
+	m.geometric_shape = &s
+}
+
+// GeometricShape returns the value of the "geometric_shape" field in the mutation.
+func (m *PetroglyphMutation) GeometricShape() (r string, exists bool) {
+	v := m.geometric_shape
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGeometricShape returns the old "geometric_shape" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldGeometricShape(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGeometricShape is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGeometricShape requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGeometricShape: %w", err)
+	}
+	return oldValue.GeometricShape, nil
+}
+
+// ClearGeometricShape clears the value of the "geometric_shape" field.
+func (m *PetroglyphMutation) ClearGeometricShape() {
+	m.geometric_shape = nil
+	m.clearedFields[petroglyph.FieldGeometricShape] = struct{}{}
+}
+
+// GeometricShapeCleared returns if the "geometric_shape" field was cleared in this mutation.
+func (m *PetroglyphMutation) GeometricShapeCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldGeometricShape]
+	return ok
+}
+
+// ResetGeometricShape resets all changes to the "geometric_shape" field.
+func (m *PetroglyphMutation) ResetGeometricShape() {
+	m.geometric_shape = nil
+	delete(m.clearedFields, petroglyph.FieldGeometricShape)
+}
+
+// SetHeight sets the "height" field.
+func (m *PetroglyphMutation) SetHeight(f float64) {
+	m.height = &f
+	m.addheight = nil
+}
+
+// Height returns the value of the "height" field in the mutation.
+func (m *PetroglyphMutation) Height() (r float64, exists bool) {
+	v := m.height
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHeight returns the old "height" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldHeight(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHeight: %w", err)
+	}
+	return oldValue.Height, nil
+}
+
+// AddHeight adds f to the "height" field.
+func (m *PetroglyphMutation) AddHeight(f float64) {
+	if m.addheight != nil {
+		*m.addheight += f
+	} else {
+		m.addheight = &f
+	}
+}
+
+// AddedHeight returns the value that was added to the "height" field in this mutation.
+func (m *PetroglyphMutation) AddedHeight() (r float64, exists bool) {
+	v := m.addheight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearHeight clears the value of the "height" field.
+func (m *PetroglyphMutation) ClearHeight() {
+	m.height = nil
+	m.addheight = nil
+	m.clearedFields[petroglyph.FieldHeight] = struct{}{}
+}
+
+// HeightCleared returns if the "height" field was cleared in this mutation.
+func (m *PetroglyphMutation) HeightCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldHeight]
+	return ok
+}
+
+// ResetHeight resets all changes to the "height" field.
+func (m *PetroglyphMutation) ResetHeight() {
+	m.height = nil
+	m.addheight = nil
+	delete(m.clearedFields, petroglyph.FieldHeight)
+}
+
+// SetWidth sets the "width" field.
+func (m *PetroglyphMutation) SetWidth(f float64) {
+	m.width = &f
+	m.addwidth = nil
+}
+
+// Width returns the value of the "width" field in the mutation.
+func (m *PetroglyphMutation) Width() (r float64, exists bool) {
+	v := m.width
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWidth returns the old "width" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldWidth(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWidth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWidth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWidth: %w", err)
+	}
+	return oldValue.Width, nil
+}
+
+// AddWidth adds f to the "width" field.
+func (m *PetroglyphMutation) AddWidth(f float64) {
+	if m.addwidth != nil {
+		*m.addwidth += f
+	} else {
+		m.addwidth = &f
+	}
+}
+
+// AddedWidth returns the value that was added to the "width" field in this mutation.
+func (m *PetroglyphMutation) AddedWidth() (r float64, exists bool) {
+	v := m.addwidth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearWidth clears the value of the "width" field.
+func (m *PetroglyphMutation) ClearWidth() {
+	m.width = nil
+	m.addwidth = nil
+	m.clearedFields[petroglyph.FieldWidth] = struct{}{}
+}
+
+// WidthCleared returns if the "width" field was cleared in this mutation.
+func (m *PetroglyphMutation) WidthCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldWidth]
+	return ok
+}
+
+// ResetWidth resets all changes to the "width" field.
+func (m *PetroglyphMutation) ResetWidth() {
+	m.width = nil
+	m.addwidth = nil
+	delete(m.clearedFields, petroglyph.FieldWidth)
+}
+
+// SetLength sets the "length" field.
+func (m *PetroglyphMutation) SetLength(f float64) {
+	m.length = &f
+	m.addlength = nil
+}
+
+// Length returns the value of the "length" field in the mutation.
+func (m *PetroglyphMutation) Length() (r float64, exists bool) {
+	v := m.length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLength returns the old "length" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldLength(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLength is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLength requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLength: %w", err)
+	}
+	return oldValue.Length, nil
+}
+
+// AddLength adds f to the "length" field.
+func (m *PetroglyphMutation) AddLength(f float64) {
+	if m.addlength != nil {
+		*m.addlength += f
+	} else {
+		m.addlength = &f
+	}
+}
+
+// AddedLength returns the value that was added to the "length" field in this mutation.
+func (m *PetroglyphMutation) AddedLength() (r float64, exists bool) {
+	v := m.addlength
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearLength clears the value of the "length" field.
+func (m *PetroglyphMutation) ClearLength() {
+	m.length = nil
+	m.addlength = nil
+	m.clearedFields[petroglyph.FieldLength] = struct{}{}
+}
+
+// LengthCleared returns if the "length" field was cleared in this mutation.
+func (m *PetroglyphMutation) LengthCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldLength]
+	return ok
+}
+
+// ResetLength resets all changes to the "length" field.
+func (m *PetroglyphMutation) ResetLength() {
+	m.length = nil
+	m.addlength = nil
+	delete(m.clearedFields, petroglyph.FieldLength)
+}
+
+// SetDepth sets the "depth" field.
+func (m *PetroglyphMutation) SetDepth(f float64) {
+	m.depth = &f
+	m.adddepth = nil
+}
+
+// Depth returns the value of the "depth" field in the mutation.
+func (m *PetroglyphMutation) Depth() (r float64, exists bool) {
+	v := m.depth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDepth returns the old "depth" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDepth(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDepth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDepth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDepth: %w", err)
+	}
+	return oldValue.Depth, nil
+}
+
+// AddDepth adds f to the "depth" field.
+func (m *PetroglyphMutation) AddDepth(f float64) {
+	if m.adddepth != nil {
+		*m.adddepth += f
+	} else {
+		m.adddepth = &f
+	}
+}
+
+// AddedDepth returns the value that was added to the "depth" field in this mutation.
+func (m *PetroglyphMutation) AddedDepth() (r float64, exists bool) {
+	v := m.adddepth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (m *PetroglyphMutation) ClearDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	m.clearedFields[petroglyph.FieldDepth] = struct{}{}
+}
+
+// DepthCleared returns if the "depth" field was cleared in this mutation.
+func (m *PetroglyphMutation) DepthCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDepth]
+	return ok
+}
+
+// ResetDepth resets all changes to the "depth" field.
+func (m *PetroglyphMutation) ResetDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	delete(m.clearedFields, petroglyph.FieldDepth)
+}
+
+// SetDiameter sets the "diameter" field.
+func (m *PetroglyphMutation) SetDiameter(f float64) {
+	m.diameter = &f
+	m.adddiameter = nil
+}
+
+// Diameter returns the value of the "diameter" field in the mutation.
+func (m *PetroglyphMutation) Diameter() (r float64, exists bool) {
+	v := m.diameter
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDiameter returns the old "diameter" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDiameter(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDiameter is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDiameter requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDiameter: %w", err)
+	}
+	return oldValue.Diameter, nil
+}
+
+// AddDiameter adds f to the "diameter" field.
+func (m *PetroglyphMutation) AddDiameter(f float64) {
+	if m.adddiameter != nil {
+		*m.adddiameter += f
+	} else {
+		m.adddiameter = &f
+	}
+}
+
+// AddedDiameter returns the value that was added to the "diameter" field in this mutation.
+func (m *PetroglyphMutation) AddedDiameter() (r float64, exists bool) {
+	v := m.adddiameter
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDiameter clears the value of the "diameter" field.
+func (m *PetroglyphMutation) ClearDiameter() {
+	m.diameter = nil
+	m.adddiameter = nil
+	m.clearedFields[petroglyph.FieldDiameter] = struct{}{}
+}
+
+// DiameterCleared returns if the "diameter" field was cleared in this mutation.
+func (m *PetroglyphMutation) DiameterCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDiameter]
+	return ok
+}
+
+// ResetDiameter resets all changes to the "diameter" field.
+func (m *PetroglyphMutation) ResetDiameter() {
+	m.diameter = nil
+	m.adddiameter = nil
+	delete(m.clearedFields, petroglyph.FieldDiameter)
+}
+
+// SetWeight sets the "weight" field.
+func (m *PetroglyphMutation) SetWeight(s string) {
+	m.weight = &s
+}
+
+// Weight returns the value of the "weight" field in the mutation.
+func (m *PetroglyphMutation) Weight() (r string, exists bool) {
+	v := m.weight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWeight returns the old "weight" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldWeight(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWeight: %w", err)
+	}
+	return oldValue.Weight, nil
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (m *PetroglyphMutation) ClearWeight() {
+	m.weight = nil
+	m.clearedFields[petroglyph.FieldWeight] = struct{}{}
+}
+
+// WeightCleared returns if the "weight" field was cleared in this mutation.
+func (m *PetroglyphMutation) WeightCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldWeight]
+	return ok
+}
+
+// ResetWeight resets all changes to the "weight" field.
+func (m *PetroglyphMutation) ResetWeight() {
+	m.weight = nil
+	delete(m.clearedFields, petroglyph.FieldWeight)
+}
+
+// SetDimensions sets the "dimensions" field.
+func (m *PetroglyphMutation) SetDimensions(s string) {
+	m.dimensions = &s
+}
+
+// Dimensions returns the value of the "dimensions" field in the mutation.
+func (m *PetroglyphMutation) Dimensions() (r string, exists bool) {
+	v := m.dimensions
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDimensions returns the old "dimensions" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDimensions(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDimensions is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDimensions requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDimensions: %w", err)
+	}
+	return oldValue.Dimensions, nil
+}
+
+// ClearDimensions clears the value of the "dimensions" field.
+func (m *PetroglyphMutation) ClearDimensions() {
+	m.dimensions = nil
+	m.clearedFields[petroglyph.FieldDimensions] = struct{}{}
+}
+
+// DimensionsCleared returns if the "dimensions" field was cleared in this mutation.
+func (m *PetroglyphMutation) DimensionsCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDimensions]
+	return ok
+}
+
+// ResetDimensions resets all changes to the "dimensions" field.
+func (m *PetroglyphMutation) ResetDimensions() {
+	m.dimensions = nil
+	delete(m.clearedFields, petroglyph.FieldDimensions)
+}
+
+// SetPlanePreservation sets the "plane_preservation" field.
+func (m *PetroglyphMutation) SetPlanePreservation(s string) {
+	m.plane_preservation = &s
+}
+
+// PlanePreservation returns the value of the "plane_preservation" field in the mutation.
+func (m *PetroglyphMutation) PlanePreservation() (r string, exists bool) {
+	v := m.plane_preservation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPlanePreservation returns the old "plane_preservation" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldPlanePreservation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPlanePreservation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPlanePreservation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPlanePreservation: %w", err)
+	}
+	return oldValue.PlanePreservation, nil
+}
+
+// ClearPlanePreservation clears the value of the "plane_preservation" field.
+func (m *PetroglyphMutation) ClearPlanePreservation() {
+	m.plane_preservation = nil
+	m.clearedFields[petroglyph.FieldPlanePreservation] = struct{}{}
+}
+
+// PlanePreservationCleared returns if the "plane_preservation" field was cleared in this mutation.
+func (m *PetroglyphMutation) PlanePreservationCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldPlanePreservation]
+	return ok
+}
+
+// ResetPlanePreservation resets all changes to the "plane_preservation" field.
+func (m *PetroglyphMutation) ResetPlanePreservation() {
+	m.plane_preservation = nil
+	delete(m.clearedFields, petroglyph.FieldPlanePreservation)
+}
+
+// SetPhotoCode sets the "photo_code" field.
+func (m *PetroglyphMutation) SetPhotoCode(s string) {
+	m.photo_code = &s
+}
+
+// PhotoCode returns the value of the "photo_code" field in the mutation.
+func (m *PetroglyphMutation) PhotoCode() (r string, exists bool) {
+	v := m.photo_code
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPhotoCode returns the old "photo_code" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldPhotoCode(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPhotoCode is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPhotoCode requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPhotoCode: %w", err)
+	}
+	return oldValue.PhotoCode, nil
+}
+
+// ClearPhotoCode clears the value of the "photo_code" field.
+func (m *PetroglyphMutation) ClearPhotoCode() {
+	m.photo_code = nil
+	m.clearedFields[petroglyph.FieldPhotoCode] = struct{}{}
+}
+
+// PhotoCodeCleared returns if the "photo_code" field was cleared in this mutation.
+func (m *PetroglyphMutation) PhotoCodeCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldPhotoCode]
+	return ok
+}
+
+// ResetPhotoCode resets all changes to the "photo_code" field.
+func (m *PetroglyphMutation) ResetPhotoCode() {
+	m.photo_code = nil
+	delete(m.clearedFields, petroglyph.FieldPhotoCode)
+}
+
+// SetAccountingDocumentationDate sets the "accounting_documentation_date" field.
+func (m *PetroglyphMutation) SetAccountingDocumentationDate(t time.Time) {
+	m.accounting_documentation_date = &t
+}
+
+// AccountingDocumentationDate returns the value of the "accounting_documentation_date" field in the mutation.
+func (m *PetroglyphMutation) AccountingDocumentationDate() (r time.Time, exists bool) {
+	v := m.accounting_documentation_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAccountingDocumentationDate returns the old "accounting_documentation_date" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldAccountingDocumentationDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAccountingDocumentationDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAccountingDocumentationDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAccountingDocumentationDate: %w", err)
+	}
+	return oldValue.AccountingDocumentationDate, nil
+}
+
+// ClearAccountingDocumentationDate clears the value of the "accounting_documentation_date" field.
+func (m *PetroglyphMutation) ClearAccountingDocumentationDate() {
+	m.accounting_documentation_date = nil
+	m.clearedFields[petroglyph.FieldAccountingDocumentationDate] = struct{}{}
+}
+
+// AccountingDocumentationDateCleared returns if the "accounting_documentation_date" field was cleared in this mutation.
+func (m *PetroglyphMutation) AccountingDocumentationDateCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldAccountingDocumentationDate]
+	return ok
+}
+
+// ResetAccountingDocumentationDate resets all changes to the "accounting_documentation_date" field.
+func (m *PetroglyphMutation) ResetAccountingDocumentationDate() {
+	m.accounting_documentation_date = nil
+	delete(m.clearedFields, petroglyph.FieldAccountingDocumentationDate)
+}
+
+// SetGeometry sets the "geometry" field.
+func (m *PetroglyphMutation) SetGeometry(t types.Geometry) {
+	m.geometry = &t
+}
+
+// Geometry returns the value of the "geometry" field in the mutation.
+func (m *PetroglyphMutation) Geometry() (r types.Geometry, exists bool) {
+	v := m.geometry
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGeometry returns the old "geometry" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldGeometry(ctx context.Context) (v *types.Geometry, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGeometry is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGeometry requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGeometry: %w", err)
+	}
+	return oldValue.Geometry, nil
+}
+
+// ClearGeometry clears the value of the "geometry" field.
+func (m *PetroglyphMutation) ClearGeometry() {
+	m.geometry = nil
+	m.clearedFields[petroglyph.FieldGeometry] = struct{}{}
+}
+
+// GeometryCleared returns if the "geometry" field was cleared in this mutation.
+func (m *PetroglyphMutation) GeometryCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldGeometry]
+	return ok
+}
+
+// ResetGeometry resets all changes to the "geometry" field.
+func (m *PetroglyphMutation) ResetGeometry() {
+	m.geometry = nil
+	delete(m.clearedFields, petroglyph.FieldGeometry)
+}
+
+// SetCulturalAffiliationID sets the "cultural_affiliation" edge to the Culture entity by id.
+func (m *PetroglyphMutation) SetCulturalAffiliationID(id int) {
+	m.cultural_affiliation = &id
+}
+
+// ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
+func (m *PetroglyphMutation) ClearCulturalAffiliation() {
+	m.clearedcultural_affiliation = true
+}
+
+// CulturalAffiliationCleared reports if the "cultural_affiliation" edge to the Culture entity was cleared.
+func (m *PetroglyphMutation) CulturalAffiliationCleared() bool {
+	return m.clearedcultural_affiliation
+}
+
+// CulturalAffiliationID returns the "cultural_affiliation" edge ID in the mutation.
+func (m *PetroglyphMutation) CulturalAffiliationID() (id int, exists bool) {
+	if m.cultural_affiliation != nil {
+		return *m.cultural_affiliation, true
+	}
+	return
+}
+
+// CulturalAffiliationIDs returns the "cultural_affiliation" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CulturalAffiliationID instead. It exists only for internal usage by the builders.
+func (m *PetroglyphMutation) CulturalAffiliationIDs() (ids []int) {
+	if id := m.cultural_affiliation; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCulturalAffiliation resets all changes to the "cultural_affiliation" edge.
+func (m *PetroglyphMutation) ResetCulturalAffiliation() {
+	m.cultural_affiliation = nil
+	m.clearedcultural_affiliation = false
+}
+
+// SetModelID sets the "model" edge to the Model entity by id.
+func (m *PetroglyphMutation) SetModelID(id int) {
+	m.model = &id
+}
+
+// ClearModel clears the "model" edge to the Model entity.
+func (m *PetroglyphMutation) ClearModel() {
+	m.clearedmodel = true
+}
+
+// ModelCleared reports if the "model" edge to the Model entity was cleared.
+func (m *PetroglyphMutation) ModelCleared() bool {
+	return m.clearedmodel
+}
+
+// ModelID returns the "model" edge ID in the mutation.
+func (m *PetroglyphMutation) ModelID() (id int, exists bool) {
+	if m.model != nil {
+		return *m.model, true
+	}
+	return
+}
+
+// ModelIDs returns the "model" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ModelID instead. It exists only for internal usage by the builders.
+func (m *PetroglyphMutation) ModelIDs() (ids []int) {
+	if id := m.model; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetModel resets all changes to the "model" edge.
+func (m *PetroglyphMutation) ResetModel() {
+	m.model = nil
+	m.clearedmodel = false
+}
+
+// SetMoundID sets the "mound" edge to the Mound entity by id.
+func (m *PetroglyphMutation) SetMoundID(id int) {
+	m.mound = &id
+}
+
+// ClearMound clears the "mound" edge to the Mound entity.
+func (m *PetroglyphMutation) ClearMound() {
+	m.clearedmound = true
+}
+
+// MoundCleared reports if the "mound" edge to the Mound entity was cleared.
+func (m *PetroglyphMutation) MoundCleared() bool {
+	return m.clearedmound
+}
+
+// MoundID returns the "mound" edge ID in the mutation.
+func (m *PetroglyphMutation) MoundID() (id int, exists bool) {
+	if m.mound != nil {
+		return *m.mound, true
+	}
+	return
+}
+
+// MoundIDs returns the "mound" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// MoundID instead. It exists only for internal usage by the builders.
+func (m *PetroglyphMutation) MoundIDs() (ids []int) {
+	if id := m.mound; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetMound resets all changes to the "mound" edge.
+func (m *PetroglyphMutation) ResetMound() {
+	m.mound = nil
+	m.clearedmound = false
+}
+
+// AddPublicationIDs adds the "publications" edge to the Publication entity by ids.
+func (m *PetroglyphMutation) AddPublicationIDs(ids ...int) {
+	if m.publications == nil {
+		m.publications = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.publications[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPublications clears the "publications" edge to the Publication entity.
+func (m *PetroglyphMutation) ClearPublications() {
+	m.clearedpublications = true
+}
+
+// PublicationsCleared reports if the "publications" edge to the Publication entity was cleared.
+func (m *PetroglyphMutation) PublicationsCleared() bool {
+	return m.clearedpublications
+}
+
+// RemovePublicationIDs removes the "publications" edge to the Publication entity by IDs.
+func (m *PetroglyphMutation) RemovePublicationIDs(ids ...int) {
+	if m.removedpublications == nil {
+		m.removedpublications = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.publications, ids[i])
+		m.removedpublications[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPublications returns the removed IDs of the "publications" edge to the Publication entity.
+func (m *PetroglyphMutation) RemovedPublicationsIDs() (ids []int) {
+	for id := range m.removedpublications {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PublicationsIDs returns the "publications" edge IDs in the mutation.
+func (m *PetroglyphMutation) PublicationsIDs() (ids []int) {
+	for id := range m.publications {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPublications resets all changes to the "publications" edge.
+func (m *PetroglyphMutation) ResetPublications() {
+	m.publications = nil
+	m.clearedpublications = false
+	m.removedpublications = nil
+}
+
+// AddTechniqueIDs adds the "techniques" edge to the Technique entity by ids.
+func (m *PetroglyphMutation) AddTechniqueIDs(ids ...int) {
+	if m.techniques == nil {
+		m.techniques = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.techniques[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTechniques clears the "techniques" edge to the Technique entity.
+func (m *PetroglyphMutation) ClearTechniques() {
+	m.clearedtechniques = true
+}
+
+// TechniquesCleared reports if the "techniques" edge to the Technique entity was cleared.
+func (m *PetroglyphMutation) TechniquesCleared() bool {
+	return m.clearedtechniques
+}
+
+// RemoveTechniqueIDs removes the "techniques" edge to the Technique entity by IDs.
+func (m *PetroglyphMutation) RemoveTechniqueIDs(ids ...int) {
+	if m.removedtechniques == nil {
+		m.removedtechniques = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.techniques, ids[i])
+		m.removedtechniques[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTechniques returns the removed IDs of the "techniques" edge to the Technique entity.
+func (m *PetroglyphMutation) RemovedTechniquesIDs() (ids []int) {
+	for id := range m.removedtechniques {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TechniquesIDs returns the "techniques" edge IDs in the mutation.
+func (m *PetroglyphMutation) TechniquesIDs() (ids []int) {
+	for id := range m.techniques {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTechniques resets all changes to the "techniques" edge.
+func (m *PetroglyphMutation) ResetTechniques() {
+	m.techniques = nil
+	m.clearedtechniques = false
+	m.removedtechniques = nil
+}
+
+// SetRegionID sets the "region" edge to the Region entity by id.
+func (m *PetroglyphMutation) SetRegionID(id int) {
+	m.region = &id
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (m *PetroglyphMutation) ClearRegion() {
+	m.clearedregion = true
+}
+
+// RegionCleared reports if the "region" edge to the Region entity was cleared.
+func (m *PetroglyphMutation) RegionCleared() bool {
+	return m.clearedregion
+}
+
+// RegionID returns the "region" edge ID in the mutation.
+func (m *PetroglyphMutation) RegionID() (id int, exists bool) {
+	if m.region != nil {
+		return *m.region, true
+	}
+	return
+}
+
+// RegionIDs returns the "region" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// RegionID instead. It exists only for internal usage by the builders.
+func (m *PetroglyphMutation) RegionIDs() (ids []int) {
+	if id := m.region; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetRegion resets all changes to the "region" edge.
+func (m *PetroglyphMutation) ResetRegion() {
+	m.region = nil
+	m.clearedregion = false
+}
+
+// SetAccountingDocumentationAddressID sets the "accounting_documentation_address" edge to the Location entity by id.
+func (m *PetroglyphMutation) SetAccountingDocumentationAddressID(id int) {
+	m.accounting_documentation_address = &id
+}
+
+// ClearAccountingDocumentationAddress clears the "accounting_documentation_address" edge to the Location entity.
+func (m *PetroglyphMutation) ClearAccountingDocumentationAddress() {
+	m.clearedaccounting_documentation_address = true
+}
+
+// AccountingDocumentationAddressCleared reports if the "accounting_documentation_address" edge to the Location entity was cleared.
+func (m *PetroglyphMutation) AccountingDocumentationAddressCleared() bool {
+	return m.clearedaccounting_documentation_address
+}
+
+// AccountingDocumentationAddressID returns the "accounting_documentation_address" edge ID in the mutation.
+func (m *PetroglyphMutation) AccountingDocumentationAddressID() (id int, exists bool) {
+	if m.accounting_documentation_address != nil {
+		return *m.accounting_documentation_address, true
+	}
+	return
+}
+
+// AccountingDocumentationAddressIDs returns the "accounting_documentation_address" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AccountingDocumentationAddressID instead. It exists only for internal usage by the builders.
+func (m *PetroglyphMutation) AccountingDocumentationAddressIDs() (ids []int) {
+	if id := m.accounting_documentation_address; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAccountingDocumentationAddress resets all changes to the "accounting_documentation_address" edge.
+func (m *PetroglyphMutation) ResetAccountingDocumentationAddress() {
+	m.accounting_documentation_address = nil
+	m.clearedaccounting_documentation_address = false
+}
+
+// SetAccountingDocumentationAuthorID sets the "accounting_documentation_author" edge to the Person entity by id.
+func (m *PetroglyphMutation) SetAccountingDocumentationAuthorID(id int) {
+	m.accounting_documentation_author = &id
+}
+
+// ClearAccountingDocumentationAuthor clears the "accounting_documentation_author" edge to the Person entity.
+func (m *PetroglyphMutation) ClearAccountingDocumentationAuthor() {
+	m.clearedaccounting_documentation_author = true
+}
+
+// AccountingDocumentationAuthorCleared reports if the "accounting_documentation_author" edge to the Person entity was cleared.
+func (m *PetroglyphMutation) AccountingDocumentationAuthorCleared() bool {
+	return m.clearedaccounting_documentation_author
+}
+
+// AccountingDocumentationAuthorID returns the "accounting_documentation_author" edge ID in the mutation.
+func (m *PetroglyphMutation) AccountingDocumentationAuthorID() (id int, exists bool) {
+	if m.accounting_documentation_author != nil {
+		return *m.accounting_documentation_author, true
+	}
+	return
+}
+
+// AccountingDocumentationAuthorIDs returns the "accounting_documentation_author" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AccountingDocumentationAuthorID instead. It exists only for internal usage by the builders.
+func (m *PetroglyphMutation) AccountingDocumentationAuthorIDs() (ids []int) {
+	if id := m.accounting_documentation_author; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAccountingDocumentationAuthor resets all changes to the "accounting_documentation_author" edge.
+func (m *PetroglyphMutation) ResetAccountingDocumentationAuthor() {
+	m.accounting_documentation_author = nil
+	m.clearedaccounting_documentation_author = false
+}
+
+// Where appends a list predicates to the PetroglyphMutation builder.
+func (m *PetroglyphMutation) Where(ps ...predicate.Petroglyph) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PetroglyphMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PetroglyphMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Petroglyph, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PetroglyphMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PetroglyphMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Petroglyph).
+func (m *PetroglyphMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PetroglyphMutation) Fields() []string {
+	fields := make([]string, 0, 31)
+	if m.created_at != nil {
+		fields = append(fields, petroglyph.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, petroglyph.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, petroglyph.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, petroglyph.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, petroglyph.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, petroglyph.FieldAbbreviation)
+	}
+	if m.description != nil {
+		fields = append(fields, petroglyph.FieldDescription)
+	}
+	if m.external_link != nil {
+		fields = append(fields, petroglyph.FieldExternalLink)
+	}
+	if m.status != nil {
+		fields = append(fields, petroglyph.FieldStatus)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, petroglyph.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, petroglyph.FieldAdditionalImagesUrls)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, petroglyph.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, petroglyph.FieldDeletedBy)
+	}
+	if m.number != nil {
+		fields = append(fields, petroglyph.FieldNumber)
+	}
+	if m.dating != nil {
+		fields = append(fields, petroglyph.FieldDating)
+	}
+	if m.dating_start != nil {
+		fields = append(fields, petroglyph.FieldDatingStart)
+	}
+	if m.dating_end != nil {
+		fields = append(fields, petroglyph.FieldDatingEnd)
+	}
+	if m.orientation != nil {
+		fields = append(fields, petroglyph.FieldOrientation)
+	}
+	if m.position != nil {
+		fields = append(fields, petroglyph.FieldPosition)
+	}
+	if m.geometric_shape != nil {
+		fields = append(fields, petroglyph.FieldGeometricShape)
+	}
+	if m.height != nil {
+		fields = append(fields, petroglyph.FieldHeight)
+	}
+	if m.width != nil {
+		fields = append(fields, petroglyph.FieldWidth)
+	}
+	if m.length != nil {
+		fields = append(fields, petroglyph.FieldLength)
+	}
+	if m.depth != nil {
+		fields = append(fields, petroglyph.FieldDepth)
+	}
+	if m.diameter != nil {
+		fields = append(fields, petroglyph.FieldDiameter)
+	}
+	if m.weight != nil {
+		fields = append(fields, petroglyph.FieldWeight)
+	}
+	if m.dimensions != nil {
+		fields = append(fields, petroglyph.FieldDimensions)
+	}
+	if m.plane_preservation != nil {
+		fields = append(fields, petroglyph.FieldPlanePreservation)
+	}
+	if m.photo_code != nil {
+		fields = append(fields, petroglyph.FieldPhotoCode)
+	}
+	if m.accounting_documentation_date != nil {
+		fields = append(fields, petroglyph.FieldAccountingDocumentationDate)
+	}
+	if m.geometry != nil {
+		fields = append(fields, petroglyph.FieldGeometry)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PetroglyphMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case petroglyph.FieldCreatedAt:
+		return m.CreatedAt()
+	case petroglyph.FieldCreatedBy:
+		return m.CreatedBy()
+	case petroglyph.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case petroglyph.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case petroglyph.FieldDisplayName:
+		return m.DisplayName()
+	case petroglyph.FieldAbbreviation:
+		return m.Abbreviation()
+	case petroglyph.FieldDescription:
+		return m.Description()
+	case petroglyph.FieldExternalLink:
+		return m.ExternalLink()
+	case petroglyph.FieldStatus:
+		return m.Status()
+	case petroglyph.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case petroglyph.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
+	case petroglyph.FieldDeletedAt:
+		return m.DeletedAt()
+	case petroglyph.FieldDeletedBy:
+		return m.DeletedBy()
+	case petroglyph.FieldNumber:
+		return m.Number()
+	case petroglyph.FieldDating:
+		return m.Dating()
+	case petroglyph.FieldDatingStart:
+		return m.DatingStart()
+	case petroglyph.FieldDatingEnd:
+		return m.DatingEnd()
+	case petroglyph.FieldOrientation:
+		return m.Orientation()
+	case petroglyph.FieldPosition:
+		return m.Position()
+	case petroglyph.FieldGeometricShape:
+		return m.GeometricShape()
+	case petroglyph.FieldHeight:
+		return m.Height()
+	case petroglyph.FieldWidth:
+		return m.Width()
+	case petroglyph.FieldLength:
+		return m.Length()
+	case petroglyph.FieldDepth:
+		return m.Depth()
+	case petroglyph.FieldDiameter:
+		return m.Diameter()
+	case petroglyph.FieldWeight:
+		return m.Weight()
+	case petroglyph.FieldDimensions:
+		return m.Dimensions()
+	case petroglyph.FieldPlanePreservation:
+		return m.PlanePreservation()
+	case petroglyph.FieldPhotoCode:
+		return m.PhotoCode()
+	case petroglyph.FieldAccountingDocumentationDate:
+		return m.AccountingDocumentationDate()
+	case petroglyph.FieldGeometry:
+		return m.Geometry()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PetroglyphMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case petroglyph.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case petroglyph.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case petroglyph.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case petroglyph.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case petroglyph.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case petroglyph.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
+	case petroglyph.FieldDescription:
+		return m.OldDescription(ctx)
+	case petroglyph.FieldExternalLink:
+		return m.OldExternalLink(ctx)
+	case petroglyph.FieldStatus:
+		return m.OldStatus(ctx)
+	case petroglyph.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case petroglyph.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
+	case petroglyph.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case petroglyph.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case petroglyph.FieldNumber:
+		return m.OldNumber(ctx)
+	case petroglyph.FieldDating:
+		return m.OldDating(ctx)
+	case petroglyph.FieldDatingStart:
+		return m.OldDatingStart(ctx)
+	case petroglyph.FieldDatingEnd:
+		return m.OldDatingEnd(ctx)
+	case petroglyph.FieldOrientation:
+		return m.OldOrientation(ctx)
+	case petroglyph.FieldPosition:
+		return m.OldPosition(ctx)
+	case petroglyph.FieldGeometricShape:
+		return m.OldGeometricShape(ctx)
+	case petroglyph.FieldHeight:
+		return m.OldHeight(ctx)
+	case petroglyph.FieldWidth:
+		return m.OldWidth(ctx)
+	case petroglyph.FieldLength:
+		return m.OldLength(ctx)
+	case petroglyph.FieldDepth:
+		return m.OldDepth(ctx)
+	case petroglyph.FieldDiameter:
+		return m.OldDiameter(ctx)
+	case petroglyph.FieldWeight:
+		return m.OldWeight(ctx)
+	case petroglyph.FieldDimensions:
+		return m.OldDimensions(ctx)
+	case petroglyph.FieldPlanePreservation:
+		return m.OldPlanePreservation(ctx)
+	case petroglyph.FieldPhotoCode:
+		return m.OldPhotoCode(ctx)
+	case petroglyph.FieldAccountingDocumentationDate:
+		return m.OldAccountingDocumentationDate(ctx)
+	case petroglyph.FieldGeometry:
+		return m.OldGeometry(ctx)
+	}
+	return nil, fmt.Errorf("unknown Petroglyph field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PetroglyphMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case petroglyph.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case petroglyph.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case petroglyph.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case petroglyph.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case petroglyph.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case petroglyph.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
+		return nil
+	case petroglyph.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case petroglyph.FieldExternalLink:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLink(v)
+		return nil
+	case petroglyph.FieldStatus:
+		v, ok := value.(petroglyph.Status)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case petroglyph.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case petroglyph.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
+		return nil
+	case petroglyph.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case petroglyph.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case petroglyph.FieldNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumber(v)
+		return nil
+	case petroglyph.FieldDating:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDating(v)
+		return nil
+	case petroglyph.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingStart(v)
+		return nil
+	case petroglyph.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingEnd(v)
+		return nil
+	case petroglyph.FieldOrientation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrientation(v)
+		return nil
+	case petroglyph.FieldPosition:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPosition(v)
+		return nil
+	case petroglyph.FieldGeometricShape:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGeometricShape(v)
+		return nil
+	case petroglyph.FieldHeight:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHeight(v)
+		return nil
+	case petroglyph.FieldWidth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWidth(v)
+		return nil
+	case petroglyph.FieldLength:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLength(v)
+		return nil
+	case petroglyph.FieldDepth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDepth(v)
+		return nil
+	case petroglyph.FieldDiameter:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDiameter(v)
+		return nil
+	case petroglyph.FieldWeight:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWeight(v)
+		return nil
+	case petroglyph.FieldDimensions:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDimensions(v)
+		return nil
+	case petroglyph.FieldPlanePreservation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPlanePreservation(v)
+		return nil
+	case petroglyph.FieldPhotoCode:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPhotoCode(v)
+		return nil
+	case petroglyph.FieldAccountingDocumentationDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAccountingDocumentationDate(v)
+		return nil
+	case petroglyph.FieldGeometry:
+		v, ok := value.(types.Geometry)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGeometry(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Petroglyph field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PetroglyphMutation) AddedFields() []string {
+	var fields []string
+	if m.adddating_start != nil {
+		fields = append(fields, petroglyph.FieldDatingStart)
+	}
+	if m.adddating_end != nil {
+		fields = append(fields, petroglyph.FieldDatingEnd)
+	}
+	if m.addheight != nil {
+		fields = append(fields, petroglyph.FieldHeight)
+	}
+	if m.addwidth != nil {
+		fields = append(fields, petroglyph.FieldWidth)
+	}
+	if m.addlength != nil {
+		fields = append(fields, petroglyph.FieldLength)
+	}
+	if m.adddepth != nil {
+		fields = append(fields, petroglyph.FieldDepth)
+	}
+	if m.adddiameter != nil {
+		fields = append(fields, petroglyph.FieldDiameter)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PetroglyphMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case petroglyph.FieldDatingStart:
+		return m.AddedDatingStart()
+	case petroglyph.FieldDatingEnd:
+		return m.AddedDatingEnd()
+	case petroglyph.FieldHeight:
+		return m.AddedHeight()
+	case petroglyph.FieldWidth:
+		return m.AddedWidth()
+	case petroglyph.FieldLength:
+		return m.AddedLength()
+	case petroglyph.FieldDepth:
+		return m.AddedDepth()
+	case petroglyph.FieldDiameter:
+		return m.AddedDiameter()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PetroglyphMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case petroglyph.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDatingStart(v)
+		return nil
+	case petroglyph.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDatingEnd(v)
+		return nil
+	case petroglyph.FieldHeight:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHeight(v)
+		return nil
+	case petroglyph.FieldWidth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddWidth(v)
+		return nil
+	case petroglyph.FieldLength:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLength(v)
+		return nil
+	case petroglyph.FieldDepth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDepth(v)
+		return nil
+	case petroglyph.FieldDiameter:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDiameter(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Petroglyph numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PetroglyphMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(petroglyph.FieldCreatedBy) {
+		fields = append(fields, petroglyph.FieldCreatedBy)
+	}
+	if m.FieldCleared(petroglyph.FieldUpdatedBy) {
+		fields = append(fields, petroglyph.FieldUpdatedBy)
+	}
+	if m.FieldCleared(petroglyph.FieldDisplayName) {
+		fields = append(fields, petroglyph.FieldDisplayName)
+	}
+	if m.FieldCleared(petroglyph.FieldAbbreviation) {
+		fields = append(fields, petroglyph.FieldAbbreviation)
+	}
+	if m.FieldCleared(petroglyph.FieldDescription) {
+		fields = append(fields, petroglyph.FieldDescription)
+	}
+	if m.FieldCleared(petroglyph.FieldExternalLink) {
+		fields = append(fields, petroglyph.FieldExternalLink)
+	}
+	if m.FieldCleared(petroglyph.FieldStatus) {
+		fields = append(fields, petroglyph.FieldStatus)
+	}
+	if m.FieldCleared(petroglyph.FieldPrimaryImageURL) {
+		fields = append(fields, petroglyph.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(petroglyph.FieldAdditionalImagesUrls) {
+		fields = append(fields, petroglyph.FieldAdditionalImagesUrls)
+	}
+	if m.FieldCleared(petroglyph.FieldDeletedAt) {
+		fields = append(fields, petroglyph.FieldDeletedAt)
+	}
+	if m.FieldCleared(petroglyph.FieldDeletedBy) {
+		fields = append(fields, petroglyph.FieldDeletedBy)
+	}
+	if m.FieldCleared(petroglyph.FieldNumber) {
+		fields = append(fields, petroglyph.FieldNumber)
+	}
+	if m.FieldCleared(petroglyph.FieldDating) {
+		fields = append(fields, petroglyph.FieldDating)
+	}
+	if m.FieldCleared(petroglyph.FieldDatingStart) {
+		fields = append(fields, petroglyph.FieldDatingStart)
+	}
+	if m.FieldCleared(petroglyph.FieldDatingEnd) {
+		fields = append(fields, petroglyph.FieldDatingEnd)
+	}
+	if m.FieldCleared(petroglyph.FieldOrientation) {
+		fields = append(fields, petroglyph.FieldOrientation)
+	}
+	if m.FieldCleared(petroglyph.FieldPosition) {
+		fields = append(fields, petroglyph.FieldPosition)
+	}
+	if m.FieldCleared(petroglyph.FieldGeometricShape) {
+		fields = append(fields, petroglyph.FieldGeometricShape)
+	}
+	if m.FieldCleared(petroglyph.FieldHeight) {
+		fields = append(fields, petroglyph.FieldHeight)
+	}
+	if m.FieldCleared(petroglyph.FieldWidth) {
+		fields = append(fields, petroglyph.FieldWidth)
+	}
+	if m.FieldCleared(petroglyph.FieldLength) {
+		fields = append(fields, petroglyph.FieldLength)
+	}
+	if m.FieldCleared(petroglyph.FieldDepth) {
+		fields = append(fields, petroglyph.FieldDepth)
+	}
+	if m.FieldCleared(petroglyph.FieldDiameter) {
+		fields = append(fields, petroglyph.FieldDiameter)
+	}
+	if m.FieldCleared(petroglyph.FieldWeight) {
+		fields = append(fields, petroglyph.FieldWeight)
+	}
+	if m.FieldCleared(petroglyph.FieldDimensions) {
+		fields = append(fields, petroglyph.FieldDimensions)
+	}
+	if m.FieldCleared(petroglyph.FieldPlanePreservation) {
+		fields = append(fields, petroglyph.FieldPlanePreservation)
+	}
+	if m.FieldCleared(petroglyph.FieldPhotoCode) {
+		fields = append(fields, petroglyph.FieldPhotoCode)
+	}
+	if m.FieldCleared(petroglyph.FieldAccountingDocumentationDate) {
+		fields = append(fields, petroglyph.FieldAccountingDocumentationDate)
+	}
+	if m.FieldCleared(petroglyph.FieldGeometry) {
+		fields = append(fields, petroglyph.FieldGeometry)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PetroglyphMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PetroglyphMutation) ClearField(name string) error {
+	switch name {
+	case petroglyph.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case petroglyph.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case petroglyph.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case petroglyph.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
+	case petroglyph.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case petroglyph.FieldExternalLink:
+		m.ClearExternalLink()
+		return nil
+	case petroglyph.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case petroglyph.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case petroglyph.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
+		return nil
+	case petroglyph.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case petroglyph.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case petroglyph.FieldNumber:
+		m.ClearNumber()
+		return nil
+	case petroglyph.FieldDating:
+		m.ClearDating()
+		return nil
+	case petroglyph.FieldDatingStart:
+		m.ClearDatingStart()
+		return nil
+	case petroglyph.FieldDatingEnd:
+		m.ClearDatingEnd()
+		return nil
+	case petroglyph.FieldOrientation:
+		m.ClearOrientation()
+		return nil
+	case petroglyph.FieldPosition:
+		m.ClearPosition()
+		return nil
+	case petroglyph.FieldGeometricShape:
+		m.ClearGeometricShape()
+		return nil
+	case petroglyph.FieldHeight:
+		m.ClearHeight()
+		return nil
+	case petroglyph.FieldWidth:
+		m.ClearWidth()
+		return nil
+	case petroglyph.FieldLength:
+		m.ClearLength()
+		return nil
+	case petroglyph.FieldDepth:
+		m.ClearDepth()
+		return nil
+	case petroglyph.FieldDiameter:
+		m.ClearDiameter()
+		return nil
+	case petroglyph.FieldWeight:
+		m.ClearWeight()
+		return nil
+	case petroglyph.FieldDimensions:
+		m.ClearDimensions()
+		return nil
+	case petroglyph.FieldPlanePreservation:
+		m.ClearPlanePreservation()
+		return nil
+	case petroglyph.FieldPhotoCode:
+		m.ClearPhotoCode()
+		return nil
+	case petroglyph.FieldAccountingDocumentationDate:
+		m.ClearAccountingDocumentationDate()
+		return nil
+	case petroglyph.FieldGeometry:
+		m.ClearGeometry()
+		return nil
+	}
+	return fmt.Errorf("unknown Petroglyph nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PetroglyphMutation) ResetField(name string) error {
+	switch name {
+	case petroglyph.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case petroglyph.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case petroglyph.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case petroglyph.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case petroglyph.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case petroglyph.FieldAbbreviation:
+		m.ResetAbbreviation()
+		return nil
+	case petroglyph.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case petroglyph.FieldExternalLink:
+		m.ResetExternalLink()
+		return nil
+	case petroglyph.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case petroglyph.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case petroglyph.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
+		return nil
+	case petroglyph.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case petroglyph.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case petroglyph.FieldNumber:
+		m.ResetNumber()
+		return nil
+	case petroglyph.FieldDating:
+		m.ResetDating()
+		return nil
+	case petroglyph.FieldDatingStart:
+		m.ResetDatingStart()
+		return nil
+	case petroglyph.FieldDatingEnd:
+		m.ResetDatingEnd()
+		return nil
+	case petroglyph.FieldOrientation:
+		m.ResetOrientation()
+		return nil
+	case petroglyph.FieldPosition:
+		m.ResetPosition()
+		return nil
+	case petroglyph.FieldGeometricShape:
+		m.ResetGeometricShape()
+		return nil
+	case petroglyph.FieldHeight:
+		m.ResetHeight()
+		return nil
+	case petroglyph.FieldWidth:
+		m.ResetWidth()
+		return nil
+	case petroglyph.FieldLength:
+		m.ResetLength()
+		return nil
+	case petroglyph.FieldDepth:
+		m.ResetDepth()
+		return nil
+	case petroglyph.FieldDiameter:
+		m.ResetDiameter()
+		return nil
+	case petroglyph.FieldWeight:
+		m.ResetWeight()
+		return nil
+	case petroglyph.FieldDimensions:
+		m.ResetDimensions()
+		return nil
+	case petroglyph.FieldPlanePreservation:
+		m.ResetPlanePreservation()
+		return nil
+	case petroglyph.FieldPhotoCode:
+		m.ResetPhotoCode()
+		return nil
+	case petroglyph.FieldAccountingDocumentationDate:
+		m.ResetAccountingDocumentationDate()
+		return nil
+	case petroglyph.FieldGeometry:
+		m.ResetGeometry()
+		return nil
+	}
+	return fmt.Errorf("unknown Petroglyph field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PetroglyphMutation) AddedEdges() []string {
+	edges := make([]string, 0, 8)
+	if m.cultural_affiliation != nil {
+		edges = append(edges, petroglyph.EdgeCulturalAffiliation)
+	}
+	if m.model != nil {
+		edges = append(edges, petroglyph.EdgeModel)
+	}
+	if m.mound != nil {
+		edges = append(edges, petroglyph.EdgeMound)
+	}
+	if m.publications != nil {
+		edges = append(edges, petroglyph.EdgePublications)
+	}
+	if m.techniques != nil {
+		edges = append(edges, petroglyph.EdgeTechniques)
+	}
+	if m.region != nil {
+		edges = append(edges, petroglyph.EdgeRegion)
+	}
+	if m.accounting_documentation_address != nil {
+		edges = append(edges, petroglyph.EdgeAccountingDocumentationAddress)
+	}
+	if m.accounting_documentation_author != nil {
+		edges = append(edges, petroglyph.EdgeAccountingDocumentationAuthor)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PetroglyphMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case petroglyph.EdgeCulturalAffiliation:
+		if id := m.cultural_affiliation; id != nil {
+			return []ent.Value{*id}
+		}
+	case petroglyph.EdgeModel:
+		if id := m.model; id != nil {
+			return []ent.Value{*id}
+		}
+	case petroglyph.EdgeMound:
+		if id := m.mound; id != nil {
+			return []ent.Value{*id}
+		}
+	case petroglyph.EdgePublications:
+		ids := make([]ent.Value, 0, len(m.publications))
+		for id := range m.publications {
+			ids = append(ids, id)
+		}
+		return ids
+	case petroglyph.EdgeTechniques:
+		ids := make([]ent.Value, 0, len(m.techniques))
+		for id := range m.techniques {
+			ids = append(ids, id)
+		}
+		return ids
+	case petroglyph.EdgeRegion:
+		if id := m.region; id != nil {
+			return []ent.Value{*id}
+		}
+	case petroglyph.EdgeAccountingDocumentationAddress:
+		if id := m.accounting_documentation_address; id != nil {
+			return []ent.Value{*id}
+		}
+	case petroglyph.EdgeAccountingDocumentationAuthor:
+		if id := m.accounting_documentation_author; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PetroglyphMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 8)
+	if m.removedpublications != nil {
+		edges = append(edges, petroglyph.EdgePublications)
+	}
+	if m.removedtechniques != nil {
+		edges = append(edges, petroglyph.EdgeTechniques)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PetroglyphMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case petroglyph.EdgePublications:
+		ids := make([]ent.Value, 0, len(m.removedpublications))
+		for id := range m.removedpublications {
+			ids = append(ids, id)
+		}
+		return ids
+	case petroglyph.EdgeTechniques:
+		ids := make([]ent.Value, 0, len(m.removedtechniques))
+		for id := range m.removedtechniques {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PetroglyphMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 8)
+	if m.clearedcultural_affiliation {
+		edges = append(edges, petroglyph.EdgeCulturalAffiliation)
+	}
+	if m.clearedmodel {
+		edges = append(edges, petroglyph.EdgeModel)
+	}
+	if m.clearedmound {
+		edges = append(edges, petroglyph.EdgeMound)
+	}
+	if m.clearedpublications {
+		edges = append(edges, petroglyph.EdgePublications)
+	}
+	if m.clearedtechniques {
+		edges = append(edges, petroglyph.EdgeTechniques)
+	}
+	if m.clearedregion {
+		edges = append(edges, petroglyph.EdgeRegion)
+	}
+	if m.clearedaccounting_documentation_address {
+		edges = append(edges, petroglyph.EdgeAccountingDocumentationAddress)
+	}
+	if m.clearedaccounting_documentation_author {
+		edges = append(edges, petroglyph.EdgeAccountingDocumentationAuthor)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PetroglyphMutation) EdgeCleared(name string) bool {
+	switch name {
+	case petroglyph.EdgeCulturalAffiliation:
+		return m.clearedcultural_affiliation
+	case petroglyph.EdgeModel:
+		return m.clearedmodel
+	case petroglyph.EdgeMound:
+		return m.clearedmound
+	case petroglyph.EdgePublications:
+		return m.clearedpublications
+	case petroglyph.EdgeTechniques:
+		return m.clearedtechniques
+	case petroglyph.EdgeRegion:
+		return m.clearedregion
+	case petroglyph.EdgeAccountingDocumentationAddress:
+		return m.clearedaccounting_documentation_address
+	case petroglyph.EdgeAccountingDocumentationAuthor:
+		return m.clearedaccounting_documentation_author
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PetroglyphMutation) ClearEdge(name string) error {
+	switch name {
+	case petroglyph.EdgeCulturalAffiliation:
+		m.ClearCulturalAffiliation()
+		return nil
+	case petroglyph.EdgeModel:
+		m.ClearModel()
+		return nil
+	case petroglyph.EdgeMound:
+		m.ClearMound()
+		return nil
+	case petroglyph.EdgeRegion:
+		m.ClearRegion()
+		return nil
+	case petroglyph.EdgeAccountingDocumentationAddress:
+		m.ClearAccountingDocumentationAddress()
+		return nil
+	case petroglyph.EdgeAccountingDocumentationAuthor:
+		m.ClearAccountingDocumentationAuthor()
+		return nil
+	}
+	return fmt.Errorf("unknown Petroglyph unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PetroglyphMutation) ResetEdge(name string) error {
+	switch name {
+	case petroglyph.EdgeCulturalAffiliation:
+		m.ResetCulturalAffiliation()
+		return nil
+	case petroglyph.EdgeModel:
+		m.ResetModel()
+		return nil
+	case petroglyph.EdgeMound:
+		m.ResetMound()
+		return nil
+	case petroglyph.EdgePublications:
+		m.ResetPublications()
+		return nil
+	case petroglyph.EdgeTechniques:
+		m.ResetTechniques()
+		return nil
+	case petroglyph.EdgeRegion:
+		m.ResetRegion()
+		return nil
+	case petroglyph.EdgeAccountingDocumentationAddress:
+		m.ResetAccountingDocumentationAddress()
+		return nil
+	case petroglyph.EdgeAccountingDocumentationAuthor:
+		m.ResetAccountingDocumentationAuthor()
+		return nil
+	}
+	return fmt.Errorf("unknown Petroglyph edge %s", name)
 }
 
 // ProjectMutation represents an operation that mutates the Project nodes in the graph.
@@ -37734,27 +42513,30 @@ func (m *ProxyMutation) ResetEdge(name string) error {
 // PublicationMutation represents an operation that mutates the Publication nodes in the graph.
 type PublicationMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	abbreviation     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	authors          map[int]struct{}
-	removedauthors   map[int]struct{}
-	clearedauthors   bool
-	done             bool
-	oldValue         func(context.Context) (*Publication, error)
-	predicates       []predicate.Publication
+	op                 Op
+	typ                string
+	id                 *int
+	created_at         *time.Time
+	created_by         *string
+	updated_at         *time.Time
+	updated_by         *string
+	display_name       *string
+	abbreviation       *string
+	description        *string
+	external_link      *string
+	clearedFields      map[string]struct{}
+	artifacts          map[int]struct{}
+	removedartifacts   map[int]struct{}
+	clearedartifacts   bool
+	petroglyphs        map[int]struct{}
+	removedpetroglyphs map[int]struct{}
+	clearedpetroglyphs bool
+	authors            map[int]struct{}
+	removedauthors     map[int]struct{}
+	clearedauthors     bool
+	done               bool
+	oldValue           func(context.Context) (*Publication, error)
+	predicates         []predicate.Publication
 }
 
 var _ ent.Mutation = (*PublicationMutation)(nil)
@@ -38275,6 +43057,60 @@ func (m *PublicationMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *PublicationMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *PublicationMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *PublicationMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *PublicationMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *PublicationMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *PublicationMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *PublicationMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
 // AddAuthorIDs adds the "authors" edge to the Person entity by ids.
 func (m *PublicationMutation) AddAuthorIDs(ids ...int) {
 	if m.authors == nil {
@@ -38620,9 +43456,12 @@ func (m *PublicationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PublicationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.artifacts != nil {
 		edges = append(edges, publication.EdgeArtifacts)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, publication.EdgePetroglyphs)
 	}
 	if m.authors != nil {
 		edges = append(edges, publication.EdgeAuthors)
@@ -38640,6 +43479,12 @@ func (m *PublicationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case publication.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	case publication.EdgeAuthors:
 		ids := make([]ent.Value, 0, len(m.authors))
 		for id := range m.authors {
@@ -38652,9 +43497,12 @@ func (m *PublicationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PublicationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.removedartifacts != nil {
 		edges = append(edges, publication.EdgeArtifacts)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, publication.EdgePetroglyphs)
 	}
 	if m.removedauthors != nil {
 		edges = append(edges, publication.EdgeAuthors)
@@ -38672,6 +43520,12 @@ func (m *PublicationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case publication.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	case publication.EdgeAuthors:
 		ids := make([]ent.Value, 0, len(m.removedauthors))
 		for id := range m.removedauthors {
@@ -38684,9 +43538,12 @@ func (m *PublicationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PublicationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedartifacts {
 		edges = append(edges, publication.EdgeArtifacts)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, publication.EdgePetroglyphs)
 	}
 	if m.clearedauthors {
 		edges = append(edges, publication.EdgeAuthors)
@@ -38700,6 +43557,8 @@ func (m *PublicationMutation) EdgeCleared(name string) bool {
 	switch name {
 	case publication.EdgeArtifacts:
 		return m.clearedartifacts
+	case publication.EdgePetroglyphs:
+		return m.clearedpetroglyphs
 	case publication.EdgeAuthors:
 		return m.clearedauthors
 	}
@@ -38720,6 +43579,9 @@ func (m *PublicationMutation) ResetEdge(name string) error {
 	switch name {
 	case publication.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case publication.EdgePetroglyphs:
+		m.ResetPetroglyphs()
 		return nil
 	case publication.EdgeAuthors:
 		m.ResetAuthors()
@@ -39666,6 +44528,9 @@ type RegionMutation struct {
 	books                          map[int]struct{}
 	removedbooks                   map[int]struct{}
 	clearedbooks                   bool
+	petroglyphs                    map[int]struct{}
+	removedpetroglyphs             map[int]struct{}
+	clearedpetroglyphs             bool
 	protected_area_pictures        map[int]struct{}
 	removedprotected_area_pictures map[int]struct{}
 	clearedprotected_area_pictures bool
@@ -40303,6 +45168,60 @@ func (m *RegionMutation) ResetBooks() {
 	m.removedbooks = nil
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *RegionMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *RegionMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *RegionMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *RegionMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *RegionMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *RegionMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *RegionMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
 func (m *RegionMutation) AddProtectedAreaPictureIDs(ids ...int) {
 	if m.protected_area_pictures == nil {
@@ -40702,7 +45621,7 @@ func (m *RegionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RegionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.art != nil {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -40711,6 +45630,9 @@ func (m *RegionMutation) AddedEdges() []string {
 	}
 	if m.books != nil {
 		edges = append(edges, region.EdgeBooks)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, region.EdgePetroglyphs)
 	}
 	if m.protected_area_pictures != nil {
 		edges = append(edges, region.EdgeProtectedAreaPictures)
@@ -40743,6 +45665,12 @@ func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case region.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	case region.EdgeProtectedAreaPictures:
 		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
 		for id := range m.protected_area_pictures {
@@ -40761,7 +45689,7 @@ func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RegionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedart != nil {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -40770,6 +45698,9 @@ func (m *RegionMutation) RemovedEdges() []string {
 	}
 	if m.removedbooks != nil {
 		edges = append(edges, region.EdgeBooks)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, region.EdgePetroglyphs)
 	}
 	if m.removedprotected_area_pictures != nil {
 		edges = append(edges, region.EdgeProtectedAreaPictures)
@@ -40802,6 +45733,12 @@ func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case region.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	case region.EdgeProtectedAreaPictures:
 		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
 		for id := range m.removedprotected_area_pictures {
@@ -40820,7 +45757,7 @@ func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RegionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedart {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -40829,6 +45766,9 @@ func (m *RegionMutation) ClearedEdges() []string {
 	}
 	if m.clearedbooks {
 		edges = append(edges, region.EdgeBooks)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, region.EdgePetroglyphs)
 	}
 	if m.clearedprotected_area_pictures {
 		edges = append(edges, region.EdgeProtectedAreaPictures)
@@ -40849,6 +45789,8 @@ func (m *RegionMutation) EdgeCleared(name string) bool {
 		return m.clearedartifacts
 	case region.EdgeBooks:
 		return m.clearedbooks
+	case region.EdgePetroglyphs:
+		return m.clearedpetroglyphs
 	case region.EdgeProtectedAreaPictures:
 		return m.clearedprotected_area_pictures
 	case region.EdgeLocations:
@@ -40877,6 +45819,9 @@ func (m *RegionMutation) ResetEdge(name string) error {
 		return nil
 	case region.EdgeBooks:
 		m.ResetBooks()
+		return nil
+	case region.EdgePetroglyphs:
+		m.ResetPetroglyphs()
 		return nil
 	case region.EdgeProtectedAreaPictures:
 		m.ResetProtectedAreaPictures()
@@ -43134,24 +48079,27 @@ func (m *SettlementMutation) ResetEdge(name string) error {
 // TechniqueMutation represents an operation that mutates the Technique nodes in the graph.
 type TechniqueMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	display_name     *string
-	abbreviation     *string
-	description      *string
-	external_link    *string
-	clearedFields    map[string]struct{}
-	artifacts        map[int]struct{}
-	removedartifacts map[int]struct{}
-	clearedartifacts bool
-	done             bool
-	oldValue         func(context.Context) (*Technique, error)
-	predicates       []predicate.Technique
+	op                 Op
+	typ                string
+	id                 *int
+	created_at         *time.Time
+	created_by         *string
+	updated_at         *time.Time
+	updated_by         *string
+	display_name       *string
+	abbreviation       *string
+	description        *string
+	external_link      *string
+	clearedFields      map[string]struct{}
+	artifacts          map[int]struct{}
+	removedartifacts   map[int]struct{}
+	clearedartifacts   bool
+	petroglyphs        map[int]struct{}
+	removedpetroglyphs map[int]struct{}
+	clearedpetroglyphs bool
+	done               bool
+	oldValue           func(context.Context) (*Technique, error)
+	predicates         []predicate.Technique
 }
 
 var _ ent.Mutation = (*TechniqueMutation)(nil)
@@ -43672,6 +48620,60 @@ func (m *TechniqueMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *TechniqueMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *TechniqueMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *TechniqueMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *TechniqueMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *TechniqueMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *TechniqueMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *TechniqueMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
 // Where appends a list predicates to the TechniqueMutation builder.
 func (m *TechniqueMutation) Where(ps ...predicate.Technique) {
 	m.predicates = append(m.predicates, ps...)
@@ -43963,9 +48965,12 @@ func (m *TechniqueMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TechniqueMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.artifacts != nil {
 		edges = append(edges, technique.EdgeArtifacts)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, technique.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -43980,15 +48985,24 @@ func (m *TechniqueMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case technique.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TechniqueMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedartifacts != nil {
 		edges = append(edges, technique.EdgeArtifacts)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, technique.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -44003,15 +49017,24 @@ func (m *TechniqueMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case technique.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TechniqueMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedartifacts {
 		edges = append(edges, technique.EdgeArtifacts)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, technique.EdgePetroglyphs)
 	}
 	return edges
 }
@@ -44022,6 +49045,8 @@ func (m *TechniqueMutation) EdgeCleared(name string) bool {
 	switch name {
 	case technique.EdgeArtifacts:
 		return m.clearedartifacts
+	case technique.EdgePetroglyphs:
+		return m.clearedpetroglyphs
 	}
 	return false
 }
@@ -44041,6 +49066,824 @@ func (m *TechniqueMutation) ResetEdge(name string) error {
 	case technique.EdgeArtifacts:
 		m.ResetArtifacts()
 		return nil
+	case technique.EdgePetroglyphs:
+		m.ResetPetroglyphs()
+		return nil
 	}
 	return fmt.Errorf("unknown Technique edge %s", name)
+}
+
+// VisitMutation represents an operation that mutates the Visit nodes in the graph.
+type VisitMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *int
+	created_at      *time.Time
+	created_by      *string
+	updated_at      *time.Time
+	updated_by      *string
+	year            *int
+	addyear         *int
+	clearedFields   map[string]struct{}
+	mounds          map[int]struct{}
+	removedmounds   map[int]struct{}
+	clearedmounds   bool
+	visitors        map[int]struct{}
+	removedvisitors map[int]struct{}
+	clearedvisitors bool
+	done            bool
+	oldValue        func(context.Context) (*Visit, error)
+	predicates      []predicate.Visit
+}
+
+var _ ent.Mutation = (*VisitMutation)(nil)
+
+// visitOption allows management of the mutation configuration using functional options.
+type visitOption func(*VisitMutation)
+
+// newVisitMutation creates new mutation for the Visit entity.
+func newVisitMutation(c config, op Op, opts ...visitOption) *VisitMutation {
+	m := &VisitMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeVisit,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withVisitID sets the ID field of the mutation.
+func withVisitID(id int) visitOption {
+	return func(m *VisitMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Visit
+		)
+		m.oldValue = func(ctx context.Context) (*Visit, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Visit.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withVisit sets the old Visit of the mutation.
+func withVisit(node *Visit) visitOption {
+	return func(m *VisitMutation) {
+		m.oldValue = func(context.Context) (*Visit, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m VisitMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m VisitMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *VisitMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *VisitMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Visit.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *VisitMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *VisitMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Visit entity.
+// If the Visit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VisitMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *VisitMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *VisitMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *VisitMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Visit entity.
+// If the Visit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VisitMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *VisitMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[visit.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *VisitMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[visit.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *VisitMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, visit.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *VisitMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *VisitMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Visit entity.
+// If the Visit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VisitMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *VisitMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *VisitMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *VisitMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Visit entity.
+// If the Visit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VisitMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *VisitMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[visit.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *VisitMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[visit.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *VisitMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, visit.FieldUpdatedBy)
+}
+
+// SetYear sets the "year" field.
+func (m *VisitMutation) SetYear(i int) {
+	m.year = &i
+	m.addyear = nil
+}
+
+// Year returns the value of the "year" field in the mutation.
+func (m *VisitMutation) Year() (r int, exists bool) {
+	v := m.year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldYear returns the old "year" field's value of the Visit entity.
+// If the Visit object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VisitMutation) OldYear(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldYear is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldYear requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldYear: %w", err)
+	}
+	return oldValue.Year, nil
+}
+
+// AddYear adds i to the "year" field.
+func (m *VisitMutation) AddYear(i int) {
+	if m.addyear != nil {
+		*m.addyear += i
+	} else {
+		m.addyear = &i
+	}
+}
+
+// AddedYear returns the value that was added to the "year" field in this mutation.
+func (m *VisitMutation) AddedYear() (r int, exists bool) {
+	v := m.addyear
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearYear clears the value of the "year" field.
+func (m *VisitMutation) ClearYear() {
+	m.year = nil
+	m.addyear = nil
+	m.clearedFields[visit.FieldYear] = struct{}{}
+}
+
+// YearCleared returns if the "year" field was cleared in this mutation.
+func (m *VisitMutation) YearCleared() bool {
+	_, ok := m.clearedFields[visit.FieldYear]
+	return ok
+}
+
+// ResetYear resets all changes to the "year" field.
+func (m *VisitMutation) ResetYear() {
+	m.year = nil
+	m.addyear = nil
+	delete(m.clearedFields, visit.FieldYear)
+}
+
+// AddMoundIDs adds the "mounds" edge to the Mound entity by ids.
+func (m *VisitMutation) AddMoundIDs(ids ...int) {
+	if m.mounds == nil {
+		m.mounds = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.mounds[ids[i]] = struct{}{}
+	}
+}
+
+// ClearMounds clears the "mounds" edge to the Mound entity.
+func (m *VisitMutation) ClearMounds() {
+	m.clearedmounds = true
+}
+
+// MoundsCleared reports if the "mounds" edge to the Mound entity was cleared.
+func (m *VisitMutation) MoundsCleared() bool {
+	return m.clearedmounds
+}
+
+// RemoveMoundIDs removes the "mounds" edge to the Mound entity by IDs.
+func (m *VisitMutation) RemoveMoundIDs(ids ...int) {
+	if m.removedmounds == nil {
+		m.removedmounds = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.mounds, ids[i])
+		m.removedmounds[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedMounds returns the removed IDs of the "mounds" edge to the Mound entity.
+func (m *VisitMutation) RemovedMoundsIDs() (ids []int) {
+	for id := range m.removedmounds {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// MoundsIDs returns the "mounds" edge IDs in the mutation.
+func (m *VisitMutation) MoundsIDs() (ids []int) {
+	for id := range m.mounds {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetMounds resets all changes to the "mounds" edge.
+func (m *VisitMutation) ResetMounds() {
+	m.mounds = nil
+	m.clearedmounds = false
+	m.removedmounds = nil
+}
+
+// AddVisitorIDs adds the "visitors" edge to the Person entity by ids.
+func (m *VisitMutation) AddVisitorIDs(ids ...int) {
+	if m.visitors == nil {
+		m.visitors = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.visitors[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVisitors clears the "visitors" edge to the Person entity.
+func (m *VisitMutation) ClearVisitors() {
+	m.clearedvisitors = true
+}
+
+// VisitorsCleared reports if the "visitors" edge to the Person entity was cleared.
+func (m *VisitMutation) VisitorsCleared() bool {
+	return m.clearedvisitors
+}
+
+// RemoveVisitorIDs removes the "visitors" edge to the Person entity by IDs.
+func (m *VisitMutation) RemoveVisitorIDs(ids ...int) {
+	if m.removedvisitors == nil {
+		m.removedvisitors = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.visitors, ids[i])
+		m.removedvisitors[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVisitors returns the removed IDs of the "visitors" edge to the Person entity.
+func (m *VisitMutation) RemovedVisitorsIDs() (ids []int) {
+	for id := range m.removedvisitors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VisitorsIDs returns the "visitors" edge IDs in the mutation.
+func (m *VisitMutation) VisitorsIDs() (ids []int) {
+	for id := range m.visitors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVisitors resets all changes to the "visitors" edge.
+func (m *VisitMutation) ResetVisitors() {
+	m.visitors = nil
+	m.clearedvisitors = false
+	m.removedvisitors = nil
+}
+
+// Where appends a list predicates to the VisitMutation builder.
+func (m *VisitMutation) Where(ps ...predicate.Visit) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the VisitMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *VisitMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Visit, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *VisitMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *VisitMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Visit).
+func (m *VisitMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *VisitMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.created_at != nil {
+		fields = append(fields, visit.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, visit.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, visit.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, visit.FieldUpdatedBy)
+	}
+	if m.year != nil {
+		fields = append(fields, visit.FieldYear)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *VisitMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case visit.FieldCreatedAt:
+		return m.CreatedAt()
+	case visit.FieldCreatedBy:
+		return m.CreatedBy()
+	case visit.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case visit.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case visit.FieldYear:
+		return m.Year()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *VisitMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case visit.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case visit.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case visit.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case visit.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case visit.FieldYear:
+		return m.OldYear(ctx)
+	}
+	return nil, fmt.Errorf("unknown Visit field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VisitMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case visit.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case visit.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case visit.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case visit.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case visit.FieldYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetYear(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Visit field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *VisitMutation) AddedFields() []string {
+	var fields []string
+	if m.addyear != nil {
+		fields = append(fields, visit.FieldYear)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *VisitMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case visit.FieldYear:
+		return m.AddedYear()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *VisitMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case visit.FieldYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddYear(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Visit numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *VisitMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(visit.FieldCreatedBy) {
+		fields = append(fields, visit.FieldCreatedBy)
+	}
+	if m.FieldCleared(visit.FieldUpdatedBy) {
+		fields = append(fields, visit.FieldUpdatedBy)
+	}
+	if m.FieldCleared(visit.FieldYear) {
+		fields = append(fields, visit.FieldYear)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *VisitMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *VisitMutation) ClearField(name string) error {
+	switch name {
+	case visit.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case visit.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case visit.FieldYear:
+		m.ClearYear()
+		return nil
+	}
+	return fmt.Errorf("unknown Visit nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *VisitMutation) ResetField(name string) error {
+	switch name {
+	case visit.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case visit.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case visit.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case visit.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case visit.FieldYear:
+		m.ResetYear()
+		return nil
+	}
+	return fmt.Errorf("unknown Visit field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *VisitMutation) AddedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.mounds != nil {
+		edges = append(edges, visit.EdgeMounds)
+	}
+	if m.visitors != nil {
+		edges = append(edges, visit.EdgeVisitors)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *VisitMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case visit.EdgeMounds:
+		ids := make([]ent.Value, 0, len(m.mounds))
+		for id := range m.mounds {
+			ids = append(ids, id)
+		}
+		return ids
+	case visit.EdgeVisitors:
+		ids := make([]ent.Value, 0, len(m.visitors))
+		for id := range m.visitors {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *VisitMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.removedmounds != nil {
+		edges = append(edges, visit.EdgeMounds)
+	}
+	if m.removedvisitors != nil {
+		edges = append(edges, visit.EdgeVisitors)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *VisitMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case visit.EdgeMounds:
+		ids := make([]ent.Value, 0, len(m.removedmounds))
+		for id := range m.removedmounds {
+			ids = append(ids, id)
+		}
+		return ids
+	case visit.EdgeVisitors:
+		ids := make([]ent.Value, 0, len(m.removedvisitors))
+		for id := range m.removedvisitors {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *VisitMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 2)
+	if m.clearedmounds {
+		edges = append(edges, visit.EdgeMounds)
+	}
+	if m.clearedvisitors {
+		edges = append(edges, visit.EdgeVisitors)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *VisitMutation) EdgeCleared(name string) bool {
+	switch name {
+	case visit.EdgeMounds:
+		return m.clearedmounds
+	case visit.EdgeVisitors:
+		return m.clearedvisitors
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *VisitMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Visit unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *VisitMutation) ResetEdge(name string) error {
+	switch name {
+	case visit.EdgeMounds:
+		m.ResetMounds()
+		return nil
+	case visit.EdgeVisitors:
+		m.ResetVisitors()
+		return nil
+	}
+	return fmt.Errorf("unknown Visit edge %s", name)
 }

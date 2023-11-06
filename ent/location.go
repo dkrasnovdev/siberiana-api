@@ -58,6 +58,8 @@ type LocationEdges struct {
 	Books []*Book `json:"books,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
+	// PetroglyphsAccountingDocumentation holds the value of the petroglyphs_accounting_documentation edge.
+	PetroglyphsAccountingDocumentation []*Petroglyph `json:"petroglyphs_accounting_documentation,omitempty"`
 	// Country holds the value of the country edge.
 	Country *Country `json:"country,omitempty"`
 	// District holds the value of the district edge.
@@ -68,13 +70,14 @@ type LocationEdges struct {
 	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
-	namedArtifacts             map[string][]*Artifact
-	namedBooks                 map[string][]*Book
-	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+	namedArtifacts                          map[string][]*Artifact
+	namedBooks                              map[string][]*Book
+	namedProtectedAreaPictures              map[string][]*ProtectedAreaPicture
+	namedPetroglyphsAccountingDocumentation map[string][]*Petroglyph
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
@@ -104,10 +107,19 @@ func (e LocationEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, er
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
 }
 
+// PetroglyphsAccountingDocumentationOrErr returns the PetroglyphsAccountingDocumentation value or an error if the edge
+// was not loaded in eager-loading.
+func (e LocationEdges) PetroglyphsAccountingDocumentationOrErr() ([]*Petroglyph, error) {
+	if e.loadedTypes[3] {
+		return e.PetroglyphsAccountingDocumentation, nil
+	}
+	return nil, &NotLoadedError{edge: "petroglyphs_accounting_documentation"}
+}
+
 // CountryOrErr returns the Country value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) CountryOrErr() (*Country, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.Country == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: country.Label}
@@ -120,7 +132,7 @@ func (e LocationEdges) CountryOrErr() (*Country, error) {
 // DistrictOrErr returns the District value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) DistrictOrErr() (*District, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		if e.District == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: district.Label}
@@ -133,7 +145,7 @@ func (e LocationEdges) DistrictOrErr() (*District, error) {
 // SettlementOrErr returns the Settlement value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) SettlementOrErr() (*Settlement, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		if e.Settlement == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: settlement.Label}
@@ -146,7 +158,7 @@ func (e LocationEdges) SettlementOrErr() (*Settlement, error) {
 // RegionOrErr returns the Region value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e LocationEdges) RegionOrErr() (*Region, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		if e.Region == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: region.Label}
@@ -309,6 +321,11 @@ func (l *Location) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
 	return NewLocationClient(l.config).QueryProtectedAreaPictures(l)
 }
 
+// QueryPetroglyphsAccountingDocumentation queries the "petroglyphs_accounting_documentation" edge of the Location entity.
+func (l *Location) QueryPetroglyphsAccountingDocumentation() *PetroglyphQuery {
+	return NewLocationClient(l.config).QueryPetroglyphsAccountingDocumentation(l)
+}
+
 // QueryCountry queries the "country" edge of the Location entity.
 func (l *Location) QueryCountry() *CountryQuery {
 	return NewLocationClient(l.config).QueryCountry(l)
@@ -453,6 +470,30 @@ func (l *Location) appendNamedProtectedAreaPictures(name string, edges ...*Prote
 		l.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
 	} else {
 		l.Edges.namedProtectedAreaPictures[name] = append(l.Edges.namedProtectedAreaPictures[name], edges...)
+	}
+}
+
+// NamedPetroglyphsAccountingDocumentation returns the PetroglyphsAccountingDocumentation named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (l *Location) NamedPetroglyphsAccountingDocumentation(name string) ([]*Petroglyph, error) {
+	if l.Edges.namedPetroglyphsAccountingDocumentation == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := l.Edges.namedPetroglyphsAccountingDocumentation[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (l *Location) appendNamedPetroglyphsAccountingDocumentation(name string, edges ...*Petroglyph) {
+	if l.Edges.namedPetroglyphsAccountingDocumentation == nil {
+		l.Edges.namedPetroglyphsAccountingDocumentation = make(map[string][]*Petroglyph)
+	}
+	if len(edges) == 0 {
+		l.Edges.namedPetroglyphsAccountingDocumentation[name] = []*Petroglyph{}
+	} else {
+		l.Edges.namedPetroglyphsAccountingDocumentation[name] = append(l.Edges.namedPetroglyphsAccountingDocumentation[name], edges...)
 	}
 }
 

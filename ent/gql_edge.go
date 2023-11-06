@@ -548,6 +548,18 @@ func (c *Culture) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	return result, err
 }
 
+func (c *Culture) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryPetroglyphs().All(ctx)
+	}
+	return result, err
+}
+
 func (d *District) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = d.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
@@ -704,6 +716,18 @@ func (l *Location) ProtectedAreaPictures(ctx context.Context) (result []*Protect
 	return result, err
 }
 
+func (l *Location) PetroglyphsAccountingDocumentation(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = l.NamedPetroglyphsAccountingDocumentation(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = l.Edges.PetroglyphsAccountingDocumentationOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = l.QueryPetroglyphsAccountingDocumentation().All(ctx)
+	}
+	return result, err
+}
+
 func (l *Location) Country(ctx context.Context) (*Country, error) {
 	result, err := l.Edges.CountryOrErr()
 	if IsNotLoaded(err) {
@@ -772,6 +796,18 @@ func (m *Model) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	return result, err
 }
 
+func (m *Model) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = m.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = m.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = m.QueryPetroglyphs().All(ctx)
+	}
+	return result, err
+}
+
 func (m *Monument) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = m.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -792,6 +828,30 @@ func (m *Monument) Sets(ctx context.Context) (result []*Set, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = m.QuerySets().All(ctx)
+	}
+	return result, err
+}
+
+func (m *Mound) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = m.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = m.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = m.QueryPetroglyphs().All(ctx)
+	}
+	return result, err
+}
+
+func (m *Mound) Visits(ctx context.Context) (result []*Visit, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = m.NamedVisits(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = m.Edges.VisitsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = m.QueryVisits().All(ctx)
 	}
 	return result, err
 }
@@ -892,6 +952,18 @@ func (pe *Person) DonatedArtifacts(ctx context.Context) (result []*Artifact, err
 	return result, err
 }
 
+func (pe *Person) PetroglyphsAccountingDocumentation(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedPetroglyphsAccountingDocumentation(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.PetroglyphsAccountingDocumentationOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryPetroglyphsAccountingDocumentation().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) Books(ctx context.Context) (result []*Book, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
@@ -900,6 +972,18 @@ func (pe *Person) Books(ctx context.Context) (result []*Book, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = pe.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (pe *Person) Visits(ctx context.Context) (result []*Visit, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedVisits(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.VisitsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryVisits().All(ctx)
 	}
 	return result, err
 }
@@ -946,6 +1030,78 @@ func (pe *Personal) Proxies(ctx context.Context) (result []*Proxy, err error) {
 		result, err = pe.QueryProxies().All(ctx)
 	}
 	return result, err
+}
+
+func (pe *Petroglyph) CulturalAffiliation(ctx context.Context) (*Culture, error) {
+	result, err := pe.Edges.CulturalAffiliationOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryCulturalAffiliation().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pe *Petroglyph) Model(ctx context.Context) (*Model, error) {
+	result, err := pe.Edges.ModelOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryModel().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pe *Petroglyph) Mound(ctx context.Context) (*Mound, error) {
+	result, err := pe.Edges.MoundOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryMound().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pe *Petroglyph) Publications(ctx context.Context) (result []*Publication, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedPublications(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.PublicationsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryPublications().All(ctx)
+	}
+	return result, err
+}
+
+func (pe *Petroglyph) Techniques(ctx context.Context) (result []*Technique, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedTechniques(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.TechniquesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryTechniques().All(ctx)
+	}
+	return result, err
+}
+
+func (pe *Petroglyph) Region(ctx context.Context) (*Region, error) {
+	result, err := pe.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryRegion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pe *Petroglyph) AccountingDocumentationAddress(ctx context.Context) (*Location, error) {
+	result, err := pe.Edges.AccountingDocumentationAddressOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryAccountingDocumentationAddress().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (pe *Petroglyph) AccountingDocumentationAuthor(ctx context.Context) (*Person, error) {
+	result, err := pe.Edges.AccountingDocumentationAuthorOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryAccountingDocumentationAuthor().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pr *Project) Artifacts(ctx context.Context) (result []*Artifact, err error) {
@@ -1096,6 +1252,18 @@ func (pu *Publication) Artifacts(ctx context.Context) (result []*Artifact, err e
 	return result, err
 }
 
+func (pu *Publication) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pu.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pu.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pu.QueryPetroglyphs().All(ctx)
+	}
+	return result, err
+}
+
 func (pu *Publication) Authors(ctx context.Context) (result []*Person, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pu.NamedAuthors(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1152,6 +1320,18 @@ func (r *Region) Books(ctx context.Context) (result []*Book, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = r.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Region) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryPetroglyphs().All(ctx)
 	}
 	return result, err
 }
@@ -1272,6 +1452,42 @@ func (t *Technique) Artifacts(ctx context.Context) (result []*Artifact, err erro
 	}
 	if IsNotLoaded(err) {
 		result, err = t.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Technique) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryPetroglyphs().All(ctx)
+	}
+	return result, err
+}
+
+func (v *Visit) Mounds(ctx context.Context) (result []*Mound, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = v.NamedMounds(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = v.Edges.MoundsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = v.QueryMounds().All(ctx)
+	}
+	return result, err
+}
+
+func (v *Visit) Visitors(ctx context.Context) (result []*Person, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = v.NamedVisitors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = v.Edges.VisitorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = v.QueryVisitors().All(ctx)
 	}
 	return result, err
 }

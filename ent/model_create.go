@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 )
 
 // ModelCreate is the builder for creating a Model entity.
@@ -168,6 +169,21 @@ func (mc *ModelCreate) AddArtifacts(a ...*Artifact) *ModelCreate {
 	return mc.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (mc *ModelCreate) AddPetroglyphIDs(ids ...int) *ModelCreate {
+	mc.mutation.AddPetroglyphIDs(ids...)
+	return mc
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (mc *ModelCreate) AddPetroglyphs(p ...*Petroglyph) *ModelCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return mc.AddPetroglyphIDs(ids...)
+}
+
 // Mutation returns the ModelMutation object of the builder.
 func (mc *ModelCreate) Mutation() *ModelMutation {
 	return mc.mutation
@@ -317,6 +333,22 @@ func (mc *ModelCreate) createSpec() (*Model, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := mc.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   model.PetroglyphsTable,
+			Columns: []string{model.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

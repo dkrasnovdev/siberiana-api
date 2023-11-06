@@ -33,6 +33,8 @@ const (
 	FieldExternalLink = "external_link"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
+	EdgePetroglyphs = "petroglyphs"
 	// Table holds the table name of the technique in the database.
 	Table = "techniques"
 	// ArtifactsTable is the table that holds the artifacts relation/edge. The primary key declared below.
@@ -40,6 +42,11 @@ const (
 	// ArtifactsInverseTable is the table name for the Artifact entity.
 	// It exists in this package in order to avoid circular dependency with the "artifact" package.
 	ArtifactsInverseTable = "artifacts"
+	// PetroglyphsTable is the table that holds the petroglyphs relation/edge. The primary key declared below.
+	PetroglyphsTable = "technique_petroglyphs"
+	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsInverseTable = "petroglyphs"
 )
 
 // Columns holds all SQL columns for technique fields.
@@ -59,6 +66,9 @@ var (
 	// ArtifactsPrimaryKey and ArtifactsColumn2 are the table columns denoting the
 	// primary key for the artifacts relation (M2M).
 	ArtifactsPrimaryKey = []string{"technique_id", "artifact_id"}
+	// PetroglyphsPrimaryKey and PetroglyphsColumn2 are the table columns denoting the
+	// primary key for the petroglyphs relation (M2M).
+	PetroglyphsPrimaryKey = []string{"technique_id", "petroglyph_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -148,10 +158,31 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByPetroglyphsCount orders the results by petroglyphs count.
+func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsStep(), opts...)
+	}
+}
+
+// ByPetroglyphs orders the results by petroglyphs terms.
+func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
+	)
+}
+func newPetroglyphsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
 	)
 }

@@ -76,8 +76,12 @@ type PersonEdges struct {
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// DonatedArtifacts holds the value of the donated_artifacts edge.
 	DonatedArtifacts []*Artifact `json:"donated_artifacts,omitempty"`
+	// PetroglyphsAccountingDocumentation holds the value of the petroglyphs_accounting_documentation edge.
+	PetroglyphsAccountingDocumentation []*Petroglyph `json:"petroglyphs_accounting_documentation,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// Visits holds the value of the visits edge.
+	Visits []*Visit `json:"visits,omitempty"`
 	// Projects holds the value of the projects edge.
 	Projects []*Project `json:"projects,omitempty"`
 	// Publications holds the value of the publications edge.
@@ -86,17 +90,19 @@ type PersonEdges struct {
 	Affiliation *Organization `json:"affiliation,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [10]map[string]int
 
-	namedCollections      map[string][]*Collection
-	namedArt              map[string][]*Art
-	namedArtifacts        map[string][]*Artifact
-	namedDonatedArtifacts map[string][]*Artifact
-	namedBooks            map[string][]*Book
-	namedProjects         map[string][]*Project
-	namedPublications     map[string][]*Publication
+	namedCollections                        map[string][]*Collection
+	namedArt                                map[string][]*Art
+	namedArtifacts                          map[string][]*Artifact
+	namedDonatedArtifacts                   map[string][]*Artifact
+	namedPetroglyphsAccountingDocumentation map[string][]*Petroglyph
+	namedBooks                              map[string][]*Book
+	namedVisits                             map[string][]*Visit
+	namedProjects                           map[string][]*Project
+	namedPublications                       map[string][]*Publication
 }
 
 // CollectionsOrErr returns the Collections value or an error if the edge
@@ -135,19 +141,37 @@ func (e PersonEdges) DonatedArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "donated_artifacts"}
 }
 
+// PetroglyphsAccountingDocumentationOrErr returns the PetroglyphsAccountingDocumentation value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonEdges) PetroglyphsAccountingDocumentationOrErr() ([]*Petroglyph, error) {
+	if e.loadedTypes[4] {
+		return e.PetroglyphsAccountingDocumentation, nil
+	}
+	return nil, &NotLoadedError{edge: "petroglyphs_accounting_documentation"}
+}
+
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
 }
 
+// VisitsOrErr returns the Visits value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonEdges) VisitsOrErr() ([]*Visit, error) {
+	if e.loadedTypes[6] {
+		return e.Visits, nil
+	}
+	return nil, &NotLoadedError{edge: "visits"}
+}
+
 // ProjectsOrErr returns the Projects value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Projects, nil
 	}
 	return nil, &NotLoadedError{edge: "projects"}
@@ -156,7 +180,7 @@ func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
 // PublicationsOrErr returns the Publications value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Publications, nil
 	}
 	return nil, &NotLoadedError{edge: "publications"}
@@ -165,7 +189,7 @@ func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
 // AffiliationOrErr returns the Affiliation value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PersonEdges) AffiliationOrErr() (*Organization, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		if e.Affiliation == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: organization.Label}
@@ -377,9 +401,19 @@ func (pe *Person) QueryDonatedArtifacts() *ArtifactQuery {
 	return NewPersonClient(pe.config).QueryDonatedArtifacts(pe)
 }
 
+// QueryPetroglyphsAccountingDocumentation queries the "petroglyphs_accounting_documentation" edge of the Person entity.
+func (pe *Person) QueryPetroglyphsAccountingDocumentation() *PetroglyphQuery {
+	return NewPersonClient(pe.config).QueryPetroglyphsAccountingDocumentation(pe)
+}
+
 // QueryBooks queries the "books" edge of the Person entity.
 func (pe *Person) QueryBooks() *BookQuery {
 	return NewPersonClient(pe.config).QueryBooks(pe)
+}
+
+// QueryVisits queries the "visits" edge of the Person entity.
+func (pe *Person) QueryVisits() *VisitQuery {
+	return NewPersonClient(pe.config).QueryVisits(pe)
 }
 
 // QueryProjects queries the "projects" edge of the Person entity.
@@ -579,6 +613,30 @@ func (pe *Person) appendNamedDonatedArtifacts(name string, edges ...*Artifact) {
 	}
 }
 
+// NamedPetroglyphsAccountingDocumentation returns the PetroglyphsAccountingDocumentation named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Person) NamedPetroglyphsAccountingDocumentation(name string) ([]*Petroglyph, error) {
+	if pe.Edges.namedPetroglyphsAccountingDocumentation == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedPetroglyphsAccountingDocumentation[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Person) appendNamedPetroglyphsAccountingDocumentation(name string, edges ...*Petroglyph) {
+	if pe.Edges.namedPetroglyphsAccountingDocumentation == nil {
+		pe.Edges.namedPetroglyphsAccountingDocumentation = make(map[string][]*Petroglyph)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedPetroglyphsAccountingDocumentation[name] = []*Petroglyph{}
+	} else {
+		pe.Edges.namedPetroglyphsAccountingDocumentation[name] = append(pe.Edges.namedPetroglyphsAccountingDocumentation[name], edges...)
+	}
+}
+
 // NamedBooks returns the Books named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (pe *Person) NamedBooks(name string) ([]*Book, error) {
@@ -600,6 +658,30 @@ func (pe *Person) appendNamedBooks(name string, edges ...*Book) {
 		pe.Edges.namedBooks[name] = []*Book{}
 	} else {
 		pe.Edges.namedBooks[name] = append(pe.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedVisits returns the Visits named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Person) NamedVisits(name string) ([]*Visit, error) {
+	if pe.Edges.namedVisits == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedVisits[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Person) appendNamedVisits(name string, edges ...*Visit) {
+	if pe.Edges.namedVisits == nil {
+		pe.Edges.namedVisits = make(map[string][]*Visit)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedVisits[name] = []*Visit{}
+	} else {
+		pe.Edges.namedVisits[name] = append(pe.Edges.namedVisits[name], edges...)
 	}
 }
 

@@ -26,10 +26,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
@@ -42,6 +44,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -603,6 +606,33 @@ func init() {
 	monument.DefaultUpdatedAt = monumentDescUpdatedAt.Default.(func() time.Time)
 	// monument.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	monument.UpdateDefaultUpdatedAt = monumentDescUpdatedAt.UpdateDefault.(func() time.Time)
+	moundMixin := schema.Mound{}.Mixin()
+	mound.Policy = privacy.NewPolicies(schema.Mound{})
+	mound.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := mound.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	moundMixinHooks0 := moundMixin[0].Hooks()
+
+	mound.Hooks[1] = moundMixinHooks0[0]
+	moundMixinFields0 := moundMixin[0].Fields()
+	_ = moundMixinFields0
+	moundFields := schema.Mound{}.Fields()
+	_ = moundFields
+	// moundDescCreatedAt is the schema descriptor for created_at field.
+	moundDescCreatedAt := moundMixinFields0[0].Descriptor()
+	// mound.DefaultCreatedAt holds the default value on creation for the created_at field.
+	mound.DefaultCreatedAt = moundDescCreatedAt.Default.(func() time.Time)
+	// moundDescUpdatedAt is the schema descriptor for updated_at field.
+	moundDescUpdatedAt := moundMixinFields0[2].Descriptor()
+	// mound.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	mound.DefaultUpdatedAt = moundDescUpdatedAt.Default.(func() time.Time)
+	// mound.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	mound.UpdateDefaultUpdatedAt = moundDescUpdatedAt.UpdateDefault.(func() time.Time)
 	organizationMixin := schema.Organization{}.Mixin()
 	organization.Policy = privacy.NewPolicies(schema.Organization{})
 	organization.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -724,6 +754,40 @@ func init() {
 	personalDescDisplayName := personalFields[0].Descriptor()
 	// personal.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	personal.DisplayNameValidator = personalDescDisplayName.Validators[0].(func(string) error)
+	petroglyphMixin := schema.Petroglyph{}.Mixin()
+	petroglyph.Policy = privacy.NewPolicies(schema.Petroglyph{})
+	petroglyph.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := petroglyph.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	petroglyphMixinHooks0 := petroglyphMixin[0].Hooks()
+	petroglyphMixinHooks4 := petroglyphMixin[4].Hooks()
+
+	petroglyph.Hooks[1] = petroglyphMixinHooks0[0]
+
+	petroglyph.Hooks[2] = petroglyphMixinHooks4[0]
+	petroglyphMixinInters4 := petroglyphMixin[4].Interceptors()
+	petroglyph.Interceptors[0] = petroglyphMixinInters4[0]
+	petroglyphMixinFields0 := petroglyphMixin[0].Fields()
+	_ = petroglyphMixinFields0
+	petroglyphMixinFields2 := petroglyphMixin[2].Fields()
+	_ = petroglyphMixinFields2
+	petroglyphFields := schema.Petroglyph{}.Fields()
+	_ = petroglyphFields
+	// petroglyphDescCreatedAt is the schema descriptor for created_at field.
+	petroglyphDescCreatedAt := petroglyphMixinFields0[0].Descriptor()
+	// petroglyph.DefaultCreatedAt holds the default value on creation for the created_at field.
+	petroglyph.DefaultCreatedAt = petroglyphDescCreatedAt.Default.(func() time.Time)
+	// petroglyphDescUpdatedAt is the schema descriptor for updated_at field.
+	petroglyphDescUpdatedAt := petroglyphMixinFields0[2].Descriptor()
+	// petroglyph.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	petroglyph.DefaultUpdatedAt = petroglyphDescUpdatedAt.Default.(func() time.Time)
+	// petroglyph.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	petroglyph.UpdateDefaultUpdatedAt = petroglyphDescUpdatedAt.UpdateDefault.(func() time.Time)
 	projectMixin := schema.Project{}.Mixin()
 	project.Policy = privacy.NewPolicies(schema.Project{})
 	project.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1035,6 +1099,37 @@ func init() {
 	technique.DefaultUpdatedAt = techniqueDescUpdatedAt.Default.(func() time.Time)
 	// technique.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	technique.UpdateDefaultUpdatedAt = techniqueDescUpdatedAt.UpdateDefault.(func() time.Time)
+	visitMixin := schema.Visit{}.Mixin()
+	visit.Policy = privacy.NewPolicies(schema.Visit{})
+	visit.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := visit.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	visitMixinHooks0 := visitMixin[0].Hooks()
+
+	visit.Hooks[1] = visitMixinHooks0[0]
+	visitMixinFields0 := visitMixin[0].Fields()
+	_ = visitMixinFields0
+	visitFields := schema.Visit{}.Fields()
+	_ = visitFields
+	// visitDescCreatedAt is the schema descriptor for created_at field.
+	visitDescCreatedAt := visitMixinFields0[0].Descriptor()
+	// visit.DefaultCreatedAt holds the default value on creation for the created_at field.
+	visit.DefaultCreatedAt = visitDescCreatedAt.Default.(func() time.Time)
+	// visitDescUpdatedAt is the schema descriptor for updated_at field.
+	visitDescUpdatedAt := visitMixinFields0[2].Descriptor()
+	// visit.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	visit.DefaultUpdatedAt = visitDescUpdatedAt.Default.(func() time.Time)
+	// visit.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	visit.UpdateDefaultUpdatedAt = visitDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// visitDescYear is the schema descriptor for year field.
+	visitDescYear := visitFields[0].Descriptor()
+	// visit.YearValidator is a validator for the "year" field. It is called by the builders before save.
+	visit.YearValidator = visitDescYear.Validators[0].(func(int) error)
 }
 
 const (

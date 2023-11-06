@@ -29,10 +29,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -45,6 +47,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -670,6 +673,33 @@ func (f TraverseMonument) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.MonumentQuery", q)
 }
 
+// The MoundFunc type is an adapter to allow the use of ordinary function as a Querier.
+type MoundFunc func(context.Context, *ent.MoundQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f MoundFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.MoundQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.MoundQuery", q)
+}
+
+// The TraverseMound type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseMound func(context.Context, *ent.MoundQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseMound) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseMound) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.MoundQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.MoundQuery", q)
+}
+
 // The OrganizationFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OrganizationFunc func(context.Context, *ent.OrganizationQuery) (ent.Value, error)
 
@@ -776,6 +806,33 @@ func (f TraversePersonal) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.PersonalQuery", q)
+}
+
+// The PetroglyphFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PetroglyphFunc func(context.Context, *ent.PetroglyphQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f PetroglyphFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.PetroglyphQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.PetroglyphQuery", q)
+}
+
+// The TraversePetroglyph type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePetroglyph func(context.Context, *ent.PetroglyphQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraversePetroglyph) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraversePetroglyph) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PetroglyphQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.PetroglyphQuery", q)
 }
 
 // The ProjectFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1075,6 +1132,33 @@ func (f TraverseTechnique) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.TechniqueQuery", q)
 }
 
+// The VisitFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VisitFunc func(context.Context, *ent.VisitQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f VisitFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.VisitQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.VisitQuery", q)
+}
+
+// The TraverseVisit type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVisit func(context.Context, *ent.VisitQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVisit) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVisit) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.VisitQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.VisitQuery", q)
+}
+
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q ent.Query) (Query, error) {
 	switch q := q.(type) {
@@ -1120,6 +1204,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.ModelQuery, predicate.Model, model.OrderOption]{typ: ent.TypeModel, tq: q}, nil
 	case *ent.MonumentQuery:
 		return &query[*ent.MonumentQuery, predicate.Monument, monument.OrderOption]{typ: ent.TypeMonument, tq: q}, nil
+	case *ent.MoundQuery:
+		return &query[*ent.MoundQuery, predicate.Mound, mound.OrderOption]{typ: ent.TypeMound, tq: q}, nil
 	case *ent.OrganizationQuery:
 		return &query[*ent.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: ent.TypeOrganization, tq: q}, nil
 	case *ent.PeriodicalQuery:
@@ -1128,6 +1214,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.PersonQuery, predicate.Person, person.OrderOption]{typ: ent.TypePerson, tq: q}, nil
 	case *ent.PersonalQuery:
 		return &query[*ent.PersonalQuery, predicate.Personal, personal.OrderOption]{typ: ent.TypePersonal, tq: q}, nil
+	case *ent.PetroglyphQuery:
+		return &query[*ent.PetroglyphQuery, predicate.Petroglyph, petroglyph.OrderOption]{typ: ent.TypePetroglyph, tq: q}, nil
 	case *ent.ProjectQuery:
 		return &query[*ent.ProjectQuery, predicate.Project, project.OrderOption]{typ: ent.TypeProject, tq: q}, nil
 	case *ent.ProtectedAreaQuery:
@@ -1150,6 +1238,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.SettlementQuery, predicate.Settlement, settlement.OrderOption]{typ: ent.TypeSettlement, tq: q}, nil
 	case *ent.TechniqueQuery:
 		return &query[*ent.TechniqueQuery, predicate.Technique, technique.OrderOption]{typ: ent.TypeTechnique, tq: q}, nil
+	case *ent.VisitQuery:
+		return &query[*ent.VisitQuery, predicate.Visit, visit.OrderOption]{typ: ent.TypeVisit, tq: q}, nil
 	default:
 		return nil, fmt.Errorf("unknown query type %T", q)
 	}

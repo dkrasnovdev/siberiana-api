@@ -18,36 +18,42 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
 
 // PersonQuery is the builder for querying Person entities.
 type PersonQuery struct {
 	config
-	ctx                       *QueryContext
-	order                     []person.OrderOption
-	inters                    []Interceptor
-	predicates                []predicate.Person
-	withCollections           *CollectionQuery
-	withArt                   *ArtQuery
-	withArtifacts             *ArtifactQuery
-	withDonatedArtifacts      *ArtifactQuery
-	withBooks                 *BookQuery
-	withProjects              *ProjectQuery
-	withPublications          *PublicationQuery
-	withAffiliation           *OrganizationQuery
-	withFKs                   bool
-	modifiers                 []func(*sql.Selector)
-	loadTotal                 []func(context.Context, []*Person) error
-	withNamedCollections      map[string]*CollectionQuery
-	withNamedArt              map[string]*ArtQuery
-	withNamedArtifacts        map[string]*ArtifactQuery
-	withNamedDonatedArtifacts map[string]*ArtifactQuery
-	withNamedBooks            map[string]*BookQuery
-	withNamedProjects         map[string]*ProjectQuery
-	withNamedPublications     map[string]*PublicationQuery
+	ctx                                         *QueryContext
+	order                                       []person.OrderOption
+	inters                                      []Interceptor
+	predicates                                  []predicate.Person
+	withCollections                             *CollectionQuery
+	withArt                                     *ArtQuery
+	withArtifacts                               *ArtifactQuery
+	withDonatedArtifacts                        *ArtifactQuery
+	withPetroglyphsAccountingDocumentation      *PetroglyphQuery
+	withBooks                                   *BookQuery
+	withVisits                                  *VisitQuery
+	withProjects                                *ProjectQuery
+	withPublications                            *PublicationQuery
+	withAffiliation                             *OrganizationQuery
+	withFKs                                     bool
+	modifiers                                   []func(*sql.Selector)
+	loadTotal                                   []func(context.Context, []*Person) error
+	withNamedCollections                        map[string]*CollectionQuery
+	withNamedArt                                map[string]*ArtQuery
+	withNamedArtifacts                          map[string]*ArtifactQuery
+	withNamedDonatedArtifacts                   map[string]*ArtifactQuery
+	withNamedPetroglyphsAccountingDocumentation map[string]*PetroglyphQuery
+	withNamedBooks                              map[string]*BookQuery
+	withNamedVisits                             map[string]*VisitQuery
+	withNamedProjects                           map[string]*ProjectQuery
+	withNamedPublications                       map[string]*PublicationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -172,6 +178,28 @@ func (pq *PersonQuery) QueryDonatedArtifacts() *ArtifactQuery {
 	return query
 }
 
+// QueryPetroglyphsAccountingDocumentation chains the current query on the "petroglyphs_accounting_documentation" edge.
+func (pq *PersonQuery) QueryPetroglyphsAccountingDocumentation() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.PetroglyphsAccountingDocumentationTable, person.PetroglyphsAccountingDocumentationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryBooks chains the current query on the "books" edge.
 func (pq *PersonQuery) QueryBooks() *BookQuery {
 	query := (&BookClient{config: pq.config}).Query()
@@ -187,6 +215,28 @@ func (pq *PersonQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.BooksTable, person.BooksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVisits chains the current query on the "visits" edge.
+func (pq *PersonQuery) QueryVisits() *VisitQuery {
+	query := (&VisitClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(visit.Table, visit.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, person.VisitsTable, person.VisitsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -447,19 +497,21 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		return nil
 	}
 	return &PersonQuery{
-		config:               pq.config,
-		ctx:                  pq.ctx.Clone(),
-		order:                append([]person.OrderOption{}, pq.order...),
-		inters:               append([]Interceptor{}, pq.inters...),
-		predicates:           append([]predicate.Person{}, pq.predicates...),
-		withCollections:      pq.withCollections.Clone(),
-		withArt:              pq.withArt.Clone(),
-		withArtifacts:        pq.withArtifacts.Clone(),
-		withDonatedArtifacts: pq.withDonatedArtifacts.Clone(),
-		withBooks:            pq.withBooks.Clone(),
-		withProjects:         pq.withProjects.Clone(),
-		withPublications:     pq.withPublications.Clone(),
-		withAffiliation:      pq.withAffiliation.Clone(),
+		config:                                 pq.config,
+		ctx:                                    pq.ctx.Clone(),
+		order:                                  append([]person.OrderOption{}, pq.order...),
+		inters:                                 append([]Interceptor{}, pq.inters...),
+		predicates:                             append([]predicate.Person{}, pq.predicates...),
+		withCollections:                        pq.withCollections.Clone(),
+		withArt:                                pq.withArt.Clone(),
+		withArtifacts:                          pq.withArtifacts.Clone(),
+		withDonatedArtifacts:                   pq.withDonatedArtifacts.Clone(),
+		withPetroglyphsAccountingDocumentation: pq.withPetroglyphsAccountingDocumentation.Clone(),
+		withBooks:                              pq.withBooks.Clone(),
+		withVisits:                             pq.withVisits.Clone(),
+		withProjects:                           pq.withProjects.Clone(),
+		withPublications:                       pq.withPublications.Clone(),
+		withAffiliation:                        pq.withAffiliation.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -510,6 +562,17 @@ func (pq *PersonQuery) WithDonatedArtifacts(opts ...func(*ArtifactQuery)) *Perso
 	return pq
 }
 
+// WithPetroglyphsAccountingDocumentation tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs_accounting_documentation" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithPetroglyphsAccountingDocumentation(opts ...func(*PetroglyphQuery)) *PersonQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPetroglyphsAccountingDocumentation = query
+	return pq
+}
+
 // WithBooks tells the query-builder to eager-load the nodes that are connected to
 // the "books" edge. The optional arguments are used to configure the query builder of the edge.
 func (pq *PersonQuery) WithBooks(opts ...func(*BookQuery)) *PersonQuery {
@@ -518,6 +581,17 @@ func (pq *PersonQuery) WithBooks(opts ...func(*BookQuery)) *PersonQuery {
 		opt(query)
 	}
 	pq.withBooks = query
+	return pq
+}
+
+// WithVisits tells the query-builder to eager-load the nodes that are connected to
+// the "visits" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithVisits(opts ...func(*VisitQuery)) *PersonQuery {
+	query := (&VisitClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withVisits = query
 	return pq
 }
 
@@ -639,12 +713,14 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [10]bool{
 			pq.withCollections != nil,
 			pq.withArt != nil,
 			pq.withArtifacts != nil,
 			pq.withDonatedArtifacts != nil,
+			pq.withPetroglyphsAccountingDocumentation != nil,
 			pq.withBooks != nil,
+			pq.withVisits != nil,
 			pq.withProjects != nil,
 			pq.withPublications != nil,
 			pq.withAffiliation != nil,
@@ -705,10 +781,26 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 			return nil, err
 		}
 	}
+	if query := pq.withPetroglyphsAccountingDocumentation; query != nil {
+		if err := pq.loadPetroglyphsAccountingDocumentation(ctx, query, nodes,
+			func(n *Person) { n.Edges.PetroglyphsAccountingDocumentation = []*Petroglyph{} },
+			func(n *Person, e *Petroglyph) {
+				n.Edges.PetroglyphsAccountingDocumentation = append(n.Edges.PetroglyphsAccountingDocumentation, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withBooks; query != nil {
 		if err := pq.loadBooks(ctx, query, nodes,
 			func(n *Person) { n.Edges.Books = []*Book{} },
 			func(n *Person, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withVisits; query != nil {
+		if err := pq.loadVisits(ctx, query, nodes,
+			func(n *Person) { n.Edges.Visits = []*Visit{} },
+			func(n *Person, e *Visit) { n.Edges.Visits = append(n.Edges.Visits, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -760,10 +852,24 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 			return nil, err
 		}
 	}
+	for name, query := range pq.withNamedPetroglyphsAccountingDocumentation {
+		if err := pq.loadPetroglyphsAccountingDocumentation(ctx, query, nodes,
+			func(n *Person) { n.appendNamedPetroglyphsAccountingDocumentation(name) },
+			func(n *Person, e *Petroglyph) { n.appendNamedPetroglyphsAccountingDocumentation(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range pq.withNamedBooks {
 		if err := pq.loadBooks(ctx, query, nodes,
 			func(n *Person) { n.appendNamedBooks(name) },
 			func(n *Person, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedVisits {
+		if err := pq.loadVisits(ctx, query, nodes,
+			func(n *Person) { n.appendNamedVisits(name) },
+			func(n *Person, e *Visit) { n.appendNamedVisits(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -973,6 +1079,37 @@ func (pq *PersonQuery) loadDonatedArtifacts(ctx context.Context, query *Artifact
 	}
 	return nil
 }
+func (pq *PersonQuery) loadPetroglyphsAccountingDocumentation(ctx context.Context, query *PetroglyphQuery, nodes []*Person, init func(*Person), assign func(*Person, *Petroglyph)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Person)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Petroglyph(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(person.PetroglyphsAccountingDocumentationColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.person_petroglyphs_accounting_documentation
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "person_petroglyphs_accounting_documentation" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "person_petroglyphs_accounting_documentation" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (pq *PersonQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Person, init func(*Person), assign func(*Person, *Book)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Person)
@@ -1027,6 +1164,67 @@ func (pq *PersonQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "books" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *PersonQuery) loadVisits(ctx context.Context, query *VisitQuery, nodes []*Person, init func(*Person), assign func(*Person, *Visit)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Person)
+	nids := make(map[int]map[*Person]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(person.VisitsTable)
+		s.Join(joinT).On(s.C(visit.FieldID), joinT.C(person.VisitsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(person.VisitsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(person.VisitsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Person]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Visit](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "visits" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1329,6 +1527,20 @@ func (pq *PersonQuery) WithNamedDonatedArtifacts(name string, opts ...func(*Arti
 	return pq
 }
 
+// WithNamedPetroglyphsAccountingDocumentation tells the query-builder to eager-load the nodes that are connected to the "petroglyphs_accounting_documentation"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedPetroglyphsAccountingDocumentation(name string, opts ...func(*PetroglyphQuery)) *PersonQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedPetroglyphsAccountingDocumentation == nil {
+		pq.withNamedPetroglyphsAccountingDocumentation = make(map[string]*PetroglyphQuery)
+	}
+	pq.withNamedPetroglyphsAccountingDocumentation[name] = query
+	return pq
+}
+
 // WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (pq *PersonQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *PersonQuery {
@@ -1340,6 +1552,20 @@ func (pq *PersonQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *Pe
 		pq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	pq.withNamedBooks[name] = query
+	return pq
+}
+
+// WithNamedVisits tells the query-builder to eager-load the nodes that are connected to the "visits"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedVisits(name string, opts ...func(*VisitQuery)) *PersonQuery {
+	query := (&VisitClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedVisits == nil {
+		pq.withNamedVisits = make(map[string]*VisitQuery)
+	}
+	pq.withNamedVisits[name] = query
 	return pq
 }
 

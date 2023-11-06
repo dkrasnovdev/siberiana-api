@@ -648,6 +648,29 @@ func HasArtifactsWith(preds ...predicate.Artifact) predicate.Publication {
 	})
 }
 
+// HasPetroglyphs applies the HasEdge predicate on the "petroglyphs" edge.
+func HasPetroglyphs() predicate.Publication {
+	return predicate.Publication(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPetroglyphsWith applies the HasEdge predicate on the "petroglyphs" edge with a given conditions (other predicates).
+func HasPetroglyphsWith(preds ...predicate.Petroglyph) predicate.Publication {
+	return predicate.Publication(func(s *sql.Selector) {
+		step := newPetroglyphsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAuthors applies the HasEdge predicate on the "authors" edge.
 func HasAuthors() predicate.Publication {
 	return predicate.Publication(func(s *sql.Selector) {

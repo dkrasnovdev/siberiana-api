@@ -673,6 +673,25 @@ var (
 		Columns:    MonumentsColumns,
 		PrimaryKey: []*schema.Column{MonumentsColumns[0]},
 	}
+	// MoundsColumns holds the columns for the "mounds" table.
+	MoundsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "number", Type: field.TypeString, Nullable: true},
+	}
+	// MoundsTable holds the schema information for the "mounds" table.
+	MoundsTable = &schema.Table{
+		Name:       "mounds",
+		Columns:    MoundsColumns,
+		PrimaryKey: []*schema.Column{MoundsColumns[0]},
+	}
 	// OrganizationsColumns holds the columns for the "organizations" table.
 	OrganizationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -772,6 +791,91 @@ var (
 		Name:       "personals",
 		Columns:    PersonalsColumns,
 		PrimaryKey: []*schema.Column{PersonalsColumns[0]},
+	}
+	// PetroglyphsColumns holds the columns for the "petroglyphs" table.
+	PetroglyphsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "number", Type: field.TypeString, Nullable: true},
+		{Name: "dating", Type: field.TypeString, Nullable: true},
+		{Name: "dating_start", Type: field.TypeInt, Nullable: true},
+		{Name: "dating_end", Type: field.TypeInt, Nullable: true},
+		{Name: "orientation", Type: field.TypeString, Nullable: true},
+		{Name: "position", Type: field.TypeString, Nullable: true},
+		{Name: "geometric_shape", Type: field.TypeString, Nullable: true},
+		{Name: "height", Type: field.TypeFloat64, Nullable: true},
+		{Name: "width", Type: field.TypeFloat64, Nullable: true},
+		{Name: "length", Type: field.TypeFloat64, Nullable: true},
+		{Name: "depth", Type: field.TypeFloat64, Nullable: true},
+		{Name: "diameter", Type: field.TypeFloat64, Nullable: true},
+		{Name: "weight", Type: field.TypeString, Nullable: true},
+		{Name: "dimensions", Type: field.TypeString, Nullable: true},
+		{Name: "plane_preservation", Type: field.TypeString, Nullable: true},
+		{Name: "photo_code", Type: field.TypeString, Nullable: true},
+		{Name: "accounting_documentation_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "geometry", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "geometry"}},
+		{Name: "culture_petroglyphs", Type: field.TypeInt, Nullable: true},
+		{Name: "location_petroglyphs_accounting_documentation", Type: field.TypeInt, Nullable: true},
+		{Name: "model_petroglyphs", Type: field.TypeInt, Nullable: true},
+		{Name: "mound_petroglyphs", Type: field.TypeInt, Nullable: true},
+		{Name: "person_petroglyphs_accounting_documentation", Type: field.TypeInt, Nullable: true},
+		{Name: "region_petroglyphs", Type: field.TypeInt, Nullable: true},
+	}
+	// PetroglyphsTable holds the schema information for the "petroglyphs" table.
+	PetroglyphsTable = &schema.Table{
+		Name:       "petroglyphs",
+		Columns:    PetroglyphsColumns,
+		PrimaryKey: []*schema.Column{PetroglyphsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "petroglyphs_cultures_petroglyphs",
+				Columns:    []*schema.Column{PetroglyphsColumns[32]},
+				RefColumns: []*schema.Column{CulturesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "petroglyphs_locations_petroglyphs_accounting_documentation",
+				Columns:    []*schema.Column{PetroglyphsColumns[33]},
+				RefColumns: []*schema.Column{LocationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "petroglyphs_models_petroglyphs",
+				Columns:    []*schema.Column{PetroglyphsColumns[34]},
+				RefColumns: []*schema.Column{ModelsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "petroglyphs_mounds_petroglyphs",
+				Columns:    []*schema.Column{PetroglyphsColumns[35]},
+				RefColumns: []*schema.Column{MoundsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "petroglyphs_persons_petroglyphs_accounting_documentation",
+				Columns:    []*schema.Column{PetroglyphsColumns[36]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "petroglyphs_regions_petroglyphs",
+				Columns:    []*schema.Column{PetroglyphsColumns[37]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// ProjectsColumns holds the columns for the "projects" table.
 	ProjectsColumns = []*schema.Column{
@@ -1065,6 +1169,21 @@ var (
 		Columns:    TechniquesColumns,
 		PrimaryKey: []*schema.Column{TechniquesColumns[0]},
 	}
+	// VisitsColumns holds the columns for the "visits" table.
+	VisitsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "year", Type: field.TypeInt, Nullable: true},
+	}
+	// VisitsTable holds the schema information for the "visits" table.
+	VisitsTable = &schema.Table{
+		Name:       "visits",
+		Columns:    VisitsColumns,
+		PrimaryKey: []*schema.Column{VisitsColumns[0]},
+	}
 	// ArtGenreArtColumns holds the columns for the "art_genre_art" table.
 	ArtGenreArtColumns = []*schema.Column{
 		{Name: "art_genre_id", Type: field.TypeInt},
@@ -1290,6 +1409,31 @@ var (
 			},
 		},
 	}
+	// PersonVisitsColumns holds the columns for the "person_visits" table.
+	PersonVisitsColumns = []*schema.Column{
+		{Name: "person_id", Type: field.TypeInt},
+		{Name: "visit_id", Type: field.TypeInt},
+	}
+	// PersonVisitsTable holds the schema information for the "person_visits" table.
+	PersonVisitsTable = &schema.Table{
+		Name:       "person_visits",
+		Columns:    PersonVisitsColumns,
+		PrimaryKey: []*schema.Column{PersonVisitsColumns[0], PersonVisitsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "person_visits_person_id",
+				Columns:    []*schema.Column{PersonVisitsColumns[0]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "person_visits_visit_id",
+				Columns:    []*schema.Column{PersonVisitsColumns[1]},
+				RefColumns: []*schema.Column{VisitsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// PersonProjectsColumns holds the columns for the "person_projects" table.
 	PersonProjectsColumns = []*schema.Column{
 		{Name: "person_id", Type: field.TypeInt},
@@ -1390,6 +1534,31 @@ var (
 			},
 		},
 	}
+	// PublicationPetroglyphsColumns holds the columns for the "publication_petroglyphs" table.
+	PublicationPetroglyphsColumns = []*schema.Column{
+		{Name: "publication_id", Type: field.TypeInt},
+		{Name: "petroglyph_id", Type: field.TypeInt},
+	}
+	// PublicationPetroglyphsTable holds the schema information for the "publication_petroglyphs" table.
+	PublicationPetroglyphsTable = &schema.Table{
+		Name:       "publication_petroglyphs",
+		Columns:    PublicationPetroglyphsColumns,
+		PrimaryKey: []*schema.Column{PublicationPetroglyphsColumns[0], PublicationPetroglyphsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "publication_petroglyphs_publication_id",
+				Columns:    []*schema.Column{PublicationPetroglyphsColumns[0]},
+				RefColumns: []*schema.Column{PublicationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "publication_petroglyphs_petroglyph_id",
+				Columns:    []*schema.Column{PublicationPetroglyphsColumns[1]},
+				RefColumns: []*schema.Column{PetroglyphsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// TechniqueArtifactsColumns holds the columns for the "technique_artifacts" table.
 	TechniqueArtifactsColumns = []*schema.Column{
 		{Name: "technique_id", Type: field.TypeInt},
@@ -1411,6 +1580,56 @@ var (
 				Symbol:     "technique_artifacts_artifact_id",
 				Columns:    []*schema.Column{TechniqueArtifactsColumns[1]},
 				RefColumns: []*schema.Column{ArtifactsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// TechniquePetroglyphsColumns holds the columns for the "technique_petroglyphs" table.
+	TechniquePetroglyphsColumns = []*schema.Column{
+		{Name: "technique_id", Type: field.TypeInt},
+		{Name: "petroglyph_id", Type: field.TypeInt},
+	}
+	// TechniquePetroglyphsTable holds the schema information for the "technique_petroglyphs" table.
+	TechniquePetroglyphsTable = &schema.Table{
+		Name:       "technique_petroglyphs",
+		Columns:    TechniquePetroglyphsColumns,
+		PrimaryKey: []*schema.Column{TechniquePetroglyphsColumns[0], TechniquePetroglyphsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "technique_petroglyphs_technique_id",
+				Columns:    []*schema.Column{TechniquePetroglyphsColumns[0]},
+				RefColumns: []*schema.Column{TechniquesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "technique_petroglyphs_petroglyph_id",
+				Columns:    []*schema.Column{TechniquePetroglyphsColumns[1]},
+				RefColumns: []*schema.Column{PetroglyphsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// VisitMoundsColumns holds the columns for the "visit_mounds" table.
+	VisitMoundsColumns = []*schema.Column{
+		{Name: "visit_id", Type: field.TypeInt},
+		{Name: "mound_id", Type: field.TypeInt},
+	}
+	// VisitMoundsTable holds the schema information for the "visit_mounds" table.
+	VisitMoundsTable = &schema.Table{
+		Name:       "visit_mounds",
+		Columns:    VisitMoundsColumns,
+		PrimaryKey: []*schema.Column{VisitMoundsColumns[0], VisitMoundsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "visit_mounds_visit_id",
+				Columns:    []*schema.Column{VisitMoundsColumns[0]},
+				RefColumns: []*schema.Column{VisitsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "visit_mounds_mound_id",
+				Columns:    []*schema.Column{VisitMoundsColumns[1]},
+				RefColumns: []*schema.Column{MoundsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -1438,10 +1657,12 @@ var (
 		MediaTable,
 		ModelsTable,
 		MonumentsTable,
+		MoundsTable,
 		OrganizationsTable,
 		PeriodicalsTable,
 		PersonsTable,
 		PersonalsTable,
+		PetroglyphsTable,
 		ProjectsTable,
 		ProtectedAreasTable,
 		ProtectedAreaCategoriesTable,
@@ -1453,6 +1674,7 @@ var (
 		SetsTable,
 		SettlementsTable,
 		TechniquesTable,
+		VisitsTable,
 		ArtGenreArtTable,
 		ArtStyleArtTable,
 		BookGenreBooksTable,
@@ -1462,11 +1684,15 @@ var (
 		PersonCollectionsTable,
 		PersonArtifactsTable,
 		PersonBooksTable,
+		PersonVisitsTable,
 		PersonProjectsTable,
 		PersonPublicationsTable,
 		ProjectArtifactsTable,
 		PublicationArtifactsTable,
+		PublicationPetroglyphsTable,
 		TechniqueArtifactsTable,
+		TechniquePetroglyphsTable,
+		VisitMoundsTable,
 	}
 )
 
@@ -1507,6 +1733,12 @@ func init() {
 	LocationsTable.ForeignKeys[2].RefTable = SettlementsTable
 	LocationsTable.ForeignKeys[3].RefTable = RegionsTable
 	PersonsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	PetroglyphsTable.ForeignKeys[0].RefTable = CulturesTable
+	PetroglyphsTable.ForeignKeys[1].RefTable = LocationsTable
+	PetroglyphsTable.ForeignKeys[2].RefTable = ModelsTable
+	PetroglyphsTable.ForeignKeys[3].RefTable = MoundsTable
+	PetroglyphsTable.ForeignKeys[4].RefTable = PersonsTable
+	PetroglyphsTable.ForeignKeys[5].RefTable = RegionsTable
 	ProtectedAreasTable.ForeignKeys[0].RefTable = ProtectedAreaCategoriesTable
 	ProtectedAreaPicturesTable.ForeignKeys[0].RefTable = CollectionsTable
 	ProtectedAreaPicturesTable.ForeignKeys[1].RefTable = CountriesTable
@@ -1536,6 +1768,8 @@ func init() {
 	PersonArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PersonBooksTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonBooksTable.ForeignKeys[1].RefTable = BooksTable
+	PersonVisitsTable.ForeignKeys[0].RefTable = PersonsTable
+	PersonVisitsTable.ForeignKeys[1].RefTable = VisitsTable
 	PersonProjectsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonProjectsTable.ForeignKeys[1].RefTable = ProjectsTable
 	PersonPublicationsTable.ForeignKeys[0].RefTable = PersonsTable
@@ -1544,6 +1778,12 @@ func init() {
 	ProjectArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PublicationArtifactsTable.ForeignKeys[0].RefTable = PublicationsTable
 	PublicationArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	PublicationPetroglyphsTable.ForeignKeys[0].RefTable = PublicationsTable
+	PublicationPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
 	TechniqueArtifactsTable.ForeignKeys[0].RefTable = TechniquesTable
 	TechniqueArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	TechniquePetroglyphsTable.ForeignKeys[0].RefTable = TechniquesTable
+	TechniquePetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
+	VisitMoundsTable.ForeignKeys[0].RefTable = VisitsTable
+	VisitMoundsTable.ForeignKeys[1].RefTable = MoundsTable
 }

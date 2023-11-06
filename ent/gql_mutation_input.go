@@ -11,6 +11,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
@@ -2260,15 +2261,16 @@ func (c *CountryUpdateOne) SetInput(i UpdateCountryInput) *CountryUpdateOne {
 
 // CreateCultureInput represents a mutation input for creating cultures.
 type CreateCultureInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	ArtifactIDs  []int
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Abbreviation  *string
+	Description   *string
+	ExternalLink  *string
+	ArtifactIDs   []int
+	PetroglyphIDs []int
 }
 
 // Mutate applies the CreateCultureInput on the CultureMutation builder.
@@ -2300,6 +2302,9 @@ func (i *CreateCultureInput) Mutate(m *CultureMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateCultureInput on the CultureCreate builder.
@@ -2310,22 +2315,25 @@ func (c *CultureCreate) SetInput(i CreateCultureInput) *CultureCreate {
 
 // UpdateCultureInput represents a mutation input for updating cultures.
 type UpdateCultureInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearArtifacts    bool
-	AddArtifactIDs    []int
-	RemoveArtifactIDs []int
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLink   bool
+	ExternalLink        *string
+	ClearArtifacts      bool
+	AddArtifactIDs      []int
+	RemoveArtifactIDs   []int
+	ClearPetroglyphs    bool
+	AddPetroglyphIDs    []int
+	RemovePetroglyphIDs []int
 }
 
 // Mutate applies the UpdateCultureInput on the CultureMutation builder.
@@ -2377,6 +2385,15 @@ func (i *UpdateCultureInput) Mutate(m *CultureMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
 	}
 }
 
@@ -3110,22 +3127,23 @@ func (c *LicenseUpdateOne) SetInput(i UpdateLicenseInput) *LicenseUpdateOne {
 
 // CreateLocationInput represents a mutation input for creating locations.
 type CreateLocationInput struct {
-	CreatedAt               *time.Time
-	CreatedBy               *string
-	UpdatedAt               *time.Time
-	UpdatedBy               *string
-	DisplayName             *string
-	Abbreviation            *string
-	Description             *string
-	ExternalLink            *string
-	Geometry                *types.Geometry
-	ArtifactIDs             []int
-	BookIDs                 []int
-	ProtectedAreaPictureIDs []int
-	CountryID               *int
-	DistrictID              *int
-	SettlementID            *int
-	RegionID                *int
+	CreatedAt                             *time.Time
+	CreatedBy                             *string
+	UpdatedAt                             *time.Time
+	UpdatedBy                             *string
+	DisplayName                           *string
+	Abbreviation                          *string
+	Description                           *string
+	ExternalLink                          *string
+	Geometry                              *types.Geometry
+	ArtifactIDs                           []int
+	BookIDs                               []int
+	ProtectedAreaPictureIDs               []int
+	PetroglyphsAccountingDocumentationIDs []int
+	CountryID                             *int
+	DistrictID                            *int
+	SettlementID                          *int
+	RegionID                              *int
 }
 
 // Mutate applies the CreateLocationInput on the LocationMutation builder.
@@ -3166,6 +3184,9 @@ func (i *CreateLocationInput) Mutate(m *LocationMutation) {
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
+	if v := i.PetroglyphsAccountingDocumentationIDs; len(v) > 0 {
+		m.AddPetroglyphsAccountingDocumentationIDs(v...)
+	}
 	if v := i.CountryID; v != nil {
 		m.SetCountryID(*v)
 	}
@@ -3188,38 +3209,41 @@ func (c *LocationCreate) SetInput(i CreateLocationInput) *LocationCreate {
 
 // UpdateLocationInput represents a mutation input for updating locations.
 type UpdateLocationInput struct {
-	ClearCreatedBy                bool
-	CreatedBy                     *string
-	UpdatedAt                     *time.Time
-	ClearUpdatedBy                bool
-	UpdatedBy                     *string
-	ClearDisplayName              bool
-	DisplayName                   *string
-	ClearAbbreviation             bool
-	Abbreviation                  *string
-	ClearDescription              bool
-	Description                   *string
-	ClearExternalLink             bool
-	ExternalLink                  *string
-	ClearGeometry                 bool
-	Geometry                      *types.Geometry
-	ClearArtifacts                bool
-	AddArtifactIDs                []int
-	RemoveArtifactIDs             []int
-	ClearBooks                    bool
-	AddBookIDs                    []int
-	RemoveBookIDs                 []int
-	ClearProtectedAreaPictures    bool
-	AddProtectedAreaPictureIDs    []int
-	RemoveProtectedAreaPictureIDs []int
-	ClearCountry                  bool
-	CountryID                     *int
-	ClearDistrict                 bool
-	DistrictID                    *int
-	ClearSettlement               bool
-	SettlementID                  *int
-	ClearRegion                   bool
-	RegionID                      *int
+	ClearCreatedBy                              bool
+	CreatedBy                                   *string
+	UpdatedAt                                   *time.Time
+	ClearUpdatedBy                              bool
+	UpdatedBy                                   *string
+	ClearDisplayName                            bool
+	DisplayName                                 *string
+	ClearAbbreviation                           bool
+	Abbreviation                                *string
+	ClearDescription                            bool
+	Description                                 *string
+	ClearExternalLink                           bool
+	ExternalLink                                *string
+	ClearGeometry                               bool
+	Geometry                                    *types.Geometry
+	ClearArtifacts                              bool
+	AddArtifactIDs                              []int
+	RemoveArtifactIDs                           []int
+	ClearBooks                                  bool
+	AddBookIDs                                  []int
+	RemoveBookIDs                               []int
+	ClearProtectedAreaPictures                  bool
+	AddProtectedAreaPictureIDs                  []int
+	RemoveProtectedAreaPictureIDs               []int
+	ClearPetroglyphsAccountingDocumentation     bool
+	AddPetroglyphsAccountingDocumentationIDs    []int
+	RemovePetroglyphsAccountingDocumentationIDs []int
+	ClearCountry                                bool
+	CountryID                                   *int
+	ClearDistrict                               bool
+	DistrictID                                  *int
+	ClearSettlement                             bool
+	SettlementID                                *int
+	ClearRegion                                 bool
+	RegionID                                    *int
 }
 
 // Mutate applies the UpdateLocationInput on the LocationMutation builder.
@@ -3295,6 +3319,15 @@ func (i *UpdateLocationInput) Mutate(m *LocationMutation) {
 	}
 	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
 		m.RemoveProtectedAreaPictureIDs(v...)
+	}
+	if i.ClearPetroglyphsAccountingDocumentation {
+		m.ClearPetroglyphsAccountingDocumentation()
+	}
+	if v := i.AddPetroglyphsAccountingDocumentationIDs; len(v) > 0 {
+		m.AddPetroglyphsAccountingDocumentationIDs(v...)
+	}
+	if v := i.RemovePetroglyphsAccountingDocumentationIDs; len(v) > 0 {
+		m.RemovePetroglyphsAccountingDocumentationIDs(v...)
 	}
 	if i.ClearCountry {
 		m.ClearCountry()
@@ -3486,17 +3519,18 @@ func (c *MediumUpdateOne) SetInput(i UpdateMediumInput) *MediumUpdateOne {
 
 // CreateModelInput represents a mutation input for creating models.
 type CreateModelInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	Status       *model.Status
-	FileURL      string
-	ArtifactIDs  []int
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Abbreviation  *string
+	Description   *string
+	ExternalLink  *string
+	Status        *model.Status
+	FileURL       string
+	ArtifactIDs   []int
+	PetroglyphIDs []int
 }
 
 // Mutate applies the CreateModelInput on the ModelMutation builder.
@@ -3532,6 +3566,9 @@ func (i *CreateModelInput) Mutate(m *ModelMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateModelInput on the ModelCreate builder.
@@ -3542,25 +3579,28 @@ func (c *ModelCreate) SetInput(i CreateModelInput) *ModelCreate {
 
 // UpdateModelInput represents a mutation input for updating models.
 type UpdateModelInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearStatus       bool
-	Status            *model.Status
-	FileURL           *string
-	ClearArtifacts    bool
-	AddArtifactIDs    []int
-	RemoveArtifactIDs []int
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLink   bool
+	ExternalLink        *string
+	ClearStatus         bool
+	Status              *model.Status
+	FileURL             *string
+	ClearArtifacts      bool
+	AddArtifactIDs      []int
+	RemoveArtifactIDs   []int
+	ClearPetroglyphs    bool
+	AddPetroglyphIDs    []int
+	RemovePetroglyphIDs []int
 }
 
 // Mutate applies the UpdateModelInput on the ModelMutation builder.
@@ -3621,6 +3661,15 @@ func (i *UpdateModelInput) Mutate(m *ModelMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
 	}
 }
 
@@ -3782,6 +3831,168 @@ func (c *MonumentUpdate) SetInput(i UpdateMonumentInput) *MonumentUpdate {
 
 // SetInput applies the change-set in the UpdateMonumentInput on the MonumentUpdateOne builder.
 func (c *MonumentUpdateOne) SetInput(i UpdateMonumentInput) *MonumentUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateMoundInput represents a mutation input for creating mounds.
+type CreateMoundInput struct {
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Abbreviation  *string
+	Description   *string
+	ExternalLink  *string
+	Number        *string
+	PetroglyphIDs []int
+	VisitIDs      []int
+}
+
+// Mutate applies the CreateMoundInput on the MoundMutation builder.
+func (i *CreateMoundInput) Mutate(m *MoundMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.VisitIDs; len(v) > 0 {
+		m.AddVisitIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateMoundInput on the MoundCreate builder.
+func (c *MoundCreate) SetInput(i CreateMoundInput) *MoundCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateMoundInput represents a mutation input for updating mounds.
+type UpdateMoundInput struct {
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLink   bool
+	ExternalLink        *string
+	ClearNumber         bool
+	Number              *string
+	ClearPetroglyphs    bool
+	AddPetroglyphIDs    []int
+	RemovePetroglyphIDs []int
+	ClearVisits         bool
+	AddVisitIDs         []int
+	RemoveVisitIDs      []int
+}
+
+// Mutate applies the UpdateMoundInput on the MoundMutation builder.
+func (i *UpdateMoundInput) Mutate(m *MoundMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearNumber {
+		m.ClearNumber()
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
+	}
+	if i.ClearVisits {
+		m.ClearVisits()
+	}
+	if v := i.AddVisitIDs; len(v) > 0 {
+		m.AddVisitIDs(v...)
+	}
+	if v := i.RemoveVisitIDs; len(v) > 0 {
+		m.RemoveVisitIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateMoundInput on the MoundUpdate builder.
+func (c *MoundUpdate) SetInput(i UpdateMoundInput) *MoundUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateMoundInput on the MoundUpdateOne builder.
+func (c *MoundUpdateOne) SetInput(i UpdateMoundInput) *MoundUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -4212,34 +4423,36 @@ func (c *PeriodicalUpdateOne) SetInput(i UpdatePeriodicalInput) *PeriodicalUpdat
 
 // CreatePersonInput represents a mutation input for creating persons.
 type CreatePersonInput struct {
-	CreatedAt            *time.Time
-	CreatedBy            *string
-	UpdatedAt            *time.Time
-	UpdatedBy            *string
-	Address              *string
-	PhoneNumbers         []string
-	Emails               []string
-	DisplayName          *string
-	Abbreviation         *string
-	Description          *string
-	ExternalLink         *string
-	PrimaryImageURL      *string
-	AdditionalImagesUrls []string
-	GivenName            *string
-	FamilyName           *string
-	PatronymicName       *string
-	BeginData            *time.Time
-	EndDate              *time.Time
-	Gender               *person.Gender
-	Occupation           *string
-	CollectionIDs        []int
-	ArtIDs               []int
-	ArtifactIDs          []int
-	DonatedArtifactIDs   []int
-	BookIDs              []int
-	ProjectIDs           []int
-	PublicationIDs       []int
-	AffiliationID        *int
+	CreatedAt                             *time.Time
+	CreatedBy                             *string
+	UpdatedAt                             *time.Time
+	UpdatedBy                             *string
+	Address                               *string
+	PhoneNumbers                          []string
+	Emails                                []string
+	DisplayName                           *string
+	Abbreviation                          *string
+	Description                           *string
+	ExternalLink                          *string
+	PrimaryImageURL                       *string
+	AdditionalImagesUrls                  []string
+	GivenName                             *string
+	FamilyName                            *string
+	PatronymicName                        *string
+	BeginData                             *time.Time
+	EndDate                               *time.Time
+	Gender                                *person.Gender
+	Occupation                            *string
+	CollectionIDs                         []int
+	ArtIDs                                []int
+	ArtifactIDs                           []int
+	DonatedArtifactIDs                    []int
+	PetroglyphsAccountingDocumentationIDs []int
+	BookIDs                               []int
+	VisitIDs                              []int
+	ProjectIDs                            []int
+	PublicationIDs                        []int
+	AffiliationID                         *int
 }
 
 // Mutate applies the CreatePersonInput on the PersonMutation builder.
@@ -4316,8 +4529,14 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.DonatedArtifactIDs; len(v) > 0 {
 		m.AddDonatedArtifactIDs(v...)
 	}
+	if v := i.PetroglyphsAccountingDocumentationIDs; len(v) > 0 {
+		m.AddPetroglyphsAccountingDocumentationIDs(v...)
+	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
+	}
+	if v := i.VisitIDs; len(v) > 0 {
+		m.AddVisitIDs(v...)
 	}
 	if v := i.ProjectIDs; len(v) > 0 {
 		m.AddProjectIDs(v...)
@@ -4338,69 +4557,75 @@ func (c *PersonCreate) SetInput(i CreatePersonInput) *PersonCreate {
 
 // UpdatePersonInput represents a mutation input for updating persons.
 type UpdatePersonInput struct {
-	ClearCreatedBy             bool
-	CreatedBy                  *string
-	UpdatedAt                  *time.Time
-	ClearUpdatedBy             bool
-	UpdatedBy                  *string
-	ClearAddress               bool
-	Address                    *string
-	ClearPhoneNumbers          bool
-	PhoneNumbers               []string
-	AppendPhoneNumbers         []string
-	ClearEmails                bool
-	Emails                     []string
-	AppendEmails               []string
-	ClearDisplayName           bool
-	DisplayName                *string
-	ClearAbbreviation          bool
-	Abbreviation               *string
-	ClearDescription           bool
-	Description                *string
-	ClearExternalLink          bool
-	ExternalLink               *string
-	ClearPrimaryImageURL       bool
-	PrimaryImageURL            *string
-	ClearAdditionalImagesUrls  bool
-	AdditionalImagesUrls       []string
-	AppendAdditionalImagesUrls []string
-	ClearGivenName             bool
-	GivenName                  *string
-	ClearFamilyName            bool
-	FamilyName                 *string
-	ClearPatronymicName        bool
-	PatronymicName             *string
-	ClearBeginData             bool
-	BeginData                  *time.Time
-	ClearEndDate               bool
-	EndDate                    *time.Time
-	ClearGender                bool
-	Gender                     *person.Gender
-	ClearOccupation            bool
-	Occupation                 *string
-	ClearCollections           bool
-	AddCollectionIDs           []int
-	RemoveCollectionIDs        []int
-	ClearArt                   bool
-	AddArtIDs                  []int
-	RemoveArtIDs               []int
-	ClearArtifacts             bool
-	AddArtifactIDs             []int
-	RemoveArtifactIDs          []int
-	ClearDonatedArtifacts      bool
-	AddDonatedArtifactIDs      []int
-	RemoveDonatedArtifactIDs   []int
-	ClearBooks                 bool
-	AddBookIDs                 []int
-	RemoveBookIDs              []int
-	ClearProjects              bool
-	AddProjectIDs              []int
-	RemoveProjectIDs           []int
-	ClearPublications          bool
-	AddPublicationIDs          []int
-	RemovePublicationIDs       []int
-	ClearAffiliation           bool
-	AffiliationID              *int
+	ClearCreatedBy                              bool
+	CreatedBy                                   *string
+	UpdatedAt                                   *time.Time
+	ClearUpdatedBy                              bool
+	UpdatedBy                                   *string
+	ClearAddress                                bool
+	Address                                     *string
+	ClearPhoneNumbers                           bool
+	PhoneNumbers                                []string
+	AppendPhoneNumbers                          []string
+	ClearEmails                                 bool
+	Emails                                      []string
+	AppendEmails                                []string
+	ClearDisplayName                            bool
+	DisplayName                                 *string
+	ClearAbbreviation                           bool
+	Abbreviation                                *string
+	ClearDescription                            bool
+	Description                                 *string
+	ClearExternalLink                           bool
+	ExternalLink                                *string
+	ClearPrimaryImageURL                        bool
+	PrimaryImageURL                             *string
+	ClearAdditionalImagesUrls                   bool
+	AdditionalImagesUrls                        []string
+	AppendAdditionalImagesUrls                  []string
+	ClearGivenName                              bool
+	GivenName                                   *string
+	ClearFamilyName                             bool
+	FamilyName                                  *string
+	ClearPatronymicName                         bool
+	PatronymicName                              *string
+	ClearBeginData                              bool
+	BeginData                                   *time.Time
+	ClearEndDate                                bool
+	EndDate                                     *time.Time
+	ClearGender                                 bool
+	Gender                                      *person.Gender
+	ClearOccupation                             bool
+	Occupation                                  *string
+	ClearCollections                            bool
+	AddCollectionIDs                            []int
+	RemoveCollectionIDs                         []int
+	ClearArt                                    bool
+	AddArtIDs                                   []int
+	RemoveArtIDs                                []int
+	ClearArtifacts                              bool
+	AddArtifactIDs                              []int
+	RemoveArtifactIDs                           []int
+	ClearDonatedArtifacts                       bool
+	AddDonatedArtifactIDs                       []int
+	RemoveDonatedArtifactIDs                    []int
+	ClearPetroglyphsAccountingDocumentation     bool
+	AddPetroglyphsAccountingDocumentationIDs    []int
+	RemovePetroglyphsAccountingDocumentationIDs []int
+	ClearBooks                                  bool
+	AddBookIDs                                  []int
+	RemoveBookIDs                               []int
+	ClearVisits                                 bool
+	AddVisitIDs                                 []int
+	RemoveVisitIDs                              []int
+	ClearProjects                               bool
+	AddProjectIDs                               []int
+	RemoveProjectIDs                            []int
+	ClearPublications                           bool
+	AddPublicationIDs                           []int
+	RemovePublicationIDs                        []int
+	ClearAffiliation                            bool
+	AffiliationID                               *int
 }
 
 // Mutate applies the UpdatePersonInput on the PersonMutation builder.
@@ -4561,6 +4786,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.RemoveDonatedArtifactIDs; len(v) > 0 {
 		m.RemoveDonatedArtifactIDs(v...)
 	}
+	if i.ClearPetroglyphsAccountingDocumentation {
+		m.ClearPetroglyphsAccountingDocumentation()
+	}
+	if v := i.AddPetroglyphsAccountingDocumentationIDs; len(v) > 0 {
+		m.AddPetroglyphsAccountingDocumentationIDs(v...)
+	}
+	if v := i.RemovePetroglyphsAccountingDocumentationIDs; len(v) > 0 {
+		m.RemovePetroglyphsAccountingDocumentationIDs(v...)
+	}
 	if i.ClearBooks {
 		m.ClearBooks()
 	}
@@ -4569,6 +4803,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
+	}
+	if i.ClearVisits {
+		m.ClearVisits()
+	}
+	if v := i.AddVisitIDs; len(v) > 0 {
+		m.AddVisitIDs(v...)
+	}
+	if v := i.RemoveVisitIDs; len(v) > 0 {
+		m.RemoveVisitIDs(v...)
 	}
 	if i.ClearProjects {
 		m.ClearProjects()
@@ -4698,6 +4941,508 @@ func (c *PersonalUpdate) SetInput(i UpdatePersonalInput) *PersonalUpdate {
 
 // SetInput applies the change-set in the UpdatePersonalInput on the PersonalUpdateOne builder.
 func (c *PersonalUpdateOne) SetInput(i UpdatePersonalInput) *PersonalUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreatePetroglyphInput represents a mutation input for creating petroglyphs.
+type CreatePetroglyphInput struct {
+	CreatedAt                        *time.Time
+	CreatedBy                        *string
+	UpdatedAt                        *time.Time
+	UpdatedBy                        *string
+	DisplayName                      *string
+	Abbreviation                     *string
+	Description                      *string
+	ExternalLink                     *string
+	Status                           *petroglyph.Status
+	PrimaryImageURL                  *string
+	AdditionalImagesUrls             []string
+	DeletedAt                        *time.Time
+	DeletedBy                        *string
+	Number                           *string
+	Dating                           *string
+	DatingStart                      *int
+	DatingEnd                        *int
+	Orientation                      *string
+	Position                         *string
+	GeometricShape                   *string
+	Height                           *float64
+	Width                            *float64
+	Length                           *float64
+	Depth                            *float64
+	Diameter                         *float64
+	Weight                           *string
+	Dimensions                       *string
+	PlanePreservation                *string
+	PhotoCode                        *string
+	AccountingDocumentationDate      *time.Time
+	Geometry                         *types.Geometry
+	CulturalAffiliationID            *int
+	ModelID                          *int
+	MoundID                          *int
+	PublicationIDs                   []int
+	TechniqueIDs                     []int
+	RegionID                         *int
+	AccountingDocumentationAddressID *int
+	AccountingDocumentationAuthorID  *int
+}
+
+// Mutate applies the CreatePetroglyphInput on the PetroglyphMutation builder.
+func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
+	if v := i.Orientation; v != nil {
+		m.SetOrientation(*v)
+	}
+	if v := i.Position; v != nil {
+		m.SetPosition(*v)
+	}
+	if v := i.GeometricShape; v != nil {
+		m.SetGeometricShape(*v)
+	}
+	if v := i.Height; v != nil {
+		m.SetHeight(*v)
+	}
+	if v := i.Width; v != nil {
+		m.SetWidth(*v)
+	}
+	if v := i.Length; v != nil {
+		m.SetLength(*v)
+	}
+	if v := i.Depth; v != nil {
+		m.SetDepth(*v)
+	}
+	if v := i.Diameter; v != nil {
+		m.SetDiameter(*v)
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
+	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
+	if v := i.PlanePreservation; v != nil {
+		m.SetPlanePreservation(*v)
+	}
+	if v := i.PhotoCode; v != nil {
+		m.SetPhotoCode(*v)
+	}
+	if v := i.AccountingDocumentationDate; v != nil {
+		m.SetAccountingDocumentationDate(*v)
+	}
+	if v := i.Geometry; v != nil {
+		m.SetGeometry(*v)
+	}
+	if v := i.CulturalAffiliationID; v != nil {
+		m.SetCulturalAffiliationID(*v)
+	}
+	if v := i.ModelID; v != nil {
+		m.SetModelID(*v)
+	}
+	if v := i.MoundID; v != nil {
+		m.SetMoundID(*v)
+	}
+	if v := i.PublicationIDs; len(v) > 0 {
+		m.AddPublicationIDs(v...)
+	}
+	if v := i.TechniqueIDs; len(v) > 0 {
+		m.AddTechniqueIDs(v...)
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
+	if v := i.AccountingDocumentationAddressID; v != nil {
+		m.SetAccountingDocumentationAddressID(*v)
+	}
+	if v := i.AccountingDocumentationAuthorID; v != nil {
+		m.SetAccountingDocumentationAuthorID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreatePetroglyphInput on the PetroglyphCreate builder.
+func (c *PetroglyphCreate) SetInput(i CreatePetroglyphInput) *PetroglyphCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdatePetroglyphInput represents a mutation input for updating petroglyphs.
+type UpdatePetroglyphInput struct {
+	ClearCreatedBy                      bool
+	CreatedBy                           *string
+	UpdatedAt                           *time.Time
+	ClearUpdatedBy                      bool
+	UpdatedBy                           *string
+	ClearDisplayName                    bool
+	DisplayName                         *string
+	ClearAbbreviation                   bool
+	Abbreviation                        *string
+	ClearDescription                    bool
+	Description                         *string
+	ClearExternalLink                   bool
+	ExternalLink                        *string
+	ClearStatus                         bool
+	Status                              *petroglyph.Status
+	ClearPrimaryImageURL                bool
+	PrimaryImageURL                     *string
+	ClearAdditionalImagesUrls           bool
+	AdditionalImagesUrls                []string
+	AppendAdditionalImagesUrls          []string
+	ClearDeletedAt                      bool
+	DeletedAt                           *time.Time
+	ClearDeletedBy                      bool
+	DeletedBy                           *string
+	ClearNumber                         bool
+	Number                              *string
+	ClearDating                         bool
+	Dating                              *string
+	ClearDatingStart                    bool
+	DatingStart                         *int
+	ClearDatingEnd                      bool
+	DatingEnd                           *int
+	ClearOrientation                    bool
+	Orientation                         *string
+	ClearPosition                       bool
+	Position                            *string
+	ClearGeometricShape                 bool
+	GeometricShape                      *string
+	ClearHeight                         bool
+	Height                              *float64
+	ClearWidth                          bool
+	Width                               *float64
+	ClearLength                         bool
+	Length                              *float64
+	ClearDepth                          bool
+	Depth                               *float64
+	ClearDiameter                       bool
+	Diameter                            *float64
+	ClearWeight                         bool
+	Weight                              *string
+	ClearDimensions                     bool
+	Dimensions                          *string
+	ClearPlanePreservation              bool
+	PlanePreservation                   *string
+	ClearPhotoCode                      bool
+	PhotoCode                           *string
+	ClearAccountingDocumentationDate    bool
+	AccountingDocumentationDate         *time.Time
+	ClearGeometry                       bool
+	Geometry                            *types.Geometry
+	ClearCulturalAffiliation            bool
+	CulturalAffiliationID               *int
+	ClearModel                          bool
+	ModelID                             *int
+	ClearMound                          bool
+	MoundID                             *int
+	ClearPublications                   bool
+	AddPublicationIDs                   []int
+	RemovePublicationIDs                []int
+	ClearTechniques                     bool
+	AddTechniqueIDs                     []int
+	RemoveTechniqueIDs                  []int
+	ClearRegion                         bool
+	RegionID                            *int
+	ClearAccountingDocumentationAddress bool
+	AccountingDocumentationAddressID    *int
+	ClearAccountingDocumentationAuthor  bool
+	AccountingDocumentationAuthorID     *int
+}
+
+// Mutate applies the UpdatePetroglyphInput on the PetroglyphMutation builder.
+func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearDeletedAt {
+		m.ClearDeletedAt()
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if i.ClearDeletedBy {
+		m.ClearDeletedBy()
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
+	if i.ClearNumber {
+		m.ClearNumber()
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if i.ClearDating {
+		m.ClearDating()
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if i.ClearDatingStart {
+		m.ClearDatingStart()
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if i.ClearDatingEnd {
+		m.ClearDatingEnd()
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
+	if i.ClearOrientation {
+		m.ClearOrientation()
+	}
+	if v := i.Orientation; v != nil {
+		m.SetOrientation(*v)
+	}
+	if i.ClearPosition {
+		m.ClearPosition()
+	}
+	if v := i.Position; v != nil {
+		m.SetPosition(*v)
+	}
+	if i.ClearGeometricShape {
+		m.ClearGeometricShape()
+	}
+	if v := i.GeometricShape; v != nil {
+		m.SetGeometricShape(*v)
+	}
+	if i.ClearHeight {
+		m.ClearHeight()
+	}
+	if v := i.Height; v != nil {
+		m.SetHeight(*v)
+	}
+	if i.ClearWidth {
+		m.ClearWidth()
+	}
+	if v := i.Width; v != nil {
+		m.SetWidth(*v)
+	}
+	if i.ClearLength {
+		m.ClearLength()
+	}
+	if v := i.Length; v != nil {
+		m.SetLength(*v)
+	}
+	if i.ClearDepth {
+		m.ClearDepth()
+	}
+	if v := i.Depth; v != nil {
+		m.SetDepth(*v)
+	}
+	if i.ClearDiameter {
+		m.ClearDiameter()
+	}
+	if v := i.Diameter; v != nil {
+		m.SetDiameter(*v)
+	}
+	if i.ClearWeight {
+		m.ClearWeight()
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
+	}
+	if i.ClearDimensions {
+		m.ClearDimensions()
+	}
+	if v := i.Dimensions; v != nil {
+		m.SetDimensions(*v)
+	}
+	if i.ClearPlanePreservation {
+		m.ClearPlanePreservation()
+	}
+	if v := i.PlanePreservation; v != nil {
+		m.SetPlanePreservation(*v)
+	}
+	if i.ClearPhotoCode {
+		m.ClearPhotoCode()
+	}
+	if v := i.PhotoCode; v != nil {
+		m.SetPhotoCode(*v)
+	}
+	if i.ClearAccountingDocumentationDate {
+		m.ClearAccountingDocumentationDate()
+	}
+	if v := i.AccountingDocumentationDate; v != nil {
+		m.SetAccountingDocumentationDate(*v)
+	}
+	if i.ClearGeometry {
+		m.ClearGeometry()
+	}
+	if v := i.Geometry; v != nil {
+		m.SetGeometry(*v)
+	}
+	if i.ClearCulturalAffiliation {
+		m.ClearCulturalAffiliation()
+	}
+	if v := i.CulturalAffiliationID; v != nil {
+		m.SetCulturalAffiliationID(*v)
+	}
+	if i.ClearModel {
+		m.ClearModel()
+	}
+	if v := i.ModelID; v != nil {
+		m.SetModelID(*v)
+	}
+	if i.ClearMound {
+		m.ClearMound()
+	}
+	if v := i.MoundID; v != nil {
+		m.SetMoundID(*v)
+	}
+	if i.ClearPublications {
+		m.ClearPublications()
+	}
+	if v := i.AddPublicationIDs; len(v) > 0 {
+		m.AddPublicationIDs(v...)
+	}
+	if v := i.RemovePublicationIDs; len(v) > 0 {
+		m.RemovePublicationIDs(v...)
+	}
+	if i.ClearTechniques {
+		m.ClearTechniques()
+	}
+	if v := i.AddTechniqueIDs; len(v) > 0 {
+		m.AddTechniqueIDs(v...)
+	}
+	if v := i.RemoveTechniqueIDs; len(v) > 0 {
+		m.RemoveTechniqueIDs(v...)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
+	if i.ClearAccountingDocumentationAddress {
+		m.ClearAccountingDocumentationAddress()
+	}
+	if v := i.AccountingDocumentationAddressID; v != nil {
+		m.SetAccountingDocumentationAddressID(*v)
+	}
+	if i.ClearAccountingDocumentationAuthor {
+		m.ClearAccountingDocumentationAuthor()
+	}
+	if v := i.AccountingDocumentationAuthorID; v != nil {
+		m.SetAccountingDocumentationAuthorID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdatePetroglyphInput on the PetroglyphUpdate builder.
+func (c *PetroglyphUpdate) SetInput(i UpdatePetroglyphInput) *PetroglyphUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdatePetroglyphInput on the PetroglyphUpdateOne builder.
+func (c *PetroglyphUpdateOne) SetInput(i UpdatePetroglyphInput) *PetroglyphUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -5598,16 +6343,17 @@ func (c *ProxyUpdateOne) SetInput(i UpdateProxyInput) *ProxyUpdateOne {
 
 // CreatePublicationInput represents a mutation input for creating publications.
 type CreatePublicationInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	ArtifactIDs  []int
-	AuthorIDs    []int
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Abbreviation  *string
+	Description   *string
+	ExternalLink  *string
+	ArtifactIDs   []int
+	PetroglyphIDs []int
+	AuthorIDs     []int
 }
 
 // Mutate applies the CreatePublicationInput on the PublicationMutation builder.
@@ -5639,6 +6385,9 @@ func (i *CreatePublicationInput) Mutate(m *PublicationMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
 	if v := i.AuthorIDs; len(v) > 0 {
 		m.AddAuthorIDs(v...)
 	}
@@ -5652,25 +6401,28 @@ func (c *PublicationCreate) SetInput(i CreatePublicationInput) *PublicationCreat
 
 // UpdatePublicationInput represents a mutation input for updating publications.
 type UpdatePublicationInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearArtifacts    bool
-	AddArtifactIDs    []int
-	RemoveArtifactIDs []int
-	ClearAuthors      bool
-	AddAuthorIDs      []int
-	RemoveAuthorIDs   []int
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLink   bool
+	ExternalLink        *string
+	ClearArtifacts      bool
+	AddArtifactIDs      []int
+	RemoveArtifactIDs   []int
+	ClearPetroglyphs    bool
+	AddPetroglyphIDs    []int
+	RemovePetroglyphIDs []int
+	ClearAuthors        bool
+	AddAuthorIDs        []int
+	RemoveAuthorIDs     []int
 }
 
 // Mutate applies the UpdatePublicationInput on the PublicationMutation builder.
@@ -5722,6 +6474,15 @@ func (i *UpdatePublicationInput) Mutate(m *PublicationMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
 	}
 	if i.ClearAuthors {
 		m.ClearAuthors()
@@ -5893,6 +6654,7 @@ type CreateRegionInput struct {
 	ArtIDs                  []int
 	ArtifactIDs             []int
 	BookIDs                 []int
+	PetroglyphIDs           []int
 	ProtectedAreaPictureIDs []int
 	LocationIDs             []int
 }
@@ -5932,6 +6694,9 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
@@ -5970,6 +6735,9 @@ type UpdateRegionInput struct {
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
+	ClearPetroglyphs              bool
+	AddPetroglyphIDs              []int
+	RemovePetroglyphIDs           []int
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
@@ -6045,6 +6813,15 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
 	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()
@@ -6428,15 +7205,16 @@ func (c *SettlementUpdateOne) SetInput(i UpdateSettlementInput) *SettlementUpdat
 
 // CreateTechniqueInput represents a mutation input for creating techniques.
 type CreateTechniqueInput struct {
-	CreatedAt    *time.Time
-	CreatedBy    *string
-	UpdatedAt    *time.Time
-	UpdatedBy    *string
-	DisplayName  *string
-	Abbreviation *string
-	Description  *string
-	ExternalLink *string
-	ArtifactIDs  []int
+	CreatedAt     *time.Time
+	CreatedBy     *string
+	UpdatedAt     *time.Time
+	UpdatedBy     *string
+	DisplayName   *string
+	Abbreviation  *string
+	Description   *string
+	ExternalLink  *string
+	ArtifactIDs   []int
+	PetroglyphIDs []int
 }
 
 // Mutate applies the CreateTechniqueInput on the TechniqueMutation builder.
@@ -6468,6 +7246,9 @@ func (i *CreateTechniqueInput) Mutate(m *TechniqueMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTechniqueInput on the TechniqueCreate builder.
@@ -6478,22 +7259,25 @@ func (c *TechniqueCreate) SetInput(i CreateTechniqueInput) *TechniqueCreate {
 
 // UpdateTechniqueInput represents a mutation input for updating techniques.
 type UpdateTechniqueInput struct {
-	ClearCreatedBy    bool
-	CreatedBy         *string
-	UpdatedAt         *time.Time
-	ClearUpdatedBy    bool
-	UpdatedBy         *string
-	ClearDisplayName  bool
-	DisplayName       *string
-	ClearAbbreviation bool
-	Abbreviation      *string
-	ClearDescription  bool
-	Description       *string
-	ClearExternalLink bool
-	ExternalLink      *string
-	ClearArtifacts    bool
-	AddArtifactIDs    []int
-	RemoveArtifactIDs []int
+	ClearCreatedBy      bool
+	CreatedBy           *string
+	UpdatedAt           *time.Time
+	ClearUpdatedBy      bool
+	UpdatedBy           *string
+	ClearDisplayName    bool
+	DisplayName         *string
+	ClearAbbreviation   bool
+	Abbreviation        *string
+	ClearDescription    bool
+	Description         *string
+	ClearExternalLink   bool
+	ExternalLink        *string
+	ClearArtifacts      bool
+	AddArtifactIDs      []int
+	RemoveArtifactIDs   []int
+	ClearPetroglyphs    bool
+	AddPetroglyphIDs    []int
+	RemovePetroglyphIDs []int
 }
 
 // Mutate applies the UpdateTechniqueInput on the TechniqueMutation builder.
@@ -6546,6 +7330,15 @@ func (i *UpdateTechniqueInput) Mutate(m *TechniqueMutation) {
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
 	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateTechniqueInput on the TechniqueUpdate builder.
@@ -6556,6 +7349,120 @@ func (c *TechniqueUpdate) SetInput(i UpdateTechniqueInput) *TechniqueUpdate {
 
 // SetInput applies the change-set in the UpdateTechniqueInput on the TechniqueUpdateOne builder.
 func (c *TechniqueUpdateOne) SetInput(i UpdateTechniqueInput) *TechniqueUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateVisitInput represents a mutation input for creating visits.
+type CreateVisitInput struct {
+	CreatedAt  *time.Time
+	CreatedBy  *string
+	UpdatedAt  *time.Time
+	UpdatedBy  *string
+	Year       *int
+	MoundIDs   []int
+	VisitorIDs []int
+}
+
+// Mutate applies the CreateVisitInput on the VisitMutation builder.
+func (i *CreateVisitInput) Mutate(m *VisitMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.Year; v != nil {
+		m.SetYear(*v)
+	}
+	if v := i.MoundIDs; len(v) > 0 {
+		m.AddMoundIDs(v...)
+	}
+	if v := i.VisitorIDs; len(v) > 0 {
+		m.AddVisitorIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateVisitInput on the VisitCreate builder.
+func (c *VisitCreate) SetInput(i CreateVisitInput) *VisitCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateVisitInput represents a mutation input for updating visits.
+type UpdateVisitInput struct {
+	ClearCreatedBy   bool
+	CreatedBy        *string
+	UpdatedAt        *time.Time
+	ClearUpdatedBy   bool
+	UpdatedBy        *string
+	ClearYear        bool
+	Year             *int
+	ClearMounds      bool
+	AddMoundIDs      []int
+	RemoveMoundIDs   []int
+	ClearVisitors    bool
+	AddVisitorIDs    []int
+	RemoveVisitorIDs []int
+}
+
+// Mutate applies the UpdateVisitInput on the VisitMutation builder.
+func (i *UpdateVisitInput) Mutate(m *VisitMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearYear {
+		m.ClearYear()
+	}
+	if v := i.Year; v != nil {
+		m.SetYear(*v)
+	}
+	if i.ClearMounds {
+		m.ClearMounds()
+	}
+	if v := i.AddMoundIDs; len(v) > 0 {
+		m.AddMoundIDs(v...)
+	}
+	if v := i.RemoveMoundIDs; len(v) > 0 {
+		m.RemoveMoundIDs(v...)
+	}
+	if i.ClearVisitors {
+		m.ClearVisitors()
+	}
+	if v := i.AddVisitorIDs; len(v) > 0 {
+		m.AddVisitorIDs(v...)
+	}
+	if v := i.RemoveVisitorIDs; len(v) > 0 {
+		m.RemoveVisitorIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateVisitInput on the VisitUpdate builder.
+func (c *VisitUpdate) SetInput(i UpdateVisitInput) *VisitUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateVisitInput on the VisitUpdateOne builder.
+func (c *VisitUpdateOne) SetInput(i UpdateVisitInput) *VisitUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

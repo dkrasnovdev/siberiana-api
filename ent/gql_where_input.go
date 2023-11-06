@@ -28,10 +28,12 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
+	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -44,6 +46,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
+	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
@@ -8499,6 +8502,10 @@ type CultureWhereInput struct {
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -8932,6 +8939,24 @@ func (i *CultureWhereInput) P() (predicate.Culture, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, culture.HasArtifactsWith(with...))
+	}
+	if i.HasPetroglyphs != nil {
+		p := culture.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = culture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, culture.HasPetroglyphsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -12118,6 +12143,10 @@ type LocationWhereInput struct {
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 
+	// "petroglyphs_accounting_documentation" edge predicates.
+	HasPetroglyphsAccountingDocumentation     *bool                   `json:"hasPetroglyphsAccountingDocumentation,omitempty"`
+	HasPetroglyphsAccountingDocumentationWith []*PetroglyphWhereInput `json:"hasPetroglyphsAccountingDocumentationWith,omitempty"`
+
 	// "country" edge predicates.
 	HasCountry     *bool                `json:"hasCountry,omitempty"`
 	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
@@ -12632,6 +12661,24 @@ func (i *LocationWhereInput) P() (predicate.Location, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, location.HasProtectedAreaPicturesWith(with...))
+	}
+	if i.HasPetroglyphsAccountingDocumentation != nil {
+		p := location.HasPetroglyphsAccountingDocumentation()
+		if !*i.HasPetroglyphsAccountingDocumentation {
+			p = location.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsAccountingDocumentationWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsAccountingDocumentationWith))
+		for _, w := range i.HasPetroglyphsAccountingDocumentationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsAccountingDocumentationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, location.HasPetroglyphsAccountingDocumentationWith(with...))
 	}
 	if i.HasCountry != nil {
 		p := location.HasCountry()
@@ -13488,6 +13535,10 @@ type ModelWhereInput struct {
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -13978,6 +14029,24 @@ func (i *ModelWhereInput) P() (predicate.Model, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, model.HasArtifactsWith(with...))
+	}
+	if i.HasPetroglyphs != nil {
+		p := model.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = model.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, model.HasPetroglyphsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -14594,6 +14663,676 @@ func (i *MonumentWhereInput) P() (predicate.Monument, error) {
 		return predicates[0], nil
 	default:
 		return monument.And(predicates...), nil
+	}
+}
+
+// MoundWhereInput represents a where input for filtering Mound queries.
+type MoundWhereInput struct {
+	Predicates []predicate.Mound  `json:"-"`
+	Not        *MoundWhereInput   `json:"not,omitempty"`
+	Or         []*MoundWhereInput `json:"or,omitempty"`
+	And        []*MoundWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "number" field predicates.
+	Number             *string  `json:"number,omitempty"`
+	NumberNEQ          *string  `json:"numberNEQ,omitempty"`
+	NumberIn           []string `json:"numberIn,omitempty"`
+	NumberNotIn        []string `json:"numberNotIn,omitempty"`
+	NumberGT           *string  `json:"numberGT,omitempty"`
+	NumberGTE          *string  `json:"numberGTE,omitempty"`
+	NumberLT           *string  `json:"numberLT,omitempty"`
+	NumberLTE          *string  `json:"numberLTE,omitempty"`
+	NumberContains     *string  `json:"numberContains,omitempty"`
+	NumberHasPrefix    *string  `json:"numberHasPrefix,omitempty"`
+	NumberHasSuffix    *string  `json:"numberHasSuffix,omitempty"`
+	NumberIsNil        bool     `json:"numberIsNil,omitempty"`
+	NumberNotNil       bool     `json:"numberNotNil,omitempty"`
+	NumberEqualFold    *string  `json:"numberEqualFold,omitempty"`
+	NumberContainsFold *string  `json:"numberContainsFold,omitempty"`
+
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
+
+	// "visits" edge predicates.
+	HasVisits     *bool              `json:"hasVisits,omitempty"`
+	HasVisitsWith []*VisitWhereInput `json:"hasVisitsWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *MoundWhereInput) AddPredicates(predicates ...predicate.Mound) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the MoundWhereInput filter on the MoundQuery builder.
+func (i *MoundWhereInput) Filter(q *MoundQuery) (*MoundQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyMoundWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyMoundWhereInput is returned in case the MoundWhereInput is empty.
+var ErrEmptyMoundWhereInput = errors.New("ent: empty predicate MoundWhereInput")
+
+// P returns a predicate for filtering mounds.
+// An error is returned if the input is empty or invalid.
+func (i *MoundWhereInput) P() (predicate.Mound, error) {
+	var predicates []predicate.Mound
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, mound.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Mound, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, mound.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Mound, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, mound.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, mound.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, mound.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, mound.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, mound.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, mound.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, mound.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, mound.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, mound.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, mound.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, mound.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, mound.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, mound.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, mound.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, mound.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, mound.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, mound.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, mound.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, mound.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, mound.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, mound.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, mound.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, mound.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, mound.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, mound.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, mound.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, mound.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, mound.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, mound.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, mound.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, mound.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, mound.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, mound.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, mound.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, mound.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, mound.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, mound.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, mound.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, mound.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, mound.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, mound.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, mound.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, mound.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, mound.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, mound.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, mound.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, mound.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, mound.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, mound.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, mound.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, mound.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, mound.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, mound.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, mound.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, mound.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, mound.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, mound.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, mound.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, mound.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, mound.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, mound.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, mound.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, mound.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, mound.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, mound.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, mound.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, mound.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, mound.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, mound.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, mound.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, mound.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, mound.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, mound.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, mound.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, mound.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, mound.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, mound.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, mound.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, mound.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, mound.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, mound.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, mound.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, mound.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, mound.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, mound.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, mound.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, mound.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, mound.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, mound.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, mound.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, mound.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, mound.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, mound.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, mound.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, mound.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, mound.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, mound.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, mound.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, mound.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, mound.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, mound.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, mound.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, mound.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, mound.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, mound.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, mound.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, mound.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, mound.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, mound.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, mound.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, mound.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, mound.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, mound.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, mound.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, mound.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Number != nil {
+		predicates = append(predicates, mound.NumberEQ(*i.Number))
+	}
+	if i.NumberNEQ != nil {
+		predicates = append(predicates, mound.NumberNEQ(*i.NumberNEQ))
+	}
+	if len(i.NumberIn) > 0 {
+		predicates = append(predicates, mound.NumberIn(i.NumberIn...))
+	}
+	if len(i.NumberNotIn) > 0 {
+		predicates = append(predicates, mound.NumberNotIn(i.NumberNotIn...))
+	}
+	if i.NumberGT != nil {
+		predicates = append(predicates, mound.NumberGT(*i.NumberGT))
+	}
+	if i.NumberGTE != nil {
+		predicates = append(predicates, mound.NumberGTE(*i.NumberGTE))
+	}
+	if i.NumberLT != nil {
+		predicates = append(predicates, mound.NumberLT(*i.NumberLT))
+	}
+	if i.NumberLTE != nil {
+		predicates = append(predicates, mound.NumberLTE(*i.NumberLTE))
+	}
+	if i.NumberContains != nil {
+		predicates = append(predicates, mound.NumberContains(*i.NumberContains))
+	}
+	if i.NumberHasPrefix != nil {
+		predicates = append(predicates, mound.NumberHasPrefix(*i.NumberHasPrefix))
+	}
+	if i.NumberHasSuffix != nil {
+		predicates = append(predicates, mound.NumberHasSuffix(*i.NumberHasSuffix))
+	}
+	if i.NumberIsNil {
+		predicates = append(predicates, mound.NumberIsNil())
+	}
+	if i.NumberNotNil {
+		predicates = append(predicates, mound.NumberNotNil())
+	}
+	if i.NumberEqualFold != nil {
+		predicates = append(predicates, mound.NumberEqualFold(*i.NumberEqualFold))
+	}
+	if i.NumberContainsFold != nil {
+		predicates = append(predicates, mound.NumberContainsFold(*i.NumberContainsFold))
+	}
+
+	if i.HasPetroglyphs != nil {
+		p := mound.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = mound.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, mound.HasPetroglyphsWith(with...))
+	}
+	if i.HasVisits != nil {
+		p := mound.HasVisits()
+		if !*i.HasVisits {
+			p = mound.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasVisitsWith) > 0 {
+		with := make([]predicate.Visit, 0, len(i.HasVisitsWith))
+		for _, w := range i.HasVisitsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasVisitsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, mound.HasVisitsWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyMoundWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return mound.And(predicates...), nil
 	}
 }
 
@@ -16332,9 +17071,17 @@ type PersonWhereInput struct {
 	HasDonatedArtifacts     *bool                 `json:"hasDonatedArtifacts,omitempty"`
 	HasDonatedArtifactsWith []*ArtifactWhereInput `json:"hasDonatedArtifactsWith,omitempty"`
 
+	// "petroglyphs_accounting_documentation" edge predicates.
+	HasPetroglyphsAccountingDocumentation     *bool                   `json:"hasPetroglyphsAccountingDocumentation,omitempty"`
+	HasPetroglyphsAccountingDocumentationWith []*PetroglyphWhereInput `json:"hasPetroglyphsAccountingDocumentationWith,omitempty"`
+
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "visits" edge predicates.
+	HasVisits     *bool              `json:"hasVisits,omitempty"`
+	HasVisitsWith []*VisitWhereInput `json:"hasVisitsWith,omitempty"`
 
 	// "projects" edge predicates.
 	HasProjects     *bool                `json:"hasProjects,omitempty"`
@@ -17183,6 +17930,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 		}
 		predicates = append(predicates, person.HasDonatedArtifactsWith(with...))
 	}
+	if i.HasPetroglyphsAccountingDocumentation != nil {
+		p := person.HasPetroglyphsAccountingDocumentation()
+		if !*i.HasPetroglyphsAccountingDocumentation {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsAccountingDocumentationWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsAccountingDocumentationWith))
+		for _, w := range i.HasPetroglyphsAccountingDocumentationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsAccountingDocumentationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasPetroglyphsAccountingDocumentationWith(with...))
+	}
 	if i.HasBooks != nil {
 		p := person.HasBooks()
 		if !*i.HasBooks {
@@ -17200,6 +17965,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, person.HasBooksWith(with...))
+	}
+	if i.HasVisits != nil {
+		p := person.HasVisits()
+		if !*i.HasVisits {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasVisitsWith) > 0 {
+		with := make([]predicate.Visit, 0, len(i.HasVisitsWith))
+		for _, w := range i.HasVisitsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasVisitsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasVisitsWith(with...))
 	}
 	if i.HasProjects != nil {
 		p := person.HasProjects()
@@ -17708,6 +18491,1874 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 		return predicates[0], nil
 	default:
 		return personal.And(predicates...), nil
+	}
+}
+
+// PetroglyphWhereInput represents a where input for filtering Petroglyph queries.
+type PetroglyphWhereInput struct {
+	Predicates []predicate.Petroglyph  `json:"-"`
+	Not        *PetroglyphWhereInput   `json:"not,omitempty"`
+	Or         []*PetroglyphWhereInput `json:"or,omitempty"`
+	And        []*PetroglyphWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "status" field predicates.
+	Status       *petroglyph.Status  `json:"status,omitempty"`
+	StatusNEQ    *petroglyph.Status  `json:"statusNEQ,omitempty"`
+	StatusIn     []petroglyph.Status `json:"statusIn,omitempty"`
+	StatusNotIn  []petroglyph.Status `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                `json:"statusNotNil,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "deleted_at" field predicates.
+	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
+	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGT     *time.Time  `json:"deletedAtGT,omitempty"`
+	DeletedAtGTE    *time.Time  `json:"deletedAtGTE,omitempty"`
+	DeletedAtLT     *time.Time  `json:"deletedAtLT,omitempty"`
+	DeletedAtLTE    *time.Time  `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil bool        `json:"deletedAtNotNil,omitempty"`
+
+	// "deleted_by" field predicates.
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNEQ          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGT           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGTE          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLT           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLTE          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        bool     `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "number" field predicates.
+	Number             *string  `json:"number,omitempty"`
+	NumberNEQ          *string  `json:"numberNEQ,omitempty"`
+	NumberIn           []string `json:"numberIn,omitempty"`
+	NumberNotIn        []string `json:"numberNotIn,omitempty"`
+	NumberGT           *string  `json:"numberGT,omitempty"`
+	NumberGTE          *string  `json:"numberGTE,omitempty"`
+	NumberLT           *string  `json:"numberLT,omitempty"`
+	NumberLTE          *string  `json:"numberLTE,omitempty"`
+	NumberContains     *string  `json:"numberContains,omitempty"`
+	NumberHasPrefix    *string  `json:"numberHasPrefix,omitempty"`
+	NumberHasSuffix    *string  `json:"numberHasSuffix,omitempty"`
+	NumberIsNil        bool     `json:"numberIsNil,omitempty"`
+	NumberNotNil       bool     `json:"numberNotNil,omitempty"`
+	NumberEqualFold    *string  `json:"numberEqualFold,omitempty"`
+	NumberContainsFold *string  `json:"numberContainsFold,omitempty"`
+
+	// "dating" field predicates.
+	Dating             *string  `json:"dating,omitempty"`
+	DatingNEQ          *string  `json:"datingNEQ,omitempty"`
+	DatingIn           []string `json:"datingIn,omitempty"`
+	DatingNotIn        []string `json:"datingNotIn,omitempty"`
+	DatingGT           *string  `json:"datingGT,omitempty"`
+	DatingGTE          *string  `json:"datingGTE,omitempty"`
+	DatingLT           *string  `json:"datingLT,omitempty"`
+	DatingLTE          *string  `json:"datingLTE,omitempty"`
+	DatingContains     *string  `json:"datingContains,omitempty"`
+	DatingHasPrefix    *string  `json:"datingHasPrefix,omitempty"`
+	DatingHasSuffix    *string  `json:"datingHasSuffix,omitempty"`
+	DatingIsNil        bool     `json:"datingIsNil,omitempty"`
+	DatingNotNil       bool     `json:"datingNotNil,omitempty"`
+	DatingEqualFold    *string  `json:"datingEqualFold,omitempty"`
+	DatingContainsFold *string  `json:"datingContainsFold,omitempty"`
+
+	// "dating_start" field predicates.
+	DatingStart       *int  `json:"datingStart,omitempty"`
+	DatingStartNEQ    *int  `json:"datingStartNEQ,omitempty"`
+	DatingStartIn     []int `json:"datingStartIn,omitempty"`
+	DatingStartNotIn  []int `json:"datingStartNotIn,omitempty"`
+	DatingStartGT     *int  `json:"datingStartGT,omitempty"`
+	DatingStartGTE    *int  `json:"datingStartGTE,omitempty"`
+	DatingStartLT     *int  `json:"datingStartLT,omitempty"`
+	DatingStartLTE    *int  `json:"datingStartLTE,omitempty"`
+	DatingStartIsNil  bool  `json:"datingStartIsNil,omitempty"`
+	DatingStartNotNil bool  `json:"datingStartNotNil,omitempty"`
+
+	// "dating_end" field predicates.
+	DatingEnd       *int  `json:"datingEnd,omitempty"`
+	DatingEndNEQ    *int  `json:"datingEndNEQ,omitempty"`
+	DatingEndIn     []int `json:"datingEndIn,omitempty"`
+	DatingEndNotIn  []int `json:"datingEndNotIn,omitempty"`
+	DatingEndGT     *int  `json:"datingEndGT,omitempty"`
+	DatingEndGTE    *int  `json:"datingEndGTE,omitempty"`
+	DatingEndLT     *int  `json:"datingEndLT,omitempty"`
+	DatingEndLTE    *int  `json:"datingEndLTE,omitempty"`
+	DatingEndIsNil  bool  `json:"datingEndIsNil,omitempty"`
+	DatingEndNotNil bool  `json:"datingEndNotNil,omitempty"`
+
+	// "orientation" field predicates.
+	Orientation             *string  `json:"orientation,omitempty"`
+	OrientationNEQ          *string  `json:"orientationNEQ,omitempty"`
+	OrientationIn           []string `json:"orientationIn,omitempty"`
+	OrientationNotIn        []string `json:"orientationNotIn,omitempty"`
+	OrientationGT           *string  `json:"orientationGT,omitempty"`
+	OrientationGTE          *string  `json:"orientationGTE,omitempty"`
+	OrientationLT           *string  `json:"orientationLT,omitempty"`
+	OrientationLTE          *string  `json:"orientationLTE,omitempty"`
+	OrientationContains     *string  `json:"orientationContains,omitempty"`
+	OrientationHasPrefix    *string  `json:"orientationHasPrefix,omitempty"`
+	OrientationHasSuffix    *string  `json:"orientationHasSuffix,omitempty"`
+	OrientationIsNil        bool     `json:"orientationIsNil,omitempty"`
+	OrientationNotNil       bool     `json:"orientationNotNil,omitempty"`
+	OrientationEqualFold    *string  `json:"orientationEqualFold,omitempty"`
+	OrientationContainsFold *string  `json:"orientationContainsFold,omitempty"`
+
+	// "position" field predicates.
+	Position             *string  `json:"position,omitempty"`
+	PositionNEQ          *string  `json:"positionNEQ,omitempty"`
+	PositionIn           []string `json:"positionIn,omitempty"`
+	PositionNotIn        []string `json:"positionNotIn,omitempty"`
+	PositionGT           *string  `json:"positionGT,omitempty"`
+	PositionGTE          *string  `json:"positionGTE,omitempty"`
+	PositionLT           *string  `json:"positionLT,omitempty"`
+	PositionLTE          *string  `json:"positionLTE,omitempty"`
+	PositionContains     *string  `json:"positionContains,omitempty"`
+	PositionHasPrefix    *string  `json:"positionHasPrefix,omitempty"`
+	PositionHasSuffix    *string  `json:"positionHasSuffix,omitempty"`
+	PositionIsNil        bool     `json:"positionIsNil,omitempty"`
+	PositionNotNil       bool     `json:"positionNotNil,omitempty"`
+	PositionEqualFold    *string  `json:"positionEqualFold,omitempty"`
+	PositionContainsFold *string  `json:"positionContainsFold,omitempty"`
+
+	// "geometric_shape" field predicates.
+	GeometricShape             *string  `json:"geometricShape,omitempty"`
+	GeometricShapeNEQ          *string  `json:"geometricShapeNEQ,omitempty"`
+	GeometricShapeIn           []string `json:"geometricShapeIn,omitempty"`
+	GeometricShapeNotIn        []string `json:"geometricShapeNotIn,omitempty"`
+	GeometricShapeGT           *string  `json:"geometricShapeGT,omitempty"`
+	GeometricShapeGTE          *string  `json:"geometricShapeGTE,omitempty"`
+	GeometricShapeLT           *string  `json:"geometricShapeLT,omitempty"`
+	GeometricShapeLTE          *string  `json:"geometricShapeLTE,omitempty"`
+	GeometricShapeContains     *string  `json:"geometricShapeContains,omitempty"`
+	GeometricShapeHasPrefix    *string  `json:"geometricShapeHasPrefix,omitempty"`
+	GeometricShapeHasSuffix    *string  `json:"geometricShapeHasSuffix,omitempty"`
+	GeometricShapeIsNil        bool     `json:"geometricShapeIsNil,omitempty"`
+	GeometricShapeNotNil       bool     `json:"geometricShapeNotNil,omitempty"`
+	GeometricShapeEqualFold    *string  `json:"geometricShapeEqualFold,omitempty"`
+	GeometricShapeContainsFold *string  `json:"geometricShapeContainsFold,omitempty"`
+
+	// "height" field predicates.
+	Height       *float64  `json:"height,omitempty"`
+	HeightNEQ    *float64  `json:"heightNEQ,omitempty"`
+	HeightIn     []float64 `json:"heightIn,omitempty"`
+	HeightNotIn  []float64 `json:"heightNotIn,omitempty"`
+	HeightGT     *float64  `json:"heightGT,omitempty"`
+	HeightGTE    *float64  `json:"heightGTE,omitempty"`
+	HeightLT     *float64  `json:"heightLT,omitempty"`
+	HeightLTE    *float64  `json:"heightLTE,omitempty"`
+	HeightIsNil  bool      `json:"heightIsNil,omitempty"`
+	HeightNotNil bool      `json:"heightNotNil,omitempty"`
+
+	// "width" field predicates.
+	Width       *float64  `json:"width,omitempty"`
+	WidthNEQ    *float64  `json:"widthNEQ,omitempty"`
+	WidthIn     []float64 `json:"widthIn,omitempty"`
+	WidthNotIn  []float64 `json:"widthNotIn,omitempty"`
+	WidthGT     *float64  `json:"widthGT,omitempty"`
+	WidthGTE    *float64  `json:"widthGTE,omitempty"`
+	WidthLT     *float64  `json:"widthLT,omitempty"`
+	WidthLTE    *float64  `json:"widthLTE,omitempty"`
+	WidthIsNil  bool      `json:"widthIsNil,omitempty"`
+	WidthNotNil bool      `json:"widthNotNil,omitempty"`
+
+	// "length" field predicates.
+	Length       *float64  `json:"length,omitempty"`
+	LengthNEQ    *float64  `json:"lengthNEQ,omitempty"`
+	LengthIn     []float64 `json:"lengthIn,omitempty"`
+	LengthNotIn  []float64 `json:"lengthNotIn,omitempty"`
+	LengthGT     *float64  `json:"lengthGT,omitempty"`
+	LengthGTE    *float64  `json:"lengthGTE,omitempty"`
+	LengthLT     *float64  `json:"lengthLT,omitempty"`
+	LengthLTE    *float64  `json:"lengthLTE,omitempty"`
+	LengthIsNil  bool      `json:"lengthIsNil,omitempty"`
+	LengthNotNil bool      `json:"lengthNotNil,omitempty"`
+
+	// "depth" field predicates.
+	Depth       *float64  `json:"depth,omitempty"`
+	DepthNEQ    *float64  `json:"depthNEQ,omitempty"`
+	DepthIn     []float64 `json:"depthIn,omitempty"`
+	DepthNotIn  []float64 `json:"depthNotIn,omitempty"`
+	DepthGT     *float64  `json:"depthGT,omitempty"`
+	DepthGTE    *float64  `json:"depthGTE,omitempty"`
+	DepthLT     *float64  `json:"depthLT,omitempty"`
+	DepthLTE    *float64  `json:"depthLTE,omitempty"`
+	DepthIsNil  bool      `json:"depthIsNil,omitempty"`
+	DepthNotNil bool      `json:"depthNotNil,omitempty"`
+
+	// "diameter" field predicates.
+	Diameter       *float64  `json:"diameter,omitempty"`
+	DiameterNEQ    *float64  `json:"diameterNEQ,omitempty"`
+	DiameterIn     []float64 `json:"diameterIn,omitempty"`
+	DiameterNotIn  []float64 `json:"diameterNotIn,omitempty"`
+	DiameterGT     *float64  `json:"diameterGT,omitempty"`
+	DiameterGTE    *float64  `json:"diameterGTE,omitempty"`
+	DiameterLT     *float64  `json:"diameterLT,omitempty"`
+	DiameterLTE    *float64  `json:"diameterLTE,omitempty"`
+	DiameterIsNil  bool      `json:"diameterIsNil,omitempty"`
+	DiameterNotNil bool      `json:"diameterNotNil,omitempty"`
+
+	// "weight" field predicates.
+	Weight             *string  `json:"weight,omitempty"`
+	WeightNEQ          *string  `json:"weightNEQ,omitempty"`
+	WeightIn           []string `json:"weightIn,omitempty"`
+	WeightNotIn        []string `json:"weightNotIn,omitempty"`
+	WeightGT           *string  `json:"weightGT,omitempty"`
+	WeightGTE          *string  `json:"weightGTE,omitempty"`
+	WeightLT           *string  `json:"weightLT,omitempty"`
+	WeightLTE          *string  `json:"weightLTE,omitempty"`
+	WeightContains     *string  `json:"weightContains,omitempty"`
+	WeightHasPrefix    *string  `json:"weightHasPrefix,omitempty"`
+	WeightHasSuffix    *string  `json:"weightHasSuffix,omitempty"`
+	WeightIsNil        bool     `json:"weightIsNil,omitempty"`
+	WeightNotNil       bool     `json:"weightNotNil,omitempty"`
+	WeightEqualFold    *string  `json:"weightEqualFold,omitempty"`
+	WeightContainsFold *string  `json:"weightContainsFold,omitempty"`
+
+	// "dimensions" field predicates.
+	Dimensions             *string  `json:"dimensions,omitempty"`
+	DimensionsNEQ          *string  `json:"dimensionsNEQ,omitempty"`
+	DimensionsIn           []string `json:"dimensionsIn,omitempty"`
+	DimensionsNotIn        []string `json:"dimensionsNotIn,omitempty"`
+	DimensionsGT           *string  `json:"dimensionsGT,omitempty"`
+	DimensionsGTE          *string  `json:"dimensionsGTE,omitempty"`
+	DimensionsLT           *string  `json:"dimensionsLT,omitempty"`
+	DimensionsLTE          *string  `json:"dimensionsLTE,omitempty"`
+	DimensionsContains     *string  `json:"dimensionsContains,omitempty"`
+	DimensionsHasPrefix    *string  `json:"dimensionsHasPrefix,omitempty"`
+	DimensionsHasSuffix    *string  `json:"dimensionsHasSuffix,omitempty"`
+	DimensionsIsNil        bool     `json:"dimensionsIsNil,omitempty"`
+	DimensionsNotNil       bool     `json:"dimensionsNotNil,omitempty"`
+	DimensionsEqualFold    *string  `json:"dimensionsEqualFold,omitempty"`
+	DimensionsContainsFold *string  `json:"dimensionsContainsFold,omitempty"`
+
+	// "plane_preservation" field predicates.
+	PlanePreservation             *string  `json:"planePreservation,omitempty"`
+	PlanePreservationNEQ          *string  `json:"planePreservationNEQ,omitempty"`
+	PlanePreservationIn           []string `json:"planePreservationIn,omitempty"`
+	PlanePreservationNotIn        []string `json:"planePreservationNotIn,omitempty"`
+	PlanePreservationGT           *string  `json:"planePreservationGT,omitempty"`
+	PlanePreservationGTE          *string  `json:"planePreservationGTE,omitempty"`
+	PlanePreservationLT           *string  `json:"planePreservationLT,omitempty"`
+	PlanePreservationLTE          *string  `json:"planePreservationLTE,omitempty"`
+	PlanePreservationContains     *string  `json:"planePreservationContains,omitempty"`
+	PlanePreservationHasPrefix    *string  `json:"planePreservationHasPrefix,omitempty"`
+	PlanePreservationHasSuffix    *string  `json:"planePreservationHasSuffix,omitempty"`
+	PlanePreservationIsNil        bool     `json:"planePreservationIsNil,omitempty"`
+	PlanePreservationNotNil       bool     `json:"planePreservationNotNil,omitempty"`
+	PlanePreservationEqualFold    *string  `json:"planePreservationEqualFold,omitempty"`
+	PlanePreservationContainsFold *string  `json:"planePreservationContainsFold,omitempty"`
+
+	// "photo_code" field predicates.
+	PhotoCode             *string  `json:"photoCode,omitempty"`
+	PhotoCodeNEQ          *string  `json:"photoCodeNEQ,omitempty"`
+	PhotoCodeIn           []string `json:"photoCodeIn,omitempty"`
+	PhotoCodeNotIn        []string `json:"photoCodeNotIn,omitempty"`
+	PhotoCodeGT           *string  `json:"photoCodeGT,omitempty"`
+	PhotoCodeGTE          *string  `json:"photoCodeGTE,omitempty"`
+	PhotoCodeLT           *string  `json:"photoCodeLT,omitempty"`
+	PhotoCodeLTE          *string  `json:"photoCodeLTE,omitempty"`
+	PhotoCodeContains     *string  `json:"photoCodeContains,omitempty"`
+	PhotoCodeHasPrefix    *string  `json:"photoCodeHasPrefix,omitempty"`
+	PhotoCodeHasSuffix    *string  `json:"photoCodeHasSuffix,omitempty"`
+	PhotoCodeIsNil        bool     `json:"photoCodeIsNil,omitempty"`
+	PhotoCodeNotNil       bool     `json:"photoCodeNotNil,omitempty"`
+	PhotoCodeEqualFold    *string  `json:"photoCodeEqualFold,omitempty"`
+	PhotoCodeContainsFold *string  `json:"photoCodeContainsFold,omitempty"`
+
+	// "accounting_documentation_date" field predicates.
+	AccountingDocumentationDate       *time.Time  `json:"accountingDocumentationDate,omitempty"`
+	AccountingDocumentationDateNEQ    *time.Time  `json:"accountingDocumentationDateNEQ,omitempty"`
+	AccountingDocumentationDateIn     []time.Time `json:"accountingDocumentationDateIn,omitempty"`
+	AccountingDocumentationDateNotIn  []time.Time `json:"accountingDocumentationDateNotIn,omitempty"`
+	AccountingDocumentationDateGT     *time.Time  `json:"accountingDocumentationDateGT,omitempty"`
+	AccountingDocumentationDateGTE    *time.Time  `json:"accountingDocumentationDateGTE,omitempty"`
+	AccountingDocumentationDateLT     *time.Time  `json:"accountingDocumentationDateLT,omitempty"`
+	AccountingDocumentationDateLTE    *time.Time  `json:"accountingDocumentationDateLTE,omitempty"`
+	AccountingDocumentationDateIsNil  bool        `json:"accountingDocumentationDateIsNil,omitempty"`
+	AccountingDocumentationDateNotNil bool        `json:"accountingDocumentationDateNotNil,omitempty"`
+
+	// "geometry" field predicates.
+	Geometry       *types.Geometry  `json:"geometry,omitempty"`
+	GeometryNEQ    *types.Geometry  `json:"geometryNEQ,omitempty"`
+	GeometryIn     []types.Geometry `json:"geometryIn,omitempty"`
+	GeometryNotIn  []types.Geometry `json:"geometryNotIn,omitempty"`
+	GeometryGT     *types.Geometry  `json:"geometryGT,omitempty"`
+	GeometryGTE    *types.Geometry  `json:"geometryGTE,omitempty"`
+	GeometryLT     *types.Geometry  `json:"geometryLT,omitempty"`
+	GeometryLTE    *types.Geometry  `json:"geometryLTE,omitempty"`
+	GeometryIsNil  bool             `json:"geometryIsNil,omitempty"`
+	GeometryNotNil bool             `json:"geometryNotNil,omitempty"`
+
+	// "cultural_affiliation" edge predicates.
+	HasCulturalAffiliation     *bool                `json:"hasCulturalAffiliation,omitempty"`
+	HasCulturalAffiliationWith []*CultureWhereInput `json:"hasCulturalAffiliationWith,omitempty"`
+
+	// "model" edge predicates.
+	HasModel     *bool              `json:"hasModel,omitempty"`
+	HasModelWith []*ModelWhereInput `json:"hasModelWith,omitempty"`
+
+	// "mound" edge predicates.
+	HasMound     *bool              `json:"hasMound,omitempty"`
+	HasMoundWith []*MoundWhereInput `json:"hasMoundWith,omitempty"`
+
+	// "publications" edge predicates.
+	HasPublications     *bool                    `json:"hasPublications,omitempty"`
+	HasPublicationsWith []*PublicationWhereInput `json:"hasPublicationsWith,omitempty"`
+
+	// "techniques" edge predicates.
+	HasTechniques     *bool                  `json:"hasTechniques,omitempty"`
+	HasTechniquesWith []*TechniqueWhereInput `json:"hasTechniquesWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
+
+	// "accounting_documentation_address" edge predicates.
+	HasAccountingDocumentationAddress     *bool                 `json:"hasAccountingDocumentationAddress,omitempty"`
+	HasAccountingDocumentationAddressWith []*LocationWhereInput `json:"hasAccountingDocumentationAddressWith,omitempty"`
+
+	// "accounting_documentation_author" edge predicates.
+	HasAccountingDocumentationAuthor     *bool               `json:"hasAccountingDocumentationAuthor,omitempty"`
+	HasAccountingDocumentationAuthorWith []*PersonWhereInput `json:"hasAccountingDocumentationAuthorWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *PetroglyphWhereInput) AddPredicates(predicates ...predicate.Petroglyph) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the PetroglyphWhereInput filter on the PetroglyphQuery builder.
+func (i *PetroglyphWhereInput) Filter(q *PetroglyphQuery) (*PetroglyphQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyPetroglyphWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyPetroglyphWhereInput is returned in case the PetroglyphWhereInput is empty.
+var ErrEmptyPetroglyphWhereInput = errors.New("ent: empty predicate PetroglyphWhereInput")
+
+// P returns a predicate for filtering petroglyphs.
+// An error is returned if the input is empty or invalid.
+func (i *PetroglyphWhereInput) P() (predicate.Petroglyph, error) {
+	var predicates []predicate.Petroglyph
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, petroglyph.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Petroglyph, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, petroglyph.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Petroglyph, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, petroglyph.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, petroglyph.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, petroglyph.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, petroglyph.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, petroglyph.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, petroglyph.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, petroglyph.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, petroglyph.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, petroglyph.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, petroglyph.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, petroglyph.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, petroglyph.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, petroglyph.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, petroglyph.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, petroglyph.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, petroglyph.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, petroglyph.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, petroglyph.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, petroglyph.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, petroglyph.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, petroglyph.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, petroglyph.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, petroglyph.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, petroglyph.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, petroglyph.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, petroglyph.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, petroglyph.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, petroglyph.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, petroglyph.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, petroglyph.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, petroglyph.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, petroglyph.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, petroglyph.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, petroglyph.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, petroglyph.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, petroglyph.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, petroglyph.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, petroglyph.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, petroglyph.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, petroglyph.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, petroglyph.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, petroglyph.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, petroglyph.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, petroglyph.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, petroglyph.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, petroglyph.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, petroglyph.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, petroglyph.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, petroglyph.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, petroglyph.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, petroglyph.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, petroglyph.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, petroglyph.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, petroglyph.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, petroglyph.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, petroglyph.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, petroglyph.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, petroglyph.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, petroglyph.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, petroglyph.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, petroglyph.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, petroglyph.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, petroglyph.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, petroglyph.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, petroglyph.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, petroglyph.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, petroglyph.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, petroglyph.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, petroglyph.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, petroglyph.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, petroglyph.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, petroglyph.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, petroglyph.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, petroglyph.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, petroglyph.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, petroglyph.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, petroglyph.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, petroglyph.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, petroglyph.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, petroglyph.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, petroglyph.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, petroglyph.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, petroglyph.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, petroglyph.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, petroglyph.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, petroglyph.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, petroglyph.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, petroglyph.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, petroglyph.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, petroglyph.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, petroglyph.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, petroglyph.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, petroglyph.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, petroglyph.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, petroglyph.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, petroglyph.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, petroglyph.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, petroglyph.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, petroglyph.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, petroglyph.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, petroglyph.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, petroglyph.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, petroglyph.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Status != nil {
+		predicates = append(predicates, petroglyph.StatusEQ(*i.Status))
+	}
+	if i.StatusNEQ != nil {
+		predicates = append(predicates, petroglyph.StatusNEQ(*i.StatusNEQ))
+	}
+	if len(i.StatusIn) > 0 {
+		predicates = append(predicates, petroglyph.StatusIn(i.StatusIn...))
+	}
+	if len(i.StatusNotIn) > 0 {
+		predicates = append(predicates, petroglyph.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.StatusIsNil {
+		predicates = append(predicates, petroglyph.StatusIsNil())
+	}
+	if i.StatusNotNil {
+		predicates = append(predicates, petroglyph.StatusNotNil())
+	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, petroglyph.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, petroglyph.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, petroglyph.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.DeletedAt != nil {
+		predicates = append(predicates, petroglyph.DeletedAtEQ(*i.DeletedAt))
+	}
+	if i.DeletedAtNEQ != nil {
+		predicates = append(predicates, petroglyph.DeletedAtNEQ(*i.DeletedAtNEQ))
+	}
+	if len(i.DeletedAtIn) > 0 {
+		predicates = append(predicates, petroglyph.DeletedAtIn(i.DeletedAtIn...))
+	}
+	if len(i.DeletedAtNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DeletedAtNotIn(i.DeletedAtNotIn...))
+	}
+	if i.DeletedAtGT != nil {
+		predicates = append(predicates, petroglyph.DeletedAtGT(*i.DeletedAtGT))
+	}
+	if i.DeletedAtGTE != nil {
+		predicates = append(predicates, petroglyph.DeletedAtGTE(*i.DeletedAtGTE))
+	}
+	if i.DeletedAtLT != nil {
+		predicates = append(predicates, petroglyph.DeletedAtLT(*i.DeletedAtLT))
+	}
+	if i.DeletedAtLTE != nil {
+		predicates = append(predicates, petroglyph.DeletedAtLTE(*i.DeletedAtLTE))
+	}
+	if i.DeletedAtIsNil {
+		predicates = append(predicates, petroglyph.DeletedAtIsNil())
+	}
+	if i.DeletedAtNotNil {
+		predicates = append(predicates, petroglyph.DeletedAtNotNil())
+	}
+	if i.DeletedBy != nil {
+		predicates = append(predicates, petroglyph.DeletedByEQ(*i.DeletedBy))
+	}
+	if i.DeletedByNEQ != nil {
+		predicates = append(predicates, petroglyph.DeletedByNEQ(*i.DeletedByNEQ))
+	}
+	if len(i.DeletedByIn) > 0 {
+		predicates = append(predicates, petroglyph.DeletedByIn(i.DeletedByIn...))
+	}
+	if len(i.DeletedByNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DeletedByNotIn(i.DeletedByNotIn...))
+	}
+	if i.DeletedByGT != nil {
+		predicates = append(predicates, petroglyph.DeletedByGT(*i.DeletedByGT))
+	}
+	if i.DeletedByGTE != nil {
+		predicates = append(predicates, petroglyph.DeletedByGTE(*i.DeletedByGTE))
+	}
+	if i.DeletedByLT != nil {
+		predicates = append(predicates, petroglyph.DeletedByLT(*i.DeletedByLT))
+	}
+	if i.DeletedByLTE != nil {
+		predicates = append(predicates, petroglyph.DeletedByLTE(*i.DeletedByLTE))
+	}
+	if i.DeletedByContains != nil {
+		predicates = append(predicates, petroglyph.DeletedByContains(*i.DeletedByContains))
+	}
+	if i.DeletedByHasPrefix != nil {
+		predicates = append(predicates, petroglyph.DeletedByHasPrefix(*i.DeletedByHasPrefix))
+	}
+	if i.DeletedByHasSuffix != nil {
+		predicates = append(predicates, petroglyph.DeletedByHasSuffix(*i.DeletedByHasSuffix))
+	}
+	if i.DeletedByIsNil {
+		predicates = append(predicates, petroglyph.DeletedByIsNil())
+	}
+	if i.DeletedByNotNil {
+		predicates = append(predicates, petroglyph.DeletedByNotNil())
+	}
+	if i.DeletedByEqualFold != nil {
+		predicates = append(predicates, petroglyph.DeletedByEqualFold(*i.DeletedByEqualFold))
+	}
+	if i.DeletedByContainsFold != nil {
+		predicates = append(predicates, petroglyph.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.Number != nil {
+		predicates = append(predicates, petroglyph.NumberEQ(*i.Number))
+	}
+	if i.NumberNEQ != nil {
+		predicates = append(predicates, petroglyph.NumberNEQ(*i.NumberNEQ))
+	}
+	if len(i.NumberIn) > 0 {
+		predicates = append(predicates, petroglyph.NumberIn(i.NumberIn...))
+	}
+	if len(i.NumberNotIn) > 0 {
+		predicates = append(predicates, petroglyph.NumberNotIn(i.NumberNotIn...))
+	}
+	if i.NumberGT != nil {
+		predicates = append(predicates, petroglyph.NumberGT(*i.NumberGT))
+	}
+	if i.NumberGTE != nil {
+		predicates = append(predicates, petroglyph.NumberGTE(*i.NumberGTE))
+	}
+	if i.NumberLT != nil {
+		predicates = append(predicates, petroglyph.NumberLT(*i.NumberLT))
+	}
+	if i.NumberLTE != nil {
+		predicates = append(predicates, petroglyph.NumberLTE(*i.NumberLTE))
+	}
+	if i.NumberContains != nil {
+		predicates = append(predicates, petroglyph.NumberContains(*i.NumberContains))
+	}
+	if i.NumberHasPrefix != nil {
+		predicates = append(predicates, petroglyph.NumberHasPrefix(*i.NumberHasPrefix))
+	}
+	if i.NumberHasSuffix != nil {
+		predicates = append(predicates, petroglyph.NumberHasSuffix(*i.NumberHasSuffix))
+	}
+	if i.NumberIsNil {
+		predicates = append(predicates, petroglyph.NumberIsNil())
+	}
+	if i.NumberNotNil {
+		predicates = append(predicates, petroglyph.NumberNotNil())
+	}
+	if i.NumberEqualFold != nil {
+		predicates = append(predicates, petroglyph.NumberEqualFold(*i.NumberEqualFold))
+	}
+	if i.NumberContainsFold != nil {
+		predicates = append(predicates, petroglyph.NumberContainsFold(*i.NumberContainsFold))
+	}
+	if i.Dating != nil {
+		predicates = append(predicates, petroglyph.DatingEQ(*i.Dating))
+	}
+	if i.DatingNEQ != nil {
+		predicates = append(predicates, petroglyph.DatingNEQ(*i.DatingNEQ))
+	}
+	if len(i.DatingIn) > 0 {
+		predicates = append(predicates, petroglyph.DatingIn(i.DatingIn...))
+	}
+	if len(i.DatingNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DatingNotIn(i.DatingNotIn...))
+	}
+	if i.DatingGT != nil {
+		predicates = append(predicates, petroglyph.DatingGT(*i.DatingGT))
+	}
+	if i.DatingGTE != nil {
+		predicates = append(predicates, petroglyph.DatingGTE(*i.DatingGTE))
+	}
+	if i.DatingLT != nil {
+		predicates = append(predicates, petroglyph.DatingLT(*i.DatingLT))
+	}
+	if i.DatingLTE != nil {
+		predicates = append(predicates, petroglyph.DatingLTE(*i.DatingLTE))
+	}
+	if i.DatingContains != nil {
+		predicates = append(predicates, petroglyph.DatingContains(*i.DatingContains))
+	}
+	if i.DatingHasPrefix != nil {
+		predicates = append(predicates, petroglyph.DatingHasPrefix(*i.DatingHasPrefix))
+	}
+	if i.DatingHasSuffix != nil {
+		predicates = append(predicates, petroglyph.DatingHasSuffix(*i.DatingHasSuffix))
+	}
+	if i.DatingIsNil {
+		predicates = append(predicates, petroglyph.DatingIsNil())
+	}
+	if i.DatingNotNil {
+		predicates = append(predicates, petroglyph.DatingNotNil())
+	}
+	if i.DatingEqualFold != nil {
+		predicates = append(predicates, petroglyph.DatingEqualFold(*i.DatingEqualFold))
+	}
+	if i.DatingContainsFold != nil {
+		predicates = append(predicates, petroglyph.DatingContainsFold(*i.DatingContainsFold))
+	}
+	if i.DatingStart != nil {
+		predicates = append(predicates, petroglyph.DatingStartEQ(*i.DatingStart))
+	}
+	if i.DatingStartNEQ != nil {
+		predicates = append(predicates, petroglyph.DatingStartNEQ(*i.DatingStartNEQ))
+	}
+	if len(i.DatingStartIn) > 0 {
+		predicates = append(predicates, petroglyph.DatingStartIn(i.DatingStartIn...))
+	}
+	if len(i.DatingStartNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DatingStartNotIn(i.DatingStartNotIn...))
+	}
+	if i.DatingStartGT != nil {
+		predicates = append(predicates, petroglyph.DatingStartGT(*i.DatingStartGT))
+	}
+	if i.DatingStartGTE != nil {
+		predicates = append(predicates, petroglyph.DatingStartGTE(*i.DatingStartGTE))
+	}
+	if i.DatingStartLT != nil {
+		predicates = append(predicates, petroglyph.DatingStartLT(*i.DatingStartLT))
+	}
+	if i.DatingStartLTE != nil {
+		predicates = append(predicates, petroglyph.DatingStartLTE(*i.DatingStartLTE))
+	}
+	if i.DatingStartIsNil {
+		predicates = append(predicates, petroglyph.DatingStartIsNil())
+	}
+	if i.DatingStartNotNil {
+		predicates = append(predicates, petroglyph.DatingStartNotNil())
+	}
+	if i.DatingEnd != nil {
+		predicates = append(predicates, petroglyph.DatingEndEQ(*i.DatingEnd))
+	}
+	if i.DatingEndNEQ != nil {
+		predicates = append(predicates, petroglyph.DatingEndNEQ(*i.DatingEndNEQ))
+	}
+	if len(i.DatingEndIn) > 0 {
+		predicates = append(predicates, petroglyph.DatingEndIn(i.DatingEndIn...))
+	}
+	if len(i.DatingEndNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DatingEndNotIn(i.DatingEndNotIn...))
+	}
+	if i.DatingEndGT != nil {
+		predicates = append(predicates, petroglyph.DatingEndGT(*i.DatingEndGT))
+	}
+	if i.DatingEndGTE != nil {
+		predicates = append(predicates, petroglyph.DatingEndGTE(*i.DatingEndGTE))
+	}
+	if i.DatingEndLT != nil {
+		predicates = append(predicates, petroglyph.DatingEndLT(*i.DatingEndLT))
+	}
+	if i.DatingEndLTE != nil {
+		predicates = append(predicates, petroglyph.DatingEndLTE(*i.DatingEndLTE))
+	}
+	if i.DatingEndIsNil {
+		predicates = append(predicates, petroglyph.DatingEndIsNil())
+	}
+	if i.DatingEndNotNil {
+		predicates = append(predicates, petroglyph.DatingEndNotNil())
+	}
+	if i.Orientation != nil {
+		predicates = append(predicates, petroglyph.OrientationEQ(*i.Orientation))
+	}
+	if i.OrientationNEQ != nil {
+		predicates = append(predicates, petroglyph.OrientationNEQ(*i.OrientationNEQ))
+	}
+	if len(i.OrientationIn) > 0 {
+		predicates = append(predicates, petroglyph.OrientationIn(i.OrientationIn...))
+	}
+	if len(i.OrientationNotIn) > 0 {
+		predicates = append(predicates, petroglyph.OrientationNotIn(i.OrientationNotIn...))
+	}
+	if i.OrientationGT != nil {
+		predicates = append(predicates, petroglyph.OrientationGT(*i.OrientationGT))
+	}
+	if i.OrientationGTE != nil {
+		predicates = append(predicates, petroglyph.OrientationGTE(*i.OrientationGTE))
+	}
+	if i.OrientationLT != nil {
+		predicates = append(predicates, petroglyph.OrientationLT(*i.OrientationLT))
+	}
+	if i.OrientationLTE != nil {
+		predicates = append(predicates, petroglyph.OrientationLTE(*i.OrientationLTE))
+	}
+	if i.OrientationContains != nil {
+		predicates = append(predicates, petroglyph.OrientationContains(*i.OrientationContains))
+	}
+	if i.OrientationHasPrefix != nil {
+		predicates = append(predicates, petroglyph.OrientationHasPrefix(*i.OrientationHasPrefix))
+	}
+	if i.OrientationHasSuffix != nil {
+		predicates = append(predicates, petroglyph.OrientationHasSuffix(*i.OrientationHasSuffix))
+	}
+	if i.OrientationIsNil {
+		predicates = append(predicates, petroglyph.OrientationIsNil())
+	}
+	if i.OrientationNotNil {
+		predicates = append(predicates, petroglyph.OrientationNotNil())
+	}
+	if i.OrientationEqualFold != nil {
+		predicates = append(predicates, petroglyph.OrientationEqualFold(*i.OrientationEqualFold))
+	}
+	if i.OrientationContainsFold != nil {
+		predicates = append(predicates, petroglyph.OrientationContainsFold(*i.OrientationContainsFold))
+	}
+	if i.Position != nil {
+		predicates = append(predicates, petroglyph.PositionEQ(*i.Position))
+	}
+	if i.PositionNEQ != nil {
+		predicates = append(predicates, petroglyph.PositionNEQ(*i.PositionNEQ))
+	}
+	if len(i.PositionIn) > 0 {
+		predicates = append(predicates, petroglyph.PositionIn(i.PositionIn...))
+	}
+	if len(i.PositionNotIn) > 0 {
+		predicates = append(predicates, petroglyph.PositionNotIn(i.PositionNotIn...))
+	}
+	if i.PositionGT != nil {
+		predicates = append(predicates, petroglyph.PositionGT(*i.PositionGT))
+	}
+	if i.PositionGTE != nil {
+		predicates = append(predicates, petroglyph.PositionGTE(*i.PositionGTE))
+	}
+	if i.PositionLT != nil {
+		predicates = append(predicates, petroglyph.PositionLT(*i.PositionLT))
+	}
+	if i.PositionLTE != nil {
+		predicates = append(predicates, petroglyph.PositionLTE(*i.PositionLTE))
+	}
+	if i.PositionContains != nil {
+		predicates = append(predicates, petroglyph.PositionContains(*i.PositionContains))
+	}
+	if i.PositionHasPrefix != nil {
+		predicates = append(predicates, petroglyph.PositionHasPrefix(*i.PositionHasPrefix))
+	}
+	if i.PositionHasSuffix != nil {
+		predicates = append(predicates, petroglyph.PositionHasSuffix(*i.PositionHasSuffix))
+	}
+	if i.PositionIsNil {
+		predicates = append(predicates, petroglyph.PositionIsNil())
+	}
+	if i.PositionNotNil {
+		predicates = append(predicates, petroglyph.PositionNotNil())
+	}
+	if i.PositionEqualFold != nil {
+		predicates = append(predicates, petroglyph.PositionEqualFold(*i.PositionEqualFold))
+	}
+	if i.PositionContainsFold != nil {
+		predicates = append(predicates, petroglyph.PositionContainsFold(*i.PositionContainsFold))
+	}
+	if i.GeometricShape != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeEQ(*i.GeometricShape))
+	}
+	if i.GeometricShapeNEQ != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeNEQ(*i.GeometricShapeNEQ))
+	}
+	if len(i.GeometricShapeIn) > 0 {
+		predicates = append(predicates, petroglyph.GeometricShapeIn(i.GeometricShapeIn...))
+	}
+	if len(i.GeometricShapeNotIn) > 0 {
+		predicates = append(predicates, petroglyph.GeometricShapeNotIn(i.GeometricShapeNotIn...))
+	}
+	if i.GeometricShapeGT != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeGT(*i.GeometricShapeGT))
+	}
+	if i.GeometricShapeGTE != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeGTE(*i.GeometricShapeGTE))
+	}
+	if i.GeometricShapeLT != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeLT(*i.GeometricShapeLT))
+	}
+	if i.GeometricShapeLTE != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeLTE(*i.GeometricShapeLTE))
+	}
+	if i.GeometricShapeContains != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeContains(*i.GeometricShapeContains))
+	}
+	if i.GeometricShapeHasPrefix != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeHasPrefix(*i.GeometricShapeHasPrefix))
+	}
+	if i.GeometricShapeHasSuffix != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeHasSuffix(*i.GeometricShapeHasSuffix))
+	}
+	if i.GeometricShapeIsNil {
+		predicates = append(predicates, petroglyph.GeometricShapeIsNil())
+	}
+	if i.GeometricShapeNotNil {
+		predicates = append(predicates, petroglyph.GeometricShapeNotNil())
+	}
+	if i.GeometricShapeEqualFold != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeEqualFold(*i.GeometricShapeEqualFold))
+	}
+	if i.GeometricShapeContainsFold != nil {
+		predicates = append(predicates, petroglyph.GeometricShapeContainsFold(*i.GeometricShapeContainsFold))
+	}
+	if i.Height != nil {
+		predicates = append(predicates, petroglyph.HeightEQ(*i.Height))
+	}
+	if i.HeightNEQ != nil {
+		predicates = append(predicates, petroglyph.HeightNEQ(*i.HeightNEQ))
+	}
+	if len(i.HeightIn) > 0 {
+		predicates = append(predicates, petroglyph.HeightIn(i.HeightIn...))
+	}
+	if len(i.HeightNotIn) > 0 {
+		predicates = append(predicates, petroglyph.HeightNotIn(i.HeightNotIn...))
+	}
+	if i.HeightGT != nil {
+		predicates = append(predicates, petroglyph.HeightGT(*i.HeightGT))
+	}
+	if i.HeightGTE != nil {
+		predicates = append(predicates, petroglyph.HeightGTE(*i.HeightGTE))
+	}
+	if i.HeightLT != nil {
+		predicates = append(predicates, petroglyph.HeightLT(*i.HeightLT))
+	}
+	if i.HeightLTE != nil {
+		predicates = append(predicates, petroglyph.HeightLTE(*i.HeightLTE))
+	}
+	if i.HeightIsNil {
+		predicates = append(predicates, petroglyph.HeightIsNil())
+	}
+	if i.HeightNotNil {
+		predicates = append(predicates, petroglyph.HeightNotNil())
+	}
+	if i.Width != nil {
+		predicates = append(predicates, petroglyph.WidthEQ(*i.Width))
+	}
+	if i.WidthNEQ != nil {
+		predicates = append(predicates, petroglyph.WidthNEQ(*i.WidthNEQ))
+	}
+	if len(i.WidthIn) > 0 {
+		predicates = append(predicates, petroglyph.WidthIn(i.WidthIn...))
+	}
+	if len(i.WidthNotIn) > 0 {
+		predicates = append(predicates, petroglyph.WidthNotIn(i.WidthNotIn...))
+	}
+	if i.WidthGT != nil {
+		predicates = append(predicates, petroglyph.WidthGT(*i.WidthGT))
+	}
+	if i.WidthGTE != nil {
+		predicates = append(predicates, petroglyph.WidthGTE(*i.WidthGTE))
+	}
+	if i.WidthLT != nil {
+		predicates = append(predicates, petroglyph.WidthLT(*i.WidthLT))
+	}
+	if i.WidthLTE != nil {
+		predicates = append(predicates, petroglyph.WidthLTE(*i.WidthLTE))
+	}
+	if i.WidthIsNil {
+		predicates = append(predicates, petroglyph.WidthIsNil())
+	}
+	if i.WidthNotNil {
+		predicates = append(predicates, petroglyph.WidthNotNil())
+	}
+	if i.Length != nil {
+		predicates = append(predicates, petroglyph.LengthEQ(*i.Length))
+	}
+	if i.LengthNEQ != nil {
+		predicates = append(predicates, petroglyph.LengthNEQ(*i.LengthNEQ))
+	}
+	if len(i.LengthIn) > 0 {
+		predicates = append(predicates, petroglyph.LengthIn(i.LengthIn...))
+	}
+	if len(i.LengthNotIn) > 0 {
+		predicates = append(predicates, petroglyph.LengthNotIn(i.LengthNotIn...))
+	}
+	if i.LengthGT != nil {
+		predicates = append(predicates, petroglyph.LengthGT(*i.LengthGT))
+	}
+	if i.LengthGTE != nil {
+		predicates = append(predicates, petroglyph.LengthGTE(*i.LengthGTE))
+	}
+	if i.LengthLT != nil {
+		predicates = append(predicates, petroglyph.LengthLT(*i.LengthLT))
+	}
+	if i.LengthLTE != nil {
+		predicates = append(predicates, petroglyph.LengthLTE(*i.LengthLTE))
+	}
+	if i.LengthIsNil {
+		predicates = append(predicates, petroglyph.LengthIsNil())
+	}
+	if i.LengthNotNil {
+		predicates = append(predicates, petroglyph.LengthNotNil())
+	}
+	if i.Depth != nil {
+		predicates = append(predicates, petroglyph.DepthEQ(*i.Depth))
+	}
+	if i.DepthNEQ != nil {
+		predicates = append(predicates, petroglyph.DepthNEQ(*i.DepthNEQ))
+	}
+	if len(i.DepthIn) > 0 {
+		predicates = append(predicates, petroglyph.DepthIn(i.DepthIn...))
+	}
+	if len(i.DepthNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DepthNotIn(i.DepthNotIn...))
+	}
+	if i.DepthGT != nil {
+		predicates = append(predicates, petroglyph.DepthGT(*i.DepthGT))
+	}
+	if i.DepthGTE != nil {
+		predicates = append(predicates, petroglyph.DepthGTE(*i.DepthGTE))
+	}
+	if i.DepthLT != nil {
+		predicates = append(predicates, petroglyph.DepthLT(*i.DepthLT))
+	}
+	if i.DepthLTE != nil {
+		predicates = append(predicates, petroglyph.DepthLTE(*i.DepthLTE))
+	}
+	if i.DepthIsNil {
+		predicates = append(predicates, petroglyph.DepthIsNil())
+	}
+	if i.DepthNotNil {
+		predicates = append(predicates, petroglyph.DepthNotNil())
+	}
+	if i.Diameter != nil {
+		predicates = append(predicates, petroglyph.DiameterEQ(*i.Diameter))
+	}
+	if i.DiameterNEQ != nil {
+		predicates = append(predicates, petroglyph.DiameterNEQ(*i.DiameterNEQ))
+	}
+	if len(i.DiameterIn) > 0 {
+		predicates = append(predicates, petroglyph.DiameterIn(i.DiameterIn...))
+	}
+	if len(i.DiameterNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DiameterNotIn(i.DiameterNotIn...))
+	}
+	if i.DiameterGT != nil {
+		predicates = append(predicates, petroglyph.DiameterGT(*i.DiameterGT))
+	}
+	if i.DiameterGTE != nil {
+		predicates = append(predicates, petroglyph.DiameterGTE(*i.DiameterGTE))
+	}
+	if i.DiameterLT != nil {
+		predicates = append(predicates, petroglyph.DiameterLT(*i.DiameterLT))
+	}
+	if i.DiameterLTE != nil {
+		predicates = append(predicates, petroglyph.DiameterLTE(*i.DiameterLTE))
+	}
+	if i.DiameterIsNil {
+		predicates = append(predicates, petroglyph.DiameterIsNil())
+	}
+	if i.DiameterNotNil {
+		predicates = append(predicates, petroglyph.DiameterNotNil())
+	}
+	if i.Weight != nil {
+		predicates = append(predicates, petroglyph.WeightEQ(*i.Weight))
+	}
+	if i.WeightNEQ != nil {
+		predicates = append(predicates, petroglyph.WeightNEQ(*i.WeightNEQ))
+	}
+	if len(i.WeightIn) > 0 {
+		predicates = append(predicates, petroglyph.WeightIn(i.WeightIn...))
+	}
+	if len(i.WeightNotIn) > 0 {
+		predicates = append(predicates, petroglyph.WeightNotIn(i.WeightNotIn...))
+	}
+	if i.WeightGT != nil {
+		predicates = append(predicates, petroglyph.WeightGT(*i.WeightGT))
+	}
+	if i.WeightGTE != nil {
+		predicates = append(predicates, petroglyph.WeightGTE(*i.WeightGTE))
+	}
+	if i.WeightLT != nil {
+		predicates = append(predicates, petroglyph.WeightLT(*i.WeightLT))
+	}
+	if i.WeightLTE != nil {
+		predicates = append(predicates, petroglyph.WeightLTE(*i.WeightLTE))
+	}
+	if i.WeightContains != nil {
+		predicates = append(predicates, petroglyph.WeightContains(*i.WeightContains))
+	}
+	if i.WeightHasPrefix != nil {
+		predicates = append(predicates, petroglyph.WeightHasPrefix(*i.WeightHasPrefix))
+	}
+	if i.WeightHasSuffix != nil {
+		predicates = append(predicates, petroglyph.WeightHasSuffix(*i.WeightHasSuffix))
+	}
+	if i.WeightIsNil {
+		predicates = append(predicates, petroglyph.WeightIsNil())
+	}
+	if i.WeightNotNil {
+		predicates = append(predicates, petroglyph.WeightNotNil())
+	}
+	if i.WeightEqualFold != nil {
+		predicates = append(predicates, petroglyph.WeightEqualFold(*i.WeightEqualFold))
+	}
+	if i.WeightContainsFold != nil {
+		predicates = append(predicates, petroglyph.WeightContainsFold(*i.WeightContainsFold))
+	}
+	if i.Dimensions != nil {
+		predicates = append(predicates, petroglyph.DimensionsEQ(*i.Dimensions))
+	}
+	if i.DimensionsNEQ != nil {
+		predicates = append(predicates, petroglyph.DimensionsNEQ(*i.DimensionsNEQ))
+	}
+	if len(i.DimensionsIn) > 0 {
+		predicates = append(predicates, petroglyph.DimensionsIn(i.DimensionsIn...))
+	}
+	if len(i.DimensionsNotIn) > 0 {
+		predicates = append(predicates, petroglyph.DimensionsNotIn(i.DimensionsNotIn...))
+	}
+	if i.DimensionsGT != nil {
+		predicates = append(predicates, petroglyph.DimensionsGT(*i.DimensionsGT))
+	}
+	if i.DimensionsGTE != nil {
+		predicates = append(predicates, petroglyph.DimensionsGTE(*i.DimensionsGTE))
+	}
+	if i.DimensionsLT != nil {
+		predicates = append(predicates, petroglyph.DimensionsLT(*i.DimensionsLT))
+	}
+	if i.DimensionsLTE != nil {
+		predicates = append(predicates, petroglyph.DimensionsLTE(*i.DimensionsLTE))
+	}
+	if i.DimensionsContains != nil {
+		predicates = append(predicates, petroglyph.DimensionsContains(*i.DimensionsContains))
+	}
+	if i.DimensionsHasPrefix != nil {
+		predicates = append(predicates, petroglyph.DimensionsHasPrefix(*i.DimensionsHasPrefix))
+	}
+	if i.DimensionsHasSuffix != nil {
+		predicates = append(predicates, petroglyph.DimensionsHasSuffix(*i.DimensionsHasSuffix))
+	}
+	if i.DimensionsIsNil {
+		predicates = append(predicates, petroglyph.DimensionsIsNil())
+	}
+	if i.DimensionsNotNil {
+		predicates = append(predicates, petroglyph.DimensionsNotNil())
+	}
+	if i.DimensionsEqualFold != nil {
+		predicates = append(predicates, petroglyph.DimensionsEqualFold(*i.DimensionsEqualFold))
+	}
+	if i.DimensionsContainsFold != nil {
+		predicates = append(predicates, petroglyph.DimensionsContainsFold(*i.DimensionsContainsFold))
+	}
+	if i.PlanePreservation != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationEQ(*i.PlanePreservation))
+	}
+	if i.PlanePreservationNEQ != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationNEQ(*i.PlanePreservationNEQ))
+	}
+	if len(i.PlanePreservationIn) > 0 {
+		predicates = append(predicates, petroglyph.PlanePreservationIn(i.PlanePreservationIn...))
+	}
+	if len(i.PlanePreservationNotIn) > 0 {
+		predicates = append(predicates, petroglyph.PlanePreservationNotIn(i.PlanePreservationNotIn...))
+	}
+	if i.PlanePreservationGT != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationGT(*i.PlanePreservationGT))
+	}
+	if i.PlanePreservationGTE != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationGTE(*i.PlanePreservationGTE))
+	}
+	if i.PlanePreservationLT != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationLT(*i.PlanePreservationLT))
+	}
+	if i.PlanePreservationLTE != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationLTE(*i.PlanePreservationLTE))
+	}
+	if i.PlanePreservationContains != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationContains(*i.PlanePreservationContains))
+	}
+	if i.PlanePreservationHasPrefix != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationHasPrefix(*i.PlanePreservationHasPrefix))
+	}
+	if i.PlanePreservationHasSuffix != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationHasSuffix(*i.PlanePreservationHasSuffix))
+	}
+	if i.PlanePreservationIsNil {
+		predicates = append(predicates, petroglyph.PlanePreservationIsNil())
+	}
+	if i.PlanePreservationNotNil {
+		predicates = append(predicates, petroglyph.PlanePreservationNotNil())
+	}
+	if i.PlanePreservationEqualFold != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationEqualFold(*i.PlanePreservationEqualFold))
+	}
+	if i.PlanePreservationContainsFold != nil {
+		predicates = append(predicates, petroglyph.PlanePreservationContainsFold(*i.PlanePreservationContainsFold))
+	}
+	if i.PhotoCode != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeEQ(*i.PhotoCode))
+	}
+	if i.PhotoCodeNEQ != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeNEQ(*i.PhotoCodeNEQ))
+	}
+	if len(i.PhotoCodeIn) > 0 {
+		predicates = append(predicates, petroglyph.PhotoCodeIn(i.PhotoCodeIn...))
+	}
+	if len(i.PhotoCodeNotIn) > 0 {
+		predicates = append(predicates, petroglyph.PhotoCodeNotIn(i.PhotoCodeNotIn...))
+	}
+	if i.PhotoCodeGT != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeGT(*i.PhotoCodeGT))
+	}
+	if i.PhotoCodeGTE != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeGTE(*i.PhotoCodeGTE))
+	}
+	if i.PhotoCodeLT != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeLT(*i.PhotoCodeLT))
+	}
+	if i.PhotoCodeLTE != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeLTE(*i.PhotoCodeLTE))
+	}
+	if i.PhotoCodeContains != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeContains(*i.PhotoCodeContains))
+	}
+	if i.PhotoCodeHasPrefix != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeHasPrefix(*i.PhotoCodeHasPrefix))
+	}
+	if i.PhotoCodeHasSuffix != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeHasSuffix(*i.PhotoCodeHasSuffix))
+	}
+	if i.PhotoCodeIsNil {
+		predicates = append(predicates, petroglyph.PhotoCodeIsNil())
+	}
+	if i.PhotoCodeNotNil {
+		predicates = append(predicates, petroglyph.PhotoCodeNotNil())
+	}
+	if i.PhotoCodeEqualFold != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeEqualFold(*i.PhotoCodeEqualFold))
+	}
+	if i.PhotoCodeContainsFold != nil {
+		predicates = append(predicates, petroglyph.PhotoCodeContainsFold(*i.PhotoCodeContainsFold))
+	}
+	if i.AccountingDocumentationDate != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateEQ(*i.AccountingDocumentationDate))
+	}
+	if i.AccountingDocumentationDateNEQ != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateNEQ(*i.AccountingDocumentationDateNEQ))
+	}
+	if len(i.AccountingDocumentationDateIn) > 0 {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateIn(i.AccountingDocumentationDateIn...))
+	}
+	if len(i.AccountingDocumentationDateNotIn) > 0 {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateNotIn(i.AccountingDocumentationDateNotIn...))
+	}
+	if i.AccountingDocumentationDateGT != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateGT(*i.AccountingDocumentationDateGT))
+	}
+	if i.AccountingDocumentationDateGTE != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateGTE(*i.AccountingDocumentationDateGTE))
+	}
+	if i.AccountingDocumentationDateLT != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateLT(*i.AccountingDocumentationDateLT))
+	}
+	if i.AccountingDocumentationDateLTE != nil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateLTE(*i.AccountingDocumentationDateLTE))
+	}
+	if i.AccountingDocumentationDateIsNil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateIsNil())
+	}
+	if i.AccountingDocumentationDateNotNil {
+		predicates = append(predicates, petroglyph.AccountingDocumentationDateNotNil())
+	}
+	if i.Geometry != nil {
+		predicates = append(predicates, petroglyph.GeometryEQ(*i.Geometry))
+	}
+	if i.GeometryNEQ != nil {
+		predicates = append(predicates, petroglyph.GeometryNEQ(*i.GeometryNEQ))
+	}
+	if len(i.GeometryIn) > 0 {
+		predicates = append(predicates, petroglyph.GeometryIn(i.GeometryIn...))
+	}
+	if len(i.GeometryNotIn) > 0 {
+		predicates = append(predicates, petroglyph.GeometryNotIn(i.GeometryNotIn...))
+	}
+	if i.GeometryGT != nil {
+		predicates = append(predicates, petroglyph.GeometryGT(*i.GeometryGT))
+	}
+	if i.GeometryGTE != nil {
+		predicates = append(predicates, petroglyph.GeometryGTE(*i.GeometryGTE))
+	}
+	if i.GeometryLT != nil {
+		predicates = append(predicates, petroglyph.GeometryLT(*i.GeometryLT))
+	}
+	if i.GeometryLTE != nil {
+		predicates = append(predicates, petroglyph.GeometryLTE(*i.GeometryLTE))
+	}
+	if i.GeometryIsNil {
+		predicates = append(predicates, petroglyph.GeometryIsNil())
+	}
+	if i.GeometryNotNil {
+		predicates = append(predicates, petroglyph.GeometryNotNil())
+	}
+
+	if i.HasCulturalAffiliation != nil {
+		p := petroglyph.HasCulturalAffiliation()
+		if !*i.HasCulturalAffiliation {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCulturalAffiliationWith) > 0 {
+		with := make([]predicate.Culture, 0, len(i.HasCulturalAffiliationWith))
+		for _, w := range i.HasCulturalAffiliationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCulturalAffiliationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasCulturalAffiliationWith(with...))
+	}
+	if i.HasModel != nil {
+		p := petroglyph.HasModel()
+		if !*i.HasModel {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasModelWith) > 0 {
+		with := make([]predicate.Model, 0, len(i.HasModelWith))
+		for _, w := range i.HasModelWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasModelWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasModelWith(with...))
+	}
+	if i.HasMound != nil {
+		p := petroglyph.HasMound()
+		if !*i.HasMound {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMoundWith) > 0 {
+		with := make([]predicate.Mound, 0, len(i.HasMoundWith))
+		for _, w := range i.HasMoundWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMoundWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasMoundWith(with...))
+	}
+	if i.HasPublications != nil {
+		p := petroglyph.HasPublications()
+		if !*i.HasPublications {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPublicationsWith) > 0 {
+		with := make([]predicate.Publication, 0, len(i.HasPublicationsWith))
+		for _, w := range i.HasPublicationsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPublicationsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasPublicationsWith(with...))
+	}
+	if i.HasTechniques != nil {
+		p := petroglyph.HasTechniques()
+		if !*i.HasTechniques {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTechniquesWith) > 0 {
+		with := make([]predicate.Technique, 0, len(i.HasTechniquesWith))
+		for _, w := range i.HasTechniquesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTechniquesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasTechniquesWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := petroglyph.HasRegion()
+		if !*i.HasRegion {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasRegionWith(with...))
+	}
+	if i.HasAccountingDocumentationAddress != nil {
+		p := petroglyph.HasAccountingDocumentationAddress()
+		if !*i.HasAccountingDocumentationAddress {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAccountingDocumentationAddressWith) > 0 {
+		with := make([]predicate.Location, 0, len(i.HasAccountingDocumentationAddressWith))
+		for _, w := range i.HasAccountingDocumentationAddressWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAccountingDocumentationAddressWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasAccountingDocumentationAddressWith(with...))
+	}
+	if i.HasAccountingDocumentationAuthor != nil {
+		p := petroglyph.HasAccountingDocumentationAuthor()
+		if !*i.HasAccountingDocumentationAuthor {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAccountingDocumentationAuthorWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasAccountingDocumentationAuthorWith))
+		for _, w := range i.HasAccountingDocumentationAuthorWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAccountingDocumentationAuthorWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasAccountingDocumentationAuthorWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyPetroglyphWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return petroglyph.And(predicates...), nil
 	}
 }
 
@@ -21368,6 +24019,10 @@ type PublicationWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
+
 	// "authors" edge predicates.
 	HasAuthors     *bool               `json:"hasAuthors,omitempty"`
 	HasAuthorsWith []*PersonWhereInput `json:"hasAuthorsWith,omitempty"`
@@ -21804,6 +24459,24 @@ func (i *PublicationWhereInput) P() (predicate.Publication, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, publication.HasArtifactsWith(with...))
+	}
+	if i.HasPetroglyphs != nil {
+		p := publication.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = publication.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, publication.HasPetroglyphsWith(with...))
 	}
 	if i.HasAuthors != nil {
 		p := publication.HasAuthors()
@@ -22570,6 +25243,10 @@ type RegionWhereInput struct {
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
+
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
@@ -23046,6 +25723,24 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, region.HasBooksWith(with...))
+	}
+	if i.HasPetroglyphs != nil {
+		p := region.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasPetroglyphsWith(with...))
 	}
 	if i.HasProtectedAreaPictures != nil {
 		p := region.HasProtectedAreaPictures()
@@ -24517,6 +27212,10 @@ type TechniqueWhereInput struct {
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
+
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -24951,6 +27650,24 @@ func (i *TechniqueWhereInput) P() (predicate.Technique, error) {
 		}
 		predicates = append(predicates, technique.HasArtifactsWith(with...))
 	}
+	if i.HasPetroglyphs != nil {
+		p := technique.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = technique.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, technique.HasPetroglyphsWith(with...))
+	}
 	switch len(predicates) {
 	case 0:
 		return nil, ErrEmptyTechniqueWhereInput
@@ -24958,5 +27675,407 @@ func (i *TechniqueWhereInput) P() (predicate.Technique, error) {
 		return predicates[0], nil
 	default:
 		return technique.And(predicates...), nil
+	}
+}
+
+// VisitWhereInput represents a where input for filtering Visit queries.
+type VisitWhereInput struct {
+	Predicates []predicate.Visit  `json:"-"`
+	Not        *VisitWhereInput   `json:"not,omitempty"`
+	Or         []*VisitWhereInput `json:"or,omitempty"`
+	And        []*VisitWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "year" field predicates.
+	Year       *int  `json:"year,omitempty"`
+	YearNEQ    *int  `json:"yearNEQ,omitempty"`
+	YearIn     []int `json:"yearIn,omitempty"`
+	YearNotIn  []int `json:"yearNotIn,omitempty"`
+	YearGT     *int  `json:"yearGT,omitempty"`
+	YearGTE    *int  `json:"yearGTE,omitempty"`
+	YearLT     *int  `json:"yearLT,omitempty"`
+	YearLTE    *int  `json:"yearLTE,omitempty"`
+	YearIsNil  bool  `json:"yearIsNil,omitempty"`
+	YearNotNil bool  `json:"yearNotNil,omitempty"`
+
+	// "mounds" edge predicates.
+	HasMounds     *bool              `json:"hasMounds,omitempty"`
+	HasMoundsWith []*MoundWhereInput `json:"hasMoundsWith,omitempty"`
+
+	// "visitors" edge predicates.
+	HasVisitors     *bool               `json:"hasVisitors,omitempty"`
+	HasVisitorsWith []*PersonWhereInput `json:"hasVisitorsWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *VisitWhereInput) AddPredicates(predicates ...predicate.Visit) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the VisitWhereInput filter on the VisitQuery builder.
+func (i *VisitWhereInput) Filter(q *VisitQuery) (*VisitQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyVisitWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyVisitWhereInput is returned in case the VisitWhereInput is empty.
+var ErrEmptyVisitWhereInput = errors.New("ent: empty predicate VisitWhereInput")
+
+// P returns a predicate for filtering visits.
+// An error is returned if the input is empty or invalid.
+func (i *VisitWhereInput) P() (predicate.Visit, error) {
+	var predicates []predicate.Visit
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, visit.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Visit, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, visit.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Visit, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, visit.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, visit.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, visit.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, visit.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, visit.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, visit.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, visit.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, visit.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, visit.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, visit.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, visit.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, visit.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, visit.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, visit.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, visit.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, visit.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, visit.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, visit.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, visit.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, visit.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, visit.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, visit.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, visit.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, visit.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, visit.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, visit.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, visit.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, visit.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, visit.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, visit.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, visit.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, visit.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, visit.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, visit.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, visit.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, visit.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, visit.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, visit.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, visit.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, visit.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, visit.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, visit.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, visit.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, visit.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, visit.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, visit.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, visit.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, visit.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, visit.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, visit.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, visit.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, visit.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, visit.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, visit.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, visit.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.Year != nil {
+		predicates = append(predicates, visit.YearEQ(*i.Year))
+	}
+	if i.YearNEQ != nil {
+		predicates = append(predicates, visit.YearNEQ(*i.YearNEQ))
+	}
+	if len(i.YearIn) > 0 {
+		predicates = append(predicates, visit.YearIn(i.YearIn...))
+	}
+	if len(i.YearNotIn) > 0 {
+		predicates = append(predicates, visit.YearNotIn(i.YearNotIn...))
+	}
+	if i.YearGT != nil {
+		predicates = append(predicates, visit.YearGT(*i.YearGT))
+	}
+	if i.YearGTE != nil {
+		predicates = append(predicates, visit.YearGTE(*i.YearGTE))
+	}
+	if i.YearLT != nil {
+		predicates = append(predicates, visit.YearLT(*i.YearLT))
+	}
+	if i.YearLTE != nil {
+		predicates = append(predicates, visit.YearLTE(*i.YearLTE))
+	}
+	if i.YearIsNil {
+		predicates = append(predicates, visit.YearIsNil())
+	}
+	if i.YearNotNil {
+		predicates = append(predicates, visit.YearNotNil())
+	}
+
+	if i.HasMounds != nil {
+		p := visit.HasMounds()
+		if !*i.HasMounds {
+			p = visit.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasMoundsWith) > 0 {
+		with := make([]predicate.Mound, 0, len(i.HasMoundsWith))
+		for _, w := range i.HasMoundsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasMoundsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, visit.HasMoundsWith(with...))
+	}
+	if i.HasVisitors != nil {
+		p := visit.HasVisitors()
+		if !*i.HasVisitors {
+			p = visit.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasVisitorsWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasVisitorsWith))
+		for _, w := range i.HasVisitorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasVisitorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, visit.HasVisitorsWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyVisitWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return visit.And(predicates...), nil
 	}
 }

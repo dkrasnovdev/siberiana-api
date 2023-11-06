@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
@@ -20,14 +21,16 @@ import (
 // TechniqueQuery is the builder for querying Technique entities.
 type TechniqueQuery struct {
 	config
-	ctx                *QueryContext
-	order              []technique.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Technique
-	withArtifacts      *ArtifactQuery
-	modifiers          []func(*sql.Selector)
-	loadTotal          []func(context.Context, []*Technique) error
-	withNamedArtifacts map[string]*ArtifactQuery
+	ctx                  *QueryContext
+	order                []technique.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Technique
+	withArtifacts        *ArtifactQuery
+	withPetroglyphs      *PetroglyphQuery
+	modifiers            []func(*sql.Selector)
+	loadTotal            []func(context.Context, []*Technique) error
+	withNamedArtifacts   map[string]*ArtifactQuery
+	withNamedPetroglyphs map[string]*PetroglyphQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -79,6 +82,28 @@ func (tq *TechniqueQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(technique.Table, technique.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, technique.ArtifactsTable, technique.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
+func (tq *TechniqueQuery) QueryPetroglyphs() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(technique.Table, technique.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, technique.PetroglyphsTable, technique.PetroglyphsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,12 +298,13 @@ func (tq *TechniqueQuery) Clone() *TechniqueQuery {
 		return nil
 	}
 	return &TechniqueQuery{
-		config:        tq.config,
-		ctx:           tq.ctx.Clone(),
-		order:         append([]technique.OrderOption{}, tq.order...),
-		inters:        append([]Interceptor{}, tq.inters...),
-		predicates:    append([]predicate.Technique{}, tq.predicates...),
-		withArtifacts: tq.withArtifacts.Clone(),
+		config:          tq.config,
+		ctx:             tq.ctx.Clone(),
+		order:           append([]technique.OrderOption{}, tq.order...),
+		inters:          append([]Interceptor{}, tq.inters...),
+		predicates:      append([]predicate.Technique{}, tq.predicates...),
+		withArtifacts:   tq.withArtifacts.Clone(),
+		withPetroglyphs: tq.withPetroglyphs.Clone(),
 		// clone intermediate query.
 		sql:  tq.sql.Clone(),
 		path: tq.path,
@@ -293,6 +319,17 @@ func (tq *TechniqueQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *Technique
 		opt(query)
 	}
 	tq.withArtifacts = query
+	return tq
+}
+
+// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TechniqueQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *TechniqueQuery {
+	query := (&PetroglyphClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withPetroglyphs = query
 	return tq
 }
 
@@ -380,8 +417,9 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 	var (
 		nodes       = []*Technique{}
 		_spec       = tq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			tq.withArtifacts != nil,
+			tq.withPetroglyphs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -412,10 +450,24 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 			return nil, err
 		}
 	}
+	if query := tq.withPetroglyphs; query != nil {
+		if err := tq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Technique) { n.Edges.Petroglyphs = []*Petroglyph{} },
+			func(n *Technique, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range tq.withNamedArtifacts {
 		if err := tq.loadArtifacts(ctx, query, nodes,
 			func(n *Technique) { n.appendNamedArtifacts(name) },
 			func(n *Technique, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedPetroglyphs {
+		if err := tq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Technique) { n.appendNamedPetroglyphs(name) },
+			func(n *Technique, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -481,6 +533,67 @@ func (tq *TechniqueQuery) loadArtifacts(ctx context.Context, query *ArtifactQuer
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (tq *TechniqueQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*Technique, init func(*Technique), assign func(*Technique, *Petroglyph)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Technique)
+	nids := make(map[int]map[*Technique]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(technique.PetroglyphsTable)
+		s.Join(joinT).On(s.C(petroglyph.FieldID), joinT.C(technique.PetroglyphsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(technique.PetroglyphsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(technique.PetroglyphsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Technique]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Petroglyph](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "petroglyphs" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -584,6 +697,20 @@ func (tq *TechniqueQuery) WithNamedArtifacts(name string, opts ...func(*Artifact
 		tq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	tq.withNamedArtifacts[name] = query
+	return tq
+}
+
+// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TechniqueQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *TechniqueQuery {
+	query := (&PetroglyphClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedPetroglyphs == nil {
+		tq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
+	}
+	tq.withNamedPetroglyphs[name] = query
 	return tq
 }
 

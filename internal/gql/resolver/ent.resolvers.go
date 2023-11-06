@@ -123,6 +123,11 @@ func (r *queryResolver) Monuments(ctx context.Context, after *entgql.Cursor[int]
 	return r.client.Monument.Query().Paginate(ctx, after, first, before, last, offset, ent.WithMonumentOrder(orderBy), ent.WithMonumentFilter(where.Filter))
 }
 
+// Mounds is the resolver for the mounds field.
+func (r *queryResolver) Mounds(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.MoundOrder, where *ent.MoundWhereInput) (*ent.MoundConnection, error) {
+	return r.client.Mound.Query().Paginate(ctx, after, first, before, last, offset, ent.WithMoundOrder(orderBy), ent.WithMoundFilter(where.Filter))
+}
+
 // Organizations is the resolver for the organizations field.
 func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy *ent.OrganizationOrder, where *ent.OrganizationWhereInput) (*ent.OrganizationConnection, error) {
 	return r.client.Organization.Query().Paginate(ctx, after, first, before, last, offset, ent.WithOrganizationOrder(orderBy), ent.WithOrganizationFilter(where.Filter))
@@ -141,6 +146,11 @@ func (r *queryResolver) Persons(ctx context.Context, after *entgql.Cursor[int], 
 // Personals is the resolver for the personals field.
 func (r *queryResolver) Personals(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonalOrder, where *ent.PersonalWhereInput) (*ent.PersonalConnection, error) {
 	return r.client.Personal.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonalOrder(orderBy), ent.WithPersonalFilter(where.Filter))
+}
+
+// Petroglyphs is the resolver for the petroglyphs field.
+func (r *queryResolver) Petroglyphs(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PetroglyphOrder, where *ent.PetroglyphWhereInput) (*ent.PetroglyphConnection, error) {
+	return r.client.Petroglyph.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPetroglyphOrder(orderBy), ent.WithPetroglyphFilter(where.Filter))
 }
 
 // Projects is the resolver for the projects field.
@@ -196,6 +206,11 @@ func (r *queryResolver) Settlements(ctx context.Context, after *entgql.Cursor[in
 // Techniques is the resolver for the techniques field.
 func (r *queryResolver) Techniques(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.TechniqueOrder, where *ent.TechniqueWhereInput) (*ent.TechniqueConnection, error) {
 	return r.client.Technique.Query().Paginate(ctx, after, first, before, last, offset, ent.WithTechniqueOrder(orderBy), ent.WithTechniqueFilter(where.Filter))
+}
+
+// Visits is the resolver for the visits field.
+func (r *queryResolver) Visits(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.VisitOrder, where *ent.VisitWhereInput) (*ent.VisitConnection, error) {
+	panic(fmt.Errorf("not implemented: Visits - visits"))
 }
 
 // Query returns gql.QueryResolver implementation.

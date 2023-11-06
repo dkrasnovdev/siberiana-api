@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
@@ -170,6 +171,21 @@ func (cu *CultureUpdate) AddArtifacts(a ...*Artifact) *CultureUpdate {
 	return cu.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (cu *CultureUpdate) AddPetroglyphIDs(ids ...int) *CultureUpdate {
+	cu.mutation.AddPetroglyphIDs(ids...)
+	return cu
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (cu *CultureUpdate) AddPetroglyphs(p ...*Petroglyph) *CultureUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.AddPetroglyphIDs(ids...)
+}
+
 // Mutation returns the CultureMutation object of the builder.
 func (cu *CultureUpdate) Mutation() *CultureMutation {
 	return cu.mutation
@@ -194,6 +210,27 @@ func (cu *CultureUpdate) RemoveArtifacts(a ...*Artifact) *CultureUpdate {
 		ids[i] = a[i].ID
 	}
 	return cu.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (cu *CultureUpdate) ClearPetroglyphs() *CultureUpdate {
+	cu.mutation.ClearPetroglyphs()
+	return cu
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (cu *CultureUpdate) RemovePetroglyphIDs(ids ...int) *CultureUpdate {
+	cu.mutation.RemovePetroglyphIDs(ids...)
+	return cu
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (cu *CultureUpdate) RemovePetroglyphs(p ...*Petroglyph) *CultureUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cu.RemovePetroglyphIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -324,6 +361,51 @@ func (cu *CultureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.PetroglyphsTable,
+			Columns: []string{culture.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !cu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.PetroglyphsTable,
+			Columns: []string{culture.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.PetroglyphsTable,
+			Columns: []string{culture.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -492,6 +574,21 @@ func (cuo *CultureUpdateOne) AddArtifacts(a ...*Artifact) *CultureUpdateOne {
 	return cuo.AddArtifactIDs(ids...)
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (cuo *CultureUpdateOne) AddPetroglyphIDs(ids ...int) *CultureUpdateOne {
+	cuo.mutation.AddPetroglyphIDs(ids...)
+	return cuo
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (cuo *CultureUpdateOne) AddPetroglyphs(p ...*Petroglyph) *CultureUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.AddPetroglyphIDs(ids...)
+}
+
 // Mutation returns the CultureMutation object of the builder.
 func (cuo *CultureUpdateOne) Mutation() *CultureMutation {
 	return cuo.mutation
@@ -516,6 +613,27 @@ func (cuo *CultureUpdateOne) RemoveArtifacts(a ...*Artifact) *CultureUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return cuo.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (cuo *CultureUpdateOne) ClearPetroglyphs() *CultureUpdateOne {
+	cuo.mutation.ClearPetroglyphs()
+	return cuo
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (cuo *CultureUpdateOne) RemovePetroglyphIDs(ids ...int) *CultureUpdateOne {
+	cuo.mutation.RemovePetroglyphIDs(ids...)
+	return cuo
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (cuo *CultureUpdateOne) RemovePetroglyphs(p ...*Petroglyph) *CultureUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cuo.RemovePetroglyphIDs(ids...)
 }
 
 // Where appends a list predicates to the CultureUpdate builder.
@@ -676,6 +794,51 @@ func (cuo *CultureUpdateOne) sqlSave(ctx context.Context) (_node *Culture, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.PetroglyphsTable,
+			Columns: []string{culture.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !cuo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.PetroglyphsTable,
+			Columns: []string{culture.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   culture.PetroglyphsTable,
+			Columns: []string{culture.PetroglyphsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -66,8 +66,12 @@ const (
 	EdgeArtifacts = "artifacts"
 	// EdgeDonatedArtifacts holds the string denoting the donated_artifacts edge name in mutations.
 	EdgeDonatedArtifacts = "donated_artifacts"
+	// EdgePetroglyphsAccountingDocumentation holds the string denoting the petroglyphs_accounting_documentation edge name in mutations.
+	EdgePetroglyphsAccountingDocumentation = "petroglyphs_accounting_documentation"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
+	// EdgeVisits holds the string denoting the visits edge name in mutations.
+	EdgeVisits = "visits"
 	// EdgeProjects holds the string denoting the projects edge name in mutations.
 	EdgeProjects = "projects"
 	// EdgePublications holds the string denoting the publications edge name in mutations.
@@ -100,11 +104,23 @@ const (
 	DonatedArtifactsInverseTable = "artifacts"
 	// DonatedArtifactsColumn is the table column denoting the donated_artifacts relation/edge.
 	DonatedArtifactsColumn = "person_donated_artifacts"
+	// PetroglyphsAccountingDocumentationTable is the table that holds the petroglyphs_accounting_documentation relation/edge.
+	PetroglyphsAccountingDocumentationTable = "petroglyphs"
+	// PetroglyphsAccountingDocumentationInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsAccountingDocumentationInverseTable = "petroglyphs"
+	// PetroglyphsAccountingDocumentationColumn is the table column denoting the petroglyphs_accounting_documentation relation/edge.
+	PetroglyphsAccountingDocumentationColumn = "person_petroglyphs_accounting_documentation"
 	// BooksTable is the table that holds the books relation/edge. The primary key declared below.
 	BooksTable = "person_books"
 	// BooksInverseTable is the table name for the Book entity.
 	// It exists in this package in order to avoid circular dependency with the "book" package.
 	BooksInverseTable = "books"
+	// VisitsTable is the table that holds the visits relation/edge. The primary key declared below.
+	VisitsTable = "person_visits"
+	// VisitsInverseTable is the table name for the Visit entity.
+	// It exists in this package in order to avoid circular dependency with the "visit" package.
+	VisitsInverseTable = "visits"
 	// ProjectsTable is the table that holds the projects relation/edge. The primary key declared below.
 	ProjectsTable = "person_projects"
 	// ProjectsInverseTable is the table name for the Project entity.
@@ -165,6 +181,9 @@ var (
 	// BooksPrimaryKey and BooksColumn2 are the table columns denoting the
 	// primary key for the books relation (M2M).
 	BooksPrimaryKey = []string{"person_id", "book_id"}
+	// VisitsPrimaryKey and VisitsColumn2 are the table columns denoting the
+	// primary key for the visits relation (M2M).
+	VisitsPrimaryKey = []string{"person_id", "visit_id"}
 	// ProjectsPrimaryKey and ProjectsColumn2 are the table columns denoting the
 	// primary key for the projects relation (M2M).
 	ProjectsPrimaryKey = []string{"person_id", "project_id"}
@@ -376,6 +395,20 @@ func ByDonatedArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByPetroglyphsAccountingDocumentationCount orders the results by petroglyphs_accounting_documentation count.
+func ByPetroglyphsAccountingDocumentationCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsAccountingDocumentationStep(), opts...)
+	}
+}
+
+// ByPetroglyphsAccountingDocumentation orders the results by petroglyphs_accounting_documentation terms.
+func ByPetroglyphsAccountingDocumentation(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsAccountingDocumentationStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByBooksCount orders the results by books count.
 func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -387,6 +420,20 @@ func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newBooksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVisitsCount orders the results by visits count.
+func ByVisitsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVisitsStep(), opts...)
+	}
+}
+
+// ByVisits orders the results by visits terms.
+func ByVisits(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVisitsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -452,11 +499,25 @@ func newDonatedArtifactsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, DonatedArtifactsTable, DonatedArtifactsColumn),
 	)
 }
+func newPetroglyphsAccountingDocumentationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsAccountingDocumentationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PetroglyphsAccountingDocumentationTable, PetroglyphsAccountingDocumentationColumn),
+	)
+}
 func newBooksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BooksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, BooksTable, BooksPrimaryKey...),
+	)
+}
+func newVisitsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VisitsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, VisitsTable, VisitsPrimaryKey...),
 	)
 }
 func newProjectsStep() *sqlgraph.Step {
