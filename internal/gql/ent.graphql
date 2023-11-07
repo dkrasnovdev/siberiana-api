@@ -1957,6 +1957,7 @@ type Collection implements Node {
   type: CollectionType
   art: [Art!]
   artifacts: [Artifact!]
+  petroglyphs: [Petroglyph!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
   category: Category!
@@ -1997,6 +1998,7 @@ enum CollectionType @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/co
   artifacts
   books
   protected_area_pictures
+  petroglyphs
 }
 """
 CollectionWhereInput is used for filtering Collection objects.
@@ -2172,6 +2174,9 @@ input CollectionWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """petroglyphs edge predicates"""
+  hasPetroglyphs: Boolean
+  hasPetroglyphsWith: [PetroglyphWhereInput!]
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
@@ -2571,6 +2576,7 @@ input CreateCollectionInput {
   type: CollectionType
   artIDs: [ID!]
   artifactIDs: [ID!]
+  petroglyphIDs: [ID!]
   bookIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
   categoryID: ID!
@@ -2848,6 +2854,7 @@ input CreatePersonInput {
   collectionIDs: [ID!]
   artIDs: [ID!]
   artifactIDs: [ID!]
+  protectedAreaPictureIDs: [ID!]
   donatedArtifactIDs: [ID!]
   petroglyphsAccountingDocumentationIDs: [ID!]
   bookIDs: [ID!]
@@ -2914,6 +2921,7 @@ input CreatePetroglyphInput {
   regionID: ID
   accountingDocumentationAddressID: ID
   accountingDocumentationAuthorID: ID
+  collectionID: ID!
 }
 """
 CreateProjectInput is used for create Project object.
@@ -2987,6 +2995,7 @@ input CreateProtectedAreaPictureInput {
   additionalImagesUrls: [String!]
   shootingDate: Time
   geometry: Geometry
+  authorID: ID
   collectionID: ID!
   protectedAreaID: ID
   locationID: ID
@@ -5663,6 +5672,7 @@ type Person implements Node {
   collections: [Collection!]
   art: [Art!]
   artifacts: [Artifact!]
+  protectedAreaPictures: [ProtectedAreaPicture!]
   donatedArtifacts: [Artifact!]
   petroglyphsAccountingDocumentation: [Petroglyph!]
   books: [Book!]
@@ -5970,6 +5980,9 @@ input PersonWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """protected_area_pictures edge predicates"""
+  hasProtectedAreaPictures: Boolean
+  hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
   """donated_artifacts edge predicates"""
   hasDonatedArtifacts: Boolean
   hasDonatedArtifactsWith: [ArtifactWhereInput!]
@@ -6171,6 +6184,7 @@ type Petroglyph implements Node {
   region: Region
   accountingDocumentationAddress: Location
   accountingDocumentationAuthor: Person
+  collection: Collection!
 }
 """A connection to a list of items."""
 type PetroglyphConnection {
@@ -6671,6 +6685,9 @@ input PetroglyphWhereInput {
   """accounting_documentation_author edge predicates"""
   hasAccountingDocumentationAuthor: Boolean
   hasAccountingDocumentationAuthorWith: [PersonWhereInput!]
+  """collection edge predicates"""
+  hasCollection: Boolean
+  hasCollectionWith: [CollectionWhereInput!]
 }
 type Project implements Node {
   id: ID!
@@ -7147,6 +7164,7 @@ type ProtectedAreaPicture implements Node {
   additionalImagesUrls: [String!]
   shootingDate: Time
   geometry: Geometry
+  author: Person
   collection: Collection!
   protectedArea: ProtectedArea
   location: Location
@@ -7367,6 +7385,9 @@ input ProtectedAreaPictureWhereInput {
   geometryLTE: Geometry
   geometryIsNil: Boolean
   geometryNotNil: Boolean
+  """author edge predicates"""
+  hasAuthor: Boolean
+  hasAuthorWith: [PersonWhereInput!]
   """collection edge predicates"""
   hasCollection: Boolean
   hasCollectionWith: [CollectionWhereInput!]
@@ -10000,6 +10021,9 @@ input UpdateCollectionInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addPetroglyphIDs: [ID!]
+  removePetroglyphIDs: [ID!]
+  clearPetroglyphs: Boolean
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
@@ -10461,6 +10485,9 @@ input UpdatePersonInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addProtectedAreaPictureIDs: [ID!]
+  removeProtectedAreaPictureIDs: [ID!]
+  clearProtectedAreaPictures: Boolean
   addDonatedArtifactIDs: [ID!]
   removeDonatedArtifactIDs: [ID!]
   clearDonatedArtifacts: Boolean
@@ -10582,6 +10609,7 @@ input UpdatePetroglyphInput {
   clearAccountingDocumentationAddress: Boolean
   accountingDocumentationAuthorID: ID
   clearAccountingDocumentationAuthor: Boolean
+  collectionID: ID
 }
 """
 UpdateProjectInput is used for update Project object.
@@ -10697,6 +10725,8 @@ input UpdateProtectedAreaPictureInput {
   clearShootingDate: Boolean
   geometry: Geometry
   clearGeometry: Boolean
+  authorID: ID
+  clearAuthor: Boolean
   collectionID: ID
   protectedAreaID: ID
   clearProtectedArea: Boolean

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
@@ -92,6 +93,7 @@ type Petroglyph struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PetroglyphQuery when eager-loading is set.
 	Edges                                         PetroglyphEdges `json:"edges"`
+	collection_petroglyphs                        *int
 	culture_petroglyphs                           *int
 	location_petroglyphs_accounting_documentation *int
 	model_petroglyphs                             *int
@@ -119,11 +121,13 @@ type PetroglyphEdges struct {
 	AccountingDocumentationAddress *Location `json:"accounting_documentation_address,omitempty"`
 	// AccountingDocumentationAuthor holds the value of the accounting_documentation_author edge.
 	AccountingDocumentationAuthor *Person `json:"accounting_documentation_author,omitempty"`
+	// Collection holds the value of the collection edge.
+	Collection *Collection `json:"collection,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
 	namedPublications map[string][]*Publication
 	namedTechniques   map[string][]*Technique
@@ -225,6 +229,19 @@ func (e PetroglyphEdges) AccountingDocumentationAuthorOrErr() (*Person, error) {
 	return nil, &NotLoadedError{edge: "accounting_documentation_author"}
 }
 
+// CollectionOrErr returns the Collection value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PetroglyphEdges) CollectionOrErr() (*Collection, error) {
+	if e.loadedTypes[8] {
+		if e.Collection == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: collection.Label}
+		}
+		return e.Collection, nil
+	}
+	return nil, &NotLoadedError{edge: "collection"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Petroglyph) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -242,17 +259,19 @@ func (*Petroglyph) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case petroglyph.FieldCreatedAt, petroglyph.FieldUpdatedAt, petroglyph.FieldDeletedAt, petroglyph.FieldAccountingDocumentationDate:
 			values[i] = new(sql.NullTime)
-		case petroglyph.ForeignKeys[0]: // culture_petroglyphs
+		case petroglyph.ForeignKeys[0]: // collection_petroglyphs
 			values[i] = new(sql.NullInt64)
-		case petroglyph.ForeignKeys[1]: // location_petroglyphs_accounting_documentation
+		case petroglyph.ForeignKeys[1]: // culture_petroglyphs
 			values[i] = new(sql.NullInt64)
-		case petroglyph.ForeignKeys[2]: // model_petroglyphs
+		case petroglyph.ForeignKeys[2]: // location_petroglyphs_accounting_documentation
 			values[i] = new(sql.NullInt64)
-		case petroglyph.ForeignKeys[3]: // mound_petroglyphs
+		case petroglyph.ForeignKeys[3]: // model_petroglyphs
 			values[i] = new(sql.NullInt64)
-		case petroglyph.ForeignKeys[4]: // person_petroglyphs_accounting_documentation
+		case petroglyph.ForeignKeys[4]: // mound_petroglyphs
 			values[i] = new(sql.NullInt64)
-		case petroglyph.ForeignKeys[5]: // region_petroglyphs
+		case petroglyph.ForeignKeys[5]: // person_petroglyphs_accounting_documentation
+			values[i] = new(sql.NullInt64)
+		case petroglyph.ForeignKeys[6]: // region_petroglyphs
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -472,40 +491,47 @@ func (pe *Petroglyph) assignValues(columns []string, values []any) error {
 			}
 		case petroglyph.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field collection_petroglyphs", value)
+			} else if value.Valid {
+				pe.collection_petroglyphs = new(int)
+				*pe.collection_petroglyphs = int(value.Int64)
+			}
+		case petroglyph.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field culture_petroglyphs", value)
 			} else if value.Valid {
 				pe.culture_petroglyphs = new(int)
 				*pe.culture_petroglyphs = int(value.Int64)
 			}
-		case petroglyph.ForeignKeys[1]:
+		case petroglyph.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field location_petroglyphs_accounting_documentation", value)
 			} else if value.Valid {
 				pe.location_petroglyphs_accounting_documentation = new(int)
 				*pe.location_petroglyphs_accounting_documentation = int(value.Int64)
 			}
-		case petroglyph.ForeignKeys[2]:
+		case petroglyph.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field model_petroglyphs", value)
 			} else if value.Valid {
 				pe.model_petroglyphs = new(int)
 				*pe.model_petroglyphs = int(value.Int64)
 			}
-		case petroglyph.ForeignKeys[3]:
+		case petroglyph.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field mound_petroglyphs", value)
 			} else if value.Valid {
 				pe.mound_petroglyphs = new(int)
 				*pe.mound_petroglyphs = int(value.Int64)
 			}
-		case petroglyph.ForeignKeys[4]:
+		case petroglyph.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field person_petroglyphs_accounting_documentation", value)
 			} else if value.Valid {
 				pe.person_petroglyphs_accounting_documentation = new(int)
 				*pe.person_petroglyphs_accounting_documentation = int(value.Int64)
 			}
-		case petroglyph.ForeignKeys[5]:
+		case petroglyph.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field region_petroglyphs", value)
 			} else if value.Valid {
@@ -563,6 +589,11 @@ func (pe *Petroglyph) QueryAccountingDocumentationAddress() *LocationQuery {
 // QueryAccountingDocumentationAuthor queries the "accounting_documentation_author" edge of the Petroglyph entity.
 func (pe *Petroglyph) QueryAccountingDocumentationAuthor() *PersonQuery {
 	return NewPetroglyphClient(pe.config).QueryAccountingDocumentationAuthor(pe)
+}
+
+// QueryCollection queries the "collection" edge of the Petroglyph entity.
+func (pe *Petroglyph) QueryCollection() *CollectionQuery {
+	return NewPetroglyphClient(pe.config).QueryCollection(pe)
 }
 
 // Update returns a builder for updating this Petroglyph.

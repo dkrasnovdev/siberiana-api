@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
@@ -443,6 +444,21 @@ func (pu *PersonUpdate) AddArtifacts(a ...*Artifact) *PersonUpdate {
 	return pu.AddArtifactIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (pu *PersonUpdate) AddProtectedAreaPictureIDs(ids ...int) *PersonUpdate {
+	pu.mutation.AddProtectedAreaPictureIDs(ids...)
+	return pu
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pu *PersonUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddProtectedAreaPictureIDs(ids...)
+}
+
 // AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by IDs.
 func (pu *PersonUpdate) AddDonatedArtifactIDs(ids ...int) *PersonUpdate {
 	pu.mutation.AddDonatedArtifactIDs(ids...)
@@ -618,6 +634,27 @@ func (pu *PersonUpdate) RemoveArtifacts(a ...*Artifact) *PersonUpdate {
 		ids[i] = a[i].ID
 	}
 	return pu.RemoveArtifactIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pu *PersonUpdate) ClearProtectedAreaPictures() *PersonUpdate {
+	pu.mutation.ClearProtectedAreaPictures()
+	return pu
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (pu *PersonUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *PersonUpdate {
+	pu.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return pu
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (pu *PersonUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearDonatedArtifacts clears all "donated_artifacts" edges to the Artifact entity.
@@ -1070,6 +1107,51 @@ func (pu *PersonUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.ProtectedAreaPicturesTable,
+			Columns: []string{person.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !pu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.ProtectedAreaPicturesTable,
+			Columns: []string{person.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.ProtectedAreaPicturesTable,
+			Columns: []string{person.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1801,6 +1883,21 @@ func (puo *PersonUpdateOne) AddArtifacts(a ...*Artifact) *PersonUpdateOne {
 	return puo.AddArtifactIDs(ids...)
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (puo *PersonUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return puo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (puo *PersonUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddProtectedAreaPictureIDs(ids...)
+}
+
 // AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by IDs.
 func (puo *PersonUpdateOne) AddDonatedArtifactIDs(ids ...int) *PersonUpdateOne {
 	puo.mutation.AddDonatedArtifactIDs(ids...)
@@ -1976,6 +2073,27 @@ func (puo *PersonUpdateOne) RemoveArtifacts(a ...*Artifact) *PersonUpdateOne {
 		ids[i] = a[i].ID
 	}
 	return puo.RemoveArtifactIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (puo *PersonUpdateOne) ClearProtectedAreaPictures() *PersonUpdateOne {
+	puo.mutation.ClearProtectedAreaPictures()
+	return puo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (puo *PersonUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *PersonUpdateOne {
+	puo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return puo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (puo *PersonUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // ClearDonatedArtifacts clears all "donated_artifacts" edges to the Artifact entity.
@@ -2458,6 +2576,51 @@ func (puo *PersonUpdateOne) sqlSave(ctx context.Context) (_node *Person, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.ProtectedAreaPicturesTable,
+			Columns: []string{person.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !puo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.ProtectedAreaPicturesTable,
+			Columns: []string{person.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.ProtectedAreaPicturesTable,
+			Columns: []string{person.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -71,6 +71,7 @@ func (ProtectedAreaPicture) Fields() []ent.Field {
 // Edges of the ProtectedAreaPicture.
 func (ProtectedAreaPicture) Edges() []ent.Edge {
 	return []ent.Edge{
+		edge.From("author", Person.Type).Ref("protected_area_pictures").Unique(),
 		edge.From("collection", Collection.Type).Ref("protected_area_pictures").Unique().Required(),
 		edge.From("protected_area", ProtectedArea.Type).Ref("protected_area_pictures").Unique(),
 		edge.From("location", Location.Type).Ref("protected_area_pictures").Unique(),

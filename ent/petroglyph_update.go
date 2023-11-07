@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
@@ -835,6 +836,17 @@ func (pu *PetroglyphUpdate) SetAccountingDocumentationAuthor(p *Person) *Petrogl
 	return pu.SetAccountingDocumentationAuthorID(p.ID)
 }
 
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (pu *PetroglyphUpdate) SetCollectionID(id int) *PetroglyphUpdate {
+	pu.mutation.SetCollectionID(id)
+	return pu
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (pu *PetroglyphUpdate) SetCollection(c *Collection) *PetroglyphUpdate {
+	return pu.SetCollectionID(c.ID)
+}
+
 // Mutation returns the PetroglyphMutation object of the builder.
 func (pu *PetroglyphUpdate) Mutation() *PetroglyphMutation {
 	return pu.mutation
@@ -918,6 +930,12 @@ func (pu *PetroglyphUpdate) ClearAccountingDocumentationAuthor() *PetroglyphUpda
 	return pu
 }
 
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (pu *PetroglyphUpdate) ClearCollection() *PetroglyphUpdate {
+	pu.mutation.ClearCollection()
+	return pu
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *PetroglyphUpdate) Save(ctx context.Context) (int, error) {
 	if err := pu.defaults(); err != nil {
@@ -966,6 +984,9 @@ func (pu *PetroglyphUpdate) check() error {
 		if err := petroglyph.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Petroglyph.status": %w`, err)}
 		}
+	}
+	if _, ok := pu.mutation.CollectionID(); pu.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Petroglyph.collection"`)
 	}
 	return nil
 }
@@ -1448,6 +1469,35 @@ func (pu *PetroglyphUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   petroglyph.CollectionTable,
+			Columns: []string{petroglyph.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   petroglyph.CollectionTable,
+			Columns: []string{petroglyph.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2272,6 +2322,17 @@ func (puo *PetroglyphUpdateOne) SetAccountingDocumentationAuthor(p *Person) *Pet
 	return puo.SetAccountingDocumentationAuthorID(p.ID)
 }
 
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (puo *PetroglyphUpdateOne) SetCollectionID(id int) *PetroglyphUpdateOne {
+	puo.mutation.SetCollectionID(id)
+	return puo
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (puo *PetroglyphUpdateOne) SetCollection(c *Collection) *PetroglyphUpdateOne {
+	return puo.SetCollectionID(c.ID)
+}
+
 // Mutation returns the PetroglyphMutation object of the builder.
 func (puo *PetroglyphUpdateOne) Mutation() *PetroglyphMutation {
 	return puo.mutation
@@ -2355,6 +2416,12 @@ func (puo *PetroglyphUpdateOne) ClearAccountingDocumentationAuthor() *Petroglyph
 	return puo
 }
 
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (puo *PetroglyphUpdateOne) ClearCollection() *PetroglyphUpdateOne {
+	puo.mutation.ClearCollection()
+	return puo
+}
+
 // Where appends a list predicates to the PetroglyphUpdate builder.
 func (puo *PetroglyphUpdateOne) Where(ps ...predicate.Petroglyph) *PetroglyphUpdateOne {
 	puo.mutation.Where(ps...)
@@ -2416,6 +2483,9 @@ func (puo *PetroglyphUpdateOne) check() error {
 		if err := petroglyph.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Petroglyph.status": %w`, err)}
 		}
+	}
+	if _, ok := puo.mutation.CollectionID(); puo.mutation.CollectionCleared() && !ok {
+		return errors.New(`ent: clearing a required unique edge "Petroglyph.collection"`)
 	}
 	return nil
 }
@@ -2915,6 +2985,35 @@ func (puo *PetroglyphUpdateOne) sqlSave(ctx context.Context) (_node *Petroglyph,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.CollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   petroglyph.CollectionTable,
+			Columns: []string{petroglyph.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   petroglyph.CollectionTable,
+			Columns: []string{petroglyph.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

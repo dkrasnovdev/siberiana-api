@@ -74,6 +74,8 @@ type PersonEdges struct {
 	Art []*Art `json:"art,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// DonatedArtifacts holds the value of the donated_artifacts edge.
 	DonatedArtifacts []*Artifact `json:"donated_artifacts,omitempty"`
 	// PetroglyphsAccountingDocumentation holds the value of the petroglyphs_accounting_documentation edge.
@@ -90,13 +92,14 @@ type PersonEdges struct {
 	Affiliation *Organization `json:"affiliation,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [11]map[string]int
 
 	namedCollections                        map[string][]*Collection
 	namedArt                                map[string][]*Art
 	namedArtifacts                          map[string][]*Artifact
+	namedProtectedAreaPictures              map[string][]*ProtectedAreaPicture
 	namedDonatedArtifacts                   map[string][]*Artifact
 	namedPetroglyphsAccountingDocumentation map[string][]*Petroglyph
 	namedBooks                              map[string][]*Book
@@ -132,10 +135,19 @@ func (e PersonEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[3] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
+}
+
 // DonatedArtifactsOrErr returns the DonatedArtifacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) DonatedArtifactsOrErr() ([]*Artifact, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.DonatedArtifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "donated_artifacts"}
@@ -144,7 +156,7 @@ func (e PersonEdges) DonatedArtifactsOrErr() ([]*Artifact, error) {
 // PetroglyphsAccountingDocumentationOrErr returns the PetroglyphsAccountingDocumentation value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) PetroglyphsAccountingDocumentationOrErr() ([]*Petroglyph, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.PetroglyphsAccountingDocumentation, nil
 	}
 	return nil, &NotLoadedError{edge: "petroglyphs_accounting_documentation"}
@@ -153,7 +165,7 @@ func (e PersonEdges) PetroglyphsAccountingDocumentationOrErr() ([]*Petroglyph, e
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
@@ -162,7 +174,7 @@ func (e PersonEdges) BooksOrErr() ([]*Book, error) {
 // VisitsOrErr returns the Visits value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) VisitsOrErr() ([]*Visit, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Visits, nil
 	}
 	return nil, &NotLoadedError{edge: "visits"}
@@ -171,7 +183,7 @@ func (e PersonEdges) VisitsOrErr() ([]*Visit, error) {
 // ProjectsOrErr returns the Projects value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Projects, nil
 	}
 	return nil, &NotLoadedError{edge: "projects"}
@@ -180,7 +192,7 @@ func (e PersonEdges) ProjectsOrErr() ([]*Project, error) {
 // PublicationsOrErr returns the Publications value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Publications, nil
 	}
 	return nil, &NotLoadedError{edge: "publications"}
@@ -189,7 +201,7 @@ func (e PersonEdges) PublicationsOrErr() ([]*Publication, error) {
 // AffiliationOrErr returns the Affiliation value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PersonEdges) AffiliationOrErr() (*Organization, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		if e.Affiliation == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: organization.Label}
@@ -396,6 +408,11 @@ func (pe *Person) QueryArtifacts() *ArtifactQuery {
 	return NewPersonClient(pe.config).QueryArtifacts(pe)
 }
 
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Person entity.
+func (pe *Person) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewPersonClient(pe.config).QueryProtectedAreaPictures(pe)
+}
+
 // QueryDonatedArtifacts queries the "donated_artifacts" edge of the Person entity.
 func (pe *Person) QueryDonatedArtifacts() *ArtifactQuery {
 	return NewPersonClient(pe.config).QueryDonatedArtifacts(pe)
@@ -586,6 +603,30 @@ func (pe *Person) appendNamedArtifacts(name string, edges ...*Artifact) {
 		pe.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		pe.Edges.namedArtifacts[name] = append(pe.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Person) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if pe.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Person) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if pe.Edges.namedProtectedAreaPictures == nil {
+		pe.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		pe.Edges.namedProtectedAreaPictures[name] = append(pe.Edges.namedProtectedAreaPictures[name], edges...)
 	}
 }
 

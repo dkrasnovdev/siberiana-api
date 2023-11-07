@@ -64,6 +64,8 @@ const (
 	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
+	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeDonatedArtifacts holds the string denoting the donated_artifacts edge name in mutations.
 	EdgeDonatedArtifacts = "donated_artifacts"
 	// EdgePetroglyphsAccountingDocumentation holds the string denoting the petroglyphs_accounting_documentation edge name in mutations.
@@ -97,6 +99,13 @@ const (
 	// ArtifactsInverseTable is the table name for the Artifact entity.
 	// It exists in this package in order to avoid circular dependency with the "artifact" package.
 	ArtifactsInverseTable = "artifacts"
+	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesTable = "protected_area_pictures"
+	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedareapicture" package.
+	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
+	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
+	ProtectedAreaPicturesColumn = "person_protected_area_pictures"
 	// DonatedArtifactsTable is the table that holds the donated_artifacts relation/edge.
 	DonatedArtifactsTable = "artifacts"
 	// DonatedArtifactsInverseTable is the table name for the Artifact entity.
@@ -381,6 +390,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
+func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProtectedAreaPicturesStep(), opts...)
+	}
+}
+
+// ByProtectedAreaPictures orders the results by protected_area_pictures terms.
+func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaPicturesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByDonatedArtifactsCount orders the results by donated_artifacts count.
 func ByDonatedArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -490,6 +513,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
+	)
+}
+func newProtectedAreaPicturesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
 	)
 }
 func newDonatedArtifactsStep() *sqlgraph.Step {

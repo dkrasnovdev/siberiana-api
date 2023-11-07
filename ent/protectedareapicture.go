@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -61,6 +62,7 @@ type ProtectedAreaPicture struct {
 	district_protected_area_pictures       *int
 	license_protected_area_pictures        *int
 	location_protected_area_pictures       *int
+	person_protected_area_pictures         *int
 	protected_area_protected_area_pictures *int
 	region_protected_area_pictures         *int
 	settlement_protected_area_pictures     *int
@@ -69,6 +71,8 @@ type ProtectedAreaPicture struct {
 
 // ProtectedAreaPictureEdges holds the relations/edges for other nodes in the graph.
 type ProtectedAreaPictureEdges struct {
+	// Author holds the value of the author edge.
+	Author *Person `json:"author,omitempty"`
 	// Collection holds the value of the collection edge.
 	Collection *Collection `json:"collection,omitempty"`
 	// ProtectedArea holds the value of the protected_area edge.
@@ -87,15 +91,28 @@ type ProtectedAreaPictureEdges struct {
 	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
+}
+
+// AuthorOrErr returns the Author value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProtectedAreaPictureEdges) AuthorOrErr() (*Person, error) {
+	if e.loadedTypes[0] {
+		if e.Author == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: person.Label}
+		}
+		return e.Author, nil
+	}
+	return nil, &NotLoadedError{edge: "author"}
 }
 
 // CollectionOrErr returns the Collection value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) CollectionOrErr() (*Collection, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		if e.Collection == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: collection.Label}
@@ -108,7 +125,7 @@ func (e ProtectedAreaPictureEdges) CollectionOrErr() (*Collection, error) {
 // ProtectedAreaOrErr returns the ProtectedArea value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) ProtectedAreaOrErr() (*ProtectedArea, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		if e.ProtectedArea == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: protectedarea.Label}
@@ -121,7 +138,7 @@ func (e ProtectedAreaPictureEdges) ProtectedAreaOrErr() (*ProtectedArea, error) 
 // LocationOrErr returns the Location value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) LocationOrErr() (*Location, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		if e.Location == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: location.Label}
@@ -134,7 +151,7 @@ func (e ProtectedAreaPictureEdges) LocationOrErr() (*Location, error) {
 // LicenseOrErr returns the License value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) LicenseOrErr() (*License, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		if e.License == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: license.Label}
@@ -147,7 +164,7 @@ func (e ProtectedAreaPictureEdges) LicenseOrErr() (*License, error) {
 // CountryOrErr returns the Country value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) CountryOrErr() (*Country, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		if e.Country == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: country.Label}
@@ -160,7 +177,7 @@ func (e ProtectedAreaPictureEdges) CountryOrErr() (*Country, error) {
 // SettlementOrErr returns the Settlement value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) SettlementOrErr() (*Settlement, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		if e.Settlement == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: settlement.Label}
@@ -173,7 +190,7 @@ func (e ProtectedAreaPictureEdges) SettlementOrErr() (*Settlement, error) {
 // DistrictOrErr returns the District value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) DistrictOrErr() (*District, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		if e.District == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: district.Label}
@@ -186,7 +203,7 @@ func (e ProtectedAreaPictureEdges) DistrictOrErr() (*District, error) {
 // RegionOrErr returns the Region value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProtectedAreaPictureEdges) RegionOrErr() (*Region, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		if e.Region == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: region.Label}
@@ -221,11 +238,13 @@ func (*ProtectedAreaPicture) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case protectedareapicture.ForeignKeys[4]: // location_protected_area_pictures
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.ForeignKeys[5]: // protected_area_protected_area_pictures
+		case protectedareapicture.ForeignKeys[5]: // person_protected_area_pictures
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.ForeignKeys[6]: // region_protected_area_pictures
+		case protectedareapicture.ForeignKeys[6]: // protected_area_protected_area_pictures
 			values[i] = new(sql.NullInt64)
-		case protectedareapicture.ForeignKeys[7]: // settlement_protected_area_pictures
+		case protectedareapicture.ForeignKeys[7]: // region_protected_area_pictures
+			values[i] = new(sql.NullInt64)
+		case protectedareapicture.ForeignKeys[8]: // settlement_protected_area_pictures
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -366,19 +385,26 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 			}
 		case protectedareapicture.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field person_protected_area_pictures", value)
+			} else if value.Valid {
+				pap.person_protected_area_pictures = new(int)
+				*pap.person_protected_area_pictures = int(value.Int64)
+			}
+		case protectedareapicture.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field protected_area_protected_area_pictures", value)
 			} else if value.Valid {
 				pap.protected_area_protected_area_pictures = new(int)
 				*pap.protected_area_protected_area_pictures = int(value.Int64)
 			}
-		case protectedareapicture.ForeignKeys[6]:
+		case protectedareapicture.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field region_protected_area_pictures", value)
 			} else if value.Valid {
 				pap.region_protected_area_pictures = new(int)
 				*pap.region_protected_area_pictures = int(value.Int64)
 			}
-		case protectedareapicture.ForeignKeys[7]:
+		case protectedareapicture.ForeignKeys[8]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for edge-field settlement_protected_area_pictures", value)
 			} else if value.Valid {
@@ -396,6 +422,11 @@ func (pap *ProtectedAreaPicture) assignValues(columns []string, values []any) er
 // This includes values selected through modifiers, order, etc.
 func (pap *ProtectedAreaPicture) Value(name string) (ent.Value, error) {
 	return pap.selectValues.Get(name)
+}
+
+// QueryAuthor queries the "author" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryAuthor() *PersonQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryAuthor(pap)
 }
 
 // QueryCollection queries the "collection" edge of the ProtectedAreaPicture entity.

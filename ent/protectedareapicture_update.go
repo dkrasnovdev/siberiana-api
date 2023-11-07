@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -262,6 +263,25 @@ func (papu *ProtectedAreaPictureUpdate) ClearGeometry() *ProtectedAreaPictureUpd
 	return papu
 }
 
+// SetAuthorID sets the "author" edge to the Person entity by ID.
+func (papu *ProtectedAreaPictureUpdate) SetAuthorID(id int) *ProtectedAreaPictureUpdate {
+	papu.mutation.SetAuthorID(id)
+	return papu
+}
+
+// SetNillableAuthorID sets the "author" edge to the Person entity by ID if the given value is not nil.
+func (papu *ProtectedAreaPictureUpdate) SetNillableAuthorID(id *int) *ProtectedAreaPictureUpdate {
+	if id != nil {
+		papu = papu.SetAuthorID(*id)
+	}
+	return papu
+}
+
+// SetAuthor sets the "author" edge to the Person entity.
+func (papu *ProtectedAreaPictureUpdate) SetAuthor(p *Person) *ProtectedAreaPictureUpdate {
+	return papu.SetAuthorID(p.ID)
+}
+
 // SetCollectionID sets the "collection" edge to the Collection entity by ID.
 func (papu *ProtectedAreaPictureUpdate) SetCollectionID(id int) *ProtectedAreaPictureUpdate {
 	papu.mutation.SetCollectionID(id)
@@ -409,6 +429,12 @@ func (papu *ProtectedAreaPictureUpdate) SetRegion(r *Region) *ProtectedAreaPictu
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papu *ProtectedAreaPictureUpdate) Mutation() *ProtectedAreaPictureMutation {
 	return papu.mutation
+}
+
+// ClearAuthor clears the "author" edge to the Person entity.
+func (papu *ProtectedAreaPictureUpdate) ClearAuthor() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearAuthor()
+	return papu
 }
 
 // ClearCollection clears the "collection" edge to the Collection entity.
@@ -599,6 +625,35 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if papu.mutation.GeometryCleared() {
 		_spec.ClearField(protectedareapicture.FieldGeometry, field.TypeOther)
+	}
+	if papu.mutation.AuthorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.AuthorTable,
+			Columns: []string{protectedareapicture.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papu.mutation.AuthorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.AuthorTable,
+			Columns: []string{protectedareapicture.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if papu.mutation.CollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1076,6 +1131,25 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearGeometry() *ProtectedAreaPictur
 	return papuo
 }
 
+// SetAuthorID sets the "author" edge to the Person entity by ID.
+func (papuo *ProtectedAreaPictureUpdateOne) SetAuthorID(id int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.SetAuthorID(id)
+	return papuo
+}
+
+// SetNillableAuthorID sets the "author" edge to the Person entity by ID if the given value is not nil.
+func (papuo *ProtectedAreaPictureUpdateOne) SetNillableAuthorID(id *int) *ProtectedAreaPictureUpdateOne {
+	if id != nil {
+		papuo = papuo.SetAuthorID(*id)
+	}
+	return papuo
+}
+
+// SetAuthor sets the "author" edge to the Person entity.
+func (papuo *ProtectedAreaPictureUpdateOne) SetAuthor(p *Person) *ProtectedAreaPictureUpdateOne {
+	return papuo.SetAuthorID(p.ID)
+}
+
 // SetCollectionID sets the "collection" edge to the Collection entity by ID.
 func (papuo *ProtectedAreaPictureUpdateOne) SetCollectionID(id int) *ProtectedAreaPictureUpdateOne {
 	papuo.mutation.SetCollectionID(id)
@@ -1223,6 +1297,12 @@ func (papuo *ProtectedAreaPictureUpdateOne) SetRegion(r *Region) *ProtectedAreaP
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papuo *ProtectedAreaPictureUpdateOne) Mutation() *ProtectedAreaPictureMutation {
 	return papuo.mutation
+}
+
+// ClearAuthor clears the "author" edge to the Person entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearAuthor() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearAuthor()
+	return papuo
 }
 
 // ClearCollection clears the "collection" edge to the Collection entity.
@@ -1443,6 +1523,35 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if papuo.mutation.GeometryCleared() {
 		_spec.ClearField(protectedareapicture.FieldGeometry, field.TypeOther)
+	}
+	if papuo.mutation.AuthorCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.AuthorTable,
+			Columns: []string{protectedareapicture.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := papuo.mutation.AuthorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.AuthorTable,
+			Columns: []string{protectedareapicture.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if papuo.mutation.CollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{

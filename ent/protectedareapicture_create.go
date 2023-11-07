@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -201,6 +202,25 @@ func (papc *ProtectedAreaPictureCreate) SetNillableGeometry(t *types.Geometry) *
 		papc.SetGeometry(*t)
 	}
 	return papc
+}
+
+// SetAuthorID sets the "author" edge to the Person entity by ID.
+func (papc *ProtectedAreaPictureCreate) SetAuthorID(id int) *ProtectedAreaPictureCreate {
+	papc.mutation.SetAuthorID(id)
+	return papc
+}
+
+// SetNillableAuthorID sets the "author" edge to the Person entity by ID if the given value is not nil.
+func (papc *ProtectedAreaPictureCreate) SetNillableAuthorID(id *int) *ProtectedAreaPictureCreate {
+	if id != nil {
+		papc = papc.SetAuthorID(*id)
+	}
+	return papc
+}
+
+// SetAuthor sets the "author" edge to the Person entity.
+func (papc *ProtectedAreaPictureCreate) SetAuthor(p *Person) *ProtectedAreaPictureCreate {
+	return papc.SetAuthorID(p.ID)
 }
 
 // SetCollectionID sets the "collection" edge to the Collection entity by ID.
@@ -498,6 +518,23 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 	if value, ok := papc.mutation.Geometry(); ok {
 		_spec.SetField(protectedareapicture.FieldGeometry, field.TypeOther, value)
 		_node.Geometry = &value
+	}
+	if nodes := papc.mutation.AuthorIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   protectedareapicture.AuthorTable,
+			Columns: []string{protectedareapicture.AuthorColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(person.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.person_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := papc.mutation.CollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -85,6 +85,7 @@ func (Person) Edges() []ent.Edge {
 		edge.To("collections", Collection.Type),
 		edge.To("art", Art.Type),
 		edge.To("artifacts", Artifact.Type),
+		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
 		edge.To("donated_artifacts", Artifact.Type),
 		edge.To("petroglyphs_accounting_documentation", Petroglyph.Type),
 		edge.To("books", Book.Type),

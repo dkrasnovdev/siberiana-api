@@ -46,6 +46,8 @@ const (
 	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
+	EdgePetroglyphs = "petroglyphs"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
@@ -70,6 +72,13 @@ const (
 	ArtifactsInverseTable = "artifacts"
 	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
 	ArtifactsColumn = "collection_artifacts"
+	// PetroglyphsTable is the table that holds the petroglyphs relation/edge.
+	PetroglyphsTable = "petroglyphs"
+	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsInverseTable = "petroglyphs"
+	// PetroglyphsColumn is the table column denoting the petroglyphs relation/edge.
+	PetroglyphsColumn = "collection_petroglyphs"
 	// BooksTable is the table that holds the books relation/edge.
 	BooksTable = "books"
 	// BooksInverseTable is the table name for the Book entity.
@@ -167,6 +176,7 @@ const (
 	TypeArtifacts             Type = "artifacts"
 	TypeBooks                 Type = "books"
 	TypeProtectedAreaPictures Type = "protected_area_pictures"
+	TypePetroglyphs           Type = "petroglyphs"
 )
 
 func (_type Type) String() string {
@@ -176,7 +186,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeArt, TypeArtifacts, TypeBooks, TypeProtectedAreaPictures:
+	case TypeArt, TypeArtifacts, TypeBooks, TypeProtectedAreaPictures, TypePetroglyphs:
 		return nil
 	default:
 		return fmt.Errorf("collection: invalid enum value for type field: %q", _type)
@@ -274,6 +284,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPetroglyphsCount orders the results by petroglyphs count.
+func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsStep(), opts...)
+	}
+}
+
+// ByPetroglyphs orders the results by petroglyphs terms.
+func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByBooksCount orders the results by books count.
 func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -334,6 +358,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newPetroglyphsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PetroglyphsTable, PetroglyphsColumn),
 	)
 }
 func newBooksStep() *sqlgraph.Step {

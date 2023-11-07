@@ -21,6 +21,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
@@ -35,6 +36,7 @@ type PersonQuery struct {
 	withCollections                             *CollectionQuery
 	withArt                                     *ArtQuery
 	withArtifacts                               *ArtifactQuery
+	withProtectedAreaPictures                   *ProtectedAreaPictureQuery
 	withDonatedArtifacts                        *ArtifactQuery
 	withPetroglyphsAccountingDocumentation      *PetroglyphQuery
 	withBooks                                   *BookQuery
@@ -48,6 +50,7 @@ type PersonQuery struct {
 	withNamedCollections                        map[string]*CollectionQuery
 	withNamedArt                                map[string]*ArtQuery
 	withNamedArtifacts                          map[string]*ArtifactQuery
+	withNamedProtectedAreaPictures              map[string]*ProtectedAreaPictureQuery
 	withNamedDonatedArtifacts                   map[string]*ArtifactQuery
 	withNamedPetroglyphsAccountingDocumentation map[string]*PetroglyphQuery
 	withNamedBooks                              map[string]*BookQuery
@@ -149,6 +152,28 @@ func (pq *PersonQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.ArtifactsTable, person.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (pq *PersonQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.ProtectedAreaPicturesTable, person.ProtectedAreaPicturesColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -505,6 +530,7 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		withCollections:                        pq.withCollections.Clone(),
 		withArt:                                pq.withArt.Clone(),
 		withArtifacts:                          pq.withArtifacts.Clone(),
+		withProtectedAreaPictures:              pq.withProtectedAreaPictures.Clone(),
 		withDonatedArtifacts:                   pq.withDonatedArtifacts.Clone(),
 		withPetroglyphsAccountingDocumentation: pq.withPetroglyphsAccountingDocumentation.Clone(),
 		withBooks:                              pq.withBooks.Clone(),
@@ -548,6 +574,17 @@ func (pq *PersonQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *PersonQuery 
 		opt(query)
 	}
 	pq.withArtifacts = query
+	return pq
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *PersonQuery {
+	query := (&ProtectedAreaPictureClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withProtectedAreaPictures = query
 	return pq
 }
 
@@ -713,10 +750,11 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
 			pq.withCollections != nil,
 			pq.withArt != nil,
 			pq.withArtifacts != nil,
+			pq.withProtectedAreaPictures != nil,
 			pq.withDonatedArtifacts != nil,
 			pq.withPetroglyphsAccountingDocumentation != nil,
 			pq.withBooks != nil,
@@ -771,6 +809,15 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.Edges.Artifacts = []*Artifact{} },
 			func(n *Person, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withProtectedAreaPictures; query != nil {
+		if err := pq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Person) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *Person, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -842,6 +889,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.appendNamedArtifacts(name) },
 			func(n *Person, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedProtectedAreaPictures {
+		if err := pq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Person) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *Person, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1045,6 +1099,37 @@ func (pq *PersonQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, 
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (pq *PersonQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*Person, init func(*Person), assign func(*Person, *ProtectedAreaPicture)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Person)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(person.ProtectedAreaPicturesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.person_protected_area_pictures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "person_protected_area_pictures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "person_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1510,6 +1595,20 @@ func (pq *PersonQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQue
 		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *PersonQuery {
+	query := (&ProtectedAreaPictureClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedProtectedAreaPictures == nil {
+		pq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	pq.withNamedProtectedAreaPictures[name] = query
 	return pq
 }
 

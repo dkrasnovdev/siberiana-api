@@ -1766,6 +1766,18 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
+				*wq = *query
+			})
 		case "books":
 			var (
 				alias = field.Alias
@@ -4349,6 +4361,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			pe.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "protectedAreaPictures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProtectedAreaPictureClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+				*wq = *query
+			})
 		case "donatedArtifacts":
 			var (
 				alias = field.Alias
@@ -4837,6 +4861,16 @@ func (pe *PetroglyphQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 				return err
 			}
 			pe.withAccountingDocumentationAuthor = query
+		case "collection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			pe.withCollection = query
 		case "createdAt":
 			if _, ok := fieldSeen[petroglyph.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, petroglyph.FieldCreatedAt)
@@ -5570,6 +5604,16 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "author":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: pap.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			pap.withAuthor = query
 		case "collection":
 			var (
 				alias = field.Alias

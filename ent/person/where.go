@@ -1344,6 +1344,29 @@ func HasArtifactsWith(preds ...predicate.Artifact) predicate.Person {
 	})
 }
 
+// HasProtectedAreaPictures applies the HasEdge predicate on the "protected_area_pictures" edge.
+func HasProtectedAreaPictures() predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProtectedAreaPicturesWith applies the HasEdge predicate on the "protected_area_pictures" edge with a given conditions (other predicates).
+func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predicate.Person {
+	return predicate.Person(func(s *sql.Selector) {
+		step := newProtectedAreaPicturesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasDonatedArtifacts applies the HasEdge predicate on the "donated_artifacts" edge.
 func HasDonatedArtifacts() predicate.Person {
 	return predicate.Person(func(s *sql.Selector) {

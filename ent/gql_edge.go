@@ -432,6 +432,18 @@ func (c *Collection) Artifacts(ctx context.Context) (result []*Artifact, err err
 	return result, err
 }
 
+func (c *Collection) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryPetroglyphs().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Collection) Books(ctx context.Context) (result []*Book, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
@@ -940,6 +952,18 @@ func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	return result, err
 }
 
+func (pe *Person) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryProtectedAreaPictures().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) DonatedArtifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedDonatedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1104,6 +1128,14 @@ func (pe *Petroglyph) AccountingDocumentationAuthor(ctx context.Context) (*Perso
 	return result, MaskNotFound(err)
 }
 
+func (pe *Petroglyph) Collection(ctx context.Context) (*Collection, error) {
+	result, err := pe.Edges.CollectionOrErr()
+	if IsNotLoaded(err) {
+		result, err = pe.QueryCollection().Only(ctx)
+	}
+	return result, err
+}
+
 func (pr *Project) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pr.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1158,6 +1190,14 @@ func (pac *ProtectedAreaCategory) ProtectedAreas(ctx context.Context) (result []
 		result, err = pac.QueryProtectedAreas().All(ctx)
 	}
 	return result, err
+}
+
+func (pap *ProtectedAreaPicture) Author(ctx context.Context) (*Person, error) {
+	result, err := pap.Edges.AuthorOrErr()
+	if IsNotLoaded(err) {
+		result, err = pap.QueryAuthor().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (pap *ProtectedAreaPicture) Collection(ctx context.Context) (*Collection, error) {

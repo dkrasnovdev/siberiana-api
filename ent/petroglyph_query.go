@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
@@ -39,6 +40,7 @@ type PetroglyphQuery struct {
 	withRegion                         *RegionQuery
 	withAccountingDocumentationAddress *LocationQuery
 	withAccountingDocumentationAuthor  *PersonQuery
+	withCollection                     *CollectionQuery
 	withFKs                            bool
 	modifiers                          []func(*sql.Selector)
 	loadTotal                          []func(context.Context, []*Petroglyph) error
@@ -256,6 +258,28 @@ func (pq *PetroglyphQuery) QueryAccountingDocumentationAuthor() *PersonQuery {
 	return query
 }
 
+// QueryCollection chains the current query on the "collection" edge.
+func (pq *PetroglyphQuery) QueryCollection() *CollectionQuery {
+	query := (&CollectionClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, selector),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.CollectionTable, petroglyph.CollectionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Petroglyph entity from the query.
 // Returns a *NotFoundError when no Petroglyph was found.
 func (pq *PetroglyphQuery) First(ctx context.Context) (*Petroglyph, error) {
@@ -456,6 +480,7 @@ func (pq *PetroglyphQuery) Clone() *PetroglyphQuery {
 		withRegion:                         pq.withRegion.Clone(),
 		withAccountingDocumentationAddress: pq.withAccountingDocumentationAddress.Clone(),
 		withAccountingDocumentationAuthor:  pq.withAccountingDocumentationAuthor.Clone(),
+		withCollection:                     pq.withCollection.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -550,6 +575,17 @@ func (pq *PetroglyphQuery) WithAccountingDocumentationAuthor(opts ...func(*Perso
 	return pq
 }
 
+// WithCollection tells the query-builder to eager-load the nodes that are connected to
+// the "collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PetroglyphQuery) WithCollection(opts ...func(*CollectionQuery)) *PetroglyphQuery {
+	query := (&CollectionClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withCollection = query
+	return pq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -635,7 +671,7 @@ func (pq *PetroglyphQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 		nodes       = []*Petroglyph{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
 			pq.withCulturalAffiliation != nil,
 			pq.withModel != nil,
 			pq.withMound != nil,
@@ -644,9 +680,10 @@ func (pq *PetroglyphQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 			pq.withRegion != nil,
 			pq.withAccountingDocumentationAddress != nil,
 			pq.withAccountingDocumentationAuthor != nil,
+			pq.withCollection != nil,
 		}
 	)
-	if pq.withCulturalAffiliation != nil || pq.withModel != nil || pq.withMound != nil || pq.withRegion != nil || pq.withAccountingDocumentationAddress != nil || pq.withAccountingDocumentationAuthor != nil {
+	if pq.withCulturalAffiliation != nil || pq.withModel != nil || pq.withMound != nil || pq.withRegion != nil || pq.withAccountingDocumentationAddress != nil || pq.withAccountingDocumentationAuthor != nil || pq.withCollection != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -720,6 +757,12 @@ func (pq *PetroglyphQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 	if query := pq.withAccountingDocumentationAuthor; query != nil {
 		if err := pq.loadAccountingDocumentationAuthor(ctx, query, nodes, nil,
 			func(n *Petroglyph, e *Person) { n.Edges.AccountingDocumentationAuthor = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withCollection; query != nil {
+		if err := pq.loadCollection(ctx, query, nodes, nil,
+			func(n *Petroglyph, e *Collection) { n.Edges.Collection = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1052,6 +1095,38 @@ func (pq *PetroglyphQuery) loadAccountingDocumentationAuthor(ctx context.Context
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "person_petroglyphs_accounting_documentation" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *PetroglyphQuery) loadCollection(ctx context.Context, query *CollectionQuery, nodes []*Petroglyph, init func(*Petroglyph), assign func(*Petroglyph, *Collection)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Petroglyph)
+	for i := range nodes {
+		if nodes[i].collection_petroglyphs == nil {
+			continue
+		}
+		fk := *nodes[i].collection_petroglyphs
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(collection.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "collection_petroglyphs" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

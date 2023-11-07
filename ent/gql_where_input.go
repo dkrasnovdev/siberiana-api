@@ -7035,6 +7035,10 @@ type CollectionWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
+
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
@@ -7603,6 +7607,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, collection.HasArtifactsWith(with...))
+	}
+	if i.HasPetroglyphs != nil {
+		p := collection.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasPetroglyphsWith(with...))
 	}
 	if i.HasBooks != nil {
 		p := collection.HasBooks()
@@ -17067,6 +17089,10 @@ type PersonWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "protected_area_pictures" edge predicates.
+	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
+	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
+
 	// "donated_artifacts" edge predicates.
 	HasDonatedArtifacts     *bool                 `json:"hasDonatedArtifacts,omitempty"`
 	HasDonatedArtifactsWith []*ArtifactWhereInput `json:"hasDonatedArtifactsWith,omitempty"`
@@ -17911,6 +17937,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, person.HasArtifactsWith(with...))
+	}
+	if i.HasProtectedAreaPictures != nil {
+		p := person.HasProtectedAreaPictures()
+		if !*i.HasProtectedAreaPictures {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProtectedAreaPicturesWith) > 0 {
+		with := make([]predicate.ProtectedAreaPicture, 0, len(i.HasProtectedAreaPicturesWith))
+		for _, w := range i.HasProtectedAreaPicturesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProtectedAreaPicturesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasProtectedAreaPicturesWith(with...))
 	}
 	if i.HasDonatedArtifacts != nil {
 		p := person.HasDonatedArtifacts()
@@ -18996,6 +19040,10 @@ type PetroglyphWhereInput struct {
 	// "accounting_documentation_author" edge predicates.
 	HasAccountingDocumentationAuthor     *bool               `json:"hasAccountingDocumentationAuthor,omitempty"`
 	HasAccountingDocumentationAuthorWith []*PersonWhereInput `json:"hasAccountingDocumentationAuthorWith,omitempty"`
+
+	// "collection" edge predicates.
+	HasCollection     *bool                   `json:"hasCollection,omitempty"`
+	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -20413,6 +20461,24 @@ func (i *PetroglyphWhereInput) P() (predicate.Petroglyph, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, petroglyph.HasAccountingDocumentationAuthorWith(with...))
+	}
+	if i.HasCollection != nil {
+		p := petroglyph.HasCollection()
+		if !*i.HasCollection {
+			p = petroglyph.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCollectionWith) > 0 {
+		with := make([]predicate.Collection, 0, len(i.HasCollectionWith))
+		for _, w := range i.HasCollectionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCollectionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, petroglyph.HasCollectionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -22728,6 +22794,10 @@ type ProtectedAreaPictureWhereInput struct {
 	GeometryIsNil  bool             `json:"geometryIsNil,omitempty"`
 	GeometryNotNil bool             `json:"geometryNotNil,omitempty"`
 
+	// "author" edge predicates.
+	HasAuthor     *bool               `json:"hasAuthor,omitempty"`
+	HasAuthorWith []*PersonWhereInput `json:"hasAuthorWith,omitempty"`
+
 	// "collection" edge predicates.
 	HasCollection     *bool                   `json:"hasCollection,omitempty"`
 	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
@@ -23298,6 +23368,24 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 		predicates = append(predicates, protectedareapicture.GeometryNotNil())
 	}
 
+	if i.HasAuthor != nil {
+		p := protectedareapicture.HasAuthor()
+		if !*i.HasAuthor {
+			p = protectedareapicture.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAuthorWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasAuthorWith))
+		for _, w := range i.HasAuthorWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAuthorWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, protectedareapicture.HasAuthorWith(with...))
+	}
 	if i.HasCollection != nil {
 		p := protectedareapicture.HasCollection()
 		if !*i.HasCollection {

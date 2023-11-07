@@ -44,6 +44,8 @@ const (
 	FieldShootingDate = "shooting_date"
 	// FieldGeometry holds the string denoting the geometry field in the database.
 	FieldGeometry = "geometry"
+	// EdgeAuthor holds the string denoting the author edge name in mutations.
+	EdgeAuthor = "author"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
 	EdgeCollection = "collection"
 	// EdgeProtectedArea holds the string denoting the protected_area edge name in mutations.
@@ -62,6 +64,13 @@ const (
 	EdgeRegion = "region"
 	// Table holds the table name of the protectedareapicture in the database.
 	Table = "protected_area_pictures"
+	// AuthorTable is the table that holds the author relation/edge.
+	AuthorTable = "protected_area_pictures"
+	// AuthorInverseTable is the table name for the Person entity.
+	// It exists in this package in order to avoid circular dependency with the "person" package.
+	AuthorInverseTable = "persons"
+	// AuthorColumn is the table column denoting the author relation/edge.
+	AuthorColumn = "person_protected_area_pictures"
 	// CollectionTable is the table that holds the collection relation/edge.
 	CollectionTable = "protected_area_pictures"
 	// CollectionInverseTable is the table name for the Collection entity.
@@ -146,6 +155,7 @@ var ForeignKeys = []string{
 	"district_protected_area_pictures",
 	"license_protected_area_pictures",
 	"location_protected_area_pictures",
+	"person_protected_area_pictures",
 	"protected_area_protected_area_pictures",
 	"region_protected_area_pictures",
 	"settlement_protected_area_pictures",
@@ -277,6 +287,13 @@ func ByGeometry(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldGeometry, opts...).ToFunc()
 }
 
+// ByAuthorField orders the results by author field.
+func ByAuthorField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAuthorStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByCollectionField orders the results by collection field.
 func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -331,6 +348,13 @@ func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
 	}
+}
+func newAuthorStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AuthorInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, AuthorTable, AuthorColumn),
+	)
 }
 func newCollectionStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

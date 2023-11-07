@@ -97,5 +97,6 @@ func (Petroglyph) Edges() []ent.Edge {
 		edge.From("region", Region.Type).Ref("petroglyphs").Unique(),
 		edge.From("accounting_documentation_address", Location.Type).Ref("petroglyphs_accounting_documentation").Unique(),
 		edge.From("accounting_documentation_author", Person.Type).Ref("petroglyphs_accounting_documentation").Unique(),
+		edge.From("collection", Collection.Type).Ref("petroglyphs").Unique().Required(),
 	}
 }

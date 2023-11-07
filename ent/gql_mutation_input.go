@@ -1835,6 +1835,7 @@ type CreateCollectionInput struct {
 	Type                    *collection.Type
 	ArtIDs                  []int
 	ArtifactIDs             []int
+	PetroglyphIDs           []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
 	CategoryID              int
@@ -1883,6 +1884,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
@@ -1928,6 +1932,9 @@ type UpdateCollectionInput struct {
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
+	ClearPetroglyphs              bool
+	AddPetroglyphIDs              []int
+	RemovePetroglyphIDs           []int
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
@@ -2016,6 +2023,15 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
 	}
 	if i.ClearBooks {
 		m.ClearBooks()
@@ -4446,6 +4462,7 @@ type CreatePersonInput struct {
 	CollectionIDs                         []int
 	ArtIDs                                []int
 	ArtifactIDs                           []int
+	ProtectedAreaPictureIDs               []int
 	DonatedArtifactIDs                    []int
 	PetroglyphsAccountingDocumentationIDs []int
 	BookIDs                               []int
@@ -4525,6 +4542,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
+	}
+	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
 	}
 	if v := i.DonatedArtifactIDs; len(v) > 0 {
 		m.AddDonatedArtifactIDs(v...)
@@ -4606,6 +4626,9 @@ type UpdatePersonInput struct {
 	ClearArtifacts                              bool
 	AddArtifactIDs                              []int
 	RemoveArtifactIDs                           []int
+	ClearProtectedAreaPictures                  bool
+	AddProtectedAreaPictureIDs                  []int
+	RemoveProtectedAreaPictureIDs               []int
 	ClearDonatedArtifacts                       bool
 	AddDonatedArtifactIDs                       []int
 	RemoveDonatedArtifactIDs                    []int
@@ -4776,6 +4799,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearProtectedAreaPictures {
+		m.ClearProtectedAreaPictures()
+	}
+	if v := i.AddProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
+	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
+		m.RemoveProtectedAreaPictureIDs(v...)
 	}
 	if i.ClearDonatedArtifacts {
 		m.ClearDonatedArtifacts()
@@ -4987,6 +5019,7 @@ type CreatePetroglyphInput struct {
 	RegionID                           *int
 	AccountingDocumentationAddressID   *int
 	AccountingDocumentationAuthorID    *int
+	CollectionID                       int
 }
 
 // Mutate applies the CreatePetroglyphInput on the PetroglyphMutation builder.
@@ -5111,6 +5144,7 @@ func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	if v := i.AccountingDocumentationAuthorID; v != nil {
 		m.SetAccountingDocumentationAuthorID(*v)
 	}
+	m.SetCollectionID(i.CollectionID)
 }
 
 // SetInput applies the change-set in the CreatePetroglyphInput on the PetroglyphCreate builder.
@@ -5201,6 +5235,7 @@ type UpdatePetroglyphInput struct {
 	AccountingDocumentationAddressID        *int
 	ClearAccountingDocumentationAuthor      bool
 	AccountingDocumentationAuthorID         *int
+	CollectionID                            *int
 }
 
 // Mutate applies the UpdatePetroglyphInput on the PetroglyphMutation builder.
@@ -5444,6 +5479,9 @@ func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	}
 	if v := i.AccountingDocumentationAuthorID; v != nil {
 		m.SetAccountingDocumentationAuthorID(*v)
+	}
+	if v := i.CollectionID; v != nil {
+		m.SetCollectionID(*v)
 	}
 }
 
@@ -5988,6 +6026,7 @@ type CreateProtectedAreaPictureInput struct {
 	AdditionalImagesUrls []string
 	ShootingDate         *time.Time
 	Geometry             *types.Geometry
+	AuthorID             *int
 	CollectionID         int
 	ProtectedAreaID      *int
 	LocationID           *int
@@ -6038,6 +6077,9 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.Geometry; v != nil {
 		m.SetGeometry(*v)
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
 	}
 	m.SetCollectionID(i.CollectionID)
 	if v := i.ProtectedAreaID; v != nil {
@@ -6095,6 +6137,8 @@ type UpdateProtectedAreaPictureInput struct {
 	ShootingDate               *time.Time
 	ClearGeometry              bool
 	Geometry                   *types.Geometry
+	ClearAuthor                bool
+	AuthorID                   *int
 	CollectionID               *int
 	ClearProtectedArea         bool
 	ProtectedAreaID            *int
@@ -6185,6 +6229,12 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	}
 	if v := i.Geometry; v != nil {
 		m.SetGeometry(*v)
+	}
+	if i.ClearAuthor {
+		m.ClearAuthor()
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)

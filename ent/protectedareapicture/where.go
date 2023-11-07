@@ -856,6 +856,29 @@ func GeometryNotNil() predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(sql.FieldNotNull(FieldGeometry))
 }
 
+// HasAuthor applies the HasEdge predicate on the "author" edge.
+func HasAuthor() predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, AuthorTable, AuthorColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAuthorWith applies the HasEdge predicate on the "author" edge with a given conditions (other predicates).
+func HasAuthorWith(preds ...predicate.Person) predicate.ProtectedAreaPicture {
+	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
+		step := newAuthorStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasCollection applies the HasEdge predicate on the "collection" edge.
 func HasCollection() predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {

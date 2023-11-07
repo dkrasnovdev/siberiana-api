@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
@@ -328,6 +329,21 @@ func (pc *PersonCreate) AddArtifacts(a ...*Artifact) *PersonCreate {
 		ids[i] = a[i].ID
 	}
 	return pc.AddArtifactIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (pc *PersonCreate) AddProtectedAreaPictureIDs(ids ...int) *PersonCreate {
+	pc.mutation.AddProtectedAreaPictureIDs(ids...)
+	return pc
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pc *PersonCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddProtectedAreaPictureIDs(ids...)
 }
 
 // AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by IDs.
@@ -653,6 +669,22 @@ func (pc *PersonCreate) createSpec() (*Person, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   person.ProtectedAreaPicturesTable,
+			Columns: []string{person.ProtectedAreaPicturesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

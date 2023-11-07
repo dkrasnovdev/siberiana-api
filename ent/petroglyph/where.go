@@ -2360,6 +2360,29 @@ func HasAccountingDocumentationAuthorWith(preds ...predicate.Person) predicate.P
 	})
 }
 
+// HasCollection applies the HasEdge predicate on the "collection" edge.
+func HasCollection() predicate.Petroglyph {
+	return predicate.Petroglyph(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCollectionWith applies the HasEdge predicate on the "collection" edge with a given conditions (other predicates).
+func HasCollectionWith(preds ...predicate.Collection) predicate.Petroglyph {
+	return predicate.Petroglyph(func(s *sql.Selector) {
+		step := newCollectionStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Petroglyph) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.AndPredicates(predicates...))

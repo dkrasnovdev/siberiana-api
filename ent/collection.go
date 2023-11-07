@@ -56,6 +56,8 @@ type CollectionEdges struct {
 	Art []*Art `json:"art,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Petroglyphs holds the value of the petroglyphs edge.
+	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
@@ -66,12 +68,13 @@ type CollectionEdges struct {
 	Authors []*Person `json:"authors,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
+	namedPetroglyphs           map[string][]*Petroglyph
 	namedBooks                 map[string][]*Book
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedAuthors               map[string][]*Person
@@ -95,10 +98,19 @@ func (e CollectionEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
+// PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
+// was not loaded in eager-loading.
+func (e CollectionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
+	if e.loadedTypes[2] {
+		return e.Petroglyphs, nil
+	}
+	return nil, &NotLoadedError{edge: "petroglyphs"}
+}
+
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
@@ -107,7 +119,7 @@ func (e CollectionEdges) BooksOrErr() ([]*Book, error) {
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -116,7 +128,7 @@ func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, 
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CollectionEdges) CategoryOrErr() (*Category, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		if e.Category == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: category.Label}
@@ -129,7 +141,7 @@ func (e CollectionEdges) CategoryOrErr() (*Category, error) {
 // AuthorsOrErr returns the Authors value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) AuthorsOrErr() ([]*Person, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Authors, nil
 	}
 	return nil, &NotLoadedError{edge: "authors"}
@@ -275,6 +287,11 @@ func (c *Collection) QueryArtifacts() *ArtifactQuery {
 	return NewCollectionClient(c.config).QueryArtifacts(c)
 }
 
+// QueryPetroglyphs queries the "petroglyphs" edge of the Collection entity.
+func (c *Collection) QueryPetroglyphs() *PetroglyphQuery {
+	return NewCollectionClient(c.config).QueryPetroglyphs(c)
+}
+
 // QueryBooks queries the "books" edge of the Collection entity.
 func (c *Collection) QueryBooks() *BookQuery {
 	return NewCollectionClient(c.config).QueryBooks(c)
@@ -402,6 +419,30 @@ func (c *Collection) appendNamedArtifacts(name string, edges ...*Artifact) {
 		c.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
 		c.Edges.namedArtifacts[name] = append(c.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedPetroglyphs returns the Petroglyphs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Collection) NamedPetroglyphs(name string) ([]*Petroglyph, error) {
+	if c.Edges.namedPetroglyphs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedPetroglyphs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Collection) appendNamedPetroglyphs(name string, edges ...*Petroglyph) {
+	if c.Edges.namedPetroglyphs == nil {
+		c.Edges.namedPetroglyphs = make(map[string][]*Petroglyph)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedPetroglyphs[name] = []*Petroglyph{}
+	} else {
+		c.Edges.namedPetroglyphs[name] = append(c.Edges.namedPetroglyphs[name], edges...)
 	}
 }
 

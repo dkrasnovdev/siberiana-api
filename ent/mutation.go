@@ -12663,6 +12663,9 @@ type CollectionMutation struct {
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
 	clearedartifacts               bool
+	petroglyphs                    map[int]struct{}
+	removedpetroglyphs             map[int]struct{}
+	clearedpetroglyphs             bool
 	books                          map[int]struct{}
 	removedbooks                   map[int]struct{}
 	clearedbooks                   bool
@@ -13450,6 +13453,60 @@ func (m *CollectionMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *CollectionMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *CollectionMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *CollectionMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *CollectionMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *CollectionMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *CollectionMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *CollectionMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
 // AddBookIDs adds the "books" edge to the Book entity by ids.
 func (m *CollectionMutation) AddBookIDs(ids ...int) {
 	if m.books == nil {
@@ -14028,12 +14085,15 @@ func (m *CollectionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CollectionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.art != nil {
 		edges = append(edges, collection.EdgeArt)
 	}
 	if m.artifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, collection.EdgePetroglyphs)
 	}
 	if m.books != nil {
 		edges = append(edges, collection.EdgeBooks)
@@ -14066,6 +14126,12 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case collection.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	case collection.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.books))
 		for id := range m.books {
@@ -14094,12 +14160,15 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CollectionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedart != nil {
 		edges = append(edges, collection.EdgeArt)
 	}
 	if m.removedartifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, collection.EdgePetroglyphs)
 	}
 	if m.removedbooks != nil {
 		edges = append(edges, collection.EdgeBooks)
@@ -14129,6 +14198,12 @@ func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case collection.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
 	case collection.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.removedbooks))
 		for id := range m.removedbooks {
@@ -14153,12 +14228,15 @@ func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CollectionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedart {
 		edges = append(edges, collection.EdgeArt)
 	}
 	if m.clearedartifacts {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, collection.EdgePetroglyphs)
 	}
 	if m.clearedbooks {
 		edges = append(edges, collection.EdgeBooks)
@@ -14183,6 +14261,8 @@ func (m *CollectionMutation) EdgeCleared(name string) bool {
 		return m.clearedart
 	case collection.EdgeArtifacts:
 		return m.clearedartifacts
+	case collection.EdgePetroglyphs:
+		return m.clearedpetroglyphs
 	case collection.EdgeBooks:
 		return m.clearedbooks
 	case collection.EdgeProtectedAreaPictures:
@@ -14215,6 +14295,9 @@ func (m *CollectionMutation) ResetEdge(name string) error {
 		return nil
 	case collection.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case collection.EdgePetroglyphs:
+		m.ResetPetroglyphs()
 		return nil
 	case collection.EdgeBooks:
 		m.ResetBooks()
@@ -29967,6 +30050,9 @@ type PersonMutation struct {
 	artifacts                                   map[int]struct{}
 	removedartifacts                            map[int]struct{}
 	clearedartifacts                            bool
+	protected_area_pictures                     map[int]struct{}
+	removedprotected_area_pictures              map[int]struct{}
+	clearedprotected_area_pictures              bool
 	donated_artifacts                           map[int]struct{}
 	removeddonated_artifacts                    map[int]struct{}
 	cleareddonated_artifacts                    bool
@@ -31254,6 +31340,60 @@ func (m *PersonMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
+func (m *PersonMutation) AddProtectedAreaPictureIDs(ids ...int) {
+	if m.protected_area_pictures == nil {
+		m.protected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.protected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProtectedAreaPictures clears the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *PersonMutation) ClearProtectedAreaPictures() {
+	m.clearedprotected_area_pictures = true
+}
+
+// ProtectedAreaPicturesCleared reports if the "protected_area_pictures" edge to the ProtectedAreaPicture entity was cleared.
+func (m *PersonMutation) ProtectedAreaPicturesCleared() bool {
+	return m.clearedprotected_area_pictures
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (m *PersonMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
+	if m.removedprotected_area_pictures == nil {
+		m.removedprotected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.protected_area_pictures, ids[i])
+		m.removedprotected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProtectedAreaPictures returns the removed IDs of the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *PersonMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.removedprotected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProtectedAreaPicturesIDs returns the "protected_area_pictures" edge IDs in the mutation.
+func (m *PersonMutation) ProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.protected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProtectedAreaPictures resets all changes to the "protected_area_pictures" edge.
+func (m *PersonMutation) ResetProtectedAreaPictures() {
+	m.protected_area_pictures = nil
+	m.clearedprotected_area_pictures = false
+	m.removedprotected_area_pictures = nil
+}
+
 // AddDonatedArtifactIDs adds the "donated_artifacts" edge to the Artifact entity by ids.
 func (m *PersonMutation) AddDonatedArtifactIDs(ids ...int) {
 	if m.donated_artifacts == nil {
@@ -32184,7 +32324,7 @@ func (m *PersonMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonMutation) AddedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.collections != nil {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -32193,6 +32333,9 @@ func (m *PersonMutation) AddedEdges() []string {
 	}
 	if m.artifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
+	}
+	if m.protected_area_pictures != nil {
+		edges = append(edges, person.EdgeProtectedAreaPictures)
 	}
 	if m.donated_artifacts != nil {
 		edges = append(edges, person.EdgeDonatedArtifacts)
@@ -32237,6 +32380,12 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 	case person.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.artifacts))
 		for id := range m.artifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case person.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
+		for id := range m.protected_area_pictures {
 			ids = append(ids, id)
 		}
 		return ids
@@ -32286,7 +32435,7 @@ func (m *PersonMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.removedcollections != nil {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -32295,6 +32444,9 @@ func (m *PersonMutation) RemovedEdges() []string {
 	}
 	if m.removedartifacts != nil {
 		edges = append(edges, person.EdgeArtifacts)
+	}
+	if m.removedprotected_area_pictures != nil {
+		edges = append(edges, person.EdgeProtectedAreaPictures)
 	}
 	if m.removeddonated_artifacts != nil {
 		edges = append(edges, person.EdgeDonatedArtifacts)
@@ -32336,6 +32488,12 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 	case person.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.removedartifacts))
 		for id := range m.removedartifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case person.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
+		for id := range m.removedprotected_area_pictures {
 			ids = append(ids, id)
 		}
 		return ids
@@ -32381,7 +32539,7 @@ func (m *PersonMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.clearedcollections {
 		edges = append(edges, person.EdgeCollections)
 	}
@@ -32390,6 +32548,9 @@ func (m *PersonMutation) ClearedEdges() []string {
 	}
 	if m.clearedartifacts {
 		edges = append(edges, person.EdgeArtifacts)
+	}
+	if m.clearedprotected_area_pictures {
+		edges = append(edges, person.EdgeProtectedAreaPictures)
 	}
 	if m.cleareddonated_artifacts {
 		edges = append(edges, person.EdgeDonatedArtifacts)
@@ -32425,6 +32586,8 @@ func (m *PersonMutation) EdgeCleared(name string) bool {
 		return m.clearedart
 	case person.EdgeArtifacts:
 		return m.clearedartifacts
+	case person.EdgeProtectedAreaPictures:
+		return m.clearedprotected_area_pictures
 	case person.EdgeDonatedArtifacts:
 		return m.cleareddonated_artifacts
 	case person.EdgePetroglyphsAccountingDocumentation:
@@ -32466,6 +32629,9 @@ func (m *PersonMutation) ResetEdge(name string) error {
 		return nil
 	case person.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case person.EdgeProtectedAreaPictures:
+		m.ResetProtectedAreaPictures()
 		return nil
 	case person.EdgeDonatedArtifacts:
 		m.ResetDonatedArtifacts()
@@ -33287,6 +33453,8 @@ type PetroglyphMutation struct {
 	clearedaccounting_documentation_address bool
 	accounting_documentation_author         *int
 	clearedaccounting_documentation_author  bool
+	collection                              *int
+	clearedcollection                       bool
 	done                                    bool
 	oldValue                                func(context.Context) (*Petroglyph, error)
 	predicates                              []predicate.Petroglyph
@@ -35437,6 +35605,45 @@ func (m *PetroglyphMutation) ResetAccountingDocumentationAuthor() {
 	m.clearedaccounting_documentation_author = false
 }
 
+// SetCollectionID sets the "collection" edge to the Collection entity by id.
+func (m *PetroglyphMutation) SetCollectionID(id int) {
+	m.collection = &id
+}
+
+// ClearCollection clears the "collection" edge to the Collection entity.
+func (m *PetroglyphMutation) ClearCollection() {
+	m.clearedcollection = true
+}
+
+// CollectionCleared reports if the "collection" edge to the Collection entity was cleared.
+func (m *PetroglyphMutation) CollectionCleared() bool {
+	return m.clearedcollection
+}
+
+// CollectionID returns the "collection" edge ID in the mutation.
+func (m *PetroglyphMutation) CollectionID() (id int, exists bool) {
+	if m.collection != nil {
+		return *m.collection, true
+	}
+	return
+}
+
+// CollectionIDs returns the "collection" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CollectionID instead. It exists only for internal usage by the builders.
+func (m *PetroglyphMutation) CollectionIDs() (ids []int) {
+	if id := m.collection; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCollection resets all changes to the "collection" edge.
+func (m *PetroglyphMutation) ResetCollection() {
+	m.collection = nil
+	m.clearedcollection = false
+}
+
 // Where appends a list predicates to the PetroglyphMutation builder.
 func (m *PetroglyphMutation) Where(ps ...predicate.Petroglyph) {
 	m.predicates = append(m.predicates, ps...)
@@ -36367,7 +36574,7 @@ func (m *PetroglyphMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PetroglyphMutation) AddedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.cultural_affiliation != nil {
 		edges = append(edges, petroglyph.EdgeCulturalAffiliation)
 	}
@@ -36391,6 +36598,9 @@ func (m *PetroglyphMutation) AddedEdges() []string {
 	}
 	if m.accounting_documentation_author != nil {
 		edges = append(edges, petroglyph.EdgeAccountingDocumentationAuthor)
+	}
+	if m.collection != nil {
+		edges = append(edges, petroglyph.EdgeCollection)
 	}
 	return edges
 }
@@ -36435,13 +36645,17 @@ func (m *PetroglyphMutation) AddedIDs(name string) []ent.Value {
 		if id := m.accounting_documentation_author; id != nil {
 			return []ent.Value{*id}
 		}
+	case petroglyph.EdgeCollection:
+		if id := m.collection; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PetroglyphMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.removedpublications != nil {
 		edges = append(edges, petroglyph.EdgePublications)
 	}
@@ -36473,7 +36687,7 @@ func (m *PetroglyphMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PetroglyphMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.clearedcultural_affiliation {
 		edges = append(edges, petroglyph.EdgeCulturalAffiliation)
 	}
@@ -36498,6 +36712,9 @@ func (m *PetroglyphMutation) ClearedEdges() []string {
 	if m.clearedaccounting_documentation_author {
 		edges = append(edges, petroglyph.EdgeAccountingDocumentationAuthor)
 	}
+	if m.clearedcollection {
+		edges = append(edges, petroglyph.EdgeCollection)
+	}
 	return edges
 }
 
@@ -36521,6 +36738,8 @@ func (m *PetroglyphMutation) EdgeCleared(name string) bool {
 		return m.clearedaccounting_documentation_address
 	case petroglyph.EdgeAccountingDocumentationAuthor:
 		return m.clearedaccounting_documentation_author
+	case petroglyph.EdgeCollection:
+		return m.clearedcollection
 	}
 	return false
 }
@@ -36546,6 +36765,9 @@ func (m *PetroglyphMutation) ClearEdge(name string) error {
 		return nil
 	case petroglyph.EdgeAccountingDocumentationAuthor:
 		m.ClearAccountingDocumentationAuthor()
+		return nil
+	case petroglyph.EdgeCollection:
+		m.ClearCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown Petroglyph unique edge %s", name)
@@ -36578,6 +36800,9 @@ func (m *PetroglyphMutation) ResetEdge(name string) error {
 		return nil
 	case petroglyph.EdgeAccountingDocumentationAuthor:
 		m.ResetAccountingDocumentationAuthor()
+		return nil
+	case petroglyph.EdgeCollection:
+		m.ResetCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown Petroglyph edge %s", name)
@@ -40104,6 +40329,8 @@ type ProtectedAreaPictureMutation struct {
 	shooting_date                *time.Time
 	geometry                     *types.Geometry
 	clearedFields                map[string]struct{}
+	author                       *int
+	clearedauthor                bool
 	collection                   *int
 	clearedcollection            bool
 	protected_area               *int
@@ -40850,6 +41077,45 @@ func (m *ProtectedAreaPictureMutation) ResetGeometry() {
 	delete(m.clearedFields, protectedareapicture.FieldGeometry)
 }
 
+// SetAuthorID sets the "author" edge to the Person entity by id.
+func (m *ProtectedAreaPictureMutation) SetAuthorID(id int) {
+	m.author = &id
+}
+
+// ClearAuthor clears the "author" edge to the Person entity.
+func (m *ProtectedAreaPictureMutation) ClearAuthor() {
+	m.clearedauthor = true
+}
+
+// AuthorCleared reports if the "author" edge to the Person entity was cleared.
+func (m *ProtectedAreaPictureMutation) AuthorCleared() bool {
+	return m.clearedauthor
+}
+
+// AuthorID returns the "author" edge ID in the mutation.
+func (m *ProtectedAreaPictureMutation) AuthorID() (id int, exists bool) {
+	if m.author != nil {
+		return *m.author, true
+	}
+	return
+}
+
+// AuthorIDs returns the "author" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AuthorID instead. It exists only for internal usage by the builders.
+func (m *ProtectedAreaPictureMutation) AuthorIDs() (ids []int) {
+	if id := m.author; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAuthor resets all changes to the "author" edge.
+func (m *ProtectedAreaPictureMutation) ResetAuthor() {
+	m.author = nil
+	m.clearedauthor = false
+}
+
 // SetCollectionID sets the "collection" edge to the Collection entity by id.
 func (m *ProtectedAreaPictureMutation) SetCollectionID(id int) {
 	m.collection = &id
@@ -41568,7 +41834,10 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProtectedAreaPictureMutation) AddedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
+	if m.author != nil {
+		edges = append(edges, protectedareapicture.EdgeAuthor)
+	}
 	if m.collection != nil {
 		edges = append(edges, protectedareapicture.EdgeCollection)
 	}
@@ -41600,6 +41869,10 @@ func (m *ProtectedAreaPictureMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *ProtectedAreaPictureMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case protectedareapicture.EdgeAuthor:
+		if id := m.author; id != nil {
+			return []ent.Value{*id}
+		}
 	case protectedareapicture.EdgeCollection:
 		if id := m.collection; id != nil {
 			return []ent.Value{*id}
@@ -41638,7 +41911,7 @@ func (m *ProtectedAreaPictureMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProtectedAreaPictureMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	return edges
 }
 
@@ -41650,7 +41923,10 @@ func (m *ProtectedAreaPictureMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProtectedAreaPictureMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
+	if m.clearedauthor {
+		edges = append(edges, protectedareapicture.EdgeAuthor)
+	}
 	if m.clearedcollection {
 		edges = append(edges, protectedareapicture.EdgeCollection)
 	}
@@ -41682,6 +41958,8 @@ func (m *ProtectedAreaPictureMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *ProtectedAreaPictureMutation) EdgeCleared(name string) bool {
 	switch name {
+	case protectedareapicture.EdgeAuthor:
+		return m.clearedauthor
 	case protectedareapicture.EdgeCollection:
 		return m.clearedcollection
 	case protectedareapicture.EdgeProtectedArea:
@@ -41706,6 +41984,9 @@ func (m *ProtectedAreaPictureMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *ProtectedAreaPictureMutation) ClearEdge(name string) error {
 	switch name {
+	case protectedareapicture.EdgeAuthor:
+		m.ClearAuthor()
+		return nil
 	case protectedareapicture.EdgeCollection:
 		m.ClearCollection()
 		return nil
@@ -41738,6 +42019,9 @@ func (m *ProtectedAreaPictureMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ProtectedAreaPictureMutation) ResetEdge(name string) error {
 	switch name {
+	case protectedareapicture.EdgeAuthor:
+		m.ResetAuthor()
+		return nil
 	case protectedareapicture.EdgeCollection:
 		m.ResetCollection()
 		return nil

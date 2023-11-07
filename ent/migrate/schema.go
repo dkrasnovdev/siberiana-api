@@ -417,7 +417,7 @@ var (
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "protected_area_pictures"}},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "protected_area_pictures", "petroglyphs"}},
 		{Name: "category_collections", Type: field.TypeInt},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.
@@ -827,6 +827,7 @@ var (
 		{Name: "accounting_documentation_information", Type: field.TypeString, Nullable: true},
 		{Name: "accounting_documentation_date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "geometry", Type: field.TypeOther, Nullable: true, SchemaType: map[string]string{"postgres": "geometry"}},
+		{Name: "collection_petroglyphs", Type: field.TypeInt},
 		{Name: "culture_petroglyphs", Type: field.TypeInt, Nullable: true},
 		{Name: "location_petroglyphs_accounting_documentation", Type: field.TypeInt, Nullable: true},
 		{Name: "model_petroglyphs", Type: field.TypeInt, Nullable: true},
@@ -841,38 +842,44 @@ var (
 		PrimaryKey: []*schema.Column{PetroglyphsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "petroglyphs_cultures_petroglyphs",
+				Symbol:     "petroglyphs_collections_petroglyphs",
 				Columns:    []*schema.Column{PetroglyphsColumns[33]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "petroglyphs_cultures_petroglyphs",
+				Columns:    []*schema.Column{PetroglyphsColumns[34]},
 				RefColumns: []*schema.Column{CulturesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "petroglyphs_locations_petroglyphs_accounting_documentation",
-				Columns:    []*schema.Column{PetroglyphsColumns[34]},
+				Columns:    []*schema.Column{PetroglyphsColumns[35]},
 				RefColumns: []*schema.Column{LocationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "petroglyphs_models_petroglyphs",
-				Columns:    []*schema.Column{PetroglyphsColumns[35]},
+				Columns:    []*schema.Column{PetroglyphsColumns[36]},
 				RefColumns: []*schema.Column{ModelsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "petroglyphs_mounds_petroglyphs",
-				Columns:    []*schema.Column{PetroglyphsColumns[36]},
+				Columns:    []*schema.Column{PetroglyphsColumns[37]},
 				RefColumns: []*schema.Column{MoundsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "petroglyphs_persons_petroglyphs_accounting_documentation",
-				Columns:    []*schema.Column{PetroglyphsColumns[37]},
+				Columns:    []*schema.Column{PetroglyphsColumns[38]},
 				RefColumns: []*schema.Column{PersonsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "petroglyphs_regions_petroglyphs",
-				Columns:    []*schema.Column{PetroglyphsColumns[38]},
+				Columns:    []*schema.Column{PetroglyphsColumns[39]},
 				RefColumns: []*schema.Column{RegionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -969,6 +976,7 @@ var (
 		{Name: "district_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "license_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "location_protected_area_pictures", Type: field.TypeInt, Nullable: true},
+		{Name: "person_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "protected_area_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "region_protected_area_pictures", Type: field.TypeInt, Nullable: true},
 		{Name: "settlement_protected_area_pictures", Type: field.TypeInt, Nullable: true},
@@ -1010,20 +1018,26 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "protected_area_pictures_protected_areas_protected_area_pictures",
+				Symbol:     "protected_area_pictures_persons_protected_area_pictures",
 				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[19]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "protected_area_pictures_protected_areas_protected_area_pictures",
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[20]},
 				RefColumns: []*schema.Column{ProtectedAreasColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "protected_area_pictures_regions_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[20]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[21]},
 				RefColumns: []*schema.Column{RegionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "protected_area_pictures_settlements_protected_area_pictures",
-				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[21]},
+				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[22]},
 				RefColumns: []*schema.Column{SettlementsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1734,21 +1748,23 @@ func init() {
 	LocationsTable.ForeignKeys[2].RefTable = SettlementsTable
 	LocationsTable.ForeignKeys[3].RefTable = RegionsTable
 	PersonsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	PetroglyphsTable.ForeignKeys[0].RefTable = CulturesTable
-	PetroglyphsTable.ForeignKeys[1].RefTable = LocationsTable
-	PetroglyphsTable.ForeignKeys[2].RefTable = ModelsTable
-	PetroglyphsTable.ForeignKeys[3].RefTable = MoundsTable
-	PetroglyphsTable.ForeignKeys[4].RefTable = PersonsTable
-	PetroglyphsTable.ForeignKeys[5].RefTable = RegionsTable
+	PetroglyphsTable.ForeignKeys[0].RefTable = CollectionsTable
+	PetroglyphsTable.ForeignKeys[1].RefTable = CulturesTable
+	PetroglyphsTable.ForeignKeys[2].RefTable = LocationsTable
+	PetroglyphsTable.ForeignKeys[3].RefTable = ModelsTable
+	PetroglyphsTable.ForeignKeys[4].RefTable = MoundsTable
+	PetroglyphsTable.ForeignKeys[5].RefTable = PersonsTable
+	PetroglyphsTable.ForeignKeys[6].RefTable = RegionsTable
 	ProtectedAreasTable.ForeignKeys[0].RefTable = ProtectedAreaCategoriesTable
 	ProtectedAreaPicturesTable.ForeignKeys[0].RefTable = CollectionsTable
 	ProtectedAreaPicturesTable.ForeignKeys[1].RefTable = CountriesTable
 	ProtectedAreaPicturesTable.ForeignKeys[2].RefTable = DistrictsTable
 	ProtectedAreaPicturesTable.ForeignKeys[3].RefTable = LicensesTable
 	ProtectedAreaPicturesTable.ForeignKeys[4].RefTable = LocationsTable
-	ProtectedAreaPicturesTable.ForeignKeys[5].RefTable = ProtectedAreasTable
-	ProtectedAreaPicturesTable.ForeignKeys[6].RefTable = RegionsTable
-	ProtectedAreaPicturesTable.ForeignKeys[7].RefTable = SettlementsTable
+	ProtectedAreaPicturesTable.ForeignKeys[5].RefTable = PersonsTable
+	ProtectedAreaPicturesTable.ForeignKeys[6].RefTable = ProtectedAreasTable
+	ProtectedAreaPicturesTable.ForeignKeys[7].RefTable = RegionsTable
+	ProtectedAreaPicturesTable.ForeignKeys[8].RefTable = SettlementsTable
 	ProxiesTable.ForeignKeys[0].RefTable = FavouritesTable
 	ProxiesTable.ForeignKeys[1].RefTable = PersonalsTable
 	ArtGenreArtTable.ForeignKeys[0].RefTable = ArtGenresTable

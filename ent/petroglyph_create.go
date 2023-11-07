@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
@@ -613,6 +614,17 @@ func (pc *PetroglyphCreate) SetAccountingDocumentationAuthor(p *Person) *Petrogl
 	return pc.SetAccountingDocumentationAuthorID(p.ID)
 }
 
+// SetCollectionID sets the "collection" edge to the Collection entity by ID.
+func (pc *PetroglyphCreate) SetCollectionID(id int) *PetroglyphCreate {
+	pc.mutation.SetCollectionID(id)
+	return pc
+}
+
+// SetCollection sets the "collection" edge to the Collection entity.
+func (pc *PetroglyphCreate) SetCollection(c *Collection) *PetroglyphCreate {
+	return pc.SetCollectionID(c.ID)
+}
+
 // Mutation returns the PetroglyphMutation object of the builder.
 func (pc *PetroglyphCreate) Mutation() *PetroglyphMutation {
 	return pc.mutation
@@ -683,6 +695,9 @@ func (pc *PetroglyphCreate) check() error {
 		if err := petroglyph.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Petroglyph.status": %w`, err)}
 		}
+	}
+	if _, ok := pc.mutation.CollectionID(); !ok {
+		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "Petroglyph.collection"`)}
 	}
 	return nil
 }
@@ -970,6 +985,23 @@ func (pc *PetroglyphCreate) createSpec() (*Petroglyph, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.person_petroglyphs_accounting_documentation = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.CollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   petroglyph.CollectionTable,
+			Columns: []string{petroglyph.CollectionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.collection_petroglyphs = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

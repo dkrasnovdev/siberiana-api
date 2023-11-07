@@ -98,6 +98,8 @@ const (
 	EdgeAccountingDocumentationAddress = "accounting_documentation_address"
 	// EdgeAccountingDocumentationAuthor holds the string denoting the accounting_documentation_author edge name in mutations.
 	EdgeAccountingDocumentationAuthor = "accounting_documentation_author"
+	// EdgeCollection holds the string denoting the collection edge name in mutations.
+	EdgeCollection = "collection"
 	// Table holds the table name of the petroglyph in the database.
 	Table = "petroglyphs"
 	// CulturalAffiliationTable is the table that holds the cultural_affiliation relation/edge.
@@ -152,6 +154,13 @@ const (
 	AccountingDocumentationAuthorInverseTable = "persons"
 	// AccountingDocumentationAuthorColumn is the table column denoting the accounting_documentation_author relation/edge.
 	AccountingDocumentationAuthorColumn = "person_petroglyphs_accounting_documentation"
+	// CollectionTable is the table that holds the collection relation/edge.
+	CollectionTable = "petroglyphs"
+	// CollectionInverseTable is the table name for the Collection entity.
+	// It exists in this package in order to avoid circular dependency with the "collection" package.
+	CollectionInverseTable = "collections"
+	// CollectionColumn is the table column denoting the collection relation/edge.
+	CollectionColumn = "collection_petroglyphs"
 )
 
 // Columns holds all SQL columns for petroglyph fields.
@@ -194,6 +203,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "petroglyphs"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"collection_petroglyphs",
 	"culture_petroglyphs",
 	"location_petroglyphs_accounting_documentation",
 	"model_petroglyphs",
@@ -502,6 +512,13 @@ func ByAccountingDocumentationAuthorField(field string, opts ...sql.OrderTermOpt
 		sqlgraph.OrderByNeighborTerms(s, newAccountingDocumentationAuthorStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByCollectionField orders the results by collection field.
+func ByCollectionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCollectionStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newCulturalAffiliationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -556,6 +573,13 @@ func newAccountingDocumentationAuthorStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AccountingDocumentationAuthorInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, AccountingDocumentationAuthorTable, AccountingDocumentationAuthorColumn),
+	)
+}
+func newCollectionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CollectionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CollectionTable, CollectionColumn),
 	)
 }
 

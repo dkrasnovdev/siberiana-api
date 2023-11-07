@@ -2419,6 +2419,22 @@ func (c *CollectionClient) QueryArtifacts(co *Collection) *ArtifactQuery {
 	return query
 }
 
+// QueryPetroglyphs queries the petroglyphs edge of a Collection.
+func (c *CollectionClient) QueryPetroglyphs(co *Collection) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.PetroglyphsTable, collection.PetroglyphsColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBooks queries the books edge of a Collection.
 func (c *CollectionClient) QueryBooks(co *Collection) *BookQuery {
 	query := (&BookClient{config: c.config}).Query()
@@ -5266,6 +5282,22 @@ func (c *PersonClient) QueryArtifacts(pe *Person) *ArtifactQuery {
 	return query
 }
 
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Person.
+func (c *PersonClient) QueryProtectedAreaPictures(pe *Person) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.ProtectedAreaPicturesTable, person.ProtectedAreaPicturesColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryDonatedArtifacts queries the donated_artifacts edge of a Person.
 func (c *PersonClient) QueryDonatedArtifacts(pe *Person) *ArtifactQuery {
 	query := (&ArtifactClient{config: c.config}).Query()
@@ -5783,6 +5815,22 @@ func (c *PetroglyphClient) QueryAccountingDocumentationAuthor(pe *Petroglyph) *P
 			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
 			sqlgraph.To(person.Table, person.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.AccountingDocumentationAuthorTable, petroglyph.AccountingDocumentationAuthorColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCollection queries the collection edge of a Petroglyph.
+func (c *PetroglyphClient) QueryCollection(pe *Petroglyph) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.CollectionTable, petroglyph.CollectionColumn),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -6405,6 +6453,22 @@ func (c *ProtectedAreaPictureClient) GetX(ctx context.Context, id int) *Protecte
 		panic(err)
 	}
 	return obj
+}
+
+// QueryAuthor queries the author edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryAuthor(pap *ProtectedAreaPicture) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.AuthorTable, protectedareapicture.AuthorColumn),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryCollection queries the collection edge of a ProtectedAreaPicture.

@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
+	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -30,6 +31,7 @@ type ProtectedAreaPictureQuery struct {
 	order             []protectedareapicture.OrderOption
 	inters            []Interceptor
 	predicates        []predicate.ProtectedAreaPicture
+	withAuthor        *PersonQuery
 	withCollection    *CollectionQuery
 	withProtectedArea *ProtectedAreaQuery
 	withLocation      *LocationQuery
@@ -75,6 +77,28 @@ func (papq *ProtectedAreaPictureQuery) Unique(unique bool) *ProtectedAreaPicture
 func (papq *ProtectedAreaPictureQuery) Order(o ...protectedareapicture.OrderOption) *ProtectedAreaPictureQuery {
 	papq.order = append(papq.order, o...)
 	return papq
+}
+
+// QueryAuthor chains the current query on the "author" edge.
+func (papq *ProtectedAreaPictureQuery) QueryAuthor() *PersonQuery {
+	query := (&PersonClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, protectedareapicture.AuthorTable, protectedareapicture.AuthorColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryCollection chains the current query on the "collection" edge.
@@ -445,6 +469,7 @@ func (papq *ProtectedAreaPictureQuery) Clone() *ProtectedAreaPictureQuery {
 		order:             append([]protectedareapicture.OrderOption{}, papq.order...),
 		inters:            append([]Interceptor{}, papq.inters...),
 		predicates:        append([]predicate.ProtectedAreaPicture{}, papq.predicates...),
+		withAuthor:        papq.withAuthor.Clone(),
 		withCollection:    papq.withCollection.Clone(),
 		withProtectedArea: papq.withProtectedArea.Clone(),
 		withLocation:      papq.withLocation.Clone(),
@@ -457,6 +482,17 @@ func (papq *ProtectedAreaPictureQuery) Clone() *ProtectedAreaPictureQuery {
 		sql:  papq.sql.Clone(),
 		path: papq.path,
 	}
+}
+
+// WithAuthor tells the query-builder to eager-load the nodes that are connected to
+// the "author" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithAuthor(opts ...func(*PersonQuery)) *ProtectedAreaPictureQuery {
+	query := (&PersonClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withAuthor = query
+	return papq
 }
 
 // WithCollection tells the query-builder to eager-load the nodes that are connected to
@@ -632,7 +668,8 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 		nodes       = []*ProtectedAreaPicture{}
 		withFKs     = papq.withFKs
 		_spec       = papq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
+			papq.withAuthor != nil,
 			papq.withCollection != nil,
 			papq.withProtectedArea != nil,
 			papq.withLocation != nil,
@@ -643,7 +680,7 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 			papq.withRegion != nil,
 		}
 	)
-	if papq.withCollection != nil || papq.withProtectedArea != nil || papq.withLocation != nil || papq.withLicense != nil || papq.withCountry != nil || papq.withSettlement != nil || papq.withDistrict != nil || papq.withRegion != nil {
+	if papq.withAuthor != nil || papq.withCollection != nil || papq.withProtectedArea != nil || papq.withLocation != nil || papq.withLicense != nil || papq.withCountry != nil || papq.withSettlement != nil || papq.withDistrict != nil || papq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -669,6 +706,12 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := papq.withAuthor; query != nil {
+		if err := papq.loadAuthor(ctx, query, nodes, nil,
+			func(n *ProtectedAreaPicture, e *Person) { n.Edges.Author = e }); err != nil {
+			return nil, err
+		}
 	}
 	if query := papq.withCollection; query != nil {
 		if err := papq.loadCollection(ctx, query, nodes, nil,
@@ -726,6 +769,38 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 	return nodes, nil
 }
 
+func (papq *ProtectedAreaPictureQuery) loadAuthor(ctx context.Context, query *PersonQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Person)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*ProtectedAreaPicture)
+	for i := range nodes {
+		if nodes[i].person_protected_area_pictures == nil {
+			continue
+		}
+		fk := *nodes[i].person_protected_area_pictures
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(person.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "person_protected_area_pictures" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (papq *ProtectedAreaPictureQuery) loadCollection(ctx context.Context, query *CollectionQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Collection)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*ProtectedAreaPicture)
