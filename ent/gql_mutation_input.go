@@ -35,7 +35,7 @@ type CreateArtInput struct {
 	AuthorID             *int
 	ArtGenreIDs          []int
 	ArtStyleIDs          []int
-	MediumIDs            []int
+	TechniqueIDs         []int
 	CollectionID         int
 	CountryID            *int
 	SettlementID         *int
@@ -93,8 +93,8 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 	if v := i.ArtStyleIDs; len(v) > 0 {
 		m.AddArtStyleIDs(v...)
 	}
-	if v := i.MediumIDs; len(v) > 0 {
-		m.AddMediumIDs(v...)
+	if v := i.TechniqueIDs; len(v) > 0 {
+		m.AddTechniqueIDs(v...)
 	}
 	m.SetCollectionID(i.CollectionID)
 	if v := i.CountryID; v != nil {
@@ -151,9 +151,9 @@ type UpdateArtInput struct {
 	ClearArtStyle              bool
 	AddArtStyleIDs             []int
 	RemoveArtStyleIDs          []int
-	ClearMediums               bool
-	AddMediumIDs               []int
-	RemoveMediumIDs            []int
+	ClearTechniques            bool
+	AddTechniqueIDs            []int
+	RemoveTechniqueIDs         []int
 	CollectionID               *int
 	ClearCountry               bool
 	CountryID                  *int
@@ -263,14 +263,14 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	if v := i.RemoveArtStyleIDs; len(v) > 0 {
 		m.RemoveArtStyleIDs(v...)
 	}
-	if i.ClearMediums {
-		m.ClearMediums()
+	if i.ClearTechniques {
+		m.ClearTechniques()
 	}
-	if v := i.AddMediumIDs; len(v) > 0 {
-		m.AddMediumIDs(v...)
+	if v := i.AddTechniqueIDs; len(v) > 0 {
+		m.AddTechniqueIDs(v...)
 	}
-	if v := i.RemoveMediumIDs; len(v) > 0 {
-		m.RemoveMediumIDs(v...)
+	if v := i.RemoveTechniqueIDs; len(v) > 0 {
+		m.RemoveTechniqueIDs(v...)
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
@@ -3393,7 +3393,6 @@ type CreateMediumInput struct {
 	Abbreviation *string
 	Description  *string
 	ExternalLink *string
-	ArtIDs       []int
 	ArtifactIDs  []int
 }
 
@@ -3423,9 +3422,6 @@ func (i *CreateMediumInput) Mutate(m *MediumMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
-	if v := i.ArtIDs; len(v) > 0 {
-		m.AddArtIDs(v...)
-	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -3452,9 +3448,6 @@ type UpdateMediumInput struct {
 	Description       *string
 	ClearExternalLink bool
 	ExternalLink      *string
-	ClearArt          bool
-	AddArtIDs         []int
-	RemoveArtIDs      []int
 	ClearArtifacts    bool
 	AddArtifactIDs    []int
 	RemoveArtifactIDs []int
@@ -3500,15 +3493,6 @@ func (i *UpdateMediumInput) Mutate(m *MediumMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
-	}
-	if i.ClearArt {
-		m.ClearArt()
-	}
-	if v := i.AddArtIDs; len(v) > 0 {
-		m.AddArtIDs(v...)
-	}
-	if v := i.RemoveArtIDs; len(v) > 0 {
-		m.RemoveArtIDs(v...)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -7275,6 +7259,7 @@ type CreateTechniqueInput struct {
 	Abbreviation  *string
 	Description   *string
 	ExternalLink  *string
+	ArtIDs        []int
 	ArtifactIDs   []int
 	PetroglyphIDs []int
 }
@@ -7305,6 +7290,9 @@ func (i *CreateTechniqueInput) Mutate(m *TechniqueMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -7334,6 +7322,9 @@ type UpdateTechniqueInput struct {
 	Description         *string
 	ClearExternalLink   bool
 	ExternalLink        *string
+	ClearArt            bool
+	AddArtIDs           []int
+	RemoveArtIDs        []int
 	ClearArtifacts      bool
 	AddArtifactIDs      []int
 	RemoveArtifactIDs   []int
@@ -7382,6 +7373,15 @@ func (i *UpdateTechniqueInput) Mutate(m *TechniqueMutation) {
 	}
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
+	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()

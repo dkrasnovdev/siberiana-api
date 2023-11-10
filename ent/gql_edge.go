@@ -40,14 +40,14 @@ func (a *Art) ArtStyle(ctx context.Context) (result []*ArtStyle, err error) {
 	return result, err
 }
 
-func (a *Art) Mediums(ctx context.Context) (result []*Medium, err error) {
+func (a *Art) Techniques(ctx context.Context) (result []*Technique, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = a.NamedMediums(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = a.NamedTechniques(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = a.Edges.MediumsOrErr()
+		result, err = a.Edges.TechniquesOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = a.QueryMediums().All(ctx)
+		result, err = a.QueryTechniques().All(ctx)
 	}
 	return result, err
 }
@@ -772,18 +772,6 @@ func (l *Location) Region(ctx context.Context) (*Region, error) {
 	return result, MaskNotFound(err)
 }
 
-func (m *Medium) Art(ctx context.Context) (result []*Art, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = m.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = m.Edges.ArtOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = m.QueryArt().All(ctx)
-	}
-	return result, err
-}
-
 func (m *Medium) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = m.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1480,6 +1468,18 @@ func (s *Settlement) Locations(ctx context.Context) (result []*Location, err err
 	}
 	if IsNotLoaded(err) {
 		result, err = s.QueryLocations().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Technique) Art(ctx context.Context) (result []*Art, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.ArtOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryArt().All(ctx)
 	}
 	return result, err
 }

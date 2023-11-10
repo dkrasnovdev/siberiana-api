@@ -51,7 +51,6 @@ func (Medium) Annotations() []schema.Annotation {
 // Edges of the Medium.
 func (Medium) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("art", Art.Type),
 		edge.To("artifacts", Artifact.Type),
 	}
 }

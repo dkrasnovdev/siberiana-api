@@ -31,12 +31,19 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// EdgeArt holds the string denoting the art edge name in mutations.
+	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
 	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
 	EdgePetroglyphs = "petroglyphs"
 	// Table holds the table name of the technique in the database.
 	Table = "techniques"
+	// ArtTable is the table that holds the art relation/edge. The primary key declared below.
+	ArtTable = "technique_art"
+	// ArtInverseTable is the table name for the Art entity.
+	// It exists in this package in order to avoid circular dependency with the "art" package.
+	ArtInverseTable = "arts"
 	// ArtifactsTable is the table that holds the artifacts relation/edge. The primary key declared below.
 	ArtifactsTable = "technique_artifacts"
 	// ArtifactsInverseTable is the table name for the Artifact entity.
@@ -63,6 +70,9 @@ var Columns = []string{
 }
 
 var (
+	// ArtPrimaryKey and ArtColumn2 are the table columns denoting the
+	// primary key for the art relation (M2M).
+	ArtPrimaryKey = []string{"technique_id", "art_id"}
 	// ArtifactsPrimaryKey and ArtifactsColumn2 are the table columns denoting the
 	// primary key for the artifacts relation (M2M).
 	ArtifactsPrimaryKey = []string{"technique_id", "artifact_id"}
@@ -145,6 +155,20 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
+// ByArtCount orders the results by art count.
+func ByArtCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newArtStep(), opts...)
+	}
+}
+
+// ByArt orders the results by art terms.
+func ByArt(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newArtStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByArtifactsCount orders the results by artifacts count.
 func ByArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -171,6 +195,13 @@ func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newArtStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ArtInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ArtTable, ArtPrimaryKey...),
+	)
 }
 func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

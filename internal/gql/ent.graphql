@@ -18,7 +18,7 @@ type Art implements Node {
   author: Person
   artGenre: [ArtGenre!]
   artStyle: [ArtStyle!]
-  mediums: [Medium!]
+  techniques: [Technique!]
   collection: Collection!
   country: Country
   settlement: Settlement
@@ -610,9 +610,9 @@ input ArtWhereInput {
   """art_style edge predicates"""
   hasArtStyle: Boolean
   hasArtStyleWith: [ArtStyleWhereInput!]
-  """mediums edge predicates"""
-  hasMediums: Boolean
-  hasMediumsWith: [MediumWhereInput!]
+  """techniques edge predicates"""
+  hasTechniques: Boolean
+  hasTechniquesWith: [TechniqueWhereInput!]
   """collection edge predicates"""
   hasCollection: Boolean
   hasCollectionWith: [CollectionWhereInput!]
@@ -2418,7 +2418,7 @@ input CreateArtInput {
   authorID: ID
   artGenreIDs: [ID!]
   artStyleIDs: [ID!]
-  mediumIDs: [ID!]
+  techniqueIDs: [ID!]
   collectionID: ID!
   countryID: ID
   settlementID: ID
@@ -2731,7 +2731,6 @@ input CreateMediumInput {
   abbreviation: String
   description: String
   externalLink: String
-  artIDs: [ID!]
   artifactIDs: [ID!]
 }
 """
@@ -3120,6 +3119,7 @@ input CreateTechniqueInput {
   abbreviation: String
   description: String
   externalLink: String
+  artIDs: [ID!]
   artifactIDs: [ID!]
   petroglyphIDs: [ID!]
 }
@@ -4426,7 +4426,6 @@ type Medium implements Node {
   abbreviation: String
   description: String
   externalLink: String
-  art: [Art!]
   artifacts: [Artifact!]
 }
 """A connection to a list of items."""
@@ -4589,9 +4588,6 @@ input MediumWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
-  """art edge predicates"""
-  hasArt: Boolean
-  hasArtWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -9517,6 +9513,7 @@ type Technique implements Node {
   abbreviation: String
   description: String
   externalLink: String
+  art: [Art!]
   artifacts: [Artifact!]
   petroglyphs: [Petroglyph!]
 }
@@ -9680,6 +9677,9 @@ input TechniqueWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
+  """art edge predicates"""
+  hasArt: Boolean
+  hasArtWith: [ArtWhereInput!]
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
@@ -9748,9 +9748,9 @@ input UpdateArtInput {
   addArtStyleIDs: [ID!]
   removeArtStyleIDs: [ID!]
   clearArtStyle: Boolean
-  addMediumIDs: [ID!]
-  removeMediumIDs: [ID!]
-  clearMediums: Boolean
+  addTechniqueIDs: [ID!]
+  removeTechniqueIDs: [ID!]
+  clearTechniques: Boolean
   collectionID: ID
   countryID: ID
   clearCountry: Boolean
@@ -10272,9 +10272,6 @@ input UpdateMediumInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
-  addArtIDs: [ID!]
-  removeArtIDs: [ID!]
-  clearArt: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
@@ -10924,6 +10921,9 @@ input UpdateTechniqueInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
+  addArtIDs: [ID!]
+  removeArtIDs: [ID!]
+  clearArt: Boolean
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean

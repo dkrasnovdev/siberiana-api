@@ -65,7 +65,7 @@ func (Art) Edges() []ent.Edge {
 		edge.From("author", Person.Type).Ref("art").Unique(),
 		edge.From("art_genre", ArtGenre.Type).Ref("art"),
 		edge.From("art_style", ArtStyle.Type).Ref("art"),
-		edge.From("mediums", Medium.Type).Ref("art"),
+		edge.From("techniques", Technique.Type).Ref("art"),
 		edge.From("collection", Collection.Type).Ref("art").Unique().Required(),
 		edge.From("country", Country.Type).Ref("art").Unique(),
 		edge.From("settlement", Settlement.Type).Ref("art").Unique(),

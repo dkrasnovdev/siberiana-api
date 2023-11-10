@@ -1024,21 +1024,21 @@ func HasArtStyleWith(preds ...predicate.ArtStyle) predicate.Art {
 	})
 }
 
-// HasMediums applies the HasEdge predicate on the "mediums" edge.
-func HasMediums() predicate.Art {
+// HasTechniques applies the HasEdge predicate on the "techniques" edge.
+func HasTechniques() predicate.Art {
 	return predicate.Art(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, MediumsTable, MediumsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, TechniquesTable, TechniquesPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasMediumsWith applies the HasEdge predicate on the "mediums" edge with a given conditions (other predicates).
-func HasMediumsWith(preds ...predicate.Medium) predicate.Art {
+// HasTechniquesWith applies the HasEdge predicate on the "techniques" edge with a given conditions (other predicates).
+func HasTechniquesWith(preds ...predicate.Technique) predicate.Art {
 	return predicate.Art(func(s *sql.Selector) {
-		step := newMediumsStep()
+		step := newTechniquesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

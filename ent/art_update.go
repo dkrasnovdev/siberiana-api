@@ -18,11 +18,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
-	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
 
 // ArtUpdate is the builder for updating Art entities.
@@ -311,19 +311,19 @@ func (au *ArtUpdate) AddArtStyle(a ...*ArtStyle) *ArtUpdate {
 	return au.AddArtStyleIDs(ids...)
 }
 
-// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
-func (au *ArtUpdate) AddMediumIDs(ids ...int) *ArtUpdate {
-	au.mutation.AddMediumIDs(ids...)
+// AddTechniqueIDs adds the "techniques" edge to the Technique entity by IDs.
+func (au *ArtUpdate) AddTechniqueIDs(ids ...int) *ArtUpdate {
+	au.mutation.AddTechniqueIDs(ids...)
 	return au
 }
 
-// AddMediums adds the "mediums" edges to the Medium entity.
-func (au *ArtUpdate) AddMediums(m ...*Medium) *ArtUpdate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// AddTechniques adds the "techniques" edges to the Technique entity.
+func (au *ArtUpdate) AddTechniques(t ...*Technique) *ArtUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return au.AddMediumIDs(ids...)
+	return au.AddTechniqueIDs(ids...)
 }
 
 // SetCollectionID sets the "collection" edge to the Collection entity by ID.
@@ -466,25 +466,25 @@ func (au *ArtUpdate) RemoveArtStyle(a ...*ArtStyle) *ArtUpdate {
 	return au.RemoveArtStyleIDs(ids...)
 }
 
-// ClearMediums clears all "mediums" edges to the Medium entity.
-func (au *ArtUpdate) ClearMediums() *ArtUpdate {
-	au.mutation.ClearMediums()
+// ClearTechniques clears all "techniques" edges to the Technique entity.
+func (au *ArtUpdate) ClearTechniques() *ArtUpdate {
+	au.mutation.ClearTechniques()
 	return au
 }
 
-// RemoveMediumIDs removes the "mediums" edge to Medium entities by IDs.
-func (au *ArtUpdate) RemoveMediumIDs(ids ...int) *ArtUpdate {
-	au.mutation.RemoveMediumIDs(ids...)
+// RemoveTechniqueIDs removes the "techniques" edge to Technique entities by IDs.
+func (au *ArtUpdate) RemoveTechniqueIDs(ids ...int) *ArtUpdate {
+	au.mutation.RemoveTechniqueIDs(ids...)
 	return au
 }
 
-// RemoveMediums removes "mediums" edges to Medium entities.
-func (au *ArtUpdate) RemoveMediums(m ...*Medium) *ArtUpdate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// RemoveTechniques removes "techniques" edges to Technique entities.
+func (au *ArtUpdate) RemoveTechniques(t ...*Technique) *ArtUpdate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return au.RemoveMediumIDs(ids...)
+	return au.RemoveTechniqueIDs(ids...)
 }
 
 // ClearCollection clears the "collection" edge to the Collection entity.
@@ -772,28 +772,28 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.MediumsCleared() {
+	if au.mutation.TechniquesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   art.MediumsTable,
-			Columns: art.MediumsPrimaryKey,
+			Table:   art.TechniquesTable,
+			Columns: art.TechniquesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedMediumsIDs(); len(nodes) > 0 && !au.mutation.MediumsCleared() {
+	if nodes := au.mutation.RemovedTechniquesIDs(); len(nodes) > 0 && !au.mutation.TechniquesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   art.MediumsTable,
-			Columns: art.MediumsPrimaryKey,
+			Table:   art.TechniquesTable,
+			Columns: art.TechniquesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -801,15 +801,15 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.MediumsIDs(); len(nodes) > 0 {
+	if nodes := au.mutation.TechniquesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   art.MediumsTable,
-			Columns: art.MediumsPrimaryKey,
+			Table:   art.TechniquesTable,
+			Columns: art.TechniquesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1255,19 +1255,19 @@ func (auo *ArtUpdateOne) AddArtStyle(a ...*ArtStyle) *ArtUpdateOne {
 	return auo.AddArtStyleIDs(ids...)
 }
 
-// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
-func (auo *ArtUpdateOne) AddMediumIDs(ids ...int) *ArtUpdateOne {
-	auo.mutation.AddMediumIDs(ids...)
+// AddTechniqueIDs adds the "techniques" edge to the Technique entity by IDs.
+func (auo *ArtUpdateOne) AddTechniqueIDs(ids ...int) *ArtUpdateOne {
+	auo.mutation.AddTechniqueIDs(ids...)
 	return auo
 }
 
-// AddMediums adds the "mediums" edges to the Medium entity.
-func (auo *ArtUpdateOne) AddMediums(m ...*Medium) *ArtUpdateOne {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// AddTechniques adds the "techniques" edges to the Technique entity.
+func (auo *ArtUpdateOne) AddTechniques(t ...*Technique) *ArtUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return auo.AddMediumIDs(ids...)
+	return auo.AddTechniqueIDs(ids...)
 }
 
 // SetCollectionID sets the "collection" edge to the Collection entity by ID.
@@ -1410,25 +1410,25 @@ func (auo *ArtUpdateOne) RemoveArtStyle(a ...*ArtStyle) *ArtUpdateOne {
 	return auo.RemoveArtStyleIDs(ids...)
 }
 
-// ClearMediums clears all "mediums" edges to the Medium entity.
-func (auo *ArtUpdateOne) ClearMediums() *ArtUpdateOne {
-	auo.mutation.ClearMediums()
+// ClearTechniques clears all "techniques" edges to the Technique entity.
+func (auo *ArtUpdateOne) ClearTechniques() *ArtUpdateOne {
+	auo.mutation.ClearTechniques()
 	return auo
 }
 
-// RemoveMediumIDs removes the "mediums" edge to Medium entities by IDs.
-func (auo *ArtUpdateOne) RemoveMediumIDs(ids ...int) *ArtUpdateOne {
-	auo.mutation.RemoveMediumIDs(ids...)
+// RemoveTechniqueIDs removes the "techniques" edge to Technique entities by IDs.
+func (auo *ArtUpdateOne) RemoveTechniqueIDs(ids ...int) *ArtUpdateOne {
+	auo.mutation.RemoveTechniqueIDs(ids...)
 	return auo
 }
 
-// RemoveMediums removes "mediums" edges to Medium entities.
-func (auo *ArtUpdateOne) RemoveMediums(m ...*Medium) *ArtUpdateOne {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// RemoveTechniques removes "techniques" edges to Technique entities.
+func (auo *ArtUpdateOne) RemoveTechniques(t ...*Technique) *ArtUpdateOne {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return auo.RemoveMediumIDs(ids...)
+	return auo.RemoveTechniqueIDs(ids...)
 }
 
 // ClearCollection clears the "collection" edge to the Collection entity.
@@ -1746,28 +1746,28 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.MediumsCleared() {
+	if auo.mutation.TechniquesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   art.MediumsTable,
-			Columns: art.MediumsPrimaryKey,
+			Table:   art.TechniquesTable,
+			Columns: art.TechniquesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedMediumsIDs(); len(nodes) > 0 && !auo.mutation.MediumsCleared() {
+	if nodes := auo.mutation.RemovedTechniquesIDs(); len(nodes) > 0 && !auo.mutation.TechniquesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   art.MediumsTable,
-			Columns: art.MediumsPrimaryKey,
+			Table:   art.TechniquesTable,
+			Columns: art.TechniquesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1775,15 +1775,15 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.MediumsIDs(); len(nodes) > 0 {
+	if nodes := auo.mutation.TechniquesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   art.MediumsTable,
-			Columns: art.MediumsPrimaryKey,
+			Table:   art.TechniquesTable,
+			Columns: art.TechniquesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

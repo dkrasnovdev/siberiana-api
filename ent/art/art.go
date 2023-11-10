@@ -47,8 +47,8 @@ const (
 	EdgeArtGenre = "art_genre"
 	// EdgeArtStyle holds the string denoting the art_style edge name in mutations.
 	EdgeArtStyle = "art_style"
-	// EdgeMediums holds the string denoting the mediums edge name in mutations.
-	EdgeMediums = "mediums"
+	// EdgeTechniques holds the string denoting the techniques edge name in mutations.
+	EdgeTechniques = "techniques"
 	// EdgeCollection holds the string denoting the collection edge name in mutations.
 	EdgeCollection = "collection"
 	// EdgeCountry holds the string denoting the country edge name in mutations.
@@ -78,11 +78,11 @@ const (
 	// ArtStyleInverseTable is the table name for the ArtStyle entity.
 	// It exists in this package in order to avoid circular dependency with the "artstyle" package.
 	ArtStyleInverseTable = "art_styles"
-	// MediumsTable is the table that holds the mediums relation/edge. The primary key declared below.
-	MediumsTable = "medium_art"
-	// MediumsInverseTable is the table name for the Medium entity.
-	// It exists in this package in order to avoid circular dependency with the "medium" package.
-	MediumsInverseTable = "media"
+	// TechniquesTable is the table that holds the techniques relation/edge. The primary key declared below.
+	TechniquesTable = "technique_art"
+	// TechniquesInverseTable is the table name for the Technique entity.
+	// It exists in this package in order to avoid circular dependency with the "technique" package.
+	TechniquesInverseTable = "techniques"
 	// CollectionTable is the table that holds the collection relation/edge.
 	CollectionTable = "arts"
 	// CollectionInverseTable is the table name for the Collection entity.
@@ -156,9 +156,9 @@ var (
 	// ArtStylePrimaryKey and ArtStyleColumn2 are the table columns denoting the
 	// primary key for the art_style relation (M2M).
 	ArtStylePrimaryKey = []string{"art_style_id", "art_id"}
-	// MediumsPrimaryKey and MediumsColumn2 are the table columns denoting the
-	// primary key for the mediums relation (M2M).
-	MediumsPrimaryKey = []string{"medium_id", "art_id"}
+	// TechniquesPrimaryKey and TechniquesColumn2 are the table columns denoting the
+	// primary key for the techniques relation (M2M).
+	TechniquesPrimaryKey = []string{"technique_id", "art_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -295,17 +295,17 @@ func ByArtStyle(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByMediumsCount orders the results by mediums count.
-func ByMediumsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByTechniquesCount orders the results by techniques count.
+func ByTechniquesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newMediumsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newTechniquesStep(), opts...)
 	}
 }
 
-// ByMediums orders the results by mediums terms.
-func ByMediums(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByTechniques orders the results by techniques terms.
+func ByTechniques(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newMediumsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTechniquesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -364,11 +364,11 @@ func newArtStyleStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ArtStyleTable, ArtStylePrimaryKey...),
 	)
 }
-func newMediumsStep() *sqlgraph.Step {
+func newTechniquesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(MediumsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, MediumsTable, MediumsPrimaryKey...),
+		sqlgraph.To(TechniquesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, TechniquesTable, TechniquesPrimaryKey...),
 	)
 }
 func newCollectionStep() *sqlgraph.Step {

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -156,6 +157,21 @@ func (tu *TechniqueUpdate) ClearExternalLink() *TechniqueUpdate {
 	return tu
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (tu *TechniqueUpdate) AddArtIDs(ids ...int) *TechniqueUpdate {
+	tu.mutation.AddArtIDs(ids...)
+	return tu
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (tu *TechniqueUpdate) AddArt(a ...*Art) *TechniqueUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tu.AddArtIDs(ids...)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (tu *TechniqueUpdate) AddArtifactIDs(ids ...int) *TechniqueUpdate {
 	tu.mutation.AddArtifactIDs(ids...)
@@ -189,6 +205,27 @@ func (tu *TechniqueUpdate) AddPetroglyphs(p ...*Petroglyph) *TechniqueUpdate {
 // Mutation returns the TechniqueMutation object of the builder.
 func (tu *TechniqueUpdate) Mutation() *TechniqueMutation {
 	return tu.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (tu *TechniqueUpdate) ClearArt() *TechniqueUpdate {
+	tu.mutation.ClearArt()
+	return tu
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (tu *TechniqueUpdate) RemoveArtIDs(ids ...int) *TechniqueUpdate {
+	tu.mutation.RemoveArtIDs(ids...)
+	return tu
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (tu *TechniqueUpdate) RemoveArt(a ...*Art) *TechniqueUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tu.RemoveArtIDs(ids...)
 }
 
 // ClearArtifacts clears all "artifacts" edges to the Artifact entity.
@@ -322,6 +359,51 @@ func (tu *TechniqueUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if tu.mutation.ExternalLinkCleared() {
 		_spec.ClearField(technique.FieldExternalLink, field.TypeString)
+	}
+	if tu.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtTable,
+			Columns: technique.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedArtIDs(); len(nodes) > 0 && !tu.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtTable,
+			Columns: technique.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtTable,
+			Columns: technique.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -559,6 +641,21 @@ func (tuo *TechniqueUpdateOne) ClearExternalLink() *TechniqueUpdateOne {
 	return tuo
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by IDs.
+func (tuo *TechniqueUpdateOne) AddArtIDs(ids ...int) *TechniqueUpdateOne {
+	tuo.mutation.AddArtIDs(ids...)
+	return tuo
+}
+
+// AddArt adds the "art" edges to the Art entity.
+func (tuo *TechniqueUpdateOne) AddArt(a ...*Art) *TechniqueUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tuo.AddArtIDs(ids...)
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
 func (tuo *TechniqueUpdateOne) AddArtifactIDs(ids ...int) *TechniqueUpdateOne {
 	tuo.mutation.AddArtifactIDs(ids...)
@@ -592,6 +689,27 @@ func (tuo *TechniqueUpdateOne) AddPetroglyphs(p ...*Petroglyph) *TechniqueUpdate
 // Mutation returns the TechniqueMutation object of the builder.
 func (tuo *TechniqueUpdateOne) Mutation() *TechniqueMutation {
 	return tuo.mutation
+}
+
+// ClearArt clears all "art" edges to the Art entity.
+func (tuo *TechniqueUpdateOne) ClearArt() *TechniqueUpdateOne {
+	tuo.mutation.ClearArt()
+	return tuo
+}
+
+// RemoveArtIDs removes the "art" edge to Art entities by IDs.
+func (tuo *TechniqueUpdateOne) RemoveArtIDs(ids ...int) *TechniqueUpdateOne {
+	tuo.mutation.RemoveArtIDs(ids...)
+	return tuo
+}
+
+// RemoveArt removes "art" edges to Art entities.
+func (tuo *TechniqueUpdateOne) RemoveArt(a ...*Art) *TechniqueUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return tuo.RemoveArtIDs(ids...)
 }
 
 // ClearArtifacts clears all "artifacts" edges to the Artifact entity.
@@ -755,6 +873,51 @@ func (tuo *TechniqueUpdateOne) sqlSave(ctx context.Context) (_node *Technique, e
 	}
 	if tuo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(technique.FieldExternalLink, field.TypeString)
+	}
+	if tuo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtTable,
+			Columns: technique.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedArtIDs(); len(nodes) > 0 && !tuo.mutation.ArtCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtTable,
+			Columns: technique.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.ArtIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   technique.ArtTable,
+			Columns: technique.ArtPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if tuo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

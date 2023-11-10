@@ -103,16 +103,16 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 			a.WithNamedArtStyle(alias, func(wq *ArtStyleQuery) {
 				*wq = *query
 			})
-		case "mediums":
+		case "techniques":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&MediumClient{config: a.config}).Query()
+				query = (&TechniqueClient{config: a.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, mediumImplementors)...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, techniqueImplementors)...); err != nil {
 				return err
 			}
-			a.WithNamedMediums(alias, func(wq *MediumQuery) {
+			a.WithNamedTechniques(alias, func(wq *TechniqueQuery) {
 				*wq = *query
 			})
 		case "collection":
@@ -3347,18 +3347,6 @@ func (m *MediumQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
-		case "art":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ArtClient{config: m.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
-				return err
-			}
-			m.WithNamedArt(alias, func(wq *ArtQuery) {
-				*wq = *query
-			})
 		case "artifacts":
 			var (
 				alias = field.Alias
@@ -6848,6 +6836,18 @@ func (t *TechniqueQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
 		case "artifacts":
 			var (
 				alias = field.Alias

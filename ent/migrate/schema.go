@@ -1274,31 +1274,6 @@ var (
 			},
 		},
 	}
-	// MediumArtColumns holds the columns for the "medium_art" table.
-	MediumArtColumns = []*schema.Column{
-		{Name: "medium_id", Type: field.TypeInt},
-		{Name: "art_id", Type: field.TypeInt},
-	}
-	// MediumArtTable holds the schema information for the "medium_art" table.
-	MediumArtTable = &schema.Table{
-		Name:       "medium_art",
-		Columns:    MediumArtColumns,
-		PrimaryKey: []*schema.Column{MediumArtColumns[0], MediumArtColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "medium_art_medium_id",
-				Columns:    []*schema.Column{MediumArtColumns[0]},
-				RefColumns: []*schema.Column{MediaColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "medium_art_art_id",
-				Columns:    []*schema.Column{MediumArtColumns[1]},
-				RefColumns: []*schema.Column{ArtsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// MediumArtifactsColumns holds the columns for the "medium_artifacts" table.
 	MediumArtifactsColumns = []*schema.Column{
 		{Name: "medium_id", Type: field.TypeInt},
@@ -1574,6 +1549,31 @@ var (
 			},
 		},
 	}
+	// TechniqueArtColumns holds the columns for the "technique_art" table.
+	TechniqueArtColumns = []*schema.Column{
+		{Name: "technique_id", Type: field.TypeInt},
+		{Name: "art_id", Type: field.TypeInt},
+	}
+	// TechniqueArtTable holds the schema information for the "technique_art" table.
+	TechniqueArtTable = &schema.Table{
+		Name:       "technique_art",
+		Columns:    TechniqueArtColumns,
+		PrimaryKey: []*schema.Column{TechniqueArtColumns[0], TechniqueArtColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "technique_art_technique_id",
+				Columns:    []*schema.Column{TechniqueArtColumns[0]},
+				RefColumns: []*schema.Column{TechniquesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "technique_art_art_id",
+				Columns:    []*schema.Column{TechniqueArtColumns[1]},
+				RefColumns: []*schema.Column{ArtsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// TechniqueArtifactsColumns holds the columns for the "technique_artifacts" table.
 	TechniqueArtifactsColumns = []*schema.Column{
 		{Name: "technique_id", Type: field.TypeInt},
@@ -1693,7 +1693,6 @@ var (
 		ArtGenreArtTable,
 		ArtStyleArtTable,
 		BookGenreBooksTable,
-		MediumArtTable,
 		MediumArtifactsTable,
 		MonumentSetsTable,
 		PersonCollectionsTable,
@@ -1705,6 +1704,7 @@ var (
 		ProjectArtifactsTable,
 		PublicationArtifactsTable,
 		PublicationPetroglyphsTable,
+		TechniqueArtTable,
 		TechniqueArtifactsTable,
 		TechniquePetroglyphsTable,
 		VisitMoundsTable,
@@ -1773,8 +1773,6 @@ func init() {
 	ArtStyleArtTable.ForeignKeys[1].RefTable = ArtsTable
 	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable
 	BookGenreBooksTable.ForeignKeys[1].RefTable = BooksTable
-	MediumArtTable.ForeignKeys[0].RefTable = MediaTable
-	MediumArtTable.ForeignKeys[1].RefTable = ArtsTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	MonumentSetsTable.ForeignKeys[0].RefTable = MonumentsTable
@@ -1797,6 +1795,8 @@ func init() {
 	PublicationArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PublicationPetroglyphsTable.ForeignKeys[0].RefTable = PublicationsTable
 	PublicationPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
+	TechniqueArtTable.ForeignKeys[0].RefTable = TechniquesTable
+	TechniqueArtTable.ForeignKeys[1].RefTable = ArtsTable
 	TechniqueArtifactsTable.ForeignKeys[0].RefTable = TechniquesTable
 	TechniqueArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	TechniquePetroglyphsTable.ForeignKeys[0].RefTable = TechniquesTable

@@ -41,24 +41,36 @@ type Technique struct {
 
 // TechniqueEdges holds the relations/edges for other nodes in the graph.
 type TechniqueEdges struct {
+	// Art holds the value of the art edge.
+	Art []*Art `json:"art,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Petroglyphs holds the value of the petroglyphs edge.
 	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
+	namedArt         map[string][]*Art
 	namedArtifacts   map[string][]*Artifact
 	namedPetroglyphs map[string][]*Petroglyph
+}
+
+// ArtOrErr returns the Art value or an error if the edge
+// was not loaded in eager-loading.
+func (e TechniqueEdges) ArtOrErr() ([]*Art, error) {
+	if e.loadedTypes[0] {
+		return e.Art, nil
+	}
+	return nil, &NotLoadedError{edge: "art"}
 }
 
 // ArtifactsOrErr returns the Artifacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e TechniqueEdges) ArtifactsOrErr() ([]*Artifact, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Artifacts, nil
 	}
 	return nil, &NotLoadedError{edge: "artifacts"}
@@ -67,7 +79,7 @@ func (e TechniqueEdges) ArtifactsOrErr() ([]*Artifact, error) {
 // PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
 // was not loaded in eager-loading.
 func (e TechniqueEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Petroglyphs, nil
 	}
 	return nil, &NotLoadedError{edge: "petroglyphs"}
@@ -166,6 +178,11 @@ func (t *Technique) Value(name string) (ent.Value, error) {
 	return t.selectValues.Get(name)
 }
 
+// QueryArt queries the "art" edge of the Technique entity.
+func (t *Technique) QueryArt() *ArtQuery {
+	return NewTechniqueClient(t.config).QueryArt(t)
+}
+
 // QueryArtifacts queries the "artifacts" edge of the Technique entity.
 func (t *Technique) QueryArtifacts() *ArtifactQuery {
 	return NewTechniqueClient(t.config).QueryArtifacts(t)
@@ -224,6 +241,30 @@ func (t *Technique) String() string {
 	builder.WriteString(t.ExternalLink)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedArt returns the Art named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (t *Technique) NamedArt(name string) ([]*Art, error) {
+	if t.Edges.namedArt == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := t.Edges.namedArt[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (t *Technique) appendNamedArt(name string, edges ...*Art) {
+	if t.Edges.namedArt == nil {
+		t.Edges.namedArt = make(map[string][]*Art)
+	}
+	if len(edges) == 0 {
+		t.Edges.namedArt[name] = []*Art{}
+	} else {
+		t.Edges.namedArt[name] = append(t.Edges.namedArt[name], edges...)
+	}
 }
 
 // NamedArtifacts returns the Artifacts named value or an error if the edge was not

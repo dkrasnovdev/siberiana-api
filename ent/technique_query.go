@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -25,10 +26,12 @@ type TechniqueQuery struct {
 	order                []technique.OrderOption
 	inters               []Interceptor
 	predicates           []predicate.Technique
+	withArt              *ArtQuery
 	withArtifacts        *ArtifactQuery
 	withPetroglyphs      *PetroglyphQuery
 	modifiers            []func(*sql.Selector)
 	loadTotal            []func(context.Context, []*Technique) error
+	withNamedArt         map[string]*ArtQuery
 	withNamedArtifacts   map[string]*ArtifactQuery
 	withNamedPetroglyphs map[string]*PetroglyphQuery
 	// intermediate query (i.e. traversal path).
@@ -65,6 +68,28 @@ func (tq *TechniqueQuery) Unique(unique bool) *TechniqueQuery {
 func (tq *TechniqueQuery) Order(o ...technique.OrderOption) *TechniqueQuery {
 	tq.order = append(tq.order, o...)
 	return tq
+}
+
+// QueryArt chains the current query on the "art" edge.
+func (tq *TechniqueQuery) QueryArt() *ArtQuery {
+	query := (&ArtClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(technique.Table, technique.FieldID, selector),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, technique.ArtTable, technique.ArtPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryArtifacts chains the current query on the "artifacts" edge.
@@ -303,12 +328,24 @@ func (tq *TechniqueQuery) Clone() *TechniqueQuery {
 		order:           append([]technique.OrderOption{}, tq.order...),
 		inters:          append([]Interceptor{}, tq.inters...),
 		predicates:      append([]predicate.Technique{}, tq.predicates...),
+		withArt:         tq.withArt.Clone(),
 		withArtifacts:   tq.withArtifacts.Clone(),
 		withPetroglyphs: tq.withPetroglyphs.Clone(),
 		// clone intermediate query.
 		sql:  tq.sql.Clone(),
 		path: tq.path,
 	}
+}
+
+// WithArt tells the query-builder to eager-load the nodes that are connected to
+// the "art" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TechniqueQuery) WithArt(opts ...func(*ArtQuery)) *TechniqueQuery {
+	query := (&ArtClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withArt = query
+	return tq
 }
 
 // WithArtifacts tells the query-builder to eager-load the nodes that are connected to
@@ -417,7 +454,8 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 	var (
 		nodes       = []*Technique{}
 		_spec       = tq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
+			tq.withArt != nil,
 			tq.withArtifacts != nil,
 			tq.withPetroglyphs != nil,
 		}
@@ -443,6 +481,13 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := tq.withArt; query != nil {
+		if err := tq.loadArt(ctx, query, nodes,
+			func(n *Technique) { n.Edges.Art = []*Art{} },
+			func(n *Technique, e *Art) { n.Edges.Art = append(n.Edges.Art, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := tq.withArtifacts; query != nil {
 		if err := tq.loadArtifacts(ctx, query, nodes,
 			func(n *Technique) { n.Edges.Artifacts = []*Artifact{} },
@@ -454,6 +499,13 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 		if err := tq.loadPetroglyphs(ctx, query, nodes,
 			func(n *Technique) { n.Edges.Petroglyphs = []*Petroglyph{} },
 			func(n *Technique, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedArt {
+		if err := tq.loadArt(ctx, query, nodes,
+			func(n *Technique) { n.appendNamedArt(name) },
+			func(n *Technique, e *Art) { n.appendNamedArt(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -479,6 +531,67 @@ func (tq *TechniqueQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Te
 	return nodes, nil
 }
 
+func (tq *TechniqueQuery) loadArt(ctx context.Context, query *ArtQuery, nodes []*Technique, init func(*Technique), assign func(*Technique, *Art)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Technique)
+	nids := make(map[int]map[*Technique]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(technique.ArtTable)
+		s.Join(joinT).On(s.C(art.FieldID), joinT.C(technique.ArtPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(technique.ArtPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(technique.ArtPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Technique]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Art](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "art" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (tq *TechniqueQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Technique, init func(*Technique), assign func(*Technique, *Artifact)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Technique)
@@ -684,6 +797,20 @@ func (tq *TechniqueQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedArt tells the query-builder to eager-load the nodes that are connected to the "art"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TechniqueQuery) WithNamedArt(name string, opts ...func(*ArtQuery)) *TechniqueQuery {
+	query := (&ArtClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedArt == nil {
+		tq.withNamedArt = make(map[string]*ArtQuery)
+	}
+	tq.withNamedArt[name] = query
+	return tq
 }
 
 // WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"

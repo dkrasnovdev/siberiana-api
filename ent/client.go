@@ -674,15 +674,15 @@ func (c *ArtClient) QueryArtStyle(a *Art) *ArtStyleQuery {
 	return query
 }
 
-// QueryMediums queries the mediums edge of a Art.
-func (c *ArtClient) QueryMediums(a *Art) *MediumQuery {
-	query := (&MediumClient{config: c.config}).Query()
+// QueryTechniques queries the techniques edge of a Art.
+func (c *ArtClient) QueryTechniques(a *Art) *TechniqueQuery {
+	query := (&TechniqueClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := a.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(art.Table, art.FieldID, id),
-			sqlgraph.To(medium.Table, medium.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, art.MediumsTable, art.MediumsPrimaryKey...),
+			sqlgraph.To(technique.Table, technique.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.TechniquesTable, art.TechniquesPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -4236,22 +4236,6 @@ func (c *MediumClient) GetX(ctx context.Context, id int) *Medium {
 		panic(err)
 	}
 	return obj
-}
-
-// QueryArt queries the art edge of a Medium.
-func (c *MediumClient) QueryArt(m *Medium) *ArtQuery {
-	query := (&ArtClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(medium.Table, medium.FieldID, id),
-			sqlgraph.To(art.Table, art.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, medium.ArtTable, medium.ArtPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // QueryArtifacts queries the artifacts edge of a Medium.
@@ -7839,6 +7823,22 @@ func (c *TechniqueClient) GetX(ctx context.Context, id int) *Technique {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryArt queries the art edge of a Technique.
+func (c *TechniqueClient) QueryArt(t *Technique) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(technique.Table, technique.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, technique.ArtTable, technique.ArtPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryArtifacts queries the artifacts edge of a Technique.

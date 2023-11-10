@@ -70,8 +70,8 @@ type ArtEdges struct {
 	ArtGenre []*ArtGenre `json:"art_genre,omitempty"`
 	// ArtStyle holds the value of the art_style edge.
 	ArtStyle []*ArtStyle `json:"art_style,omitempty"`
-	// Mediums holds the value of the mediums edge.
-	Mediums []*Medium `json:"mediums,omitempty"`
+	// Techniques holds the value of the techniques edge.
+	Techniques []*Technique `json:"techniques,omitempty"`
 	// Collection holds the value of the collection edge.
 	Collection *Collection `json:"collection,omitempty"`
 	// Country holds the value of the country edge.
@@ -88,9 +88,9 @@ type ArtEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [9]map[string]int
 
-	namedArtGenre map[string][]*ArtGenre
-	namedArtStyle map[string][]*ArtStyle
-	namedMediums  map[string][]*Medium
+	namedArtGenre   map[string][]*ArtGenre
+	namedArtStyle   map[string][]*ArtStyle
+	namedTechniques map[string][]*Technique
 }
 
 // AuthorOrErr returns the Author value or an error if the edge
@@ -124,13 +124,13 @@ func (e ArtEdges) ArtStyleOrErr() ([]*ArtStyle, error) {
 	return nil, &NotLoadedError{edge: "art_style"}
 }
 
-// MediumsOrErr returns the Mediums value or an error if the edge
+// TechniquesOrErr returns the Techniques value or an error if the edge
 // was not loaded in eager-loading.
-func (e ArtEdges) MediumsOrErr() ([]*Medium, error) {
+func (e ArtEdges) TechniquesOrErr() ([]*Technique, error) {
 	if e.loadedTypes[3] {
-		return e.Mediums, nil
+		return e.Techniques, nil
 	}
-	return nil, &NotLoadedError{edge: "mediums"}
+	return nil, &NotLoadedError{edge: "techniques"}
 }
 
 // CollectionOrErr returns the Collection value or an error if the edge
@@ -394,9 +394,9 @@ func (a *Art) QueryArtStyle() *ArtStyleQuery {
 	return NewArtClient(a.config).QueryArtStyle(a)
 }
 
-// QueryMediums queries the "mediums" edge of the Art entity.
-func (a *Art) QueryMediums() *MediumQuery {
-	return NewArtClient(a.config).QueryMediums(a)
+// QueryTechniques queries the "techniques" edge of the Art entity.
+func (a *Art) QueryTechniques() *TechniqueQuery {
+	return NewArtClient(a.config).QueryTechniques(a)
 }
 
 // QueryCollection queries the "collection" edge of the Art entity.
@@ -537,27 +537,27 @@ func (a *Art) appendNamedArtStyle(name string, edges ...*ArtStyle) {
 	}
 }
 
-// NamedMediums returns the Mediums named value or an error if the edge was not
+// NamedTechniques returns the Techniques named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Art) NamedMediums(name string) ([]*Medium, error) {
-	if a.Edges.namedMediums == nil {
+func (a *Art) NamedTechniques(name string) ([]*Technique, error) {
+	if a.Edges.namedTechniques == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedMediums[name]
+	nodes, ok := a.Edges.namedTechniques[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Art) appendNamedMediums(name string, edges ...*Medium) {
-	if a.Edges.namedMediums == nil {
-		a.Edges.namedMediums = make(map[string][]*Medium)
+func (a *Art) appendNamedTechniques(name string, edges ...*Technique) {
+	if a.Edges.namedTechniques == nil {
+		a.Edges.namedTechniques = make(map[string][]*Technique)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedMediums[name] = []*Medium{}
+		a.Edges.namedTechniques[name] = []*Technique{}
 	} else {
-		a.Edges.namedMediums[name] = append(a.Edges.namedMediums[name], edges...)
+		a.Edges.namedTechniques[name] = append(a.Edges.namedTechniques[name], edges...)
 	}
 }
 

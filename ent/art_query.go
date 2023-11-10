@@ -18,35 +18,35 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
-	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
 
 // ArtQuery is the builder for querying Art entities.
 type ArtQuery struct {
 	config
-	ctx               *QueryContext
-	order             []art.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.Art
-	withAuthor        *PersonQuery
-	withArtGenre      *ArtGenreQuery
-	withArtStyle      *ArtStyleQuery
-	withMediums       *MediumQuery
-	withCollection    *CollectionQuery
-	withCountry       *CountryQuery
-	withSettlement    *SettlementQuery
-	withDistrict      *DistrictQuery
-	withRegion        *RegionQuery
-	withFKs           bool
-	modifiers         []func(*sql.Selector)
-	loadTotal         []func(context.Context, []*Art) error
-	withNamedArtGenre map[string]*ArtGenreQuery
-	withNamedArtStyle map[string]*ArtStyleQuery
-	withNamedMediums  map[string]*MediumQuery
+	ctx                 *QueryContext
+	order               []art.OrderOption
+	inters              []Interceptor
+	predicates          []predicate.Art
+	withAuthor          *PersonQuery
+	withArtGenre        *ArtGenreQuery
+	withArtStyle        *ArtStyleQuery
+	withTechniques      *TechniqueQuery
+	withCollection      *CollectionQuery
+	withCountry         *CountryQuery
+	withSettlement      *SettlementQuery
+	withDistrict        *DistrictQuery
+	withRegion          *RegionQuery
+	withFKs             bool
+	modifiers           []func(*sql.Selector)
+	loadTotal           []func(context.Context, []*Art) error
+	withNamedArtGenre   map[string]*ArtGenreQuery
+	withNamedArtStyle   map[string]*ArtStyleQuery
+	withNamedTechniques map[string]*TechniqueQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -149,9 +149,9 @@ func (aq *ArtQuery) QueryArtStyle() *ArtStyleQuery {
 	return query
 }
 
-// QueryMediums chains the current query on the "mediums" edge.
-func (aq *ArtQuery) QueryMediums() *MediumQuery {
-	query := (&MediumClient{config: aq.config}).Query()
+// QueryTechniques chains the current query on the "techniques" edge.
+func (aq *ArtQuery) QueryTechniques() *TechniqueQuery {
+	query := (&TechniqueClient{config: aq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := aq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -162,8 +162,8 @@ func (aq *ArtQuery) QueryMediums() *MediumQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(art.Table, art.FieldID, selector),
-			sqlgraph.To(medium.Table, medium.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, art.MediumsTable, art.MediumsPrimaryKey...),
+			sqlgraph.To(technique.Table, technique.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.TechniquesTable, art.TechniquesPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -476,7 +476,7 @@ func (aq *ArtQuery) Clone() *ArtQuery {
 		withAuthor:     aq.withAuthor.Clone(),
 		withArtGenre:   aq.withArtGenre.Clone(),
 		withArtStyle:   aq.withArtStyle.Clone(),
-		withMediums:    aq.withMediums.Clone(),
+		withTechniques: aq.withTechniques.Clone(),
 		withCollection: aq.withCollection.Clone(),
 		withCountry:    aq.withCountry.Clone(),
 		withSettlement: aq.withSettlement.Clone(),
@@ -521,14 +521,14 @@ func (aq *ArtQuery) WithArtStyle(opts ...func(*ArtStyleQuery)) *ArtQuery {
 	return aq
 }
 
-// WithMediums tells the query-builder to eager-load the nodes that are connected to
-// the "mediums" edge. The optional arguments are used to configure the query builder of the edge.
-func (aq *ArtQuery) WithMediums(opts ...func(*MediumQuery)) *ArtQuery {
-	query := (&MediumClient{config: aq.config}).Query()
+// WithTechniques tells the query-builder to eager-load the nodes that are connected to
+// the "techniques" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithTechniques(opts ...func(*TechniqueQuery)) *ArtQuery {
+	query := (&TechniqueClient{config: aq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	aq.withMediums = query
+	aq.withTechniques = query
 	return aq
 }
 
@@ -676,7 +676,7 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 			aq.withAuthor != nil,
 			aq.withArtGenre != nil,
 			aq.withArtStyle != nil,
-			aq.withMediums != nil,
+			aq.withTechniques != nil,
 			aq.withCollection != nil,
 			aq.withCountry != nil,
 			aq.withSettlement != nil,
@@ -731,10 +731,10 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 			return nil, err
 		}
 	}
-	if query := aq.withMediums; query != nil {
-		if err := aq.loadMediums(ctx, query, nodes,
-			func(n *Art) { n.Edges.Mediums = []*Medium{} },
-			func(n *Art, e *Medium) { n.Edges.Mediums = append(n.Edges.Mediums, e) }); err != nil {
+	if query := aq.withTechniques; query != nil {
+		if err := aq.loadTechniques(ctx, query, nodes,
+			func(n *Art) { n.Edges.Techniques = []*Technique{} },
+			func(n *Art, e *Technique) { n.Edges.Techniques = append(n.Edges.Techniques, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -782,10 +782,10 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 			return nil, err
 		}
 	}
-	for name, query := range aq.withNamedMediums {
-		if err := aq.loadMediums(ctx, query, nodes,
-			func(n *Art) { n.appendNamedMediums(name) },
-			func(n *Art, e *Medium) { n.appendNamedMediums(name, e) }); err != nil {
+	for name, query := range aq.withNamedTechniques {
+		if err := aq.loadTechniques(ctx, query, nodes,
+			func(n *Art) { n.appendNamedTechniques(name) },
+			func(n *Art, e *Technique) { n.appendNamedTechniques(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -951,7 +951,7 @@ func (aq *ArtQuery) loadArtStyle(ctx context.Context, query *ArtStyleQuery, node
 	}
 	return nil
 }
-func (aq *ArtQuery) loadMediums(ctx context.Context, query *MediumQuery, nodes []*Art, init func(*Art), assign func(*Art, *Medium)) error {
+func (aq *ArtQuery) loadTechniques(ctx context.Context, query *TechniqueQuery, nodes []*Art, init func(*Art), assign func(*Art, *Technique)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Art)
 	nids := make(map[int]map[*Art]struct{})
@@ -963,11 +963,11 @@ func (aq *ArtQuery) loadMediums(ctx context.Context, query *MediumQuery, nodes [
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(art.MediumsTable)
-		s.Join(joinT).On(s.C(medium.FieldID), joinT.C(art.MediumsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(art.MediumsPrimaryKey[1]), edgeIDs...))
+		joinT := sql.Table(art.TechniquesTable)
+		s.Join(joinT).On(s.C(technique.FieldID), joinT.C(art.TechniquesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(art.TechniquesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(art.MediumsPrimaryKey[1]))
+		s.Select(joinT.C(art.TechniquesPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -997,14 +997,14 @@ func (aq *ArtQuery) loadMediums(ctx context.Context, query *MediumQuery, nodes [
 			}
 		})
 	})
-	neighbors, err := withInterceptors[[]*Medium](ctx, query, qr, query.inters)
+	neighbors, err := withInterceptors[[]*Technique](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "mediums" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "techniques" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1285,17 +1285,17 @@ func (aq *ArtQuery) WithNamedArtStyle(name string, opts ...func(*ArtStyleQuery))
 	return aq
 }
 
-// WithNamedMediums tells the query-builder to eager-load the nodes that are connected to the "mediums"
+// WithNamedTechniques tells the query-builder to eager-load the nodes that are connected to the "techniques"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (aq *ArtQuery) WithNamedMediums(name string, opts ...func(*MediumQuery)) *ArtQuery {
-	query := (&MediumClient{config: aq.config}).Query()
+func (aq *ArtQuery) WithNamedTechniques(name string, opts ...func(*TechniqueQuery)) *ArtQuery {
+	query := (&TechniqueClient{config: aq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if aq.withNamedMediums == nil {
-		aq.withNamedMediums = make(map[string]*MediumQuery)
+	if aq.withNamedTechniques == nil {
+		aq.withNamedTechniques = make(map[string]*TechniqueQuery)
 	}
-	aq.withNamedMediums[name] = query
+	aq.withNamedTechniques[name] = query
 	return aq
 }
 

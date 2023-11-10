@@ -16,10 +16,10 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
-	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 )
 
 // ArtCreate is the builder for creating a Art entity.
@@ -252,19 +252,19 @@ func (ac *ArtCreate) AddArtStyle(a ...*ArtStyle) *ArtCreate {
 	return ac.AddArtStyleIDs(ids...)
 }
 
-// AddMediumIDs adds the "mediums" edge to the Medium entity by IDs.
-func (ac *ArtCreate) AddMediumIDs(ids ...int) *ArtCreate {
-	ac.mutation.AddMediumIDs(ids...)
+// AddTechniqueIDs adds the "techniques" edge to the Technique entity by IDs.
+func (ac *ArtCreate) AddTechniqueIDs(ids ...int) *ArtCreate {
+	ac.mutation.AddTechniqueIDs(ids...)
 	return ac
 }
 
-// AddMediums adds the "mediums" edges to the Medium entity.
-func (ac *ArtCreate) AddMediums(m ...*Medium) *ArtCreate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+// AddTechniques adds the "techniques" edges to the Technique entity.
+func (ac *ArtCreate) AddTechniques(t ...*Technique) *ArtCreate {
+	ids := make([]int, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
 	}
-	return ac.AddMediumIDs(ids...)
+	return ac.AddTechniqueIDs(ids...)
 }
 
 // SetCollectionID sets the "collection" edge to the Collection entity by ID.
@@ -546,15 +546,15 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := ac.mutation.MediumsIDs(); len(nodes) > 0 {
+	if nodes := ac.mutation.TechniquesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   art.MediumsTable,
-			Columns: art.MediumsPrimaryKey,
+			Table:   art.TechniquesTable,
+			Columns: art.TechniquesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(medium.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(technique.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

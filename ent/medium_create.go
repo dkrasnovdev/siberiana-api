@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
 )
@@ -132,21 +131,6 @@ func (mc *MediumCreate) SetNillableExternalLink(s *string) *MediumCreate {
 		mc.SetExternalLink(*s)
 	}
 	return mc
-}
-
-// AddArtIDs adds the "art" edge to the Art entity by IDs.
-func (mc *MediumCreate) AddArtIDs(ids ...int) *MediumCreate {
-	mc.mutation.AddArtIDs(ids...)
-	return mc
-}
-
-// AddArt adds the "art" edges to the Art entity.
-func (mc *MediumCreate) AddArt(a ...*Art) *MediumCreate {
-	ids := make([]int, len(a))
-	for i := range a {
-		ids[i] = a[i].ID
-	}
-	return mc.AddArtIDs(ids...)
 }
 
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
@@ -283,22 +267,6 @@ func (mc *MediumCreate) createSpec() (*Medium, *sqlgraph.CreateSpec) {
 	if value, ok := mc.mutation.ExternalLink(); ok {
 		_spec.SetField(medium.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
-	}
-	if nodes := mc.mutation.ArtIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   medium.ArtTable,
-			Columns: medium.ArtPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(art.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := mc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

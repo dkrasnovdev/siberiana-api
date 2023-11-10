@@ -269,9 +269,9 @@ type ArtWhereInput struct {
 	HasArtStyle     *bool                 `json:"hasArtStyle,omitempty"`
 	HasArtStyleWith []*ArtStyleWhereInput `json:"hasArtStyleWith,omitempty"`
 
-	// "mediums" edge predicates.
-	HasMediums     *bool               `json:"hasMediums,omitempty"`
-	HasMediumsWith []*MediumWhereInput `json:"hasMediumsWith,omitempty"`
+	// "techniques" edge predicates.
+	HasTechniques     *bool                  `json:"hasTechniques,omitempty"`
+	HasTechniquesWith []*TechniqueWhereInput `json:"hasTechniquesWith,omitempty"`
 
 	// "collection" edge predicates.
 	HasCollection     *bool                   `json:"hasCollection,omitempty"`
@@ -942,23 +942,23 @@ func (i *ArtWhereInput) P() (predicate.Art, error) {
 		}
 		predicates = append(predicates, art.HasArtStyleWith(with...))
 	}
-	if i.HasMediums != nil {
-		p := art.HasMediums()
-		if !*i.HasMediums {
+	if i.HasTechniques != nil {
+		p := art.HasTechniques()
+		if !*i.HasTechniques {
 			p = art.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasMediumsWith) > 0 {
-		with := make([]predicate.Medium, 0, len(i.HasMediumsWith))
-		for _, w := range i.HasMediumsWith {
+	if len(i.HasTechniquesWith) > 0 {
+		with := make([]predicate.Technique, 0, len(i.HasTechniquesWith))
+		for _, w := range i.HasTechniquesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasMediumsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasTechniquesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, art.HasMediumsWith(with...))
+		predicates = append(predicates, art.HasTechniquesWith(with...))
 	}
 	if i.HasCollection != nil {
 		p := art.HasCollection()
@@ -12923,10 +12923,6 @@ type MediumWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
-	// "art" edge predicates.
-	HasArt     *bool            `json:"hasArt,omitempty"`
-	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
-
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -13346,24 +13342,6 @@ func (i *MediumWhereInput) P() (predicate.Medium, error) {
 		predicates = append(predicates, medium.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
-	if i.HasArt != nil {
-		p := medium.HasArt()
-		if !*i.HasArt {
-			p = medium.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasArtWith) > 0 {
-		with := make([]predicate.Art, 0, len(i.HasArtWith))
-		for _, w := range i.HasArtWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, medium.HasArtWith(with...))
-	}
 	if i.HasArtifacts != nil {
 		p := medium.HasArtifacts()
 		if !*i.HasArtifacts {
@@ -27359,6 +27337,10 @@ type TechniqueWhereInput struct {
 	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
 	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
 
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -27782,6 +27764,24 @@ func (i *TechniqueWhereInput) P() (predicate.Technique, error) {
 		predicates = append(predicates, technique.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
 	}
 
+	if i.HasArt != nil {
+		p := technique.HasArt()
+		if !*i.HasArt {
+			p = technique.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, technique.HasArtWith(with...))
+	}
 	if i.HasArtifacts != nil {
 		p := technique.HasArtifacts()
 		if !*i.HasArtifacts {
