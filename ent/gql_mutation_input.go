@@ -619,6 +619,7 @@ type CreateArtifactInput struct {
 	ProjectIDs            []int
 	PublicationIDs        []int
 	CulturalAffiliationID *int
+	EthnosID              *int
 	OrganizationID        *int
 	MonumentID            *int
 	ModelID               *int
@@ -742,6 +743,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.CulturalAffiliationID; v != nil {
 		m.SetCulturalAffiliationID(*v)
 	}
+	if v := i.EthnosID; v != nil {
+		m.SetEthnosID(*v)
+	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
 	}
@@ -858,6 +862,8 @@ type UpdateArtifactInput struct {
 	RemovePublicationIDs       []int
 	ClearCulturalAffiliation   bool
 	CulturalAffiliationID      *int
+	ClearEthnos                bool
+	EthnosID                   *int
 	ClearOrganization          bool
 	OrganizationID             *int
 	ClearMonument              bool
@@ -1107,6 +1113,12 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.CulturalAffiliationID; v != nil {
 		m.SetCulturalAffiliationID(*v)
+	}
+	if i.ClearEthnos {
+		m.ClearEthnos()
+	}
+	if v := i.EthnosID; v != nil {
+		m.SetEthnosID(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()

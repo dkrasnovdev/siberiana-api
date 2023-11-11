@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -47,6 +48,7 @@ type ArtifactQuery struct {
 	withProjects            *ProjectQuery
 	withPublications        *PublicationQuery
 	withCulturalAffiliation *CultureQuery
+	withEthnos              *EthnosQuery
 	withOrganization        *OrganizationQuery
 	withMonument            *MonumentQuery
 	withModel               *ModelQuery
@@ -249,6 +251,28 @@ func (aq *ArtifactQuery) QueryCulturalAffiliation() *CultureQuery {
 			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
 			sqlgraph.To(culture.Table, culture.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, artifact.CulturalAffiliationTable, artifact.CulturalAffiliationColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEthnos chains the current query on the "ethnos" edge.
+func (aq *ArtifactQuery) QueryEthnos() *EthnosQuery {
+	query := (&EthnosClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(ethnos.Table, ethnos.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.EthnosTable, artifact.EthnosColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -697,6 +721,7 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		withProjects:            aq.withProjects.Clone(),
 		withPublications:        aq.withPublications.Clone(),
 		withCulturalAffiliation: aq.withCulturalAffiliation.Clone(),
+		withEthnos:              aq.withEthnos.Clone(),
 		withOrganization:        aq.withOrganization.Clone(),
 		withMonument:            aq.withMonument.Clone(),
 		withModel:               aq.withModel.Clone(),
@@ -788,6 +813,17 @@ func (aq *ArtifactQuery) WithCulturalAffiliation(opts ...func(*CultureQuery)) *A
 		opt(query)
 	}
 	aq.withCulturalAffiliation = query
+	return aq
+}
+
+// WithEthnos tells the query-builder to eager-load the nodes that are connected to
+// the "ethnos" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithEthnos(opts ...func(*EthnosQuery)) *ArtifactQuery {
+	query := (&EthnosClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withEthnos = query
 	return aq
 }
 
@@ -997,7 +1033,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		nodes       = []*Artifact{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [19]bool{
 			aq.withAuthors != nil,
 			aq.withDonor != nil,
 			aq.withMediums != nil,
@@ -1005,6 +1041,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withProjects != nil,
 			aq.withPublications != nil,
 			aq.withCulturalAffiliation != nil,
+			aq.withEthnos != nil,
 			aq.withOrganization != nil,
 			aq.withMonument != nil,
 			aq.withModel != nil,
@@ -1018,7 +1055,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withRegion != nil,
 		}
 	)
-	if aq.withDonor != nil || aq.withCulturalAffiliation != nil || aq.withOrganization != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
+	if aq.withDonor != nil || aq.withCulturalAffiliation != nil || aq.withEthnos != nil || aq.withOrganization != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -1089,6 +1126,12 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 	if query := aq.withCulturalAffiliation; query != nil {
 		if err := aq.loadCulturalAffiliation(ctx, query, nodes, nil,
 			func(n *Artifact, e *Culture) { n.Edges.CulturalAffiliation = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := aq.withEthnos; query != nil {
+		if err := aq.loadEthnos(ctx, query, nodes, nil,
+			func(n *Artifact, e *Ethnos) { n.Edges.Ethnos = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1563,6 +1606,38 @@ func (aq *ArtifactQuery) loadCulturalAffiliation(ctx context.Context, query *Cul
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "culture_artifacts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (aq *ArtifactQuery) loadEthnos(ctx context.Context, query *EthnosQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Ethnos)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Artifact)
+	for i := range nodes {
+		if nodes[i].ethnos_artifacts == nil {
+			continue
+		}
+		fk := *nodes[i].ethnos_artifacts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(ethnos.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "ethnos_artifacts" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

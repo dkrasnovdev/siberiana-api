@@ -2685,6 +2685,10 @@ type ArtifactWhereInput struct {
 	HasCulturalAffiliation     *bool                `json:"hasCulturalAffiliation,omitempty"`
 	HasCulturalAffiliationWith []*CultureWhereInput `json:"hasCulturalAffiliationWith,omitempty"`
 
+	// "ethnos" edge predicates.
+	HasEthnos     *bool               `json:"hasEthnos,omitempty"`
+	HasEthnosWith []*EthnosWhereInput `json:"hasEthnosWith,omitempty"`
+
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -4007,6 +4011,24 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, artifact.HasCulturalAffiliationWith(with...))
+	}
+	if i.HasEthnos != nil {
+		p := artifact.HasEthnos()
+		if !*i.HasEthnos {
+			p = artifact.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEthnosWith) > 0 {
+		with := make([]predicate.Ethnos, 0, len(i.HasEthnosWith))
+		for _, w := range i.HasEthnosWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEthnosWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, artifact.HasEthnosWith(with...))
 	}
 	if i.HasOrganization != nil {
 		p := artifact.HasOrganization()

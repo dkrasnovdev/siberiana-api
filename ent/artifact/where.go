@@ -2121,6 +2121,29 @@ func HasCulturalAffiliationWith(preds ...predicate.Culture) predicate.Artifact {
 	})
 }
 
+// HasEthnos applies the HasEdge predicate on the "ethnos" edge.
+func HasEthnos() predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, EthnosTable, EthnosColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEthnosWith applies the HasEdge predicate on the "ethnos" edge with a given conditions (other predicates).
+func HasEthnosWith(preds ...predicate.Ethnos) predicate.Artifact {
+	return predicate.Artifact(func(s *sql.Selector) {
+		step := newEthnosStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasOrganization applies the HasEdge predicate on the "organization" edge.
 func HasOrganization() predicate.Artifact {
 	return predicate.Artifact(func(s *sql.Selector) {

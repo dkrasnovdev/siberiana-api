@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -548,6 +549,25 @@ func (ac *ArtifactCreate) SetCulturalAffiliation(c *Culture) *ArtifactCreate {
 	return ac.SetCulturalAffiliationID(c.ID)
 }
 
+// SetEthnosID sets the "ethnos" edge to the Ethnos entity by ID.
+func (ac *ArtifactCreate) SetEthnosID(id int) *ArtifactCreate {
+	ac.mutation.SetEthnosID(id)
+	return ac
+}
+
+// SetNillableEthnosID sets the "ethnos" edge to the Ethnos entity by ID if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableEthnosID(id *int) *ArtifactCreate {
+	if id != nil {
+		ac = ac.SetEthnosID(*id)
+	}
+	return ac
+}
+
+// SetEthnos sets the "ethnos" edge to the Ethnos entity.
+func (ac *ArtifactCreate) SetEthnos(e *Ethnos) *ArtifactCreate {
+	return ac.SetEthnosID(e.ID)
+}
+
 // SetOrganizationID sets the "organization" edge to the Organization entity by ID.
 func (ac *ArtifactCreate) SetOrganizationID(id int) *ArtifactCreate {
 	ac.mutation.SetOrganizationID(id)
@@ -1077,6 +1097,23 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.culture_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.EthnosIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.EthnosTable,
+			Columns: []string{artifact.EthnosColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(ethnos.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ethnos_artifacts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := ac.mutation.OrganizationIDs(); len(nodes) > 0 {

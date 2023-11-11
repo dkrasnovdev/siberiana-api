@@ -684,6 +684,16 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			a.withCulturalAffiliation = query
+		case "ethnos":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EthnosClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, ethnosImplementors)...); err != nil {
+				return err
+			}
+			a.withEthnos = query
 		case "organization":
 			var (
 				alias = field.Alias

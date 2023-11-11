@@ -3810,6 +3810,8 @@ type ArtifactMutation struct {
 	clearedpublications          bool
 	cultural_affiliation         *int
 	clearedcultural_affiliation  bool
+	ethnos                       *int
+	clearedethnos                bool
 	organization                 *int
 	clearedorganization          bool
 	monument                     *int
@@ -5841,6 +5843,45 @@ func (m *ArtifactMutation) ResetCulturalAffiliation() {
 	m.clearedcultural_affiliation = false
 }
 
+// SetEthnosID sets the "ethnos" edge to the Ethnos entity by id.
+func (m *ArtifactMutation) SetEthnosID(id int) {
+	m.ethnos = &id
+}
+
+// ClearEthnos clears the "ethnos" edge to the Ethnos entity.
+func (m *ArtifactMutation) ClearEthnos() {
+	m.clearedethnos = true
+}
+
+// EthnosCleared reports if the "ethnos" edge to the Ethnos entity was cleared.
+func (m *ArtifactMutation) EthnosCleared() bool {
+	return m.clearedethnos
+}
+
+// EthnosID returns the "ethnos" edge ID in the mutation.
+func (m *ArtifactMutation) EthnosID() (id int, exists bool) {
+	if m.ethnos != nil {
+		return *m.ethnos, true
+	}
+	return
+}
+
+// EthnosIDs returns the "ethnos" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// EthnosID instead. It exists only for internal usage by the builders.
+func (m *ArtifactMutation) EthnosIDs() (ids []int) {
+	if id := m.ethnos; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetEthnos resets all changes to the "ethnos" edge.
+func (m *ArtifactMutation) ResetEthnos() {
+	m.ethnos = nil
+	m.clearedethnos = false
+}
+
 // SetOrganizationID sets the "organization" edge to the Organization entity by id.
 func (m *ArtifactMutation) SetOrganizationID(id int) {
 	m.organization = &id
@@ -7131,7 +7172,7 @@ func (m *ArtifactMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtifactMutation) AddedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.authors != nil {
 		edges = append(edges, artifact.EdgeAuthors)
 	}
@@ -7152,6 +7193,9 @@ func (m *ArtifactMutation) AddedEdges() []string {
 	}
 	if m.cultural_affiliation != nil {
 		edges = append(edges, artifact.EdgeCulturalAffiliation)
+	}
+	if m.ethnos != nil {
+		edges = append(edges, artifact.EdgeEthnos)
 	}
 	if m.organization != nil {
 		edges = append(edges, artifact.EdgeOrganization)
@@ -7231,6 +7275,10 @@ func (m *ArtifactMutation) AddedIDs(name string) []ent.Value {
 		if id := m.cultural_affiliation; id != nil {
 			return []ent.Value{*id}
 		}
+	case artifact.EdgeEthnos:
+		if id := m.ethnos; id != nil {
+			return []ent.Value{*id}
+		}
 	case artifact.EdgeOrganization:
 		if id := m.organization; id != nil {
 			return []ent.Value{*id}
@@ -7281,7 +7329,7 @@ func (m *ArtifactMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtifactMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.removedauthors != nil {
 		edges = append(edges, artifact.EdgeAuthors)
 	}
@@ -7340,7 +7388,7 @@ func (m *ArtifactMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtifactMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 18)
+	edges := make([]string, 0, 19)
 	if m.clearedauthors {
 		edges = append(edges, artifact.EdgeAuthors)
 	}
@@ -7361,6 +7409,9 @@ func (m *ArtifactMutation) ClearedEdges() []string {
 	}
 	if m.clearedcultural_affiliation {
 		edges = append(edges, artifact.EdgeCulturalAffiliation)
+	}
+	if m.clearedethnos {
+		edges = append(edges, artifact.EdgeEthnos)
 	}
 	if m.clearedorganization {
 		edges = append(edges, artifact.EdgeOrganization)
@@ -7416,6 +7467,8 @@ func (m *ArtifactMutation) EdgeCleared(name string) bool {
 		return m.clearedpublications
 	case artifact.EdgeCulturalAffiliation:
 		return m.clearedcultural_affiliation
+	case artifact.EdgeEthnos:
+		return m.clearedethnos
 	case artifact.EdgeOrganization:
 		return m.clearedorganization
 	case artifact.EdgeMonument:
@@ -7451,6 +7504,9 @@ func (m *ArtifactMutation) ClearEdge(name string) error {
 		return nil
 	case artifact.EdgeCulturalAffiliation:
 		m.ClearCulturalAffiliation()
+		return nil
+	case artifact.EdgeEthnos:
+		m.ClearEthnos()
 		return nil
 	case artifact.EdgeOrganization:
 		m.ClearOrganization()
@@ -7513,6 +7569,9 @@ func (m *ArtifactMutation) ResetEdge(name string) error {
 		return nil
 	case artifact.EdgeCulturalAffiliation:
 		m.ResetCulturalAffiliation()
+		return nil
+	case artifact.EdgeEthnos:
+		m.ResetEthnos()
 		return nil
 	case artifact.EdgeOrganization:
 		m.ResetOrganization()

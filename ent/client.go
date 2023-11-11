@@ -1316,6 +1316,22 @@ func (c *ArtifactClient) QueryCulturalAffiliation(a *Artifact) *CultureQuery {
 	return query
 }
 
+// QueryEthnos queries the ethnos edge of a Artifact.
+func (c *ArtifactClient) QueryEthnos(a *Artifact) *EthnosQuery {
+	query := (&EthnosClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(ethnos.Table, ethnos.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, artifact.EthnosTable, artifact.EthnosColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOrganization queries the organization edge of a Artifact.
 func (c *ArtifactClient) QueryOrganization(a *Artifact) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()

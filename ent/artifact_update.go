@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/medium"
@@ -752,6 +753,25 @@ func (au *ArtifactUpdate) SetCulturalAffiliation(c *Culture) *ArtifactUpdate {
 	return au.SetCulturalAffiliationID(c.ID)
 }
 
+// SetEthnosID sets the "ethnos" edge to the Ethnos entity by ID.
+func (au *ArtifactUpdate) SetEthnosID(id int) *ArtifactUpdate {
+	au.mutation.SetEthnosID(id)
+	return au
+}
+
+// SetNillableEthnosID sets the "ethnos" edge to the Ethnos entity by ID if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableEthnosID(id *int) *ArtifactUpdate {
+	if id != nil {
+		au = au.SetEthnosID(*id)
+	}
+	return au
+}
+
+// SetEthnos sets the "ethnos" edge to the Ethnos entity.
+func (au *ArtifactUpdate) SetEthnos(e *Ethnos) *ArtifactUpdate {
+	return au.SetEthnosID(e.ID)
+}
+
 // SetOrganizationID sets the "organization" edge to the Organization entity by ID.
 func (au *ArtifactUpdate) SetOrganizationID(id int) *ArtifactUpdate {
 	au.mutation.SetOrganizationID(id)
@@ -1072,6 +1092,12 @@ func (au *ArtifactUpdate) RemovePublications(p ...*Publication) *ArtifactUpdate 
 // ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
 func (au *ArtifactUpdate) ClearCulturalAffiliation() *ArtifactUpdate {
 	au.mutation.ClearCulturalAffiliation()
+	return au
+}
+
+// ClearEthnos clears the "ethnos" edge to the Ethnos entity.
+func (au *ArtifactUpdate) ClearEthnos() *ArtifactUpdate {
+	au.mutation.ClearEthnos()
 	return au
 }
 
@@ -1675,6 +1701,35 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.EthnosCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.EthnosTable,
+			Columns: []string{artifact.EthnosColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(ethnos.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.EthnosIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.EthnosTable,
+			Columns: []string{artifact.EthnosColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(ethnos.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2727,6 +2782,25 @@ func (auo *ArtifactUpdateOne) SetCulturalAffiliation(c *Culture) *ArtifactUpdate
 	return auo.SetCulturalAffiliationID(c.ID)
 }
 
+// SetEthnosID sets the "ethnos" edge to the Ethnos entity by ID.
+func (auo *ArtifactUpdateOne) SetEthnosID(id int) *ArtifactUpdateOne {
+	auo.mutation.SetEthnosID(id)
+	return auo
+}
+
+// SetNillableEthnosID sets the "ethnos" edge to the Ethnos entity by ID if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableEthnosID(id *int) *ArtifactUpdateOne {
+	if id != nil {
+		auo = auo.SetEthnosID(*id)
+	}
+	return auo
+}
+
+// SetEthnos sets the "ethnos" edge to the Ethnos entity.
+func (auo *ArtifactUpdateOne) SetEthnos(e *Ethnos) *ArtifactUpdateOne {
+	return auo.SetEthnosID(e.ID)
+}
+
 // SetOrganizationID sets the "organization" edge to the Organization entity by ID.
 func (auo *ArtifactUpdateOne) SetOrganizationID(id int) *ArtifactUpdateOne {
 	auo.mutation.SetOrganizationID(id)
@@ -3047,6 +3121,12 @@ func (auo *ArtifactUpdateOne) RemovePublications(p ...*Publication) *ArtifactUpd
 // ClearCulturalAffiliation clears the "cultural_affiliation" edge to the Culture entity.
 func (auo *ArtifactUpdateOne) ClearCulturalAffiliation() *ArtifactUpdateOne {
 	auo.mutation.ClearCulturalAffiliation()
+	return auo
+}
+
+// ClearEthnos clears the "ethnos" edge to the Ethnos entity.
+func (auo *ArtifactUpdateOne) ClearEthnos() *ArtifactUpdateOne {
+	auo.mutation.ClearEthnos()
 	return auo
 }
 
@@ -3680,6 +3760,35 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(culture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.EthnosCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.EthnosTable,
+			Columns: []string{artifact.EthnosColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(ethnos.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.EthnosIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   artifact.EthnosTable,
+			Columns: []string{artifact.EthnosColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(ethnos.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

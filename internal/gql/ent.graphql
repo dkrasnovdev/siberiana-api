@@ -667,6 +667,7 @@ type Artifact implements Node {
   projects: [Project!]
   publications: [Publication!]
   culturalAffiliation: Culture
+  ethnos: Ethnos
   organization: Organization
   monument: Monument
   model: Model
@@ -1132,6 +1133,9 @@ input ArtifactWhereInput {
   """cultural_affiliation edge predicates"""
   hasCulturalAffiliation: Boolean
   hasCulturalAffiliationWith: [CultureWhereInput!]
+  """ethnos edge predicates"""
+  hasEthnos: Boolean
+  hasEthnosWith: [EthnosWhereInput!]
   """organization edge predicates"""
   hasOrganization: Boolean
   hasOrganizationWith: [OrganizationWhereInput!]
@@ -2481,6 +2485,7 @@ input CreateArtifactInput {
   projectIDs: [ID!]
   publicationIDs: [ID!]
   culturalAffiliationID: ID
+  ethnosID: ID
   organizationID: ID
   monumentID: ID
   modelID: ID
@@ -9863,6 +9868,8 @@ input UpdateArtifactInput {
   clearPublications: Boolean
   culturalAffiliationID: ID
   clearCulturalAffiliation: Boolean
+  ethnosID: ID
+  clearEthnos: Boolean
   organizationID: ID
   clearOrganization: Boolean
   monumentID: ID

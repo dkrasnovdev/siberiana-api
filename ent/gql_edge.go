@@ -192,6 +192,14 @@ func (a *Artifact) CulturalAffiliation(ctx context.Context) (*Culture, error) {
 	return result, MaskNotFound(err)
 }
 
+func (a *Artifact) Ethnos(ctx context.Context) (*Ethnos, error) {
+	result, err := a.Edges.EthnosOrErr()
+	if IsNotLoaded(err) {
+		result, err = a.QueryEthnos().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (a *Artifact) Organization(ctx context.Context) (*Organization, error) {
 	result, err := a.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {

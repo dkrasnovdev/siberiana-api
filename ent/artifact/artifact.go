@@ -90,6 +90,8 @@ const (
 	EdgePublications = "publications"
 	// EdgeCulturalAffiliation holds the string denoting the cultural_affiliation edge name in mutations.
 	EdgeCulturalAffiliation = "cultural_affiliation"
+	// EdgeEthnos holds the string denoting the ethnos edge name in mutations.
+	EdgeEthnos = "ethnos"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeMonument holds the string denoting the monument edge name in mutations.
@@ -153,6 +155,13 @@ const (
 	CulturalAffiliationInverseTable = "cultures"
 	// CulturalAffiliationColumn is the table column denoting the cultural_affiliation relation/edge.
 	CulturalAffiliationColumn = "culture_artifacts"
+	// EthnosTable is the table that holds the ethnos relation/edge.
+	EthnosTable = "artifacts"
+	// EthnosInverseTable is the table name for the Ethnos entity.
+	// It exists in this package in order to avoid circular dependency with the "ethnos" package.
+	EthnosInverseTable = "ethnos"
+	// EthnosColumn is the table column denoting the ethnos relation/edge.
+	EthnosColumn = "ethnos_artifacts"
 	// OrganizationTable is the table that holds the organization relation/edge.
 	OrganizationTable = "artifacts"
 	// OrganizationInverseTable is the table name for the Organization entity.
@@ -594,6 +603,13 @@ func ByCulturalAffiliationField(field string, opts ...sql.OrderTermOption) Order
 	}
 }
 
+// ByEthnosField orders the results by ethnos field.
+func ByEthnosField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEthnosStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByOrganizationField orders the results by organization field.
 func ByOrganizationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -717,6 +733,13 @@ func newCulturalAffiliationStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CulturalAffiliationInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, CulturalAffiliationTable, CulturalAffiliationColumn),
+	)
+}
+func newEthnosStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EthnosInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, EthnosTable, EthnosColumn),
 	)
 }
 func newOrganizationStep() *sqlgraph.Step {
