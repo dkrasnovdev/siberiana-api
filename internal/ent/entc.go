@@ -10,6 +10,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
+	"github.com/dkrasnovdev/siberiana-api/config"
+	"github.com/dkrasnovdev/siberiana-api/internal/minio"
 )
 
 func main() {
@@ -18,6 +20,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("getting present working directory: %v", err)
 	}
+
+	// Load the configuration from the .env file.
+	config, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+		return
+	}
+
+	// Create a new MinIO client using the loaded configuration.
+	minioClient := minio.NewClient(config)
 
 	// Create a new entgql extension.
 	gql, err := entgql.NewExtension(
@@ -34,6 +46,10 @@ func main() {
 	opts := []entc.Option{
 		entc.Extensions(gql), // Add the entgql extension.
 		entc.FeatureNames("intercept", "privacy", "schema/snapshot"), // Enable specific ent features.
+		entc.Dependency(
+			entc.DependencyName("Minio"),
+			entc.DependencyType(minioClient),
+		),
 	}
 
 	// Run the ent code generation.

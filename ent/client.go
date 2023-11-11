@@ -54,6 +54,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
+	"github.com/minio/minio-go/v7"
 )
 
 // Client is the client that holds all ent builders.
@@ -208,6 +209,7 @@ type (
 		hooks *hooks
 		// interceptors to execute on queries.
 		inters *inters
+		Minio  *minio.Client
 	}
 	// Option function to configure the client.
 	Option func(*config)
@@ -241,6 +243,13 @@ func Log(fn func(...any)) Option {
 func Driver(driver dialect.Driver) Option {
 	return func(c *config) {
 		c.driver = driver
+	}
+}
+
+// Minio configures the Minio.
+func Minio(v *minio.Client) Option {
+	return func(c *config) {
+		c.Minio = v
 	}
 }
 

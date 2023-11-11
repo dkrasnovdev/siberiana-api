@@ -1,15 +1,23 @@
 package schema
 
 import (
+	"context"
+	"errors"
+	"fmt"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	e "github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/hook"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/pkg/transform"
+	"github.com/minio/minio-go/v7"
 )
 
 // Artifact holds the schema definition for the Artifact entity.
@@ -106,4 +114,40 @@ func (Artifact) Edges() []ent.Edge {
 		edge.From("district", District.Type).Ref("artifacts").Unique(),
 		edge.From("region", Region.Type).Ref("artifacts").Unique(),
 	}
+}
+
+// Hooks of the Artifact.
+func (Artifact) Hooks() []ent.Hook {
+	return []ent.Hook{
+		DeleteOrphans(),
+	}
+}
+
+func DeleteOrphans() ent.Hook {
+	deleteOp := func(next ent.Mutator) ent.Mutator {
+		return hook.ArtifactFunc(func(ctx context.Context, m *e.ArtifactMutation) (ent.Value, error) {
+			id, exists := m.ID()
+			if !exists {
+				return nil, errors.New("id field is missing")
+			}
+
+			a, err := m.Client().Artifact.Get(ctx, id)
+			if err != nil {
+				return nil, fmt.Errorf("getting deleted artifact: %w", err)
+			}
+
+			filename := transform.Filename(a.PrimaryImageURL)
+
+			minioClient := m.Client().Minio
+
+			err = minioClient.RemoveObject(ctx, "artifacts", filename, minio.RemoveObjectOptions{})
+
+			if err != nil {
+				return nil, fmt.Errorf("deleting image: %w", err)
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}
+	return hook.On(deleteOp, ent.OpDeleteOne)
 }

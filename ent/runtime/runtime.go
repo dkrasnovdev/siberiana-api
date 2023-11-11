@@ -147,10 +147,13 @@ func init() {
 	}
 	artifactMixinHooks0 := artifactMixin[0].Hooks()
 	artifactMixinHooks4 := artifactMixin[4].Hooks()
+	artifactHooks := schema.Artifact{}.Hooks()
 
 	artifact.Hooks[1] = artifactMixinHooks0[0]
 
 	artifact.Hooks[2] = artifactMixinHooks4[0]
+
+	artifact.Hooks[3] = artifactHooks[0]
 	artifactMixinInters4 := artifactMixin[4].Interceptors()
 	artifact.Interceptors[0] = artifactMixinInters4[0]
 	artifactMixinFields0 := artifactMixin[0].Fields()
