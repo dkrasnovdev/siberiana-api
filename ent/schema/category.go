@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -37,6 +38,7 @@ func (Category) Mixin() []ent.Mixin {
 		mixin.AuditMixin{},
 		mixin.DetailsMixin{},
 		mixin.ImagesMixin{},
+		mixin.SoftDeleteMixin{},
 	}
 }
 
@@ -61,6 +63,7 @@ func (Category) Fields() []ent.Field {
 // Edges of the Category.
 func (Category) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("collections", Collection.Type),
+		edge.To("collections", Collection.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
 	}
 }

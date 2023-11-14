@@ -159,6 +159,34 @@ func (cc *CollectionCreate) SetAdditionalImagesUrls(s []string) *CollectionCreat
 	return cc
 }
 
+// SetDeletedAt sets the "deleted_at" field.
+func (cc *CollectionCreate) SetDeletedAt(t time.Time) *CollectionCreate {
+	cc.mutation.SetDeletedAt(t)
+	return cc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableDeletedAt(t *time.Time) *CollectionCreate {
+	if t != nil {
+		cc.SetDeletedAt(*t)
+	}
+	return cc
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (cc *CollectionCreate) SetDeletedBy(s string) *CollectionCreate {
+	cc.mutation.SetDeletedBy(s)
+	return cc
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (cc *CollectionCreate) SetNillableDeletedBy(s *string) *CollectionCreate {
+	if s != nil {
+		cc.SetDeletedBy(*s)
+	}
+	return cc
+}
+
 // SetSlug sets the "slug" field.
 func (cc *CollectionCreate) SetSlug(s string) *CollectionCreate {
 	cc.mutation.SetSlug(s)
@@ -418,6 +446,14 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.AdditionalImagesUrls(); ok {
 		_spec.SetField(collection.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
+	}
+	if value, ok := cc.mutation.DeletedAt(); ok {
+		_spec.SetField(collection.FieldDeletedAt, field.TypeTime, value)
+		_node.DeletedAt = value
+	}
+	if value, ok := cc.mutation.DeletedBy(); ok {
+		_spec.SetField(collection.FieldDeletedBy, field.TypeString, value)
+		_node.DeletedBy = value
 	}
 	if value, ok := cc.mutation.Slug(); ok {
 		_spec.SetField(collection.FieldSlug, field.TypeString, value)

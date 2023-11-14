@@ -50,7 +50,7 @@ var (
 				Symbol:     "arts_collections_art",
 				Columns:    []*schema.Column{ArtsColumns[23]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.Cascade,
 			},
 			{
 				Symbol:     "arts_countries_art",
@@ -177,7 +177,7 @@ var (
 				Symbol:     "artifacts_collections_artifacts",
 				Columns:    []*schema.Column{ArtifactsColumns[30]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.Cascade,
 			},
 			{
 				Symbol:     "artifacts_countries_artifacts",
@@ -315,7 +315,7 @@ var (
 				Symbol:     "books_collections_books",
 				Columns:    []*schema.Column{BooksColumns[14]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.Cascade,
 			},
 			{
 				Symbol:     "books_countries_books",
@@ -404,6 +404,8 @@ var (
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
 	}
 	// CategoriesTable holds the schema information for the "categories" table.
@@ -425,6 +427,8 @@ var (
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
 		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
 		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
 		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "protected_area_pictures", "petroglyphs"}},
 		{Name: "category_collections", Type: field.TypeInt},
@@ -437,9 +441,9 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "collections_categories_collections",
-				Columns:    []*schema.Column{CollectionsColumns[13]},
+				Columns:    []*schema.Column{CollectionsColumns[15]},
 				RefColumns: []*schema.Column{CategoriesColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.Cascade,
 			},
 		},
 	}
@@ -854,7 +858,7 @@ var (
 				Symbol:     "petroglyphs_collections_petroglyphs",
 				Columns:    []*schema.Column{PetroglyphsColumns[33]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.Cascade,
 			},
 			{
 				Symbol:     "petroglyphs_cultures_petroglyphs",
@@ -1000,7 +1004,7 @@ var (
 				Symbol:     "protected_area_pictures_collections_protected_area_pictures",
 				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[14]},
 				RefColumns: []*schema.Column{CollectionsColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.Cascade,
 			},
 			{
 				Symbol:     "protected_area_pictures_countries_protected_area_pictures",

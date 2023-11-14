@@ -12480,6 +12480,8 @@ type CategoryMutation struct {
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
+	deleted_at                   *time.Time
+	deleted_by                   *string
 	slug                         *string
 	clearedFields                map[string]struct{}
 	collections                  map[int]struct{}
@@ -13068,6 +13070,104 @@ func (m *CategoryMutation) ResetAdditionalImagesUrls() {
 	delete(m.clearedFields, category.FieldAdditionalImagesUrls)
 }
 
+// SetDeletedAt sets the "deleted_at" field.
+func (m *CategoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *CategoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *CategoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[category.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *CategoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[category.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *CategoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, category.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *CategoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *CategoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Category entity.
+// If the Category object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CategoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *CategoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[category.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *CategoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[category.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *CategoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, category.FieldDeletedBy)
+}
+
 // SetSlug sets the "slug" field.
 func (m *CategoryMutation) SetSlug(s string) {
 	m.slug = &s
@@ -13192,7 +13292,7 @@ func (m *CategoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CategoryMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 13)
 	if m.created_at != nil {
 		fields = append(fields, category.FieldCreatedAt)
 	}
@@ -13222,6 +13322,12 @@ func (m *CategoryMutation) Fields() []string {
 	}
 	if m.additional_images_urls != nil {
 		fields = append(fields, category.FieldAdditionalImagesUrls)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, category.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, category.FieldDeletedBy)
 	}
 	if m.slug != nil {
 		fields = append(fields, category.FieldSlug)
@@ -13254,6 +13360,10 @@ func (m *CategoryMutation) Field(name string) (ent.Value, bool) {
 		return m.PrimaryImageURL()
 	case category.FieldAdditionalImagesUrls:
 		return m.AdditionalImagesUrls()
+	case category.FieldDeletedAt:
+		return m.DeletedAt()
+	case category.FieldDeletedBy:
+		return m.DeletedBy()
 	case category.FieldSlug:
 		return m.Slug()
 	}
@@ -13285,6 +13395,10 @@ func (m *CategoryMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldPrimaryImageURL(ctx)
 	case category.FieldAdditionalImagesUrls:
 		return m.OldAdditionalImagesUrls(ctx)
+	case category.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case category.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
 	case category.FieldSlug:
 		return m.OldSlug(ctx)
 	}
@@ -13366,6 +13480,20 @@ func (m *CategoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalImagesUrls(v)
 		return nil
+	case category.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case category.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
 	case category.FieldSlug:
 		v, ok := value.(string)
 		if !ok {
@@ -13427,6 +13555,12 @@ func (m *CategoryMutation) ClearedFields() []string {
 	if m.FieldCleared(category.FieldAdditionalImagesUrls) {
 		fields = append(fields, category.FieldAdditionalImagesUrls)
 	}
+	if m.FieldCleared(category.FieldDeletedAt) {
+		fields = append(fields, category.FieldDeletedAt)
+	}
+	if m.FieldCleared(category.FieldDeletedBy) {
+		fields = append(fields, category.FieldDeletedBy)
+	}
 	return fields
 }
 
@@ -13465,6 +13599,12 @@ func (m *CategoryMutation) ClearField(name string) error {
 	case category.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
 		return nil
+	case category.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case category.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
 	}
 	return fmt.Errorf("unknown Category nullable field %s", name)
 }
@@ -13502,6 +13642,12 @@ func (m *CategoryMutation) ResetField(name string) error {
 		return nil
 	case category.FieldAdditionalImagesUrls:
 		m.ResetAdditionalImagesUrls()
+		return nil
+	case category.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case category.FieldDeletedBy:
+		m.ResetDeletedBy()
 		return nil
 	case category.FieldSlug:
 		m.ResetSlug()
@@ -13611,6 +13757,8 @@ type CollectionMutation struct {
 	primary_image_url              *string
 	additional_images_urls         *[]string
 	appendadditional_images_urls   []string
+	deleted_at                     *time.Time
+	deleted_by                     *string
 	slug                           *string
 	_type                          *collection.Type
 	clearedFields                  map[string]struct{}
@@ -14217,6 +14365,104 @@ func (m *CollectionMutation) ResetAdditionalImagesUrls() {
 	delete(m.clearedFields, collection.FieldAdditionalImagesUrls)
 }
 
+// SetDeletedAt sets the "deleted_at" field.
+func (m *CollectionMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *CollectionMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Collection entity.
+// If the Collection object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CollectionMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *CollectionMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[collection.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *CollectionMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[collection.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *CollectionMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, collection.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *CollectionMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *CollectionMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Collection entity.
+// If the Collection object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CollectionMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *CollectionMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[collection.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *CollectionMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[collection.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *CollectionMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, collection.FieldDeletedBy)
+}
+
 // SetSlug sets the "slug" field.
 func (m *CollectionMutation) SetSlug(s string) {
 	m.slug = &s
@@ -14699,7 +14945,7 @@ func (m *CollectionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CollectionMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 14)
 	if m.created_at != nil {
 		fields = append(fields, collection.FieldCreatedAt)
 	}
@@ -14729,6 +14975,12 @@ func (m *CollectionMutation) Fields() []string {
 	}
 	if m.additional_images_urls != nil {
 		fields = append(fields, collection.FieldAdditionalImagesUrls)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, collection.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, collection.FieldDeletedBy)
 	}
 	if m.slug != nil {
 		fields = append(fields, collection.FieldSlug)
@@ -14764,6 +15016,10 @@ func (m *CollectionMutation) Field(name string) (ent.Value, bool) {
 		return m.PrimaryImageURL()
 	case collection.FieldAdditionalImagesUrls:
 		return m.AdditionalImagesUrls()
+	case collection.FieldDeletedAt:
+		return m.DeletedAt()
+	case collection.FieldDeletedBy:
+		return m.DeletedBy()
 	case collection.FieldSlug:
 		return m.Slug()
 	case collection.FieldType:
@@ -14797,6 +15053,10 @@ func (m *CollectionMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldPrimaryImageURL(ctx)
 	case collection.FieldAdditionalImagesUrls:
 		return m.OldAdditionalImagesUrls(ctx)
+	case collection.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case collection.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
 	case collection.FieldSlug:
 		return m.OldSlug(ctx)
 	case collection.FieldType:
@@ -14880,6 +15140,20 @@ func (m *CollectionMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalImagesUrls(v)
 		return nil
+	case collection.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case collection.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
 	case collection.FieldSlug:
 		v, ok := value.(string)
 		if !ok {
@@ -14948,6 +15222,12 @@ func (m *CollectionMutation) ClearedFields() []string {
 	if m.FieldCleared(collection.FieldAdditionalImagesUrls) {
 		fields = append(fields, collection.FieldAdditionalImagesUrls)
 	}
+	if m.FieldCleared(collection.FieldDeletedAt) {
+		fields = append(fields, collection.FieldDeletedAt)
+	}
+	if m.FieldCleared(collection.FieldDeletedBy) {
+		fields = append(fields, collection.FieldDeletedBy)
+	}
 	if m.FieldCleared(collection.FieldType) {
 		fields = append(fields, collection.FieldType)
 	}
@@ -14989,6 +15269,12 @@ func (m *CollectionMutation) ClearField(name string) error {
 	case collection.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
 		return nil
+	case collection.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case collection.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
 	case collection.FieldType:
 		m.ClearType()
 		return nil
@@ -15029,6 +15315,12 @@ func (m *CollectionMutation) ResetField(name string) error {
 		return nil
 	case collection.FieldAdditionalImagesUrls:
 		m.ResetAdditionalImagesUrls()
+		return nil
+	case collection.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case collection.FieldDeletedBy:
+		m.ResetDeletedBy()
 		return nil
 	case collection.FieldSlug:
 		m.ResetSlug()

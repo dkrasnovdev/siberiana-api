@@ -2286,7 +2286,8 @@ func (c *CategoryClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *CategoryClient) Interceptors() []Interceptor {
-	return c.inters.Category
+	inters := c.inters.Category
+	return append(inters[:len(inters):len(inters)], category.Interceptors[:]...)
 }
 
 func (c *CategoryClient) mutate(ctx context.Context, m *CategoryMutation) (Value, error) {
@@ -2532,7 +2533,8 @@ func (c *CollectionClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *CollectionClient) Interceptors() []Interceptor {
-	return c.inters.Collection
+	inters := c.inters.Collection
+	return append(inters[:len(inters):len(inters)], collection.Interceptors[:]...)
 }
 
 func (c *CollectionClient) mutate(ctx context.Context, m *CollectionMutation) (Value, error) {

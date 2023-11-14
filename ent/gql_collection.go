@@ -1702,6 +1702,16 @@ func (c *CategoryQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, category.FieldAdditionalImagesUrls)
 				fieldSeen[category.FieldAdditionalImagesUrls] = struct{}{}
 			}
+		case "deletedAt":
+			if _, ok := fieldSeen[category.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, category.FieldDeletedAt)
+				fieldSeen[category.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[category.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, category.FieldDeletedBy)
+				fieldSeen[category.FieldDeletedBy] = struct{}{}
+			}
 		case "slug":
 			if _, ok := fieldSeen[category.FieldSlug]; !ok {
 				selectedFields = append(selectedFields, category.FieldSlug)
@@ -1928,6 +1938,16 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			if _, ok := fieldSeen[collection.FieldAdditionalImagesUrls]; !ok {
 				selectedFields = append(selectedFields, collection.FieldAdditionalImagesUrls)
 				fieldSeen[collection.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[collection.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, collection.FieldDeletedAt)
+				fieldSeen[collection.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[collection.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, collection.FieldDeletedBy)
+				fieldSeen[collection.FieldDeletedBy] = struct{}{}
 			}
 		case "slug":
 			if _, ok := fieldSeen[collection.FieldSlug]; !ok {

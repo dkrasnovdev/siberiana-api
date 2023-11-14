@@ -39,6 +39,10 @@ type Collection struct {
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	// DeletedBy holds the value of the "deleted_by" field.
+	DeletedBy string `json:"deleted_by,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
 	// Type holds the value of the "type" field.
@@ -156,9 +160,9 @@ func (*Collection) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case collection.FieldID:
 			values[i] = new(sql.NullInt64)
-		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldAbbreviation, collection.FieldDescription, collection.FieldExternalLink, collection.FieldPrimaryImageURL, collection.FieldSlug, collection.FieldType:
+		case collection.FieldCreatedBy, collection.FieldUpdatedBy, collection.FieldDisplayName, collection.FieldAbbreviation, collection.FieldDescription, collection.FieldExternalLink, collection.FieldPrimaryImageURL, collection.FieldDeletedBy, collection.FieldSlug, collection.FieldType:
 			values[i] = new(sql.NullString)
-		case collection.FieldCreatedAt, collection.FieldUpdatedAt:
+		case collection.FieldCreatedAt, collection.FieldUpdatedAt, collection.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case collection.ForeignKeys[0]: // category_collections
 			values[i] = new(sql.NullInt64)
@@ -244,6 +248,18 @@ func (c *Collection) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &c.AdditionalImagesUrls); err != nil {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
+			}
+		case collection.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				c.DeletedAt = value.Time
+			}
+		case collection.FieldDeletedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+			} else if value.Valid {
+				c.DeletedBy = value.String
 			}
 		case collection.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -364,6 +380,12 @@ func (c *Collection) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", c.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(c.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_by=")
+	builder.WriteString(c.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(c.Slug)

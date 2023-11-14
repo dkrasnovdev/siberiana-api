@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -37,6 +38,7 @@ func (Collection) Mixin() []ent.Mixin {
 		mixin.AuditMixin{},
 		mixin.DetailsMixin{},
 		mixin.ImagesMixin{},
+		mixin.SoftDeleteMixin{},
 	}
 }
 
@@ -65,11 +67,16 @@ func (Collection) Fields() []ent.Field {
 // Edges of the Collection.
 func (Collection) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("art", Art.Type),
-		edge.To("artifacts", Artifact.Type),
-		edge.To("petroglyphs", Petroglyph.Type),
-		edge.To("books", Book.Type),
-		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
+		edge.To("art", Art.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
+		edge.To("artifacts", Artifact.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
+		edge.To("petroglyphs", Petroglyph.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
+		edge.To("books", Book.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
+		edge.To("protected_area_pictures", ProtectedAreaPicture.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.From("category", Category.Type).Ref("collections").Unique().Required(),
 		edge.From("authors", Person.Type).Ref("collections"),
 	}

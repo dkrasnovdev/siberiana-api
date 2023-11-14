@@ -260,8 +260,13 @@ func init() {
 		})
 	}
 	categoryMixinHooks0 := categoryMixin[0].Hooks()
+	categoryMixinHooks3 := categoryMixin[3].Hooks()
 
 	category.Hooks[1] = categoryMixinHooks0[0]
+
+	category.Hooks[2] = categoryMixinHooks3[0]
+	categoryMixinInters3 := categoryMixin[3].Interceptors()
+	category.Interceptors[0] = categoryMixinInters3[0]
 	categoryMixinFields0 := categoryMixin[0].Fields()
 	_ = categoryMixinFields0
 	categoryFields := schema.Category{}.Fields()
@@ -287,8 +292,13 @@ func init() {
 		})
 	}
 	collectionMixinHooks0 := collectionMixin[0].Hooks()
+	collectionMixinHooks3 := collectionMixin[3].Hooks()
 
 	collection.Hooks[1] = collectionMixinHooks0[0]
+
+	collection.Hooks[2] = collectionMixinHooks3[0]
+	collectionMixinInters3 := collectionMixin[3].Interceptors()
+	collection.Interceptors[0] = collectionMixinInters3[0]
 	collectionMixinFields0 := collectionMixin[0].Fields()
 	_ = collectionMixinFields0
 	collectionFields := schema.Collection{}.Fields()

@@ -1863,6 +1863,8 @@ type Category implements Node {
   externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  deletedAt: Time
+  deletedBy: String
   slug: String!
   collections: [Collection!]
 }
@@ -2042,6 +2044,33 @@ input CategoryWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
+  """deleted_at field predicates"""
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """deleted_by field predicates"""
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
   """slug field predicates"""
   slug: String
   slugNEQ: String
@@ -2072,6 +2101,8 @@ type Collection implements Node {
   externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  deletedAt: Time
+  deletedBy: String
   slug: String!
   type: CollectionType
   art: [Art!]
@@ -2266,6 +2297,33 @@ input CollectionWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
+  """deleted_at field predicates"""
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """deleted_by field predicates"""
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
   """slug field predicates"""
   slug: String
   slugNEQ: String
@@ -2683,6 +2741,8 @@ input CreateCategoryInput {
   externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  deletedAt: Time
+  deletedBy: String
   slug: String!
   collectionIDs: [ID!]
 }
@@ -2701,6 +2761,8 @@ input CreateCollectionInput {
   externalLink: String
   primaryImageURL: String
   additionalImagesUrls: [String!]
+  deletedAt: Time
+  deletedBy: String
   slug: String!
   type: CollectionType
   artIDs: [ID!]
@@ -10135,6 +10197,10 @@ input UpdateCategoryInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
+  deletedAt: Time
+  clearDeletedAt: Boolean
+  deletedBy: String
+  clearDeletedBy: Boolean
   slug: String
   addCollectionIDs: [ID!]
   removeCollectionIDs: [ID!]
@@ -10163,6 +10229,10 @@ input UpdateCollectionInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
+  deletedAt: Time
+  clearDeletedAt: Boolean
+  deletedBy: String
+  clearDeletedBy: Boolean
   slug: String
   addArtIDs: [ID!]
   removeArtIDs: [ID!]

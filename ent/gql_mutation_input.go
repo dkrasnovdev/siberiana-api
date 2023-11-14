@@ -1784,6 +1784,8 @@ type CreateCategoryInput struct {
 	ExternalLink         *string
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
+	DeletedAt            *time.Time
+	DeletedBy            *string
 	Slug                 string
 	CollectionIDs        []int
 }
@@ -1820,6 +1822,12 @@ func (i *CreateCategoryInput) Mutate(m *CategoryMutation) {
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
 	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
 	m.SetSlug(i.Slug)
 	if v := i.CollectionIDs; len(v) > 0 {
 		m.AddCollectionIDs(v...)
@@ -1852,6 +1860,10 @@ type UpdateCategoryInput struct {
 	ClearAdditionalImagesUrls  bool
 	AdditionalImagesUrls       []string
 	AppendAdditionalImagesUrls []string
+	ClearDeletedAt             bool
+	DeletedAt                  *time.Time
+	ClearDeletedBy             bool
+	DeletedBy                  *string
 	Slug                       *string
 	ClearCollections           bool
 	AddCollectionIDs           []int
@@ -1914,6 +1926,18 @@ func (i *UpdateCategoryInput) Mutate(m *CategoryMutation) {
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
+	if i.ClearDeletedAt {
+		m.ClearDeletedAt()
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if i.ClearDeletedBy {
+		m.ClearDeletedBy()
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
 	if v := i.Slug; v != nil {
 		m.SetSlug(*v)
 	}
@@ -1952,6 +1976,8 @@ type CreateCollectionInput struct {
 	ExternalLink            *string
 	PrimaryImageURL         *string
 	AdditionalImagesUrls    []string
+	DeletedAt               *time.Time
+	DeletedBy               *string
 	Slug                    string
 	Type                    *collection.Type
 	ArtIDs                  []int
@@ -1994,6 +2020,12 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
 	}
 	m.SetSlug(i.Slug)
 	if v := i.Type; v != nil {
@@ -2046,6 +2078,10 @@ type UpdateCollectionInput struct {
 	ClearAdditionalImagesUrls     bool
 	AdditionalImagesUrls          []string
 	AppendAdditionalImagesUrls    []string
+	ClearDeletedAt                bool
+	DeletedAt                     *time.Time
+	ClearDeletedBy                bool
+	DeletedBy                     *string
 	Slug                          *string
 	ClearArt                      bool
 	AddArtIDs                     []int
@@ -2123,6 +2159,18 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearDeletedAt {
+		m.ClearDeletedAt()
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if i.ClearDeletedBy {
+		m.ClearDeletedBy()
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
 	}
 	if v := i.Slug; v != nil {
 		m.SetSlug(*v)

@@ -35,6 +35,10 @@ const (
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
 	FieldAdditionalImagesUrls = "additional_images_urls"
+	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
+	FieldDeletedAt = "deleted_at"
+	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
+	FieldDeletedBy = "deleted_by"
 	// FieldSlug holds the string denoting the slug field in the database.
 	FieldSlug = "slug"
 	// EdgeCollections holds the string denoting the collections edge name in mutations.
@@ -63,6 +67,8 @@ var Columns = []string{
 	FieldExternalLink,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
+	FieldDeletedAt,
+	FieldDeletedBy,
 	FieldSlug,
 }
 
@@ -82,8 +88,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/dkrasnovdev/siberiana-api/ent/runtime"
 var (
-	Hooks  [2]ent.Hook
-	Policy ent.Policy
+	Hooks        [3]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -143,6 +150,16 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryImageURL orders the results by the primary_image_url field.
 func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
+}
+
+// ByDeletedAt orders the results by the deleted_at field.
+func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
+}
+
+// ByDeletedBy orders the results by the deleted_by field.
+func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
 // BySlug orders the results by the slug field.

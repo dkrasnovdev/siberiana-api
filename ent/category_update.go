@@ -194,6 +194,46 @@ func (cu *CategoryUpdate) ClearAdditionalImagesUrls() *CategoryUpdate {
 	return cu
 }
 
+// SetDeletedAt sets the "deleted_at" field.
+func (cu *CategoryUpdate) SetDeletedAt(t time.Time) *CategoryUpdate {
+	cu.mutation.SetDeletedAt(t)
+	return cu
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (cu *CategoryUpdate) SetNillableDeletedAt(t *time.Time) *CategoryUpdate {
+	if t != nil {
+		cu.SetDeletedAt(*t)
+	}
+	return cu
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (cu *CategoryUpdate) ClearDeletedAt() *CategoryUpdate {
+	cu.mutation.ClearDeletedAt()
+	return cu
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (cu *CategoryUpdate) SetDeletedBy(s string) *CategoryUpdate {
+	cu.mutation.SetDeletedBy(s)
+	return cu
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (cu *CategoryUpdate) SetNillableDeletedBy(s *string) *CategoryUpdate {
+	if s != nil {
+		cu.SetDeletedBy(*s)
+	}
+	return cu
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (cu *CategoryUpdate) ClearDeletedBy() *CategoryUpdate {
+	cu.mutation.ClearDeletedBy()
+	return cu
+}
+
 // SetSlug sets the "slug" field.
 func (cu *CategoryUpdate) SetSlug(s string) *CategoryUpdate {
 	cu.mutation.SetSlug(s)
@@ -347,6 +387,18 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(category.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := cu.mutation.DeletedAt(); ok {
+		_spec.SetField(category.FieldDeletedAt, field.TypeTime, value)
+	}
+	if cu.mutation.DeletedAtCleared() {
+		_spec.ClearField(category.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := cu.mutation.DeletedBy(); ok {
+		_spec.SetField(category.FieldDeletedBy, field.TypeString, value)
+	}
+	if cu.mutation.DeletedByCleared() {
+		_spec.ClearField(category.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := cu.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)
@@ -580,6 +632,46 @@ func (cuo *CategoryUpdateOne) ClearAdditionalImagesUrls() *CategoryUpdateOne {
 	return cuo
 }
 
+// SetDeletedAt sets the "deleted_at" field.
+func (cuo *CategoryUpdateOne) SetDeletedAt(t time.Time) *CategoryUpdateOne {
+	cuo.mutation.SetDeletedAt(t)
+	return cuo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (cuo *CategoryUpdateOne) SetNillableDeletedAt(t *time.Time) *CategoryUpdateOne {
+	if t != nil {
+		cuo.SetDeletedAt(*t)
+	}
+	return cuo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (cuo *CategoryUpdateOne) ClearDeletedAt() *CategoryUpdateOne {
+	cuo.mutation.ClearDeletedAt()
+	return cuo
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (cuo *CategoryUpdateOne) SetDeletedBy(s string) *CategoryUpdateOne {
+	cuo.mutation.SetDeletedBy(s)
+	return cuo
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (cuo *CategoryUpdateOne) SetNillableDeletedBy(s *string) *CategoryUpdateOne {
+	if s != nil {
+		cuo.SetDeletedBy(*s)
+	}
+	return cuo
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (cuo *CategoryUpdateOne) ClearDeletedBy() *CategoryUpdateOne {
+	cuo.mutation.ClearDeletedBy()
+	return cuo
+}
+
 // SetSlug sets the "slug" field.
 func (cuo *CategoryUpdateOne) SetSlug(s string) *CategoryUpdateOne {
 	cuo.mutation.SetSlug(s)
@@ -763,6 +855,18 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 	}
 	if cuo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(category.FieldAdditionalImagesUrls, field.TypeJSON)
+	}
+	if value, ok := cuo.mutation.DeletedAt(); ok {
+		_spec.SetField(category.FieldDeletedAt, field.TypeTime, value)
+	}
+	if cuo.mutation.DeletedAtCleared() {
+		_spec.ClearField(category.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := cuo.mutation.DeletedBy(); ok {
+		_spec.SetField(category.FieldDeletedBy, field.TypeString, value)
+	}
+	if cuo.mutation.DeletedByCleared() {
+		_spec.ClearField(category.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Slug(); ok {
 		_spec.SetField(category.FieldSlug, field.TypeString, value)

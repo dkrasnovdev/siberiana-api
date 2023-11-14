@@ -38,6 +38,10 @@ type Category struct {
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	// DeletedBy holds the value of the "deleted_by" field.
+	DeletedBy string `json:"deleted_by,omitempty"`
 	// Slug holds the value of the "slug" field.
 	Slug string `json:"slug,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -77,9 +81,9 @@ func (*Category) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case category.FieldID:
 			values[i] = new(sql.NullInt64)
-		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldAbbreviation, category.FieldDescription, category.FieldExternalLink, category.FieldPrimaryImageURL, category.FieldSlug:
+		case category.FieldCreatedBy, category.FieldUpdatedBy, category.FieldDisplayName, category.FieldAbbreviation, category.FieldDescription, category.FieldExternalLink, category.FieldPrimaryImageURL, category.FieldDeletedBy, category.FieldSlug:
 			values[i] = new(sql.NullString)
-		case category.FieldCreatedAt, category.FieldUpdatedAt:
+		case category.FieldCreatedAt, category.FieldUpdatedAt, category.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -164,6 +168,18 @@ func (c *Category) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
+		case category.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				c.DeletedAt = value.Time
+			}
+		case category.FieldDeletedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+			} else if value.Valid {
+				c.DeletedBy = value.String
+			}
 		case category.FieldSlug:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field slug", values[i])
@@ -240,6 +256,12 @@ func (c *Category) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", c.AdditionalImagesUrls))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(c.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_by=")
+	builder.WriteString(c.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("slug=")
 	builder.WriteString(c.Slug)
