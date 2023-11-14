@@ -75,6 +75,21 @@ func UpdatedBy(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// Dating applies equality check predicate on the "dating" field. It's identical to DatingEQ.
+func Dating(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDating, v))
+}
+
+// DatingStart applies equality check predicate on the "dating_start" field. It's identical to DatingStartEQ.
+func DatingStart(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDatingStart, v))
+}
+
+// DatingEnd applies equality check predicate on the "dating_end" field. It's identical to DatingEndEQ.
+func DatingEnd(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDatingEnd, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldDisplayName, v))
@@ -98,31 +113,6 @@ func ExternalLink(v string) predicate.Artifact {
 // PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
 func PrimaryImageURL(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldPrimaryImageURL, v))
-}
-
-// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
-func DeletedAt(v time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDeletedAt, v))
-}
-
-// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
-func DeletedBy(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDeletedBy, v))
-}
-
-// Dating applies equality check predicate on the "dating" field. It's identical to DatingEQ.
-func Dating(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDating, v))
-}
-
-// DatingStart applies equality check predicate on the "dating_start" field. It's identical to DatingStartEQ.
-func DatingStart(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDatingStart, v))
-}
-
-// DatingEnd applies equality check predicate on the "dating_end" field. It's identical to DatingEndEQ.
-func DatingEnd(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDatingEnd, v))
 }
 
 // Height applies equality check predicate on the "height" field. It's identical to HeightEQ.
@@ -158,6 +148,16 @@ func Weight(v string) predicate.Artifact {
 // Dimensions applies equality check predicate on the "dimensions" field. It's identical to DimensionsEQ.
 func Dimensions(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldDimensions, v))
+}
+
+// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
+func DeletedAt(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
+func DeletedBy(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedBy, v))
 }
 
 // ChemicalComposition applies equality check predicate on the "chemical_composition" field. It's identical to ChemicalCompositionEQ.
@@ -418,6 +418,181 @@ func UpdatedByEqualFold(v string) predicate.Artifact {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// DatingEQ applies the EQ predicate on the "dating" field.
+func DatingEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDating, v))
+}
+
+// DatingNEQ applies the NEQ predicate on the "dating" field.
+func DatingNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDating, v))
+}
+
+// DatingIn applies the In predicate on the "dating" field.
+func DatingIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDating, vs...))
+}
+
+// DatingNotIn applies the NotIn predicate on the "dating" field.
+func DatingNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDating, vs...))
+}
+
+// DatingGT applies the GT predicate on the "dating" field.
+func DatingGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDating, v))
+}
+
+// DatingGTE applies the GTE predicate on the "dating" field.
+func DatingGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDating, v))
+}
+
+// DatingLT applies the LT predicate on the "dating" field.
+func DatingLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDating, v))
+}
+
+// DatingLTE applies the LTE predicate on the "dating" field.
+func DatingLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDating, v))
+}
+
+// DatingContains applies the Contains predicate on the "dating" field.
+func DatingContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldDating, v))
+}
+
+// DatingHasPrefix applies the HasPrefix predicate on the "dating" field.
+func DatingHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldDating, v))
+}
+
+// DatingHasSuffix applies the HasSuffix predicate on the "dating" field.
+func DatingHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldDating, v))
+}
+
+// DatingIsNil applies the IsNil predicate on the "dating" field.
+func DatingIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDating))
+}
+
+// DatingNotNil applies the NotNil predicate on the "dating" field.
+func DatingNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDating))
+}
+
+// DatingEqualFold applies the EqualFold predicate on the "dating" field.
+func DatingEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldDating, v))
+}
+
+// DatingContainsFold applies the ContainsFold predicate on the "dating" field.
+func DatingContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldDating, v))
+}
+
+// DatingStartEQ applies the EQ predicate on the "dating_start" field.
+func DatingStartEQ(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDatingStart, v))
+}
+
+// DatingStartNEQ applies the NEQ predicate on the "dating_start" field.
+func DatingStartNEQ(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDatingStart, v))
+}
+
+// DatingStartIn applies the In predicate on the "dating_start" field.
+func DatingStartIn(vs ...int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDatingStart, vs...))
+}
+
+// DatingStartNotIn applies the NotIn predicate on the "dating_start" field.
+func DatingStartNotIn(vs ...int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDatingStart, vs...))
+}
+
+// DatingStartGT applies the GT predicate on the "dating_start" field.
+func DatingStartGT(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDatingStart, v))
+}
+
+// DatingStartGTE applies the GTE predicate on the "dating_start" field.
+func DatingStartGTE(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDatingStart, v))
+}
+
+// DatingStartLT applies the LT predicate on the "dating_start" field.
+func DatingStartLT(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDatingStart, v))
+}
+
+// DatingStartLTE applies the LTE predicate on the "dating_start" field.
+func DatingStartLTE(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDatingStart, v))
+}
+
+// DatingStartIsNil applies the IsNil predicate on the "dating_start" field.
+func DatingStartIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDatingStart))
+}
+
+// DatingStartNotNil applies the NotNil predicate on the "dating_start" field.
+func DatingStartNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDatingStart))
+}
+
+// DatingEndEQ applies the EQ predicate on the "dating_end" field.
+func DatingEndEQ(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDatingEnd, v))
+}
+
+// DatingEndNEQ applies the NEQ predicate on the "dating_end" field.
+func DatingEndNEQ(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDatingEnd, v))
+}
+
+// DatingEndIn applies the In predicate on the "dating_end" field.
+func DatingEndIn(vs ...int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDatingEnd, vs...))
+}
+
+// DatingEndNotIn applies the NotIn predicate on the "dating_end" field.
+func DatingEndNotIn(vs ...int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDatingEnd, vs...))
+}
+
+// DatingEndGT applies the GT predicate on the "dating_end" field.
+func DatingEndGT(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDatingEnd, v))
+}
+
+// DatingEndGTE applies the GTE predicate on the "dating_end" field.
+func DatingEndGTE(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDatingEnd, v))
+}
+
+// DatingEndLT applies the LT predicate on the "dating_end" field.
+func DatingEndLT(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDatingEnd, v))
+}
+
+// DatingEndLTE applies the LTE predicate on the "dating_end" field.
+func DatingEndLTE(v int) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDatingEnd, v))
+}
+
+// DatingEndIsNil applies the IsNil predicate on the "dating_end" field.
+func DatingEndIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDatingEnd))
+}
+
+// DatingEndNotNil applies the NotNil predicate on the "dating_end" field.
+func DatingEndNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDatingEnd))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.
@@ -835,306 +1010,6 @@ func AdditionalImagesUrlsNotNil() predicate.Artifact {
 	return predicate.Artifact(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
-// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
-func DeletedAtEQ(v time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDeletedAt, v))
-}
-
-// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
-func DeletedAtNEQ(v time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNEQ(FieldDeletedAt, v))
-}
-
-// DeletedAtIn applies the In predicate on the "deleted_at" field.
-func DeletedAtIn(vs ...time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldIn(FieldDeletedAt, vs...))
-}
-
-// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
-func DeletedAtNotIn(vs ...time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotIn(FieldDeletedAt, vs...))
-}
-
-// DeletedAtGT applies the GT predicate on the "deleted_at" field.
-func DeletedAtGT(v time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGT(FieldDeletedAt, v))
-}
-
-// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
-func DeletedAtGTE(v time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGTE(FieldDeletedAt, v))
-}
-
-// DeletedAtLT applies the LT predicate on the "deleted_at" field.
-func DeletedAtLT(v time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLT(FieldDeletedAt, v))
-}
-
-// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
-func DeletedAtLTE(v time.Time) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLTE(FieldDeletedAt, v))
-}
-
-// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
-func DeletedAtIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldDeletedAt))
-}
-
-// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
-func DeletedAtNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldDeletedAt))
-}
-
-// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
-func DeletedByEQ(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDeletedBy, v))
-}
-
-// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
-func DeletedByNEQ(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNEQ(FieldDeletedBy, v))
-}
-
-// DeletedByIn applies the In predicate on the "deleted_by" field.
-func DeletedByIn(vs ...string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldIn(FieldDeletedBy, vs...))
-}
-
-// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
-func DeletedByNotIn(vs ...string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotIn(FieldDeletedBy, vs...))
-}
-
-// DeletedByGT applies the GT predicate on the "deleted_by" field.
-func DeletedByGT(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGT(FieldDeletedBy, v))
-}
-
-// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
-func DeletedByGTE(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGTE(FieldDeletedBy, v))
-}
-
-// DeletedByLT applies the LT predicate on the "deleted_by" field.
-func DeletedByLT(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLT(FieldDeletedBy, v))
-}
-
-// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
-func DeletedByLTE(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLTE(FieldDeletedBy, v))
-}
-
-// DeletedByContains applies the Contains predicate on the "deleted_by" field.
-func DeletedByContains(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldContains(FieldDeletedBy, v))
-}
-
-// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
-func DeletedByHasPrefix(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldHasPrefix(FieldDeletedBy, v))
-}
-
-// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
-func DeletedByHasSuffix(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldHasSuffix(FieldDeletedBy, v))
-}
-
-// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
-func DeletedByIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldDeletedBy))
-}
-
-// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
-func DeletedByNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldDeletedBy))
-}
-
-// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
-func DeletedByEqualFold(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEqualFold(FieldDeletedBy, v))
-}
-
-// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
-func DeletedByContainsFold(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldContainsFold(FieldDeletedBy, v))
-}
-
-// DatingEQ applies the EQ predicate on the "dating" field.
-func DatingEQ(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDating, v))
-}
-
-// DatingNEQ applies the NEQ predicate on the "dating" field.
-func DatingNEQ(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNEQ(FieldDating, v))
-}
-
-// DatingIn applies the In predicate on the "dating" field.
-func DatingIn(vs ...string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldIn(FieldDating, vs...))
-}
-
-// DatingNotIn applies the NotIn predicate on the "dating" field.
-func DatingNotIn(vs ...string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotIn(FieldDating, vs...))
-}
-
-// DatingGT applies the GT predicate on the "dating" field.
-func DatingGT(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGT(FieldDating, v))
-}
-
-// DatingGTE applies the GTE predicate on the "dating" field.
-func DatingGTE(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGTE(FieldDating, v))
-}
-
-// DatingLT applies the LT predicate on the "dating" field.
-func DatingLT(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLT(FieldDating, v))
-}
-
-// DatingLTE applies the LTE predicate on the "dating" field.
-func DatingLTE(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLTE(FieldDating, v))
-}
-
-// DatingContains applies the Contains predicate on the "dating" field.
-func DatingContains(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldContains(FieldDating, v))
-}
-
-// DatingHasPrefix applies the HasPrefix predicate on the "dating" field.
-func DatingHasPrefix(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldHasPrefix(FieldDating, v))
-}
-
-// DatingHasSuffix applies the HasSuffix predicate on the "dating" field.
-func DatingHasSuffix(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldHasSuffix(FieldDating, v))
-}
-
-// DatingIsNil applies the IsNil predicate on the "dating" field.
-func DatingIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldDating))
-}
-
-// DatingNotNil applies the NotNil predicate on the "dating" field.
-func DatingNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldDating))
-}
-
-// DatingEqualFold applies the EqualFold predicate on the "dating" field.
-func DatingEqualFold(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEqualFold(FieldDating, v))
-}
-
-// DatingContainsFold applies the ContainsFold predicate on the "dating" field.
-func DatingContainsFold(v string) predicate.Artifact {
-	return predicate.Artifact(sql.FieldContainsFold(FieldDating, v))
-}
-
-// DatingStartEQ applies the EQ predicate on the "dating_start" field.
-func DatingStartEQ(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDatingStart, v))
-}
-
-// DatingStartNEQ applies the NEQ predicate on the "dating_start" field.
-func DatingStartNEQ(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNEQ(FieldDatingStart, v))
-}
-
-// DatingStartIn applies the In predicate on the "dating_start" field.
-func DatingStartIn(vs ...int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldIn(FieldDatingStart, vs...))
-}
-
-// DatingStartNotIn applies the NotIn predicate on the "dating_start" field.
-func DatingStartNotIn(vs ...int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotIn(FieldDatingStart, vs...))
-}
-
-// DatingStartGT applies the GT predicate on the "dating_start" field.
-func DatingStartGT(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGT(FieldDatingStart, v))
-}
-
-// DatingStartGTE applies the GTE predicate on the "dating_start" field.
-func DatingStartGTE(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGTE(FieldDatingStart, v))
-}
-
-// DatingStartLT applies the LT predicate on the "dating_start" field.
-func DatingStartLT(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLT(FieldDatingStart, v))
-}
-
-// DatingStartLTE applies the LTE predicate on the "dating_start" field.
-func DatingStartLTE(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLTE(FieldDatingStart, v))
-}
-
-// DatingStartIsNil applies the IsNil predicate on the "dating_start" field.
-func DatingStartIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldDatingStart))
-}
-
-// DatingStartNotNil applies the NotNil predicate on the "dating_start" field.
-func DatingStartNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldDatingStart))
-}
-
-// DatingEndEQ applies the EQ predicate on the "dating_end" field.
-func DatingEndEQ(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldEQ(FieldDatingEnd, v))
-}
-
-// DatingEndNEQ applies the NEQ predicate on the "dating_end" field.
-func DatingEndNEQ(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNEQ(FieldDatingEnd, v))
-}
-
-// DatingEndIn applies the In predicate on the "dating_end" field.
-func DatingEndIn(vs ...int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldIn(FieldDatingEnd, vs...))
-}
-
-// DatingEndNotIn applies the NotIn predicate on the "dating_end" field.
-func DatingEndNotIn(vs ...int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotIn(FieldDatingEnd, vs...))
-}
-
-// DatingEndGT applies the GT predicate on the "dating_end" field.
-func DatingEndGT(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGT(FieldDatingEnd, v))
-}
-
-// DatingEndGTE applies the GTE predicate on the "dating_end" field.
-func DatingEndGTE(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldGTE(FieldDatingEnd, v))
-}
-
-// DatingEndLT applies the LT predicate on the "dating_end" field.
-func DatingEndLT(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLT(FieldDatingEnd, v))
-}
-
-// DatingEndLTE applies the LTE predicate on the "dating_end" field.
-func DatingEndLTE(v int) predicate.Artifact {
-	return predicate.Artifact(sql.FieldLTE(FieldDatingEnd, v))
-}
-
-// DatingEndIsNil applies the IsNil predicate on the "dating_end" field.
-func DatingEndIsNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldIsNull(FieldDatingEnd))
-}
-
-// DatingEndNotNil applies the NotNil predicate on the "dating_end" field.
-func DatingEndNotNil() predicate.Artifact {
-	return predicate.Artifact(sql.FieldNotNull(FieldDatingEnd))
-}
-
 // HeightEQ applies the EQ predicate on the "height" field.
 func HeightEQ(v float64) predicate.Artifact {
 	return predicate.Artifact(sql.FieldEQ(FieldHeight, v))
@@ -1533,6 +1408,131 @@ func DimensionsEqualFold(v string) predicate.Artifact {
 // DimensionsContainsFold applies the ContainsFold predicate on the "dimensions" field.
 func DimensionsContainsFold(v string) predicate.Artifact {
 	return predicate.Artifact(sql.FieldContainsFold(FieldDimensions, v))
+}
+
+// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
+func DeletedAtEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
+func DeletedAtNEQ(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtIn applies the In predicate on the "deleted_at" field.
+func DeletedAtIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
+func DeletedAtNotIn(vs ...time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtGT applies the GT predicate on the "deleted_at" field.
+func DeletedAtGT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDeletedAt, v))
+}
+
+// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
+func DeletedAtGTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDeletedAt, v))
+}
+
+// DeletedAtLT applies the LT predicate on the "deleted_at" field.
+func DeletedAtLT(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDeletedAt, v))
+}
+
+// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
+func DeletedAtLTE(v time.Time) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDeletedAt, v))
+}
+
+// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
+func DeletedAtIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDeletedAt))
+}
+
+// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
+func DeletedAtNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDeletedAt))
+}
+
+// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
+func DeletedByEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
+func DeletedByNEQ(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNEQ(FieldDeletedBy, v))
+}
+
+// DeletedByIn applies the In predicate on the "deleted_by" field.
+func DeletedByIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldIn(FieldDeletedBy, vs...))
+}
+
+// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
+func DeletedByNotIn(vs ...string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotIn(FieldDeletedBy, vs...))
+}
+
+// DeletedByGT applies the GT predicate on the "deleted_by" field.
+func DeletedByGT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGT(FieldDeletedBy, v))
+}
+
+// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
+func DeletedByGTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldGTE(FieldDeletedBy, v))
+}
+
+// DeletedByLT applies the LT predicate on the "deleted_by" field.
+func DeletedByLT(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLT(FieldDeletedBy, v))
+}
+
+// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
+func DeletedByLTE(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldLTE(FieldDeletedBy, v))
+}
+
+// DeletedByContains applies the Contains predicate on the "deleted_by" field.
+func DeletedByContains(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContains(FieldDeletedBy, v))
+}
+
+// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
+func DeletedByHasPrefix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasPrefix(FieldDeletedBy, v))
+}
+
+// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
+func DeletedByHasSuffix(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldHasSuffix(FieldDeletedBy, v))
+}
+
+// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
+func DeletedByIsNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldIsNull(FieldDeletedBy))
+}
+
+// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
+func DeletedByNotNil() predicate.Artifact {
+	return predicate.Artifact(sql.FieldNotNull(FieldDeletedBy))
+}
+
+// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
+func DeletedByEqualFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldEqualFold(FieldDeletedBy, v))
+}
+
+// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
+func DeletedByContainsFold(v string) predicate.Artifact {
+	return predicate.Artifact(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
 // ChemicalCompositionEQ applies the EQ predicate on the "chemical_composition" field.

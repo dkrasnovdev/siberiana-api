@@ -93,6 +93,80 @@ func (au *ArtifactUpdate) ClearUpdatedBy() *ArtifactUpdate {
 	return au
 }
 
+// SetDating sets the "dating" field.
+func (au *ArtifactUpdate) SetDating(s string) *ArtifactUpdate {
+	au.mutation.SetDating(s)
+	return au
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDating(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetDating(*s)
+	}
+	return au
+}
+
+// ClearDating clears the value of the "dating" field.
+func (au *ArtifactUpdate) ClearDating() *ArtifactUpdate {
+	au.mutation.ClearDating()
+	return au
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (au *ArtifactUpdate) SetDatingStart(i int) *ArtifactUpdate {
+	au.mutation.ResetDatingStart()
+	au.mutation.SetDatingStart(i)
+	return au
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDatingStart(i *int) *ArtifactUpdate {
+	if i != nil {
+		au.SetDatingStart(*i)
+	}
+	return au
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (au *ArtifactUpdate) AddDatingStart(i int) *ArtifactUpdate {
+	au.mutation.AddDatingStart(i)
+	return au
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (au *ArtifactUpdate) ClearDatingStart() *ArtifactUpdate {
+	au.mutation.ClearDatingStart()
+	return au
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (au *ArtifactUpdate) SetDatingEnd(i int) *ArtifactUpdate {
+	au.mutation.ResetDatingEnd()
+	au.mutation.SetDatingEnd(i)
+	return au
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDatingEnd(i *int) *ArtifactUpdate {
+	if i != nil {
+		au.SetDatingEnd(*i)
+	}
+	return au
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (au *ArtifactUpdate) AddDatingEnd(i int) *ArtifactUpdate {
+	au.mutation.AddDatingEnd(i)
+	return au
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (au *ArtifactUpdate) ClearDatingEnd() *ArtifactUpdate {
+	au.mutation.ClearDatingEnd()
+	return au
+}
+
 // SetDisplayName sets the "display_name" field.
 func (au *ArtifactUpdate) SetDisplayName(s string) *ArtifactUpdate {
 	au.mutation.SetDisplayName(s)
@@ -228,120 +302,6 @@ func (au *ArtifactUpdate) AppendAdditionalImagesUrls(s []string) *ArtifactUpdate
 // ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
 func (au *ArtifactUpdate) ClearAdditionalImagesUrls() *ArtifactUpdate {
 	au.mutation.ClearAdditionalImagesUrls()
-	return au
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (au *ArtifactUpdate) SetDeletedAt(t time.Time) *ArtifactUpdate {
-	au.mutation.SetDeletedAt(t)
-	return au
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableDeletedAt(t *time.Time) *ArtifactUpdate {
-	if t != nil {
-		au.SetDeletedAt(*t)
-	}
-	return au
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (au *ArtifactUpdate) ClearDeletedAt() *ArtifactUpdate {
-	au.mutation.ClearDeletedAt()
-	return au
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (au *ArtifactUpdate) SetDeletedBy(s string) *ArtifactUpdate {
-	au.mutation.SetDeletedBy(s)
-	return au
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableDeletedBy(s *string) *ArtifactUpdate {
-	if s != nil {
-		au.SetDeletedBy(*s)
-	}
-	return au
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (au *ArtifactUpdate) ClearDeletedBy() *ArtifactUpdate {
-	au.mutation.ClearDeletedBy()
-	return au
-}
-
-// SetDating sets the "dating" field.
-func (au *ArtifactUpdate) SetDating(s string) *ArtifactUpdate {
-	au.mutation.SetDating(s)
-	return au
-}
-
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableDating(s *string) *ArtifactUpdate {
-	if s != nil {
-		au.SetDating(*s)
-	}
-	return au
-}
-
-// ClearDating clears the value of the "dating" field.
-func (au *ArtifactUpdate) ClearDating() *ArtifactUpdate {
-	au.mutation.ClearDating()
-	return au
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (au *ArtifactUpdate) SetDatingStart(i int) *ArtifactUpdate {
-	au.mutation.ResetDatingStart()
-	au.mutation.SetDatingStart(i)
-	return au
-}
-
-// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableDatingStart(i *int) *ArtifactUpdate {
-	if i != nil {
-		au.SetDatingStart(*i)
-	}
-	return au
-}
-
-// AddDatingStart adds i to the "dating_start" field.
-func (au *ArtifactUpdate) AddDatingStart(i int) *ArtifactUpdate {
-	au.mutation.AddDatingStart(i)
-	return au
-}
-
-// ClearDatingStart clears the value of the "dating_start" field.
-func (au *ArtifactUpdate) ClearDatingStart() *ArtifactUpdate {
-	au.mutation.ClearDatingStart()
-	return au
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (au *ArtifactUpdate) SetDatingEnd(i int) *ArtifactUpdate {
-	au.mutation.ResetDatingEnd()
-	au.mutation.SetDatingEnd(i)
-	return au
-}
-
-// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
-func (au *ArtifactUpdate) SetNillableDatingEnd(i *int) *ArtifactUpdate {
-	if i != nil {
-		au.SetDatingEnd(*i)
-	}
-	return au
-}
-
-// AddDatingEnd adds i to the "dating_end" field.
-func (au *ArtifactUpdate) AddDatingEnd(i int) *ArtifactUpdate {
-	au.mutation.AddDatingEnd(i)
-	return au
-}
-
-// ClearDatingEnd clears the value of the "dating_end" field.
-func (au *ArtifactUpdate) ClearDatingEnd() *ArtifactUpdate {
-	au.mutation.ClearDatingEnd()
 	return au
 }
 
@@ -517,6 +477,46 @@ func (au *ArtifactUpdate) SetNillableDimensions(s *string) *ArtifactUpdate {
 // ClearDimensions clears the value of the "dimensions" field.
 func (au *ArtifactUpdate) ClearDimensions() *ArtifactUpdate {
 	au.mutation.ClearDimensions()
+	return au
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (au *ArtifactUpdate) SetDeletedAt(t time.Time) *ArtifactUpdate {
+	au.mutation.SetDeletedAt(t)
+	return au
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDeletedAt(t *time.Time) *ArtifactUpdate {
+	if t != nil {
+		au.SetDeletedAt(*t)
+	}
+	return au
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (au *ArtifactUpdate) ClearDeletedAt() *ArtifactUpdate {
+	au.mutation.ClearDeletedAt()
+	return au
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (au *ArtifactUpdate) SetDeletedBy(s string) *ArtifactUpdate {
+	au.mutation.SetDeletedBy(s)
+	return au
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (au *ArtifactUpdate) SetNillableDeletedBy(s *string) *ArtifactUpdate {
+	if s != nil {
+		au.SetDeletedBy(*s)
+	}
+	return au
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (au *ArtifactUpdate) ClearDeletedBy() *ArtifactUpdate {
+	au.mutation.ClearDeletedBy()
 	return au
 }
 
@@ -1249,6 +1249,30 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.UpdatedByCleared() {
 		_spec.ClearField(artifact.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := au.mutation.Dating(); ok {
+		_spec.SetField(artifact.FieldDating, field.TypeString, value)
+	}
+	if au.mutation.DatingCleared() {
+		_spec.ClearField(artifact.FieldDating, field.TypeString)
+	}
+	if value, ok := au.mutation.DatingStart(); ok {
+		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
+	}
+	if value, ok := au.mutation.AddedDatingStart(); ok {
+		_spec.AddField(artifact.FieldDatingStart, field.TypeInt, value)
+	}
+	if au.mutation.DatingStartCleared() {
+		_spec.ClearField(artifact.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := au.mutation.DatingEnd(); ok {
+		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := au.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if au.mutation.DatingEndCleared() {
+		_spec.ClearField(artifact.FieldDatingEnd, field.TypeInt)
+	}
 	if value, ok := au.mutation.DisplayName(); ok {
 		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
 	}
@@ -1295,42 +1319,6 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(artifact.FieldAdditionalImagesUrls, field.TypeJSON)
-	}
-	if value, ok := au.mutation.DeletedAt(); ok {
-		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
-	}
-	if au.mutation.DeletedAtCleared() {
-		_spec.ClearField(artifact.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := au.mutation.DeletedBy(); ok {
-		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
-	}
-	if au.mutation.DeletedByCleared() {
-		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := au.mutation.Dating(); ok {
-		_spec.SetField(artifact.FieldDating, field.TypeString, value)
-	}
-	if au.mutation.DatingCleared() {
-		_spec.ClearField(artifact.FieldDating, field.TypeString)
-	}
-	if value, ok := au.mutation.DatingStart(); ok {
-		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
-	}
-	if value, ok := au.mutation.AddedDatingStart(); ok {
-		_spec.AddField(artifact.FieldDatingStart, field.TypeInt, value)
-	}
-	if au.mutation.DatingStartCleared() {
-		_spec.ClearField(artifact.FieldDatingStart, field.TypeInt)
-	}
-	if value, ok := au.mutation.DatingEnd(); ok {
-		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
-	}
-	if value, ok := au.mutation.AddedDatingEnd(); ok {
-		_spec.AddField(artifact.FieldDatingEnd, field.TypeInt, value)
-	}
-	if au.mutation.DatingEndCleared() {
-		_spec.ClearField(artifact.FieldDatingEnd, field.TypeInt)
 	}
 	if value, ok := au.mutation.Height(); ok {
 		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
@@ -1388,6 +1376,18 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if au.mutation.DimensionsCleared() {
 		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	}
+	if value, ok := au.mutation.DeletedAt(); ok {
+		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
+	}
+	if au.mutation.DeletedAtCleared() {
+		_spec.ClearField(artifact.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := au.mutation.DeletedBy(); ok {
+		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
+	}
+	if au.mutation.DeletedByCleared() {
+		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := au.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)
@@ -2122,6 +2122,80 @@ func (auo *ArtifactUpdateOne) ClearUpdatedBy() *ArtifactUpdateOne {
 	return auo
 }
 
+// SetDating sets the "dating" field.
+func (auo *ArtifactUpdateOne) SetDating(s string) *ArtifactUpdateOne {
+	auo.mutation.SetDating(s)
+	return auo
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDating(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetDating(*s)
+	}
+	return auo
+}
+
+// ClearDating clears the value of the "dating" field.
+func (auo *ArtifactUpdateOne) ClearDating() *ArtifactUpdateOne {
+	auo.mutation.ClearDating()
+	return auo
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (auo *ArtifactUpdateOne) SetDatingStart(i int) *ArtifactUpdateOne {
+	auo.mutation.ResetDatingStart()
+	auo.mutation.SetDatingStart(i)
+	return auo
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDatingStart(i *int) *ArtifactUpdateOne {
+	if i != nil {
+		auo.SetDatingStart(*i)
+	}
+	return auo
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (auo *ArtifactUpdateOne) AddDatingStart(i int) *ArtifactUpdateOne {
+	auo.mutation.AddDatingStart(i)
+	return auo
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (auo *ArtifactUpdateOne) ClearDatingStart() *ArtifactUpdateOne {
+	auo.mutation.ClearDatingStart()
+	return auo
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (auo *ArtifactUpdateOne) SetDatingEnd(i int) *ArtifactUpdateOne {
+	auo.mutation.ResetDatingEnd()
+	auo.mutation.SetDatingEnd(i)
+	return auo
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDatingEnd(i *int) *ArtifactUpdateOne {
+	if i != nil {
+		auo.SetDatingEnd(*i)
+	}
+	return auo
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (auo *ArtifactUpdateOne) AddDatingEnd(i int) *ArtifactUpdateOne {
+	auo.mutation.AddDatingEnd(i)
+	return auo
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (auo *ArtifactUpdateOne) ClearDatingEnd() *ArtifactUpdateOne {
+	auo.mutation.ClearDatingEnd()
+	return auo
+}
+
 // SetDisplayName sets the "display_name" field.
 func (auo *ArtifactUpdateOne) SetDisplayName(s string) *ArtifactUpdateOne {
 	auo.mutation.SetDisplayName(s)
@@ -2257,120 +2331,6 @@ func (auo *ArtifactUpdateOne) AppendAdditionalImagesUrls(s []string) *ArtifactUp
 // ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
 func (auo *ArtifactUpdateOne) ClearAdditionalImagesUrls() *ArtifactUpdateOne {
 	auo.mutation.ClearAdditionalImagesUrls()
-	return auo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (auo *ArtifactUpdateOne) SetDeletedAt(t time.Time) *ArtifactUpdateOne {
-	auo.mutation.SetDeletedAt(t)
-	return auo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableDeletedAt(t *time.Time) *ArtifactUpdateOne {
-	if t != nil {
-		auo.SetDeletedAt(*t)
-	}
-	return auo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (auo *ArtifactUpdateOne) ClearDeletedAt() *ArtifactUpdateOne {
-	auo.mutation.ClearDeletedAt()
-	return auo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (auo *ArtifactUpdateOne) SetDeletedBy(s string) *ArtifactUpdateOne {
-	auo.mutation.SetDeletedBy(s)
-	return auo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableDeletedBy(s *string) *ArtifactUpdateOne {
-	if s != nil {
-		auo.SetDeletedBy(*s)
-	}
-	return auo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (auo *ArtifactUpdateOne) ClearDeletedBy() *ArtifactUpdateOne {
-	auo.mutation.ClearDeletedBy()
-	return auo
-}
-
-// SetDating sets the "dating" field.
-func (auo *ArtifactUpdateOne) SetDating(s string) *ArtifactUpdateOne {
-	auo.mutation.SetDating(s)
-	return auo
-}
-
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableDating(s *string) *ArtifactUpdateOne {
-	if s != nil {
-		auo.SetDating(*s)
-	}
-	return auo
-}
-
-// ClearDating clears the value of the "dating" field.
-func (auo *ArtifactUpdateOne) ClearDating() *ArtifactUpdateOne {
-	auo.mutation.ClearDating()
-	return auo
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (auo *ArtifactUpdateOne) SetDatingStart(i int) *ArtifactUpdateOne {
-	auo.mutation.ResetDatingStart()
-	auo.mutation.SetDatingStart(i)
-	return auo
-}
-
-// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableDatingStart(i *int) *ArtifactUpdateOne {
-	if i != nil {
-		auo.SetDatingStart(*i)
-	}
-	return auo
-}
-
-// AddDatingStart adds i to the "dating_start" field.
-func (auo *ArtifactUpdateOne) AddDatingStart(i int) *ArtifactUpdateOne {
-	auo.mutation.AddDatingStart(i)
-	return auo
-}
-
-// ClearDatingStart clears the value of the "dating_start" field.
-func (auo *ArtifactUpdateOne) ClearDatingStart() *ArtifactUpdateOne {
-	auo.mutation.ClearDatingStart()
-	return auo
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (auo *ArtifactUpdateOne) SetDatingEnd(i int) *ArtifactUpdateOne {
-	auo.mutation.ResetDatingEnd()
-	auo.mutation.SetDatingEnd(i)
-	return auo
-}
-
-// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
-func (auo *ArtifactUpdateOne) SetNillableDatingEnd(i *int) *ArtifactUpdateOne {
-	if i != nil {
-		auo.SetDatingEnd(*i)
-	}
-	return auo
-}
-
-// AddDatingEnd adds i to the "dating_end" field.
-func (auo *ArtifactUpdateOne) AddDatingEnd(i int) *ArtifactUpdateOne {
-	auo.mutation.AddDatingEnd(i)
-	return auo
-}
-
-// ClearDatingEnd clears the value of the "dating_end" field.
-func (auo *ArtifactUpdateOne) ClearDatingEnd() *ArtifactUpdateOne {
-	auo.mutation.ClearDatingEnd()
 	return auo
 }
 
@@ -2546,6 +2506,46 @@ func (auo *ArtifactUpdateOne) SetNillableDimensions(s *string) *ArtifactUpdateOn
 // ClearDimensions clears the value of the "dimensions" field.
 func (auo *ArtifactUpdateOne) ClearDimensions() *ArtifactUpdateOne {
 	auo.mutation.ClearDimensions()
+	return auo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (auo *ArtifactUpdateOne) SetDeletedAt(t time.Time) *ArtifactUpdateOne {
+	auo.mutation.SetDeletedAt(t)
+	return auo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDeletedAt(t *time.Time) *ArtifactUpdateOne {
+	if t != nil {
+		auo.SetDeletedAt(*t)
+	}
+	return auo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (auo *ArtifactUpdateOne) ClearDeletedAt() *ArtifactUpdateOne {
+	auo.mutation.ClearDeletedAt()
+	return auo
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (auo *ArtifactUpdateOne) SetDeletedBy(s string) *ArtifactUpdateOne {
+	auo.mutation.SetDeletedBy(s)
+	return auo
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (auo *ArtifactUpdateOne) SetNillableDeletedBy(s *string) *ArtifactUpdateOne {
+	if s != nil {
+		auo.SetDeletedBy(*s)
+	}
+	return auo
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (auo *ArtifactUpdateOne) ClearDeletedBy() *ArtifactUpdateOne {
+	auo.mutation.ClearDeletedBy()
 	return auo
 }
 
@@ -3308,6 +3308,30 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	if auo.mutation.UpdatedByCleared() {
 		_spec.ClearField(artifact.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := auo.mutation.Dating(); ok {
+		_spec.SetField(artifact.FieldDating, field.TypeString, value)
+	}
+	if auo.mutation.DatingCleared() {
+		_spec.ClearField(artifact.FieldDating, field.TypeString)
+	}
+	if value, ok := auo.mutation.DatingStart(); ok {
+		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
+	}
+	if value, ok := auo.mutation.AddedDatingStart(); ok {
+		_spec.AddField(artifact.FieldDatingStart, field.TypeInt, value)
+	}
+	if auo.mutation.DatingStartCleared() {
+		_spec.ClearField(artifact.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := auo.mutation.DatingEnd(); ok {
+		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := auo.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(artifact.FieldDatingEnd, field.TypeInt, value)
+	}
+	if auo.mutation.DatingEndCleared() {
+		_spec.ClearField(artifact.FieldDatingEnd, field.TypeInt)
+	}
 	if value, ok := auo.mutation.DisplayName(); ok {
 		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
 	}
@@ -3354,42 +3378,6 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	}
 	if auo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(artifact.FieldAdditionalImagesUrls, field.TypeJSON)
-	}
-	if value, ok := auo.mutation.DeletedAt(); ok {
-		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
-	}
-	if auo.mutation.DeletedAtCleared() {
-		_spec.ClearField(artifact.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := auo.mutation.DeletedBy(); ok {
-		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
-	}
-	if auo.mutation.DeletedByCleared() {
-		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := auo.mutation.Dating(); ok {
-		_spec.SetField(artifact.FieldDating, field.TypeString, value)
-	}
-	if auo.mutation.DatingCleared() {
-		_spec.ClearField(artifact.FieldDating, field.TypeString)
-	}
-	if value, ok := auo.mutation.DatingStart(); ok {
-		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
-	}
-	if value, ok := auo.mutation.AddedDatingStart(); ok {
-		_spec.AddField(artifact.FieldDatingStart, field.TypeInt, value)
-	}
-	if auo.mutation.DatingStartCleared() {
-		_spec.ClearField(artifact.FieldDatingStart, field.TypeInt)
-	}
-	if value, ok := auo.mutation.DatingEnd(); ok {
-		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
-	}
-	if value, ok := auo.mutation.AddedDatingEnd(); ok {
-		_spec.AddField(artifact.FieldDatingEnd, field.TypeInt, value)
-	}
-	if auo.mutation.DatingEndCleared() {
-		_spec.ClearField(artifact.FieldDatingEnd, field.TypeInt)
 	}
 	if value, ok := auo.mutation.Height(); ok {
 		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
@@ -3447,6 +3435,18 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 	}
 	if auo.mutation.DimensionsCleared() {
 		_spec.ClearField(artifact.FieldDimensions, field.TypeString)
+	}
+	if value, ok := auo.mutation.DeletedAt(); ok {
+		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
+	}
+	if auo.mutation.DeletedAtCleared() {
+		_spec.ClearField(artifact.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := auo.mutation.DeletedBy(); ok {
+		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
+	}
+	if auo.mutation.DeletedByCleared() {
+		_spec.ClearField(artifact.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := auo.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)

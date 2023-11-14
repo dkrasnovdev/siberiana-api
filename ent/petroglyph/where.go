@@ -76,6 +76,21 @@ func UpdatedBy(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// Dating applies equality check predicate on the "dating" field. It's identical to DatingEQ.
+func Dating(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDating, v))
+}
+
+// DatingStart applies equality check predicate on the "dating_start" field. It's identical to DatingStartEQ.
+func DatingStart(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDatingStart, v))
+}
+
+// DatingEnd applies equality check predicate on the "dating_end" field. It's identical to DatingEndEQ.
+func DatingEnd(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDatingEnd, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldEQ(FieldDisplayName, v))
@@ -99,51 +114,6 @@ func ExternalLink(v string) predicate.Petroglyph {
 // PrimaryImageURL applies equality check predicate on the "primary_image_url" field. It's identical to PrimaryImageURLEQ.
 func PrimaryImageURL(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldEQ(FieldPrimaryImageURL, v))
-}
-
-// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
-func DeletedAt(v time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedAt, v))
-}
-
-// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
-func DeletedBy(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedBy, v))
-}
-
-// Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
-func Number(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldNumber, v))
-}
-
-// Dating applies equality check predicate on the "dating" field. It's identical to DatingEQ.
-func Dating(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDating, v))
-}
-
-// DatingStart applies equality check predicate on the "dating_start" field. It's identical to DatingStartEQ.
-func DatingStart(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDatingStart, v))
-}
-
-// DatingEnd applies equality check predicate on the "dating_end" field. It's identical to DatingEndEQ.
-func DatingEnd(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDatingEnd, v))
-}
-
-// Orientation applies equality check predicate on the "orientation" field. It's identical to OrientationEQ.
-func Orientation(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldOrientation, v))
-}
-
-// Position applies equality check predicate on the "position" field. It's identical to PositionEQ.
-func Position(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldPosition, v))
-}
-
-// GeometricShape applies equality check predicate on the "geometric_shape" field. It's identical to GeometricShapeEQ.
-func GeometricShape(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldGeometricShape, v))
 }
 
 // Height applies equality check predicate on the "height" field. It's identical to HeightEQ.
@@ -179,6 +149,36 @@ func Weight(v string) predicate.Petroglyph {
 // Dimensions applies equality check predicate on the "dimensions" field. It's identical to DimensionsEQ.
 func Dimensions(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldEQ(FieldDimensions, v))
+}
+
+// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
+func DeletedAt(v time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
+func DeletedBy(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
+func Number(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldNumber, v))
+}
+
+// Orientation applies equality check predicate on the "orientation" field. It's identical to OrientationEQ.
+func Orientation(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldOrientation, v))
+}
+
+// Position applies equality check predicate on the "position" field. It's identical to PositionEQ.
+func Position(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldPosition, v))
+}
+
+// GeometricShape applies equality check predicate on the "geometric_shape" field. It's identical to GeometricShapeEQ.
+func GeometricShape(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldGeometricShape, v))
 }
 
 // PlanePreservation applies equality check predicate on the "plane_preservation" field. It's identical to PlanePreservationEQ.
@@ -434,6 +434,181 @@ func UpdatedByEqualFold(v string) predicate.Petroglyph {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// DatingEQ applies the EQ predicate on the "dating" field.
+func DatingEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDating, v))
+}
+
+// DatingNEQ applies the NEQ predicate on the "dating" field.
+func DatingNEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldDating, v))
+}
+
+// DatingIn applies the In predicate on the "dating" field.
+func DatingIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldDating, vs...))
+}
+
+// DatingNotIn applies the NotIn predicate on the "dating" field.
+func DatingNotIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldDating, vs...))
+}
+
+// DatingGT applies the GT predicate on the "dating" field.
+func DatingGT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldDating, v))
+}
+
+// DatingGTE applies the GTE predicate on the "dating" field.
+func DatingGTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldDating, v))
+}
+
+// DatingLT applies the LT predicate on the "dating" field.
+func DatingLT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldDating, v))
+}
+
+// DatingLTE applies the LTE predicate on the "dating" field.
+func DatingLTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldDating, v))
+}
+
+// DatingContains applies the Contains predicate on the "dating" field.
+func DatingContains(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContains(FieldDating, v))
+}
+
+// DatingHasPrefix applies the HasPrefix predicate on the "dating" field.
+func DatingHasPrefix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasPrefix(FieldDating, v))
+}
+
+// DatingHasSuffix applies the HasSuffix predicate on the "dating" field.
+func DatingHasSuffix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasSuffix(FieldDating, v))
+}
+
+// DatingIsNil applies the IsNil predicate on the "dating" field.
+func DatingIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldDating))
+}
+
+// DatingNotNil applies the NotNil predicate on the "dating" field.
+func DatingNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldDating))
+}
+
+// DatingEqualFold applies the EqualFold predicate on the "dating" field.
+func DatingEqualFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEqualFold(FieldDating, v))
+}
+
+// DatingContainsFold applies the ContainsFold predicate on the "dating" field.
+func DatingContainsFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContainsFold(FieldDating, v))
+}
+
+// DatingStartEQ applies the EQ predicate on the "dating_start" field.
+func DatingStartEQ(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDatingStart, v))
+}
+
+// DatingStartNEQ applies the NEQ predicate on the "dating_start" field.
+func DatingStartNEQ(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldDatingStart, v))
+}
+
+// DatingStartIn applies the In predicate on the "dating_start" field.
+func DatingStartIn(vs ...int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldDatingStart, vs...))
+}
+
+// DatingStartNotIn applies the NotIn predicate on the "dating_start" field.
+func DatingStartNotIn(vs ...int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldDatingStart, vs...))
+}
+
+// DatingStartGT applies the GT predicate on the "dating_start" field.
+func DatingStartGT(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldDatingStart, v))
+}
+
+// DatingStartGTE applies the GTE predicate on the "dating_start" field.
+func DatingStartGTE(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldDatingStart, v))
+}
+
+// DatingStartLT applies the LT predicate on the "dating_start" field.
+func DatingStartLT(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldDatingStart, v))
+}
+
+// DatingStartLTE applies the LTE predicate on the "dating_start" field.
+func DatingStartLTE(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldDatingStart, v))
+}
+
+// DatingStartIsNil applies the IsNil predicate on the "dating_start" field.
+func DatingStartIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldDatingStart))
+}
+
+// DatingStartNotNil applies the NotNil predicate on the "dating_start" field.
+func DatingStartNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldDatingStart))
+}
+
+// DatingEndEQ applies the EQ predicate on the "dating_end" field.
+func DatingEndEQ(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDatingEnd, v))
+}
+
+// DatingEndNEQ applies the NEQ predicate on the "dating_end" field.
+func DatingEndNEQ(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldDatingEnd, v))
+}
+
+// DatingEndIn applies the In predicate on the "dating_end" field.
+func DatingEndIn(vs ...int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldDatingEnd, vs...))
+}
+
+// DatingEndNotIn applies the NotIn predicate on the "dating_end" field.
+func DatingEndNotIn(vs ...int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldDatingEnd, vs...))
+}
+
+// DatingEndGT applies the GT predicate on the "dating_end" field.
+func DatingEndGT(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldDatingEnd, v))
+}
+
+// DatingEndGTE applies the GTE predicate on the "dating_end" field.
+func DatingEndGTE(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldDatingEnd, v))
+}
+
+// DatingEndLT applies the LT predicate on the "dating_end" field.
+func DatingEndLT(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldDatingEnd, v))
+}
+
+// DatingEndLTE applies the LTE predicate on the "dating_end" field.
+func DatingEndLTE(v int) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldDatingEnd, v))
+}
+
+// DatingEndIsNil applies the IsNil predicate on the "dating_end" field.
+func DatingEndIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldDatingEnd))
+}
+
+// DatingEndNotNil applies the NotNil predicate on the "dating_end" field.
+func DatingEndNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldDatingEnd))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.
@@ -851,606 +1026,6 @@ func AdditionalImagesUrlsNotNil() predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
-// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
-func DeletedAtEQ(v time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedAt, v))
-}
-
-// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
-func DeletedAtNEQ(v time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldDeletedAt, v))
-}
-
-// DeletedAtIn applies the In predicate on the "deleted_at" field.
-func DeletedAtIn(vs ...time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldDeletedAt, vs...))
-}
-
-// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
-func DeletedAtNotIn(vs ...time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldDeletedAt, vs...))
-}
-
-// DeletedAtGT applies the GT predicate on the "deleted_at" field.
-func DeletedAtGT(v time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldDeletedAt, v))
-}
-
-// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
-func DeletedAtGTE(v time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldDeletedAt, v))
-}
-
-// DeletedAtLT applies the LT predicate on the "deleted_at" field.
-func DeletedAtLT(v time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldDeletedAt, v))
-}
-
-// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
-func DeletedAtLTE(v time.Time) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldDeletedAt, v))
-}
-
-// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
-func DeletedAtIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldDeletedAt))
-}
-
-// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
-func DeletedAtNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldDeletedAt))
-}
-
-// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
-func DeletedByEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedBy, v))
-}
-
-// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
-func DeletedByNEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldDeletedBy, v))
-}
-
-// DeletedByIn applies the In predicate on the "deleted_by" field.
-func DeletedByIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldDeletedBy, vs...))
-}
-
-// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
-func DeletedByNotIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldDeletedBy, vs...))
-}
-
-// DeletedByGT applies the GT predicate on the "deleted_by" field.
-func DeletedByGT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldDeletedBy, v))
-}
-
-// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
-func DeletedByGTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldDeletedBy, v))
-}
-
-// DeletedByLT applies the LT predicate on the "deleted_by" field.
-func DeletedByLT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldDeletedBy, v))
-}
-
-// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
-func DeletedByLTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldDeletedBy, v))
-}
-
-// DeletedByContains applies the Contains predicate on the "deleted_by" field.
-func DeletedByContains(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContains(FieldDeletedBy, v))
-}
-
-// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
-func DeletedByHasPrefix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasPrefix(FieldDeletedBy, v))
-}
-
-// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
-func DeletedByHasSuffix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasSuffix(FieldDeletedBy, v))
-}
-
-// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
-func DeletedByIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldDeletedBy))
-}
-
-// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
-func DeletedByNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldDeletedBy))
-}
-
-// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
-func DeletedByEqualFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEqualFold(FieldDeletedBy, v))
-}
-
-// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
-func DeletedByContainsFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContainsFold(FieldDeletedBy, v))
-}
-
-// NumberEQ applies the EQ predicate on the "number" field.
-func NumberEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldNumber, v))
-}
-
-// NumberNEQ applies the NEQ predicate on the "number" field.
-func NumberNEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldNumber, v))
-}
-
-// NumberIn applies the In predicate on the "number" field.
-func NumberIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldNumber, vs...))
-}
-
-// NumberNotIn applies the NotIn predicate on the "number" field.
-func NumberNotIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldNumber, vs...))
-}
-
-// NumberGT applies the GT predicate on the "number" field.
-func NumberGT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldNumber, v))
-}
-
-// NumberGTE applies the GTE predicate on the "number" field.
-func NumberGTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldNumber, v))
-}
-
-// NumberLT applies the LT predicate on the "number" field.
-func NumberLT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldNumber, v))
-}
-
-// NumberLTE applies the LTE predicate on the "number" field.
-func NumberLTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldNumber, v))
-}
-
-// NumberContains applies the Contains predicate on the "number" field.
-func NumberContains(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContains(FieldNumber, v))
-}
-
-// NumberHasPrefix applies the HasPrefix predicate on the "number" field.
-func NumberHasPrefix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasPrefix(FieldNumber, v))
-}
-
-// NumberHasSuffix applies the HasSuffix predicate on the "number" field.
-func NumberHasSuffix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasSuffix(FieldNumber, v))
-}
-
-// NumberIsNil applies the IsNil predicate on the "number" field.
-func NumberIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldNumber))
-}
-
-// NumberNotNil applies the NotNil predicate on the "number" field.
-func NumberNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldNumber))
-}
-
-// NumberEqualFold applies the EqualFold predicate on the "number" field.
-func NumberEqualFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEqualFold(FieldNumber, v))
-}
-
-// NumberContainsFold applies the ContainsFold predicate on the "number" field.
-func NumberContainsFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContainsFold(FieldNumber, v))
-}
-
-// DatingEQ applies the EQ predicate on the "dating" field.
-func DatingEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDating, v))
-}
-
-// DatingNEQ applies the NEQ predicate on the "dating" field.
-func DatingNEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldDating, v))
-}
-
-// DatingIn applies the In predicate on the "dating" field.
-func DatingIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldDating, vs...))
-}
-
-// DatingNotIn applies the NotIn predicate on the "dating" field.
-func DatingNotIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldDating, vs...))
-}
-
-// DatingGT applies the GT predicate on the "dating" field.
-func DatingGT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldDating, v))
-}
-
-// DatingGTE applies the GTE predicate on the "dating" field.
-func DatingGTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldDating, v))
-}
-
-// DatingLT applies the LT predicate on the "dating" field.
-func DatingLT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldDating, v))
-}
-
-// DatingLTE applies the LTE predicate on the "dating" field.
-func DatingLTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldDating, v))
-}
-
-// DatingContains applies the Contains predicate on the "dating" field.
-func DatingContains(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContains(FieldDating, v))
-}
-
-// DatingHasPrefix applies the HasPrefix predicate on the "dating" field.
-func DatingHasPrefix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasPrefix(FieldDating, v))
-}
-
-// DatingHasSuffix applies the HasSuffix predicate on the "dating" field.
-func DatingHasSuffix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasSuffix(FieldDating, v))
-}
-
-// DatingIsNil applies the IsNil predicate on the "dating" field.
-func DatingIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldDating))
-}
-
-// DatingNotNil applies the NotNil predicate on the "dating" field.
-func DatingNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldDating))
-}
-
-// DatingEqualFold applies the EqualFold predicate on the "dating" field.
-func DatingEqualFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEqualFold(FieldDating, v))
-}
-
-// DatingContainsFold applies the ContainsFold predicate on the "dating" field.
-func DatingContainsFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContainsFold(FieldDating, v))
-}
-
-// DatingStartEQ applies the EQ predicate on the "dating_start" field.
-func DatingStartEQ(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDatingStart, v))
-}
-
-// DatingStartNEQ applies the NEQ predicate on the "dating_start" field.
-func DatingStartNEQ(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldDatingStart, v))
-}
-
-// DatingStartIn applies the In predicate on the "dating_start" field.
-func DatingStartIn(vs ...int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldDatingStart, vs...))
-}
-
-// DatingStartNotIn applies the NotIn predicate on the "dating_start" field.
-func DatingStartNotIn(vs ...int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldDatingStart, vs...))
-}
-
-// DatingStartGT applies the GT predicate on the "dating_start" field.
-func DatingStartGT(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldDatingStart, v))
-}
-
-// DatingStartGTE applies the GTE predicate on the "dating_start" field.
-func DatingStartGTE(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldDatingStart, v))
-}
-
-// DatingStartLT applies the LT predicate on the "dating_start" field.
-func DatingStartLT(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldDatingStart, v))
-}
-
-// DatingStartLTE applies the LTE predicate on the "dating_start" field.
-func DatingStartLTE(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldDatingStart, v))
-}
-
-// DatingStartIsNil applies the IsNil predicate on the "dating_start" field.
-func DatingStartIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldDatingStart))
-}
-
-// DatingStartNotNil applies the NotNil predicate on the "dating_start" field.
-func DatingStartNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldDatingStart))
-}
-
-// DatingEndEQ applies the EQ predicate on the "dating_end" field.
-func DatingEndEQ(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldDatingEnd, v))
-}
-
-// DatingEndNEQ applies the NEQ predicate on the "dating_end" field.
-func DatingEndNEQ(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldDatingEnd, v))
-}
-
-// DatingEndIn applies the In predicate on the "dating_end" field.
-func DatingEndIn(vs ...int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldDatingEnd, vs...))
-}
-
-// DatingEndNotIn applies the NotIn predicate on the "dating_end" field.
-func DatingEndNotIn(vs ...int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldDatingEnd, vs...))
-}
-
-// DatingEndGT applies the GT predicate on the "dating_end" field.
-func DatingEndGT(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldDatingEnd, v))
-}
-
-// DatingEndGTE applies the GTE predicate on the "dating_end" field.
-func DatingEndGTE(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldDatingEnd, v))
-}
-
-// DatingEndLT applies the LT predicate on the "dating_end" field.
-func DatingEndLT(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldDatingEnd, v))
-}
-
-// DatingEndLTE applies the LTE predicate on the "dating_end" field.
-func DatingEndLTE(v int) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldDatingEnd, v))
-}
-
-// DatingEndIsNil applies the IsNil predicate on the "dating_end" field.
-func DatingEndIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldDatingEnd))
-}
-
-// DatingEndNotNil applies the NotNil predicate on the "dating_end" field.
-func DatingEndNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldDatingEnd))
-}
-
-// OrientationEQ applies the EQ predicate on the "orientation" field.
-func OrientationEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldOrientation, v))
-}
-
-// OrientationNEQ applies the NEQ predicate on the "orientation" field.
-func OrientationNEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldOrientation, v))
-}
-
-// OrientationIn applies the In predicate on the "orientation" field.
-func OrientationIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldOrientation, vs...))
-}
-
-// OrientationNotIn applies the NotIn predicate on the "orientation" field.
-func OrientationNotIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldOrientation, vs...))
-}
-
-// OrientationGT applies the GT predicate on the "orientation" field.
-func OrientationGT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldOrientation, v))
-}
-
-// OrientationGTE applies the GTE predicate on the "orientation" field.
-func OrientationGTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldOrientation, v))
-}
-
-// OrientationLT applies the LT predicate on the "orientation" field.
-func OrientationLT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldOrientation, v))
-}
-
-// OrientationLTE applies the LTE predicate on the "orientation" field.
-func OrientationLTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldOrientation, v))
-}
-
-// OrientationContains applies the Contains predicate on the "orientation" field.
-func OrientationContains(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContains(FieldOrientation, v))
-}
-
-// OrientationHasPrefix applies the HasPrefix predicate on the "orientation" field.
-func OrientationHasPrefix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasPrefix(FieldOrientation, v))
-}
-
-// OrientationHasSuffix applies the HasSuffix predicate on the "orientation" field.
-func OrientationHasSuffix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasSuffix(FieldOrientation, v))
-}
-
-// OrientationIsNil applies the IsNil predicate on the "orientation" field.
-func OrientationIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldOrientation))
-}
-
-// OrientationNotNil applies the NotNil predicate on the "orientation" field.
-func OrientationNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldOrientation))
-}
-
-// OrientationEqualFold applies the EqualFold predicate on the "orientation" field.
-func OrientationEqualFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEqualFold(FieldOrientation, v))
-}
-
-// OrientationContainsFold applies the ContainsFold predicate on the "orientation" field.
-func OrientationContainsFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContainsFold(FieldOrientation, v))
-}
-
-// PositionEQ applies the EQ predicate on the "position" field.
-func PositionEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldPosition, v))
-}
-
-// PositionNEQ applies the NEQ predicate on the "position" field.
-func PositionNEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldPosition, v))
-}
-
-// PositionIn applies the In predicate on the "position" field.
-func PositionIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldPosition, vs...))
-}
-
-// PositionNotIn applies the NotIn predicate on the "position" field.
-func PositionNotIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldPosition, vs...))
-}
-
-// PositionGT applies the GT predicate on the "position" field.
-func PositionGT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldPosition, v))
-}
-
-// PositionGTE applies the GTE predicate on the "position" field.
-func PositionGTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldPosition, v))
-}
-
-// PositionLT applies the LT predicate on the "position" field.
-func PositionLT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldPosition, v))
-}
-
-// PositionLTE applies the LTE predicate on the "position" field.
-func PositionLTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldPosition, v))
-}
-
-// PositionContains applies the Contains predicate on the "position" field.
-func PositionContains(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContains(FieldPosition, v))
-}
-
-// PositionHasPrefix applies the HasPrefix predicate on the "position" field.
-func PositionHasPrefix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasPrefix(FieldPosition, v))
-}
-
-// PositionHasSuffix applies the HasSuffix predicate on the "position" field.
-func PositionHasSuffix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasSuffix(FieldPosition, v))
-}
-
-// PositionIsNil applies the IsNil predicate on the "position" field.
-func PositionIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldPosition))
-}
-
-// PositionNotNil applies the NotNil predicate on the "position" field.
-func PositionNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldPosition))
-}
-
-// PositionEqualFold applies the EqualFold predicate on the "position" field.
-func PositionEqualFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEqualFold(FieldPosition, v))
-}
-
-// PositionContainsFold applies the ContainsFold predicate on the "position" field.
-func PositionContainsFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContainsFold(FieldPosition, v))
-}
-
-// GeometricShapeEQ applies the EQ predicate on the "geometric_shape" field.
-func GeometricShapeEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEQ(FieldGeometricShape, v))
-}
-
-// GeometricShapeNEQ applies the NEQ predicate on the "geometric_shape" field.
-func GeometricShapeNEQ(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNEQ(FieldGeometricShape, v))
-}
-
-// GeometricShapeIn applies the In predicate on the "geometric_shape" field.
-func GeometricShapeIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIn(FieldGeometricShape, vs...))
-}
-
-// GeometricShapeNotIn applies the NotIn predicate on the "geometric_shape" field.
-func GeometricShapeNotIn(vs ...string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotIn(FieldGeometricShape, vs...))
-}
-
-// GeometricShapeGT applies the GT predicate on the "geometric_shape" field.
-func GeometricShapeGT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGT(FieldGeometricShape, v))
-}
-
-// GeometricShapeGTE applies the GTE predicate on the "geometric_shape" field.
-func GeometricShapeGTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldGTE(FieldGeometricShape, v))
-}
-
-// GeometricShapeLT applies the LT predicate on the "geometric_shape" field.
-func GeometricShapeLT(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLT(FieldGeometricShape, v))
-}
-
-// GeometricShapeLTE applies the LTE predicate on the "geometric_shape" field.
-func GeometricShapeLTE(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldLTE(FieldGeometricShape, v))
-}
-
-// GeometricShapeContains applies the Contains predicate on the "geometric_shape" field.
-func GeometricShapeContains(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContains(FieldGeometricShape, v))
-}
-
-// GeometricShapeHasPrefix applies the HasPrefix predicate on the "geometric_shape" field.
-func GeometricShapeHasPrefix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasPrefix(FieldGeometricShape, v))
-}
-
-// GeometricShapeHasSuffix applies the HasSuffix predicate on the "geometric_shape" field.
-func GeometricShapeHasSuffix(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldHasSuffix(FieldGeometricShape, v))
-}
-
-// GeometricShapeIsNil applies the IsNil predicate on the "geometric_shape" field.
-func GeometricShapeIsNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldIsNull(FieldGeometricShape))
-}
-
-// GeometricShapeNotNil applies the NotNil predicate on the "geometric_shape" field.
-func GeometricShapeNotNil() predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldNotNull(FieldGeometricShape))
-}
-
-// GeometricShapeEqualFold applies the EqualFold predicate on the "geometric_shape" field.
-func GeometricShapeEqualFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldEqualFold(FieldGeometricShape, v))
-}
-
-// GeometricShapeContainsFold applies the ContainsFold predicate on the "geometric_shape" field.
-func GeometricShapeContainsFold(v string) predicate.Petroglyph {
-	return predicate.Petroglyph(sql.FieldContainsFold(FieldGeometricShape, v))
-}
-
 // HeightEQ applies the EQ predicate on the "height" field.
 func HeightEQ(v float64) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldEQ(FieldHeight, v))
@@ -1849,6 +1424,431 @@ func DimensionsEqualFold(v string) predicate.Petroglyph {
 // DimensionsContainsFold applies the ContainsFold predicate on the "dimensions" field.
 func DimensionsContainsFold(v string) predicate.Petroglyph {
 	return predicate.Petroglyph(sql.FieldContainsFold(FieldDimensions, v))
+}
+
+// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
+func DeletedAtEQ(v time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
+func DeletedAtNEQ(v time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtIn applies the In predicate on the "deleted_at" field.
+func DeletedAtIn(vs ...time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
+func DeletedAtNotIn(vs ...time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtGT applies the GT predicate on the "deleted_at" field.
+func DeletedAtGT(v time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldDeletedAt, v))
+}
+
+// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
+func DeletedAtGTE(v time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldDeletedAt, v))
+}
+
+// DeletedAtLT applies the LT predicate on the "deleted_at" field.
+func DeletedAtLT(v time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldDeletedAt, v))
+}
+
+// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
+func DeletedAtLTE(v time.Time) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldDeletedAt, v))
+}
+
+// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
+func DeletedAtIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldDeletedAt))
+}
+
+// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
+func DeletedAtNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldDeletedAt))
+}
+
+// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
+func DeletedByEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldDeletedBy, v))
+}
+
+// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
+func DeletedByNEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldDeletedBy, v))
+}
+
+// DeletedByIn applies the In predicate on the "deleted_by" field.
+func DeletedByIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldDeletedBy, vs...))
+}
+
+// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
+func DeletedByNotIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldDeletedBy, vs...))
+}
+
+// DeletedByGT applies the GT predicate on the "deleted_by" field.
+func DeletedByGT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldDeletedBy, v))
+}
+
+// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
+func DeletedByGTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldDeletedBy, v))
+}
+
+// DeletedByLT applies the LT predicate on the "deleted_by" field.
+func DeletedByLT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldDeletedBy, v))
+}
+
+// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
+func DeletedByLTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldDeletedBy, v))
+}
+
+// DeletedByContains applies the Contains predicate on the "deleted_by" field.
+func DeletedByContains(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContains(FieldDeletedBy, v))
+}
+
+// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
+func DeletedByHasPrefix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasPrefix(FieldDeletedBy, v))
+}
+
+// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
+func DeletedByHasSuffix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasSuffix(FieldDeletedBy, v))
+}
+
+// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
+func DeletedByIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldDeletedBy))
+}
+
+// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
+func DeletedByNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldDeletedBy))
+}
+
+// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
+func DeletedByEqualFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEqualFold(FieldDeletedBy, v))
+}
+
+// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
+func DeletedByContainsFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContainsFold(FieldDeletedBy, v))
+}
+
+// NumberEQ applies the EQ predicate on the "number" field.
+func NumberEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldNumber, v))
+}
+
+// NumberNEQ applies the NEQ predicate on the "number" field.
+func NumberNEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldNumber, v))
+}
+
+// NumberIn applies the In predicate on the "number" field.
+func NumberIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldNumber, vs...))
+}
+
+// NumberNotIn applies the NotIn predicate on the "number" field.
+func NumberNotIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldNumber, vs...))
+}
+
+// NumberGT applies the GT predicate on the "number" field.
+func NumberGT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldNumber, v))
+}
+
+// NumberGTE applies the GTE predicate on the "number" field.
+func NumberGTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldNumber, v))
+}
+
+// NumberLT applies the LT predicate on the "number" field.
+func NumberLT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldNumber, v))
+}
+
+// NumberLTE applies the LTE predicate on the "number" field.
+func NumberLTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldNumber, v))
+}
+
+// NumberContains applies the Contains predicate on the "number" field.
+func NumberContains(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContains(FieldNumber, v))
+}
+
+// NumberHasPrefix applies the HasPrefix predicate on the "number" field.
+func NumberHasPrefix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasPrefix(FieldNumber, v))
+}
+
+// NumberHasSuffix applies the HasSuffix predicate on the "number" field.
+func NumberHasSuffix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasSuffix(FieldNumber, v))
+}
+
+// NumberIsNil applies the IsNil predicate on the "number" field.
+func NumberIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldNumber))
+}
+
+// NumberNotNil applies the NotNil predicate on the "number" field.
+func NumberNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldNumber))
+}
+
+// NumberEqualFold applies the EqualFold predicate on the "number" field.
+func NumberEqualFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEqualFold(FieldNumber, v))
+}
+
+// NumberContainsFold applies the ContainsFold predicate on the "number" field.
+func NumberContainsFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContainsFold(FieldNumber, v))
+}
+
+// OrientationEQ applies the EQ predicate on the "orientation" field.
+func OrientationEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldOrientation, v))
+}
+
+// OrientationNEQ applies the NEQ predicate on the "orientation" field.
+func OrientationNEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldOrientation, v))
+}
+
+// OrientationIn applies the In predicate on the "orientation" field.
+func OrientationIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldOrientation, vs...))
+}
+
+// OrientationNotIn applies the NotIn predicate on the "orientation" field.
+func OrientationNotIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldOrientation, vs...))
+}
+
+// OrientationGT applies the GT predicate on the "orientation" field.
+func OrientationGT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldOrientation, v))
+}
+
+// OrientationGTE applies the GTE predicate on the "orientation" field.
+func OrientationGTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldOrientation, v))
+}
+
+// OrientationLT applies the LT predicate on the "orientation" field.
+func OrientationLT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldOrientation, v))
+}
+
+// OrientationLTE applies the LTE predicate on the "orientation" field.
+func OrientationLTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldOrientation, v))
+}
+
+// OrientationContains applies the Contains predicate on the "orientation" field.
+func OrientationContains(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContains(FieldOrientation, v))
+}
+
+// OrientationHasPrefix applies the HasPrefix predicate on the "orientation" field.
+func OrientationHasPrefix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasPrefix(FieldOrientation, v))
+}
+
+// OrientationHasSuffix applies the HasSuffix predicate on the "orientation" field.
+func OrientationHasSuffix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasSuffix(FieldOrientation, v))
+}
+
+// OrientationIsNil applies the IsNil predicate on the "orientation" field.
+func OrientationIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldOrientation))
+}
+
+// OrientationNotNil applies the NotNil predicate on the "orientation" field.
+func OrientationNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldOrientation))
+}
+
+// OrientationEqualFold applies the EqualFold predicate on the "orientation" field.
+func OrientationEqualFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEqualFold(FieldOrientation, v))
+}
+
+// OrientationContainsFold applies the ContainsFold predicate on the "orientation" field.
+func OrientationContainsFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContainsFold(FieldOrientation, v))
+}
+
+// PositionEQ applies the EQ predicate on the "position" field.
+func PositionEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldPosition, v))
+}
+
+// PositionNEQ applies the NEQ predicate on the "position" field.
+func PositionNEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldPosition, v))
+}
+
+// PositionIn applies the In predicate on the "position" field.
+func PositionIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldPosition, vs...))
+}
+
+// PositionNotIn applies the NotIn predicate on the "position" field.
+func PositionNotIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldPosition, vs...))
+}
+
+// PositionGT applies the GT predicate on the "position" field.
+func PositionGT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldPosition, v))
+}
+
+// PositionGTE applies the GTE predicate on the "position" field.
+func PositionGTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldPosition, v))
+}
+
+// PositionLT applies the LT predicate on the "position" field.
+func PositionLT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldPosition, v))
+}
+
+// PositionLTE applies the LTE predicate on the "position" field.
+func PositionLTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldPosition, v))
+}
+
+// PositionContains applies the Contains predicate on the "position" field.
+func PositionContains(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContains(FieldPosition, v))
+}
+
+// PositionHasPrefix applies the HasPrefix predicate on the "position" field.
+func PositionHasPrefix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasPrefix(FieldPosition, v))
+}
+
+// PositionHasSuffix applies the HasSuffix predicate on the "position" field.
+func PositionHasSuffix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasSuffix(FieldPosition, v))
+}
+
+// PositionIsNil applies the IsNil predicate on the "position" field.
+func PositionIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldPosition))
+}
+
+// PositionNotNil applies the NotNil predicate on the "position" field.
+func PositionNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldPosition))
+}
+
+// PositionEqualFold applies the EqualFold predicate on the "position" field.
+func PositionEqualFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEqualFold(FieldPosition, v))
+}
+
+// PositionContainsFold applies the ContainsFold predicate on the "position" field.
+func PositionContainsFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContainsFold(FieldPosition, v))
+}
+
+// GeometricShapeEQ applies the EQ predicate on the "geometric_shape" field.
+func GeometricShapeEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEQ(FieldGeometricShape, v))
+}
+
+// GeometricShapeNEQ applies the NEQ predicate on the "geometric_shape" field.
+func GeometricShapeNEQ(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNEQ(FieldGeometricShape, v))
+}
+
+// GeometricShapeIn applies the In predicate on the "geometric_shape" field.
+func GeometricShapeIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIn(FieldGeometricShape, vs...))
+}
+
+// GeometricShapeNotIn applies the NotIn predicate on the "geometric_shape" field.
+func GeometricShapeNotIn(vs ...string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotIn(FieldGeometricShape, vs...))
+}
+
+// GeometricShapeGT applies the GT predicate on the "geometric_shape" field.
+func GeometricShapeGT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGT(FieldGeometricShape, v))
+}
+
+// GeometricShapeGTE applies the GTE predicate on the "geometric_shape" field.
+func GeometricShapeGTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldGTE(FieldGeometricShape, v))
+}
+
+// GeometricShapeLT applies the LT predicate on the "geometric_shape" field.
+func GeometricShapeLT(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLT(FieldGeometricShape, v))
+}
+
+// GeometricShapeLTE applies the LTE predicate on the "geometric_shape" field.
+func GeometricShapeLTE(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldLTE(FieldGeometricShape, v))
+}
+
+// GeometricShapeContains applies the Contains predicate on the "geometric_shape" field.
+func GeometricShapeContains(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContains(FieldGeometricShape, v))
+}
+
+// GeometricShapeHasPrefix applies the HasPrefix predicate on the "geometric_shape" field.
+func GeometricShapeHasPrefix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasPrefix(FieldGeometricShape, v))
+}
+
+// GeometricShapeHasSuffix applies the HasSuffix predicate on the "geometric_shape" field.
+func GeometricShapeHasSuffix(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldHasSuffix(FieldGeometricShape, v))
+}
+
+// GeometricShapeIsNil applies the IsNil predicate on the "geometric_shape" field.
+func GeometricShapeIsNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldIsNull(FieldGeometricShape))
+}
+
+// GeometricShapeNotNil applies the NotNil predicate on the "geometric_shape" field.
+func GeometricShapeNotNil() predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldNotNull(FieldGeometricShape))
+}
+
+// GeometricShapeEqualFold applies the EqualFold predicate on the "geometric_shape" field.
+func GeometricShapeEqualFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldEqualFold(FieldGeometricShape, v))
+}
+
+// GeometricShapeContainsFold applies the ContainsFold predicate on the "geometric_shape" field.
+func GeometricShapeContainsFold(v string) predicate.Petroglyph {
+	return predicate.Petroglyph(sql.FieldContainsFold(FieldGeometricShape, v))
 }
 
 // PlanePreservationEQ applies the EQ predicate on the "plane_preservation" field.

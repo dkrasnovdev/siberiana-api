@@ -35,8 +35,11 @@ func (Art) Policy() ent.Policy {
 func (Art) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
+		mixin.DatingMixin{},
 		mixin.DetailsMixin{},
+		mixin.DraftMixin{},
 		mixin.ImagesMixin{},
+		mixin.SizeMixin{},
 	}
 }
 
@@ -54,8 +57,6 @@ func (Art) Annotations() []schema.Annotation {
 func (Art) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("number").Optional(),
-		field.String("dating").Optional(),
-		field.String("dimensions").Optional(),
 	}
 }
 

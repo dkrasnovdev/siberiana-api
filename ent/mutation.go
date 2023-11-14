@@ -113,16 +113,32 @@ type ArtMutation struct {
 	created_by                   *string
 	updated_at                   *time.Time
 	updated_by                   *string
+	dating                       *string
+	dating_start                 *int
+	adddating_start              *int
+	dating_end                   *int
+	adddating_end                *int
 	display_name                 *string
 	abbreviation                 *string
 	description                  *string
 	external_link                *string
+	status                       *art.Status
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
-	number                       *string
-	dating                       *string
+	height                       *float64
+	addheight                    *float64
+	width                        *float64
+	addwidth                     *float64
+	length                       *float64
+	addlength                    *float64
+	depth                        *float64
+	adddepth                     *float64
+	diameter                     *float64
+	adddiameter                  *float64
+	weight                       *string
 	dimensions                   *string
+	number                       *string
 	clearedFields                map[string]struct{}
 	author                       *int
 	clearedauthor                bool
@@ -418,6 +434,195 @@ func (m *ArtMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, art.FieldUpdatedBy)
 }
 
+// SetDating sets the "dating" field.
+func (m *ArtMutation) SetDating(s string) {
+	m.dating = &s
+}
+
+// Dating returns the value of the "dating" field in the mutation.
+func (m *ArtMutation) Dating() (r string, exists bool) {
+	v := m.dating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDating returns the old "dating" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDating(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDating is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDating: %w", err)
+	}
+	return oldValue.Dating, nil
+}
+
+// ClearDating clears the value of the "dating" field.
+func (m *ArtMutation) ClearDating() {
+	m.dating = nil
+	m.clearedFields[art.FieldDating] = struct{}{}
+}
+
+// DatingCleared returns if the "dating" field was cleared in this mutation.
+func (m *ArtMutation) DatingCleared() bool {
+	_, ok := m.clearedFields[art.FieldDating]
+	return ok
+}
+
+// ResetDating resets all changes to the "dating" field.
+func (m *ArtMutation) ResetDating() {
+	m.dating = nil
+	delete(m.clearedFields, art.FieldDating)
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (m *ArtMutation) SetDatingStart(i int) {
+	m.dating_start = &i
+	m.adddating_start = nil
+}
+
+// DatingStart returns the value of the "dating_start" field in the mutation.
+func (m *ArtMutation) DatingStart() (r int, exists bool) {
+	v := m.dating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingStart returns the old "dating_start" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDatingStart(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingStart is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingStart requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingStart: %w", err)
+	}
+	return oldValue.DatingStart, nil
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (m *ArtMutation) AddDatingStart(i int) {
+	if m.adddating_start != nil {
+		*m.adddating_start += i
+	} else {
+		m.adddating_start = &i
+	}
+}
+
+// AddedDatingStart returns the value that was added to the "dating_start" field in this mutation.
+func (m *ArtMutation) AddedDatingStart() (r int, exists bool) {
+	v := m.adddating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (m *ArtMutation) ClearDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	m.clearedFields[art.FieldDatingStart] = struct{}{}
+}
+
+// DatingStartCleared returns if the "dating_start" field was cleared in this mutation.
+func (m *ArtMutation) DatingStartCleared() bool {
+	_, ok := m.clearedFields[art.FieldDatingStart]
+	return ok
+}
+
+// ResetDatingStart resets all changes to the "dating_start" field.
+func (m *ArtMutation) ResetDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	delete(m.clearedFields, art.FieldDatingStart)
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (m *ArtMutation) SetDatingEnd(i int) {
+	m.dating_end = &i
+	m.adddating_end = nil
+}
+
+// DatingEnd returns the value of the "dating_end" field in the mutation.
+func (m *ArtMutation) DatingEnd() (r int, exists bool) {
+	v := m.dating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingEnd returns the old "dating_end" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDatingEnd(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingEnd is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingEnd requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingEnd: %w", err)
+	}
+	return oldValue.DatingEnd, nil
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (m *ArtMutation) AddDatingEnd(i int) {
+	if m.adddating_end != nil {
+		*m.adddating_end += i
+	} else {
+		m.adddating_end = &i
+	}
+}
+
+// AddedDatingEnd returns the value that was added to the "dating_end" field in this mutation.
+func (m *ArtMutation) AddedDatingEnd() (r int, exists bool) {
+	v := m.adddating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (m *ArtMutation) ClearDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	m.clearedFields[art.FieldDatingEnd] = struct{}{}
+}
+
+// DatingEndCleared returns if the "dating_end" field was cleared in this mutation.
+func (m *ArtMutation) DatingEndCleared() bool {
+	_, ok := m.clearedFields[art.FieldDatingEnd]
+	return ok
+}
+
+// ResetDatingEnd resets all changes to the "dating_end" field.
+func (m *ArtMutation) ResetDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	delete(m.clearedFields, art.FieldDatingEnd)
+}
+
 // SetDisplayName sets the "display_name" field.
 func (m *ArtMutation) SetDisplayName(s string) {
 	m.display_name = &s
@@ -614,6 +819,55 @@ func (m *ArtMutation) ResetExternalLink() {
 	delete(m.clearedFields, art.FieldExternalLink)
 }
 
+// SetStatus sets the "status" field.
+func (m *ArtMutation) SetStatus(a art.Status) {
+	m.status = &a
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ArtMutation) Status() (r art.Status, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldStatus(ctx context.Context) (v art.Status, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *ArtMutation) ClearStatus() {
+	m.status = nil
+	m.clearedFields[art.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *ArtMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[art.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ArtMutation) ResetStatus() {
+	m.status = nil
+	delete(m.clearedFields, art.FieldStatus)
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (m *ArtMutation) SetPrimaryImageURL(s string) {
 	m.primary_image_url = &s
@@ -728,102 +982,403 @@ func (m *ArtMutation) ResetAdditionalImagesUrls() {
 	delete(m.clearedFields, art.FieldAdditionalImagesUrls)
 }
 
-// SetNumber sets the "number" field.
-func (m *ArtMutation) SetNumber(s string) {
-	m.number = &s
+// SetHeight sets the "height" field.
+func (m *ArtMutation) SetHeight(f float64) {
+	m.height = &f
+	m.addheight = nil
 }
 
-// Number returns the value of the "number" field in the mutation.
-func (m *ArtMutation) Number() (r string, exists bool) {
-	v := m.number
+// Height returns the value of the "height" field in the mutation.
+func (m *ArtMutation) Height() (r float64, exists bool) {
+	v := m.height
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldNumber returns the old "number" field's value of the Art entity.
+// OldHeight returns the old "height" field's value of the Art entity.
 // If the Art object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtMutation) OldNumber(ctx context.Context) (v string, err error) {
+func (m *ArtMutation) OldHeight(ctx context.Context) (v float64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+		return v, errors.New("OldHeight is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNumber requires an ID field in the mutation")
+		return v, errors.New("OldHeight requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+		return v, fmt.Errorf("querying old value for OldHeight: %w", err)
 	}
-	return oldValue.Number, nil
+	return oldValue.Height, nil
 }
 
-// ClearNumber clears the value of the "number" field.
-func (m *ArtMutation) ClearNumber() {
-	m.number = nil
-	m.clearedFields[art.FieldNumber] = struct{}{}
+// AddHeight adds f to the "height" field.
+func (m *ArtMutation) AddHeight(f float64) {
+	if m.addheight != nil {
+		*m.addheight += f
+	} else {
+		m.addheight = &f
+	}
 }
 
-// NumberCleared returns if the "number" field was cleared in this mutation.
-func (m *ArtMutation) NumberCleared() bool {
-	_, ok := m.clearedFields[art.FieldNumber]
-	return ok
-}
-
-// ResetNumber resets all changes to the "number" field.
-func (m *ArtMutation) ResetNumber() {
-	m.number = nil
-	delete(m.clearedFields, art.FieldNumber)
-}
-
-// SetDating sets the "dating" field.
-func (m *ArtMutation) SetDating(s string) {
-	m.dating = &s
-}
-
-// Dating returns the value of the "dating" field in the mutation.
-func (m *ArtMutation) Dating() (r string, exists bool) {
-	v := m.dating
+// AddedHeight returns the value that was added to the "height" field in this mutation.
+func (m *ArtMutation) AddedHeight() (r float64, exists bool) {
+	v := m.addheight
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldDating returns the old "dating" field's value of the Art entity.
-// If the Art object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtMutation) OldDating(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDating is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDating requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDating: %w", err)
-	}
-	return oldValue.Dating, nil
+// ClearHeight clears the value of the "height" field.
+func (m *ArtMutation) ClearHeight() {
+	m.height = nil
+	m.addheight = nil
+	m.clearedFields[art.FieldHeight] = struct{}{}
 }
 
-// ClearDating clears the value of the "dating" field.
-func (m *ArtMutation) ClearDating() {
-	m.dating = nil
-	m.clearedFields[art.FieldDating] = struct{}{}
-}
-
-// DatingCleared returns if the "dating" field was cleared in this mutation.
-func (m *ArtMutation) DatingCleared() bool {
-	_, ok := m.clearedFields[art.FieldDating]
+// HeightCleared returns if the "height" field was cleared in this mutation.
+func (m *ArtMutation) HeightCleared() bool {
+	_, ok := m.clearedFields[art.FieldHeight]
 	return ok
 }
 
-// ResetDating resets all changes to the "dating" field.
-func (m *ArtMutation) ResetDating() {
-	m.dating = nil
-	delete(m.clearedFields, art.FieldDating)
+// ResetHeight resets all changes to the "height" field.
+func (m *ArtMutation) ResetHeight() {
+	m.height = nil
+	m.addheight = nil
+	delete(m.clearedFields, art.FieldHeight)
+}
+
+// SetWidth sets the "width" field.
+func (m *ArtMutation) SetWidth(f float64) {
+	m.width = &f
+	m.addwidth = nil
+}
+
+// Width returns the value of the "width" field in the mutation.
+func (m *ArtMutation) Width() (r float64, exists bool) {
+	v := m.width
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWidth returns the old "width" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldWidth(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWidth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWidth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWidth: %w", err)
+	}
+	return oldValue.Width, nil
+}
+
+// AddWidth adds f to the "width" field.
+func (m *ArtMutation) AddWidth(f float64) {
+	if m.addwidth != nil {
+		*m.addwidth += f
+	} else {
+		m.addwidth = &f
+	}
+}
+
+// AddedWidth returns the value that was added to the "width" field in this mutation.
+func (m *ArtMutation) AddedWidth() (r float64, exists bool) {
+	v := m.addwidth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearWidth clears the value of the "width" field.
+func (m *ArtMutation) ClearWidth() {
+	m.width = nil
+	m.addwidth = nil
+	m.clearedFields[art.FieldWidth] = struct{}{}
+}
+
+// WidthCleared returns if the "width" field was cleared in this mutation.
+func (m *ArtMutation) WidthCleared() bool {
+	_, ok := m.clearedFields[art.FieldWidth]
+	return ok
+}
+
+// ResetWidth resets all changes to the "width" field.
+func (m *ArtMutation) ResetWidth() {
+	m.width = nil
+	m.addwidth = nil
+	delete(m.clearedFields, art.FieldWidth)
+}
+
+// SetLength sets the "length" field.
+func (m *ArtMutation) SetLength(f float64) {
+	m.length = &f
+	m.addlength = nil
+}
+
+// Length returns the value of the "length" field in the mutation.
+func (m *ArtMutation) Length() (r float64, exists bool) {
+	v := m.length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLength returns the old "length" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldLength(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLength is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLength requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLength: %w", err)
+	}
+	return oldValue.Length, nil
+}
+
+// AddLength adds f to the "length" field.
+func (m *ArtMutation) AddLength(f float64) {
+	if m.addlength != nil {
+		*m.addlength += f
+	} else {
+		m.addlength = &f
+	}
+}
+
+// AddedLength returns the value that was added to the "length" field in this mutation.
+func (m *ArtMutation) AddedLength() (r float64, exists bool) {
+	v := m.addlength
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearLength clears the value of the "length" field.
+func (m *ArtMutation) ClearLength() {
+	m.length = nil
+	m.addlength = nil
+	m.clearedFields[art.FieldLength] = struct{}{}
+}
+
+// LengthCleared returns if the "length" field was cleared in this mutation.
+func (m *ArtMutation) LengthCleared() bool {
+	_, ok := m.clearedFields[art.FieldLength]
+	return ok
+}
+
+// ResetLength resets all changes to the "length" field.
+func (m *ArtMutation) ResetLength() {
+	m.length = nil
+	m.addlength = nil
+	delete(m.clearedFields, art.FieldLength)
+}
+
+// SetDepth sets the "depth" field.
+func (m *ArtMutation) SetDepth(f float64) {
+	m.depth = &f
+	m.adddepth = nil
+}
+
+// Depth returns the value of the "depth" field in the mutation.
+func (m *ArtMutation) Depth() (r float64, exists bool) {
+	v := m.depth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDepth returns the old "depth" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDepth(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDepth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDepth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDepth: %w", err)
+	}
+	return oldValue.Depth, nil
+}
+
+// AddDepth adds f to the "depth" field.
+func (m *ArtMutation) AddDepth(f float64) {
+	if m.adddepth != nil {
+		*m.adddepth += f
+	} else {
+		m.adddepth = &f
+	}
+}
+
+// AddedDepth returns the value that was added to the "depth" field in this mutation.
+func (m *ArtMutation) AddedDepth() (r float64, exists bool) {
+	v := m.adddepth
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (m *ArtMutation) ClearDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	m.clearedFields[art.FieldDepth] = struct{}{}
+}
+
+// DepthCleared returns if the "depth" field was cleared in this mutation.
+func (m *ArtMutation) DepthCleared() bool {
+	_, ok := m.clearedFields[art.FieldDepth]
+	return ok
+}
+
+// ResetDepth resets all changes to the "depth" field.
+func (m *ArtMutation) ResetDepth() {
+	m.depth = nil
+	m.adddepth = nil
+	delete(m.clearedFields, art.FieldDepth)
+}
+
+// SetDiameter sets the "diameter" field.
+func (m *ArtMutation) SetDiameter(f float64) {
+	m.diameter = &f
+	m.adddiameter = nil
+}
+
+// Diameter returns the value of the "diameter" field in the mutation.
+func (m *ArtMutation) Diameter() (r float64, exists bool) {
+	v := m.diameter
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDiameter returns the old "diameter" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldDiameter(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDiameter is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDiameter requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDiameter: %w", err)
+	}
+	return oldValue.Diameter, nil
+}
+
+// AddDiameter adds f to the "diameter" field.
+func (m *ArtMutation) AddDiameter(f float64) {
+	if m.adddiameter != nil {
+		*m.adddiameter += f
+	} else {
+		m.adddiameter = &f
+	}
+}
+
+// AddedDiameter returns the value that was added to the "diameter" field in this mutation.
+func (m *ArtMutation) AddedDiameter() (r float64, exists bool) {
+	v := m.adddiameter
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDiameter clears the value of the "diameter" field.
+func (m *ArtMutation) ClearDiameter() {
+	m.diameter = nil
+	m.adddiameter = nil
+	m.clearedFields[art.FieldDiameter] = struct{}{}
+}
+
+// DiameterCleared returns if the "diameter" field was cleared in this mutation.
+func (m *ArtMutation) DiameterCleared() bool {
+	_, ok := m.clearedFields[art.FieldDiameter]
+	return ok
+}
+
+// ResetDiameter resets all changes to the "diameter" field.
+func (m *ArtMutation) ResetDiameter() {
+	m.diameter = nil
+	m.adddiameter = nil
+	delete(m.clearedFields, art.FieldDiameter)
+}
+
+// SetWeight sets the "weight" field.
+func (m *ArtMutation) SetWeight(s string) {
+	m.weight = &s
+}
+
+// Weight returns the value of the "weight" field in the mutation.
+func (m *ArtMutation) Weight() (r string, exists bool) {
+	v := m.weight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWeight returns the old "weight" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldWeight(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWeight: %w", err)
+	}
+	return oldValue.Weight, nil
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (m *ArtMutation) ClearWeight() {
+	m.weight = nil
+	m.clearedFields[art.FieldWeight] = struct{}{}
+}
+
+// WeightCleared returns if the "weight" field was cleared in this mutation.
+func (m *ArtMutation) WeightCleared() bool {
+	_, ok := m.clearedFields[art.FieldWeight]
+	return ok
+}
+
+// ResetWeight resets all changes to the "weight" field.
+func (m *ArtMutation) ResetWeight() {
+	m.weight = nil
+	delete(m.clearedFields, art.FieldWeight)
 }
 
 // SetDimensions sets the "dimensions" field.
@@ -873,6 +1428,55 @@ func (m *ArtMutation) DimensionsCleared() bool {
 func (m *ArtMutation) ResetDimensions() {
 	m.dimensions = nil
 	delete(m.clearedFields, art.FieldDimensions)
+}
+
+// SetNumber sets the "number" field.
+func (m *ArtMutation) SetNumber(s string) {
+	m.number = &s
+}
+
+// Number returns the value of the "number" field in the mutation.
+func (m *ArtMutation) Number() (r string, exists bool) {
+	v := m.number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumber returns the old "number" field's value of the Art entity.
+// If the Art object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtMutation) OldNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+	}
+	return oldValue.Number, nil
+}
+
+// ClearNumber clears the value of the "number" field.
+func (m *ArtMutation) ClearNumber() {
+	m.number = nil
+	m.clearedFields[art.FieldNumber] = struct{}{}
+}
+
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *ArtMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[art.FieldNumber]
+	return ok
+}
+
+// ResetNumber resets all changes to the "number" field.
+func (m *ArtMutation) ResetNumber() {
+	m.number = nil
+	delete(m.clearedFields, art.FieldNumber)
 }
 
 // SetAuthorID sets the "author" edge to the Person entity by id.
@@ -1305,7 +1909,7 @@ func (m *ArtMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ArtMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, art.FieldCreatedAt)
 	}
@@ -1317,6 +1921,15 @@ func (m *ArtMutation) Fields() []string {
 	}
 	if m.updated_by != nil {
 		fields = append(fields, art.FieldUpdatedBy)
+	}
+	if m.dating != nil {
+		fields = append(fields, art.FieldDating)
+	}
+	if m.dating_start != nil {
+		fields = append(fields, art.FieldDatingStart)
+	}
+	if m.dating_end != nil {
+		fields = append(fields, art.FieldDatingEnd)
 	}
 	if m.display_name != nil {
 		fields = append(fields, art.FieldDisplayName)
@@ -1330,20 +1943,38 @@ func (m *ArtMutation) Fields() []string {
 	if m.external_link != nil {
 		fields = append(fields, art.FieldExternalLink)
 	}
+	if m.status != nil {
+		fields = append(fields, art.FieldStatus)
+	}
 	if m.primary_image_url != nil {
 		fields = append(fields, art.FieldPrimaryImageURL)
 	}
 	if m.additional_images_urls != nil {
 		fields = append(fields, art.FieldAdditionalImagesUrls)
 	}
-	if m.number != nil {
-		fields = append(fields, art.FieldNumber)
+	if m.height != nil {
+		fields = append(fields, art.FieldHeight)
 	}
-	if m.dating != nil {
-		fields = append(fields, art.FieldDating)
+	if m.width != nil {
+		fields = append(fields, art.FieldWidth)
+	}
+	if m.length != nil {
+		fields = append(fields, art.FieldLength)
+	}
+	if m.depth != nil {
+		fields = append(fields, art.FieldDepth)
+	}
+	if m.diameter != nil {
+		fields = append(fields, art.FieldDiameter)
+	}
+	if m.weight != nil {
+		fields = append(fields, art.FieldWeight)
 	}
 	if m.dimensions != nil {
 		fields = append(fields, art.FieldDimensions)
+	}
+	if m.number != nil {
+		fields = append(fields, art.FieldNumber)
 	}
 	return fields
 }
@@ -1361,6 +1992,12 @@ func (m *ArtMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case art.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case art.FieldDating:
+		return m.Dating()
+	case art.FieldDatingStart:
+		return m.DatingStart()
+	case art.FieldDatingEnd:
+		return m.DatingEnd()
 	case art.FieldDisplayName:
 		return m.DisplayName()
 	case art.FieldAbbreviation:
@@ -1369,16 +2006,28 @@ func (m *ArtMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case art.FieldExternalLink:
 		return m.ExternalLink()
+	case art.FieldStatus:
+		return m.Status()
 	case art.FieldPrimaryImageURL:
 		return m.PrimaryImageURL()
 	case art.FieldAdditionalImagesUrls:
 		return m.AdditionalImagesUrls()
-	case art.FieldNumber:
-		return m.Number()
-	case art.FieldDating:
-		return m.Dating()
+	case art.FieldHeight:
+		return m.Height()
+	case art.FieldWidth:
+		return m.Width()
+	case art.FieldLength:
+		return m.Length()
+	case art.FieldDepth:
+		return m.Depth()
+	case art.FieldDiameter:
+		return m.Diameter()
+	case art.FieldWeight:
+		return m.Weight()
 	case art.FieldDimensions:
 		return m.Dimensions()
+	case art.FieldNumber:
+		return m.Number()
 	}
 	return nil, false
 }
@@ -1396,6 +2045,12 @@ func (m *ArtMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldUpdatedAt(ctx)
 	case art.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case art.FieldDating:
+		return m.OldDating(ctx)
+	case art.FieldDatingStart:
+		return m.OldDatingStart(ctx)
+	case art.FieldDatingEnd:
+		return m.OldDatingEnd(ctx)
 	case art.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case art.FieldAbbreviation:
@@ -1404,16 +2059,28 @@ func (m *ArtMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldDescription(ctx)
 	case art.FieldExternalLink:
 		return m.OldExternalLink(ctx)
+	case art.FieldStatus:
+		return m.OldStatus(ctx)
 	case art.FieldPrimaryImageURL:
 		return m.OldPrimaryImageURL(ctx)
 	case art.FieldAdditionalImagesUrls:
 		return m.OldAdditionalImagesUrls(ctx)
-	case art.FieldNumber:
-		return m.OldNumber(ctx)
-	case art.FieldDating:
-		return m.OldDating(ctx)
+	case art.FieldHeight:
+		return m.OldHeight(ctx)
+	case art.FieldWidth:
+		return m.OldWidth(ctx)
+	case art.FieldLength:
+		return m.OldLength(ctx)
+	case art.FieldDepth:
+		return m.OldDepth(ctx)
+	case art.FieldDiameter:
+		return m.OldDiameter(ctx)
+	case art.FieldWeight:
+		return m.OldWeight(ctx)
 	case art.FieldDimensions:
 		return m.OldDimensions(ctx)
+	case art.FieldNumber:
+		return m.OldNumber(ctx)
 	}
 	return nil, fmt.Errorf("unknown Art field %s", name)
 }
@@ -1451,6 +2118,27 @@ func (m *ArtMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
+	case art.FieldDating:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDating(v)
+		return nil
+	case art.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingStart(v)
+		return nil
+	case art.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingEnd(v)
+		return nil
 	case art.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
@@ -1479,6 +2167,13 @@ func (m *ArtMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalLink(v)
 		return nil
+	case art.FieldStatus:
+		v, ok := value.(art.Status)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
 	case art.FieldPrimaryImageURL:
 		v, ok := value.(string)
 		if !ok {
@@ -1493,19 +2188,47 @@ func (m *ArtMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalImagesUrls(v)
 		return nil
-	case art.FieldNumber:
-		v, ok := value.(string)
+	case art.FieldHeight:
+		v, ok := value.(float64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetNumber(v)
+		m.SetHeight(v)
 		return nil
-	case art.FieldDating:
+	case art.FieldWidth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWidth(v)
+		return nil
+	case art.FieldLength:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLength(v)
+		return nil
+	case art.FieldDepth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDepth(v)
+		return nil
+	case art.FieldDiameter:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDiameter(v)
+		return nil
+	case art.FieldWeight:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetDating(v)
+		m.SetWeight(v)
 		return nil
 	case art.FieldDimensions:
 		v, ok := value.(string)
@@ -1514,6 +2237,13 @@ func (m *ArtMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDimensions(v)
 		return nil
+	case art.FieldNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumber(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Art field %s", name)
 }
@@ -1521,13 +2251,51 @@ func (m *ArtMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ArtMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.adddating_start != nil {
+		fields = append(fields, art.FieldDatingStart)
+	}
+	if m.adddating_end != nil {
+		fields = append(fields, art.FieldDatingEnd)
+	}
+	if m.addheight != nil {
+		fields = append(fields, art.FieldHeight)
+	}
+	if m.addwidth != nil {
+		fields = append(fields, art.FieldWidth)
+	}
+	if m.addlength != nil {
+		fields = append(fields, art.FieldLength)
+	}
+	if m.adddepth != nil {
+		fields = append(fields, art.FieldDepth)
+	}
+	if m.adddiameter != nil {
+		fields = append(fields, art.FieldDiameter)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ArtMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case art.FieldDatingStart:
+		return m.AddedDatingStart()
+	case art.FieldDatingEnd:
+		return m.AddedDatingEnd()
+	case art.FieldHeight:
+		return m.AddedHeight()
+	case art.FieldWidth:
+		return m.AddedWidth()
+	case art.FieldLength:
+		return m.AddedLength()
+	case art.FieldDepth:
+		return m.AddedDepth()
+	case art.FieldDiameter:
+		return m.AddedDiameter()
+	}
 	return nil, false
 }
 
@@ -1536,6 +2304,55 @@ func (m *ArtMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ArtMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case art.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDatingStart(v)
+		return nil
+	case art.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDatingEnd(v)
+		return nil
+	case art.FieldHeight:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHeight(v)
+		return nil
+	case art.FieldWidth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddWidth(v)
+		return nil
+	case art.FieldLength:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLength(v)
+		return nil
+	case art.FieldDepth:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDepth(v)
+		return nil
+	case art.FieldDiameter:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDiameter(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Art numeric field %s", name)
 }
@@ -1550,6 +2367,15 @@ func (m *ArtMutation) ClearedFields() []string {
 	if m.FieldCleared(art.FieldUpdatedBy) {
 		fields = append(fields, art.FieldUpdatedBy)
 	}
+	if m.FieldCleared(art.FieldDating) {
+		fields = append(fields, art.FieldDating)
+	}
+	if m.FieldCleared(art.FieldDatingStart) {
+		fields = append(fields, art.FieldDatingStart)
+	}
+	if m.FieldCleared(art.FieldDatingEnd) {
+		fields = append(fields, art.FieldDatingEnd)
+	}
 	if m.FieldCleared(art.FieldDisplayName) {
 		fields = append(fields, art.FieldDisplayName)
 	}
@@ -1562,20 +2388,38 @@ func (m *ArtMutation) ClearedFields() []string {
 	if m.FieldCleared(art.FieldExternalLink) {
 		fields = append(fields, art.FieldExternalLink)
 	}
+	if m.FieldCleared(art.FieldStatus) {
+		fields = append(fields, art.FieldStatus)
+	}
 	if m.FieldCleared(art.FieldPrimaryImageURL) {
 		fields = append(fields, art.FieldPrimaryImageURL)
 	}
 	if m.FieldCleared(art.FieldAdditionalImagesUrls) {
 		fields = append(fields, art.FieldAdditionalImagesUrls)
 	}
-	if m.FieldCleared(art.FieldNumber) {
-		fields = append(fields, art.FieldNumber)
+	if m.FieldCleared(art.FieldHeight) {
+		fields = append(fields, art.FieldHeight)
 	}
-	if m.FieldCleared(art.FieldDating) {
-		fields = append(fields, art.FieldDating)
+	if m.FieldCleared(art.FieldWidth) {
+		fields = append(fields, art.FieldWidth)
+	}
+	if m.FieldCleared(art.FieldLength) {
+		fields = append(fields, art.FieldLength)
+	}
+	if m.FieldCleared(art.FieldDepth) {
+		fields = append(fields, art.FieldDepth)
+	}
+	if m.FieldCleared(art.FieldDiameter) {
+		fields = append(fields, art.FieldDiameter)
+	}
+	if m.FieldCleared(art.FieldWeight) {
+		fields = append(fields, art.FieldWeight)
 	}
 	if m.FieldCleared(art.FieldDimensions) {
 		fields = append(fields, art.FieldDimensions)
+	}
+	if m.FieldCleared(art.FieldNumber) {
+		fields = append(fields, art.FieldNumber)
 	}
 	return fields
 }
@@ -1597,6 +2441,15 @@ func (m *ArtMutation) ClearField(name string) error {
 	case art.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case art.FieldDating:
+		m.ClearDating()
+		return nil
+	case art.FieldDatingStart:
+		m.ClearDatingStart()
+		return nil
+	case art.FieldDatingEnd:
+		m.ClearDatingEnd()
+		return nil
 	case art.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -1609,20 +2462,38 @@ func (m *ArtMutation) ClearField(name string) error {
 	case art.FieldExternalLink:
 		m.ClearExternalLink()
 		return nil
+	case art.FieldStatus:
+		m.ClearStatus()
+		return nil
 	case art.FieldPrimaryImageURL:
 		m.ClearPrimaryImageURL()
 		return nil
 	case art.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
 		return nil
-	case art.FieldNumber:
-		m.ClearNumber()
+	case art.FieldHeight:
+		m.ClearHeight()
 		return nil
-	case art.FieldDating:
-		m.ClearDating()
+	case art.FieldWidth:
+		m.ClearWidth()
+		return nil
+	case art.FieldLength:
+		m.ClearLength()
+		return nil
+	case art.FieldDepth:
+		m.ClearDepth()
+		return nil
+	case art.FieldDiameter:
+		m.ClearDiameter()
+		return nil
+	case art.FieldWeight:
+		m.ClearWeight()
 		return nil
 	case art.FieldDimensions:
 		m.ClearDimensions()
+		return nil
+	case art.FieldNumber:
+		m.ClearNumber()
 		return nil
 	}
 	return fmt.Errorf("unknown Art nullable field %s", name)
@@ -1644,6 +2515,15 @@ func (m *ArtMutation) ResetField(name string) error {
 	case art.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
+	case art.FieldDating:
+		m.ResetDating()
+		return nil
+	case art.FieldDatingStart:
+		m.ResetDatingStart()
+		return nil
+	case art.FieldDatingEnd:
+		m.ResetDatingEnd()
+		return nil
 	case art.FieldDisplayName:
 		m.ResetDisplayName()
 		return nil
@@ -1656,20 +2536,38 @@ func (m *ArtMutation) ResetField(name string) error {
 	case art.FieldExternalLink:
 		m.ResetExternalLink()
 		return nil
+	case art.FieldStatus:
+		m.ResetStatus()
+		return nil
 	case art.FieldPrimaryImageURL:
 		m.ResetPrimaryImageURL()
 		return nil
 	case art.FieldAdditionalImagesUrls:
 		m.ResetAdditionalImagesUrls()
 		return nil
-	case art.FieldNumber:
-		m.ResetNumber()
+	case art.FieldHeight:
+		m.ResetHeight()
 		return nil
-	case art.FieldDating:
-		m.ResetDating()
+	case art.FieldWidth:
+		m.ResetWidth()
+		return nil
+	case art.FieldLength:
+		m.ResetLength()
+		return nil
+	case art.FieldDepth:
+		m.ResetDepth()
+		return nil
+	case art.FieldDiameter:
+		m.ResetDiameter()
+		return nil
+	case art.FieldWeight:
+		m.ResetWeight()
 		return nil
 	case art.FieldDimensions:
 		m.ResetDimensions()
+		return nil
+	case art.FieldNumber:
+		m.ResetNumber()
 		return nil
 	}
 	return fmt.Errorf("unknown Art field %s", name)
@@ -3757,6 +4655,11 @@ type ArtifactMutation struct {
 	created_by                   *string
 	updated_at                   *time.Time
 	updated_by                   *string
+	dating                       *string
+	dating_start                 *int
+	adddating_start              *int
+	dating_end                   *int
+	adddating_end                *int
 	display_name                 *string
 	abbreviation                 *string
 	description                  *string
@@ -3765,13 +4668,6 @@ type ArtifactMutation struct {
 	primary_image_url            *string
 	additional_images_urls       *[]string
 	appendadditional_images_urls []string
-	deleted_at                   *time.Time
-	deleted_by                   *string
-	dating                       *string
-	dating_start                 *int
-	adddating_start              *int
-	dating_end                   *int
-	adddating_end                *int
 	height                       *float64
 	addheight                    *float64
 	width                        *float64
@@ -3784,6 +4680,8 @@ type ArtifactMutation struct {
 	adddiameter                  *float64
 	weight                       *string
 	dimensions                   *string
+	deleted_at                   *time.Time
+	deleted_by                   *string
 	chemical_composition         *string
 	kp_number                    *string
 	goskatalog_number            *string
@@ -4105,6 +5003,195 @@ func (m *ArtifactMutation) UpdatedByCleared() bool {
 func (m *ArtifactMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, artifact.FieldUpdatedBy)
+}
+
+// SetDating sets the "dating" field.
+func (m *ArtifactMutation) SetDating(s string) {
+	m.dating = &s
+}
+
+// Dating returns the value of the "dating" field in the mutation.
+func (m *ArtifactMutation) Dating() (r string, exists bool) {
+	v := m.dating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDating returns the old "dating" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDating(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDating is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDating: %w", err)
+	}
+	return oldValue.Dating, nil
+}
+
+// ClearDating clears the value of the "dating" field.
+func (m *ArtifactMutation) ClearDating() {
+	m.dating = nil
+	m.clearedFields[artifact.FieldDating] = struct{}{}
+}
+
+// DatingCleared returns if the "dating" field was cleared in this mutation.
+func (m *ArtifactMutation) DatingCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDating]
+	return ok
+}
+
+// ResetDating resets all changes to the "dating" field.
+func (m *ArtifactMutation) ResetDating() {
+	m.dating = nil
+	delete(m.clearedFields, artifact.FieldDating)
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (m *ArtifactMutation) SetDatingStart(i int) {
+	m.dating_start = &i
+	m.adddating_start = nil
+}
+
+// DatingStart returns the value of the "dating_start" field in the mutation.
+func (m *ArtifactMutation) DatingStart() (r int, exists bool) {
+	v := m.dating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingStart returns the old "dating_start" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDatingStart(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingStart is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingStart requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingStart: %w", err)
+	}
+	return oldValue.DatingStart, nil
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (m *ArtifactMutation) AddDatingStart(i int) {
+	if m.adddating_start != nil {
+		*m.adddating_start += i
+	} else {
+		m.adddating_start = &i
+	}
+}
+
+// AddedDatingStart returns the value that was added to the "dating_start" field in this mutation.
+func (m *ArtifactMutation) AddedDatingStart() (r int, exists bool) {
+	v := m.adddating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (m *ArtifactMutation) ClearDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	m.clearedFields[artifact.FieldDatingStart] = struct{}{}
+}
+
+// DatingStartCleared returns if the "dating_start" field was cleared in this mutation.
+func (m *ArtifactMutation) DatingStartCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDatingStart]
+	return ok
+}
+
+// ResetDatingStart resets all changes to the "dating_start" field.
+func (m *ArtifactMutation) ResetDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	delete(m.clearedFields, artifact.FieldDatingStart)
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (m *ArtifactMutation) SetDatingEnd(i int) {
+	m.dating_end = &i
+	m.adddating_end = nil
+}
+
+// DatingEnd returns the value of the "dating_end" field in the mutation.
+func (m *ArtifactMutation) DatingEnd() (r int, exists bool) {
+	v := m.dating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingEnd returns the old "dating_end" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDatingEnd(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingEnd is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingEnd requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingEnd: %w", err)
+	}
+	return oldValue.DatingEnd, nil
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (m *ArtifactMutation) AddDatingEnd(i int) {
+	if m.adddating_end != nil {
+		*m.adddating_end += i
+	} else {
+		m.adddating_end = &i
+	}
+}
+
+// AddedDatingEnd returns the value that was added to the "dating_end" field in this mutation.
+func (m *ArtifactMutation) AddedDatingEnd() (r int, exists bool) {
+	v := m.adddating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (m *ArtifactMutation) ClearDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	m.clearedFields[artifact.FieldDatingEnd] = struct{}{}
+}
+
+// DatingEndCleared returns if the "dating_end" field was cleared in this mutation.
+func (m *ArtifactMutation) DatingEndCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDatingEnd]
+	return ok
+}
+
+// ResetDatingEnd resets all changes to the "dating_end" field.
+func (m *ArtifactMutation) ResetDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	delete(m.clearedFields, artifact.FieldDatingEnd)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -4464,293 +5551,6 @@ func (m *ArtifactMutation) ResetAdditionalImagesUrls() {
 	m.additional_images_urls = nil
 	m.appendadditional_images_urls = nil
 	delete(m.clearedFields, artifact.FieldAdditionalImagesUrls)
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (m *ArtifactMutation) SetDeletedAt(t time.Time) {
-	m.deleted_at = &t
-}
-
-// DeletedAt returns the value of the "deleted_at" field in the mutation.
-func (m *ArtifactMutation) DeletedAt() (r time.Time, exists bool) {
-	v := m.deleted_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDeletedAt returns the old "deleted_at" field's value of the Artifact entity.
-// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
-	}
-	return oldValue.DeletedAt, nil
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (m *ArtifactMutation) ClearDeletedAt() {
-	m.deleted_at = nil
-	m.clearedFields[artifact.FieldDeletedAt] = struct{}{}
-}
-
-// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
-func (m *ArtifactMutation) DeletedAtCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldDeletedAt]
-	return ok
-}
-
-// ResetDeletedAt resets all changes to the "deleted_at" field.
-func (m *ArtifactMutation) ResetDeletedAt() {
-	m.deleted_at = nil
-	delete(m.clearedFields, artifact.FieldDeletedAt)
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (m *ArtifactMutation) SetDeletedBy(s string) {
-	m.deleted_by = &s
-}
-
-// DeletedBy returns the value of the "deleted_by" field in the mutation.
-func (m *ArtifactMutation) DeletedBy() (r string, exists bool) {
-	v := m.deleted_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDeletedBy returns the old "deleted_by" field's value of the Artifact entity.
-// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
-	}
-	return oldValue.DeletedBy, nil
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (m *ArtifactMutation) ClearDeletedBy() {
-	m.deleted_by = nil
-	m.clearedFields[artifact.FieldDeletedBy] = struct{}{}
-}
-
-// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
-func (m *ArtifactMutation) DeletedByCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldDeletedBy]
-	return ok
-}
-
-// ResetDeletedBy resets all changes to the "deleted_by" field.
-func (m *ArtifactMutation) ResetDeletedBy() {
-	m.deleted_by = nil
-	delete(m.clearedFields, artifact.FieldDeletedBy)
-}
-
-// SetDating sets the "dating" field.
-func (m *ArtifactMutation) SetDating(s string) {
-	m.dating = &s
-}
-
-// Dating returns the value of the "dating" field in the mutation.
-func (m *ArtifactMutation) Dating() (r string, exists bool) {
-	v := m.dating
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDating returns the old "dating" field's value of the Artifact entity.
-// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldDating(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDating is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDating requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDating: %w", err)
-	}
-	return oldValue.Dating, nil
-}
-
-// ClearDating clears the value of the "dating" field.
-func (m *ArtifactMutation) ClearDating() {
-	m.dating = nil
-	m.clearedFields[artifact.FieldDating] = struct{}{}
-}
-
-// DatingCleared returns if the "dating" field was cleared in this mutation.
-func (m *ArtifactMutation) DatingCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldDating]
-	return ok
-}
-
-// ResetDating resets all changes to the "dating" field.
-func (m *ArtifactMutation) ResetDating() {
-	m.dating = nil
-	delete(m.clearedFields, artifact.FieldDating)
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (m *ArtifactMutation) SetDatingStart(i int) {
-	m.dating_start = &i
-	m.adddating_start = nil
-}
-
-// DatingStart returns the value of the "dating_start" field in the mutation.
-func (m *ArtifactMutation) DatingStart() (r int, exists bool) {
-	v := m.dating_start
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDatingStart returns the old "dating_start" field's value of the Artifact entity.
-// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldDatingStart(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDatingStart is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDatingStart requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDatingStart: %w", err)
-	}
-	return oldValue.DatingStart, nil
-}
-
-// AddDatingStart adds i to the "dating_start" field.
-func (m *ArtifactMutation) AddDatingStart(i int) {
-	if m.adddating_start != nil {
-		*m.adddating_start += i
-	} else {
-		m.adddating_start = &i
-	}
-}
-
-// AddedDatingStart returns the value that was added to the "dating_start" field in this mutation.
-func (m *ArtifactMutation) AddedDatingStart() (r int, exists bool) {
-	v := m.adddating_start
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearDatingStart clears the value of the "dating_start" field.
-func (m *ArtifactMutation) ClearDatingStart() {
-	m.dating_start = nil
-	m.adddating_start = nil
-	m.clearedFields[artifact.FieldDatingStart] = struct{}{}
-}
-
-// DatingStartCleared returns if the "dating_start" field was cleared in this mutation.
-func (m *ArtifactMutation) DatingStartCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldDatingStart]
-	return ok
-}
-
-// ResetDatingStart resets all changes to the "dating_start" field.
-func (m *ArtifactMutation) ResetDatingStart() {
-	m.dating_start = nil
-	m.adddating_start = nil
-	delete(m.clearedFields, artifact.FieldDatingStart)
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (m *ArtifactMutation) SetDatingEnd(i int) {
-	m.dating_end = &i
-	m.adddating_end = nil
-}
-
-// DatingEnd returns the value of the "dating_end" field in the mutation.
-func (m *ArtifactMutation) DatingEnd() (r int, exists bool) {
-	v := m.dating_end
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDatingEnd returns the old "dating_end" field's value of the Artifact entity.
-// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ArtifactMutation) OldDatingEnd(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDatingEnd is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDatingEnd requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDatingEnd: %w", err)
-	}
-	return oldValue.DatingEnd, nil
-}
-
-// AddDatingEnd adds i to the "dating_end" field.
-func (m *ArtifactMutation) AddDatingEnd(i int) {
-	if m.adddating_end != nil {
-		*m.adddating_end += i
-	} else {
-		m.adddating_end = &i
-	}
-}
-
-// AddedDatingEnd returns the value that was added to the "dating_end" field in this mutation.
-func (m *ArtifactMutation) AddedDatingEnd() (r int, exists bool) {
-	v := m.adddating_end
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearDatingEnd clears the value of the "dating_end" field.
-func (m *ArtifactMutation) ClearDatingEnd() {
-	m.dating_end = nil
-	m.adddating_end = nil
-	m.clearedFields[artifact.FieldDatingEnd] = struct{}{}
-}
-
-// DatingEndCleared returns if the "dating_end" field was cleared in this mutation.
-func (m *ArtifactMutation) DatingEndCleared() bool {
-	_, ok := m.clearedFields[artifact.FieldDatingEnd]
-	return ok
-}
-
-// ResetDatingEnd resets all changes to the "dating_end" field.
-func (m *ArtifactMutation) ResetDatingEnd() {
-	m.dating_end = nil
-	m.adddating_end = nil
-	delete(m.clearedFields, artifact.FieldDatingEnd)
 }
 
 // SetHeight sets the "height" field.
@@ -5199,6 +5999,104 @@ func (m *ArtifactMutation) DimensionsCleared() bool {
 func (m *ArtifactMutation) ResetDimensions() {
 	m.dimensions = nil
 	delete(m.clearedFields, artifact.FieldDimensions)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ArtifactMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ArtifactMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ArtifactMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[artifact.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ArtifactMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ArtifactMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, artifact.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ArtifactMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ArtifactMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Artifact entity.
+// If the Artifact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ArtifactMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ArtifactMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[artifact.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ArtifactMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[artifact.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ArtifactMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, artifact.FieldDeletedBy)
 }
 
 // SetChemicalComposition sets the "chemical_composition" field.
@@ -6358,6 +7256,15 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, artifact.FieldUpdatedBy)
 	}
+	if m.dating != nil {
+		fields = append(fields, artifact.FieldDating)
+	}
+	if m.dating_start != nil {
+		fields = append(fields, artifact.FieldDatingStart)
+	}
+	if m.dating_end != nil {
+		fields = append(fields, artifact.FieldDatingEnd)
+	}
 	if m.display_name != nil {
 		fields = append(fields, artifact.FieldDisplayName)
 	}
@@ -6379,21 +7286,6 @@ func (m *ArtifactMutation) Fields() []string {
 	if m.additional_images_urls != nil {
 		fields = append(fields, artifact.FieldAdditionalImagesUrls)
 	}
-	if m.deleted_at != nil {
-		fields = append(fields, artifact.FieldDeletedAt)
-	}
-	if m.deleted_by != nil {
-		fields = append(fields, artifact.FieldDeletedBy)
-	}
-	if m.dating != nil {
-		fields = append(fields, artifact.FieldDating)
-	}
-	if m.dating_start != nil {
-		fields = append(fields, artifact.FieldDatingStart)
-	}
-	if m.dating_end != nil {
-		fields = append(fields, artifact.FieldDatingEnd)
-	}
 	if m.height != nil {
 		fields = append(fields, artifact.FieldHeight)
 	}
@@ -6414,6 +7306,12 @@ func (m *ArtifactMutation) Fields() []string {
 	}
 	if m.dimensions != nil {
 		fields = append(fields, artifact.FieldDimensions)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, artifact.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, artifact.FieldDeletedBy)
 	}
 	if m.chemical_composition != nil {
 		fields = append(fields, artifact.FieldChemicalComposition)
@@ -6449,6 +7347,12 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case artifact.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case artifact.FieldDating:
+		return m.Dating()
+	case artifact.FieldDatingStart:
+		return m.DatingStart()
+	case artifact.FieldDatingEnd:
+		return m.DatingEnd()
 	case artifact.FieldDisplayName:
 		return m.DisplayName()
 	case artifact.FieldAbbreviation:
@@ -6463,16 +7367,6 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.PrimaryImageURL()
 	case artifact.FieldAdditionalImagesUrls:
 		return m.AdditionalImagesUrls()
-	case artifact.FieldDeletedAt:
-		return m.DeletedAt()
-	case artifact.FieldDeletedBy:
-		return m.DeletedBy()
-	case artifact.FieldDating:
-		return m.Dating()
-	case artifact.FieldDatingStart:
-		return m.DatingStart()
-	case artifact.FieldDatingEnd:
-		return m.DatingEnd()
 	case artifact.FieldHeight:
 		return m.Height()
 	case artifact.FieldWidth:
@@ -6487,6 +7381,10 @@ func (m *ArtifactMutation) Field(name string) (ent.Value, bool) {
 		return m.Weight()
 	case artifact.FieldDimensions:
 		return m.Dimensions()
+	case artifact.FieldDeletedAt:
+		return m.DeletedAt()
+	case artifact.FieldDeletedBy:
+		return m.DeletedBy()
 	case artifact.FieldChemicalComposition:
 		return m.ChemicalComposition()
 	case artifact.FieldKpNumber:
@@ -6516,6 +7414,12 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldUpdatedAt(ctx)
 	case artifact.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case artifact.FieldDating:
+		return m.OldDating(ctx)
+	case artifact.FieldDatingStart:
+		return m.OldDatingStart(ctx)
+	case artifact.FieldDatingEnd:
+		return m.OldDatingEnd(ctx)
 	case artifact.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case artifact.FieldAbbreviation:
@@ -6530,16 +7434,6 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldPrimaryImageURL(ctx)
 	case artifact.FieldAdditionalImagesUrls:
 		return m.OldAdditionalImagesUrls(ctx)
-	case artifact.FieldDeletedAt:
-		return m.OldDeletedAt(ctx)
-	case artifact.FieldDeletedBy:
-		return m.OldDeletedBy(ctx)
-	case artifact.FieldDating:
-		return m.OldDating(ctx)
-	case artifact.FieldDatingStart:
-		return m.OldDatingStart(ctx)
-	case artifact.FieldDatingEnd:
-		return m.OldDatingEnd(ctx)
 	case artifact.FieldHeight:
 		return m.OldHeight(ctx)
 	case artifact.FieldWidth:
@@ -6554,6 +7448,10 @@ func (m *ArtifactMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldWeight(ctx)
 	case artifact.FieldDimensions:
 		return m.OldDimensions(ctx)
+	case artifact.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case artifact.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
 	case artifact.FieldChemicalComposition:
 		return m.OldChemicalComposition(ctx)
 	case artifact.FieldKpNumber:
@@ -6602,6 +7500,27 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case artifact.FieldDating:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDating(v)
+		return nil
+	case artifact.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingStart(v)
+		return nil
+	case artifact.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingEnd(v)
 		return nil
 	case artifact.FieldDisplayName:
 		v, ok := value.(string)
@@ -6652,41 +7571,6 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalImagesUrls(v)
 		return nil
-	case artifact.FieldDeletedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDeletedAt(v)
-		return nil
-	case artifact.FieldDeletedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDeletedBy(v)
-		return nil
-	case artifact.FieldDating:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDating(v)
-		return nil
-	case artifact.FieldDatingStart:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDatingStart(v)
-		return nil
-	case artifact.FieldDatingEnd:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDatingEnd(v)
-		return nil
 	case artifact.FieldHeight:
 		v, ok := value.(float64)
 		if !ok {
@@ -6735,6 +7619,20 @@ func (m *ArtifactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDimensions(v)
+		return nil
+	case artifact.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case artifact.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
 		return nil
 	case artifact.FieldChemicalComposition:
 		v, ok := value.(string)
@@ -6901,6 +7799,15 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldUpdatedBy) {
 		fields = append(fields, artifact.FieldUpdatedBy)
 	}
+	if m.FieldCleared(artifact.FieldDating) {
+		fields = append(fields, artifact.FieldDating)
+	}
+	if m.FieldCleared(artifact.FieldDatingStart) {
+		fields = append(fields, artifact.FieldDatingStart)
+	}
+	if m.FieldCleared(artifact.FieldDatingEnd) {
+		fields = append(fields, artifact.FieldDatingEnd)
+	}
 	if m.FieldCleared(artifact.FieldDisplayName) {
 		fields = append(fields, artifact.FieldDisplayName)
 	}
@@ -6922,21 +7829,6 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	if m.FieldCleared(artifact.FieldAdditionalImagesUrls) {
 		fields = append(fields, artifact.FieldAdditionalImagesUrls)
 	}
-	if m.FieldCleared(artifact.FieldDeletedAt) {
-		fields = append(fields, artifact.FieldDeletedAt)
-	}
-	if m.FieldCleared(artifact.FieldDeletedBy) {
-		fields = append(fields, artifact.FieldDeletedBy)
-	}
-	if m.FieldCleared(artifact.FieldDating) {
-		fields = append(fields, artifact.FieldDating)
-	}
-	if m.FieldCleared(artifact.FieldDatingStart) {
-		fields = append(fields, artifact.FieldDatingStart)
-	}
-	if m.FieldCleared(artifact.FieldDatingEnd) {
-		fields = append(fields, artifact.FieldDatingEnd)
-	}
 	if m.FieldCleared(artifact.FieldHeight) {
 		fields = append(fields, artifact.FieldHeight)
 	}
@@ -6957,6 +7849,12 @@ func (m *ArtifactMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(artifact.FieldDimensions) {
 		fields = append(fields, artifact.FieldDimensions)
+	}
+	if m.FieldCleared(artifact.FieldDeletedAt) {
+		fields = append(fields, artifact.FieldDeletedAt)
+	}
+	if m.FieldCleared(artifact.FieldDeletedBy) {
+		fields = append(fields, artifact.FieldDeletedBy)
 	}
 	if m.FieldCleared(artifact.FieldChemicalComposition) {
 		fields = append(fields, artifact.FieldChemicalComposition)
@@ -6996,6 +7894,15 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case artifact.FieldDating:
+		m.ClearDating()
+		return nil
+	case artifact.FieldDatingStart:
+		m.ClearDatingStart()
+		return nil
+	case artifact.FieldDatingEnd:
+		m.ClearDatingEnd()
+		return nil
 	case artifact.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -7017,21 +7924,6 @@ func (m *ArtifactMutation) ClearField(name string) error {
 	case artifact.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
 		return nil
-	case artifact.FieldDeletedAt:
-		m.ClearDeletedAt()
-		return nil
-	case artifact.FieldDeletedBy:
-		m.ClearDeletedBy()
-		return nil
-	case artifact.FieldDating:
-		m.ClearDating()
-		return nil
-	case artifact.FieldDatingStart:
-		m.ClearDatingStart()
-		return nil
-	case artifact.FieldDatingEnd:
-		m.ClearDatingEnd()
-		return nil
 	case artifact.FieldHeight:
 		m.ClearHeight()
 		return nil
@@ -7052,6 +7944,12 @@ func (m *ArtifactMutation) ClearField(name string) error {
 		return nil
 	case artifact.FieldDimensions:
 		m.ClearDimensions()
+		return nil
+	case artifact.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case artifact.FieldDeletedBy:
+		m.ClearDeletedBy()
 		return nil
 	case artifact.FieldChemicalComposition:
 		m.ClearChemicalComposition()
@@ -7091,6 +7989,15 @@ func (m *ArtifactMutation) ResetField(name string) error {
 	case artifact.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
+	case artifact.FieldDating:
+		m.ResetDating()
+		return nil
+	case artifact.FieldDatingStart:
+		m.ResetDatingStart()
+		return nil
+	case artifact.FieldDatingEnd:
+		m.ResetDatingEnd()
+		return nil
 	case artifact.FieldDisplayName:
 		m.ResetDisplayName()
 		return nil
@@ -7112,21 +8019,6 @@ func (m *ArtifactMutation) ResetField(name string) error {
 	case artifact.FieldAdditionalImagesUrls:
 		m.ResetAdditionalImagesUrls()
 		return nil
-	case artifact.FieldDeletedAt:
-		m.ResetDeletedAt()
-		return nil
-	case artifact.FieldDeletedBy:
-		m.ResetDeletedBy()
-		return nil
-	case artifact.FieldDating:
-		m.ResetDating()
-		return nil
-	case artifact.FieldDatingStart:
-		m.ResetDatingStart()
-		return nil
-	case artifact.FieldDatingEnd:
-		m.ResetDatingEnd()
-		return nil
 	case artifact.FieldHeight:
 		m.ResetHeight()
 		return nil
@@ -7147,6 +8039,12 @@ func (m *ArtifactMutation) ResetField(name string) error {
 		return nil
 	case artifact.FieldDimensions:
 		m.ResetDimensions()
+		return nil
+	case artifact.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case artifact.FieldDeletedBy:
+		m.ResetDeletedBy()
 		return nil
 	case artifact.FieldChemicalComposition:
 		m.ResetChemicalComposition()
@@ -33374,6 +34272,11 @@ type PetroglyphMutation struct {
 	created_by                              *string
 	updated_at                              *time.Time
 	updated_by                              *string
+	dating                                  *string
+	dating_start                            *int
+	adddating_start                         *int
+	dating_end                              *int
+	adddating_end                           *int
 	display_name                            *string
 	abbreviation                            *string
 	description                             *string
@@ -33382,17 +34285,6 @@ type PetroglyphMutation struct {
 	primary_image_url                       *string
 	additional_images_urls                  *[]string
 	appendadditional_images_urls            []string
-	deleted_at                              *time.Time
-	deleted_by                              *string
-	number                                  *string
-	dating                                  *string
-	dating_start                            *int
-	adddating_start                         *int
-	dating_end                              *int
-	adddating_end                           *int
-	orientation                             *string
-	position                                *string
-	geometric_shape                         *string
 	height                                  *float64
 	addheight                               *float64
 	width                                   *float64
@@ -33405,6 +34297,12 @@ type PetroglyphMutation struct {
 	adddiameter                             *float64
 	weight                                  *string
 	dimensions                              *string
+	deleted_at                              *time.Time
+	deleted_by                              *string
+	number                                  *string
+	orientation                             *string
+	position                                *string
+	geometric_shape                         *string
 	plane_preservation                      *string
 	photo_code                              *string
 	accounting_documentation_information    *string
@@ -33702,6 +34600,195 @@ func (m *PetroglyphMutation) UpdatedByCleared() bool {
 func (m *PetroglyphMutation) ResetUpdatedBy() {
 	m.updated_by = nil
 	delete(m.clearedFields, petroglyph.FieldUpdatedBy)
+}
+
+// SetDating sets the "dating" field.
+func (m *PetroglyphMutation) SetDating(s string) {
+	m.dating = &s
+}
+
+// Dating returns the value of the "dating" field in the mutation.
+func (m *PetroglyphMutation) Dating() (r string, exists bool) {
+	v := m.dating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDating returns the old "dating" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDating(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDating is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDating: %w", err)
+	}
+	return oldValue.Dating, nil
+}
+
+// ClearDating clears the value of the "dating" field.
+func (m *PetroglyphMutation) ClearDating() {
+	m.dating = nil
+	m.clearedFields[petroglyph.FieldDating] = struct{}{}
+}
+
+// DatingCleared returns if the "dating" field was cleared in this mutation.
+func (m *PetroglyphMutation) DatingCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDating]
+	return ok
+}
+
+// ResetDating resets all changes to the "dating" field.
+func (m *PetroglyphMutation) ResetDating() {
+	m.dating = nil
+	delete(m.clearedFields, petroglyph.FieldDating)
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (m *PetroglyphMutation) SetDatingStart(i int) {
+	m.dating_start = &i
+	m.adddating_start = nil
+}
+
+// DatingStart returns the value of the "dating_start" field in the mutation.
+func (m *PetroglyphMutation) DatingStart() (r int, exists bool) {
+	v := m.dating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingStart returns the old "dating_start" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDatingStart(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingStart is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingStart requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingStart: %w", err)
+	}
+	return oldValue.DatingStart, nil
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (m *PetroglyphMutation) AddDatingStart(i int) {
+	if m.adddating_start != nil {
+		*m.adddating_start += i
+	} else {
+		m.adddating_start = &i
+	}
+}
+
+// AddedDatingStart returns the value that was added to the "dating_start" field in this mutation.
+func (m *PetroglyphMutation) AddedDatingStart() (r int, exists bool) {
+	v := m.adddating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (m *PetroglyphMutation) ClearDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	m.clearedFields[petroglyph.FieldDatingStart] = struct{}{}
+}
+
+// DatingStartCleared returns if the "dating_start" field was cleared in this mutation.
+func (m *PetroglyphMutation) DatingStartCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDatingStart]
+	return ok
+}
+
+// ResetDatingStart resets all changes to the "dating_start" field.
+func (m *PetroglyphMutation) ResetDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	delete(m.clearedFields, petroglyph.FieldDatingStart)
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (m *PetroglyphMutation) SetDatingEnd(i int) {
+	m.dating_end = &i
+	m.adddating_end = nil
+}
+
+// DatingEnd returns the value of the "dating_end" field in the mutation.
+func (m *PetroglyphMutation) DatingEnd() (r int, exists bool) {
+	v := m.dating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingEnd returns the old "dating_end" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDatingEnd(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingEnd is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingEnd requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingEnd: %w", err)
+	}
+	return oldValue.DatingEnd, nil
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (m *PetroglyphMutation) AddDatingEnd(i int) {
+	if m.adddating_end != nil {
+		*m.adddating_end += i
+	} else {
+		m.adddating_end = &i
+	}
+}
+
+// AddedDatingEnd returns the value that was added to the "dating_end" field in this mutation.
+func (m *PetroglyphMutation) AddedDatingEnd() (r int, exists bool) {
+	v := m.adddating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (m *PetroglyphMutation) ClearDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	m.clearedFields[petroglyph.FieldDatingEnd] = struct{}{}
+}
+
+// DatingEndCleared returns if the "dating_end" field was cleared in this mutation.
+func (m *PetroglyphMutation) DatingEndCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDatingEnd]
+	return ok
+}
+
+// ResetDatingEnd resets all changes to the "dating_end" field.
+func (m *PetroglyphMutation) ResetDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	delete(m.clearedFields, petroglyph.FieldDatingEnd)
 }
 
 // SetDisplayName sets the "display_name" field.
@@ -34061,489 +35148,6 @@ func (m *PetroglyphMutation) ResetAdditionalImagesUrls() {
 	m.additional_images_urls = nil
 	m.appendadditional_images_urls = nil
 	delete(m.clearedFields, petroglyph.FieldAdditionalImagesUrls)
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (m *PetroglyphMutation) SetDeletedAt(t time.Time) {
-	m.deleted_at = &t
-}
-
-// DeletedAt returns the value of the "deleted_at" field in the mutation.
-func (m *PetroglyphMutation) DeletedAt() (r time.Time, exists bool) {
-	v := m.deleted_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDeletedAt returns the old "deleted_at" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
-	}
-	return oldValue.DeletedAt, nil
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (m *PetroglyphMutation) ClearDeletedAt() {
-	m.deleted_at = nil
-	m.clearedFields[petroglyph.FieldDeletedAt] = struct{}{}
-}
-
-// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
-func (m *PetroglyphMutation) DeletedAtCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldDeletedAt]
-	return ok
-}
-
-// ResetDeletedAt resets all changes to the "deleted_at" field.
-func (m *PetroglyphMutation) ResetDeletedAt() {
-	m.deleted_at = nil
-	delete(m.clearedFields, petroglyph.FieldDeletedAt)
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (m *PetroglyphMutation) SetDeletedBy(s string) {
-	m.deleted_by = &s
-}
-
-// DeletedBy returns the value of the "deleted_by" field in the mutation.
-func (m *PetroglyphMutation) DeletedBy() (r string, exists bool) {
-	v := m.deleted_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDeletedBy returns the old "deleted_by" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
-	}
-	return oldValue.DeletedBy, nil
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (m *PetroglyphMutation) ClearDeletedBy() {
-	m.deleted_by = nil
-	m.clearedFields[petroglyph.FieldDeletedBy] = struct{}{}
-}
-
-// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
-func (m *PetroglyphMutation) DeletedByCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldDeletedBy]
-	return ok
-}
-
-// ResetDeletedBy resets all changes to the "deleted_by" field.
-func (m *PetroglyphMutation) ResetDeletedBy() {
-	m.deleted_by = nil
-	delete(m.clearedFields, petroglyph.FieldDeletedBy)
-}
-
-// SetNumber sets the "number" field.
-func (m *PetroglyphMutation) SetNumber(s string) {
-	m.number = &s
-}
-
-// Number returns the value of the "number" field in the mutation.
-func (m *PetroglyphMutation) Number() (r string, exists bool) {
-	v := m.number
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNumber returns the old "number" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldNumber(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNumber requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
-	}
-	return oldValue.Number, nil
-}
-
-// ClearNumber clears the value of the "number" field.
-func (m *PetroglyphMutation) ClearNumber() {
-	m.number = nil
-	m.clearedFields[petroglyph.FieldNumber] = struct{}{}
-}
-
-// NumberCleared returns if the "number" field was cleared in this mutation.
-func (m *PetroglyphMutation) NumberCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldNumber]
-	return ok
-}
-
-// ResetNumber resets all changes to the "number" field.
-func (m *PetroglyphMutation) ResetNumber() {
-	m.number = nil
-	delete(m.clearedFields, petroglyph.FieldNumber)
-}
-
-// SetDating sets the "dating" field.
-func (m *PetroglyphMutation) SetDating(s string) {
-	m.dating = &s
-}
-
-// Dating returns the value of the "dating" field in the mutation.
-func (m *PetroglyphMutation) Dating() (r string, exists bool) {
-	v := m.dating
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDating returns the old "dating" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldDating(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDating is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDating requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDating: %w", err)
-	}
-	return oldValue.Dating, nil
-}
-
-// ClearDating clears the value of the "dating" field.
-func (m *PetroglyphMutation) ClearDating() {
-	m.dating = nil
-	m.clearedFields[petroglyph.FieldDating] = struct{}{}
-}
-
-// DatingCleared returns if the "dating" field was cleared in this mutation.
-func (m *PetroglyphMutation) DatingCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldDating]
-	return ok
-}
-
-// ResetDating resets all changes to the "dating" field.
-func (m *PetroglyphMutation) ResetDating() {
-	m.dating = nil
-	delete(m.clearedFields, petroglyph.FieldDating)
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (m *PetroglyphMutation) SetDatingStart(i int) {
-	m.dating_start = &i
-	m.adddating_start = nil
-}
-
-// DatingStart returns the value of the "dating_start" field in the mutation.
-func (m *PetroglyphMutation) DatingStart() (r int, exists bool) {
-	v := m.dating_start
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDatingStart returns the old "dating_start" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldDatingStart(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDatingStart is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDatingStart requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDatingStart: %w", err)
-	}
-	return oldValue.DatingStart, nil
-}
-
-// AddDatingStart adds i to the "dating_start" field.
-func (m *PetroglyphMutation) AddDatingStart(i int) {
-	if m.adddating_start != nil {
-		*m.adddating_start += i
-	} else {
-		m.adddating_start = &i
-	}
-}
-
-// AddedDatingStart returns the value that was added to the "dating_start" field in this mutation.
-func (m *PetroglyphMutation) AddedDatingStart() (r int, exists bool) {
-	v := m.adddating_start
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearDatingStart clears the value of the "dating_start" field.
-func (m *PetroglyphMutation) ClearDatingStart() {
-	m.dating_start = nil
-	m.adddating_start = nil
-	m.clearedFields[petroglyph.FieldDatingStart] = struct{}{}
-}
-
-// DatingStartCleared returns if the "dating_start" field was cleared in this mutation.
-func (m *PetroglyphMutation) DatingStartCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldDatingStart]
-	return ok
-}
-
-// ResetDatingStart resets all changes to the "dating_start" field.
-func (m *PetroglyphMutation) ResetDatingStart() {
-	m.dating_start = nil
-	m.adddating_start = nil
-	delete(m.clearedFields, petroglyph.FieldDatingStart)
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (m *PetroglyphMutation) SetDatingEnd(i int) {
-	m.dating_end = &i
-	m.adddating_end = nil
-}
-
-// DatingEnd returns the value of the "dating_end" field in the mutation.
-func (m *PetroglyphMutation) DatingEnd() (r int, exists bool) {
-	v := m.dating_end
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldDatingEnd returns the old "dating_end" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldDatingEnd(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldDatingEnd is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldDatingEnd requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldDatingEnd: %w", err)
-	}
-	return oldValue.DatingEnd, nil
-}
-
-// AddDatingEnd adds i to the "dating_end" field.
-func (m *PetroglyphMutation) AddDatingEnd(i int) {
-	if m.adddating_end != nil {
-		*m.adddating_end += i
-	} else {
-		m.adddating_end = &i
-	}
-}
-
-// AddedDatingEnd returns the value that was added to the "dating_end" field in this mutation.
-func (m *PetroglyphMutation) AddedDatingEnd() (r int, exists bool) {
-	v := m.adddating_end
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearDatingEnd clears the value of the "dating_end" field.
-func (m *PetroglyphMutation) ClearDatingEnd() {
-	m.dating_end = nil
-	m.adddating_end = nil
-	m.clearedFields[petroglyph.FieldDatingEnd] = struct{}{}
-}
-
-// DatingEndCleared returns if the "dating_end" field was cleared in this mutation.
-func (m *PetroglyphMutation) DatingEndCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldDatingEnd]
-	return ok
-}
-
-// ResetDatingEnd resets all changes to the "dating_end" field.
-func (m *PetroglyphMutation) ResetDatingEnd() {
-	m.dating_end = nil
-	m.adddating_end = nil
-	delete(m.clearedFields, petroglyph.FieldDatingEnd)
-}
-
-// SetOrientation sets the "orientation" field.
-func (m *PetroglyphMutation) SetOrientation(s string) {
-	m.orientation = &s
-}
-
-// Orientation returns the value of the "orientation" field in the mutation.
-func (m *PetroglyphMutation) Orientation() (r string, exists bool) {
-	v := m.orientation
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOrientation returns the old "orientation" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldOrientation(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOrientation is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOrientation requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOrientation: %w", err)
-	}
-	return oldValue.Orientation, nil
-}
-
-// ClearOrientation clears the value of the "orientation" field.
-func (m *PetroglyphMutation) ClearOrientation() {
-	m.orientation = nil
-	m.clearedFields[petroglyph.FieldOrientation] = struct{}{}
-}
-
-// OrientationCleared returns if the "orientation" field was cleared in this mutation.
-func (m *PetroglyphMutation) OrientationCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldOrientation]
-	return ok
-}
-
-// ResetOrientation resets all changes to the "orientation" field.
-func (m *PetroglyphMutation) ResetOrientation() {
-	m.orientation = nil
-	delete(m.clearedFields, petroglyph.FieldOrientation)
-}
-
-// SetPosition sets the "position" field.
-func (m *PetroglyphMutation) SetPosition(s string) {
-	m.position = &s
-}
-
-// Position returns the value of the "position" field in the mutation.
-func (m *PetroglyphMutation) Position() (r string, exists bool) {
-	v := m.position
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldPosition returns the old "position" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldPosition(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldPosition is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldPosition requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
-	}
-	return oldValue.Position, nil
-}
-
-// ClearPosition clears the value of the "position" field.
-func (m *PetroglyphMutation) ClearPosition() {
-	m.position = nil
-	m.clearedFields[petroglyph.FieldPosition] = struct{}{}
-}
-
-// PositionCleared returns if the "position" field was cleared in this mutation.
-func (m *PetroglyphMutation) PositionCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldPosition]
-	return ok
-}
-
-// ResetPosition resets all changes to the "position" field.
-func (m *PetroglyphMutation) ResetPosition() {
-	m.position = nil
-	delete(m.clearedFields, petroglyph.FieldPosition)
-}
-
-// SetGeometricShape sets the "geometric_shape" field.
-func (m *PetroglyphMutation) SetGeometricShape(s string) {
-	m.geometric_shape = &s
-}
-
-// GeometricShape returns the value of the "geometric_shape" field in the mutation.
-func (m *PetroglyphMutation) GeometricShape() (r string, exists bool) {
-	v := m.geometric_shape
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldGeometricShape returns the old "geometric_shape" field's value of the Petroglyph entity.
-// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PetroglyphMutation) OldGeometricShape(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldGeometricShape is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldGeometricShape requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldGeometricShape: %w", err)
-	}
-	return oldValue.GeometricShape, nil
-}
-
-// ClearGeometricShape clears the value of the "geometric_shape" field.
-func (m *PetroglyphMutation) ClearGeometricShape() {
-	m.geometric_shape = nil
-	m.clearedFields[petroglyph.FieldGeometricShape] = struct{}{}
-}
-
-// GeometricShapeCleared returns if the "geometric_shape" field was cleared in this mutation.
-func (m *PetroglyphMutation) GeometricShapeCleared() bool {
-	_, ok := m.clearedFields[petroglyph.FieldGeometricShape]
-	return ok
-}
-
-// ResetGeometricShape resets all changes to the "geometric_shape" field.
-func (m *PetroglyphMutation) ResetGeometricShape() {
-	m.geometric_shape = nil
-	delete(m.clearedFields, petroglyph.FieldGeometricShape)
 }
 
 // SetHeight sets the "height" field.
@@ -34992,6 +35596,300 @@ func (m *PetroglyphMutation) DimensionsCleared() bool {
 func (m *PetroglyphMutation) ResetDimensions() {
 	m.dimensions = nil
 	delete(m.clearedFields, petroglyph.FieldDimensions)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *PetroglyphMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *PetroglyphMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *PetroglyphMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[petroglyph.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *PetroglyphMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *PetroglyphMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, petroglyph.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *PetroglyphMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *PetroglyphMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *PetroglyphMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[petroglyph.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *PetroglyphMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *PetroglyphMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, petroglyph.FieldDeletedBy)
+}
+
+// SetNumber sets the "number" field.
+func (m *PetroglyphMutation) SetNumber(s string) {
+	m.number = &s
+}
+
+// Number returns the value of the "number" field in the mutation.
+func (m *PetroglyphMutation) Number() (r string, exists bool) {
+	v := m.number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumber returns the old "number" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldNumber(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumber: %w", err)
+	}
+	return oldValue.Number, nil
+}
+
+// ClearNumber clears the value of the "number" field.
+func (m *PetroglyphMutation) ClearNumber() {
+	m.number = nil
+	m.clearedFields[petroglyph.FieldNumber] = struct{}{}
+}
+
+// NumberCleared returns if the "number" field was cleared in this mutation.
+func (m *PetroglyphMutation) NumberCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldNumber]
+	return ok
+}
+
+// ResetNumber resets all changes to the "number" field.
+func (m *PetroglyphMutation) ResetNumber() {
+	m.number = nil
+	delete(m.clearedFields, petroglyph.FieldNumber)
+}
+
+// SetOrientation sets the "orientation" field.
+func (m *PetroglyphMutation) SetOrientation(s string) {
+	m.orientation = &s
+}
+
+// Orientation returns the value of the "orientation" field in the mutation.
+func (m *PetroglyphMutation) Orientation() (r string, exists bool) {
+	v := m.orientation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrientation returns the old "orientation" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldOrientation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrientation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrientation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrientation: %w", err)
+	}
+	return oldValue.Orientation, nil
+}
+
+// ClearOrientation clears the value of the "orientation" field.
+func (m *PetroglyphMutation) ClearOrientation() {
+	m.orientation = nil
+	m.clearedFields[petroglyph.FieldOrientation] = struct{}{}
+}
+
+// OrientationCleared returns if the "orientation" field was cleared in this mutation.
+func (m *PetroglyphMutation) OrientationCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldOrientation]
+	return ok
+}
+
+// ResetOrientation resets all changes to the "orientation" field.
+func (m *PetroglyphMutation) ResetOrientation() {
+	m.orientation = nil
+	delete(m.clearedFields, petroglyph.FieldOrientation)
+}
+
+// SetPosition sets the "position" field.
+func (m *PetroglyphMutation) SetPosition(s string) {
+	m.position = &s
+}
+
+// Position returns the value of the "position" field in the mutation.
+func (m *PetroglyphMutation) Position() (r string, exists bool) {
+	v := m.position
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPosition returns the old "position" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldPosition(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPosition is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPosition requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPosition: %w", err)
+	}
+	return oldValue.Position, nil
+}
+
+// ClearPosition clears the value of the "position" field.
+func (m *PetroglyphMutation) ClearPosition() {
+	m.position = nil
+	m.clearedFields[petroglyph.FieldPosition] = struct{}{}
+}
+
+// PositionCleared returns if the "position" field was cleared in this mutation.
+func (m *PetroglyphMutation) PositionCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldPosition]
+	return ok
+}
+
+// ResetPosition resets all changes to the "position" field.
+func (m *PetroglyphMutation) ResetPosition() {
+	m.position = nil
+	delete(m.clearedFields, petroglyph.FieldPosition)
+}
+
+// SetGeometricShape sets the "geometric_shape" field.
+func (m *PetroglyphMutation) SetGeometricShape(s string) {
+	m.geometric_shape = &s
+}
+
+// GeometricShape returns the value of the "geometric_shape" field in the mutation.
+func (m *PetroglyphMutation) GeometricShape() (r string, exists bool) {
+	v := m.geometric_shape
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGeometricShape returns the old "geometric_shape" field's value of the Petroglyph entity.
+// If the Petroglyph object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetroglyphMutation) OldGeometricShape(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGeometricShape is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGeometricShape requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGeometricShape: %w", err)
+	}
+	return oldValue.GeometricShape, nil
+}
+
+// ClearGeometricShape clears the value of the "geometric_shape" field.
+func (m *PetroglyphMutation) ClearGeometricShape() {
+	m.geometric_shape = nil
+	m.clearedFields[petroglyph.FieldGeometricShape] = struct{}{}
+}
+
+// GeometricShapeCleared returns if the "geometric_shape" field was cleared in this mutation.
+func (m *PetroglyphMutation) GeometricShapeCleared() bool {
+	_, ok := m.clearedFields[petroglyph.FieldGeometricShape]
+	return ok
+}
+
+// ResetGeometricShape resets all changes to the "geometric_shape" field.
+func (m *PetroglyphMutation) ResetGeometricShape() {
+	m.geometric_shape = nil
+	delete(m.clearedFields, petroglyph.FieldGeometricShape)
 }
 
 // SetPlanePreservation sets the "plane_preservation" field.
@@ -35667,6 +36565,15 @@ func (m *PetroglyphMutation) Fields() []string {
 	if m.updated_by != nil {
 		fields = append(fields, petroglyph.FieldUpdatedBy)
 	}
+	if m.dating != nil {
+		fields = append(fields, petroglyph.FieldDating)
+	}
+	if m.dating_start != nil {
+		fields = append(fields, petroglyph.FieldDatingStart)
+	}
+	if m.dating_end != nil {
+		fields = append(fields, petroglyph.FieldDatingEnd)
+	}
 	if m.display_name != nil {
 		fields = append(fields, petroglyph.FieldDisplayName)
 	}
@@ -35688,33 +36595,6 @@ func (m *PetroglyphMutation) Fields() []string {
 	if m.additional_images_urls != nil {
 		fields = append(fields, petroglyph.FieldAdditionalImagesUrls)
 	}
-	if m.deleted_at != nil {
-		fields = append(fields, petroglyph.FieldDeletedAt)
-	}
-	if m.deleted_by != nil {
-		fields = append(fields, petroglyph.FieldDeletedBy)
-	}
-	if m.number != nil {
-		fields = append(fields, petroglyph.FieldNumber)
-	}
-	if m.dating != nil {
-		fields = append(fields, petroglyph.FieldDating)
-	}
-	if m.dating_start != nil {
-		fields = append(fields, petroglyph.FieldDatingStart)
-	}
-	if m.dating_end != nil {
-		fields = append(fields, petroglyph.FieldDatingEnd)
-	}
-	if m.orientation != nil {
-		fields = append(fields, petroglyph.FieldOrientation)
-	}
-	if m.position != nil {
-		fields = append(fields, petroglyph.FieldPosition)
-	}
-	if m.geometric_shape != nil {
-		fields = append(fields, petroglyph.FieldGeometricShape)
-	}
 	if m.height != nil {
 		fields = append(fields, petroglyph.FieldHeight)
 	}
@@ -35735,6 +36615,24 @@ func (m *PetroglyphMutation) Fields() []string {
 	}
 	if m.dimensions != nil {
 		fields = append(fields, petroglyph.FieldDimensions)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, petroglyph.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, petroglyph.FieldDeletedBy)
+	}
+	if m.number != nil {
+		fields = append(fields, petroglyph.FieldNumber)
+	}
+	if m.orientation != nil {
+		fields = append(fields, petroglyph.FieldOrientation)
+	}
+	if m.position != nil {
+		fields = append(fields, petroglyph.FieldPosition)
+	}
+	if m.geometric_shape != nil {
+		fields = append(fields, petroglyph.FieldGeometricShape)
 	}
 	if m.plane_preservation != nil {
 		fields = append(fields, petroglyph.FieldPlanePreservation)
@@ -35767,6 +36665,12 @@ func (m *PetroglyphMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedAt()
 	case petroglyph.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case petroglyph.FieldDating:
+		return m.Dating()
+	case petroglyph.FieldDatingStart:
+		return m.DatingStart()
+	case petroglyph.FieldDatingEnd:
+		return m.DatingEnd()
 	case petroglyph.FieldDisplayName:
 		return m.DisplayName()
 	case petroglyph.FieldAbbreviation:
@@ -35781,24 +36685,6 @@ func (m *PetroglyphMutation) Field(name string) (ent.Value, bool) {
 		return m.PrimaryImageURL()
 	case petroglyph.FieldAdditionalImagesUrls:
 		return m.AdditionalImagesUrls()
-	case petroglyph.FieldDeletedAt:
-		return m.DeletedAt()
-	case petroglyph.FieldDeletedBy:
-		return m.DeletedBy()
-	case petroglyph.FieldNumber:
-		return m.Number()
-	case petroglyph.FieldDating:
-		return m.Dating()
-	case petroglyph.FieldDatingStart:
-		return m.DatingStart()
-	case petroglyph.FieldDatingEnd:
-		return m.DatingEnd()
-	case petroglyph.FieldOrientation:
-		return m.Orientation()
-	case petroglyph.FieldPosition:
-		return m.Position()
-	case petroglyph.FieldGeometricShape:
-		return m.GeometricShape()
 	case petroglyph.FieldHeight:
 		return m.Height()
 	case petroglyph.FieldWidth:
@@ -35813,6 +36699,18 @@ func (m *PetroglyphMutation) Field(name string) (ent.Value, bool) {
 		return m.Weight()
 	case petroglyph.FieldDimensions:
 		return m.Dimensions()
+	case petroglyph.FieldDeletedAt:
+		return m.DeletedAt()
+	case petroglyph.FieldDeletedBy:
+		return m.DeletedBy()
+	case petroglyph.FieldNumber:
+		return m.Number()
+	case petroglyph.FieldOrientation:
+		return m.Orientation()
+	case petroglyph.FieldPosition:
+		return m.Position()
+	case petroglyph.FieldGeometricShape:
+		return m.GeometricShape()
 	case petroglyph.FieldPlanePreservation:
 		return m.PlanePreservation()
 	case petroglyph.FieldPhotoCode:
@@ -35840,6 +36738,12 @@ func (m *PetroglyphMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldUpdatedAt(ctx)
 	case petroglyph.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case petroglyph.FieldDating:
+		return m.OldDating(ctx)
+	case petroglyph.FieldDatingStart:
+		return m.OldDatingStart(ctx)
+	case petroglyph.FieldDatingEnd:
+		return m.OldDatingEnd(ctx)
 	case petroglyph.FieldDisplayName:
 		return m.OldDisplayName(ctx)
 	case petroglyph.FieldAbbreviation:
@@ -35854,24 +36758,6 @@ func (m *PetroglyphMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldPrimaryImageURL(ctx)
 	case petroglyph.FieldAdditionalImagesUrls:
 		return m.OldAdditionalImagesUrls(ctx)
-	case petroglyph.FieldDeletedAt:
-		return m.OldDeletedAt(ctx)
-	case petroglyph.FieldDeletedBy:
-		return m.OldDeletedBy(ctx)
-	case petroglyph.FieldNumber:
-		return m.OldNumber(ctx)
-	case petroglyph.FieldDating:
-		return m.OldDating(ctx)
-	case petroglyph.FieldDatingStart:
-		return m.OldDatingStart(ctx)
-	case petroglyph.FieldDatingEnd:
-		return m.OldDatingEnd(ctx)
-	case petroglyph.FieldOrientation:
-		return m.OldOrientation(ctx)
-	case petroglyph.FieldPosition:
-		return m.OldPosition(ctx)
-	case petroglyph.FieldGeometricShape:
-		return m.OldGeometricShape(ctx)
 	case petroglyph.FieldHeight:
 		return m.OldHeight(ctx)
 	case petroglyph.FieldWidth:
@@ -35886,6 +36772,18 @@ func (m *PetroglyphMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldWeight(ctx)
 	case petroglyph.FieldDimensions:
 		return m.OldDimensions(ctx)
+	case petroglyph.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case petroglyph.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case petroglyph.FieldNumber:
+		return m.OldNumber(ctx)
+	case petroglyph.FieldOrientation:
+		return m.OldOrientation(ctx)
+	case petroglyph.FieldPosition:
+		return m.OldPosition(ctx)
+	case petroglyph.FieldGeometricShape:
+		return m.OldGeometricShape(ctx)
 	case petroglyph.FieldPlanePreservation:
 		return m.OldPlanePreservation(ctx)
 	case petroglyph.FieldPhotoCode:
@@ -35932,6 +36830,27 @@ func (m *PetroglyphMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
+		return nil
+	case petroglyph.FieldDating:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDating(v)
+		return nil
+	case petroglyph.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingStart(v)
+		return nil
+	case petroglyph.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingEnd(v)
 		return nil
 	case petroglyph.FieldDisplayName:
 		v, ok := value.(string)
@@ -35982,69 +36901,6 @@ func (m *PetroglyphMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAdditionalImagesUrls(v)
 		return nil
-	case petroglyph.FieldDeletedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDeletedAt(v)
-		return nil
-	case petroglyph.FieldDeletedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDeletedBy(v)
-		return nil
-	case petroglyph.FieldNumber:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNumber(v)
-		return nil
-	case petroglyph.FieldDating:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDating(v)
-		return nil
-	case petroglyph.FieldDatingStart:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDatingStart(v)
-		return nil
-	case petroglyph.FieldDatingEnd:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetDatingEnd(v)
-		return nil
-	case petroglyph.FieldOrientation:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOrientation(v)
-		return nil
-	case petroglyph.FieldPosition:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetPosition(v)
-		return nil
-	case petroglyph.FieldGeometricShape:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetGeometricShape(v)
-		return nil
 	case petroglyph.FieldHeight:
 		v, ok := value.(float64)
 		if !ok {
@@ -36093,6 +36949,48 @@ func (m *PetroglyphMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDimensions(v)
+		return nil
+	case petroglyph.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case petroglyph.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case petroglyph.FieldNumber:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumber(v)
+		return nil
+	case petroglyph.FieldOrientation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrientation(v)
+		return nil
+	case petroglyph.FieldPosition:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPosition(v)
+		return nil
+	case petroglyph.FieldGeometricShape:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGeometricShape(v)
 		return nil
 	case petroglyph.FieldPlanePreservation:
 		v, ok := value.(string)
@@ -36252,6 +37150,15 @@ func (m *PetroglyphMutation) ClearedFields() []string {
 	if m.FieldCleared(petroglyph.FieldUpdatedBy) {
 		fields = append(fields, petroglyph.FieldUpdatedBy)
 	}
+	if m.FieldCleared(petroglyph.FieldDating) {
+		fields = append(fields, petroglyph.FieldDating)
+	}
+	if m.FieldCleared(petroglyph.FieldDatingStart) {
+		fields = append(fields, petroglyph.FieldDatingStart)
+	}
+	if m.FieldCleared(petroglyph.FieldDatingEnd) {
+		fields = append(fields, petroglyph.FieldDatingEnd)
+	}
 	if m.FieldCleared(petroglyph.FieldDisplayName) {
 		fields = append(fields, petroglyph.FieldDisplayName)
 	}
@@ -36273,33 +37180,6 @@ func (m *PetroglyphMutation) ClearedFields() []string {
 	if m.FieldCleared(petroglyph.FieldAdditionalImagesUrls) {
 		fields = append(fields, petroglyph.FieldAdditionalImagesUrls)
 	}
-	if m.FieldCleared(petroglyph.FieldDeletedAt) {
-		fields = append(fields, petroglyph.FieldDeletedAt)
-	}
-	if m.FieldCleared(petroglyph.FieldDeletedBy) {
-		fields = append(fields, petroglyph.FieldDeletedBy)
-	}
-	if m.FieldCleared(petroglyph.FieldNumber) {
-		fields = append(fields, petroglyph.FieldNumber)
-	}
-	if m.FieldCleared(petroglyph.FieldDating) {
-		fields = append(fields, petroglyph.FieldDating)
-	}
-	if m.FieldCleared(petroglyph.FieldDatingStart) {
-		fields = append(fields, petroglyph.FieldDatingStart)
-	}
-	if m.FieldCleared(petroglyph.FieldDatingEnd) {
-		fields = append(fields, petroglyph.FieldDatingEnd)
-	}
-	if m.FieldCleared(petroglyph.FieldOrientation) {
-		fields = append(fields, petroglyph.FieldOrientation)
-	}
-	if m.FieldCleared(petroglyph.FieldPosition) {
-		fields = append(fields, petroglyph.FieldPosition)
-	}
-	if m.FieldCleared(petroglyph.FieldGeometricShape) {
-		fields = append(fields, petroglyph.FieldGeometricShape)
-	}
 	if m.FieldCleared(petroglyph.FieldHeight) {
 		fields = append(fields, petroglyph.FieldHeight)
 	}
@@ -36320,6 +37200,24 @@ func (m *PetroglyphMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(petroglyph.FieldDimensions) {
 		fields = append(fields, petroglyph.FieldDimensions)
+	}
+	if m.FieldCleared(petroglyph.FieldDeletedAt) {
+		fields = append(fields, petroglyph.FieldDeletedAt)
+	}
+	if m.FieldCleared(petroglyph.FieldDeletedBy) {
+		fields = append(fields, petroglyph.FieldDeletedBy)
+	}
+	if m.FieldCleared(petroglyph.FieldNumber) {
+		fields = append(fields, petroglyph.FieldNumber)
+	}
+	if m.FieldCleared(petroglyph.FieldOrientation) {
+		fields = append(fields, petroglyph.FieldOrientation)
+	}
+	if m.FieldCleared(petroglyph.FieldPosition) {
+		fields = append(fields, petroglyph.FieldPosition)
+	}
+	if m.FieldCleared(petroglyph.FieldGeometricShape) {
+		fields = append(fields, petroglyph.FieldGeometricShape)
 	}
 	if m.FieldCleared(petroglyph.FieldPlanePreservation) {
 		fields = append(fields, petroglyph.FieldPlanePreservation)
@@ -36356,6 +37254,15 @@ func (m *PetroglyphMutation) ClearField(name string) error {
 	case petroglyph.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
+	case petroglyph.FieldDating:
+		m.ClearDating()
+		return nil
+	case petroglyph.FieldDatingStart:
+		m.ClearDatingStart()
+		return nil
+	case petroglyph.FieldDatingEnd:
+		m.ClearDatingEnd()
+		return nil
 	case petroglyph.FieldDisplayName:
 		m.ClearDisplayName()
 		return nil
@@ -36377,33 +37284,6 @@ func (m *PetroglyphMutation) ClearField(name string) error {
 	case petroglyph.FieldAdditionalImagesUrls:
 		m.ClearAdditionalImagesUrls()
 		return nil
-	case petroglyph.FieldDeletedAt:
-		m.ClearDeletedAt()
-		return nil
-	case petroglyph.FieldDeletedBy:
-		m.ClearDeletedBy()
-		return nil
-	case petroglyph.FieldNumber:
-		m.ClearNumber()
-		return nil
-	case petroglyph.FieldDating:
-		m.ClearDating()
-		return nil
-	case petroglyph.FieldDatingStart:
-		m.ClearDatingStart()
-		return nil
-	case petroglyph.FieldDatingEnd:
-		m.ClearDatingEnd()
-		return nil
-	case petroglyph.FieldOrientation:
-		m.ClearOrientation()
-		return nil
-	case petroglyph.FieldPosition:
-		m.ClearPosition()
-		return nil
-	case petroglyph.FieldGeometricShape:
-		m.ClearGeometricShape()
-		return nil
 	case petroglyph.FieldHeight:
 		m.ClearHeight()
 		return nil
@@ -36424,6 +37304,24 @@ func (m *PetroglyphMutation) ClearField(name string) error {
 		return nil
 	case petroglyph.FieldDimensions:
 		m.ClearDimensions()
+		return nil
+	case petroglyph.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case petroglyph.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case petroglyph.FieldNumber:
+		m.ClearNumber()
+		return nil
+	case petroglyph.FieldOrientation:
+		m.ClearOrientation()
+		return nil
+	case petroglyph.FieldPosition:
+		m.ClearPosition()
+		return nil
+	case petroglyph.FieldGeometricShape:
+		m.ClearGeometricShape()
 		return nil
 	case petroglyph.FieldPlanePreservation:
 		m.ClearPlanePreservation()
@@ -36460,6 +37358,15 @@ func (m *PetroglyphMutation) ResetField(name string) error {
 	case petroglyph.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
+	case petroglyph.FieldDating:
+		m.ResetDating()
+		return nil
+	case petroglyph.FieldDatingStart:
+		m.ResetDatingStart()
+		return nil
+	case petroglyph.FieldDatingEnd:
+		m.ResetDatingEnd()
+		return nil
 	case petroglyph.FieldDisplayName:
 		m.ResetDisplayName()
 		return nil
@@ -36481,33 +37388,6 @@ func (m *PetroglyphMutation) ResetField(name string) error {
 	case petroglyph.FieldAdditionalImagesUrls:
 		m.ResetAdditionalImagesUrls()
 		return nil
-	case petroglyph.FieldDeletedAt:
-		m.ResetDeletedAt()
-		return nil
-	case petroglyph.FieldDeletedBy:
-		m.ResetDeletedBy()
-		return nil
-	case petroglyph.FieldNumber:
-		m.ResetNumber()
-		return nil
-	case petroglyph.FieldDating:
-		m.ResetDating()
-		return nil
-	case petroglyph.FieldDatingStart:
-		m.ResetDatingStart()
-		return nil
-	case petroglyph.FieldDatingEnd:
-		m.ResetDatingEnd()
-		return nil
-	case petroglyph.FieldOrientation:
-		m.ResetOrientation()
-		return nil
-	case petroglyph.FieldPosition:
-		m.ResetPosition()
-		return nil
-	case petroglyph.FieldGeometricShape:
-		m.ResetGeometricShape()
-		return nil
 	case petroglyph.FieldHeight:
 		m.ResetHeight()
 		return nil
@@ -36528,6 +37408,24 @@ func (m *PetroglyphMutation) ResetField(name string) error {
 		return nil
 	case petroglyph.FieldDimensions:
 		m.ResetDimensions()
+		return nil
+	case petroglyph.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case petroglyph.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case petroglyph.FieldNumber:
+		m.ResetNumber()
+		return nil
+	case petroglyph.FieldOrientation:
+		m.ResetOrientation()
+		return nil
+	case petroglyph.FieldPosition:
+		m.ResetPosition()
+		return nil
+	case petroglyph.FieldGeometricShape:
+		m.ResetGeometricShape()
 		return nil
 	case petroglyph.FieldPlanePreservation:
 		m.ResetPlanePreservation()

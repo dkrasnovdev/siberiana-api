@@ -84,6 +84,80 @@ func (au *ArtUpdate) ClearUpdatedBy() *ArtUpdate {
 	return au
 }
 
+// SetDating sets the "dating" field.
+func (au *ArtUpdate) SetDating(s string) *ArtUpdate {
+	au.mutation.SetDating(s)
+	return au
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableDating(s *string) *ArtUpdate {
+	if s != nil {
+		au.SetDating(*s)
+	}
+	return au
+}
+
+// ClearDating clears the value of the "dating" field.
+func (au *ArtUpdate) ClearDating() *ArtUpdate {
+	au.mutation.ClearDating()
+	return au
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (au *ArtUpdate) SetDatingStart(i int) *ArtUpdate {
+	au.mutation.ResetDatingStart()
+	au.mutation.SetDatingStart(i)
+	return au
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableDatingStart(i *int) *ArtUpdate {
+	if i != nil {
+		au.SetDatingStart(*i)
+	}
+	return au
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (au *ArtUpdate) AddDatingStart(i int) *ArtUpdate {
+	au.mutation.AddDatingStart(i)
+	return au
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (au *ArtUpdate) ClearDatingStart() *ArtUpdate {
+	au.mutation.ClearDatingStart()
+	return au
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (au *ArtUpdate) SetDatingEnd(i int) *ArtUpdate {
+	au.mutation.ResetDatingEnd()
+	au.mutation.SetDatingEnd(i)
+	return au
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableDatingEnd(i *int) *ArtUpdate {
+	if i != nil {
+		au.SetDatingEnd(*i)
+	}
+	return au
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (au *ArtUpdate) AddDatingEnd(i int) *ArtUpdate {
+	au.mutation.AddDatingEnd(i)
+	return au
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (au *ArtUpdate) ClearDatingEnd() *ArtUpdate {
+	au.mutation.ClearDatingEnd()
+	return au
+}
+
 // SetDisplayName sets the "display_name" field.
 func (au *ArtUpdate) SetDisplayName(s string) *ArtUpdate {
 	au.mutation.SetDisplayName(s)
@@ -164,6 +238,26 @@ func (au *ArtUpdate) ClearExternalLink() *ArtUpdate {
 	return au
 }
 
+// SetStatus sets the "status" field.
+func (au *ArtUpdate) SetStatus(a art.Status) *ArtUpdate {
+	au.mutation.SetStatus(a)
+	return au
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableStatus(a *art.Status) *ArtUpdate {
+	if a != nil {
+		au.SetStatus(*a)
+	}
+	return au
+}
+
+// ClearStatus clears the value of the "status" field.
+func (au *ArtUpdate) ClearStatus() *ArtUpdate {
+	au.mutation.ClearStatus()
+	return au
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (au *ArtUpdate) SetPrimaryImageURL(s string) *ArtUpdate {
 	au.mutation.SetPrimaryImageURL(s)
@@ -202,43 +296,158 @@ func (au *ArtUpdate) ClearAdditionalImagesUrls() *ArtUpdate {
 	return au
 }
 
-// SetNumber sets the "number" field.
-func (au *ArtUpdate) SetNumber(s string) *ArtUpdate {
-	au.mutation.SetNumber(s)
+// SetHeight sets the "height" field.
+func (au *ArtUpdate) SetHeight(f float64) *ArtUpdate {
+	au.mutation.ResetHeight()
+	au.mutation.SetHeight(f)
 	return au
 }
 
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (au *ArtUpdate) SetNillableNumber(s *string) *ArtUpdate {
-	if s != nil {
-		au.SetNumber(*s)
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableHeight(f *float64) *ArtUpdate {
+	if f != nil {
+		au.SetHeight(*f)
 	}
 	return au
 }
 
-// ClearNumber clears the value of the "number" field.
-func (au *ArtUpdate) ClearNumber() *ArtUpdate {
-	au.mutation.ClearNumber()
+// AddHeight adds f to the "height" field.
+func (au *ArtUpdate) AddHeight(f float64) *ArtUpdate {
+	au.mutation.AddHeight(f)
 	return au
 }
 
-// SetDating sets the "dating" field.
-func (au *ArtUpdate) SetDating(s string) *ArtUpdate {
-	au.mutation.SetDating(s)
+// ClearHeight clears the value of the "height" field.
+func (au *ArtUpdate) ClearHeight() *ArtUpdate {
+	au.mutation.ClearHeight()
 	return au
 }
 
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (au *ArtUpdate) SetNillableDating(s *string) *ArtUpdate {
-	if s != nil {
-		au.SetDating(*s)
+// SetWidth sets the "width" field.
+func (au *ArtUpdate) SetWidth(f float64) *ArtUpdate {
+	au.mutation.ResetWidth()
+	au.mutation.SetWidth(f)
+	return au
+}
+
+// SetNillableWidth sets the "width" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableWidth(f *float64) *ArtUpdate {
+	if f != nil {
+		au.SetWidth(*f)
 	}
 	return au
 }
 
-// ClearDating clears the value of the "dating" field.
-func (au *ArtUpdate) ClearDating() *ArtUpdate {
-	au.mutation.ClearDating()
+// AddWidth adds f to the "width" field.
+func (au *ArtUpdate) AddWidth(f float64) *ArtUpdate {
+	au.mutation.AddWidth(f)
+	return au
+}
+
+// ClearWidth clears the value of the "width" field.
+func (au *ArtUpdate) ClearWidth() *ArtUpdate {
+	au.mutation.ClearWidth()
+	return au
+}
+
+// SetLength sets the "length" field.
+func (au *ArtUpdate) SetLength(f float64) *ArtUpdate {
+	au.mutation.ResetLength()
+	au.mutation.SetLength(f)
+	return au
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableLength(f *float64) *ArtUpdate {
+	if f != nil {
+		au.SetLength(*f)
+	}
+	return au
+}
+
+// AddLength adds f to the "length" field.
+func (au *ArtUpdate) AddLength(f float64) *ArtUpdate {
+	au.mutation.AddLength(f)
+	return au
+}
+
+// ClearLength clears the value of the "length" field.
+func (au *ArtUpdate) ClearLength() *ArtUpdate {
+	au.mutation.ClearLength()
+	return au
+}
+
+// SetDepth sets the "depth" field.
+func (au *ArtUpdate) SetDepth(f float64) *ArtUpdate {
+	au.mutation.ResetDepth()
+	au.mutation.SetDepth(f)
+	return au
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableDepth(f *float64) *ArtUpdate {
+	if f != nil {
+		au.SetDepth(*f)
+	}
+	return au
+}
+
+// AddDepth adds f to the "depth" field.
+func (au *ArtUpdate) AddDepth(f float64) *ArtUpdate {
+	au.mutation.AddDepth(f)
+	return au
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (au *ArtUpdate) ClearDepth() *ArtUpdate {
+	au.mutation.ClearDepth()
+	return au
+}
+
+// SetDiameter sets the "diameter" field.
+func (au *ArtUpdate) SetDiameter(f float64) *ArtUpdate {
+	au.mutation.ResetDiameter()
+	au.mutation.SetDiameter(f)
+	return au
+}
+
+// SetNillableDiameter sets the "diameter" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableDiameter(f *float64) *ArtUpdate {
+	if f != nil {
+		au.SetDiameter(*f)
+	}
+	return au
+}
+
+// AddDiameter adds f to the "diameter" field.
+func (au *ArtUpdate) AddDiameter(f float64) *ArtUpdate {
+	au.mutation.AddDiameter(f)
+	return au
+}
+
+// ClearDiameter clears the value of the "diameter" field.
+func (au *ArtUpdate) ClearDiameter() *ArtUpdate {
+	au.mutation.ClearDiameter()
+	return au
+}
+
+// SetWeight sets the "weight" field.
+func (au *ArtUpdate) SetWeight(s string) *ArtUpdate {
+	au.mutation.SetWeight(s)
+	return au
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableWeight(s *string) *ArtUpdate {
+	if s != nil {
+		au.SetWeight(*s)
+	}
+	return au
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (au *ArtUpdate) ClearWeight() *ArtUpdate {
+	au.mutation.ClearWeight()
 	return au
 }
 
@@ -259,6 +468,26 @@ func (au *ArtUpdate) SetNillableDimensions(s *string) *ArtUpdate {
 // ClearDimensions clears the value of the "dimensions" field.
 func (au *ArtUpdate) ClearDimensions() *ArtUpdate {
 	au.mutation.ClearDimensions()
+	return au
+}
+
+// SetNumber sets the "number" field.
+func (au *ArtUpdate) SetNumber(s string) *ArtUpdate {
+	au.mutation.SetNumber(s)
+	return au
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (au *ArtUpdate) SetNillableNumber(s *string) *ArtUpdate {
+	if s != nil {
+		au.SetNumber(*s)
+	}
+	return au
+}
+
+// ClearNumber clears the value of the "number" field.
+func (au *ArtUpdate) ClearNumber() *ArtUpdate {
+	au.mutation.ClearNumber()
 	return au
 }
 
@@ -561,6 +790,11 @@ func (au *ArtUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (au *ArtUpdate) check() error {
+	if v, ok := au.mutation.Status(); ok {
+		if err := art.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Art.status": %w`, err)}
+		}
+	}
 	if _, ok := au.mutation.CollectionID(); au.mutation.CollectionCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "Art.collection"`)
 	}
@@ -594,6 +828,30 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.UpdatedByCleared() {
 		_spec.ClearField(art.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := au.mutation.Dating(); ok {
+		_spec.SetField(art.FieldDating, field.TypeString, value)
+	}
+	if au.mutation.DatingCleared() {
+		_spec.ClearField(art.FieldDating, field.TypeString)
+	}
+	if value, ok := au.mutation.DatingStart(); ok {
+		_spec.SetField(art.FieldDatingStart, field.TypeInt, value)
+	}
+	if value, ok := au.mutation.AddedDatingStart(); ok {
+		_spec.AddField(art.FieldDatingStart, field.TypeInt, value)
+	}
+	if au.mutation.DatingStartCleared() {
+		_spec.ClearField(art.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := au.mutation.DatingEnd(); ok {
+		_spec.SetField(art.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := au.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(art.FieldDatingEnd, field.TypeInt, value)
+	}
+	if au.mutation.DatingEndCleared() {
+		_spec.ClearField(art.FieldDatingEnd, field.TypeInt)
+	}
 	if value, ok := au.mutation.DisplayName(); ok {
 		_spec.SetField(art.FieldDisplayName, field.TypeString, value)
 	}
@@ -618,6 +876,12 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.ExternalLinkCleared() {
 		_spec.ClearField(art.FieldExternalLink, field.TypeString)
 	}
+	if value, ok := au.mutation.Status(); ok {
+		_spec.SetField(art.FieldStatus, field.TypeEnum, value)
+	}
+	if au.mutation.StatusCleared() {
+		_spec.ClearField(art.FieldStatus, field.TypeEnum)
+	}
 	if value, ok := au.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(art.FieldPrimaryImageURL, field.TypeString, value)
 	}
@@ -635,23 +899,68 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if au.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(art.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
-	if value, ok := au.mutation.Number(); ok {
-		_spec.SetField(art.FieldNumber, field.TypeString, value)
+	if value, ok := au.mutation.Height(); ok {
+		_spec.SetField(art.FieldHeight, field.TypeFloat64, value)
 	}
-	if au.mutation.NumberCleared() {
-		_spec.ClearField(art.FieldNumber, field.TypeString)
+	if value, ok := au.mutation.AddedHeight(); ok {
+		_spec.AddField(art.FieldHeight, field.TypeFloat64, value)
 	}
-	if value, ok := au.mutation.Dating(); ok {
-		_spec.SetField(art.FieldDating, field.TypeString, value)
+	if au.mutation.HeightCleared() {
+		_spec.ClearField(art.FieldHeight, field.TypeFloat64)
 	}
-	if au.mutation.DatingCleared() {
-		_spec.ClearField(art.FieldDating, field.TypeString)
+	if value, ok := au.mutation.Width(); ok {
+		_spec.SetField(art.FieldWidth, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedWidth(); ok {
+		_spec.AddField(art.FieldWidth, field.TypeFloat64, value)
+	}
+	if au.mutation.WidthCleared() {
+		_spec.ClearField(art.FieldWidth, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Length(); ok {
+		_spec.SetField(art.FieldLength, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedLength(); ok {
+		_spec.AddField(art.FieldLength, field.TypeFloat64, value)
+	}
+	if au.mutation.LengthCleared() {
+		_spec.ClearField(art.FieldLength, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Depth(); ok {
+		_spec.SetField(art.FieldDepth, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedDepth(); ok {
+		_spec.AddField(art.FieldDepth, field.TypeFloat64, value)
+	}
+	if au.mutation.DepthCleared() {
+		_spec.ClearField(art.FieldDepth, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Diameter(); ok {
+		_spec.SetField(art.FieldDiameter, field.TypeFloat64, value)
+	}
+	if value, ok := au.mutation.AddedDiameter(); ok {
+		_spec.AddField(art.FieldDiameter, field.TypeFloat64, value)
+	}
+	if au.mutation.DiameterCleared() {
+		_spec.ClearField(art.FieldDiameter, field.TypeFloat64)
+	}
+	if value, ok := au.mutation.Weight(); ok {
+		_spec.SetField(art.FieldWeight, field.TypeString, value)
+	}
+	if au.mutation.WeightCleared() {
+		_spec.ClearField(art.FieldWeight, field.TypeString)
 	}
 	if value, ok := au.mutation.Dimensions(); ok {
 		_spec.SetField(art.FieldDimensions, field.TypeString, value)
 	}
 	if au.mutation.DimensionsCleared() {
 		_spec.ClearField(art.FieldDimensions, field.TypeString)
+	}
+	if value, ok := au.mutation.Number(); ok {
+		_spec.SetField(art.FieldNumber, field.TypeString, value)
+	}
+	if au.mutation.NumberCleared() {
+		_spec.ClearField(art.FieldNumber, field.TypeString)
 	}
 	if au.mutation.AuthorCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1028,6 +1337,80 @@ func (auo *ArtUpdateOne) ClearUpdatedBy() *ArtUpdateOne {
 	return auo
 }
 
+// SetDating sets the "dating" field.
+func (auo *ArtUpdateOne) SetDating(s string) *ArtUpdateOne {
+	auo.mutation.SetDating(s)
+	return auo
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableDating(s *string) *ArtUpdateOne {
+	if s != nil {
+		auo.SetDating(*s)
+	}
+	return auo
+}
+
+// ClearDating clears the value of the "dating" field.
+func (auo *ArtUpdateOne) ClearDating() *ArtUpdateOne {
+	auo.mutation.ClearDating()
+	return auo
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (auo *ArtUpdateOne) SetDatingStart(i int) *ArtUpdateOne {
+	auo.mutation.ResetDatingStart()
+	auo.mutation.SetDatingStart(i)
+	return auo
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableDatingStart(i *int) *ArtUpdateOne {
+	if i != nil {
+		auo.SetDatingStart(*i)
+	}
+	return auo
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (auo *ArtUpdateOne) AddDatingStart(i int) *ArtUpdateOne {
+	auo.mutation.AddDatingStart(i)
+	return auo
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (auo *ArtUpdateOne) ClearDatingStart() *ArtUpdateOne {
+	auo.mutation.ClearDatingStart()
+	return auo
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (auo *ArtUpdateOne) SetDatingEnd(i int) *ArtUpdateOne {
+	auo.mutation.ResetDatingEnd()
+	auo.mutation.SetDatingEnd(i)
+	return auo
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableDatingEnd(i *int) *ArtUpdateOne {
+	if i != nil {
+		auo.SetDatingEnd(*i)
+	}
+	return auo
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (auo *ArtUpdateOne) AddDatingEnd(i int) *ArtUpdateOne {
+	auo.mutation.AddDatingEnd(i)
+	return auo
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (auo *ArtUpdateOne) ClearDatingEnd() *ArtUpdateOne {
+	auo.mutation.ClearDatingEnd()
+	return auo
+}
+
 // SetDisplayName sets the "display_name" field.
 func (auo *ArtUpdateOne) SetDisplayName(s string) *ArtUpdateOne {
 	auo.mutation.SetDisplayName(s)
@@ -1108,6 +1491,26 @@ func (auo *ArtUpdateOne) ClearExternalLink() *ArtUpdateOne {
 	return auo
 }
 
+// SetStatus sets the "status" field.
+func (auo *ArtUpdateOne) SetStatus(a art.Status) *ArtUpdateOne {
+	auo.mutation.SetStatus(a)
+	return auo
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableStatus(a *art.Status) *ArtUpdateOne {
+	if a != nil {
+		auo.SetStatus(*a)
+	}
+	return auo
+}
+
+// ClearStatus clears the value of the "status" field.
+func (auo *ArtUpdateOne) ClearStatus() *ArtUpdateOne {
+	auo.mutation.ClearStatus()
+	return auo
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (auo *ArtUpdateOne) SetPrimaryImageURL(s string) *ArtUpdateOne {
 	auo.mutation.SetPrimaryImageURL(s)
@@ -1146,43 +1549,158 @@ func (auo *ArtUpdateOne) ClearAdditionalImagesUrls() *ArtUpdateOne {
 	return auo
 }
 
-// SetNumber sets the "number" field.
-func (auo *ArtUpdateOne) SetNumber(s string) *ArtUpdateOne {
-	auo.mutation.SetNumber(s)
+// SetHeight sets the "height" field.
+func (auo *ArtUpdateOne) SetHeight(f float64) *ArtUpdateOne {
+	auo.mutation.ResetHeight()
+	auo.mutation.SetHeight(f)
 	return auo
 }
 
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (auo *ArtUpdateOne) SetNillableNumber(s *string) *ArtUpdateOne {
-	if s != nil {
-		auo.SetNumber(*s)
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableHeight(f *float64) *ArtUpdateOne {
+	if f != nil {
+		auo.SetHeight(*f)
 	}
 	return auo
 }
 
-// ClearNumber clears the value of the "number" field.
-func (auo *ArtUpdateOne) ClearNumber() *ArtUpdateOne {
-	auo.mutation.ClearNumber()
+// AddHeight adds f to the "height" field.
+func (auo *ArtUpdateOne) AddHeight(f float64) *ArtUpdateOne {
+	auo.mutation.AddHeight(f)
 	return auo
 }
 
-// SetDating sets the "dating" field.
-func (auo *ArtUpdateOne) SetDating(s string) *ArtUpdateOne {
-	auo.mutation.SetDating(s)
+// ClearHeight clears the value of the "height" field.
+func (auo *ArtUpdateOne) ClearHeight() *ArtUpdateOne {
+	auo.mutation.ClearHeight()
 	return auo
 }
 
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (auo *ArtUpdateOne) SetNillableDating(s *string) *ArtUpdateOne {
-	if s != nil {
-		auo.SetDating(*s)
+// SetWidth sets the "width" field.
+func (auo *ArtUpdateOne) SetWidth(f float64) *ArtUpdateOne {
+	auo.mutation.ResetWidth()
+	auo.mutation.SetWidth(f)
+	return auo
+}
+
+// SetNillableWidth sets the "width" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableWidth(f *float64) *ArtUpdateOne {
+	if f != nil {
+		auo.SetWidth(*f)
 	}
 	return auo
 }
 
-// ClearDating clears the value of the "dating" field.
-func (auo *ArtUpdateOne) ClearDating() *ArtUpdateOne {
-	auo.mutation.ClearDating()
+// AddWidth adds f to the "width" field.
+func (auo *ArtUpdateOne) AddWidth(f float64) *ArtUpdateOne {
+	auo.mutation.AddWidth(f)
+	return auo
+}
+
+// ClearWidth clears the value of the "width" field.
+func (auo *ArtUpdateOne) ClearWidth() *ArtUpdateOne {
+	auo.mutation.ClearWidth()
+	return auo
+}
+
+// SetLength sets the "length" field.
+func (auo *ArtUpdateOne) SetLength(f float64) *ArtUpdateOne {
+	auo.mutation.ResetLength()
+	auo.mutation.SetLength(f)
+	return auo
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableLength(f *float64) *ArtUpdateOne {
+	if f != nil {
+		auo.SetLength(*f)
+	}
+	return auo
+}
+
+// AddLength adds f to the "length" field.
+func (auo *ArtUpdateOne) AddLength(f float64) *ArtUpdateOne {
+	auo.mutation.AddLength(f)
+	return auo
+}
+
+// ClearLength clears the value of the "length" field.
+func (auo *ArtUpdateOne) ClearLength() *ArtUpdateOne {
+	auo.mutation.ClearLength()
+	return auo
+}
+
+// SetDepth sets the "depth" field.
+func (auo *ArtUpdateOne) SetDepth(f float64) *ArtUpdateOne {
+	auo.mutation.ResetDepth()
+	auo.mutation.SetDepth(f)
+	return auo
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableDepth(f *float64) *ArtUpdateOne {
+	if f != nil {
+		auo.SetDepth(*f)
+	}
+	return auo
+}
+
+// AddDepth adds f to the "depth" field.
+func (auo *ArtUpdateOne) AddDepth(f float64) *ArtUpdateOne {
+	auo.mutation.AddDepth(f)
+	return auo
+}
+
+// ClearDepth clears the value of the "depth" field.
+func (auo *ArtUpdateOne) ClearDepth() *ArtUpdateOne {
+	auo.mutation.ClearDepth()
+	return auo
+}
+
+// SetDiameter sets the "diameter" field.
+func (auo *ArtUpdateOne) SetDiameter(f float64) *ArtUpdateOne {
+	auo.mutation.ResetDiameter()
+	auo.mutation.SetDiameter(f)
+	return auo
+}
+
+// SetNillableDiameter sets the "diameter" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableDiameter(f *float64) *ArtUpdateOne {
+	if f != nil {
+		auo.SetDiameter(*f)
+	}
+	return auo
+}
+
+// AddDiameter adds f to the "diameter" field.
+func (auo *ArtUpdateOne) AddDiameter(f float64) *ArtUpdateOne {
+	auo.mutation.AddDiameter(f)
+	return auo
+}
+
+// ClearDiameter clears the value of the "diameter" field.
+func (auo *ArtUpdateOne) ClearDiameter() *ArtUpdateOne {
+	auo.mutation.ClearDiameter()
+	return auo
+}
+
+// SetWeight sets the "weight" field.
+func (auo *ArtUpdateOne) SetWeight(s string) *ArtUpdateOne {
+	auo.mutation.SetWeight(s)
+	return auo
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableWeight(s *string) *ArtUpdateOne {
+	if s != nil {
+		auo.SetWeight(*s)
+	}
+	return auo
+}
+
+// ClearWeight clears the value of the "weight" field.
+func (auo *ArtUpdateOne) ClearWeight() *ArtUpdateOne {
+	auo.mutation.ClearWeight()
 	return auo
 }
 
@@ -1203,6 +1721,26 @@ func (auo *ArtUpdateOne) SetNillableDimensions(s *string) *ArtUpdateOne {
 // ClearDimensions clears the value of the "dimensions" field.
 func (auo *ArtUpdateOne) ClearDimensions() *ArtUpdateOne {
 	auo.mutation.ClearDimensions()
+	return auo
+}
+
+// SetNumber sets the "number" field.
+func (auo *ArtUpdateOne) SetNumber(s string) *ArtUpdateOne {
+	auo.mutation.SetNumber(s)
+	return auo
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (auo *ArtUpdateOne) SetNillableNumber(s *string) *ArtUpdateOne {
+	if s != nil {
+		auo.SetNumber(*s)
+	}
+	return auo
+}
+
+// ClearNumber clears the value of the "number" field.
+func (auo *ArtUpdateOne) ClearNumber() *ArtUpdateOne {
+	auo.mutation.ClearNumber()
 	return auo
 }
 
@@ -1518,6 +2056,11 @@ func (auo *ArtUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (auo *ArtUpdateOne) check() error {
+	if v, ok := auo.mutation.Status(); ok {
+		if err := art.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Art.status": %w`, err)}
+		}
+	}
 	if _, ok := auo.mutation.CollectionID(); auo.mutation.CollectionCleared() && !ok {
 		return errors.New(`ent: clearing a required unique edge "Art.collection"`)
 	}
@@ -1568,6 +2111,30 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 	if auo.mutation.UpdatedByCleared() {
 		_spec.ClearField(art.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := auo.mutation.Dating(); ok {
+		_spec.SetField(art.FieldDating, field.TypeString, value)
+	}
+	if auo.mutation.DatingCleared() {
+		_spec.ClearField(art.FieldDating, field.TypeString)
+	}
+	if value, ok := auo.mutation.DatingStart(); ok {
+		_spec.SetField(art.FieldDatingStart, field.TypeInt, value)
+	}
+	if value, ok := auo.mutation.AddedDatingStart(); ok {
+		_spec.AddField(art.FieldDatingStart, field.TypeInt, value)
+	}
+	if auo.mutation.DatingStartCleared() {
+		_spec.ClearField(art.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := auo.mutation.DatingEnd(); ok {
+		_spec.SetField(art.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := auo.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(art.FieldDatingEnd, field.TypeInt, value)
+	}
+	if auo.mutation.DatingEndCleared() {
+		_spec.ClearField(art.FieldDatingEnd, field.TypeInt)
+	}
 	if value, ok := auo.mutation.DisplayName(); ok {
 		_spec.SetField(art.FieldDisplayName, field.TypeString, value)
 	}
@@ -1592,6 +2159,12 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 	if auo.mutation.ExternalLinkCleared() {
 		_spec.ClearField(art.FieldExternalLink, field.TypeString)
 	}
+	if value, ok := auo.mutation.Status(); ok {
+		_spec.SetField(art.FieldStatus, field.TypeEnum, value)
+	}
+	if auo.mutation.StatusCleared() {
+		_spec.ClearField(art.FieldStatus, field.TypeEnum)
+	}
 	if value, ok := auo.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(art.FieldPrimaryImageURL, field.TypeString, value)
 	}
@@ -1609,23 +2182,68 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 	if auo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(art.FieldAdditionalImagesUrls, field.TypeJSON)
 	}
-	if value, ok := auo.mutation.Number(); ok {
-		_spec.SetField(art.FieldNumber, field.TypeString, value)
+	if value, ok := auo.mutation.Height(); ok {
+		_spec.SetField(art.FieldHeight, field.TypeFloat64, value)
 	}
-	if auo.mutation.NumberCleared() {
-		_spec.ClearField(art.FieldNumber, field.TypeString)
+	if value, ok := auo.mutation.AddedHeight(); ok {
+		_spec.AddField(art.FieldHeight, field.TypeFloat64, value)
 	}
-	if value, ok := auo.mutation.Dating(); ok {
-		_spec.SetField(art.FieldDating, field.TypeString, value)
+	if auo.mutation.HeightCleared() {
+		_spec.ClearField(art.FieldHeight, field.TypeFloat64)
 	}
-	if auo.mutation.DatingCleared() {
-		_spec.ClearField(art.FieldDating, field.TypeString)
+	if value, ok := auo.mutation.Width(); ok {
+		_spec.SetField(art.FieldWidth, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedWidth(); ok {
+		_spec.AddField(art.FieldWidth, field.TypeFloat64, value)
+	}
+	if auo.mutation.WidthCleared() {
+		_spec.ClearField(art.FieldWidth, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Length(); ok {
+		_spec.SetField(art.FieldLength, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedLength(); ok {
+		_spec.AddField(art.FieldLength, field.TypeFloat64, value)
+	}
+	if auo.mutation.LengthCleared() {
+		_spec.ClearField(art.FieldLength, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Depth(); ok {
+		_spec.SetField(art.FieldDepth, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedDepth(); ok {
+		_spec.AddField(art.FieldDepth, field.TypeFloat64, value)
+	}
+	if auo.mutation.DepthCleared() {
+		_spec.ClearField(art.FieldDepth, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Diameter(); ok {
+		_spec.SetField(art.FieldDiameter, field.TypeFloat64, value)
+	}
+	if value, ok := auo.mutation.AddedDiameter(); ok {
+		_spec.AddField(art.FieldDiameter, field.TypeFloat64, value)
+	}
+	if auo.mutation.DiameterCleared() {
+		_spec.ClearField(art.FieldDiameter, field.TypeFloat64)
+	}
+	if value, ok := auo.mutation.Weight(); ok {
+		_spec.SetField(art.FieldWeight, field.TypeString, value)
+	}
+	if auo.mutation.WeightCleared() {
+		_spec.ClearField(art.FieldWeight, field.TypeString)
 	}
 	if value, ok := auo.mutation.Dimensions(); ok {
 		_spec.SetField(art.FieldDimensions, field.TypeString, value)
 	}
 	if auo.mutation.DimensionsCleared() {
 		_spec.ClearField(art.FieldDimensions, field.TypeString)
+	}
+	if value, ok := auo.mutation.Number(); ok {
+		_spec.SetField(art.FieldNumber, field.TypeString, value)
+	}
+	if auo.mutation.NumberCleared() {
+		_spec.ClearField(art.FieldNumber, field.TypeString)
 	}
 	if auo.mutation.AuthorCleared() {
 		edge := &sqlgraph.EdgeSpec{

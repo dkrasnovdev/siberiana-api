@@ -26,6 +26,12 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldDating holds the string denoting the dating field in the database.
+	FieldDating = "dating"
+	// FieldDatingStart holds the string denoting the dating_start field in the database.
+	FieldDatingStart = "dating_start"
+	// FieldDatingEnd holds the string denoting the dating_end field in the database.
+	FieldDatingEnd = "dating_end"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldAbbreviation holds the string denoting the abbreviation field in the database.
@@ -40,24 +46,6 @@ const (
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
 	FieldAdditionalImagesUrls = "additional_images_urls"
-	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
-	FieldDeletedAt = "deleted_at"
-	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
-	FieldDeletedBy = "deleted_by"
-	// FieldNumber holds the string denoting the number field in the database.
-	FieldNumber = "number"
-	// FieldDating holds the string denoting the dating field in the database.
-	FieldDating = "dating"
-	// FieldDatingStart holds the string denoting the dating_start field in the database.
-	FieldDatingStart = "dating_start"
-	// FieldDatingEnd holds the string denoting the dating_end field in the database.
-	FieldDatingEnd = "dating_end"
-	// FieldOrientation holds the string denoting the orientation field in the database.
-	FieldOrientation = "orientation"
-	// FieldPosition holds the string denoting the position field in the database.
-	FieldPosition = "position"
-	// FieldGeometricShape holds the string denoting the geometric_shape field in the database.
-	FieldGeometricShape = "geometric_shape"
 	// FieldHeight holds the string denoting the height field in the database.
 	FieldHeight = "height"
 	// FieldWidth holds the string denoting the width field in the database.
@@ -72,6 +60,18 @@ const (
 	FieldWeight = "weight"
 	// FieldDimensions holds the string denoting the dimensions field in the database.
 	FieldDimensions = "dimensions"
+	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
+	FieldDeletedAt = "deleted_at"
+	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
+	FieldDeletedBy = "deleted_by"
+	// FieldNumber holds the string denoting the number field in the database.
+	FieldNumber = "number"
+	// FieldOrientation holds the string denoting the orientation field in the database.
+	FieldOrientation = "orientation"
+	// FieldPosition holds the string denoting the position field in the database.
+	FieldPosition = "position"
+	// FieldGeometricShape holds the string denoting the geometric_shape field in the database.
+	FieldGeometricShape = "geometric_shape"
 	// FieldPlanePreservation holds the string denoting the plane_preservation field in the database.
 	FieldPlanePreservation = "plane_preservation"
 	// FieldPhotoCode holds the string denoting the photo_code field in the database.
@@ -170,6 +170,9 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
+	FieldDating,
+	FieldDatingStart,
+	FieldDatingEnd,
 	FieldDisplayName,
 	FieldAbbreviation,
 	FieldDescription,
@@ -177,15 +180,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
-	FieldDeletedAt,
-	FieldDeletedBy,
-	FieldNumber,
-	FieldDating,
-	FieldDatingStart,
-	FieldDatingEnd,
-	FieldOrientation,
-	FieldPosition,
-	FieldGeometricShape,
 	FieldHeight,
 	FieldWidth,
 	FieldLength,
@@ -193,6 +187,12 @@ var Columns = []string{
 	FieldDiameter,
 	FieldWeight,
 	FieldDimensions,
+	FieldDeletedAt,
+	FieldDeletedBy,
+	FieldNumber,
+	FieldOrientation,
+	FieldPosition,
+	FieldGeometricShape,
 	FieldPlanePreservation,
 	FieldPhotoCode,
 	FieldAccountingDocumentationInformation,
@@ -308,6 +308,21 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
+// ByDating orders the results by the dating field.
+func ByDating(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDating, opts...).ToFunc()
+}
+
+// ByDatingStart orders the results by the dating_start field.
+func ByDatingStart(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDatingStart, opts...).ToFunc()
+}
+
+// ByDatingEnd orders the results by the dating_end field.
+func ByDatingEnd(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDatingEnd, opts...).ToFunc()
+}
+
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
@@ -336,51 +351,6 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryImageURL orders the results by the primary_image_url field.
 func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
-}
-
-// ByDeletedAt orders the results by the deleted_at field.
-func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
-}
-
-// ByDeletedBy orders the results by the deleted_by field.
-func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
-}
-
-// ByNumber orders the results by the number field.
-func ByNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNumber, opts...).ToFunc()
-}
-
-// ByDating orders the results by the dating field.
-func ByDating(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDating, opts...).ToFunc()
-}
-
-// ByDatingStart orders the results by the dating_start field.
-func ByDatingStart(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDatingStart, opts...).ToFunc()
-}
-
-// ByDatingEnd orders the results by the dating_end field.
-func ByDatingEnd(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDatingEnd, opts...).ToFunc()
-}
-
-// ByOrientation orders the results by the orientation field.
-func ByOrientation(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOrientation, opts...).ToFunc()
-}
-
-// ByPosition orders the results by the position field.
-func ByPosition(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPosition, opts...).ToFunc()
-}
-
-// ByGeometricShape orders the results by the geometric_shape field.
-func ByGeometricShape(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldGeometricShape, opts...).ToFunc()
 }
 
 // ByHeight orders the results by the height field.
@@ -416,6 +386,36 @@ func ByWeight(opts ...sql.OrderTermOption) OrderOption {
 // ByDimensions orders the results by the dimensions field.
 func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
+}
+
+// ByDeletedAt orders the results by the deleted_at field.
+func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
+}
+
+// ByDeletedBy orders the results by the deleted_by field.
+func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// ByNumber orders the results by the number field.
+func ByNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+}
+
+// ByOrientation orders the results by the orientation field.
+func ByOrientation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrientation, opts...).ToFunc()
+}
+
+// ByPosition orders the results by the position field.
+func ByPosition(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPosition, opts...).ToFunc()
+}
+
+// ByGeometricShape orders the results by the geometric_shape field.
+func ByGeometricShape(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGeometricShape, opts...).ToFunc()
 }
 
 // ByPlanePreservation orders the results by the plane_preservation field.

@@ -85,6 +85,48 @@ func (ac *ArtCreate) SetNillableUpdatedBy(s *string) *ArtCreate {
 	return ac
 }
 
+// SetDating sets the "dating" field.
+func (ac *ArtCreate) SetDating(s string) *ArtCreate {
+	ac.mutation.SetDating(s)
+	return ac
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableDating(s *string) *ArtCreate {
+	if s != nil {
+		ac.SetDating(*s)
+	}
+	return ac
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (ac *ArtCreate) SetDatingStart(i int) *ArtCreate {
+	ac.mutation.SetDatingStart(i)
+	return ac
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableDatingStart(i *int) *ArtCreate {
+	if i != nil {
+		ac.SetDatingStart(*i)
+	}
+	return ac
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (ac *ArtCreate) SetDatingEnd(i int) *ArtCreate {
+	ac.mutation.SetDatingEnd(i)
+	return ac
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableDatingEnd(i *int) *ArtCreate {
+	if i != nil {
+		ac.SetDatingEnd(*i)
+	}
+	return ac
+}
+
 // SetDisplayName sets the "display_name" field.
 func (ac *ArtCreate) SetDisplayName(s string) *ArtCreate {
 	ac.mutation.SetDisplayName(s)
@@ -141,6 +183,20 @@ func (ac *ArtCreate) SetNillableExternalLink(s *string) *ArtCreate {
 	return ac
 }
 
+// SetStatus sets the "status" field.
+func (ac *ArtCreate) SetStatus(a art.Status) *ArtCreate {
+	ac.mutation.SetStatus(a)
+	return ac
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableStatus(a *art.Status) *ArtCreate {
+	if a != nil {
+		ac.SetStatus(*a)
+	}
+	return ac
+}
+
 // SetPrimaryImageURL sets the "primary_image_url" field.
 func (ac *ArtCreate) SetPrimaryImageURL(s string) *ArtCreate {
 	ac.mutation.SetPrimaryImageURL(s)
@@ -161,30 +217,86 @@ func (ac *ArtCreate) SetAdditionalImagesUrls(s []string) *ArtCreate {
 	return ac
 }
 
-// SetNumber sets the "number" field.
-func (ac *ArtCreate) SetNumber(s string) *ArtCreate {
-	ac.mutation.SetNumber(s)
+// SetHeight sets the "height" field.
+func (ac *ArtCreate) SetHeight(f float64) *ArtCreate {
+	ac.mutation.SetHeight(f)
 	return ac
 }
 
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (ac *ArtCreate) SetNillableNumber(s *string) *ArtCreate {
-	if s != nil {
-		ac.SetNumber(*s)
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableHeight(f *float64) *ArtCreate {
+	if f != nil {
+		ac.SetHeight(*f)
 	}
 	return ac
 }
 
-// SetDating sets the "dating" field.
-func (ac *ArtCreate) SetDating(s string) *ArtCreate {
-	ac.mutation.SetDating(s)
+// SetWidth sets the "width" field.
+func (ac *ArtCreate) SetWidth(f float64) *ArtCreate {
+	ac.mutation.SetWidth(f)
 	return ac
 }
 
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (ac *ArtCreate) SetNillableDating(s *string) *ArtCreate {
+// SetNillableWidth sets the "width" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableWidth(f *float64) *ArtCreate {
+	if f != nil {
+		ac.SetWidth(*f)
+	}
+	return ac
+}
+
+// SetLength sets the "length" field.
+func (ac *ArtCreate) SetLength(f float64) *ArtCreate {
+	ac.mutation.SetLength(f)
+	return ac
+}
+
+// SetNillableLength sets the "length" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableLength(f *float64) *ArtCreate {
+	if f != nil {
+		ac.SetLength(*f)
+	}
+	return ac
+}
+
+// SetDepth sets the "depth" field.
+func (ac *ArtCreate) SetDepth(f float64) *ArtCreate {
+	ac.mutation.SetDepth(f)
+	return ac
+}
+
+// SetNillableDepth sets the "depth" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableDepth(f *float64) *ArtCreate {
+	if f != nil {
+		ac.SetDepth(*f)
+	}
+	return ac
+}
+
+// SetDiameter sets the "diameter" field.
+func (ac *ArtCreate) SetDiameter(f float64) *ArtCreate {
+	ac.mutation.SetDiameter(f)
+	return ac
+}
+
+// SetNillableDiameter sets the "diameter" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableDiameter(f *float64) *ArtCreate {
+	if f != nil {
+		ac.SetDiameter(*f)
+	}
+	return ac
+}
+
+// SetWeight sets the "weight" field.
+func (ac *ArtCreate) SetWeight(s string) *ArtCreate {
+	ac.mutation.SetWeight(s)
+	return ac
+}
+
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableWeight(s *string) *ArtCreate {
 	if s != nil {
-		ac.SetDating(*s)
+		ac.SetWeight(*s)
 	}
 	return ac
 }
@@ -199,6 +311,20 @@ func (ac *ArtCreate) SetDimensions(s string) *ArtCreate {
 func (ac *ArtCreate) SetNillableDimensions(s *string) *ArtCreate {
 	if s != nil {
 		ac.SetDimensions(*s)
+	}
+	return ac
+}
+
+// SetNumber sets the "number" field.
+func (ac *ArtCreate) SetNumber(s string) *ArtCreate {
+	ac.mutation.SetNumber(s)
+	return ac
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (ac *ArtCreate) SetNillableNumber(s *string) *ArtCreate {
+	if s != nil {
+		ac.SetNumber(*s)
 	}
 	return ac
 }
@@ -405,6 +531,10 @@ func (ac *ArtCreate) defaults() error {
 		v := art.DefaultUpdatedAt()
 		ac.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := ac.mutation.Status(); !ok {
+		v := art.DefaultStatus
+		ac.mutation.SetStatus(v)
+	}
 	return nil
 }
 
@@ -415,6 +545,11 @@ func (ac *ArtCreate) check() error {
 	}
 	if _, ok := ac.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Art.updated_at"`)}
+	}
+	if v, ok := ac.mutation.Status(); ok {
+		if err := art.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "Art.status": %w`, err)}
+		}
 	}
 	if _, ok := ac.mutation.CollectionID(); !ok {
 		return &ValidationError{Name: "collection", err: errors.New(`ent: missing required edge "Art.collection"`)}
@@ -461,6 +596,18 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		_spec.SetField(art.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := ac.mutation.Dating(); ok {
+		_spec.SetField(art.FieldDating, field.TypeString, value)
+		_node.Dating = value
+	}
+	if value, ok := ac.mutation.DatingStart(); ok {
+		_spec.SetField(art.FieldDatingStart, field.TypeInt, value)
+		_node.DatingStart = value
+	}
+	if value, ok := ac.mutation.DatingEnd(); ok {
+		_spec.SetField(art.FieldDatingEnd, field.TypeInt, value)
+		_node.DatingEnd = value
+	}
 	if value, ok := ac.mutation.DisplayName(); ok {
 		_spec.SetField(art.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
@@ -477,6 +624,10 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		_spec.SetField(art.FieldExternalLink, field.TypeString, value)
 		_node.ExternalLink = value
 	}
+	if value, ok := ac.mutation.Status(); ok {
+		_spec.SetField(art.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
+	}
 	if value, ok := ac.mutation.PrimaryImageURL(); ok {
 		_spec.SetField(art.FieldPrimaryImageURL, field.TypeString, value)
 		_node.PrimaryImageURL = value
@@ -485,17 +636,37 @@ func (ac *ArtCreate) createSpec() (*Art, *sqlgraph.CreateSpec) {
 		_spec.SetField(art.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
 	}
-	if value, ok := ac.mutation.Number(); ok {
-		_spec.SetField(art.FieldNumber, field.TypeString, value)
-		_node.Number = value
+	if value, ok := ac.mutation.Height(); ok {
+		_spec.SetField(art.FieldHeight, field.TypeFloat64, value)
+		_node.Height = value
 	}
-	if value, ok := ac.mutation.Dating(); ok {
-		_spec.SetField(art.FieldDating, field.TypeString, value)
-		_node.Dating = value
+	if value, ok := ac.mutation.Width(); ok {
+		_spec.SetField(art.FieldWidth, field.TypeFloat64, value)
+		_node.Width = value
+	}
+	if value, ok := ac.mutation.Length(); ok {
+		_spec.SetField(art.FieldLength, field.TypeFloat64, value)
+		_node.Length = value
+	}
+	if value, ok := ac.mutation.Depth(); ok {
+		_spec.SetField(art.FieldDepth, field.TypeFloat64, value)
+		_node.Depth = value
+	}
+	if value, ok := ac.mutation.Diameter(); ok {
+		_spec.SetField(art.FieldDiameter, field.TypeFloat64, value)
+		_node.Diameter = value
+	}
+	if value, ok := ac.mutation.Weight(); ok {
+		_spec.SetField(art.FieldWeight, field.TypeString, value)
+		_node.Weight = value
 	}
 	if value, ok := ac.mutation.Dimensions(); ok {
 		_spec.SetField(art.FieldDimensions, field.TypeString, value)
 		_node.Dimensions = value
+	}
+	if value, ok := ac.mutation.Number(); ok {
+		_spec.SetField(art.FieldNumber, field.TypeString, value)
+		_node.Number = value
 	}
 	if nodes := ac.mutation.AuthorIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

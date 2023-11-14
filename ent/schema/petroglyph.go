@@ -37,9 +37,11 @@ func (Petroglyph) Policy() ent.Policy {
 func (Petroglyph) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
+		mixin.DatingMixin{},
 		mixin.DetailsMixin{},
 		mixin.DraftMixin{},
 		mixin.ImagesMixin{},
+		mixin.SizeMixin{},
 		mixin.SoftDeleteMixin{},
 	}
 }
@@ -58,19 +60,9 @@ func (Petroglyph) Annotations() []schema.Annotation {
 func (Petroglyph) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("number").Optional(),
-		field.String("dating").Optional(),
-		field.Int("dating_start").Optional(),
-		field.Int("dating_end").Optional(),
 		field.String("orientation").Optional(),
 		field.String("position").Optional(),
 		field.String("geometric_shape").Optional(),
-		field.Float("height").Optional(),
-		field.Float("width").Optional(),
-		field.Float("length").Optional(),
-		field.Float("depth").Optional(),
-		field.Float("diameter").Optional(),
-		field.String("weight").Optional(),
-		field.String("dimensions").Optional(),
 		field.String("plane_preservation").Optional(),
 		field.String("photo_code").Optional(),
 		field.String("accounting_documentation_information").Optional(),

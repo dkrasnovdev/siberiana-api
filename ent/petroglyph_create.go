@@ -86,6 +86,48 @@ func (pc *PetroglyphCreate) SetNillableUpdatedBy(s *string) *PetroglyphCreate {
 	return pc
 }
 
+// SetDating sets the "dating" field.
+func (pc *PetroglyphCreate) SetDating(s string) *PetroglyphCreate {
+	pc.mutation.SetDating(s)
+	return pc
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableDating(s *string) *PetroglyphCreate {
+	if s != nil {
+		pc.SetDating(*s)
+	}
+	return pc
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (pc *PetroglyphCreate) SetDatingStart(i int) *PetroglyphCreate {
+	pc.mutation.SetDatingStart(i)
+	return pc
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableDatingStart(i *int) *PetroglyphCreate {
+	if i != nil {
+		pc.SetDatingStart(*i)
+	}
+	return pc
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (pc *PetroglyphCreate) SetDatingEnd(i int) *PetroglyphCreate {
+	pc.mutation.SetDatingEnd(i)
+	return pc
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableDatingEnd(i *int) *PetroglyphCreate {
+	if i != nil {
+		pc.SetDatingEnd(*i)
+	}
+	return pc
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pc *PetroglyphCreate) SetDisplayName(s string) *PetroglyphCreate {
 	pc.mutation.SetDisplayName(s)
@@ -173,132 +215,6 @@ func (pc *PetroglyphCreate) SetNillablePrimaryImageURL(s *string) *PetroglyphCre
 // SetAdditionalImagesUrls sets the "additional_images_urls" field.
 func (pc *PetroglyphCreate) SetAdditionalImagesUrls(s []string) *PetroglyphCreate {
 	pc.mutation.SetAdditionalImagesUrls(s)
-	return pc
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (pc *PetroglyphCreate) SetDeletedAt(t time.Time) *PetroglyphCreate {
-	pc.mutation.SetDeletedAt(t)
-	return pc
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableDeletedAt(t *time.Time) *PetroglyphCreate {
-	if t != nil {
-		pc.SetDeletedAt(*t)
-	}
-	return pc
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pc *PetroglyphCreate) SetDeletedBy(s string) *PetroglyphCreate {
-	pc.mutation.SetDeletedBy(s)
-	return pc
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableDeletedBy(s *string) *PetroglyphCreate {
-	if s != nil {
-		pc.SetDeletedBy(*s)
-	}
-	return pc
-}
-
-// SetNumber sets the "number" field.
-func (pc *PetroglyphCreate) SetNumber(s string) *PetroglyphCreate {
-	pc.mutation.SetNumber(s)
-	return pc
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableNumber(s *string) *PetroglyphCreate {
-	if s != nil {
-		pc.SetNumber(*s)
-	}
-	return pc
-}
-
-// SetDating sets the "dating" field.
-func (pc *PetroglyphCreate) SetDating(s string) *PetroglyphCreate {
-	pc.mutation.SetDating(s)
-	return pc
-}
-
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableDating(s *string) *PetroglyphCreate {
-	if s != nil {
-		pc.SetDating(*s)
-	}
-	return pc
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (pc *PetroglyphCreate) SetDatingStart(i int) *PetroglyphCreate {
-	pc.mutation.SetDatingStart(i)
-	return pc
-}
-
-// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableDatingStart(i *int) *PetroglyphCreate {
-	if i != nil {
-		pc.SetDatingStart(*i)
-	}
-	return pc
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (pc *PetroglyphCreate) SetDatingEnd(i int) *PetroglyphCreate {
-	pc.mutation.SetDatingEnd(i)
-	return pc
-}
-
-// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableDatingEnd(i *int) *PetroglyphCreate {
-	if i != nil {
-		pc.SetDatingEnd(*i)
-	}
-	return pc
-}
-
-// SetOrientation sets the "orientation" field.
-func (pc *PetroglyphCreate) SetOrientation(s string) *PetroglyphCreate {
-	pc.mutation.SetOrientation(s)
-	return pc
-}
-
-// SetNillableOrientation sets the "orientation" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableOrientation(s *string) *PetroglyphCreate {
-	if s != nil {
-		pc.SetOrientation(*s)
-	}
-	return pc
-}
-
-// SetPosition sets the "position" field.
-func (pc *PetroglyphCreate) SetPosition(s string) *PetroglyphCreate {
-	pc.mutation.SetPosition(s)
-	return pc
-}
-
-// SetNillablePosition sets the "position" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillablePosition(s *string) *PetroglyphCreate {
-	if s != nil {
-		pc.SetPosition(*s)
-	}
-	return pc
-}
-
-// SetGeometricShape sets the "geometric_shape" field.
-func (pc *PetroglyphCreate) SetGeometricShape(s string) *PetroglyphCreate {
-	pc.mutation.SetGeometricShape(s)
-	return pc
-}
-
-// SetNillableGeometricShape sets the "geometric_shape" field if the given value is not nil.
-func (pc *PetroglyphCreate) SetNillableGeometricShape(s *string) *PetroglyphCreate {
-	if s != nil {
-		pc.SetGeometricShape(*s)
-	}
 	return pc
 }
 
@@ -396,6 +312,90 @@ func (pc *PetroglyphCreate) SetDimensions(s string) *PetroglyphCreate {
 func (pc *PetroglyphCreate) SetNillableDimensions(s *string) *PetroglyphCreate {
 	if s != nil {
 		pc.SetDimensions(*s)
+	}
+	return pc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (pc *PetroglyphCreate) SetDeletedAt(t time.Time) *PetroglyphCreate {
+	pc.mutation.SetDeletedAt(t)
+	return pc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableDeletedAt(t *time.Time) *PetroglyphCreate {
+	if t != nil {
+		pc.SetDeletedAt(*t)
+	}
+	return pc
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (pc *PetroglyphCreate) SetDeletedBy(s string) *PetroglyphCreate {
+	pc.mutation.SetDeletedBy(s)
+	return pc
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableDeletedBy(s *string) *PetroglyphCreate {
+	if s != nil {
+		pc.SetDeletedBy(*s)
+	}
+	return pc
+}
+
+// SetNumber sets the "number" field.
+func (pc *PetroglyphCreate) SetNumber(s string) *PetroglyphCreate {
+	pc.mutation.SetNumber(s)
+	return pc
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableNumber(s *string) *PetroglyphCreate {
+	if s != nil {
+		pc.SetNumber(*s)
+	}
+	return pc
+}
+
+// SetOrientation sets the "orientation" field.
+func (pc *PetroglyphCreate) SetOrientation(s string) *PetroglyphCreate {
+	pc.mutation.SetOrientation(s)
+	return pc
+}
+
+// SetNillableOrientation sets the "orientation" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableOrientation(s *string) *PetroglyphCreate {
+	if s != nil {
+		pc.SetOrientation(*s)
+	}
+	return pc
+}
+
+// SetPosition sets the "position" field.
+func (pc *PetroglyphCreate) SetPosition(s string) *PetroglyphCreate {
+	pc.mutation.SetPosition(s)
+	return pc
+}
+
+// SetNillablePosition sets the "position" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillablePosition(s *string) *PetroglyphCreate {
+	if s != nil {
+		pc.SetPosition(*s)
+	}
+	return pc
+}
+
+// SetGeometricShape sets the "geometric_shape" field.
+func (pc *PetroglyphCreate) SetGeometricShape(s string) *PetroglyphCreate {
+	pc.mutation.SetGeometricShape(s)
+	return pc
+}
+
+// SetNillableGeometricShape sets the "geometric_shape" field if the given value is not nil.
+func (pc *PetroglyphCreate) SetNillableGeometricShape(s *string) *PetroglyphCreate {
+	if s != nil {
+		pc.SetGeometricShape(*s)
 	}
 	return pc
 }
@@ -741,6 +741,18 @@ func (pc *PetroglyphCreate) createSpec() (*Petroglyph, *sqlgraph.CreateSpec) {
 		_spec.SetField(petroglyph.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := pc.mutation.Dating(); ok {
+		_spec.SetField(petroglyph.FieldDating, field.TypeString, value)
+		_node.Dating = value
+	}
+	if value, ok := pc.mutation.DatingStart(); ok {
+		_spec.SetField(petroglyph.FieldDatingStart, field.TypeInt, value)
+		_node.DatingStart = value
+	}
+	if value, ok := pc.mutation.DatingEnd(); ok {
+		_spec.SetField(petroglyph.FieldDatingEnd, field.TypeInt, value)
+		_node.DatingEnd = value
+	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(petroglyph.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
@@ -769,42 +781,6 @@ func (pc *PetroglyphCreate) createSpec() (*Petroglyph, *sqlgraph.CreateSpec) {
 		_spec.SetField(petroglyph.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
 	}
-	if value, ok := pc.mutation.DeletedAt(); ok {
-		_spec.SetField(petroglyph.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := pc.mutation.DeletedBy(); ok {
-		_spec.SetField(petroglyph.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
-	}
-	if value, ok := pc.mutation.Number(); ok {
-		_spec.SetField(petroglyph.FieldNumber, field.TypeString, value)
-		_node.Number = value
-	}
-	if value, ok := pc.mutation.Dating(); ok {
-		_spec.SetField(petroglyph.FieldDating, field.TypeString, value)
-		_node.Dating = value
-	}
-	if value, ok := pc.mutation.DatingStart(); ok {
-		_spec.SetField(petroglyph.FieldDatingStart, field.TypeInt, value)
-		_node.DatingStart = value
-	}
-	if value, ok := pc.mutation.DatingEnd(); ok {
-		_spec.SetField(petroglyph.FieldDatingEnd, field.TypeInt, value)
-		_node.DatingEnd = value
-	}
-	if value, ok := pc.mutation.Orientation(); ok {
-		_spec.SetField(petroglyph.FieldOrientation, field.TypeString, value)
-		_node.Orientation = value
-	}
-	if value, ok := pc.mutation.Position(); ok {
-		_spec.SetField(petroglyph.FieldPosition, field.TypeString, value)
-		_node.Position = value
-	}
-	if value, ok := pc.mutation.GeometricShape(); ok {
-		_spec.SetField(petroglyph.FieldGeometricShape, field.TypeString, value)
-		_node.GeometricShape = value
-	}
 	if value, ok := pc.mutation.Height(); ok {
 		_spec.SetField(petroglyph.FieldHeight, field.TypeFloat64, value)
 		_node.Height = value
@@ -832,6 +808,30 @@ func (pc *PetroglyphCreate) createSpec() (*Petroglyph, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Dimensions(); ok {
 		_spec.SetField(petroglyph.FieldDimensions, field.TypeString, value)
 		_node.Dimensions = value
+	}
+	if value, ok := pc.mutation.DeletedAt(); ok {
+		_spec.SetField(petroglyph.FieldDeletedAt, field.TypeTime, value)
+		_node.DeletedAt = value
+	}
+	if value, ok := pc.mutation.DeletedBy(); ok {
+		_spec.SetField(petroglyph.FieldDeletedBy, field.TypeString, value)
+		_node.DeletedBy = value
+	}
+	if value, ok := pc.mutation.Number(); ok {
+		_spec.SetField(petroglyph.FieldNumber, field.TypeString, value)
+		_node.Number = value
+	}
+	if value, ok := pc.mutation.Orientation(); ok {
+		_spec.SetField(petroglyph.FieldOrientation, field.TypeString, value)
+		_node.Orientation = value
+	}
+	if value, ok := pc.mutation.Position(); ok {
+		_spec.SetField(petroglyph.FieldPosition, field.TypeString, value)
+		_node.Position = value
+	}
+	if value, ok := pc.mutation.GeometricShape(); ok {
+		_spec.SetField(petroglyph.FieldGeometricShape, field.TypeString, value)
+		_node.GeometricShape = value
 	}
 	if value, ok := pc.mutation.PlanePreservation(); ok {
 		_spec.SetField(petroglyph.FieldPlanePreservation, field.TypeString, value)

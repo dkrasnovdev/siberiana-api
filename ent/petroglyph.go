@@ -34,6 +34,12 @@ type Petroglyph struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Dating holds the value of the "dating" field.
+	Dating string `json:"dating,omitempty"`
+	// DatingStart holds the value of the "dating_start" field.
+	DatingStart int `json:"dating_start,omitempty"`
+	// DatingEnd holds the value of the "dating_end" field.
+	DatingEnd int `json:"dating_end,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Abbreviation holds the value of the "abbreviation" field.
@@ -48,24 +54,6 @@ type Petroglyph struct {
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
-	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
-	// Number holds the value of the "number" field.
-	Number string `json:"number,omitempty"`
-	// Dating holds the value of the "dating" field.
-	Dating string `json:"dating,omitempty"`
-	// DatingStart holds the value of the "dating_start" field.
-	DatingStart int `json:"dating_start,omitempty"`
-	// DatingEnd holds the value of the "dating_end" field.
-	DatingEnd int `json:"dating_end,omitempty"`
-	// Orientation holds the value of the "orientation" field.
-	Orientation string `json:"orientation,omitempty"`
-	// Position holds the value of the "position" field.
-	Position string `json:"position,omitempty"`
-	// GeometricShape holds the value of the "geometric_shape" field.
-	GeometricShape string `json:"geometric_shape,omitempty"`
 	// Height holds the value of the "height" field.
 	Height float64 `json:"height,omitempty"`
 	// Width holds the value of the "width" field.
@@ -80,6 +68,18 @@ type Petroglyph struct {
 	Weight string `json:"weight,omitempty"`
 	// Dimensions holds the value of the "dimensions" field.
 	Dimensions string `json:"dimensions,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	// DeletedBy holds the value of the "deleted_by" field.
+	DeletedBy string `json:"deleted_by,omitempty"`
+	// Number holds the value of the "number" field.
+	Number string `json:"number,omitempty"`
+	// Orientation holds the value of the "orientation" field.
+	Orientation string `json:"orientation,omitempty"`
+	// Position holds the value of the "position" field.
+	Position string `json:"position,omitempty"`
+	// GeometricShape holds the value of the "geometric_shape" field.
+	GeometricShape string `json:"geometric_shape,omitempty"`
 	// PlanePreservation holds the value of the "plane_preservation" field.
 	PlanePreservation string `json:"plane_preservation,omitempty"`
 	// PhotoCode holds the value of the "photo_code" field.
@@ -255,7 +255,7 @@ func (*Petroglyph) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case petroglyph.FieldID, petroglyph.FieldDatingStart, petroglyph.FieldDatingEnd:
 			values[i] = new(sql.NullInt64)
-		case petroglyph.FieldCreatedBy, petroglyph.FieldUpdatedBy, petroglyph.FieldDisplayName, petroglyph.FieldAbbreviation, petroglyph.FieldDescription, petroglyph.FieldExternalLink, petroglyph.FieldStatus, petroglyph.FieldPrimaryImageURL, petroglyph.FieldDeletedBy, petroglyph.FieldNumber, petroglyph.FieldDating, petroglyph.FieldOrientation, petroglyph.FieldPosition, petroglyph.FieldGeometricShape, petroglyph.FieldWeight, petroglyph.FieldDimensions, petroglyph.FieldPlanePreservation, petroglyph.FieldPhotoCode, petroglyph.FieldAccountingDocumentationInformation:
+		case petroglyph.FieldCreatedBy, petroglyph.FieldUpdatedBy, petroglyph.FieldDating, petroglyph.FieldDisplayName, petroglyph.FieldAbbreviation, petroglyph.FieldDescription, petroglyph.FieldExternalLink, petroglyph.FieldStatus, petroglyph.FieldPrimaryImageURL, petroglyph.FieldWeight, petroglyph.FieldDimensions, petroglyph.FieldDeletedBy, petroglyph.FieldNumber, petroglyph.FieldOrientation, petroglyph.FieldPosition, petroglyph.FieldGeometricShape, petroglyph.FieldPlanePreservation, petroglyph.FieldPhotoCode, petroglyph.FieldAccountingDocumentationInformation:
 			values[i] = new(sql.NullString)
 		case petroglyph.FieldCreatedAt, petroglyph.FieldUpdatedAt, petroglyph.FieldDeletedAt, petroglyph.FieldAccountingDocumentationDate:
 			values[i] = new(sql.NullTime)
@@ -318,6 +318,24 @@ func (pe *Petroglyph) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.UpdatedBy = value.String
 			}
+		case petroglyph.FieldDating:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dating", values[i])
+			} else if value.Valid {
+				pe.Dating = value.String
+			}
+		case petroglyph.FieldDatingStart:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field dating_start", values[i])
+			} else if value.Valid {
+				pe.DatingStart = int(value.Int64)
+			}
+		case petroglyph.FieldDatingEnd:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field dating_end", values[i])
+			} else if value.Valid {
+				pe.DatingEnd = int(value.Int64)
+			}
 		case petroglyph.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
@@ -362,60 +380,6 @@ func (pe *Petroglyph) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
-		case petroglyph.FieldDeletedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
-			} else if value.Valid {
-				pe.DeletedAt = value.Time
-			}
-		case petroglyph.FieldDeletedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
-			} else if value.Valid {
-				pe.DeletedBy = value.String
-			}
-		case petroglyph.FieldNumber:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field number", values[i])
-			} else if value.Valid {
-				pe.Number = value.String
-			}
-		case petroglyph.FieldDating:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field dating", values[i])
-			} else if value.Valid {
-				pe.Dating = value.String
-			}
-		case petroglyph.FieldDatingStart:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field dating_start", values[i])
-			} else if value.Valid {
-				pe.DatingStart = int(value.Int64)
-			}
-		case petroglyph.FieldDatingEnd:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field dating_end", values[i])
-			} else if value.Valid {
-				pe.DatingEnd = int(value.Int64)
-			}
-		case petroglyph.FieldOrientation:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field orientation", values[i])
-			} else if value.Valid {
-				pe.Orientation = value.String
-			}
-		case petroglyph.FieldPosition:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field position", values[i])
-			} else if value.Valid {
-				pe.Position = value.String
-			}
-		case petroglyph.FieldGeometricShape:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field geometric_shape", values[i])
-			} else if value.Valid {
-				pe.GeometricShape = value.String
-			}
 		case petroglyph.FieldHeight:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field height", values[i])
@@ -457,6 +421,42 @@ func (pe *Petroglyph) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field dimensions", values[i])
 			} else if value.Valid {
 				pe.Dimensions = value.String
+			}
+		case petroglyph.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				pe.DeletedAt = value.Time
+			}
+		case petroglyph.FieldDeletedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+			} else if value.Valid {
+				pe.DeletedBy = value.String
+			}
+		case petroglyph.FieldNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field number", values[i])
+			} else if value.Valid {
+				pe.Number = value.String
+			}
+		case petroglyph.FieldOrientation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field orientation", values[i])
+			} else if value.Valid {
+				pe.Orientation = value.String
+			}
+		case petroglyph.FieldPosition:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field position", values[i])
+			} else if value.Valid {
+				pe.Position = value.String
+			}
+		case petroglyph.FieldGeometricShape:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field geometric_shape", values[i])
+			} else if value.Valid {
+				pe.GeometricShape = value.String
 			}
 		case petroglyph.FieldPlanePreservation:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -631,6 +631,15 @@ func (pe *Petroglyph) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(pe.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("dating=")
+	builder.WriteString(pe.Dating)
+	builder.WriteString(", ")
+	builder.WriteString("dating_start=")
+	builder.WriteString(fmt.Sprintf("%v", pe.DatingStart))
+	builder.WriteString(", ")
+	builder.WriteString("dating_end=")
+	builder.WriteString(fmt.Sprintf("%v", pe.DatingEnd))
+	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pe.DisplayName)
 	builder.WriteString(", ")
@@ -652,33 +661,6 @@ func (pe *Petroglyph) String() string {
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", pe.AdditionalImagesUrls))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(pe.DeletedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(pe.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("number=")
-	builder.WriteString(pe.Number)
-	builder.WriteString(", ")
-	builder.WriteString("dating=")
-	builder.WriteString(pe.Dating)
-	builder.WriteString(", ")
-	builder.WriteString("dating_start=")
-	builder.WriteString(fmt.Sprintf("%v", pe.DatingStart))
-	builder.WriteString(", ")
-	builder.WriteString("dating_end=")
-	builder.WriteString(fmt.Sprintf("%v", pe.DatingEnd))
-	builder.WriteString(", ")
-	builder.WriteString("orientation=")
-	builder.WriteString(pe.Orientation)
-	builder.WriteString(", ")
-	builder.WriteString("position=")
-	builder.WriteString(pe.Position)
-	builder.WriteString(", ")
-	builder.WriteString("geometric_shape=")
-	builder.WriteString(pe.GeometricShape)
-	builder.WriteString(", ")
 	builder.WriteString("height=")
 	builder.WriteString(fmt.Sprintf("%v", pe.Height))
 	builder.WriteString(", ")
@@ -699,6 +681,24 @@ func (pe *Petroglyph) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dimensions=")
 	builder.WriteString(pe.Dimensions)
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(pe.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_by=")
+	builder.WriteString(pe.DeletedBy)
+	builder.WriteString(", ")
+	builder.WriteString("number=")
+	builder.WriteString(pe.Number)
+	builder.WriteString(", ")
+	builder.WriteString("orientation=")
+	builder.WriteString(pe.Orientation)
+	builder.WriteString(", ")
+	builder.WriteString("position=")
+	builder.WriteString(pe.Position)
+	builder.WriteString(", ")
+	builder.WriteString("geometric_shape=")
+	builder.WriteString(pe.GeometricShape)
 	builder.WriteString(", ")
 	builder.WriteString("plane_preservation=")
 	builder.WriteString(pe.PlanePreservation)

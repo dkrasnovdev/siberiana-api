@@ -69,6 +69,8 @@ func init() {
 	art.Hooks[1] = artMixinHooks0[0]
 	artMixinFields0 := artMixin[0].Fields()
 	_ = artMixinFields0
+	artMixinFields3 := artMixin[3].Fields()
+	_ = artMixinFields3
 	artFields := schema.Art{}.Fields()
 	_ = artFields
 	// artDescCreatedAt is the schema descriptor for created_at field.
@@ -146,20 +148,20 @@ func init() {
 		})
 	}
 	artifactMixinHooks0 := artifactMixin[0].Hooks()
-	artifactMixinHooks4 := artifactMixin[4].Hooks()
+	artifactMixinHooks6 := artifactMixin[6].Hooks()
 	artifactHooks := schema.Artifact{}.Hooks()
 
 	artifact.Hooks[1] = artifactMixinHooks0[0]
 
-	artifact.Hooks[2] = artifactMixinHooks4[0]
+	artifact.Hooks[2] = artifactMixinHooks6[0]
 
 	artifact.Hooks[3] = artifactHooks[0]
-	artifactMixinInters4 := artifactMixin[4].Interceptors()
-	artifact.Interceptors[0] = artifactMixinInters4[0]
+	artifactMixinInters6 := artifactMixin[6].Interceptors()
+	artifact.Interceptors[0] = artifactMixinInters6[0]
 	artifactMixinFields0 := artifactMixin[0].Fields()
 	_ = artifactMixinFields0
-	artifactMixinFields2 := artifactMixin[2].Fields()
-	_ = artifactMixinFields2
+	artifactMixinFields3 := artifactMixin[3].Fields()
+	_ = artifactMixinFields3
 	artifactFields := schema.Artifact{}.Fields()
 	_ = artifactFields
 	// artifactDescCreatedAt is the schema descriptor for created_at field.
@@ -768,17 +770,17 @@ func init() {
 		})
 	}
 	petroglyphMixinHooks0 := petroglyphMixin[0].Hooks()
-	petroglyphMixinHooks4 := petroglyphMixin[4].Hooks()
+	petroglyphMixinHooks6 := petroglyphMixin[6].Hooks()
 
 	petroglyph.Hooks[1] = petroglyphMixinHooks0[0]
 
-	petroglyph.Hooks[2] = petroglyphMixinHooks4[0]
-	petroglyphMixinInters4 := petroglyphMixin[4].Interceptors()
-	petroglyph.Interceptors[0] = petroglyphMixinInters4[0]
+	petroglyph.Hooks[2] = petroglyphMixinHooks6[0]
+	petroglyphMixinInters6 := petroglyphMixin[6].Interceptors()
+	petroglyph.Interceptors[0] = petroglyphMixinInters6[0]
 	petroglyphMixinFields0 := petroglyphMixin[0].Fields()
 	_ = petroglyphMixinFields0
-	petroglyphMixinFields2 := petroglyphMixin[2].Fields()
-	_ = petroglyphMixinFields2
+	petroglyphMixinFields3 := petroglyphMixin[3].Fields()
+	_ = petroglyphMixinFields3
 	petroglyphFields := schema.Petroglyph{}.Fields()
 	_ = petroglyphFields
 	// petroglyphDescCreatedAt is the schema descriptor for created_at field.

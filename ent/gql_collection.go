@@ -185,6 +185,21 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				selectedFields = append(selectedFields, art.FieldUpdatedBy)
 				fieldSeen[art.FieldUpdatedBy] = struct{}{}
 			}
+		case "dating":
+			if _, ok := fieldSeen[art.FieldDating]; !ok {
+				selectedFields = append(selectedFields, art.FieldDating)
+				fieldSeen[art.FieldDating] = struct{}{}
+			}
+		case "datingStart":
+			if _, ok := fieldSeen[art.FieldDatingStart]; !ok {
+				selectedFields = append(selectedFields, art.FieldDatingStart)
+				fieldSeen[art.FieldDatingStart] = struct{}{}
+			}
+		case "datingEnd":
+			if _, ok := fieldSeen[art.FieldDatingEnd]; !ok {
+				selectedFields = append(selectedFields, art.FieldDatingEnd)
+				fieldSeen[art.FieldDatingEnd] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[art.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, art.FieldDisplayName)
@@ -205,6 +220,11 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				selectedFields = append(selectedFields, art.FieldExternalLink)
 				fieldSeen[art.FieldExternalLink] = struct{}{}
 			}
+		case "status":
+			if _, ok := fieldSeen[art.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, art.FieldStatus)
+				fieldSeen[art.FieldStatus] = struct{}{}
+			}
 		case "primaryImageURL":
 			if _, ok := fieldSeen[art.FieldPrimaryImageURL]; !ok {
 				selectedFields = append(selectedFields, art.FieldPrimaryImageURL)
@@ -215,20 +235,45 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				selectedFields = append(selectedFields, art.FieldAdditionalImagesUrls)
 				fieldSeen[art.FieldAdditionalImagesUrls] = struct{}{}
 			}
-		case "number":
-			if _, ok := fieldSeen[art.FieldNumber]; !ok {
-				selectedFields = append(selectedFields, art.FieldNumber)
-				fieldSeen[art.FieldNumber] = struct{}{}
+		case "height":
+			if _, ok := fieldSeen[art.FieldHeight]; !ok {
+				selectedFields = append(selectedFields, art.FieldHeight)
+				fieldSeen[art.FieldHeight] = struct{}{}
 			}
-		case "dating":
-			if _, ok := fieldSeen[art.FieldDating]; !ok {
-				selectedFields = append(selectedFields, art.FieldDating)
-				fieldSeen[art.FieldDating] = struct{}{}
+		case "width":
+			if _, ok := fieldSeen[art.FieldWidth]; !ok {
+				selectedFields = append(selectedFields, art.FieldWidth)
+				fieldSeen[art.FieldWidth] = struct{}{}
+			}
+		case "length":
+			if _, ok := fieldSeen[art.FieldLength]; !ok {
+				selectedFields = append(selectedFields, art.FieldLength)
+				fieldSeen[art.FieldLength] = struct{}{}
+			}
+		case "depth":
+			if _, ok := fieldSeen[art.FieldDepth]; !ok {
+				selectedFields = append(selectedFields, art.FieldDepth)
+				fieldSeen[art.FieldDepth] = struct{}{}
+			}
+		case "diameter":
+			if _, ok := fieldSeen[art.FieldDiameter]; !ok {
+				selectedFields = append(selectedFields, art.FieldDiameter)
+				fieldSeen[art.FieldDiameter] = struct{}{}
+			}
+		case "weight":
+			if _, ok := fieldSeen[art.FieldWeight]; !ok {
+				selectedFields = append(selectedFields, art.FieldWeight)
+				fieldSeen[art.FieldWeight] = struct{}{}
 			}
 		case "dimensions":
 			if _, ok := fieldSeen[art.FieldDimensions]; !ok {
 				selectedFields = append(selectedFields, art.FieldDimensions)
 				fieldSeen[art.FieldDimensions] = struct{}{}
+			}
+		case "number":
+			if _, ok := fieldSeen[art.FieldNumber]; !ok {
+				selectedFields = append(selectedFields, art.FieldNumber)
+				fieldSeen[art.FieldNumber] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -824,6 +869,21 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldUpdatedBy)
 				fieldSeen[artifact.FieldUpdatedBy] = struct{}{}
 			}
+		case "dating":
+			if _, ok := fieldSeen[artifact.FieldDating]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDating)
+				fieldSeen[artifact.FieldDating] = struct{}{}
+			}
+		case "datingStart":
+			if _, ok := fieldSeen[artifact.FieldDatingStart]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDatingStart)
+				fieldSeen[artifact.FieldDatingStart] = struct{}{}
+			}
+		case "datingEnd":
+			if _, ok := fieldSeen[artifact.FieldDatingEnd]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDatingEnd)
+				fieldSeen[artifact.FieldDatingEnd] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[artifact.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldDisplayName)
@@ -859,31 +919,6 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				selectedFields = append(selectedFields, artifact.FieldAdditionalImagesUrls)
 				fieldSeen[artifact.FieldAdditionalImagesUrls] = struct{}{}
 			}
-		case "deletedAt":
-			if _, ok := fieldSeen[artifact.FieldDeletedAt]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldDeletedAt)
-				fieldSeen[artifact.FieldDeletedAt] = struct{}{}
-			}
-		case "deletedBy":
-			if _, ok := fieldSeen[artifact.FieldDeletedBy]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldDeletedBy)
-				fieldSeen[artifact.FieldDeletedBy] = struct{}{}
-			}
-		case "dating":
-			if _, ok := fieldSeen[artifact.FieldDating]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldDating)
-				fieldSeen[artifact.FieldDating] = struct{}{}
-			}
-		case "datingStart":
-			if _, ok := fieldSeen[artifact.FieldDatingStart]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldDatingStart)
-				fieldSeen[artifact.FieldDatingStart] = struct{}{}
-			}
-		case "datingEnd":
-			if _, ok := fieldSeen[artifact.FieldDatingEnd]; !ok {
-				selectedFields = append(selectedFields, artifact.FieldDatingEnd)
-				fieldSeen[artifact.FieldDatingEnd] = struct{}{}
-			}
 		case "height":
 			if _, ok := fieldSeen[artifact.FieldHeight]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldHeight)
@@ -918,6 +953,16 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			if _, ok := fieldSeen[artifact.FieldDimensions]; !ok {
 				selectedFields = append(selectedFields, artifact.FieldDimensions)
 				fieldSeen[artifact.FieldDimensions] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[artifact.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDeletedAt)
+				fieldSeen[artifact.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[artifact.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, artifact.FieldDeletedBy)
+				fieldSeen[artifact.FieldDeletedBy] = struct{}{}
 			}
 		case "chemicalComposition":
 			if _, ok := fieldSeen[artifact.FieldChemicalComposition]; !ok {
@@ -4889,6 +4934,21 @@ func (pe *PetroglyphQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 				selectedFields = append(selectedFields, petroglyph.FieldUpdatedBy)
 				fieldSeen[petroglyph.FieldUpdatedBy] = struct{}{}
 			}
+		case "dating":
+			if _, ok := fieldSeen[petroglyph.FieldDating]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDating)
+				fieldSeen[petroglyph.FieldDating] = struct{}{}
+			}
+		case "datingStart":
+			if _, ok := fieldSeen[petroglyph.FieldDatingStart]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDatingStart)
+				fieldSeen[petroglyph.FieldDatingStart] = struct{}{}
+			}
+		case "datingEnd":
+			if _, ok := fieldSeen[petroglyph.FieldDatingEnd]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDatingEnd)
+				fieldSeen[petroglyph.FieldDatingEnd] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[petroglyph.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, petroglyph.FieldDisplayName)
@@ -4924,51 +4984,6 @@ func (pe *PetroglyphQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 				selectedFields = append(selectedFields, petroglyph.FieldAdditionalImagesUrls)
 				fieldSeen[petroglyph.FieldAdditionalImagesUrls] = struct{}{}
 			}
-		case "deletedAt":
-			if _, ok := fieldSeen[petroglyph.FieldDeletedAt]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldDeletedAt)
-				fieldSeen[petroglyph.FieldDeletedAt] = struct{}{}
-			}
-		case "deletedBy":
-			if _, ok := fieldSeen[petroglyph.FieldDeletedBy]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldDeletedBy)
-				fieldSeen[petroglyph.FieldDeletedBy] = struct{}{}
-			}
-		case "number":
-			if _, ok := fieldSeen[petroglyph.FieldNumber]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldNumber)
-				fieldSeen[petroglyph.FieldNumber] = struct{}{}
-			}
-		case "dating":
-			if _, ok := fieldSeen[petroglyph.FieldDating]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldDating)
-				fieldSeen[petroglyph.FieldDating] = struct{}{}
-			}
-		case "datingStart":
-			if _, ok := fieldSeen[petroglyph.FieldDatingStart]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldDatingStart)
-				fieldSeen[petroglyph.FieldDatingStart] = struct{}{}
-			}
-		case "datingEnd":
-			if _, ok := fieldSeen[petroglyph.FieldDatingEnd]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldDatingEnd)
-				fieldSeen[petroglyph.FieldDatingEnd] = struct{}{}
-			}
-		case "orientation":
-			if _, ok := fieldSeen[petroglyph.FieldOrientation]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldOrientation)
-				fieldSeen[petroglyph.FieldOrientation] = struct{}{}
-			}
-		case "position":
-			if _, ok := fieldSeen[petroglyph.FieldPosition]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldPosition)
-				fieldSeen[petroglyph.FieldPosition] = struct{}{}
-			}
-		case "geometricShape":
-			if _, ok := fieldSeen[petroglyph.FieldGeometricShape]; !ok {
-				selectedFields = append(selectedFields, petroglyph.FieldGeometricShape)
-				fieldSeen[petroglyph.FieldGeometricShape] = struct{}{}
-			}
 		case "height":
 			if _, ok := fieldSeen[petroglyph.FieldHeight]; !ok {
 				selectedFields = append(selectedFields, petroglyph.FieldHeight)
@@ -5003,6 +5018,36 @@ func (pe *PetroglyphQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 			if _, ok := fieldSeen[petroglyph.FieldDimensions]; !ok {
 				selectedFields = append(selectedFields, petroglyph.FieldDimensions)
 				fieldSeen[petroglyph.FieldDimensions] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[petroglyph.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDeletedAt)
+				fieldSeen[petroglyph.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[petroglyph.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldDeletedBy)
+				fieldSeen[petroglyph.FieldDeletedBy] = struct{}{}
+			}
+		case "number":
+			if _, ok := fieldSeen[petroglyph.FieldNumber]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldNumber)
+				fieldSeen[petroglyph.FieldNumber] = struct{}{}
+			}
+		case "orientation":
+			if _, ok := fieldSeen[petroglyph.FieldOrientation]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldOrientation)
+				fieldSeen[petroglyph.FieldOrientation] = struct{}{}
+			}
+		case "position":
+			if _, ok := fieldSeen[petroglyph.FieldPosition]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldPosition)
+				fieldSeen[petroglyph.FieldPosition] = struct{}{}
+			}
+		case "geometricShape":
+			if _, ok := fieldSeen[petroglyph.FieldGeometricShape]; !ok {
+				selectedFields = append(selectedFields, petroglyph.FieldGeometricShape)
+				fieldSeen[petroglyph.FieldGeometricShape] = struct{}{}
 			}
 		case "planePreservation":
 			if _, ok := fieldSeen[petroglyph.FieldPlanePreservation]; !ok {

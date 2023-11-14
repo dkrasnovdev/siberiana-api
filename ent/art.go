@@ -32,6 +32,12 @@ type Art struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Dating holds the value of the "dating" field.
+	Dating string `json:"dating,omitempty"`
+	// DatingStart holds the value of the "dating_start" field.
+	DatingStart int `json:"dating_start,omitempty"`
+	// DatingEnd holds the value of the "dating_end" field.
+	DatingEnd int `json:"dating_end,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Abbreviation holds the value of the "abbreviation" field.
@@ -40,16 +46,28 @@ type Art struct {
 	Description string `json:"description,omitempty"`
 	// ExternalLink holds the value of the "external_link" field.
 	ExternalLink string `json:"external_link,omitempty"`
+	// Status holds the value of the "status" field.
+	Status art.Status `json:"status,omitempty"`
 	// PrimaryImageURL holds the value of the "primary_image_url" field.
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
-	// Number holds the value of the "number" field.
-	Number string `json:"number,omitempty"`
-	// Dating holds the value of the "dating" field.
-	Dating string `json:"dating,omitempty"`
+	// Height holds the value of the "height" field.
+	Height float64 `json:"height,omitempty"`
+	// Width holds the value of the "width" field.
+	Width float64 `json:"width,omitempty"`
+	// Length holds the value of the "length" field.
+	Length float64 `json:"length,omitempty"`
+	// Depth holds the value of the "depth" field.
+	Depth float64 `json:"depth,omitempty"`
+	// Diameter holds the value of the "diameter" field.
+	Diameter float64 `json:"diameter,omitempty"`
+	// Weight holds the value of the "weight" field.
+	Weight string `json:"weight,omitempty"`
 	// Dimensions holds the value of the "dimensions" field.
 	Dimensions string `json:"dimensions,omitempty"`
+	// Number holds the value of the "number" field.
+	Number string `json:"number,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ArtQuery when eager-loading is set.
 	Edges          ArtEdges `json:"edges"`
@@ -205,9 +223,11 @@ func (*Art) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case art.FieldAdditionalImagesUrls:
 			values[i] = new([]byte)
-		case art.FieldID:
+		case art.FieldHeight, art.FieldWidth, art.FieldLength, art.FieldDepth, art.FieldDiameter:
+			values[i] = new(sql.NullFloat64)
+		case art.FieldID, art.FieldDatingStart, art.FieldDatingEnd:
 			values[i] = new(sql.NullInt64)
-		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldExternalLink, art.FieldPrimaryImageURL, art.FieldNumber, art.FieldDating, art.FieldDimensions:
+		case art.FieldCreatedBy, art.FieldUpdatedBy, art.FieldDating, art.FieldDisplayName, art.FieldAbbreviation, art.FieldDescription, art.FieldExternalLink, art.FieldStatus, art.FieldPrimaryImageURL, art.FieldWeight, art.FieldDimensions, art.FieldNumber:
 			values[i] = new(sql.NullString)
 		case art.FieldCreatedAt, art.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -268,6 +288,24 @@ func (a *Art) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.UpdatedBy = value.String
 			}
+		case art.FieldDating:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dating", values[i])
+			} else if value.Valid {
+				a.Dating = value.String
+			}
+		case art.FieldDatingStart:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field dating_start", values[i])
+			} else if value.Valid {
+				a.DatingStart = int(value.Int64)
+			}
+		case art.FieldDatingEnd:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field dating_end", values[i])
+			} else if value.Valid {
+				a.DatingEnd = int(value.Int64)
+			}
 		case art.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
@@ -292,6 +330,12 @@ func (a *Art) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.ExternalLink = value.String
 			}
+		case art.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				a.Status = art.Status(value.String)
+			}
 		case art.FieldPrimaryImageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field primary_image_url", values[i])
@@ -306,23 +350,53 @@ func (a *Art) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
-		case art.FieldNumber:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field number", values[i])
+		case art.FieldHeight:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field height", values[i])
 			} else if value.Valid {
-				a.Number = value.String
+				a.Height = value.Float64
 			}
-		case art.FieldDating:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field dating", values[i])
+		case art.FieldWidth:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field width", values[i])
 			} else if value.Valid {
-				a.Dating = value.String
+				a.Width = value.Float64
+			}
+		case art.FieldLength:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field length", values[i])
+			} else if value.Valid {
+				a.Length = value.Float64
+			}
+		case art.FieldDepth:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field depth", values[i])
+			} else if value.Valid {
+				a.Depth = value.Float64
+			}
+		case art.FieldDiameter:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field diameter", values[i])
+			} else if value.Valid {
+				a.Diameter = value.Float64
+			}
+		case art.FieldWeight:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field weight", values[i])
+			} else if value.Valid {
+				a.Weight = value.String
 			}
 		case art.FieldDimensions:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field dimensions", values[i])
 			} else if value.Valid {
 				a.Dimensions = value.String
+			}
+		case art.FieldNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field number", values[i])
+			} else if value.Valid {
+				a.Number = value.String
 			}
 		case art.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -459,6 +533,15 @@ func (a *Art) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(a.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("dating=")
+	builder.WriteString(a.Dating)
+	builder.WriteString(", ")
+	builder.WriteString("dating_start=")
+	builder.WriteString(fmt.Sprintf("%v", a.DatingStart))
+	builder.WriteString(", ")
+	builder.WriteString("dating_end=")
+	builder.WriteString(fmt.Sprintf("%v", a.DatingEnd))
+	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(a.DisplayName)
 	builder.WriteString(", ")
@@ -471,20 +554,38 @@ func (a *Art) String() string {
 	builder.WriteString("external_link=")
 	builder.WriteString(a.ExternalLink)
 	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", a.Status))
+	builder.WriteString(", ")
 	builder.WriteString("primary_image_url=")
 	builder.WriteString(a.PrimaryImageURL)
 	builder.WriteString(", ")
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", a.AdditionalImagesUrls))
 	builder.WriteString(", ")
-	builder.WriteString("number=")
-	builder.WriteString(a.Number)
+	builder.WriteString("height=")
+	builder.WriteString(fmt.Sprintf("%v", a.Height))
 	builder.WriteString(", ")
-	builder.WriteString("dating=")
-	builder.WriteString(a.Dating)
+	builder.WriteString("width=")
+	builder.WriteString(fmt.Sprintf("%v", a.Width))
+	builder.WriteString(", ")
+	builder.WriteString("length=")
+	builder.WriteString(fmt.Sprintf("%v", a.Length))
+	builder.WriteString(", ")
+	builder.WriteString("depth=")
+	builder.WriteString(fmt.Sprintf("%v", a.Depth))
+	builder.WriteString(", ")
+	builder.WriteString("diameter=")
+	builder.WriteString(fmt.Sprintf("%v", a.Diameter))
+	builder.WriteString(", ")
+	builder.WriteString("weight=")
+	builder.WriteString(a.Weight)
 	builder.WriteString(", ")
 	builder.WriteString("dimensions=")
 	builder.WriteString(a.Dimensions)
+	builder.WriteString(", ")
+	builder.WriteString("number=")
+	builder.WriteString(a.Number)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -75,6 +75,21 @@ func UpdatedBy(v string) predicate.Art {
 	return predicate.Art(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
+// Dating applies equality check predicate on the "dating" field. It's identical to DatingEQ.
+func Dating(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDating, v))
+}
+
+// DatingStart applies equality check predicate on the "dating_start" field. It's identical to DatingStartEQ.
+func DatingStart(v int) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDatingStart, v))
+}
+
+// DatingEnd applies equality check predicate on the "dating_end" field. It's identical to DatingEndEQ.
+func DatingEnd(v int) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDatingEnd, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.Art {
 	return predicate.Art(sql.FieldEQ(FieldDisplayName, v))
@@ -100,19 +115,44 @@ func PrimaryImageURL(v string) predicate.Art {
 	return predicate.Art(sql.FieldEQ(FieldPrimaryImageURL, v))
 }
 
-// Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
-func Number(v string) predicate.Art {
-	return predicate.Art(sql.FieldEQ(FieldNumber, v))
+// Height applies equality check predicate on the "height" field. It's identical to HeightEQ.
+func Height(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldHeight, v))
 }
 
-// Dating applies equality check predicate on the "dating" field. It's identical to DatingEQ.
-func Dating(v string) predicate.Art {
-	return predicate.Art(sql.FieldEQ(FieldDating, v))
+// Width applies equality check predicate on the "width" field. It's identical to WidthEQ.
+func Width(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldWidth, v))
+}
+
+// Length applies equality check predicate on the "length" field. It's identical to LengthEQ.
+func Length(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldLength, v))
+}
+
+// Depth applies equality check predicate on the "depth" field. It's identical to DepthEQ.
+func Depth(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDepth, v))
+}
+
+// Diameter applies equality check predicate on the "diameter" field. It's identical to DiameterEQ.
+func Diameter(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDiameter, v))
+}
+
+// Weight applies equality check predicate on the "weight" field. It's identical to WeightEQ.
+func Weight(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldWeight, v))
 }
 
 // Dimensions applies equality check predicate on the "dimensions" field. It's identical to DimensionsEQ.
 func Dimensions(v string) predicate.Art {
 	return predicate.Art(sql.FieldEQ(FieldDimensions, v))
+}
+
+// Number applies equality check predicate on the "number" field. It's identical to NumberEQ.
+func Number(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldNumber, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -343,6 +383,181 @@ func UpdatedByEqualFold(v string) predicate.Art {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Art {
 	return predicate.Art(sql.FieldContainsFold(FieldUpdatedBy, v))
+}
+
+// DatingEQ applies the EQ predicate on the "dating" field.
+func DatingEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDating, v))
+}
+
+// DatingNEQ applies the NEQ predicate on the "dating" field.
+func DatingNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldDating, v))
+}
+
+// DatingIn applies the In predicate on the "dating" field.
+func DatingIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldDating, vs...))
+}
+
+// DatingNotIn applies the NotIn predicate on the "dating" field.
+func DatingNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldDating, vs...))
+}
+
+// DatingGT applies the GT predicate on the "dating" field.
+func DatingGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldDating, v))
+}
+
+// DatingGTE applies the GTE predicate on the "dating" field.
+func DatingGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldDating, v))
+}
+
+// DatingLT applies the LT predicate on the "dating" field.
+func DatingLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldDating, v))
+}
+
+// DatingLTE applies the LTE predicate on the "dating" field.
+func DatingLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldDating, v))
+}
+
+// DatingContains applies the Contains predicate on the "dating" field.
+func DatingContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldDating, v))
+}
+
+// DatingHasPrefix applies the HasPrefix predicate on the "dating" field.
+func DatingHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldDating, v))
+}
+
+// DatingHasSuffix applies the HasSuffix predicate on the "dating" field.
+func DatingHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldDating, v))
+}
+
+// DatingIsNil applies the IsNil predicate on the "dating" field.
+func DatingIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldDating))
+}
+
+// DatingNotNil applies the NotNil predicate on the "dating" field.
+func DatingNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldDating))
+}
+
+// DatingEqualFold applies the EqualFold predicate on the "dating" field.
+func DatingEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldDating, v))
+}
+
+// DatingContainsFold applies the ContainsFold predicate on the "dating" field.
+func DatingContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldDating, v))
+}
+
+// DatingStartEQ applies the EQ predicate on the "dating_start" field.
+func DatingStartEQ(v int) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDatingStart, v))
+}
+
+// DatingStartNEQ applies the NEQ predicate on the "dating_start" field.
+func DatingStartNEQ(v int) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldDatingStart, v))
+}
+
+// DatingStartIn applies the In predicate on the "dating_start" field.
+func DatingStartIn(vs ...int) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldDatingStart, vs...))
+}
+
+// DatingStartNotIn applies the NotIn predicate on the "dating_start" field.
+func DatingStartNotIn(vs ...int) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldDatingStart, vs...))
+}
+
+// DatingStartGT applies the GT predicate on the "dating_start" field.
+func DatingStartGT(v int) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldDatingStart, v))
+}
+
+// DatingStartGTE applies the GTE predicate on the "dating_start" field.
+func DatingStartGTE(v int) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldDatingStart, v))
+}
+
+// DatingStartLT applies the LT predicate on the "dating_start" field.
+func DatingStartLT(v int) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldDatingStart, v))
+}
+
+// DatingStartLTE applies the LTE predicate on the "dating_start" field.
+func DatingStartLTE(v int) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldDatingStart, v))
+}
+
+// DatingStartIsNil applies the IsNil predicate on the "dating_start" field.
+func DatingStartIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldDatingStart))
+}
+
+// DatingStartNotNil applies the NotNil predicate on the "dating_start" field.
+func DatingStartNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldDatingStart))
+}
+
+// DatingEndEQ applies the EQ predicate on the "dating_end" field.
+func DatingEndEQ(v int) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDatingEnd, v))
+}
+
+// DatingEndNEQ applies the NEQ predicate on the "dating_end" field.
+func DatingEndNEQ(v int) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldDatingEnd, v))
+}
+
+// DatingEndIn applies the In predicate on the "dating_end" field.
+func DatingEndIn(vs ...int) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldDatingEnd, vs...))
+}
+
+// DatingEndNotIn applies the NotIn predicate on the "dating_end" field.
+func DatingEndNotIn(vs ...int) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldDatingEnd, vs...))
+}
+
+// DatingEndGT applies the GT predicate on the "dating_end" field.
+func DatingEndGT(v int) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldDatingEnd, v))
+}
+
+// DatingEndGTE applies the GTE predicate on the "dating_end" field.
+func DatingEndGTE(v int) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldDatingEnd, v))
+}
+
+// DatingEndLT applies the LT predicate on the "dating_end" field.
+func DatingEndLT(v int) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldDatingEnd, v))
+}
+
+// DatingEndLTE applies the LTE predicate on the "dating_end" field.
+func DatingEndLTE(v int) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldDatingEnd, v))
+}
+
+// DatingEndIsNil applies the IsNil predicate on the "dating_end" field.
+func DatingEndIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldDatingEnd))
+}
+
+// DatingEndNotNil applies the NotNil predicate on the "dating_end" field.
+func DatingEndNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldDatingEnd))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.
@@ -645,6 +860,36 @@ func ExternalLinkContainsFold(v string) predicate.Art {
 	return predicate.Art(sql.FieldContainsFold(FieldExternalLink, v))
 }
 
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v Status) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldStatus, v))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v Status) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldStatus, v))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...Status) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldStatus, vs...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...Status) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldStatus, vs...))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldStatus))
+}
+
 // PrimaryImageURLEQ applies the EQ predicate on the "primary_image_url" field.
 func PrimaryImageURLEQ(v string) predicate.Art {
 	return predicate.Art(sql.FieldEQ(FieldPrimaryImageURL, v))
@@ -730,154 +975,329 @@ func AdditionalImagesUrlsNotNil() predicate.Art {
 	return predicate.Art(sql.FieldNotNull(FieldAdditionalImagesUrls))
 }
 
-// NumberEQ applies the EQ predicate on the "number" field.
-func NumberEQ(v string) predicate.Art {
-	return predicate.Art(sql.FieldEQ(FieldNumber, v))
+// HeightEQ applies the EQ predicate on the "height" field.
+func HeightEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldHeight, v))
 }
 
-// NumberNEQ applies the NEQ predicate on the "number" field.
-func NumberNEQ(v string) predicate.Art {
-	return predicate.Art(sql.FieldNEQ(FieldNumber, v))
+// HeightNEQ applies the NEQ predicate on the "height" field.
+func HeightNEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldHeight, v))
 }
 
-// NumberIn applies the In predicate on the "number" field.
-func NumberIn(vs ...string) predicate.Art {
-	return predicate.Art(sql.FieldIn(FieldNumber, vs...))
+// HeightIn applies the In predicate on the "height" field.
+func HeightIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldHeight, vs...))
 }
 
-// NumberNotIn applies the NotIn predicate on the "number" field.
-func NumberNotIn(vs ...string) predicate.Art {
-	return predicate.Art(sql.FieldNotIn(FieldNumber, vs...))
+// HeightNotIn applies the NotIn predicate on the "height" field.
+func HeightNotIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldHeight, vs...))
 }
 
-// NumberGT applies the GT predicate on the "number" field.
-func NumberGT(v string) predicate.Art {
-	return predicate.Art(sql.FieldGT(FieldNumber, v))
+// HeightGT applies the GT predicate on the "height" field.
+func HeightGT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldHeight, v))
 }
 
-// NumberGTE applies the GTE predicate on the "number" field.
-func NumberGTE(v string) predicate.Art {
-	return predicate.Art(sql.FieldGTE(FieldNumber, v))
+// HeightGTE applies the GTE predicate on the "height" field.
+func HeightGTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldHeight, v))
 }
 
-// NumberLT applies the LT predicate on the "number" field.
-func NumberLT(v string) predicate.Art {
-	return predicate.Art(sql.FieldLT(FieldNumber, v))
+// HeightLT applies the LT predicate on the "height" field.
+func HeightLT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldHeight, v))
 }
 
-// NumberLTE applies the LTE predicate on the "number" field.
-func NumberLTE(v string) predicate.Art {
-	return predicate.Art(sql.FieldLTE(FieldNumber, v))
+// HeightLTE applies the LTE predicate on the "height" field.
+func HeightLTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldHeight, v))
 }
 
-// NumberContains applies the Contains predicate on the "number" field.
-func NumberContains(v string) predicate.Art {
-	return predicate.Art(sql.FieldContains(FieldNumber, v))
+// HeightIsNil applies the IsNil predicate on the "height" field.
+func HeightIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldHeight))
 }
 
-// NumberHasPrefix applies the HasPrefix predicate on the "number" field.
-func NumberHasPrefix(v string) predicate.Art {
-	return predicate.Art(sql.FieldHasPrefix(FieldNumber, v))
+// HeightNotNil applies the NotNil predicate on the "height" field.
+func HeightNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldHeight))
 }
 
-// NumberHasSuffix applies the HasSuffix predicate on the "number" field.
-func NumberHasSuffix(v string) predicate.Art {
-	return predicate.Art(sql.FieldHasSuffix(FieldNumber, v))
+// WidthEQ applies the EQ predicate on the "width" field.
+func WidthEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldWidth, v))
 }
 
-// NumberIsNil applies the IsNil predicate on the "number" field.
-func NumberIsNil() predicate.Art {
-	return predicate.Art(sql.FieldIsNull(FieldNumber))
+// WidthNEQ applies the NEQ predicate on the "width" field.
+func WidthNEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldWidth, v))
 }
 
-// NumberNotNil applies the NotNil predicate on the "number" field.
-func NumberNotNil() predicate.Art {
-	return predicate.Art(sql.FieldNotNull(FieldNumber))
+// WidthIn applies the In predicate on the "width" field.
+func WidthIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldWidth, vs...))
 }
 
-// NumberEqualFold applies the EqualFold predicate on the "number" field.
-func NumberEqualFold(v string) predicate.Art {
-	return predicate.Art(sql.FieldEqualFold(FieldNumber, v))
+// WidthNotIn applies the NotIn predicate on the "width" field.
+func WidthNotIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldWidth, vs...))
 }
 
-// NumberContainsFold applies the ContainsFold predicate on the "number" field.
-func NumberContainsFold(v string) predicate.Art {
-	return predicate.Art(sql.FieldContainsFold(FieldNumber, v))
+// WidthGT applies the GT predicate on the "width" field.
+func WidthGT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldWidth, v))
 }
 
-// DatingEQ applies the EQ predicate on the "dating" field.
-func DatingEQ(v string) predicate.Art {
-	return predicate.Art(sql.FieldEQ(FieldDating, v))
+// WidthGTE applies the GTE predicate on the "width" field.
+func WidthGTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldWidth, v))
 }
 
-// DatingNEQ applies the NEQ predicate on the "dating" field.
-func DatingNEQ(v string) predicate.Art {
-	return predicate.Art(sql.FieldNEQ(FieldDating, v))
+// WidthLT applies the LT predicate on the "width" field.
+func WidthLT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldWidth, v))
 }
 
-// DatingIn applies the In predicate on the "dating" field.
-func DatingIn(vs ...string) predicate.Art {
-	return predicate.Art(sql.FieldIn(FieldDating, vs...))
+// WidthLTE applies the LTE predicate on the "width" field.
+func WidthLTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldWidth, v))
 }
 
-// DatingNotIn applies the NotIn predicate on the "dating" field.
-func DatingNotIn(vs ...string) predicate.Art {
-	return predicate.Art(sql.FieldNotIn(FieldDating, vs...))
+// WidthIsNil applies the IsNil predicate on the "width" field.
+func WidthIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldWidth))
 }
 
-// DatingGT applies the GT predicate on the "dating" field.
-func DatingGT(v string) predicate.Art {
-	return predicate.Art(sql.FieldGT(FieldDating, v))
+// WidthNotNil applies the NotNil predicate on the "width" field.
+func WidthNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldWidth))
 }
 
-// DatingGTE applies the GTE predicate on the "dating" field.
-func DatingGTE(v string) predicate.Art {
-	return predicate.Art(sql.FieldGTE(FieldDating, v))
+// LengthEQ applies the EQ predicate on the "length" field.
+func LengthEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldLength, v))
 }
 
-// DatingLT applies the LT predicate on the "dating" field.
-func DatingLT(v string) predicate.Art {
-	return predicate.Art(sql.FieldLT(FieldDating, v))
+// LengthNEQ applies the NEQ predicate on the "length" field.
+func LengthNEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldLength, v))
 }
 
-// DatingLTE applies the LTE predicate on the "dating" field.
-func DatingLTE(v string) predicate.Art {
-	return predicate.Art(sql.FieldLTE(FieldDating, v))
+// LengthIn applies the In predicate on the "length" field.
+func LengthIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldLength, vs...))
 }
 
-// DatingContains applies the Contains predicate on the "dating" field.
-func DatingContains(v string) predicate.Art {
-	return predicate.Art(sql.FieldContains(FieldDating, v))
+// LengthNotIn applies the NotIn predicate on the "length" field.
+func LengthNotIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldLength, vs...))
 }
 
-// DatingHasPrefix applies the HasPrefix predicate on the "dating" field.
-func DatingHasPrefix(v string) predicate.Art {
-	return predicate.Art(sql.FieldHasPrefix(FieldDating, v))
+// LengthGT applies the GT predicate on the "length" field.
+func LengthGT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldLength, v))
 }
 
-// DatingHasSuffix applies the HasSuffix predicate on the "dating" field.
-func DatingHasSuffix(v string) predicate.Art {
-	return predicate.Art(sql.FieldHasSuffix(FieldDating, v))
+// LengthGTE applies the GTE predicate on the "length" field.
+func LengthGTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldLength, v))
 }
 
-// DatingIsNil applies the IsNil predicate on the "dating" field.
-func DatingIsNil() predicate.Art {
-	return predicate.Art(sql.FieldIsNull(FieldDating))
+// LengthLT applies the LT predicate on the "length" field.
+func LengthLT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldLength, v))
 }
 
-// DatingNotNil applies the NotNil predicate on the "dating" field.
-func DatingNotNil() predicate.Art {
-	return predicate.Art(sql.FieldNotNull(FieldDating))
+// LengthLTE applies the LTE predicate on the "length" field.
+func LengthLTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldLength, v))
 }
 
-// DatingEqualFold applies the EqualFold predicate on the "dating" field.
-func DatingEqualFold(v string) predicate.Art {
-	return predicate.Art(sql.FieldEqualFold(FieldDating, v))
+// LengthIsNil applies the IsNil predicate on the "length" field.
+func LengthIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldLength))
 }
 
-// DatingContainsFold applies the ContainsFold predicate on the "dating" field.
-func DatingContainsFold(v string) predicate.Art {
-	return predicate.Art(sql.FieldContainsFold(FieldDating, v))
+// LengthNotNil applies the NotNil predicate on the "length" field.
+func LengthNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldLength))
+}
+
+// DepthEQ applies the EQ predicate on the "depth" field.
+func DepthEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDepth, v))
+}
+
+// DepthNEQ applies the NEQ predicate on the "depth" field.
+func DepthNEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldDepth, v))
+}
+
+// DepthIn applies the In predicate on the "depth" field.
+func DepthIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldDepth, vs...))
+}
+
+// DepthNotIn applies the NotIn predicate on the "depth" field.
+func DepthNotIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldDepth, vs...))
+}
+
+// DepthGT applies the GT predicate on the "depth" field.
+func DepthGT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldDepth, v))
+}
+
+// DepthGTE applies the GTE predicate on the "depth" field.
+func DepthGTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldDepth, v))
+}
+
+// DepthLT applies the LT predicate on the "depth" field.
+func DepthLT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldDepth, v))
+}
+
+// DepthLTE applies the LTE predicate on the "depth" field.
+func DepthLTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldDepth, v))
+}
+
+// DepthIsNil applies the IsNil predicate on the "depth" field.
+func DepthIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldDepth))
+}
+
+// DepthNotNil applies the NotNil predicate on the "depth" field.
+func DepthNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldDepth))
+}
+
+// DiameterEQ applies the EQ predicate on the "diameter" field.
+func DiameterEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldDiameter, v))
+}
+
+// DiameterNEQ applies the NEQ predicate on the "diameter" field.
+func DiameterNEQ(v float64) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldDiameter, v))
+}
+
+// DiameterIn applies the In predicate on the "diameter" field.
+func DiameterIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldDiameter, vs...))
+}
+
+// DiameterNotIn applies the NotIn predicate on the "diameter" field.
+func DiameterNotIn(vs ...float64) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldDiameter, vs...))
+}
+
+// DiameterGT applies the GT predicate on the "diameter" field.
+func DiameterGT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldDiameter, v))
+}
+
+// DiameterGTE applies the GTE predicate on the "diameter" field.
+func DiameterGTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldDiameter, v))
+}
+
+// DiameterLT applies the LT predicate on the "diameter" field.
+func DiameterLT(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldDiameter, v))
+}
+
+// DiameterLTE applies the LTE predicate on the "diameter" field.
+func DiameterLTE(v float64) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldDiameter, v))
+}
+
+// DiameterIsNil applies the IsNil predicate on the "diameter" field.
+func DiameterIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldDiameter))
+}
+
+// DiameterNotNil applies the NotNil predicate on the "diameter" field.
+func DiameterNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldDiameter))
+}
+
+// WeightEQ applies the EQ predicate on the "weight" field.
+func WeightEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldWeight, v))
+}
+
+// WeightNEQ applies the NEQ predicate on the "weight" field.
+func WeightNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldWeight, v))
+}
+
+// WeightIn applies the In predicate on the "weight" field.
+func WeightIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldWeight, vs...))
+}
+
+// WeightNotIn applies the NotIn predicate on the "weight" field.
+func WeightNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldWeight, vs...))
+}
+
+// WeightGT applies the GT predicate on the "weight" field.
+func WeightGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldWeight, v))
+}
+
+// WeightGTE applies the GTE predicate on the "weight" field.
+func WeightGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldWeight, v))
+}
+
+// WeightLT applies the LT predicate on the "weight" field.
+func WeightLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldWeight, v))
+}
+
+// WeightLTE applies the LTE predicate on the "weight" field.
+func WeightLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldWeight, v))
+}
+
+// WeightContains applies the Contains predicate on the "weight" field.
+func WeightContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldWeight, v))
+}
+
+// WeightHasPrefix applies the HasPrefix predicate on the "weight" field.
+func WeightHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldWeight, v))
+}
+
+// WeightHasSuffix applies the HasSuffix predicate on the "weight" field.
+func WeightHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldWeight, v))
+}
+
+// WeightIsNil applies the IsNil predicate on the "weight" field.
+func WeightIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldWeight))
+}
+
+// WeightNotNil applies the NotNil predicate on the "weight" field.
+func WeightNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldWeight))
+}
+
+// WeightEqualFold applies the EqualFold predicate on the "weight" field.
+func WeightEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldWeight, v))
+}
+
+// WeightContainsFold applies the ContainsFold predicate on the "weight" field.
+func WeightContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldWeight, v))
 }
 
 // DimensionsEQ applies the EQ predicate on the "dimensions" field.
@@ -953,6 +1373,81 @@ func DimensionsEqualFold(v string) predicate.Art {
 // DimensionsContainsFold applies the ContainsFold predicate on the "dimensions" field.
 func DimensionsContainsFold(v string) predicate.Art {
 	return predicate.Art(sql.FieldContainsFold(FieldDimensions, v))
+}
+
+// NumberEQ applies the EQ predicate on the "number" field.
+func NumberEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldEQ(FieldNumber, v))
+}
+
+// NumberNEQ applies the NEQ predicate on the "number" field.
+func NumberNEQ(v string) predicate.Art {
+	return predicate.Art(sql.FieldNEQ(FieldNumber, v))
+}
+
+// NumberIn applies the In predicate on the "number" field.
+func NumberIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldIn(FieldNumber, vs...))
+}
+
+// NumberNotIn applies the NotIn predicate on the "number" field.
+func NumberNotIn(vs ...string) predicate.Art {
+	return predicate.Art(sql.FieldNotIn(FieldNumber, vs...))
+}
+
+// NumberGT applies the GT predicate on the "number" field.
+func NumberGT(v string) predicate.Art {
+	return predicate.Art(sql.FieldGT(FieldNumber, v))
+}
+
+// NumberGTE applies the GTE predicate on the "number" field.
+func NumberGTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldGTE(FieldNumber, v))
+}
+
+// NumberLT applies the LT predicate on the "number" field.
+func NumberLT(v string) predicate.Art {
+	return predicate.Art(sql.FieldLT(FieldNumber, v))
+}
+
+// NumberLTE applies the LTE predicate on the "number" field.
+func NumberLTE(v string) predicate.Art {
+	return predicate.Art(sql.FieldLTE(FieldNumber, v))
+}
+
+// NumberContains applies the Contains predicate on the "number" field.
+func NumberContains(v string) predicate.Art {
+	return predicate.Art(sql.FieldContains(FieldNumber, v))
+}
+
+// NumberHasPrefix applies the HasPrefix predicate on the "number" field.
+func NumberHasPrefix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasPrefix(FieldNumber, v))
+}
+
+// NumberHasSuffix applies the HasSuffix predicate on the "number" field.
+func NumberHasSuffix(v string) predicate.Art {
+	return predicate.Art(sql.FieldHasSuffix(FieldNumber, v))
+}
+
+// NumberIsNil applies the IsNil predicate on the "number" field.
+func NumberIsNil() predicate.Art {
+	return predicate.Art(sql.FieldIsNull(FieldNumber))
+}
+
+// NumberNotNil applies the NotNil predicate on the "number" field.
+func NumberNotNil() predicate.Art {
+	return predicate.Art(sql.FieldNotNull(FieldNumber))
+}
+
+// NumberEqualFold applies the EqualFold predicate on the "number" field.
+func NumberEqualFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldEqualFold(FieldNumber, v))
+}
+
+// NumberContainsFold applies the ContainsFold predicate on the "number" field.
+func NumberContainsFold(v string) predicate.Art {
+	return predicate.Art(sql.FieldContainsFold(FieldNumber, v))
 }
 
 // HasAuthor applies the HasEdge predicate on the "author" edge.

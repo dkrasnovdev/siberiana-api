@@ -85,6 +85,80 @@ func (pu *PetroglyphUpdate) ClearUpdatedBy() *PetroglyphUpdate {
 	return pu
 }
 
+// SetDating sets the "dating" field.
+func (pu *PetroglyphUpdate) SetDating(s string) *PetroglyphUpdate {
+	pu.mutation.SetDating(s)
+	return pu
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableDating(s *string) *PetroglyphUpdate {
+	if s != nil {
+		pu.SetDating(*s)
+	}
+	return pu
+}
+
+// ClearDating clears the value of the "dating" field.
+func (pu *PetroglyphUpdate) ClearDating() *PetroglyphUpdate {
+	pu.mutation.ClearDating()
+	return pu
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (pu *PetroglyphUpdate) SetDatingStart(i int) *PetroglyphUpdate {
+	pu.mutation.ResetDatingStart()
+	pu.mutation.SetDatingStart(i)
+	return pu
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableDatingStart(i *int) *PetroglyphUpdate {
+	if i != nil {
+		pu.SetDatingStart(*i)
+	}
+	return pu
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (pu *PetroglyphUpdate) AddDatingStart(i int) *PetroglyphUpdate {
+	pu.mutation.AddDatingStart(i)
+	return pu
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (pu *PetroglyphUpdate) ClearDatingStart() *PetroglyphUpdate {
+	pu.mutation.ClearDatingStart()
+	return pu
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (pu *PetroglyphUpdate) SetDatingEnd(i int) *PetroglyphUpdate {
+	pu.mutation.ResetDatingEnd()
+	pu.mutation.SetDatingEnd(i)
+	return pu
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableDatingEnd(i *int) *PetroglyphUpdate {
+	if i != nil {
+		pu.SetDatingEnd(*i)
+	}
+	return pu
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (pu *PetroglyphUpdate) AddDatingEnd(i int) *PetroglyphUpdate {
+	pu.mutation.AddDatingEnd(i)
+	return pu
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (pu *PetroglyphUpdate) ClearDatingEnd() *PetroglyphUpdate {
+	pu.mutation.ClearDatingEnd()
+	return pu
+}
+
 // SetDisplayName sets the "display_name" field.
 func (pu *PetroglyphUpdate) SetDisplayName(s string) *PetroglyphUpdate {
 	pu.mutation.SetDisplayName(s)
@@ -220,200 +294,6 @@ func (pu *PetroglyphUpdate) AppendAdditionalImagesUrls(s []string) *PetroglyphUp
 // ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
 func (pu *PetroglyphUpdate) ClearAdditionalImagesUrls() *PetroglyphUpdate {
 	pu.mutation.ClearAdditionalImagesUrls()
-	return pu
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (pu *PetroglyphUpdate) SetDeletedAt(t time.Time) *PetroglyphUpdate {
-	pu.mutation.SetDeletedAt(t)
-	return pu
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableDeletedAt(t *time.Time) *PetroglyphUpdate {
-	if t != nil {
-		pu.SetDeletedAt(*t)
-	}
-	return pu
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (pu *PetroglyphUpdate) ClearDeletedAt() *PetroglyphUpdate {
-	pu.mutation.ClearDeletedAt()
-	return pu
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (pu *PetroglyphUpdate) SetDeletedBy(s string) *PetroglyphUpdate {
-	pu.mutation.SetDeletedBy(s)
-	return pu
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableDeletedBy(s *string) *PetroglyphUpdate {
-	if s != nil {
-		pu.SetDeletedBy(*s)
-	}
-	return pu
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (pu *PetroglyphUpdate) ClearDeletedBy() *PetroglyphUpdate {
-	pu.mutation.ClearDeletedBy()
-	return pu
-}
-
-// SetNumber sets the "number" field.
-func (pu *PetroglyphUpdate) SetNumber(s string) *PetroglyphUpdate {
-	pu.mutation.SetNumber(s)
-	return pu
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableNumber(s *string) *PetroglyphUpdate {
-	if s != nil {
-		pu.SetNumber(*s)
-	}
-	return pu
-}
-
-// ClearNumber clears the value of the "number" field.
-func (pu *PetroglyphUpdate) ClearNumber() *PetroglyphUpdate {
-	pu.mutation.ClearNumber()
-	return pu
-}
-
-// SetDating sets the "dating" field.
-func (pu *PetroglyphUpdate) SetDating(s string) *PetroglyphUpdate {
-	pu.mutation.SetDating(s)
-	return pu
-}
-
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableDating(s *string) *PetroglyphUpdate {
-	if s != nil {
-		pu.SetDating(*s)
-	}
-	return pu
-}
-
-// ClearDating clears the value of the "dating" field.
-func (pu *PetroglyphUpdate) ClearDating() *PetroglyphUpdate {
-	pu.mutation.ClearDating()
-	return pu
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (pu *PetroglyphUpdate) SetDatingStart(i int) *PetroglyphUpdate {
-	pu.mutation.ResetDatingStart()
-	pu.mutation.SetDatingStart(i)
-	return pu
-}
-
-// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableDatingStart(i *int) *PetroglyphUpdate {
-	if i != nil {
-		pu.SetDatingStart(*i)
-	}
-	return pu
-}
-
-// AddDatingStart adds i to the "dating_start" field.
-func (pu *PetroglyphUpdate) AddDatingStart(i int) *PetroglyphUpdate {
-	pu.mutation.AddDatingStart(i)
-	return pu
-}
-
-// ClearDatingStart clears the value of the "dating_start" field.
-func (pu *PetroglyphUpdate) ClearDatingStart() *PetroglyphUpdate {
-	pu.mutation.ClearDatingStart()
-	return pu
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (pu *PetroglyphUpdate) SetDatingEnd(i int) *PetroglyphUpdate {
-	pu.mutation.ResetDatingEnd()
-	pu.mutation.SetDatingEnd(i)
-	return pu
-}
-
-// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableDatingEnd(i *int) *PetroglyphUpdate {
-	if i != nil {
-		pu.SetDatingEnd(*i)
-	}
-	return pu
-}
-
-// AddDatingEnd adds i to the "dating_end" field.
-func (pu *PetroglyphUpdate) AddDatingEnd(i int) *PetroglyphUpdate {
-	pu.mutation.AddDatingEnd(i)
-	return pu
-}
-
-// ClearDatingEnd clears the value of the "dating_end" field.
-func (pu *PetroglyphUpdate) ClearDatingEnd() *PetroglyphUpdate {
-	pu.mutation.ClearDatingEnd()
-	return pu
-}
-
-// SetOrientation sets the "orientation" field.
-func (pu *PetroglyphUpdate) SetOrientation(s string) *PetroglyphUpdate {
-	pu.mutation.SetOrientation(s)
-	return pu
-}
-
-// SetNillableOrientation sets the "orientation" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableOrientation(s *string) *PetroglyphUpdate {
-	if s != nil {
-		pu.SetOrientation(*s)
-	}
-	return pu
-}
-
-// ClearOrientation clears the value of the "orientation" field.
-func (pu *PetroglyphUpdate) ClearOrientation() *PetroglyphUpdate {
-	pu.mutation.ClearOrientation()
-	return pu
-}
-
-// SetPosition sets the "position" field.
-func (pu *PetroglyphUpdate) SetPosition(s string) *PetroglyphUpdate {
-	pu.mutation.SetPosition(s)
-	return pu
-}
-
-// SetNillablePosition sets the "position" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillablePosition(s *string) *PetroglyphUpdate {
-	if s != nil {
-		pu.SetPosition(*s)
-	}
-	return pu
-}
-
-// ClearPosition clears the value of the "position" field.
-func (pu *PetroglyphUpdate) ClearPosition() *PetroglyphUpdate {
-	pu.mutation.ClearPosition()
-	return pu
-}
-
-// SetGeometricShape sets the "geometric_shape" field.
-func (pu *PetroglyphUpdate) SetGeometricShape(s string) *PetroglyphUpdate {
-	pu.mutation.SetGeometricShape(s)
-	return pu
-}
-
-// SetNillableGeometricShape sets the "geometric_shape" field if the given value is not nil.
-func (pu *PetroglyphUpdate) SetNillableGeometricShape(s *string) *PetroglyphUpdate {
-	if s != nil {
-		pu.SetGeometricShape(*s)
-	}
-	return pu
-}
-
-// ClearGeometricShape clears the value of the "geometric_shape" field.
-func (pu *PetroglyphUpdate) ClearGeometricShape() *PetroglyphUpdate {
-	pu.mutation.ClearGeometricShape()
 	return pu
 }
 
@@ -589,6 +469,126 @@ func (pu *PetroglyphUpdate) SetNillableDimensions(s *string) *PetroglyphUpdate {
 // ClearDimensions clears the value of the "dimensions" field.
 func (pu *PetroglyphUpdate) ClearDimensions() *PetroglyphUpdate {
 	pu.mutation.ClearDimensions()
+	return pu
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (pu *PetroglyphUpdate) SetDeletedAt(t time.Time) *PetroglyphUpdate {
+	pu.mutation.SetDeletedAt(t)
+	return pu
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableDeletedAt(t *time.Time) *PetroglyphUpdate {
+	if t != nil {
+		pu.SetDeletedAt(*t)
+	}
+	return pu
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (pu *PetroglyphUpdate) ClearDeletedAt() *PetroglyphUpdate {
+	pu.mutation.ClearDeletedAt()
+	return pu
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (pu *PetroglyphUpdate) SetDeletedBy(s string) *PetroglyphUpdate {
+	pu.mutation.SetDeletedBy(s)
+	return pu
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableDeletedBy(s *string) *PetroglyphUpdate {
+	if s != nil {
+		pu.SetDeletedBy(*s)
+	}
+	return pu
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (pu *PetroglyphUpdate) ClearDeletedBy() *PetroglyphUpdate {
+	pu.mutation.ClearDeletedBy()
+	return pu
+}
+
+// SetNumber sets the "number" field.
+func (pu *PetroglyphUpdate) SetNumber(s string) *PetroglyphUpdate {
+	pu.mutation.SetNumber(s)
+	return pu
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableNumber(s *string) *PetroglyphUpdate {
+	if s != nil {
+		pu.SetNumber(*s)
+	}
+	return pu
+}
+
+// ClearNumber clears the value of the "number" field.
+func (pu *PetroglyphUpdate) ClearNumber() *PetroglyphUpdate {
+	pu.mutation.ClearNumber()
+	return pu
+}
+
+// SetOrientation sets the "orientation" field.
+func (pu *PetroglyphUpdate) SetOrientation(s string) *PetroglyphUpdate {
+	pu.mutation.SetOrientation(s)
+	return pu
+}
+
+// SetNillableOrientation sets the "orientation" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableOrientation(s *string) *PetroglyphUpdate {
+	if s != nil {
+		pu.SetOrientation(*s)
+	}
+	return pu
+}
+
+// ClearOrientation clears the value of the "orientation" field.
+func (pu *PetroglyphUpdate) ClearOrientation() *PetroglyphUpdate {
+	pu.mutation.ClearOrientation()
+	return pu
+}
+
+// SetPosition sets the "position" field.
+func (pu *PetroglyphUpdate) SetPosition(s string) *PetroglyphUpdate {
+	pu.mutation.SetPosition(s)
+	return pu
+}
+
+// SetNillablePosition sets the "position" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillablePosition(s *string) *PetroglyphUpdate {
+	if s != nil {
+		pu.SetPosition(*s)
+	}
+	return pu
+}
+
+// ClearPosition clears the value of the "position" field.
+func (pu *PetroglyphUpdate) ClearPosition() *PetroglyphUpdate {
+	pu.mutation.ClearPosition()
+	return pu
+}
+
+// SetGeometricShape sets the "geometric_shape" field.
+func (pu *PetroglyphUpdate) SetGeometricShape(s string) *PetroglyphUpdate {
+	pu.mutation.SetGeometricShape(s)
+	return pu
+}
+
+// SetNillableGeometricShape sets the "geometric_shape" field if the given value is not nil.
+func (pu *PetroglyphUpdate) SetNillableGeometricShape(s *string) *PetroglyphUpdate {
+	if s != nil {
+		pu.SetGeometricShape(*s)
+	}
+	return pu
+}
+
+// ClearGeometricShape clears the value of the "geometric_shape" field.
+func (pu *PetroglyphUpdate) ClearGeometricShape() *PetroglyphUpdate {
+	pu.mutation.ClearGeometricShape()
 	return pu
 }
 
@@ -1018,6 +1018,30 @@ func (pu *PetroglyphUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedByCleared() {
 		_spec.ClearField(petroglyph.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := pu.mutation.Dating(); ok {
+		_spec.SetField(petroglyph.FieldDating, field.TypeString, value)
+	}
+	if pu.mutation.DatingCleared() {
+		_spec.ClearField(petroglyph.FieldDating, field.TypeString)
+	}
+	if value, ok := pu.mutation.DatingStart(); ok {
+		_spec.SetField(petroglyph.FieldDatingStart, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedDatingStart(); ok {
+		_spec.AddField(petroglyph.FieldDatingStart, field.TypeInt, value)
+	}
+	if pu.mutation.DatingStartCleared() {
+		_spec.ClearField(petroglyph.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := pu.mutation.DatingEnd(); ok {
+		_spec.SetField(petroglyph.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(petroglyph.FieldDatingEnd, field.TypeInt, value)
+	}
+	if pu.mutation.DatingEndCleared() {
+		_spec.ClearField(petroglyph.FieldDatingEnd, field.TypeInt)
+	}
 	if value, ok := pu.mutation.DisplayName(); ok {
 		_spec.SetField(petroglyph.FieldDisplayName, field.TypeString, value)
 	}
@@ -1064,66 +1088,6 @@ func (pu *PetroglyphUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(petroglyph.FieldAdditionalImagesUrls, field.TypeJSON)
-	}
-	if value, ok := pu.mutation.DeletedAt(); ok {
-		_spec.SetField(petroglyph.FieldDeletedAt, field.TypeTime, value)
-	}
-	if pu.mutation.DeletedAtCleared() {
-		_spec.ClearField(petroglyph.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := pu.mutation.DeletedBy(); ok {
-		_spec.SetField(petroglyph.FieldDeletedBy, field.TypeString, value)
-	}
-	if pu.mutation.DeletedByCleared() {
-		_spec.ClearField(petroglyph.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := pu.mutation.Number(); ok {
-		_spec.SetField(petroglyph.FieldNumber, field.TypeString, value)
-	}
-	if pu.mutation.NumberCleared() {
-		_spec.ClearField(petroglyph.FieldNumber, field.TypeString)
-	}
-	if value, ok := pu.mutation.Dating(); ok {
-		_spec.SetField(petroglyph.FieldDating, field.TypeString, value)
-	}
-	if pu.mutation.DatingCleared() {
-		_spec.ClearField(petroglyph.FieldDating, field.TypeString)
-	}
-	if value, ok := pu.mutation.DatingStart(); ok {
-		_spec.SetField(petroglyph.FieldDatingStart, field.TypeInt, value)
-	}
-	if value, ok := pu.mutation.AddedDatingStart(); ok {
-		_spec.AddField(petroglyph.FieldDatingStart, field.TypeInt, value)
-	}
-	if pu.mutation.DatingStartCleared() {
-		_spec.ClearField(petroglyph.FieldDatingStart, field.TypeInt)
-	}
-	if value, ok := pu.mutation.DatingEnd(); ok {
-		_spec.SetField(petroglyph.FieldDatingEnd, field.TypeInt, value)
-	}
-	if value, ok := pu.mutation.AddedDatingEnd(); ok {
-		_spec.AddField(petroglyph.FieldDatingEnd, field.TypeInt, value)
-	}
-	if pu.mutation.DatingEndCleared() {
-		_spec.ClearField(petroglyph.FieldDatingEnd, field.TypeInt)
-	}
-	if value, ok := pu.mutation.Orientation(); ok {
-		_spec.SetField(petroglyph.FieldOrientation, field.TypeString, value)
-	}
-	if pu.mutation.OrientationCleared() {
-		_spec.ClearField(petroglyph.FieldOrientation, field.TypeString)
-	}
-	if value, ok := pu.mutation.Position(); ok {
-		_spec.SetField(petroglyph.FieldPosition, field.TypeString, value)
-	}
-	if pu.mutation.PositionCleared() {
-		_spec.ClearField(petroglyph.FieldPosition, field.TypeString)
-	}
-	if value, ok := pu.mutation.GeometricShape(); ok {
-		_spec.SetField(petroglyph.FieldGeometricShape, field.TypeString, value)
-	}
-	if pu.mutation.GeometricShapeCleared() {
-		_spec.ClearField(petroglyph.FieldGeometricShape, field.TypeString)
 	}
 	if value, ok := pu.mutation.Height(); ok {
 		_spec.SetField(petroglyph.FieldHeight, field.TypeFloat64, value)
@@ -1181,6 +1145,42 @@ func (pu *PetroglyphUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.DimensionsCleared() {
 		_spec.ClearField(petroglyph.FieldDimensions, field.TypeString)
+	}
+	if value, ok := pu.mutation.DeletedAt(); ok {
+		_spec.SetField(petroglyph.FieldDeletedAt, field.TypeTime, value)
+	}
+	if pu.mutation.DeletedAtCleared() {
+		_spec.ClearField(petroglyph.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := pu.mutation.DeletedBy(); ok {
+		_spec.SetField(petroglyph.FieldDeletedBy, field.TypeString, value)
+	}
+	if pu.mutation.DeletedByCleared() {
+		_spec.ClearField(petroglyph.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := pu.mutation.Number(); ok {
+		_spec.SetField(petroglyph.FieldNumber, field.TypeString, value)
+	}
+	if pu.mutation.NumberCleared() {
+		_spec.ClearField(petroglyph.FieldNumber, field.TypeString)
+	}
+	if value, ok := pu.mutation.Orientation(); ok {
+		_spec.SetField(petroglyph.FieldOrientation, field.TypeString, value)
+	}
+	if pu.mutation.OrientationCleared() {
+		_spec.ClearField(petroglyph.FieldOrientation, field.TypeString)
+	}
+	if value, ok := pu.mutation.Position(); ok {
+		_spec.SetField(petroglyph.FieldPosition, field.TypeString, value)
+	}
+	if pu.mutation.PositionCleared() {
+		_spec.ClearField(petroglyph.FieldPosition, field.TypeString)
+	}
+	if value, ok := pu.mutation.GeometricShape(); ok {
+		_spec.SetField(petroglyph.FieldGeometricShape, field.TypeString, value)
+	}
+	if pu.mutation.GeometricShapeCleared() {
+		_spec.ClearField(petroglyph.FieldGeometricShape, field.TypeString)
 	}
 	if value, ok := pu.mutation.PlanePreservation(); ok {
 		_spec.SetField(petroglyph.FieldPlanePreservation, field.TypeString, value)
@@ -1571,6 +1571,80 @@ func (puo *PetroglyphUpdateOne) ClearUpdatedBy() *PetroglyphUpdateOne {
 	return puo
 }
 
+// SetDating sets the "dating" field.
+func (puo *PetroglyphUpdateOne) SetDating(s string) *PetroglyphUpdateOne {
+	puo.mutation.SetDating(s)
+	return puo
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableDating(s *string) *PetroglyphUpdateOne {
+	if s != nil {
+		puo.SetDating(*s)
+	}
+	return puo
+}
+
+// ClearDating clears the value of the "dating" field.
+func (puo *PetroglyphUpdateOne) ClearDating() *PetroglyphUpdateOne {
+	puo.mutation.ClearDating()
+	return puo
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (puo *PetroglyphUpdateOne) SetDatingStart(i int) *PetroglyphUpdateOne {
+	puo.mutation.ResetDatingStart()
+	puo.mutation.SetDatingStart(i)
+	return puo
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableDatingStart(i *int) *PetroglyphUpdateOne {
+	if i != nil {
+		puo.SetDatingStart(*i)
+	}
+	return puo
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (puo *PetroglyphUpdateOne) AddDatingStart(i int) *PetroglyphUpdateOne {
+	puo.mutation.AddDatingStart(i)
+	return puo
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (puo *PetroglyphUpdateOne) ClearDatingStart() *PetroglyphUpdateOne {
+	puo.mutation.ClearDatingStart()
+	return puo
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (puo *PetroglyphUpdateOne) SetDatingEnd(i int) *PetroglyphUpdateOne {
+	puo.mutation.ResetDatingEnd()
+	puo.mutation.SetDatingEnd(i)
+	return puo
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableDatingEnd(i *int) *PetroglyphUpdateOne {
+	if i != nil {
+		puo.SetDatingEnd(*i)
+	}
+	return puo
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (puo *PetroglyphUpdateOne) AddDatingEnd(i int) *PetroglyphUpdateOne {
+	puo.mutation.AddDatingEnd(i)
+	return puo
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (puo *PetroglyphUpdateOne) ClearDatingEnd() *PetroglyphUpdateOne {
+	puo.mutation.ClearDatingEnd()
+	return puo
+}
+
 // SetDisplayName sets the "display_name" field.
 func (puo *PetroglyphUpdateOne) SetDisplayName(s string) *PetroglyphUpdateOne {
 	puo.mutation.SetDisplayName(s)
@@ -1706,200 +1780,6 @@ func (puo *PetroglyphUpdateOne) AppendAdditionalImagesUrls(s []string) *Petrogly
 // ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
 func (puo *PetroglyphUpdateOne) ClearAdditionalImagesUrls() *PetroglyphUpdateOne {
 	puo.mutation.ClearAdditionalImagesUrls()
-	return puo
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (puo *PetroglyphUpdateOne) SetDeletedAt(t time.Time) *PetroglyphUpdateOne {
-	puo.mutation.SetDeletedAt(t)
-	return puo
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableDeletedAt(t *time.Time) *PetroglyphUpdateOne {
-	if t != nil {
-		puo.SetDeletedAt(*t)
-	}
-	return puo
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (puo *PetroglyphUpdateOne) ClearDeletedAt() *PetroglyphUpdateOne {
-	puo.mutation.ClearDeletedAt()
-	return puo
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (puo *PetroglyphUpdateOne) SetDeletedBy(s string) *PetroglyphUpdateOne {
-	puo.mutation.SetDeletedBy(s)
-	return puo
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableDeletedBy(s *string) *PetroglyphUpdateOne {
-	if s != nil {
-		puo.SetDeletedBy(*s)
-	}
-	return puo
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (puo *PetroglyphUpdateOne) ClearDeletedBy() *PetroglyphUpdateOne {
-	puo.mutation.ClearDeletedBy()
-	return puo
-}
-
-// SetNumber sets the "number" field.
-func (puo *PetroglyphUpdateOne) SetNumber(s string) *PetroglyphUpdateOne {
-	puo.mutation.SetNumber(s)
-	return puo
-}
-
-// SetNillableNumber sets the "number" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableNumber(s *string) *PetroglyphUpdateOne {
-	if s != nil {
-		puo.SetNumber(*s)
-	}
-	return puo
-}
-
-// ClearNumber clears the value of the "number" field.
-func (puo *PetroglyphUpdateOne) ClearNumber() *PetroglyphUpdateOne {
-	puo.mutation.ClearNumber()
-	return puo
-}
-
-// SetDating sets the "dating" field.
-func (puo *PetroglyphUpdateOne) SetDating(s string) *PetroglyphUpdateOne {
-	puo.mutation.SetDating(s)
-	return puo
-}
-
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableDating(s *string) *PetroglyphUpdateOne {
-	if s != nil {
-		puo.SetDating(*s)
-	}
-	return puo
-}
-
-// ClearDating clears the value of the "dating" field.
-func (puo *PetroglyphUpdateOne) ClearDating() *PetroglyphUpdateOne {
-	puo.mutation.ClearDating()
-	return puo
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (puo *PetroglyphUpdateOne) SetDatingStart(i int) *PetroglyphUpdateOne {
-	puo.mutation.ResetDatingStart()
-	puo.mutation.SetDatingStart(i)
-	return puo
-}
-
-// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableDatingStart(i *int) *PetroglyphUpdateOne {
-	if i != nil {
-		puo.SetDatingStart(*i)
-	}
-	return puo
-}
-
-// AddDatingStart adds i to the "dating_start" field.
-func (puo *PetroglyphUpdateOne) AddDatingStart(i int) *PetroglyphUpdateOne {
-	puo.mutation.AddDatingStart(i)
-	return puo
-}
-
-// ClearDatingStart clears the value of the "dating_start" field.
-func (puo *PetroglyphUpdateOne) ClearDatingStart() *PetroglyphUpdateOne {
-	puo.mutation.ClearDatingStart()
-	return puo
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (puo *PetroglyphUpdateOne) SetDatingEnd(i int) *PetroglyphUpdateOne {
-	puo.mutation.ResetDatingEnd()
-	puo.mutation.SetDatingEnd(i)
-	return puo
-}
-
-// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableDatingEnd(i *int) *PetroglyphUpdateOne {
-	if i != nil {
-		puo.SetDatingEnd(*i)
-	}
-	return puo
-}
-
-// AddDatingEnd adds i to the "dating_end" field.
-func (puo *PetroglyphUpdateOne) AddDatingEnd(i int) *PetroglyphUpdateOne {
-	puo.mutation.AddDatingEnd(i)
-	return puo
-}
-
-// ClearDatingEnd clears the value of the "dating_end" field.
-func (puo *PetroglyphUpdateOne) ClearDatingEnd() *PetroglyphUpdateOne {
-	puo.mutation.ClearDatingEnd()
-	return puo
-}
-
-// SetOrientation sets the "orientation" field.
-func (puo *PetroglyphUpdateOne) SetOrientation(s string) *PetroglyphUpdateOne {
-	puo.mutation.SetOrientation(s)
-	return puo
-}
-
-// SetNillableOrientation sets the "orientation" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableOrientation(s *string) *PetroglyphUpdateOne {
-	if s != nil {
-		puo.SetOrientation(*s)
-	}
-	return puo
-}
-
-// ClearOrientation clears the value of the "orientation" field.
-func (puo *PetroglyphUpdateOne) ClearOrientation() *PetroglyphUpdateOne {
-	puo.mutation.ClearOrientation()
-	return puo
-}
-
-// SetPosition sets the "position" field.
-func (puo *PetroglyphUpdateOne) SetPosition(s string) *PetroglyphUpdateOne {
-	puo.mutation.SetPosition(s)
-	return puo
-}
-
-// SetNillablePosition sets the "position" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillablePosition(s *string) *PetroglyphUpdateOne {
-	if s != nil {
-		puo.SetPosition(*s)
-	}
-	return puo
-}
-
-// ClearPosition clears the value of the "position" field.
-func (puo *PetroglyphUpdateOne) ClearPosition() *PetroglyphUpdateOne {
-	puo.mutation.ClearPosition()
-	return puo
-}
-
-// SetGeometricShape sets the "geometric_shape" field.
-func (puo *PetroglyphUpdateOne) SetGeometricShape(s string) *PetroglyphUpdateOne {
-	puo.mutation.SetGeometricShape(s)
-	return puo
-}
-
-// SetNillableGeometricShape sets the "geometric_shape" field if the given value is not nil.
-func (puo *PetroglyphUpdateOne) SetNillableGeometricShape(s *string) *PetroglyphUpdateOne {
-	if s != nil {
-		puo.SetGeometricShape(*s)
-	}
-	return puo
-}
-
-// ClearGeometricShape clears the value of the "geometric_shape" field.
-func (puo *PetroglyphUpdateOne) ClearGeometricShape() *PetroglyphUpdateOne {
-	puo.mutation.ClearGeometricShape()
 	return puo
 }
 
@@ -2075,6 +1955,126 @@ func (puo *PetroglyphUpdateOne) SetNillableDimensions(s *string) *PetroglyphUpda
 // ClearDimensions clears the value of the "dimensions" field.
 func (puo *PetroglyphUpdateOne) ClearDimensions() *PetroglyphUpdateOne {
 	puo.mutation.ClearDimensions()
+	return puo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (puo *PetroglyphUpdateOne) SetDeletedAt(t time.Time) *PetroglyphUpdateOne {
+	puo.mutation.SetDeletedAt(t)
+	return puo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableDeletedAt(t *time.Time) *PetroglyphUpdateOne {
+	if t != nil {
+		puo.SetDeletedAt(*t)
+	}
+	return puo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (puo *PetroglyphUpdateOne) ClearDeletedAt() *PetroglyphUpdateOne {
+	puo.mutation.ClearDeletedAt()
+	return puo
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (puo *PetroglyphUpdateOne) SetDeletedBy(s string) *PetroglyphUpdateOne {
+	puo.mutation.SetDeletedBy(s)
+	return puo
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableDeletedBy(s *string) *PetroglyphUpdateOne {
+	if s != nil {
+		puo.SetDeletedBy(*s)
+	}
+	return puo
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (puo *PetroglyphUpdateOne) ClearDeletedBy() *PetroglyphUpdateOne {
+	puo.mutation.ClearDeletedBy()
+	return puo
+}
+
+// SetNumber sets the "number" field.
+func (puo *PetroglyphUpdateOne) SetNumber(s string) *PetroglyphUpdateOne {
+	puo.mutation.SetNumber(s)
+	return puo
+}
+
+// SetNillableNumber sets the "number" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableNumber(s *string) *PetroglyphUpdateOne {
+	if s != nil {
+		puo.SetNumber(*s)
+	}
+	return puo
+}
+
+// ClearNumber clears the value of the "number" field.
+func (puo *PetroglyphUpdateOne) ClearNumber() *PetroglyphUpdateOne {
+	puo.mutation.ClearNumber()
+	return puo
+}
+
+// SetOrientation sets the "orientation" field.
+func (puo *PetroglyphUpdateOne) SetOrientation(s string) *PetroglyphUpdateOne {
+	puo.mutation.SetOrientation(s)
+	return puo
+}
+
+// SetNillableOrientation sets the "orientation" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableOrientation(s *string) *PetroglyphUpdateOne {
+	if s != nil {
+		puo.SetOrientation(*s)
+	}
+	return puo
+}
+
+// ClearOrientation clears the value of the "orientation" field.
+func (puo *PetroglyphUpdateOne) ClearOrientation() *PetroglyphUpdateOne {
+	puo.mutation.ClearOrientation()
+	return puo
+}
+
+// SetPosition sets the "position" field.
+func (puo *PetroglyphUpdateOne) SetPosition(s string) *PetroglyphUpdateOne {
+	puo.mutation.SetPosition(s)
+	return puo
+}
+
+// SetNillablePosition sets the "position" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillablePosition(s *string) *PetroglyphUpdateOne {
+	if s != nil {
+		puo.SetPosition(*s)
+	}
+	return puo
+}
+
+// ClearPosition clears the value of the "position" field.
+func (puo *PetroglyphUpdateOne) ClearPosition() *PetroglyphUpdateOne {
+	puo.mutation.ClearPosition()
+	return puo
+}
+
+// SetGeometricShape sets the "geometric_shape" field.
+func (puo *PetroglyphUpdateOne) SetGeometricShape(s string) *PetroglyphUpdateOne {
+	puo.mutation.SetGeometricShape(s)
+	return puo
+}
+
+// SetNillableGeometricShape sets the "geometric_shape" field if the given value is not nil.
+func (puo *PetroglyphUpdateOne) SetNillableGeometricShape(s *string) *PetroglyphUpdateOne {
+	if s != nil {
+		puo.SetGeometricShape(*s)
+	}
+	return puo
+}
+
+// ClearGeometricShape clears the value of the "geometric_shape" field.
+func (puo *PetroglyphUpdateOne) ClearGeometricShape() *PetroglyphUpdateOne {
+	puo.mutation.ClearGeometricShape()
 	return puo
 }
 
@@ -2534,6 +2534,30 @@ func (puo *PetroglyphUpdateOne) sqlSave(ctx context.Context) (_node *Petroglyph,
 	if puo.mutation.UpdatedByCleared() {
 		_spec.ClearField(petroglyph.FieldUpdatedBy, field.TypeString)
 	}
+	if value, ok := puo.mutation.Dating(); ok {
+		_spec.SetField(petroglyph.FieldDating, field.TypeString, value)
+	}
+	if puo.mutation.DatingCleared() {
+		_spec.ClearField(petroglyph.FieldDating, field.TypeString)
+	}
+	if value, ok := puo.mutation.DatingStart(); ok {
+		_spec.SetField(petroglyph.FieldDatingStart, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedDatingStart(); ok {
+		_spec.AddField(petroglyph.FieldDatingStart, field.TypeInt, value)
+	}
+	if puo.mutation.DatingStartCleared() {
+		_spec.ClearField(petroglyph.FieldDatingStart, field.TypeInt)
+	}
+	if value, ok := puo.mutation.DatingEnd(); ok {
+		_spec.SetField(petroglyph.FieldDatingEnd, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedDatingEnd(); ok {
+		_spec.AddField(petroglyph.FieldDatingEnd, field.TypeInt, value)
+	}
+	if puo.mutation.DatingEndCleared() {
+		_spec.ClearField(petroglyph.FieldDatingEnd, field.TypeInt)
+	}
 	if value, ok := puo.mutation.DisplayName(); ok {
 		_spec.SetField(petroglyph.FieldDisplayName, field.TypeString, value)
 	}
@@ -2580,66 +2604,6 @@ func (puo *PetroglyphUpdateOne) sqlSave(ctx context.Context) (_node *Petroglyph,
 	}
 	if puo.mutation.AdditionalImagesUrlsCleared() {
 		_spec.ClearField(petroglyph.FieldAdditionalImagesUrls, field.TypeJSON)
-	}
-	if value, ok := puo.mutation.DeletedAt(); ok {
-		_spec.SetField(petroglyph.FieldDeletedAt, field.TypeTime, value)
-	}
-	if puo.mutation.DeletedAtCleared() {
-		_spec.ClearField(petroglyph.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := puo.mutation.DeletedBy(); ok {
-		_spec.SetField(petroglyph.FieldDeletedBy, field.TypeString, value)
-	}
-	if puo.mutation.DeletedByCleared() {
-		_spec.ClearField(petroglyph.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := puo.mutation.Number(); ok {
-		_spec.SetField(petroglyph.FieldNumber, field.TypeString, value)
-	}
-	if puo.mutation.NumberCleared() {
-		_spec.ClearField(petroglyph.FieldNumber, field.TypeString)
-	}
-	if value, ok := puo.mutation.Dating(); ok {
-		_spec.SetField(petroglyph.FieldDating, field.TypeString, value)
-	}
-	if puo.mutation.DatingCleared() {
-		_spec.ClearField(petroglyph.FieldDating, field.TypeString)
-	}
-	if value, ok := puo.mutation.DatingStart(); ok {
-		_spec.SetField(petroglyph.FieldDatingStart, field.TypeInt, value)
-	}
-	if value, ok := puo.mutation.AddedDatingStart(); ok {
-		_spec.AddField(petroglyph.FieldDatingStart, field.TypeInt, value)
-	}
-	if puo.mutation.DatingStartCleared() {
-		_spec.ClearField(petroglyph.FieldDatingStart, field.TypeInt)
-	}
-	if value, ok := puo.mutation.DatingEnd(); ok {
-		_spec.SetField(petroglyph.FieldDatingEnd, field.TypeInt, value)
-	}
-	if value, ok := puo.mutation.AddedDatingEnd(); ok {
-		_spec.AddField(petroglyph.FieldDatingEnd, field.TypeInt, value)
-	}
-	if puo.mutation.DatingEndCleared() {
-		_spec.ClearField(petroglyph.FieldDatingEnd, field.TypeInt)
-	}
-	if value, ok := puo.mutation.Orientation(); ok {
-		_spec.SetField(petroglyph.FieldOrientation, field.TypeString, value)
-	}
-	if puo.mutation.OrientationCleared() {
-		_spec.ClearField(petroglyph.FieldOrientation, field.TypeString)
-	}
-	if value, ok := puo.mutation.Position(); ok {
-		_spec.SetField(petroglyph.FieldPosition, field.TypeString, value)
-	}
-	if puo.mutation.PositionCleared() {
-		_spec.ClearField(petroglyph.FieldPosition, field.TypeString)
-	}
-	if value, ok := puo.mutation.GeometricShape(); ok {
-		_spec.SetField(petroglyph.FieldGeometricShape, field.TypeString, value)
-	}
-	if puo.mutation.GeometricShapeCleared() {
-		_spec.ClearField(petroglyph.FieldGeometricShape, field.TypeString)
 	}
 	if value, ok := puo.mutation.Height(); ok {
 		_spec.SetField(petroglyph.FieldHeight, field.TypeFloat64, value)
@@ -2697,6 +2661,42 @@ func (puo *PetroglyphUpdateOne) sqlSave(ctx context.Context) (_node *Petroglyph,
 	}
 	if puo.mutation.DimensionsCleared() {
 		_spec.ClearField(petroglyph.FieldDimensions, field.TypeString)
+	}
+	if value, ok := puo.mutation.DeletedAt(); ok {
+		_spec.SetField(petroglyph.FieldDeletedAt, field.TypeTime, value)
+	}
+	if puo.mutation.DeletedAtCleared() {
+		_spec.ClearField(petroglyph.FieldDeletedAt, field.TypeTime)
+	}
+	if value, ok := puo.mutation.DeletedBy(); ok {
+		_spec.SetField(petroglyph.FieldDeletedBy, field.TypeString, value)
+	}
+	if puo.mutation.DeletedByCleared() {
+		_spec.ClearField(petroglyph.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := puo.mutation.Number(); ok {
+		_spec.SetField(petroglyph.FieldNumber, field.TypeString, value)
+	}
+	if puo.mutation.NumberCleared() {
+		_spec.ClearField(petroglyph.FieldNumber, field.TypeString)
+	}
+	if value, ok := puo.mutation.Orientation(); ok {
+		_spec.SetField(petroglyph.FieldOrientation, field.TypeString, value)
+	}
+	if puo.mutation.OrientationCleared() {
+		_spec.ClearField(petroglyph.FieldOrientation, field.TypeString)
+	}
+	if value, ok := puo.mutation.Position(); ok {
+		_spec.SetField(petroglyph.FieldPosition, field.TypeString, value)
+	}
+	if puo.mutation.PositionCleared() {
+		_spec.ClearField(petroglyph.FieldPosition, field.TypeString)
+	}
+	if value, ok := puo.mutation.GeometricShape(); ok {
+		_spec.SetField(petroglyph.FieldGeometricShape, field.TypeString, value)
+	}
+	if puo.mutation.GeometricShapeCleared() {
+		_spec.ClearField(petroglyph.FieldGeometricShape, field.TypeString)
 	}
 	if value, ok := puo.mutation.PlanePreservation(); ok {
 		_spec.SetField(petroglyph.FieldPlanePreservation, field.TypeString, value)

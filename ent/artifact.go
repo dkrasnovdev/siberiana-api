@@ -40,6 +40,12 @@ type Artifact struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
+	// Dating holds the value of the "dating" field.
+	Dating string `json:"dating,omitempty"`
+	// DatingStart holds the value of the "dating_start" field.
+	DatingStart int `json:"dating_start,omitempty"`
+	// DatingEnd holds the value of the "dating_end" field.
+	DatingEnd int `json:"dating_end,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// Abbreviation holds the value of the "abbreviation" field.
@@ -54,16 +60,6 @@ type Artifact struct {
 	PrimaryImageURL string `json:"primary_image_url,omitempty"`
 	// AdditionalImagesUrls holds the value of the "additional_images_urls" field.
 	AdditionalImagesUrls []string `json:"additional_images_urls,omitempty"`
-	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
-	// Dating holds the value of the "dating" field.
-	Dating string `json:"dating,omitempty"`
-	// DatingStart holds the value of the "dating_start" field.
-	DatingStart int `json:"dating_start,omitempty"`
-	// DatingEnd holds the value of the "dating_end" field.
-	DatingEnd int `json:"dating_end,omitempty"`
 	// Height holds the value of the "height" field.
 	Height float64 `json:"height,omitempty"`
 	// Width holds the value of the "width" field.
@@ -78,6 +74,10 @@ type Artifact struct {
 	Weight string `json:"weight,omitempty"`
 	// Dimensions holds the value of the "dimensions" field.
 	Dimensions string `json:"dimensions,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	// DeletedBy holds the value of the "deleted_by" field.
+	DeletedBy string `json:"deleted_by,omitempty"`
 	// ChemicalComposition holds the value of the "chemical_composition" field.
 	ChemicalComposition string `json:"chemical_composition,omitempty"`
 	// KpNumber holds the value of the "kp_number" field.
@@ -401,7 +401,7 @@ func (*Artifact) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case artifact.FieldID, artifact.FieldDatingStart, artifact.FieldDatingEnd:
 			values[i] = new(sql.NullInt64)
-		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDisplayName, artifact.FieldAbbreviation, artifact.FieldDescription, artifact.FieldExternalLink, artifact.FieldStatus, artifact.FieldPrimaryImageURL, artifact.FieldDeletedBy, artifact.FieldDating, artifact.FieldWeight, artifact.FieldDimensions, artifact.FieldChemicalComposition, artifact.FieldKpNumber, artifact.FieldGoskatalogNumber, artifact.FieldInventoryNumber, artifact.FieldTypology:
+		case artifact.FieldCreatedBy, artifact.FieldUpdatedBy, artifact.FieldDating, artifact.FieldDisplayName, artifact.FieldAbbreviation, artifact.FieldDescription, artifact.FieldExternalLink, artifact.FieldStatus, artifact.FieldPrimaryImageURL, artifact.FieldWeight, artifact.FieldDimensions, artifact.FieldDeletedBy, artifact.FieldChemicalComposition, artifact.FieldKpNumber, artifact.FieldGoskatalogNumber, artifact.FieldInventoryNumber, artifact.FieldTypology:
 			values[i] = new(sql.NullString)
 		case artifact.FieldCreatedAt, artifact.FieldUpdatedAt, artifact.FieldDeletedAt, artifact.FieldAdmissionDate:
 			values[i] = new(sql.NullTime)
@@ -478,6 +478,24 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.UpdatedBy = value.String
 			}
+		case artifact.FieldDating:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field dating", values[i])
+			} else if value.Valid {
+				a.Dating = value.String
+			}
+		case artifact.FieldDatingStart:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field dating_start", values[i])
+			} else if value.Valid {
+				a.DatingStart = int(value.Int64)
+			}
+		case artifact.FieldDatingEnd:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field dating_end", values[i])
+			} else if value.Valid {
+				a.DatingEnd = int(value.Int64)
+			}
 		case artifact.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field display_name", values[i])
@@ -522,36 +540,6 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field additional_images_urls: %w", err)
 				}
 			}
-		case artifact.FieldDeletedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
-			} else if value.Valid {
-				a.DeletedAt = value.Time
-			}
-		case artifact.FieldDeletedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
-			} else if value.Valid {
-				a.DeletedBy = value.String
-			}
-		case artifact.FieldDating:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field dating", values[i])
-			} else if value.Valid {
-				a.Dating = value.String
-			}
-		case artifact.FieldDatingStart:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field dating_start", values[i])
-			} else if value.Valid {
-				a.DatingStart = int(value.Int64)
-			}
-		case artifact.FieldDatingEnd:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field dating_end", values[i])
-			} else if value.Valid {
-				a.DatingEnd = int(value.Int64)
-			}
 		case artifact.FieldHeight:
 			if value, ok := values[i].(*sql.NullFloat64); !ok {
 				return fmt.Errorf("unexpected type %T for field height", values[i])
@@ -593,6 +581,18 @@ func (a *Artifact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field dimensions", values[i])
 			} else if value.Valid {
 				a.Dimensions = value.String
+			}
+		case artifact.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				a.DeletedAt = value.Time
+			}
+		case artifact.FieldDeletedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
+			} else if value.Valid {
+				a.DeletedBy = value.String
 			}
 		case artifact.FieldChemicalComposition:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -871,6 +871,15 @@ func (a *Artifact) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(a.UpdatedBy)
 	builder.WriteString(", ")
+	builder.WriteString("dating=")
+	builder.WriteString(a.Dating)
+	builder.WriteString(", ")
+	builder.WriteString("dating_start=")
+	builder.WriteString(fmt.Sprintf("%v", a.DatingStart))
+	builder.WriteString(", ")
+	builder.WriteString("dating_end=")
+	builder.WriteString(fmt.Sprintf("%v", a.DatingEnd))
+	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(a.DisplayName)
 	builder.WriteString(", ")
@@ -892,21 +901,6 @@ func (a *Artifact) String() string {
 	builder.WriteString("additional_images_urls=")
 	builder.WriteString(fmt.Sprintf("%v", a.AdditionalImagesUrls))
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(a.DeletedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(a.DeletedBy)
-	builder.WriteString(", ")
-	builder.WriteString("dating=")
-	builder.WriteString(a.Dating)
-	builder.WriteString(", ")
-	builder.WriteString("dating_start=")
-	builder.WriteString(fmt.Sprintf("%v", a.DatingStart))
-	builder.WriteString(", ")
-	builder.WriteString("dating_end=")
-	builder.WriteString(fmt.Sprintf("%v", a.DatingEnd))
-	builder.WriteString(", ")
 	builder.WriteString("height=")
 	builder.WriteString(fmt.Sprintf("%v", a.Height))
 	builder.WriteString(", ")
@@ -927,6 +921,12 @@ func (a *Artifact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("dimensions=")
 	builder.WriteString(a.Dimensions)
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(a.DeletedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_by=")
+	builder.WriteString(a.DeletedBy)
 	builder.WriteString(", ")
 	builder.WriteString("chemical_composition=")
 	builder.WriteString(a.ChemicalComposition)

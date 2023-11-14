@@ -3,6 +3,9 @@
 package art
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 
 	"entgo.io/ent"
@@ -23,6 +26,12 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldDating holds the string denoting the dating field in the database.
+	FieldDating = "dating"
+	// FieldDatingStart holds the string denoting the dating_start field in the database.
+	FieldDatingStart = "dating_start"
+	// FieldDatingEnd holds the string denoting the dating_end field in the database.
+	FieldDatingEnd = "dating_end"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldAbbreviation holds the string denoting the abbreviation field in the database.
@@ -31,16 +40,28 @@ const (
 	FieldDescription = "description"
 	// FieldExternalLink holds the string denoting the external_link field in the database.
 	FieldExternalLink = "external_link"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldPrimaryImageURL holds the string denoting the primary_image_url field in the database.
 	FieldPrimaryImageURL = "primary_image_url"
 	// FieldAdditionalImagesUrls holds the string denoting the additional_images_urls field in the database.
 	FieldAdditionalImagesUrls = "additional_images_urls"
-	// FieldNumber holds the string denoting the number field in the database.
-	FieldNumber = "number"
-	// FieldDating holds the string denoting the dating field in the database.
-	FieldDating = "dating"
+	// FieldHeight holds the string denoting the height field in the database.
+	FieldHeight = "height"
+	// FieldWidth holds the string denoting the width field in the database.
+	FieldWidth = "width"
+	// FieldLength holds the string denoting the length field in the database.
+	FieldLength = "length"
+	// FieldDepth holds the string denoting the depth field in the database.
+	FieldDepth = "depth"
+	// FieldDiameter holds the string denoting the diameter field in the database.
+	FieldDiameter = "diameter"
+	// FieldWeight holds the string denoting the weight field in the database.
+	FieldWeight = "weight"
 	// FieldDimensions holds the string denoting the dimensions field in the database.
 	FieldDimensions = "dimensions"
+	// FieldNumber holds the string denoting the number field in the database.
+	FieldNumber = "number"
 	// EdgeAuthor holds the string denoting the author edge name in mutations.
 	EdgeAuthor = "author"
 	// EdgeArtGenre holds the string denoting the art_genre edge name in mutations.
@@ -127,15 +148,24 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
+	FieldDating,
+	FieldDatingStart,
+	FieldDatingEnd,
 	FieldDisplayName,
 	FieldAbbreviation,
 	FieldDescription,
 	FieldExternalLink,
+	FieldStatus,
 	FieldPrimaryImageURL,
 	FieldAdditionalImagesUrls,
-	FieldNumber,
-	FieldDating,
+	FieldHeight,
+	FieldWidth,
+	FieldLength,
+	FieldDepth,
+	FieldDiameter,
+	FieldWeight,
 	FieldDimensions,
+	FieldNumber,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "arts"
@@ -192,6 +222,33 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 )
 
+// Status defines the type for the "status" enum field.
+type Status string
+
+// StatusDraft is the default value of the Status enum.
+const DefaultStatus = StatusDraft
+
+// Status values.
+const (
+	StatusListed   Status = "listed"
+	StatusUnlisted Status = "unlisted"
+	StatusDraft    Status = "draft"
+)
+
+func (s Status) String() string {
+	return string(s)
+}
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s Status) error {
+	switch s {
+	case StatusListed, StatusUnlisted, StatusDraft:
+		return nil
+	default:
+		return fmt.Errorf("art: invalid enum value for status field: %q", s)
+	}
+}
+
 // OrderOption defines the ordering options for the Art queries.
 type OrderOption func(*sql.Selector)
 
@@ -220,6 +277,21 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
+// ByDating orders the results by the dating field.
+func ByDating(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDating, opts...).ToFunc()
+}
+
+// ByDatingStart orders the results by the dating_start field.
+func ByDatingStart(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDatingStart, opts...).ToFunc()
+}
+
+// ByDatingEnd orders the results by the dating_end field.
+func ByDatingEnd(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDatingEnd, opts...).ToFunc()
+}
+
 // ByDisplayName orders the results by the display_name field.
 func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
@@ -240,24 +312,54 @@ func ByExternalLink(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalLink, opts...).ToFunc()
 }
 
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
 // ByPrimaryImageURL orders the results by the primary_image_url field.
 func ByPrimaryImageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryImageURL, opts...).ToFunc()
 }
 
-// ByNumber orders the results by the number field.
-func ByNumber(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNumber, opts...).ToFunc()
+// ByHeight orders the results by the height field.
+func ByHeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeight, opts...).ToFunc()
 }
 
-// ByDating orders the results by the dating field.
-func ByDating(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDating, opts...).ToFunc()
+// ByWidth orders the results by the width field.
+func ByWidth(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWidth, opts...).ToFunc()
+}
+
+// ByLength orders the results by the length field.
+func ByLength(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLength, opts...).ToFunc()
+}
+
+// ByDepth orders the results by the depth field.
+func ByDepth(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDepth, opts...).ToFunc()
+}
+
+// ByDiameter orders the results by the diameter field.
+func ByDiameter(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDiameter, opts...).ToFunc()
+}
+
+// ByWeight orders the results by the weight field.
+func ByWeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWeight, opts...).ToFunc()
 }
 
 // ByDimensions orders the results by the dimensions field.
 func ByDimensions(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDimensions, opts...).ToFunc()
+}
+
+// ByNumber orders the results by the number field.
+func ByNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNumber, opts...).ToFunc()
 }
 
 // ByAuthorField orders the results by author field.
@@ -405,4 +507,22 @@ func newRegionStep() *sqlgraph.Step {
 		sqlgraph.To(RegionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
 	)
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e Status) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *Status) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = Status(str)
+	if err := StatusValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Status", str)
+	}
+	return nil
 }

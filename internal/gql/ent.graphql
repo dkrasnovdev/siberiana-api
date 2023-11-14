@@ -6,15 +6,24 @@ type Art implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
+  dating: String
+  datingStart: Int
+  datingEnd: Int
   displayName: String
   abbreviation: String
   description: String
   externalLink: String
+  status: ArtStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  number: String
-  dating: String
+  height: Float
+  width: Float
+  length: Float
+  depth: Float
+  diameter: Float
+  weight: String
   dimensions: String
+  number: String
   author: Person
   artGenre: [ArtGenre!]
   artStyle: [ArtStyle!]
@@ -229,6 +238,12 @@ enum ArtOrderField {
   CREATED_AT
   UPDATED_AT
   DISPLAY_NAME
+}
+"""ArtStatus is enum for the field status"""
+enum ArtStatus @goModel(model: "github.com/dkrasnovdev/siberiana-api/ent/art.Status") {
+  listed
+  unlisted
+  draft
 }
 type ArtStyle implements Node {
   id: ID!
@@ -473,6 +488,44 @@ input ArtWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """dating field predicates"""
+  dating: String
+  datingNEQ: String
+  datingIn: [String!]
+  datingNotIn: [String!]
+  datingGT: String
+  datingGTE: String
+  datingLT: String
+  datingLTE: String
+  datingContains: String
+  datingHasPrefix: String
+  datingHasSuffix: String
+  datingIsNil: Boolean
+  datingNotNil: Boolean
+  datingEqualFold: String
+  datingContainsFold: String
+  """dating_start field predicates"""
+  datingStart: Int
+  datingStartNEQ: Int
+  datingStartIn: [Int!]
+  datingStartNotIn: [Int!]
+  datingStartGT: Int
+  datingStartGTE: Int
+  datingStartLT: Int
+  datingStartLTE: Int
+  datingStartIsNil: Boolean
+  datingStartNotNil: Boolean
+  """dating_end field predicates"""
+  datingEnd: Int
+  datingEndNEQ: Int
+  datingEndIn: [Int!]
+  datingEndNotIn: [Int!]
+  datingEndGT: Int
+  datingEndGTE: Int
+  datingEndLT: Int
+  datingEndLTE: Int
+  datingEndIsNil: Boolean
+  datingEndNotNil: Boolean
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -537,6 +590,13 @@ input ArtWhereInput {
   externalLinkNotNil: Boolean
   externalLinkEqualFold: String
   externalLinkContainsFold: String
+  """status field predicates"""
+  status: ArtStatus
+  statusNEQ: ArtStatus
+  statusIn: [ArtStatus!]
+  statusNotIn: [ArtStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """primary_image_url field predicates"""
   primaryImageURL: String
   primaryImageURLNEQ: String
@@ -553,38 +613,77 @@ input ArtWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
-  """number field predicates"""
-  number: String
-  numberNEQ: String
-  numberIn: [String!]
-  numberNotIn: [String!]
-  numberGT: String
-  numberGTE: String
-  numberLT: String
-  numberLTE: String
-  numberContains: String
-  numberHasPrefix: String
-  numberHasSuffix: String
-  numberIsNil: Boolean
-  numberNotNil: Boolean
-  numberEqualFold: String
-  numberContainsFold: String
-  """dating field predicates"""
-  dating: String
-  datingNEQ: String
-  datingIn: [String!]
-  datingNotIn: [String!]
-  datingGT: String
-  datingGTE: String
-  datingLT: String
-  datingLTE: String
-  datingContains: String
-  datingHasPrefix: String
-  datingHasSuffix: String
-  datingIsNil: Boolean
-  datingNotNil: Boolean
-  datingEqualFold: String
-  datingContainsFold: String
+  """height field predicates"""
+  height: Float
+  heightNEQ: Float
+  heightIn: [Float!]
+  heightNotIn: [Float!]
+  heightGT: Float
+  heightGTE: Float
+  heightLT: Float
+  heightLTE: Float
+  heightIsNil: Boolean
+  heightNotNil: Boolean
+  """width field predicates"""
+  width: Float
+  widthNEQ: Float
+  widthIn: [Float!]
+  widthNotIn: [Float!]
+  widthGT: Float
+  widthGTE: Float
+  widthLT: Float
+  widthLTE: Float
+  widthIsNil: Boolean
+  widthNotNil: Boolean
+  """length field predicates"""
+  length: Float
+  lengthNEQ: Float
+  lengthIn: [Float!]
+  lengthNotIn: [Float!]
+  lengthGT: Float
+  lengthGTE: Float
+  lengthLT: Float
+  lengthLTE: Float
+  lengthIsNil: Boolean
+  lengthNotNil: Boolean
+  """depth field predicates"""
+  depth: Float
+  depthNEQ: Float
+  depthIn: [Float!]
+  depthNotIn: [Float!]
+  depthGT: Float
+  depthGTE: Float
+  depthLT: Float
+  depthLTE: Float
+  depthIsNil: Boolean
+  depthNotNil: Boolean
+  """diameter field predicates"""
+  diameter: Float
+  diameterNEQ: Float
+  diameterIn: [Float!]
+  diameterNotIn: [Float!]
+  diameterGT: Float
+  diameterGTE: Float
+  diameterLT: Float
+  diameterLTE: Float
+  diameterIsNil: Boolean
+  diameterNotNil: Boolean
+  """weight field predicates"""
+  weight: String
+  weightNEQ: String
+  weightIn: [String!]
+  weightNotIn: [String!]
+  weightGT: String
+  weightGTE: String
+  weightLT: String
+  weightLTE: String
+  weightContains: String
+  weightHasPrefix: String
+  weightHasSuffix: String
+  weightIsNil: Boolean
+  weightNotNil: Boolean
+  weightEqualFold: String
+  weightContainsFold: String
   """dimensions field predicates"""
   dimensions: String
   dimensionsNEQ: String
@@ -601,6 +700,22 @@ input ArtWhereInput {
   dimensionsNotNil: Boolean
   dimensionsEqualFold: String
   dimensionsContainsFold: String
+  """number field predicates"""
+  number: String
+  numberNEQ: String
+  numberIn: [String!]
+  numberNotIn: [String!]
+  numberGT: String
+  numberGTE: String
+  numberLT: String
+  numberLTE: String
+  numberContains: String
+  numberHasPrefix: String
+  numberHasSuffix: String
+  numberIsNil: Boolean
+  numberNotNil: Boolean
+  numberEqualFold: String
+  numberContainsFold: String
   """author edge predicates"""
   hasAuthor: Boolean
   hasAuthorWith: [PersonWhereInput!]
@@ -635,6 +750,9 @@ type Artifact implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
+  dating: String
+  datingStart: Int
+  datingEnd: Int
   displayName: String
   abbreviation: String
   description: String
@@ -642,11 +760,6 @@ type Artifact implements Node {
   status: ArtifactStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  deletedAt: Time
-  deletedBy: String
-  dating: String
-  datingStart: Int
-  datingEnd: Int
   height: Float
   width: Float
   length: Float
@@ -654,6 +767,8 @@ type Artifact implements Node {
   diameter: Float
   weight: String
   dimensions: String
+  deletedAt: Time
+  deletedBy: String
   chemicalComposition: String
   kpNumber: String
   goskatalogNumber: String
@@ -782,6 +897,44 @@ input ArtifactWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """dating field predicates"""
+  dating: String
+  datingNEQ: String
+  datingIn: [String!]
+  datingNotIn: [String!]
+  datingGT: String
+  datingGTE: String
+  datingLT: String
+  datingLTE: String
+  datingContains: String
+  datingHasPrefix: String
+  datingHasSuffix: String
+  datingIsNil: Boolean
+  datingNotNil: Boolean
+  datingEqualFold: String
+  datingContainsFold: String
+  """dating_start field predicates"""
+  datingStart: Int
+  datingStartNEQ: Int
+  datingStartIn: [Int!]
+  datingStartNotIn: [Int!]
+  datingStartGT: Int
+  datingStartGTE: Int
+  datingStartLT: Int
+  datingStartLTE: Int
+  datingStartIsNil: Boolean
+  datingStartNotNil: Boolean
+  """dating_end field predicates"""
+  datingEnd: Int
+  datingEndNEQ: Int
+  datingEndIn: [Int!]
+  datingEndNotIn: [Int!]
+  datingEndGT: Int
+  datingEndGTE: Int
+  datingEndLT: Int
+  datingEndLTE: Int
+  datingEndIsNil: Boolean
+  datingEndNotNil: Boolean
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -869,71 +1022,6 @@ input ArtifactWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
-  """deleted_at field predicates"""
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """deleted_by field predicates"""
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """dating field predicates"""
-  dating: String
-  datingNEQ: String
-  datingIn: [String!]
-  datingNotIn: [String!]
-  datingGT: String
-  datingGTE: String
-  datingLT: String
-  datingLTE: String
-  datingContains: String
-  datingHasPrefix: String
-  datingHasSuffix: String
-  datingIsNil: Boolean
-  datingNotNil: Boolean
-  datingEqualFold: String
-  datingContainsFold: String
-  """dating_start field predicates"""
-  datingStart: Int
-  datingStartNEQ: Int
-  datingStartIn: [Int!]
-  datingStartNotIn: [Int!]
-  datingStartGT: Int
-  datingStartGTE: Int
-  datingStartLT: Int
-  datingStartLTE: Int
-  datingStartIsNil: Boolean
-  datingStartNotNil: Boolean
-  """dating_end field predicates"""
-  datingEnd: Int
-  datingEndNEQ: Int
-  datingEndIn: [Int!]
-  datingEndNotIn: [Int!]
-  datingEndGT: Int
-  datingEndGTE: Int
-  datingEndLT: Int
-  datingEndLTE: Int
-  datingEndIsNil: Boolean
-  datingEndNotNil: Boolean
   """height field predicates"""
   height: Float
   heightNEQ: Float
@@ -1021,6 +1109,33 @@ input ArtifactWhereInput {
   dimensionsNotNil: Boolean
   dimensionsEqualFold: String
   dimensionsContainsFold: String
+  """deleted_at field predicates"""
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """deleted_by field predicates"""
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
   """chemical_composition field predicates"""
   chemicalComposition: String
   chemicalCompositionNEQ: String
@@ -2410,15 +2525,24 @@ input CreateArtInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
+  dating: String
+  datingStart: Int
+  datingEnd: Int
   displayName: String
   abbreviation: String
   description: String
   externalLink: String
+  status: ArtStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  number: String
-  dating: String
+  height: Float
+  width: Float
+  length: Float
+  depth: Float
+  diameter: Float
+  weight: String
   dimensions: String
+  number: String
   authorID: ID
   artGenreIDs: [ID!]
   artStyleIDs: [ID!]
@@ -2453,6 +2577,9 @@ input CreateArtifactInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
+  dating: String
+  datingStart: Int
+  datingEnd: Int
   displayName: String
   abbreviation: String
   description: String
@@ -2460,11 +2587,6 @@ input CreateArtifactInput {
   status: ArtifactStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  deletedAt: Time
-  deletedBy: String
-  dating: String
-  datingStart: Int
-  datingEnd: Int
   height: Float
   width: Float
   length: Float
@@ -2472,6 +2594,8 @@ input CreateArtifactInput {
   diameter: Float
   weight: String
   dimensions: String
+  deletedAt: Time
+  deletedBy: String
   chemicalComposition: String
   kpNumber: String
   goskatalogNumber: String
@@ -2889,6 +3013,9 @@ input CreatePetroglyphInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
+  dating: String
+  datingStart: Int
+  datingEnd: Int
   displayName: String
   abbreviation: String
   description: String
@@ -2896,15 +3023,6 @@ input CreatePetroglyphInput {
   status: PetroglyphStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  deletedAt: Time
-  deletedBy: String
-  number: String
-  dating: String
-  datingStart: Int
-  datingEnd: Int
-  orientation: String
-  position: String
-  geometricShape: String
   height: Float
   width: Float
   length: Float
@@ -2912,6 +3030,12 @@ input CreatePetroglyphInput {
   diameter: Float
   weight: String
   dimensions: String
+  deletedAt: Time
+  deletedBy: String
+  number: String
+  orientation: String
+  position: String
+  geometricShape: String
   planePreservation: String
   photoCode: String
   accountingDocumentationInformation: String
@@ -6149,6 +6273,9 @@ type Petroglyph implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
+  dating: String
+  datingStart: Int
+  datingEnd: Int
   displayName: String
   abbreviation: String
   description: String
@@ -6156,15 +6283,6 @@ type Petroglyph implements Node {
   status: PetroglyphStatus
   primaryImageURL: String
   additionalImagesUrls: [String!]
-  deletedAt: Time
-  deletedBy: String
-  number: String
-  dating: String
-  datingStart: Int
-  datingEnd: Int
-  orientation: String
-  position: String
-  geometricShape: String
   height: Float
   width: Float
   length: Float
@@ -6172,6 +6290,12 @@ type Petroglyph implements Node {
   diameter: Float
   weight: String
   dimensions: String
+  deletedAt: Time
+  deletedBy: String
+  number: String
+  orientation: String
+  position: String
+  geometricShape: String
   planePreservation: String
   photoCode: String
   accountingDocumentationInformation: String
@@ -6289,6 +6413,44 @@ input PetroglyphWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
+  """dating field predicates"""
+  dating: String
+  datingNEQ: String
+  datingIn: [String!]
+  datingNotIn: [String!]
+  datingGT: String
+  datingGTE: String
+  datingLT: String
+  datingLTE: String
+  datingContains: String
+  datingHasPrefix: String
+  datingHasSuffix: String
+  datingIsNil: Boolean
+  datingNotNil: Boolean
+  datingEqualFold: String
+  datingContainsFold: String
+  """dating_start field predicates"""
+  datingStart: Int
+  datingStartNEQ: Int
+  datingStartIn: [Int!]
+  datingStartNotIn: [Int!]
+  datingStartGT: Int
+  datingStartGTE: Int
+  datingStartLT: Int
+  datingStartLTE: Int
+  datingStartIsNil: Boolean
+  datingStartNotNil: Boolean
+  """dating_end field predicates"""
+  datingEnd: Int
+  datingEndNEQ: Int
+  datingEndIn: [Int!]
+  datingEndNotIn: [Int!]
+  datingEndGT: Int
+  datingEndGTE: Int
+  datingEndLT: Int
+  datingEndLTE: Int
+  datingEndIsNil: Boolean
+  datingEndNotNil: Boolean
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String
@@ -6376,135 +6538,6 @@ input PetroglyphWhereInput {
   primaryImageURLNotNil: Boolean
   primaryImageURLEqualFold: String
   primaryImageURLContainsFold: String
-  """deleted_at field predicates"""
-  deletedAt: Time
-  deletedAtNEQ: Time
-  deletedAtIn: [Time!]
-  deletedAtNotIn: [Time!]
-  deletedAtGT: Time
-  deletedAtGTE: Time
-  deletedAtLT: Time
-  deletedAtLTE: Time
-  deletedAtIsNil: Boolean
-  deletedAtNotNil: Boolean
-  """deleted_by field predicates"""
-  deletedBy: String
-  deletedByNEQ: String
-  deletedByIn: [String!]
-  deletedByNotIn: [String!]
-  deletedByGT: String
-  deletedByGTE: String
-  deletedByLT: String
-  deletedByLTE: String
-  deletedByContains: String
-  deletedByHasPrefix: String
-  deletedByHasSuffix: String
-  deletedByIsNil: Boolean
-  deletedByNotNil: Boolean
-  deletedByEqualFold: String
-  deletedByContainsFold: String
-  """number field predicates"""
-  number: String
-  numberNEQ: String
-  numberIn: [String!]
-  numberNotIn: [String!]
-  numberGT: String
-  numberGTE: String
-  numberLT: String
-  numberLTE: String
-  numberContains: String
-  numberHasPrefix: String
-  numberHasSuffix: String
-  numberIsNil: Boolean
-  numberNotNil: Boolean
-  numberEqualFold: String
-  numberContainsFold: String
-  """dating field predicates"""
-  dating: String
-  datingNEQ: String
-  datingIn: [String!]
-  datingNotIn: [String!]
-  datingGT: String
-  datingGTE: String
-  datingLT: String
-  datingLTE: String
-  datingContains: String
-  datingHasPrefix: String
-  datingHasSuffix: String
-  datingIsNil: Boolean
-  datingNotNil: Boolean
-  datingEqualFold: String
-  datingContainsFold: String
-  """dating_start field predicates"""
-  datingStart: Int
-  datingStartNEQ: Int
-  datingStartIn: [Int!]
-  datingStartNotIn: [Int!]
-  datingStartGT: Int
-  datingStartGTE: Int
-  datingStartLT: Int
-  datingStartLTE: Int
-  datingStartIsNil: Boolean
-  datingStartNotNil: Boolean
-  """dating_end field predicates"""
-  datingEnd: Int
-  datingEndNEQ: Int
-  datingEndIn: [Int!]
-  datingEndNotIn: [Int!]
-  datingEndGT: Int
-  datingEndGTE: Int
-  datingEndLT: Int
-  datingEndLTE: Int
-  datingEndIsNil: Boolean
-  datingEndNotNil: Boolean
-  """orientation field predicates"""
-  orientation: String
-  orientationNEQ: String
-  orientationIn: [String!]
-  orientationNotIn: [String!]
-  orientationGT: String
-  orientationGTE: String
-  orientationLT: String
-  orientationLTE: String
-  orientationContains: String
-  orientationHasPrefix: String
-  orientationHasSuffix: String
-  orientationIsNil: Boolean
-  orientationNotNil: Boolean
-  orientationEqualFold: String
-  orientationContainsFold: String
-  """position field predicates"""
-  position: String
-  positionNEQ: String
-  positionIn: [String!]
-  positionNotIn: [String!]
-  positionGT: String
-  positionGTE: String
-  positionLT: String
-  positionLTE: String
-  positionContains: String
-  positionHasPrefix: String
-  positionHasSuffix: String
-  positionIsNil: Boolean
-  positionNotNil: Boolean
-  positionEqualFold: String
-  positionContainsFold: String
-  """geometric_shape field predicates"""
-  geometricShape: String
-  geometricShapeNEQ: String
-  geometricShapeIn: [String!]
-  geometricShapeNotIn: [String!]
-  geometricShapeGT: String
-  geometricShapeGTE: String
-  geometricShapeLT: String
-  geometricShapeLTE: String
-  geometricShapeContains: String
-  geometricShapeHasPrefix: String
-  geometricShapeHasSuffix: String
-  geometricShapeIsNil: Boolean
-  geometricShapeNotNil: Boolean
-  geometricShapeEqualFold: String
-  geometricShapeContainsFold: String
   """height field predicates"""
   height: Float
   heightNEQ: Float
@@ -6592,6 +6625,97 @@ input PetroglyphWhereInput {
   dimensionsNotNil: Boolean
   dimensionsEqualFold: String
   dimensionsContainsFold: String
+  """deleted_at field predicates"""
+  deletedAt: Time
+  deletedAtNEQ: Time
+  deletedAtIn: [Time!]
+  deletedAtNotIn: [Time!]
+  deletedAtGT: Time
+  deletedAtGTE: Time
+  deletedAtLT: Time
+  deletedAtLTE: Time
+  deletedAtIsNil: Boolean
+  deletedAtNotNil: Boolean
+  """deleted_by field predicates"""
+  deletedBy: String
+  deletedByNEQ: String
+  deletedByIn: [String!]
+  deletedByNotIn: [String!]
+  deletedByGT: String
+  deletedByGTE: String
+  deletedByLT: String
+  deletedByLTE: String
+  deletedByContains: String
+  deletedByHasPrefix: String
+  deletedByHasSuffix: String
+  deletedByIsNil: Boolean
+  deletedByNotNil: Boolean
+  deletedByEqualFold: String
+  deletedByContainsFold: String
+  """number field predicates"""
+  number: String
+  numberNEQ: String
+  numberIn: [String!]
+  numberNotIn: [String!]
+  numberGT: String
+  numberGTE: String
+  numberLT: String
+  numberLTE: String
+  numberContains: String
+  numberHasPrefix: String
+  numberHasSuffix: String
+  numberIsNil: Boolean
+  numberNotNil: Boolean
+  numberEqualFold: String
+  numberContainsFold: String
+  """orientation field predicates"""
+  orientation: String
+  orientationNEQ: String
+  orientationIn: [String!]
+  orientationNotIn: [String!]
+  orientationGT: String
+  orientationGTE: String
+  orientationLT: String
+  orientationLTE: String
+  orientationContains: String
+  orientationHasPrefix: String
+  orientationHasSuffix: String
+  orientationIsNil: Boolean
+  orientationNotNil: Boolean
+  orientationEqualFold: String
+  orientationContainsFold: String
+  """position field predicates"""
+  position: String
+  positionNEQ: String
+  positionIn: [String!]
+  positionNotIn: [String!]
+  positionGT: String
+  positionGTE: String
+  positionLT: String
+  positionLTE: String
+  positionContains: String
+  positionHasPrefix: String
+  positionHasSuffix: String
+  positionIsNil: Boolean
+  positionNotNil: Boolean
+  positionEqualFold: String
+  positionContainsFold: String
+  """geometric_shape field predicates"""
+  geometricShape: String
+  geometricShapeNEQ: String
+  geometricShapeIn: [String!]
+  geometricShapeNotIn: [String!]
+  geometricShapeGT: String
+  geometricShapeGTE: String
+  geometricShapeLT: String
+  geometricShapeLTE: String
+  geometricShapeContains: String
+  geometricShapeHasPrefix: String
+  geometricShapeHasSuffix: String
+  geometricShapeIsNil: Boolean
+  geometricShapeNotNil: Boolean
+  geometricShapeEqualFold: String
+  geometricShapeContainsFold: String
   """plane_preservation field predicates"""
   planePreservation: String
   planePreservationNEQ: String
@@ -9726,6 +9850,12 @@ input UpdateArtInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
+  dating: String
+  clearDating: Boolean
+  datingStart: Int
+  clearDatingStart: Boolean
+  datingEnd: Int
+  clearDatingEnd: Boolean
   displayName: String
   clearDisplayName: Boolean
   abbreviation: String
@@ -9734,17 +9864,29 @@ input UpdateArtInput {
   clearDescription: Boolean
   externalLink: String
   clearExternalLink: Boolean
+  status: ArtStatus
+  clearStatus: Boolean
   primaryImageURL: String
   clearPrimaryImageURL: Boolean
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
-  number: String
-  clearNumber: Boolean
-  dating: String
-  clearDating: Boolean
+  height: Float
+  clearHeight: Boolean
+  width: Float
+  clearWidth: Boolean
+  length: Float
+  clearLength: Boolean
+  depth: Float
+  clearDepth: Boolean
+  diameter: Float
+  clearDiameter: Boolean
+  weight: String
+  clearWeight: Boolean
   dimensions: String
   clearDimensions: Boolean
+  number: String
+  clearNumber: Boolean
   authorID: ID
   clearAuthor: Boolean
   addArtGenreIDs: [ID!]
@@ -9798,6 +9940,12 @@ input UpdateArtifactInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
+  dating: String
+  clearDating: Boolean
+  datingStart: Int
+  clearDatingStart: Boolean
+  datingEnd: Int
+  clearDatingEnd: Boolean
   displayName: String
   clearDisplayName: Boolean
   abbreviation: String
@@ -9813,16 +9961,6 @@ input UpdateArtifactInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
-  deletedAt: Time
-  clearDeletedAt: Boolean
-  deletedBy: String
-  clearDeletedBy: Boolean
-  dating: String
-  clearDating: Boolean
-  datingStart: Int
-  clearDatingStart: Boolean
-  datingEnd: Int
-  clearDatingEnd: Boolean
   height: Float
   clearHeight: Boolean
   width: Float
@@ -9837,6 +9975,10 @@ input UpdateArtifactInput {
   clearWeight: Boolean
   dimensions: String
   clearDimensions: Boolean
+  deletedAt: Time
+  clearDeletedAt: Boolean
+  deletedBy: String
+  clearDeletedBy: Boolean
   chemicalComposition: String
   clearChemicalComposition: Boolean
   kpNumber: String
@@ -10538,6 +10680,12 @@ input UpdatePetroglyphInput {
   updatedAt: Time
   updatedBy: String
   clearUpdatedBy: Boolean
+  dating: String
+  clearDating: Boolean
+  datingStart: Int
+  clearDatingStart: Boolean
+  datingEnd: Int
+  clearDatingEnd: Boolean
   displayName: String
   clearDisplayName: Boolean
   abbreviation: String
@@ -10553,24 +10701,6 @@ input UpdatePetroglyphInput {
   additionalImagesUrls: [String!]
   appendAdditionalImagesUrls: [String!]
   clearAdditionalImagesUrls: Boolean
-  deletedAt: Time
-  clearDeletedAt: Boolean
-  deletedBy: String
-  clearDeletedBy: Boolean
-  number: String
-  clearNumber: Boolean
-  dating: String
-  clearDating: Boolean
-  datingStart: Int
-  clearDatingStart: Boolean
-  datingEnd: Int
-  clearDatingEnd: Boolean
-  orientation: String
-  clearOrientation: Boolean
-  position: String
-  clearPosition: Boolean
-  geometricShape: String
-  clearGeometricShape: Boolean
   height: Float
   clearHeight: Boolean
   width: Float
@@ -10585,6 +10715,18 @@ input UpdatePetroglyphInput {
   clearWeight: Boolean
   dimensions: String
   clearDimensions: Boolean
+  deletedAt: Time
+  clearDeletedAt: Boolean
+  deletedBy: String
+  clearDeletedBy: Boolean
+  number: String
+  clearNumber: Boolean
+  orientation: String
+  clearOrientation: Boolean
+  position: String
+  clearPosition: Boolean
+  geometricShape: String
+  clearGeometricShape: Boolean
   planePreservation: String
   clearPlanePreservation: Boolean
   photoCode: String

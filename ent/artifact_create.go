@@ -94,6 +94,48 @@ func (ac *ArtifactCreate) SetNillableUpdatedBy(s *string) *ArtifactCreate {
 	return ac
 }
 
+// SetDating sets the "dating" field.
+func (ac *ArtifactCreate) SetDating(s string) *ArtifactCreate {
+	ac.mutation.SetDating(s)
+	return ac
+}
+
+// SetNillableDating sets the "dating" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDating(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDating(*s)
+	}
+	return ac
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (ac *ArtifactCreate) SetDatingStart(i int) *ArtifactCreate {
+	ac.mutation.SetDatingStart(i)
+	return ac
+}
+
+// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDatingStart(i *int) *ArtifactCreate {
+	if i != nil {
+		ac.SetDatingStart(*i)
+	}
+	return ac
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (ac *ArtifactCreate) SetDatingEnd(i int) *ArtifactCreate {
+	ac.mutation.SetDatingEnd(i)
+	return ac
+}
+
+// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDatingEnd(i *int) *ArtifactCreate {
+	if i != nil {
+		ac.SetDatingEnd(*i)
+	}
+	return ac
+}
+
 // SetDisplayName sets the "display_name" field.
 func (ac *ArtifactCreate) SetDisplayName(s string) *ArtifactCreate {
 	ac.mutation.SetDisplayName(s)
@@ -181,76 +223,6 @@ func (ac *ArtifactCreate) SetNillablePrimaryImageURL(s *string) *ArtifactCreate 
 // SetAdditionalImagesUrls sets the "additional_images_urls" field.
 func (ac *ArtifactCreate) SetAdditionalImagesUrls(s []string) *ArtifactCreate {
 	ac.mutation.SetAdditionalImagesUrls(s)
-	return ac
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (ac *ArtifactCreate) SetDeletedAt(t time.Time) *ArtifactCreate {
-	ac.mutation.SetDeletedAt(t)
-	return ac
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableDeletedAt(t *time.Time) *ArtifactCreate {
-	if t != nil {
-		ac.SetDeletedAt(*t)
-	}
-	return ac
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (ac *ArtifactCreate) SetDeletedBy(s string) *ArtifactCreate {
-	ac.mutation.SetDeletedBy(s)
-	return ac
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableDeletedBy(s *string) *ArtifactCreate {
-	if s != nil {
-		ac.SetDeletedBy(*s)
-	}
-	return ac
-}
-
-// SetDating sets the "dating" field.
-func (ac *ArtifactCreate) SetDating(s string) *ArtifactCreate {
-	ac.mutation.SetDating(s)
-	return ac
-}
-
-// SetNillableDating sets the "dating" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableDating(s *string) *ArtifactCreate {
-	if s != nil {
-		ac.SetDating(*s)
-	}
-	return ac
-}
-
-// SetDatingStart sets the "dating_start" field.
-func (ac *ArtifactCreate) SetDatingStart(i int) *ArtifactCreate {
-	ac.mutation.SetDatingStart(i)
-	return ac
-}
-
-// SetNillableDatingStart sets the "dating_start" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableDatingStart(i *int) *ArtifactCreate {
-	if i != nil {
-		ac.SetDatingStart(*i)
-	}
-	return ac
-}
-
-// SetDatingEnd sets the "dating_end" field.
-func (ac *ArtifactCreate) SetDatingEnd(i int) *ArtifactCreate {
-	ac.mutation.SetDatingEnd(i)
-	return ac
-}
-
-// SetNillableDatingEnd sets the "dating_end" field if the given value is not nil.
-func (ac *ArtifactCreate) SetNillableDatingEnd(i *int) *ArtifactCreate {
-	if i != nil {
-		ac.SetDatingEnd(*i)
-	}
 	return ac
 }
 
@@ -348,6 +320,34 @@ func (ac *ArtifactCreate) SetDimensions(s string) *ArtifactCreate {
 func (ac *ArtifactCreate) SetNillableDimensions(s *string) *ArtifactCreate {
 	if s != nil {
 		ac.SetDimensions(*s)
+	}
+	return ac
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (ac *ArtifactCreate) SetDeletedAt(t time.Time) *ArtifactCreate {
+	ac.mutation.SetDeletedAt(t)
+	return ac
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDeletedAt(t *time.Time) *ArtifactCreate {
+	if t != nil {
+		ac.SetDeletedAt(*t)
+	}
+	return ac
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (ac *ArtifactCreate) SetDeletedBy(s string) *ArtifactCreate {
+	ac.mutation.SetDeletedBy(s)
+	return ac
+}
+
+// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
+func (ac *ArtifactCreate) SetNillableDeletedBy(s *string) *ArtifactCreate {
+	if s != nil {
+		ac.SetDeletedBy(*s)
 	}
 	return ac
 }
@@ -885,6 +885,18 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
+	if value, ok := ac.mutation.Dating(); ok {
+		_spec.SetField(artifact.FieldDating, field.TypeString, value)
+		_node.Dating = value
+	}
+	if value, ok := ac.mutation.DatingStart(); ok {
+		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
+		_node.DatingStart = value
+	}
+	if value, ok := ac.mutation.DatingEnd(); ok {
+		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
+		_node.DatingEnd = value
+	}
 	if value, ok := ac.mutation.DisplayName(); ok {
 		_spec.SetField(artifact.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
@@ -913,26 +925,6 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 		_spec.SetField(artifact.FieldAdditionalImagesUrls, field.TypeJSON, value)
 		_node.AdditionalImagesUrls = value
 	}
-	if value, ok := ac.mutation.DeletedAt(); ok {
-		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := ac.mutation.DeletedBy(); ok {
-		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
-	}
-	if value, ok := ac.mutation.Dating(); ok {
-		_spec.SetField(artifact.FieldDating, field.TypeString, value)
-		_node.Dating = value
-	}
-	if value, ok := ac.mutation.DatingStart(); ok {
-		_spec.SetField(artifact.FieldDatingStart, field.TypeInt, value)
-		_node.DatingStart = value
-	}
-	if value, ok := ac.mutation.DatingEnd(); ok {
-		_spec.SetField(artifact.FieldDatingEnd, field.TypeInt, value)
-		_node.DatingEnd = value
-	}
 	if value, ok := ac.mutation.Height(); ok {
 		_spec.SetField(artifact.FieldHeight, field.TypeFloat64, value)
 		_node.Height = value
@@ -960,6 +952,14 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Dimensions(); ok {
 		_spec.SetField(artifact.FieldDimensions, field.TypeString, value)
 		_node.Dimensions = value
+	}
+	if value, ok := ac.mutation.DeletedAt(); ok {
+		_spec.SetField(artifact.FieldDeletedAt, field.TypeTime, value)
+		_node.DeletedAt = value
+	}
+	if value, ok := ac.mutation.DeletedBy(); ok {
+		_spec.SetField(artifact.FieldDeletedBy, field.TypeString, value)
+		_node.DeletedBy = value
 	}
 	if value, ok := ac.mutation.ChemicalComposition(); ok {
 		_spec.SetField(artifact.FieldChemicalComposition, field.TypeString, value)

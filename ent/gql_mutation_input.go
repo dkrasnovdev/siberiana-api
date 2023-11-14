@@ -5,6 +5,7 @@ package ent
 import (
 	"time"
 
+	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
@@ -23,15 +24,24 @@ type CreateArtInput struct {
 	CreatedBy            *string
 	UpdatedAt            *time.Time
 	UpdatedBy            *string
+	Dating               *string
+	DatingStart          *int
+	DatingEnd            *int
 	DisplayName          *string
 	Abbreviation         *string
 	Description          *string
 	ExternalLink         *string
+	Status               *art.Status
 	PrimaryImageURL      *string
 	AdditionalImagesUrls []string
-	Number               *string
-	Dating               *string
+	Height               *float64
+	Width                *float64
+	Length               *float64
+	Depth                *float64
+	Diameter             *float64
+	Weight               *string
 	Dimensions           *string
+	Number               *string
 	AuthorID             *int
 	ArtGenreIDs          []int
 	ArtStyleIDs          []int
@@ -57,6 +67,15 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
 	}
@@ -69,20 +88,38 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
 	if v := i.PrimaryImageURL; v != nil {
 		m.SetPrimaryImageURL(*v)
 	}
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
 	}
-	if v := i.Number; v != nil {
-		m.SetNumber(*v)
+	if v := i.Height; v != nil {
+		m.SetHeight(*v)
 	}
-	if v := i.Dating; v != nil {
-		m.SetDating(*v)
+	if v := i.Width; v != nil {
+		m.SetWidth(*v)
+	}
+	if v := i.Length; v != nil {
+		m.SetLength(*v)
+	}
+	if v := i.Depth; v != nil {
+		m.SetDepth(*v)
+	}
+	if v := i.Diameter; v != nil {
+		m.SetDiameter(*v)
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
 	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
 	}
 	if v := i.AuthorID; v != nil {
 		m.SetAuthorID(*v)
@@ -124,6 +161,12 @@ type UpdateArtInput struct {
 	UpdatedAt                  *time.Time
 	ClearUpdatedBy             bool
 	UpdatedBy                  *string
+	ClearDating                bool
+	Dating                     *string
+	ClearDatingStart           bool
+	DatingStart                *int
+	ClearDatingEnd             bool
+	DatingEnd                  *int
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearAbbreviation          bool
@@ -132,17 +175,29 @@ type UpdateArtInput struct {
 	Description                *string
 	ClearExternalLink          bool
 	ExternalLink               *string
+	ClearStatus                bool
+	Status                     *art.Status
 	ClearPrimaryImageURL       bool
 	PrimaryImageURL            *string
 	ClearAdditionalImagesUrls  bool
 	AdditionalImagesUrls       []string
 	AppendAdditionalImagesUrls []string
-	ClearNumber                bool
-	Number                     *string
-	ClearDating                bool
-	Dating                     *string
+	ClearHeight                bool
+	Height                     *float64
+	ClearWidth                 bool
+	Width                      *float64
+	ClearLength                bool
+	Length                     *float64
+	ClearDepth                 bool
+	Depth                      *float64
+	ClearDiameter              bool
+	Diameter                   *float64
+	ClearWeight                bool
+	Weight                     *string
 	ClearDimensions            bool
 	Dimensions                 *string
+	ClearNumber                bool
+	Number                     *string
 	ClearAuthor                bool
 	AuthorID                   *int
 	ClearArtGenre              bool
@@ -182,6 +237,24 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if i.ClearDating {
+		m.ClearDating()
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if i.ClearDatingStart {
+		m.ClearDatingStart()
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if i.ClearDatingEnd {
+		m.ClearDatingEnd()
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
 	}
@@ -206,6 +279,12 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	if v := i.ExternalLink; v != nil {
 		m.SetExternalLink(*v)
 	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
 	if i.ClearPrimaryImageURL {
 		m.ClearPrimaryImageURL()
 	}
@@ -221,23 +300,53 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
-	if i.ClearNumber {
-		m.ClearNumber()
+	if i.ClearHeight {
+		m.ClearHeight()
 	}
-	if v := i.Number; v != nil {
-		m.SetNumber(*v)
+	if v := i.Height; v != nil {
+		m.SetHeight(*v)
 	}
-	if i.ClearDating {
-		m.ClearDating()
+	if i.ClearWidth {
+		m.ClearWidth()
 	}
-	if v := i.Dating; v != nil {
-		m.SetDating(*v)
+	if v := i.Width; v != nil {
+		m.SetWidth(*v)
+	}
+	if i.ClearLength {
+		m.ClearLength()
+	}
+	if v := i.Length; v != nil {
+		m.SetLength(*v)
+	}
+	if i.ClearDepth {
+		m.ClearDepth()
+	}
+	if v := i.Depth; v != nil {
+		m.SetDepth(*v)
+	}
+	if i.ClearDiameter {
+		m.ClearDiameter()
+	}
+	if v := i.Diameter; v != nil {
+		m.SetDiameter(*v)
+	}
+	if i.ClearWeight {
+		m.ClearWeight()
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
 	}
 	if i.ClearDimensions {
 		m.ClearDimensions()
 	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
+	}
+	if i.ClearNumber {
+		m.ClearNumber()
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
 	}
 	if i.ClearAuthor {
 		m.ClearAuthor()
@@ -587,6 +696,9 @@ type CreateArtifactInput struct {
 	CreatedBy             *string
 	UpdatedAt             *time.Time
 	UpdatedBy             *string
+	Dating                *string
+	DatingStart           *int
+	DatingEnd             *int
 	DisplayName           *string
 	Abbreviation          *string
 	Description           *string
@@ -594,11 +706,6 @@ type CreateArtifactInput struct {
 	Status                *artifact.Status
 	PrimaryImageURL       *string
 	AdditionalImagesUrls  []string
-	DeletedAt             *time.Time
-	DeletedBy             *string
-	Dating                *string
-	DatingStart           *int
-	DatingEnd             *int
 	Height                *float64
 	Width                 *float64
 	Length                *float64
@@ -606,6 +713,8 @@ type CreateArtifactInput struct {
 	Diameter              *float64
 	Weight                *string
 	Dimensions            *string
+	DeletedAt             *time.Time
+	DeletedBy             *string
 	ChemicalComposition   *string
 	KpNumber              *string
 	GoskatalogNumber      *string
@@ -647,6 +756,15 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
 	}
@@ -668,21 +786,6 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
 	}
-	if v := i.DeletedAt; v != nil {
-		m.SetDeletedAt(*v)
-	}
-	if v := i.DeletedBy; v != nil {
-		m.SetDeletedBy(*v)
-	}
-	if v := i.Dating; v != nil {
-		m.SetDating(*v)
-	}
-	if v := i.DatingStart; v != nil {
-		m.SetDatingStart(*v)
-	}
-	if v := i.DatingEnd; v != nil {
-		m.SetDatingEnd(*v)
-	}
 	if v := i.Height; v != nil {
 		m.SetHeight(*v)
 	}
@@ -703,6 +806,12 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
 	}
 	if v := i.ChemicalComposition; v != nil {
 		m.SetChemicalComposition(*v)
@@ -792,6 +901,12 @@ type UpdateArtifactInput struct {
 	UpdatedAt                  *time.Time
 	ClearUpdatedBy             bool
 	UpdatedBy                  *string
+	ClearDating                bool
+	Dating                     *string
+	ClearDatingStart           bool
+	DatingStart                *int
+	ClearDatingEnd             bool
+	DatingEnd                  *int
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearAbbreviation          bool
@@ -807,16 +922,6 @@ type UpdateArtifactInput struct {
 	ClearAdditionalImagesUrls  bool
 	AdditionalImagesUrls       []string
 	AppendAdditionalImagesUrls []string
-	ClearDeletedAt             bool
-	DeletedAt                  *time.Time
-	ClearDeletedBy             bool
-	DeletedBy                  *string
-	ClearDating                bool
-	Dating                     *string
-	ClearDatingStart           bool
-	DatingStart                *int
-	ClearDatingEnd             bool
-	DatingEnd                  *int
 	ClearHeight                bool
 	Height                     *float64
 	ClearWidth                 bool
@@ -831,6 +936,10 @@ type UpdateArtifactInput struct {
 	Weight                     *string
 	ClearDimensions            bool
 	Dimensions                 *string
+	ClearDeletedAt             bool
+	DeletedAt                  *time.Time
+	ClearDeletedBy             bool
+	DeletedBy                  *string
 	ClearChemicalComposition   bool
 	ChemicalComposition        *string
 	ClearKpNumber              bool
@@ -904,6 +1013,24 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if i.ClearDating {
+		m.ClearDating()
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if i.ClearDatingStart {
+		m.ClearDatingStart()
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if i.ClearDatingEnd {
+		m.ClearDatingEnd()
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
 	}
@@ -949,36 +1076,6 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
-	if i.ClearDeletedAt {
-		m.ClearDeletedAt()
-	}
-	if v := i.DeletedAt; v != nil {
-		m.SetDeletedAt(*v)
-	}
-	if i.ClearDeletedBy {
-		m.ClearDeletedBy()
-	}
-	if v := i.DeletedBy; v != nil {
-		m.SetDeletedBy(*v)
-	}
-	if i.ClearDating {
-		m.ClearDating()
-	}
-	if v := i.Dating; v != nil {
-		m.SetDating(*v)
-	}
-	if i.ClearDatingStart {
-		m.ClearDatingStart()
-	}
-	if v := i.DatingStart; v != nil {
-		m.SetDatingStart(*v)
-	}
-	if i.ClearDatingEnd {
-		m.ClearDatingEnd()
-	}
-	if v := i.DatingEnd; v != nil {
-		m.SetDatingEnd(*v)
-	}
 	if i.ClearHeight {
 		m.ClearHeight()
 	}
@@ -1020,6 +1117,18 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
+	}
+	if i.ClearDeletedAt {
+		m.ClearDeletedAt()
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if i.ClearDeletedBy {
+		m.ClearDeletedBy()
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
 	}
 	if i.ClearChemicalComposition {
 		m.ClearChemicalComposition()
@@ -4979,6 +5088,9 @@ type CreatePetroglyphInput struct {
 	CreatedBy                          *string
 	UpdatedAt                          *time.Time
 	UpdatedBy                          *string
+	Dating                             *string
+	DatingStart                        *int
+	DatingEnd                          *int
 	DisplayName                        *string
 	Abbreviation                       *string
 	Description                        *string
@@ -4986,15 +5098,6 @@ type CreatePetroglyphInput struct {
 	Status                             *petroglyph.Status
 	PrimaryImageURL                    *string
 	AdditionalImagesUrls               []string
-	DeletedAt                          *time.Time
-	DeletedBy                          *string
-	Number                             *string
-	Dating                             *string
-	DatingStart                        *int
-	DatingEnd                          *int
-	Orientation                        *string
-	Position                           *string
-	GeometricShape                     *string
 	Height                             *float64
 	Width                              *float64
 	Length                             *float64
@@ -5002,6 +5105,12 @@ type CreatePetroglyphInput struct {
 	Diameter                           *float64
 	Weight                             *string
 	Dimensions                         *string
+	DeletedAt                          *time.Time
+	DeletedBy                          *string
+	Number                             *string
+	Orientation                        *string
+	Position                           *string
+	GeometricShape                     *string
 	PlanePreservation                  *string
 	PhotoCode                          *string
 	AccountingDocumentationInformation *string
@@ -5032,6 +5141,15 @@ func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
 	}
@@ -5053,33 +5171,6 @@ func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	if v := i.AdditionalImagesUrls; v != nil {
 		m.SetAdditionalImagesUrls(v)
 	}
-	if v := i.DeletedAt; v != nil {
-		m.SetDeletedAt(*v)
-	}
-	if v := i.DeletedBy; v != nil {
-		m.SetDeletedBy(*v)
-	}
-	if v := i.Number; v != nil {
-		m.SetNumber(*v)
-	}
-	if v := i.Dating; v != nil {
-		m.SetDating(*v)
-	}
-	if v := i.DatingStart; v != nil {
-		m.SetDatingStart(*v)
-	}
-	if v := i.DatingEnd; v != nil {
-		m.SetDatingEnd(*v)
-	}
-	if v := i.Orientation; v != nil {
-		m.SetOrientation(*v)
-	}
-	if v := i.Position; v != nil {
-		m.SetPosition(*v)
-	}
-	if v := i.GeometricShape; v != nil {
-		m.SetGeometricShape(*v)
-	}
 	if v := i.Height; v != nil {
 		m.SetHeight(*v)
 	}
@@ -5100,6 +5191,24 @@ func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if v := i.Orientation; v != nil {
+		m.SetOrientation(*v)
+	}
+	if v := i.Position; v != nil {
+		m.SetPosition(*v)
+	}
+	if v := i.GeometricShape; v != nil {
+		m.SetGeometricShape(*v)
 	}
 	if v := i.PlanePreservation; v != nil {
 		m.SetPlanePreservation(*v)
@@ -5156,6 +5265,12 @@ type UpdatePetroglyphInput struct {
 	UpdatedAt                               *time.Time
 	ClearUpdatedBy                          bool
 	UpdatedBy                               *string
+	ClearDating                             bool
+	Dating                                  *string
+	ClearDatingStart                        bool
+	DatingStart                             *int
+	ClearDatingEnd                          bool
+	DatingEnd                               *int
 	ClearDisplayName                        bool
 	DisplayName                             *string
 	ClearAbbreviation                       bool
@@ -5171,24 +5286,6 @@ type UpdatePetroglyphInput struct {
 	ClearAdditionalImagesUrls               bool
 	AdditionalImagesUrls                    []string
 	AppendAdditionalImagesUrls              []string
-	ClearDeletedAt                          bool
-	DeletedAt                               *time.Time
-	ClearDeletedBy                          bool
-	DeletedBy                               *string
-	ClearNumber                             bool
-	Number                                  *string
-	ClearDating                             bool
-	Dating                                  *string
-	ClearDatingStart                        bool
-	DatingStart                             *int
-	ClearDatingEnd                          bool
-	DatingEnd                               *int
-	ClearOrientation                        bool
-	Orientation                             *string
-	ClearPosition                           bool
-	Position                                *string
-	ClearGeometricShape                     bool
-	GeometricShape                          *string
 	ClearHeight                             bool
 	Height                                  *float64
 	ClearWidth                              bool
@@ -5203,6 +5300,18 @@ type UpdatePetroglyphInput struct {
 	Weight                                  *string
 	ClearDimensions                         bool
 	Dimensions                              *string
+	ClearDeletedAt                          bool
+	DeletedAt                               *time.Time
+	ClearDeletedBy                          bool
+	DeletedBy                               *string
+	ClearNumber                             bool
+	Number                                  *string
+	ClearOrientation                        bool
+	Orientation                             *string
+	ClearPosition                           bool
+	Position                                *string
+	ClearGeometricShape                     bool
+	GeometricShape                          *string
 	ClearPlanePreservation                  bool
 	PlanePreservation                       *string
 	ClearPhotoCode                          bool
@@ -5251,6 +5360,24 @@ func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
+	if i.ClearDating {
+		m.ClearDating()
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if i.ClearDatingStart {
+		m.ClearDatingStart()
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if i.ClearDatingEnd {
+		m.ClearDatingEnd()
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
 	}
@@ -5296,60 +5423,6 @@ func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	if i.AppendAdditionalImagesUrls != nil {
 		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
 	}
-	if i.ClearDeletedAt {
-		m.ClearDeletedAt()
-	}
-	if v := i.DeletedAt; v != nil {
-		m.SetDeletedAt(*v)
-	}
-	if i.ClearDeletedBy {
-		m.ClearDeletedBy()
-	}
-	if v := i.DeletedBy; v != nil {
-		m.SetDeletedBy(*v)
-	}
-	if i.ClearNumber {
-		m.ClearNumber()
-	}
-	if v := i.Number; v != nil {
-		m.SetNumber(*v)
-	}
-	if i.ClearDating {
-		m.ClearDating()
-	}
-	if v := i.Dating; v != nil {
-		m.SetDating(*v)
-	}
-	if i.ClearDatingStart {
-		m.ClearDatingStart()
-	}
-	if v := i.DatingStart; v != nil {
-		m.SetDatingStart(*v)
-	}
-	if i.ClearDatingEnd {
-		m.ClearDatingEnd()
-	}
-	if v := i.DatingEnd; v != nil {
-		m.SetDatingEnd(*v)
-	}
-	if i.ClearOrientation {
-		m.ClearOrientation()
-	}
-	if v := i.Orientation; v != nil {
-		m.SetOrientation(*v)
-	}
-	if i.ClearPosition {
-		m.ClearPosition()
-	}
-	if v := i.Position; v != nil {
-		m.SetPosition(*v)
-	}
-	if i.ClearGeometricShape {
-		m.ClearGeometricShape()
-	}
-	if v := i.GeometricShape; v != nil {
-		m.SetGeometricShape(*v)
-	}
 	if i.ClearHeight {
 		m.ClearHeight()
 	}
@@ -5391,6 +5464,42 @@ func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	}
 	if v := i.Dimensions; v != nil {
 		m.SetDimensions(*v)
+	}
+	if i.ClearDeletedAt {
+		m.ClearDeletedAt()
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if i.ClearDeletedBy {
+		m.ClearDeletedBy()
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
+	if i.ClearNumber {
+		m.ClearNumber()
+	}
+	if v := i.Number; v != nil {
+		m.SetNumber(*v)
+	}
+	if i.ClearOrientation {
+		m.ClearOrientation()
+	}
+	if v := i.Orientation; v != nil {
+		m.SetOrientation(*v)
+	}
+	if i.ClearPosition {
+		m.ClearPosition()
+	}
+	if v := i.Position; v != nil {
+		m.SetPosition(*v)
+	}
+	if i.ClearGeometricShape {
+		m.ClearGeometricShape()
+	}
+	if v := i.GeometricShape; v != nil {
+		m.SetGeometricShape(*v)
 	}
 	if i.ClearPlanePreservation {
 		m.ClearPlanePreservation()

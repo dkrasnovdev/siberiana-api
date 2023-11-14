@@ -44,9 +44,11 @@ func (Artifact) Policy() ent.Policy {
 func (Artifact) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
+		mixin.DatingMixin{},
 		mixin.DetailsMixin{},
 		mixin.DraftMixin{},
 		mixin.ImagesMixin{},
+		mixin.SizeMixin{},
 		mixin.SoftDeleteMixin{},
 	}
 }
@@ -64,24 +66,10 @@ func (Artifact) Annotations() []schema.Annotation {
 // Fields of the Artifact.
 func (Artifact) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("dating").Optional(),
-		field.Int("dating_start").Optional(),
-		field.Int("dating_end").Optional(),
-
-		field.Float("height").Optional(),
-		field.Float("width").Optional(),
-		field.Float("length").Optional(),
-		field.Float("depth").Optional(),
-		field.Float("diameter").Optional(),
-		field.String("weight").Optional(),
-		field.String("dimensions").Optional(),
-
 		field.String("chemical_composition").Optional(),
-
 		field.String("kp_number").Optional(),
 		field.String("goskatalog_number").Optional(),
 		field.String("inventory_number").Optional(),
-
 		field.String("typology").Optional(),
 		field.Time("admission_date").
 			Optional().
