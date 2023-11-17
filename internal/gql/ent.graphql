@@ -2383,8 +2383,8 @@ type Country implements Node {
   protectedAreaPictures: [ProtectedAreaPicture!]
   regions: [Region!]
   locations: [Location!]
-  knownAsFor: [Country!]
-  knownAs: [Country!]
+  knownAsAfter: [Country!]
+  knownAsBefore: [Country!]
 }
 """A connection to a list of items."""
 type CountryConnection {
@@ -2564,12 +2564,12 @@ input CountryWhereInput {
   """locations edge predicates"""
   hasLocations: Boolean
   hasLocationsWith: [LocationWhereInput!]
-  """known_as_for edge predicates"""
-  hasKnownAsFor: Boolean
-  hasKnownAsForWith: [CountryWhereInput!]
-  """known_as edge predicates"""
-  hasKnownAs: Boolean
-  hasKnownAsWith: [CountryWhereInput!]
+  """known_as_after edge predicates"""
+  hasKnownAsAfter: Boolean
+  hasKnownAsAfterWith: [CountryWhereInput!]
+  """known_as_before edge predicates"""
+  hasKnownAsBefore: Boolean
+  hasKnownAsBeforeWith: [CountryWhereInput!]
 }
 """
 CreateArtGenreInput is used for create ArtGenre object.
@@ -2804,8 +2804,8 @@ input CreateCountryInput {
   protectedAreaPictureIDs: [ID!]
   regionIDs: [ID!]
   locationIDs: [ID!]
-  knownAsForIDs: [ID!]
-  knownAIDs: [ID!]
+  knownAsAfterIDs: [ID!]
+  knownAsBeforeIDs: [ID!]
 }
 """
 CreateCultureInput is used for create Culture object.
@@ -2843,6 +2843,8 @@ input CreateDistrictInput {
   settlementIDs: [ID!]
   locationIDs: [ID!]
   regionID: ID
+  knownAsAfterIDs: [ID!]
+  knownAsBeforeIDs: [ID!]
 }
 """
 CreateEthnosInput is used for create Ethnos object.
@@ -3281,6 +3283,8 @@ input CreateRegionInput {
   settlementIDs: [ID!]
   locationIDs: [ID!]
   countryID: ID
+  knownAsAfterIDs: [ID!]
+  knownAsBeforeIDs: [ID!]
 }
 """
 CreateSetInput is used for create Set object.
@@ -3318,6 +3322,8 @@ input CreateSettlementInput {
   locationIDs: [ID!]
   regionID: ID
   districtID: ID
+  knownAsAfterIDs: [ID!]
+  knownAsBeforeIDs: [ID!]
 }
 """
 CreateTechniqueInput is used for create Technique object.
@@ -3551,6 +3557,8 @@ type District implements Node {
   settlements: [Settlement!]
   locations: [Location!]
   region: Region
+  knownAsAfter: [District!]
+  knownAsBefore: [District!]
 }
 """A connection to a list of items."""
 type DistrictConnection {
@@ -3733,6 +3741,12 @@ input DistrictWhereInput {
   """region edge predicates"""
   hasRegion: Boolean
   hasRegionWith: [RegionWhereInput!]
+  """known_as_after edge predicates"""
+  hasKnownAsAfter: Boolean
+  hasKnownAsAfterWith: [DistrictWhereInput!]
+  """known_as_before edge predicates"""
+  hasKnownAsBefore: Boolean
+  hasKnownAsBeforeWith: [DistrictWhereInput!]
 }
 type Ethnos implements Node {
   id: ID!
@@ -9175,6 +9189,8 @@ type Region implements Node {
   settlements: [Settlement!]
   locations: [Location!]
   country: Country
+  knownAsAfter: [Region!]
+  knownAsBefore: [Region!]
 }
 """A connection to a list of items."""
 type RegionConnection {
@@ -9363,6 +9379,12 @@ input RegionWhereInput {
   """country edge predicates"""
   hasCountry: Boolean
   hasCountryWith: [CountryWhereInput!]
+  """known_as_after edge predicates"""
+  hasKnownAsAfter: Boolean
+  hasKnownAsAfterWith: [RegionWhereInput!]
+  """known_as_before edge predicates"""
+  hasKnownAsBefore: Boolean
+  hasKnownAsBeforeWith: [RegionWhereInput!]
 }
 type Set implements Node {
   id: ID!
@@ -9561,6 +9583,8 @@ type Settlement implements Node {
   locations: [Location!]
   region: Region
   district: District
+  knownAsAfter: [Settlement!]
+  knownAsBefore: [Settlement!]
 }
 """A connection to a list of items."""
 type SettlementConnection {
@@ -9743,6 +9767,12 @@ input SettlementWhereInput {
   """district edge predicates"""
   hasDistrict: Boolean
   hasDistrictWith: [DistrictWhereInput!]
+  """known_as_after edge predicates"""
+  hasKnownAsAfter: Boolean
+  hasKnownAsAfterWith: [SettlementWhereInput!]
+  """known_as_before edge predicates"""
+  hasKnownAsBefore: Boolean
+  hasKnownAsBeforeWith: [SettlementWhereInput!]
 }
 type Technique implements Node {
   id: ID!
@@ -10340,12 +10370,12 @@ input UpdateCountryInput {
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
   clearLocations: Boolean
-  addKnownAsForIDs: [ID!]
-  removeKnownAsForIDs: [ID!]
-  clearKnownAsFor: Boolean
-  addKnownAIDs: [ID!]
-  removeKnownAIDs: [ID!]
-  clearKnownAs: Boolean
+  addKnownAsAfterIDs: [ID!]
+  removeKnownAsAfterIDs: [ID!]
+  clearKnownAsAfter: Boolean
+  addKnownAsBeforeIDs: [ID!]
+  removeKnownAsBeforeIDs: [ID!]
+  clearKnownAsBefore: Boolean
 }
 """
 UpdateCultureInput is used for update Culture object.
@@ -10410,6 +10440,12 @@ input UpdateDistrictInput {
   clearLocations: Boolean
   regionID: ID
   clearRegion: Boolean
+  addKnownAsAfterIDs: [ID!]
+  removeKnownAsAfterIDs: [ID!]
+  clearKnownAsAfter: Boolean
+  addKnownAsBeforeIDs: [ID!]
+  removeKnownAsBeforeIDs: [ID!]
+  clearKnownAsBefore: Boolean
 }
 """
 UpdateEthnosInput is used for update Ethnos object.
@@ -11134,6 +11170,12 @@ input UpdateRegionInput {
   clearLocations: Boolean
   countryID: ID
   clearCountry: Boolean
+  addKnownAsAfterIDs: [ID!]
+  removeKnownAsAfterIDs: [ID!]
+  clearKnownAsAfter: Boolean
+  addKnownAsBeforeIDs: [ID!]
+  removeKnownAsBeforeIDs: [ID!]
+  clearKnownAsBefore: Boolean
 }
 """
 UpdateSetInput is used for update Set object.
@@ -11197,6 +11239,12 @@ input UpdateSettlementInput {
   clearRegion: Boolean
   districtID: ID
   clearDistrict: Boolean
+  addKnownAsAfterIDs: [ID!]
+  removeKnownAsAfterIDs: [ID!]
+  clearKnownAsAfter: Boolean
+  addKnownAsBeforeIDs: [ID!]
+  removeKnownAsBeforeIDs: [ID!]
+  clearKnownAsBefore: Boolean
 }
 """
 UpdateTechniqueInput is used for update Technique object.

@@ -15597,12 +15597,12 @@ type CountryMutation struct {
 	locations                      map[int]struct{}
 	removedlocations               map[int]struct{}
 	clearedlocations               bool
-	known_as_for                   map[int]struct{}
-	removedknown_as_for            map[int]struct{}
-	clearedknown_as_for            bool
-	known_as                       map[int]struct{}
-	removedknown_as                map[int]struct{}
-	clearedknown_as                bool
+	known_as_after                 map[int]struct{}
+	removedknown_as_after          map[int]struct{}
+	clearedknown_as_after          bool
+	known_as_before                map[int]struct{}
+	removedknown_as_before         map[int]struct{}
+	clearedknown_as_before         bool
 	done                           bool
 	oldValue                       func(context.Context) (*Country, error)
 	predicates                     []predicate.Country
@@ -16396,112 +16396,112 @@ func (m *CountryMutation) ResetLocations() {
 	m.removedlocations = nil
 }
 
-// AddKnownAsForIDs adds the "known_as_for" edge to the Country entity by ids.
-func (m *CountryMutation) AddKnownAsForIDs(ids ...int) {
-	if m.known_as_for == nil {
-		m.known_as_for = make(map[int]struct{})
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Country entity by ids.
+func (m *CountryMutation) AddKnownAsAfterIDs(ids ...int) {
+	if m.known_as_after == nil {
+		m.known_as_after = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.known_as_for[ids[i]] = struct{}{}
+		m.known_as_after[ids[i]] = struct{}{}
 	}
 }
 
-// ClearKnownAsFor clears the "known_as_for" edge to the Country entity.
-func (m *CountryMutation) ClearKnownAsFor() {
-	m.clearedknown_as_for = true
+// ClearKnownAsAfter clears the "known_as_after" edge to the Country entity.
+func (m *CountryMutation) ClearKnownAsAfter() {
+	m.clearedknown_as_after = true
 }
 
-// KnownAsForCleared reports if the "known_as_for" edge to the Country entity was cleared.
-func (m *CountryMutation) KnownAsForCleared() bool {
-	return m.clearedknown_as_for
+// KnownAsAfterCleared reports if the "known_as_after" edge to the Country entity was cleared.
+func (m *CountryMutation) KnownAsAfterCleared() bool {
+	return m.clearedknown_as_after
 }
 
-// RemoveKnownAsForIDs removes the "known_as_for" edge to the Country entity by IDs.
-func (m *CountryMutation) RemoveKnownAsForIDs(ids ...int) {
-	if m.removedknown_as_for == nil {
-		m.removedknown_as_for = make(map[int]struct{})
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to the Country entity by IDs.
+func (m *CountryMutation) RemoveKnownAsAfterIDs(ids ...int) {
+	if m.removedknown_as_after == nil {
+		m.removedknown_as_after = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.known_as_for, ids[i])
-		m.removedknown_as_for[ids[i]] = struct{}{}
+		delete(m.known_as_after, ids[i])
+		m.removedknown_as_after[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedKnownAsFor returns the removed IDs of the "known_as_for" edge to the Country entity.
-func (m *CountryMutation) RemovedKnownAsForIDs() (ids []int) {
-	for id := range m.removedknown_as_for {
+// RemovedKnownAsAfter returns the removed IDs of the "known_as_after" edge to the Country entity.
+func (m *CountryMutation) RemovedKnownAsAfterIDs() (ids []int) {
+	for id := range m.removedknown_as_after {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// KnownAsForIDs returns the "known_as_for" edge IDs in the mutation.
-func (m *CountryMutation) KnownAsForIDs() (ids []int) {
-	for id := range m.known_as_for {
+// KnownAsAfterIDs returns the "known_as_after" edge IDs in the mutation.
+func (m *CountryMutation) KnownAsAfterIDs() (ids []int) {
+	for id := range m.known_as_after {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetKnownAsFor resets all changes to the "known_as_for" edge.
-func (m *CountryMutation) ResetKnownAsFor() {
-	m.known_as_for = nil
-	m.clearedknown_as_for = false
-	m.removedknown_as_for = nil
+// ResetKnownAsAfter resets all changes to the "known_as_after" edge.
+func (m *CountryMutation) ResetKnownAsAfter() {
+	m.known_as_after = nil
+	m.clearedknown_as_after = false
+	m.removedknown_as_after = nil
 }
 
-// AddKnownAIDs adds the "known_as" edge to the Country entity by ids.
-func (m *CountryMutation) AddKnownAIDs(ids ...int) {
-	if m.known_as == nil {
-		m.known_as = make(map[int]struct{})
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Country entity by ids.
+func (m *CountryMutation) AddKnownAsBeforeIDs(ids ...int) {
+	if m.known_as_before == nil {
+		m.known_as_before = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.known_as[ids[i]] = struct{}{}
+		m.known_as_before[ids[i]] = struct{}{}
 	}
 }
 
-// ClearKnownAs clears the "known_as" edge to the Country entity.
-func (m *CountryMutation) ClearKnownAs() {
-	m.clearedknown_as = true
+// ClearKnownAsBefore clears the "known_as_before" edge to the Country entity.
+func (m *CountryMutation) ClearKnownAsBefore() {
+	m.clearedknown_as_before = true
 }
 
-// KnownAsCleared reports if the "known_as" edge to the Country entity was cleared.
-func (m *CountryMutation) KnownAsCleared() bool {
-	return m.clearedknown_as
+// KnownAsBeforeCleared reports if the "known_as_before" edge to the Country entity was cleared.
+func (m *CountryMutation) KnownAsBeforeCleared() bool {
+	return m.clearedknown_as_before
 }
 
-// RemoveKnownAIDs removes the "known_as" edge to the Country entity by IDs.
-func (m *CountryMutation) RemoveKnownAIDs(ids ...int) {
-	if m.removedknown_as == nil {
-		m.removedknown_as = make(map[int]struct{})
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to the Country entity by IDs.
+func (m *CountryMutation) RemoveKnownAsBeforeIDs(ids ...int) {
+	if m.removedknown_as_before == nil {
+		m.removedknown_as_before = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.known_as, ids[i])
-		m.removedknown_as[ids[i]] = struct{}{}
+		delete(m.known_as_before, ids[i])
+		m.removedknown_as_before[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedKnownAs returns the removed IDs of the "known_as" edge to the Country entity.
-func (m *CountryMutation) RemovedKnownAsIDs() (ids []int) {
-	for id := range m.removedknown_as {
+// RemovedKnownAsBefore returns the removed IDs of the "known_as_before" edge to the Country entity.
+func (m *CountryMutation) RemovedKnownAsBeforeIDs() (ids []int) {
+	for id := range m.removedknown_as_before {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// KnownAsIDs returns the "known_as" edge IDs in the mutation.
-func (m *CountryMutation) KnownAsIDs() (ids []int) {
-	for id := range m.known_as {
+// KnownAsBeforeIDs returns the "known_as_before" edge IDs in the mutation.
+func (m *CountryMutation) KnownAsBeforeIDs() (ids []int) {
+	for id := range m.known_as_before {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetKnownAs resets all changes to the "known_as" edge.
-func (m *CountryMutation) ResetKnownAs() {
-	m.known_as = nil
-	m.clearedknown_as = false
-	m.removedknown_as = nil
+// ResetKnownAsBefore resets all changes to the "known_as_before" edge.
+func (m *CountryMutation) ResetKnownAsBefore() {
+	m.known_as_before = nil
+	m.clearedknown_as_before = false
+	m.removedknown_as_before = nil
 }
 
 // Where appends a list predicates to the CountryMutation builder.
@@ -16814,11 +16814,11 @@ func (m *CountryMutation) AddedEdges() []string {
 	if m.locations != nil {
 		edges = append(edges, country.EdgeLocations)
 	}
-	if m.known_as_for != nil {
-		edges = append(edges, country.EdgeKnownAsFor)
+	if m.known_as_after != nil {
+		edges = append(edges, country.EdgeKnownAsAfter)
 	}
-	if m.known_as != nil {
-		edges = append(edges, country.EdgeKnownAs)
+	if m.known_as_before != nil {
+		edges = append(edges, country.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -16863,15 +16863,15 @@ func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case country.EdgeKnownAsFor:
-		ids := make([]ent.Value, 0, len(m.known_as_for))
-		for id := range m.known_as_for {
+	case country.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.known_as_after))
+		for id := range m.known_as_after {
 			ids = append(ids, id)
 		}
 		return ids
-	case country.EdgeKnownAs:
-		ids := make([]ent.Value, 0, len(m.known_as))
-		for id := range m.known_as {
+	case country.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.known_as_before))
+		for id := range m.known_as_before {
 			ids = append(ids, id)
 		}
 		return ids
@@ -16900,11 +16900,11 @@ func (m *CountryMutation) RemovedEdges() []string {
 	if m.removedlocations != nil {
 		edges = append(edges, country.EdgeLocations)
 	}
-	if m.removedknown_as_for != nil {
-		edges = append(edges, country.EdgeKnownAsFor)
+	if m.removedknown_as_after != nil {
+		edges = append(edges, country.EdgeKnownAsAfter)
 	}
-	if m.removedknown_as != nil {
-		edges = append(edges, country.EdgeKnownAs)
+	if m.removedknown_as_before != nil {
+		edges = append(edges, country.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -16949,15 +16949,15 @@ func (m *CountryMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case country.EdgeKnownAsFor:
-		ids := make([]ent.Value, 0, len(m.removedknown_as_for))
-		for id := range m.removedknown_as_for {
+	case country.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_after))
+		for id := range m.removedknown_as_after {
 			ids = append(ids, id)
 		}
 		return ids
-	case country.EdgeKnownAs:
-		ids := make([]ent.Value, 0, len(m.removedknown_as))
-		for id := range m.removedknown_as {
+	case country.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_before))
+		for id := range m.removedknown_as_before {
 			ids = append(ids, id)
 		}
 		return ids
@@ -16986,11 +16986,11 @@ func (m *CountryMutation) ClearedEdges() []string {
 	if m.clearedlocations {
 		edges = append(edges, country.EdgeLocations)
 	}
-	if m.clearedknown_as_for {
-		edges = append(edges, country.EdgeKnownAsFor)
+	if m.clearedknown_as_after {
+		edges = append(edges, country.EdgeKnownAsAfter)
 	}
-	if m.clearedknown_as {
-		edges = append(edges, country.EdgeKnownAs)
+	if m.clearedknown_as_before {
+		edges = append(edges, country.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -17011,10 +17011,10 @@ func (m *CountryMutation) EdgeCleared(name string) bool {
 		return m.clearedregions
 	case country.EdgeLocations:
 		return m.clearedlocations
-	case country.EdgeKnownAsFor:
-		return m.clearedknown_as_for
-	case country.EdgeKnownAs:
-		return m.clearedknown_as
+	case country.EdgeKnownAsAfter:
+		return m.clearedknown_as_after
+	case country.EdgeKnownAsBefore:
+		return m.clearedknown_as_before
 	}
 	return false
 }
@@ -17049,11 +17049,11 @@ func (m *CountryMutation) ResetEdge(name string) error {
 	case country.EdgeLocations:
 		m.ResetLocations()
 		return nil
-	case country.EdgeKnownAsFor:
-		m.ResetKnownAsFor()
+	case country.EdgeKnownAsAfter:
+		m.ResetKnownAsAfter()
 		return nil
-	case country.EdgeKnownAs:
-		m.ResetKnownAs()
+	case country.EdgeKnownAsBefore:
+		m.ResetKnownAsBefore()
 		return nil
 	}
 	return fmt.Errorf("unknown Country edge %s", name)
@@ -18091,6 +18091,12 @@ type DistrictMutation struct {
 	clearedlocations               bool
 	region                         *int
 	clearedregion                  bool
+	known_as_after                 map[int]struct{}
+	removedknown_as_after          map[int]struct{}
+	clearedknown_as_after          bool
+	known_as_before                map[int]struct{}
+	removedknown_as_before         map[int]struct{}
+	clearedknown_as_before         bool
 	done                           bool
 	oldValue                       func(context.Context) (*District, error)
 	predicates                     []predicate.District
@@ -18923,6 +18929,114 @@ func (m *DistrictMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the District entity by ids.
+func (m *DistrictMutation) AddKnownAsAfterIDs(ids ...int) {
+	if m.known_as_after == nil {
+		m.known_as_after = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as_after[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAsAfter clears the "known_as_after" edge to the District entity.
+func (m *DistrictMutation) ClearKnownAsAfter() {
+	m.clearedknown_as_after = true
+}
+
+// KnownAsAfterCleared reports if the "known_as_after" edge to the District entity was cleared.
+func (m *DistrictMutation) KnownAsAfterCleared() bool {
+	return m.clearedknown_as_after
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to the District entity by IDs.
+func (m *DistrictMutation) RemoveKnownAsAfterIDs(ids ...int) {
+	if m.removedknown_as_after == nil {
+		m.removedknown_as_after = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as_after, ids[i])
+		m.removedknown_as_after[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAsAfter returns the removed IDs of the "known_as_after" edge to the District entity.
+func (m *DistrictMutation) RemovedKnownAsAfterIDs() (ids []int) {
+	for id := range m.removedknown_as_after {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsAfterIDs returns the "known_as_after" edge IDs in the mutation.
+func (m *DistrictMutation) KnownAsAfterIDs() (ids []int) {
+	for id := range m.known_as_after {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAsAfter resets all changes to the "known_as_after" edge.
+func (m *DistrictMutation) ResetKnownAsAfter() {
+	m.known_as_after = nil
+	m.clearedknown_as_after = false
+	m.removedknown_as_after = nil
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the District entity by ids.
+func (m *DistrictMutation) AddKnownAsBeforeIDs(ids ...int) {
+	if m.known_as_before == nil {
+		m.known_as_before = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as_before[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAsBefore clears the "known_as_before" edge to the District entity.
+func (m *DistrictMutation) ClearKnownAsBefore() {
+	m.clearedknown_as_before = true
+}
+
+// KnownAsBeforeCleared reports if the "known_as_before" edge to the District entity was cleared.
+func (m *DistrictMutation) KnownAsBeforeCleared() bool {
+	return m.clearedknown_as_before
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to the District entity by IDs.
+func (m *DistrictMutation) RemoveKnownAsBeforeIDs(ids ...int) {
+	if m.removedknown_as_before == nil {
+		m.removedknown_as_before = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as_before, ids[i])
+		m.removedknown_as_before[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAsBefore returns the removed IDs of the "known_as_before" edge to the District entity.
+func (m *DistrictMutation) RemovedKnownAsBeforeIDs() (ids []int) {
+	for id := range m.removedknown_as_before {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsBeforeIDs returns the "known_as_before" edge IDs in the mutation.
+func (m *DistrictMutation) KnownAsBeforeIDs() (ids []int) {
+	for id := range m.known_as_before {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAsBefore resets all changes to the "known_as_before" edge.
+func (m *DistrictMutation) ResetKnownAsBefore() {
+	m.known_as_before = nil
+	m.clearedknown_as_before = false
+	m.removedknown_as_before = nil
+}
+
 // Where appends a list predicates to the DistrictMutation builder.
 func (m *DistrictMutation) Where(ps ...predicate.District) {
 	m.predicates = append(m.predicates, ps...)
@@ -19214,7 +19328,7 @@ func (m *DistrictMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *DistrictMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 9)
 	if m.art != nil {
 		edges = append(edges, district.EdgeArt)
 	}
@@ -19235,6 +19349,12 @@ func (m *DistrictMutation) AddedEdges() []string {
 	}
 	if m.region != nil {
 		edges = append(edges, district.EdgeRegion)
+	}
+	if m.known_as_after != nil {
+		edges = append(edges, district.EdgeKnownAsAfter)
+	}
+	if m.known_as_before != nil {
+		edges = append(edges, district.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -19283,13 +19403,25 @@ func (m *DistrictMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
+	case district.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.known_as_after))
+		for id := range m.known_as_after {
+			ids = append(ids, id)
+		}
+		return ids
+	case district.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.known_as_before))
+		for id := range m.known_as_before {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *DistrictMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 9)
 	if m.removedart != nil {
 		edges = append(edges, district.EdgeArt)
 	}
@@ -19307,6 +19439,12 @@ func (m *DistrictMutation) RemovedEdges() []string {
 	}
 	if m.removedlocations != nil {
 		edges = append(edges, district.EdgeLocations)
+	}
+	if m.removedknown_as_after != nil {
+		edges = append(edges, district.EdgeKnownAsAfter)
+	}
+	if m.removedknown_as_before != nil {
+		edges = append(edges, district.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -19351,13 +19489,25 @@ func (m *DistrictMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case district.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_after))
+		for id := range m.removedknown_as_after {
+			ids = append(ids, id)
+		}
+		return ids
+	case district.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_before))
+		for id := range m.removedknown_as_before {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *DistrictMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 9)
 	if m.clearedart {
 		edges = append(edges, district.EdgeArt)
 	}
@@ -19378,6 +19528,12 @@ func (m *DistrictMutation) ClearedEdges() []string {
 	}
 	if m.clearedregion {
 		edges = append(edges, district.EdgeRegion)
+	}
+	if m.clearedknown_as_after {
+		edges = append(edges, district.EdgeKnownAsAfter)
+	}
+	if m.clearedknown_as_before {
+		edges = append(edges, district.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -19400,6 +19556,10 @@ func (m *DistrictMutation) EdgeCleared(name string) bool {
 		return m.clearedlocations
 	case district.EdgeRegion:
 		return m.clearedregion
+	case district.EdgeKnownAsAfter:
+		return m.clearedknown_as_after
+	case district.EdgeKnownAsBefore:
+		return m.clearedknown_as_before
 	}
 	return false
 }
@@ -19439,6 +19599,12 @@ func (m *DistrictMutation) ResetEdge(name string) error {
 		return nil
 	case district.EdgeRegion:
 		m.ResetRegion()
+		return nil
+	case district.EdgeKnownAsAfter:
+		m.ResetKnownAsAfter()
+		return nil
+	case district.EdgeKnownAsBefore:
+		m.ResetKnownAsBefore()
 		return nil
 	}
 	return fmt.Errorf("unknown District edge %s", name)
@@ -46459,6 +46625,12 @@ type RegionMutation struct {
 	clearedlocations               bool
 	country                        *int
 	clearedcountry                 bool
+	known_as_after                 map[int]struct{}
+	removedknown_as_after          map[int]struct{}
+	clearedknown_as_after          bool
+	known_as_before                map[int]struct{}
+	removedknown_as_before         map[int]struct{}
+	clearedknown_as_before         bool
 	done                           bool
 	oldValue                       func(context.Context) (*Region, error)
 	predicates                     []predicate.Region
@@ -47399,6 +47571,114 @@ func (m *RegionMutation) ResetCountry() {
 	m.clearedcountry = false
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Region entity by ids.
+func (m *RegionMutation) AddKnownAsAfterIDs(ids ...int) {
+	if m.known_as_after == nil {
+		m.known_as_after = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as_after[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAsAfter clears the "known_as_after" edge to the Region entity.
+func (m *RegionMutation) ClearKnownAsAfter() {
+	m.clearedknown_as_after = true
+}
+
+// KnownAsAfterCleared reports if the "known_as_after" edge to the Region entity was cleared.
+func (m *RegionMutation) KnownAsAfterCleared() bool {
+	return m.clearedknown_as_after
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to the Region entity by IDs.
+func (m *RegionMutation) RemoveKnownAsAfterIDs(ids ...int) {
+	if m.removedknown_as_after == nil {
+		m.removedknown_as_after = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as_after, ids[i])
+		m.removedknown_as_after[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAsAfter returns the removed IDs of the "known_as_after" edge to the Region entity.
+func (m *RegionMutation) RemovedKnownAsAfterIDs() (ids []int) {
+	for id := range m.removedknown_as_after {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsAfterIDs returns the "known_as_after" edge IDs in the mutation.
+func (m *RegionMutation) KnownAsAfterIDs() (ids []int) {
+	for id := range m.known_as_after {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAsAfter resets all changes to the "known_as_after" edge.
+func (m *RegionMutation) ResetKnownAsAfter() {
+	m.known_as_after = nil
+	m.clearedknown_as_after = false
+	m.removedknown_as_after = nil
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Region entity by ids.
+func (m *RegionMutation) AddKnownAsBeforeIDs(ids ...int) {
+	if m.known_as_before == nil {
+		m.known_as_before = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as_before[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAsBefore clears the "known_as_before" edge to the Region entity.
+func (m *RegionMutation) ClearKnownAsBefore() {
+	m.clearedknown_as_before = true
+}
+
+// KnownAsBeforeCleared reports if the "known_as_before" edge to the Region entity was cleared.
+func (m *RegionMutation) KnownAsBeforeCleared() bool {
+	return m.clearedknown_as_before
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to the Region entity by IDs.
+func (m *RegionMutation) RemoveKnownAsBeforeIDs(ids ...int) {
+	if m.removedknown_as_before == nil {
+		m.removedknown_as_before = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as_before, ids[i])
+		m.removedknown_as_before[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAsBefore returns the removed IDs of the "known_as_before" edge to the Region entity.
+func (m *RegionMutation) RemovedKnownAsBeforeIDs() (ids []int) {
+	for id := range m.removedknown_as_before {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsBeforeIDs returns the "known_as_before" edge IDs in the mutation.
+func (m *RegionMutation) KnownAsBeforeIDs() (ids []int) {
+	for id := range m.known_as_before {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAsBefore resets all changes to the "known_as_before" edge.
+func (m *RegionMutation) ResetKnownAsBefore() {
+	m.known_as_before = nil
+	m.clearedknown_as_before = false
+	m.removedknown_as_before = nil
+}
+
 // Where appends a list predicates to the RegionMutation builder.
 func (m *RegionMutation) Where(ps ...predicate.Region) {
 	m.predicates = append(m.predicates, ps...)
@@ -47690,7 +47970,7 @@ func (m *RegionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RegionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 11)
 	if m.art != nil {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -47717,6 +47997,12 @@ func (m *RegionMutation) AddedEdges() []string {
 	}
 	if m.country != nil {
 		edges = append(edges, region.EdgeCountry)
+	}
+	if m.known_as_after != nil {
+		edges = append(edges, region.EdgeKnownAsAfter)
+	}
+	if m.known_as_before != nil {
+		edges = append(edges, region.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -47777,13 +48063,25 @@ func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 		if id := m.country; id != nil {
 			return []ent.Value{*id}
 		}
+	case region.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.known_as_after))
+		for id := range m.known_as_after {
+			ids = append(ids, id)
+		}
+		return ids
+	case region.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.known_as_before))
+		for id := range m.known_as_before {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RegionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 11)
 	if m.removedart != nil {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -47807,6 +48105,12 @@ func (m *RegionMutation) RemovedEdges() []string {
 	}
 	if m.removedlocations != nil {
 		edges = append(edges, region.EdgeLocations)
+	}
+	if m.removedknown_as_after != nil {
+		edges = append(edges, region.EdgeKnownAsAfter)
+	}
+	if m.removedknown_as_before != nil {
+		edges = append(edges, region.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -47863,13 +48167,25 @@ func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case region.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_after))
+		for id := range m.removedknown_as_after {
+			ids = append(ids, id)
+		}
+		return ids
+	case region.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_before))
+		for id := range m.removedknown_as_before {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RegionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 11)
 	if m.clearedart {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -47897,6 +48213,12 @@ func (m *RegionMutation) ClearedEdges() []string {
 	if m.clearedcountry {
 		edges = append(edges, region.EdgeCountry)
 	}
+	if m.clearedknown_as_after {
+		edges = append(edges, region.EdgeKnownAsAfter)
+	}
+	if m.clearedknown_as_before {
+		edges = append(edges, region.EdgeKnownAsBefore)
+	}
 	return edges
 }
 
@@ -47922,6 +48244,10 @@ func (m *RegionMutation) EdgeCleared(name string) bool {
 		return m.clearedlocations
 	case region.EdgeCountry:
 		return m.clearedcountry
+	case region.EdgeKnownAsAfter:
+		return m.clearedknown_as_after
+	case region.EdgeKnownAsBefore:
+		return m.clearedknown_as_before
 	}
 	return false
 }
@@ -47967,6 +48293,12 @@ func (m *RegionMutation) ResetEdge(name string) error {
 		return nil
 	case region.EdgeCountry:
 		m.ResetCountry()
+		return nil
+	case region.EdgeKnownAsAfter:
+		m.ResetKnownAsAfter()
+		return nil
+	case region.EdgeKnownAsBefore:
+		m.ResetKnownAsBefore()
 		return nil
 	}
 	return fmt.Errorf("unknown Region edge %s", name)
@@ -49003,6 +49335,12 @@ type SettlementMutation struct {
 	clearedregion                  bool
 	district                       *int
 	cleareddistrict                bool
+	known_as_after                 map[int]struct{}
+	removedknown_as_after          map[int]struct{}
+	clearedknown_as_after          bool
+	known_as_before                map[int]struct{}
+	removedknown_as_before         map[int]struct{}
+	clearedknown_as_before         bool
 	done                           bool
 	oldValue                       func(context.Context) (*Settlement, error)
 	predicates                     []predicate.Settlement
@@ -49820,6 +50158,114 @@ func (m *SettlementMutation) ResetDistrict() {
 	m.cleareddistrict = false
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Settlement entity by ids.
+func (m *SettlementMutation) AddKnownAsAfterIDs(ids ...int) {
+	if m.known_as_after == nil {
+		m.known_as_after = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as_after[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAsAfter clears the "known_as_after" edge to the Settlement entity.
+func (m *SettlementMutation) ClearKnownAsAfter() {
+	m.clearedknown_as_after = true
+}
+
+// KnownAsAfterCleared reports if the "known_as_after" edge to the Settlement entity was cleared.
+func (m *SettlementMutation) KnownAsAfterCleared() bool {
+	return m.clearedknown_as_after
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to the Settlement entity by IDs.
+func (m *SettlementMutation) RemoveKnownAsAfterIDs(ids ...int) {
+	if m.removedknown_as_after == nil {
+		m.removedknown_as_after = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as_after, ids[i])
+		m.removedknown_as_after[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAsAfter returns the removed IDs of the "known_as_after" edge to the Settlement entity.
+func (m *SettlementMutation) RemovedKnownAsAfterIDs() (ids []int) {
+	for id := range m.removedknown_as_after {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsAfterIDs returns the "known_as_after" edge IDs in the mutation.
+func (m *SettlementMutation) KnownAsAfterIDs() (ids []int) {
+	for id := range m.known_as_after {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAsAfter resets all changes to the "known_as_after" edge.
+func (m *SettlementMutation) ResetKnownAsAfter() {
+	m.known_as_after = nil
+	m.clearedknown_as_after = false
+	m.removedknown_as_after = nil
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Settlement entity by ids.
+func (m *SettlementMutation) AddKnownAsBeforeIDs(ids ...int) {
+	if m.known_as_before == nil {
+		m.known_as_before = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as_before[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAsBefore clears the "known_as_before" edge to the Settlement entity.
+func (m *SettlementMutation) ClearKnownAsBefore() {
+	m.clearedknown_as_before = true
+}
+
+// KnownAsBeforeCleared reports if the "known_as_before" edge to the Settlement entity was cleared.
+func (m *SettlementMutation) KnownAsBeforeCleared() bool {
+	return m.clearedknown_as_before
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to the Settlement entity by IDs.
+func (m *SettlementMutation) RemoveKnownAsBeforeIDs(ids ...int) {
+	if m.removedknown_as_before == nil {
+		m.removedknown_as_before = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as_before, ids[i])
+		m.removedknown_as_before[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAsBefore returns the removed IDs of the "known_as_before" edge to the Settlement entity.
+func (m *SettlementMutation) RemovedKnownAsBeforeIDs() (ids []int) {
+	for id := range m.removedknown_as_before {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsBeforeIDs returns the "known_as_before" edge IDs in the mutation.
+func (m *SettlementMutation) KnownAsBeforeIDs() (ids []int) {
+	for id := range m.known_as_before {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAsBefore resets all changes to the "known_as_before" edge.
+func (m *SettlementMutation) ResetKnownAsBefore() {
+	m.known_as_before = nil
+	m.clearedknown_as_before = false
+	m.removedknown_as_before = nil
+}
+
 // Where appends a list predicates to the SettlementMutation builder.
 func (m *SettlementMutation) Where(ps ...predicate.Settlement) {
 	m.predicates = append(m.predicates, ps...)
@@ -50111,7 +50557,7 @@ func (m *SettlementMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SettlementMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 9)
 	if m.art != nil {
 		edges = append(edges, settlement.EdgeArt)
 	}
@@ -50132,6 +50578,12 @@ func (m *SettlementMutation) AddedEdges() []string {
 	}
 	if m.district != nil {
 		edges = append(edges, settlement.EdgeDistrict)
+	}
+	if m.known_as_after != nil {
+		edges = append(edges, settlement.EdgeKnownAsAfter)
+	}
+	if m.known_as_before != nil {
+		edges = append(edges, settlement.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -50178,13 +50630,25 @@ func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 		if id := m.district; id != nil {
 			return []ent.Value{*id}
 		}
+	case settlement.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.known_as_after))
+		for id := range m.known_as_after {
+			ids = append(ids, id)
+		}
+		return ids
+	case settlement.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.known_as_before))
+		for id := range m.known_as_before {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SettlementMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 9)
 	if m.removedart != nil {
 		edges = append(edges, settlement.EdgeArt)
 	}
@@ -50199,6 +50663,12 @@ func (m *SettlementMutation) RemovedEdges() []string {
 	}
 	if m.removedlocations != nil {
 		edges = append(edges, settlement.EdgeLocations)
+	}
+	if m.removedknown_as_after != nil {
+		edges = append(edges, settlement.EdgeKnownAsAfter)
+	}
+	if m.removedknown_as_before != nil {
+		edges = append(edges, settlement.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -50237,13 +50707,25 @@ func (m *SettlementMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case settlement.EdgeKnownAsAfter:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_after))
+		for id := range m.removedknown_as_after {
+			ids = append(ids, id)
+		}
+		return ids
+	case settlement.EdgeKnownAsBefore:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_before))
+		for id := range m.removedknown_as_before {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SettlementMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 9)
 	if m.clearedart {
 		edges = append(edges, settlement.EdgeArt)
 	}
@@ -50264,6 +50746,12 @@ func (m *SettlementMutation) ClearedEdges() []string {
 	}
 	if m.cleareddistrict {
 		edges = append(edges, settlement.EdgeDistrict)
+	}
+	if m.clearedknown_as_after {
+		edges = append(edges, settlement.EdgeKnownAsAfter)
+	}
+	if m.clearedknown_as_before {
+		edges = append(edges, settlement.EdgeKnownAsBefore)
 	}
 	return edges
 }
@@ -50286,6 +50774,10 @@ func (m *SettlementMutation) EdgeCleared(name string) bool {
 		return m.clearedregion
 	case settlement.EdgeDistrict:
 		return m.cleareddistrict
+	case settlement.EdgeKnownAsAfter:
+		return m.clearedknown_as_after
+	case settlement.EdgeKnownAsBefore:
+		return m.clearedknown_as_before
 	}
 	return false
 }
@@ -50328,6 +50820,12 @@ func (m *SettlementMutation) ResetEdge(name string) error {
 		return nil
 	case settlement.EdgeDistrict:
 		m.ResetDistrict()
+		return nil
+	case settlement.EdgeKnownAsAfter:
+		m.ResetKnownAsAfter()
+		return nil
+	case settlement.EdgeKnownAsBefore:
+		m.ResetKnownAsBefore()
 		return nil
 	}
 	return fmt.Errorf("unknown Settlement edge %s", name)

@@ -274,6 +274,36 @@ func (su *SettlementUpdate) SetDistrict(d *District) *SettlementUpdate {
 	return su.SetDistrictID(d.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Settlement entity by IDs.
+func (su *SettlementUpdate) AddKnownAsAfterIDs(ids ...int) *SettlementUpdate {
+	su.mutation.AddKnownAsAfterIDs(ids...)
+	return su
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the Settlement entity.
+func (su *SettlementUpdate) AddKnownAsAfter(s ...*Settlement) *SettlementUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Settlement entity by IDs.
+func (su *SettlementUpdate) AddKnownAsBeforeIDs(ids ...int) *SettlementUpdate {
+	su.mutation.AddKnownAsBeforeIDs(ids...)
+	return su
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the Settlement entity.
+func (su *SettlementUpdate) AddKnownAsBefore(s ...*Settlement) *SettlementUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (su *SettlementUpdate) Mutation() *SettlementMutation {
 	return su.mutation
@@ -394,6 +424,48 @@ func (su *SettlementUpdate) ClearRegion() *SettlementUpdate {
 func (su *SettlementUpdate) ClearDistrict() *SettlementUpdate {
 	su.mutation.ClearDistrict()
 	return su
+}
+
+// ClearKnownAsAfter clears all "known_as_after" edges to the Settlement entity.
+func (su *SettlementUpdate) ClearKnownAsAfter() *SettlementUpdate {
+	su.mutation.ClearKnownAsAfter()
+	return su
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to Settlement entities by IDs.
+func (su *SettlementUpdate) RemoveKnownAsAfterIDs(ids ...int) *SettlementUpdate {
+	su.mutation.RemoveKnownAsAfterIDs(ids...)
+	return su
+}
+
+// RemoveKnownAsAfter removes "known_as_after" edges to Settlement entities.
+func (su *SettlementUpdate) RemoveKnownAsAfter(s ...*Settlement) *SettlementUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.RemoveKnownAsAfterIDs(ids...)
+}
+
+// ClearKnownAsBefore clears all "known_as_before" edges to the Settlement entity.
+func (su *SettlementUpdate) ClearKnownAsBefore() *SettlementUpdate {
+	su.mutation.ClearKnownAsBefore()
+	return su
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to Settlement entities by IDs.
+func (su *SettlementUpdate) RemoveKnownAsBeforeIDs(ids ...int) *SettlementUpdate {
+	su.mutation.RemoveKnownAsBeforeIDs(ids...)
+	return su
+}
+
+// RemoveKnownAsBefore removes "known_as_before" edges to Settlement entities.
+func (su *SettlementUpdate) RemoveKnownAsBefore(s ...*Settlement) *SettlementUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return su.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -769,6 +841,96 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if su.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   settlement.KnownAsAfterTable,
+			Columns: settlement.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !su.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   settlement.KnownAsAfterTable,
+			Columns: settlement.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   settlement.KnownAsAfterTable,
+			Columns: settlement.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   settlement.KnownAsBeforeTable,
+			Columns: settlement.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !su.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   settlement.KnownAsBeforeTable,
+			Columns: settlement.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   settlement.KnownAsBeforeTable,
+			Columns: settlement.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{settlement.Label}
@@ -1028,6 +1190,36 @@ func (suo *SettlementUpdateOne) SetDistrict(d *District) *SettlementUpdateOne {
 	return suo.SetDistrictID(d.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Settlement entity by IDs.
+func (suo *SettlementUpdateOne) AddKnownAsAfterIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.AddKnownAsAfterIDs(ids...)
+	return suo
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the Settlement entity.
+func (suo *SettlementUpdateOne) AddKnownAsAfter(s ...*Settlement) *SettlementUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Settlement entity by IDs.
+func (suo *SettlementUpdateOne) AddKnownAsBeforeIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.AddKnownAsBeforeIDs(ids...)
+	return suo
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the Settlement entity.
+func (suo *SettlementUpdateOne) AddKnownAsBefore(s ...*Settlement) *SettlementUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (suo *SettlementUpdateOne) Mutation() *SettlementMutation {
 	return suo.mutation
@@ -1148,6 +1340,48 @@ func (suo *SettlementUpdateOne) ClearRegion() *SettlementUpdateOne {
 func (suo *SettlementUpdateOne) ClearDistrict() *SettlementUpdateOne {
 	suo.mutation.ClearDistrict()
 	return suo
+}
+
+// ClearKnownAsAfter clears all "known_as_after" edges to the Settlement entity.
+func (suo *SettlementUpdateOne) ClearKnownAsAfter() *SettlementUpdateOne {
+	suo.mutation.ClearKnownAsAfter()
+	return suo
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to Settlement entities by IDs.
+func (suo *SettlementUpdateOne) RemoveKnownAsAfterIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.RemoveKnownAsAfterIDs(ids...)
+	return suo
+}
+
+// RemoveKnownAsAfter removes "known_as_after" edges to Settlement entities.
+func (suo *SettlementUpdateOne) RemoveKnownAsAfter(s ...*Settlement) *SettlementUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.RemoveKnownAsAfterIDs(ids...)
+}
+
+// ClearKnownAsBefore clears all "known_as_before" edges to the Settlement entity.
+func (suo *SettlementUpdateOne) ClearKnownAsBefore() *SettlementUpdateOne {
+	suo.mutation.ClearKnownAsBefore()
+	return suo
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to Settlement entities by IDs.
+func (suo *SettlementUpdateOne) RemoveKnownAsBeforeIDs(ids ...int) *SettlementUpdateOne {
+	suo.mutation.RemoveKnownAsBeforeIDs(ids...)
+	return suo
+}
+
+// RemoveKnownAsBefore removes "known_as_before" edges to Settlement entities.
+func (suo *SettlementUpdateOne) RemoveKnownAsBefore(s ...*Settlement) *SettlementUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return suo.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Where appends a list predicates to the SettlementUpdate builder.
@@ -1546,6 +1780,96 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   settlement.KnownAsAfterTable,
+			Columns: settlement.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !suo.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   settlement.KnownAsAfterTable,
+			Columns: settlement.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   settlement.KnownAsAfterTable,
+			Columns: settlement.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   settlement.KnownAsBeforeTable,
+			Columns: settlement.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !suo.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   settlement.KnownAsBeforeTable,
+			Columns: settlement.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   settlement.KnownAsBeforeTable,
+			Columns: settlement.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

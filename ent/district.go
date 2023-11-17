@@ -57,11 +57,15 @@ type DistrictEdges struct {
 	Locations []*Location `json:"locations,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
+	// KnownAsAfter holds the value of the known_as_after edge.
+	KnownAsAfter []*District `json:"known_as_after,omitempty"`
+	// KnownAsBefore holds the value of the known_as_before edge.
+	KnownAsBefore []*District `json:"known_as_before,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [9]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
@@ -69,6 +73,8 @@ type DistrictEdges struct {
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedSettlements           map[string][]*Settlement
 	namedLocations             map[string][]*Location
+	namedKnownAsAfter          map[string][]*District
+	namedKnownAsBefore         map[string][]*District
 }
 
 // ArtOrErr returns the Art value or an error if the edge
@@ -136,6 +142,24 @@ func (e DistrictEdges) RegionOrErr() (*Region, error) {
 		return e.Region, nil
 	}
 	return nil, &NotLoadedError{edge: "region"}
+}
+
+// KnownAsAfterOrErr returns the KnownAsAfter value or an error if the edge
+// was not loaded in eager-loading.
+func (e DistrictEdges) KnownAsAfterOrErr() ([]*District, error) {
+	if e.loadedTypes[7] {
+		return e.KnownAsAfter, nil
+	}
+	return nil, &NotLoadedError{edge: "known_as_after"}
+}
+
+// KnownAsBeforeOrErr returns the KnownAsBefore value or an error if the edge
+// was not loaded in eager-loading.
+func (e DistrictEdges) KnownAsBeforeOrErr() ([]*District, error) {
+	if e.loadedTypes[8] {
+		return e.KnownAsBefore, nil
+	}
+	return nil, &NotLoadedError{edge: "known_as_before"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -273,6 +297,16 @@ func (d *District) QueryLocations() *LocationQuery {
 // QueryRegion queries the "region" edge of the District entity.
 func (d *District) QueryRegion() *RegionQuery {
 	return NewDistrictClient(d.config).QueryRegion(d)
+}
+
+// QueryKnownAsAfter queries the "known_as_after" edge of the District entity.
+func (d *District) QueryKnownAsAfter() *DistrictQuery {
+	return NewDistrictClient(d.config).QueryKnownAsAfter(d)
+}
+
+// QueryKnownAsBefore queries the "known_as_before" edge of the District entity.
+func (d *District) QueryKnownAsBefore() *DistrictQuery {
+	return NewDistrictClient(d.config).QueryKnownAsBefore(d)
 }
 
 // Update returns a builder for updating this District.
@@ -466,6 +500,54 @@ func (d *District) appendNamedLocations(name string, edges ...*Location) {
 		d.Edges.namedLocations[name] = []*Location{}
 	} else {
 		d.Edges.namedLocations[name] = append(d.Edges.namedLocations[name], edges...)
+	}
+}
+
+// NamedKnownAsAfter returns the KnownAsAfter named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (d *District) NamedKnownAsAfter(name string) ([]*District, error) {
+	if d.Edges.namedKnownAsAfter == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := d.Edges.namedKnownAsAfter[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (d *District) appendNamedKnownAsAfter(name string, edges ...*District) {
+	if d.Edges.namedKnownAsAfter == nil {
+		d.Edges.namedKnownAsAfter = make(map[string][]*District)
+	}
+	if len(edges) == 0 {
+		d.Edges.namedKnownAsAfter[name] = []*District{}
+	} else {
+		d.Edges.namedKnownAsAfter[name] = append(d.Edges.namedKnownAsAfter[name], edges...)
+	}
+}
+
+// NamedKnownAsBefore returns the KnownAsBefore named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (d *District) NamedKnownAsBefore(name string) ([]*District, error) {
+	if d.Edges.namedKnownAsBefore == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := d.Edges.namedKnownAsBefore[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (d *District) appendNamedKnownAsBefore(name string, edges ...*District) {
+	if d.Edges.namedKnownAsBefore == nil {
+		d.Edges.namedKnownAsBefore = make(map[string][]*District)
+	}
+	if len(edges) == 0 {
+		d.Edges.namedKnownAsBefore[name] = []*District{}
+	} else {
+		d.Edges.namedKnownAsBefore[name] = append(d.Edges.namedKnownAsBefore[name], edges...)
 	}
 }
 

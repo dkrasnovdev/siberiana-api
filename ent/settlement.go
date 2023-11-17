@@ -59,17 +59,23 @@ type SettlementEdges struct {
 	Region *Region `json:"region,omitempty"`
 	// District holds the value of the district edge.
 	District *District `json:"district,omitempty"`
+	// KnownAsAfter holds the value of the known_as_after edge.
+	KnownAsAfter []*Settlement `json:"known_as_after,omitempty"`
+	// KnownAsBefore holds the value of the known_as_before edge.
+	KnownAsBefore []*Settlement `json:"known_as_before,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [9]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedLocations             map[string][]*Location
+	namedKnownAsAfter          map[string][]*Settlement
+	namedKnownAsBefore         map[string][]*Settlement
 }
 
 // ArtOrErr returns the Art value or an error if the edge
@@ -141,6 +147,24 @@ func (e SettlementEdges) DistrictOrErr() (*District, error) {
 		return e.District, nil
 	}
 	return nil, &NotLoadedError{edge: "district"}
+}
+
+// KnownAsAfterOrErr returns the KnownAsAfter value or an error if the edge
+// was not loaded in eager-loading.
+func (e SettlementEdges) KnownAsAfterOrErr() ([]*Settlement, error) {
+	if e.loadedTypes[7] {
+		return e.KnownAsAfter, nil
+	}
+	return nil, &NotLoadedError{edge: "known_as_after"}
+}
+
+// KnownAsBeforeOrErr returns the KnownAsBefore value or an error if the edge
+// was not loaded in eager-loading.
+func (e SettlementEdges) KnownAsBeforeOrErr() ([]*Settlement, error) {
+	if e.loadedTypes[8] {
+		return e.KnownAsBefore, nil
+	}
+	return nil, &NotLoadedError{edge: "known_as_before"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -287,6 +311,16 @@ func (s *Settlement) QueryRegion() *RegionQuery {
 // QueryDistrict queries the "district" edge of the Settlement entity.
 func (s *Settlement) QueryDistrict() *DistrictQuery {
 	return NewSettlementClient(s.config).QueryDistrict(s)
+}
+
+// QueryKnownAsAfter queries the "known_as_after" edge of the Settlement entity.
+func (s *Settlement) QueryKnownAsAfter() *SettlementQuery {
+	return NewSettlementClient(s.config).QueryKnownAsAfter(s)
+}
+
+// QueryKnownAsBefore queries the "known_as_before" edge of the Settlement entity.
+func (s *Settlement) QueryKnownAsBefore() *SettlementQuery {
+	return NewSettlementClient(s.config).QueryKnownAsBefore(s)
 }
 
 // Update returns a builder for updating this Settlement.
@@ -456,6 +490,54 @@ func (s *Settlement) appendNamedLocations(name string, edges ...*Location) {
 		s.Edges.namedLocations[name] = []*Location{}
 	} else {
 		s.Edges.namedLocations[name] = append(s.Edges.namedLocations[name], edges...)
+	}
+}
+
+// NamedKnownAsAfter returns the KnownAsAfter named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Settlement) NamedKnownAsAfter(name string) ([]*Settlement, error) {
+	if s.Edges.namedKnownAsAfter == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedKnownAsAfter[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Settlement) appendNamedKnownAsAfter(name string, edges ...*Settlement) {
+	if s.Edges.namedKnownAsAfter == nil {
+		s.Edges.namedKnownAsAfter = make(map[string][]*Settlement)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedKnownAsAfter[name] = []*Settlement{}
+	} else {
+		s.Edges.namedKnownAsAfter[name] = append(s.Edges.namedKnownAsAfter[name], edges...)
+	}
+}
+
+// NamedKnownAsBefore returns the KnownAsBefore named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Settlement) NamedKnownAsBefore(name string) ([]*Settlement, error) {
+	if s.Edges.namedKnownAsBefore == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedKnownAsBefore[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Settlement) appendNamedKnownAsBefore(name string, edges ...*Settlement) {
+	if s.Edges.namedKnownAsBefore == nil {
+		s.Edges.namedKnownAsBefore = make(map[string][]*Settlement)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedKnownAsBefore[name] = []*Settlement{}
+	} else {
+		s.Edges.namedKnownAsBefore[name] = append(s.Edges.namedKnownAsBefore[name], edges...)
 	}
 }
 

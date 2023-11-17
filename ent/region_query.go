@@ -41,6 +41,8 @@ type RegionQuery struct {
 	withSettlements                *SettlementQuery
 	withLocations                  *LocationQuery
 	withCountry                    *CountryQuery
+	withKnownAsAfter               *RegionQuery
+	withKnownAsBefore              *RegionQuery
 	withFKs                        bool
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*Region) error
@@ -52,6 +54,8 @@ type RegionQuery struct {
 	withNamedDistricts             map[string]*DistrictQuery
 	withNamedSettlements           map[string]*SettlementQuery
 	withNamedLocations             map[string]*LocationQuery
+	withNamedKnownAsAfter          map[string]*RegionQuery
+	withNamedKnownAsBefore         map[string]*RegionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -286,6 +290,50 @@ func (rq *RegionQuery) QueryCountry() *CountryQuery {
 	return query
 }
 
+// QueryKnownAsAfter chains the current query on the "known_as_after" edge.
+func (rq *RegionQuery) QueryKnownAsAfter() *RegionQuery {
+	query := (&RegionClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, region.KnownAsAfterTable, region.KnownAsAfterPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryKnownAsBefore chains the current query on the "known_as_before" edge.
+func (rq *RegionQuery) QueryKnownAsBefore() *RegionQuery {
+	query := (&RegionClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, region.KnownAsBeforeTable, region.KnownAsBeforePrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Region entity from the query.
 // Returns a *NotFoundError when no Region was found.
 func (rq *RegionQuery) First(ctx context.Context) (*Region, error) {
@@ -487,6 +535,8 @@ func (rq *RegionQuery) Clone() *RegionQuery {
 		withSettlements:           rq.withSettlements.Clone(),
 		withLocations:             rq.withLocations.Clone(),
 		withCountry:               rq.withCountry.Clone(),
+		withKnownAsAfter:          rq.withKnownAsAfter.Clone(),
+		withKnownAsBefore:         rq.withKnownAsBefore.Clone(),
 		// clone intermediate query.
 		sql:  rq.sql.Clone(),
 		path: rq.path,
@@ -592,6 +642,28 @@ func (rq *RegionQuery) WithCountry(opts ...func(*CountryQuery)) *RegionQuery {
 	return rq
 }
 
+// WithKnownAsAfter tells the query-builder to eager-load the nodes that are connected to
+// the "known_as_after" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithKnownAsAfter(opts ...func(*RegionQuery)) *RegionQuery {
+	query := (&RegionClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withKnownAsAfter = query
+	return rq
+}
+
+// WithKnownAsBefore tells the query-builder to eager-load the nodes that are connected to
+// the "known_as_before" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithKnownAsBefore(opts ...func(*RegionQuery)) *RegionQuery {
+	query := (&RegionClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withKnownAsBefore = query
+	return rq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -677,7 +749,7 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 		nodes       = []*Region{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [11]bool{
 			rq.withArt != nil,
 			rq.withArtifacts != nil,
 			rq.withBooks != nil,
@@ -687,6 +759,8 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 			rq.withSettlements != nil,
 			rq.withLocations != nil,
 			rq.withCountry != nil,
+			rq.withKnownAsAfter != nil,
+			rq.withKnownAsBefore != nil,
 		}
 	)
 	if rq.withCountry != nil {
@@ -780,6 +854,20 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 			return nil, err
 		}
 	}
+	if query := rq.withKnownAsAfter; query != nil {
+		if err := rq.loadKnownAsAfter(ctx, query, nodes,
+			func(n *Region) { n.Edges.KnownAsAfter = []*Region{} },
+			func(n *Region, e *Region) { n.Edges.KnownAsAfter = append(n.Edges.KnownAsAfter, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withKnownAsBefore; query != nil {
+		if err := rq.loadKnownAsBefore(ctx, query, nodes,
+			func(n *Region) { n.Edges.KnownAsBefore = []*Region{} },
+			func(n *Region, e *Region) { n.Edges.KnownAsBefore = append(n.Edges.KnownAsBefore, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range rq.withNamedArt {
 		if err := rq.loadArt(ctx, query, nodes,
 			func(n *Region) { n.appendNamedArt(name) },
@@ -833,6 +921,20 @@ func (rq *RegionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Regio
 		if err := rq.loadLocations(ctx, query, nodes,
 			func(n *Region) { n.appendNamedLocations(name) },
 			func(n *Region, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedKnownAsAfter {
+		if err := rq.loadKnownAsAfter(ctx, query, nodes,
+			func(n *Region) { n.appendNamedKnownAsAfter(name) },
+			func(n *Region, e *Region) { n.appendNamedKnownAsAfter(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedKnownAsBefore {
+		if err := rq.loadKnownAsBefore(ctx, query, nodes,
+			func(n *Region) { n.appendNamedKnownAsBefore(name) },
+			func(n *Region, e *Region) { n.appendNamedKnownAsBefore(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1124,6 +1226,128 @@ func (rq *RegionQuery) loadCountry(ctx context.Context, query *CountryQuery, nod
 	}
 	return nil
 }
+func (rq *RegionQuery) loadKnownAsAfter(ctx context.Context, query *RegionQuery, nodes []*Region, init func(*Region), assign func(*Region, *Region)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Region)
+	nids := make(map[int]map[*Region]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(region.KnownAsAfterTable)
+		s.Join(joinT).On(s.C(region.FieldID), joinT.C(region.KnownAsAfterPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(region.KnownAsAfterPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(region.KnownAsAfterPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Region]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Region](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as_after" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (rq *RegionQuery) loadKnownAsBefore(ctx context.Context, query *RegionQuery, nodes []*Region, init func(*Region), assign func(*Region, *Region)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Region)
+	nids := make(map[int]map[*Region]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(region.KnownAsBeforeTable)
+		s.Join(joinT).On(s.C(region.FieldID), joinT.C(region.KnownAsBeforePrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(region.KnownAsBeforePrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(region.KnownAsBeforePrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Region]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Region](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as_before" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (rq *RegionQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := rq.querySpec()
@@ -1318,6 +1542,34 @@ func (rq *RegionQuery) WithNamedLocations(name string, opts ...func(*LocationQue
 		rq.withNamedLocations = make(map[string]*LocationQuery)
 	}
 	rq.withNamedLocations[name] = query
+	return rq
+}
+
+// WithNamedKnownAsAfter tells the query-builder to eager-load the nodes that are connected to the "known_as_after"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithNamedKnownAsAfter(name string, opts ...func(*RegionQuery)) *RegionQuery {
+	query := (&RegionClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedKnownAsAfter == nil {
+		rq.withNamedKnownAsAfter = make(map[string]*RegionQuery)
+	}
+	rq.withNamedKnownAsAfter[name] = query
+	return rq
+}
+
+// WithNamedKnownAsBefore tells the query-builder to eager-load the nodes that are connected to the "known_as_before"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RegionQuery) WithNamedKnownAsBefore(name string, opts ...func(*RegionQuery)) *RegionQuery {
+	query := (&RegionClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedKnownAsBefore == nil {
+		rq.withNamedKnownAsBefore = make(map[string]*RegionQuery)
+	}
+	rq.withNamedKnownAsBefore[name] = query
 	return rq
 }
 

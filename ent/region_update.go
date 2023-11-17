@@ -302,6 +302,36 @@ func (ru *RegionUpdate) SetCountry(c *Country) *RegionUpdate {
 	return ru.SetCountryID(c.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Region entity by IDs.
+func (ru *RegionUpdate) AddKnownAsAfterIDs(ids ...int) *RegionUpdate {
+	ru.mutation.AddKnownAsAfterIDs(ids...)
+	return ru
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the Region entity.
+func (ru *RegionUpdate) AddKnownAsAfter(r ...*Region) *RegionUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ru.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Region entity by IDs.
+func (ru *RegionUpdate) AddKnownAsBeforeIDs(ids ...int) *RegionUpdate {
+	ru.mutation.AddKnownAsBeforeIDs(ids...)
+	return ru
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the Region entity.
+func (ru *RegionUpdate) AddKnownAsBefore(r ...*Region) *RegionUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ru.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the RegionMutation object of the builder.
 func (ru *RegionUpdate) Mutation() *RegionMutation {
 	return ru.mutation
@@ -479,6 +509,48 @@ func (ru *RegionUpdate) RemoveLocations(l ...*Location) *RegionUpdate {
 func (ru *RegionUpdate) ClearCountry() *RegionUpdate {
 	ru.mutation.ClearCountry()
 	return ru
+}
+
+// ClearKnownAsAfter clears all "known_as_after" edges to the Region entity.
+func (ru *RegionUpdate) ClearKnownAsAfter() *RegionUpdate {
+	ru.mutation.ClearKnownAsAfter()
+	return ru
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to Region entities by IDs.
+func (ru *RegionUpdate) RemoveKnownAsAfterIDs(ids ...int) *RegionUpdate {
+	ru.mutation.RemoveKnownAsAfterIDs(ids...)
+	return ru
+}
+
+// RemoveKnownAsAfter removes "known_as_after" edges to Region entities.
+func (ru *RegionUpdate) RemoveKnownAsAfter(r ...*Region) *RegionUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ru.RemoveKnownAsAfterIDs(ids...)
+}
+
+// ClearKnownAsBefore clears all "known_as_before" edges to the Region entity.
+func (ru *RegionUpdate) ClearKnownAsBefore() *RegionUpdate {
+	ru.mutation.ClearKnownAsBefore()
+	return ru
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to Region entities by IDs.
+func (ru *RegionUpdate) RemoveKnownAsBeforeIDs(ids ...int) *RegionUpdate {
+	ru.mutation.RemoveKnownAsBeforeIDs(ids...)
+	return ru
+}
+
+// RemoveKnownAsBefore removes "known_as_before" edges to Region entities.
+func (ru *RegionUpdate) RemoveKnownAsBefore(r ...*Region) *RegionUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ru.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -960,6 +1032,96 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ru.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   region.KnownAsAfterTable,
+			Columns: region.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !ru.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   region.KnownAsAfterTable,
+			Columns: region.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   region.KnownAsAfterTable,
+			Columns: region.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   region.KnownAsBeforeTable,
+			Columns: region.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !ru.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   region.KnownAsBeforeTable,
+			Columns: region.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   region.KnownAsBeforeTable,
+			Columns: region.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{region.Label}
@@ -1245,6 +1407,36 @@ func (ruo *RegionUpdateOne) SetCountry(c *Country) *RegionUpdateOne {
 	return ruo.SetCountryID(c.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Region entity by IDs.
+func (ruo *RegionUpdateOne) AddKnownAsAfterIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.AddKnownAsAfterIDs(ids...)
+	return ruo
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the Region entity.
+func (ruo *RegionUpdateOne) AddKnownAsAfter(r ...*Region) *RegionUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ruo.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Region entity by IDs.
+func (ruo *RegionUpdateOne) AddKnownAsBeforeIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.AddKnownAsBeforeIDs(ids...)
+	return ruo
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the Region entity.
+func (ruo *RegionUpdateOne) AddKnownAsBefore(r ...*Region) *RegionUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ruo.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the RegionMutation object of the builder.
 func (ruo *RegionUpdateOne) Mutation() *RegionMutation {
 	return ruo.mutation
@@ -1422,6 +1614,48 @@ func (ruo *RegionUpdateOne) RemoveLocations(l ...*Location) *RegionUpdateOne {
 func (ruo *RegionUpdateOne) ClearCountry() *RegionUpdateOne {
 	ruo.mutation.ClearCountry()
 	return ruo
+}
+
+// ClearKnownAsAfter clears all "known_as_after" edges to the Region entity.
+func (ruo *RegionUpdateOne) ClearKnownAsAfter() *RegionUpdateOne {
+	ruo.mutation.ClearKnownAsAfter()
+	return ruo
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to Region entities by IDs.
+func (ruo *RegionUpdateOne) RemoveKnownAsAfterIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.RemoveKnownAsAfterIDs(ids...)
+	return ruo
+}
+
+// RemoveKnownAsAfter removes "known_as_after" edges to Region entities.
+func (ruo *RegionUpdateOne) RemoveKnownAsAfter(r ...*Region) *RegionUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ruo.RemoveKnownAsAfterIDs(ids...)
+}
+
+// ClearKnownAsBefore clears all "known_as_before" edges to the Region entity.
+func (ruo *RegionUpdateOne) ClearKnownAsBefore() *RegionUpdateOne {
+	ruo.mutation.ClearKnownAsBefore()
+	return ruo
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to Region entities by IDs.
+func (ruo *RegionUpdateOne) RemoveKnownAsBeforeIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.RemoveKnownAsBeforeIDs(ids...)
+	return ruo
+}
+
+// RemoveKnownAsBefore removes "known_as_before" edges to Region entities.
+func (ruo *RegionUpdateOne) RemoveKnownAsBefore(r ...*Region) *RegionUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ruo.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Where appends a list predicates to the RegionUpdate builder.
@@ -1926,6 +2160,96 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   region.KnownAsAfterTable,
+			Columns: region.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !ruo.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   region.KnownAsAfterTable,
+			Columns: region.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   region.KnownAsAfterTable,
+			Columns: region.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   region.KnownAsBeforeTable,
+			Columns: region.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !ruo.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   region.KnownAsBeforeTable,
+			Columns: region.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   region.KnownAsBeforeTable,
+			Columns: region.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

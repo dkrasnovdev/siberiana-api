@@ -37,6 +37,8 @@ type DistrictQuery struct {
 	withSettlements                *SettlementQuery
 	withLocations                  *LocationQuery
 	withRegion                     *RegionQuery
+	withKnownAsAfter               *DistrictQuery
+	withKnownAsBefore              *DistrictQuery
 	withFKs                        bool
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*District) error
@@ -46,6 +48,8 @@ type DistrictQuery struct {
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	withNamedSettlements           map[string]*SettlementQuery
 	withNamedLocations             map[string]*LocationQuery
+	withNamedKnownAsAfter          map[string]*DistrictQuery
+	withNamedKnownAsBefore         map[string]*DistrictQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -229,6 +233,50 @@ func (dq *DistrictQuery) QueryRegion() *RegionQuery {
 			sqlgraph.From(district.Table, district.FieldID, selector),
 			sqlgraph.To(region.Table, region.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, district.RegionTable, district.RegionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryKnownAsAfter chains the current query on the "known_as_after" edge.
+func (dq *DistrictQuery) QueryKnownAsAfter() *DistrictQuery {
+	query := (&DistrictClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, district.KnownAsAfterTable, district.KnownAsAfterPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryKnownAsBefore chains the current query on the "known_as_before" edge.
+func (dq *DistrictQuery) QueryKnownAsBefore() *DistrictQuery {
+	query := (&DistrictClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, district.KnownAsBeforeTable, district.KnownAsBeforePrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -435,6 +483,8 @@ func (dq *DistrictQuery) Clone() *DistrictQuery {
 		withSettlements:           dq.withSettlements.Clone(),
 		withLocations:             dq.withLocations.Clone(),
 		withRegion:                dq.withRegion.Clone(),
+		withKnownAsAfter:          dq.withKnownAsAfter.Clone(),
+		withKnownAsBefore:         dq.withKnownAsBefore.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
 		path: dq.path,
@@ -515,6 +565,28 @@ func (dq *DistrictQuery) WithRegion(opts ...func(*RegionQuery)) *DistrictQuery {
 		opt(query)
 	}
 	dq.withRegion = query
+	return dq
+}
+
+// WithKnownAsAfter tells the query-builder to eager-load the nodes that are connected to
+// the "known_as_after" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithKnownAsAfter(opts ...func(*DistrictQuery)) *DistrictQuery {
+	query := (&DistrictClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withKnownAsAfter = query
+	return dq
+}
+
+// WithKnownAsBefore tells the query-builder to eager-load the nodes that are connected to
+// the "known_as_before" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithKnownAsBefore(opts ...func(*DistrictQuery)) *DistrictQuery {
+	query := (&DistrictClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withKnownAsBefore = query
 	return dq
 }
 
@@ -603,7 +675,7 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		nodes       = []*District{}
 		withFKs     = dq.withFKs
 		_spec       = dq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [9]bool{
 			dq.withArt != nil,
 			dq.withArtifacts != nil,
 			dq.withBooks != nil,
@@ -611,6 +683,8 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 			dq.withSettlements != nil,
 			dq.withLocations != nil,
 			dq.withRegion != nil,
+			dq.withKnownAsAfter != nil,
+			dq.withKnownAsBefore != nil,
 		}
 	)
 	if dq.withRegion != nil {
@@ -690,6 +764,20 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 			return nil, err
 		}
 	}
+	if query := dq.withKnownAsAfter; query != nil {
+		if err := dq.loadKnownAsAfter(ctx, query, nodes,
+			func(n *District) { n.Edges.KnownAsAfter = []*District{} },
+			func(n *District, e *District) { n.Edges.KnownAsAfter = append(n.Edges.KnownAsAfter, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := dq.withKnownAsBefore; query != nil {
+		if err := dq.loadKnownAsBefore(ctx, query, nodes,
+			func(n *District) { n.Edges.KnownAsBefore = []*District{} },
+			func(n *District, e *District) { n.Edges.KnownAsBefore = append(n.Edges.KnownAsBefore, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range dq.withNamedArt {
 		if err := dq.loadArt(ctx, query, nodes,
 			func(n *District) { n.appendNamedArt(name) },
@@ -729,6 +817,20 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		if err := dq.loadLocations(ctx, query, nodes,
 			func(n *District) { n.appendNamedLocations(name) },
 			func(n *District, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedKnownAsAfter {
+		if err := dq.loadKnownAsAfter(ctx, query, nodes,
+			func(n *District) { n.appendNamedKnownAsAfter(name) },
+			func(n *District, e *District) { n.appendNamedKnownAsAfter(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedKnownAsBefore {
+		if err := dq.loadKnownAsBefore(ctx, query, nodes,
+			func(n *District) { n.appendNamedKnownAsBefore(name) },
+			func(n *District, e *District) { n.appendNamedKnownAsBefore(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -958,6 +1060,128 @@ func (dq *DistrictQuery) loadRegion(ctx context.Context, query *RegionQuery, nod
 	}
 	return nil
 }
+func (dq *DistrictQuery) loadKnownAsAfter(ctx context.Context, query *DistrictQuery, nodes []*District, init func(*District), assign func(*District, *District)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*District)
+	nids := make(map[int]map[*District]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(district.KnownAsAfterTable)
+		s.Join(joinT).On(s.C(district.FieldID), joinT.C(district.KnownAsAfterPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(district.KnownAsAfterPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(district.KnownAsAfterPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*District]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*District](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as_after" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (dq *DistrictQuery) loadKnownAsBefore(ctx context.Context, query *DistrictQuery, nodes []*District, init func(*District), assign func(*District, *District)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*District)
+	nids := make(map[int]map[*District]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(district.KnownAsBeforeTable)
+		s.Join(joinT).On(s.C(district.FieldID), joinT.C(district.KnownAsBeforePrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(district.KnownAsBeforePrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(district.KnownAsBeforePrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*District]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*District](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as_before" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (dq *DistrictQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := dq.querySpec()
@@ -1124,6 +1348,34 @@ func (dq *DistrictQuery) WithNamedLocations(name string, opts ...func(*LocationQ
 		dq.withNamedLocations = make(map[string]*LocationQuery)
 	}
 	dq.withNamedLocations[name] = query
+	return dq
+}
+
+// WithNamedKnownAsAfter tells the query-builder to eager-load the nodes that are connected to the "known_as_after"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedKnownAsAfter(name string, opts ...func(*DistrictQuery)) *DistrictQuery {
+	query := (&DistrictClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedKnownAsAfter == nil {
+		dq.withNamedKnownAsAfter = make(map[string]*DistrictQuery)
+	}
+	dq.withNamedKnownAsAfter[name] = query
+	return dq
+}
+
+// WithNamedKnownAsBefore tells the query-builder to eager-load the nodes that are connected to the "known_as_before"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedKnownAsBefore(name string, opts ...func(*DistrictQuery)) *DistrictQuery {
+	query := (&DistrictClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedKnownAsBefore == nil {
+		dq.withNamedKnownAsBefore = make(map[string]*DistrictQuery)
+	}
+	dq.withNamedKnownAsBefore[name] = query
 	return dq
 }
 

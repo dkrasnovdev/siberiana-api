@@ -2262,8 +2262,8 @@ type CreateCountryInput struct {
 	ProtectedAreaPictureIDs []int
 	RegionIDs               []int
 	LocationIDs             []int
-	KnownAsForIDs           []int
-	KnownAIDs               []int
+	KnownAsAfterIDs         []int
+	KnownAsBeforeIDs        []int
 }
 
 // Mutate applies the CreateCountryInput on the CountryMutation builder.
@@ -2310,11 +2310,11 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
-	if v := i.KnownAsForIDs; len(v) > 0 {
-		m.AddKnownAsForIDs(v...)
+	if v := i.KnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
 	}
-	if v := i.KnownAIDs; len(v) > 0 {
-		m.AddKnownAIDs(v...)
+	if v := i.KnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
 	}
 }
 
@@ -2357,12 +2357,12 @@ type UpdateCountryInput struct {
 	ClearLocations                bool
 	AddLocationIDs                []int
 	RemoveLocationIDs             []int
-	ClearKnownAsFor               bool
-	AddKnownAsForIDs              []int
-	RemoveKnownAsForIDs           []int
-	ClearKnownAs                  bool
-	AddKnownAIDs                  []int
-	RemoveKnownAIDs               []int
+	ClearKnownAsAfter             bool
+	AddKnownAsAfterIDs            []int
+	RemoveKnownAsAfterIDs         []int
+	ClearKnownAsBefore            bool
+	AddKnownAsBeforeIDs           []int
+	RemoveKnownAsBeforeIDs        []int
 }
 
 // Mutate applies the UpdateCountryInput on the CountryMutation builder.
@@ -2460,23 +2460,23 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.RemoveLocationIDs; len(v) > 0 {
 		m.RemoveLocationIDs(v...)
 	}
-	if i.ClearKnownAsFor {
-		m.ClearKnownAsFor()
+	if i.ClearKnownAsAfter {
+		m.ClearKnownAsAfter()
 	}
-	if v := i.AddKnownAsForIDs; len(v) > 0 {
-		m.AddKnownAsForIDs(v...)
+	if v := i.AddKnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
 	}
-	if v := i.RemoveKnownAsForIDs; len(v) > 0 {
-		m.RemoveKnownAsForIDs(v...)
+	if v := i.RemoveKnownAsAfterIDs; len(v) > 0 {
+		m.RemoveKnownAsAfterIDs(v...)
 	}
-	if i.ClearKnownAs {
-		m.ClearKnownAs()
+	if i.ClearKnownAsBefore {
+		m.ClearKnownAsBefore()
 	}
-	if v := i.AddKnownAIDs; len(v) > 0 {
-		m.AddKnownAIDs(v...)
+	if v := i.AddKnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
 	}
-	if v := i.RemoveKnownAIDs; len(v) > 0 {
-		m.RemoveKnownAIDs(v...)
+	if v := i.RemoveKnownAsBeforeIDs; len(v) > 0 {
+		m.RemoveKnownAsBeforeIDs(v...)
 	}
 }
 
@@ -2659,6 +2659,8 @@ type CreateDistrictInput struct {
 	SettlementIDs           []int
 	LocationIDs             []int
 	RegionID                *int
+	KnownAsAfterIDs         []int
+	KnownAsBeforeIDs        []int
 }
 
 // Mutate applies the CreateDistrictInput on the DistrictMutation builder.
@@ -2708,6 +2710,12 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
+	if v := i.KnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
+	}
+	if v := i.KnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateDistrictInput on the DistrictCreate builder.
@@ -2751,6 +2759,12 @@ type UpdateDistrictInput struct {
 	RemoveLocationIDs             []int
 	ClearRegion                   bool
 	RegionID                      *int
+	ClearKnownAsAfter             bool
+	AddKnownAsAfterIDs            []int
+	RemoveKnownAsAfterIDs         []int
+	ClearKnownAsBefore            bool
+	AddKnownAsBeforeIDs           []int
+	RemoveKnownAsBeforeIDs        []int
 }
 
 // Mutate applies the UpdateDistrictInput on the DistrictMutation builder.
@@ -2853,6 +2867,24 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
+	}
+	if i.ClearKnownAsAfter {
+		m.ClearKnownAsAfter()
+	}
+	if v := i.AddKnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
+	}
+	if v := i.RemoveKnownAsAfterIDs; len(v) > 0 {
+		m.RemoveKnownAsAfterIDs(v...)
+	}
+	if i.ClearKnownAsBefore {
+		m.ClearKnownAsBefore()
+	}
+	if v := i.AddKnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
+	}
+	if v := i.RemoveKnownAsBeforeIDs; len(v) > 0 {
+		m.RemoveKnownAsBeforeIDs(v...)
 	}
 }
 
@@ -6951,6 +6983,8 @@ type CreateRegionInput struct {
 	SettlementIDs           []int
 	LocationIDs             []int
 	CountryID               *int
+	KnownAsAfterIDs         []int
+	KnownAsBeforeIDs        []int
 }
 
 // Mutate applies the CreateRegionInput on the RegionMutation builder.
@@ -7006,6 +7040,12 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.CountryID; v != nil {
 		m.SetCountryID(*v)
 	}
+	if v := i.KnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
+	}
+	if v := i.KnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRegionInput on the RegionCreate builder.
@@ -7055,6 +7095,12 @@ type UpdateRegionInput struct {
 	RemoveLocationIDs             []int
 	ClearCountry                  bool
 	CountryID                     *int
+	ClearKnownAsAfter             bool
+	AddKnownAsAfterIDs            []int
+	RemoveKnownAsAfterIDs         []int
+	ClearKnownAsBefore            bool
+	AddKnownAsBeforeIDs           []int
+	RemoveKnownAsBeforeIDs        []int
 }
 
 // Mutate applies the UpdateRegionInput on the RegionMutation builder.
@@ -7175,6 +7221,24 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.CountryID; v != nil {
 		m.SetCountryID(*v)
+	}
+	if i.ClearKnownAsAfter {
+		m.ClearKnownAsAfter()
+	}
+	if v := i.AddKnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
+	}
+	if v := i.RemoveKnownAsAfterIDs; len(v) > 0 {
+		m.RemoveKnownAsAfterIDs(v...)
+	}
+	if i.ClearKnownAsBefore {
+		m.ClearKnownAsBefore()
+	}
+	if v := i.AddKnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
+	}
+	if v := i.RemoveKnownAsBeforeIDs; len(v) > 0 {
+		m.RemoveKnownAsBeforeIDs(v...)
 	}
 }
 
@@ -7357,6 +7421,8 @@ type CreateSettlementInput struct {
 	LocationIDs             []int
 	RegionID                *int
 	DistrictID              *int
+	KnownAsAfterIDs         []int
+	KnownAsBeforeIDs        []int
 }
 
 // Mutate applies the CreateSettlementInput on the SettlementMutation builder.
@@ -7406,6 +7472,12 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.DistrictID; v != nil {
 		m.SetDistrictID(*v)
 	}
+	if v := i.KnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
+	}
+	if v := i.KnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateSettlementInput on the SettlementCreate builder.
@@ -7448,6 +7520,12 @@ type UpdateSettlementInput struct {
 	RegionID                      *int
 	ClearDistrict                 bool
 	DistrictID                    *int
+	ClearKnownAsAfter             bool
+	AddKnownAsAfterIDs            []int
+	RemoveKnownAsAfterIDs         []int
+	ClearKnownAsBefore            bool
+	AddKnownAsBeforeIDs           []int
+	RemoveKnownAsBeforeIDs        []int
 }
 
 // Mutate applies the UpdateSettlementInput on the SettlementMutation builder.
@@ -7547,6 +7625,24 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	}
 	if v := i.DistrictID; v != nil {
 		m.SetDistrictID(*v)
+	}
+	if i.ClearKnownAsAfter {
+		m.ClearKnownAsAfter()
+	}
+	if v := i.AddKnownAsAfterIDs; len(v) > 0 {
+		m.AddKnownAsAfterIDs(v...)
+	}
+	if v := i.RemoveKnownAsAfterIDs; len(v) > 0 {
+		m.RemoveKnownAsAfterIDs(v...)
+	}
+	if i.ClearKnownAsBefore {
+		m.ClearKnownAsBefore()
+	}
+	if v := i.AddKnownAsBeforeIDs; len(v) > 0 {
+		m.AddKnownAsBeforeIDs(v...)
+	}
+	if v := i.RemoveKnownAsBeforeIDs; len(v) > 0 {
+		m.RemoveKnownAsBeforeIDs(v...)
 	}
 }
 

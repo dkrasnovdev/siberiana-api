@@ -58,5 +58,7 @@ func (District) Edges() []ent.Edge {
 		edge.To("settlements", Settlement.Type),
 		edge.From("locations", Location.Type).Ref("district"),
 		edge.From("region", Region.Type).Ref("districts").Unique(),
+		edge.To("known_as_before", District.Type).
+			From("known_as_after"),
 	}
 }

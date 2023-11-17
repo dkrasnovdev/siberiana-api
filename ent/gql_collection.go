@@ -2121,7 +2121,7 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			c.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
-		case "knownAsFor":
+		case "knownAsAfter":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -2130,10 +2130,10 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedKnownAsFor(alias, func(wq *CountryQuery) {
+			c.WithNamedKnownAsAfter(alias, func(wq *CountryQuery) {
 				*wq = *query
 			})
-		case "knownAs":
+		case "knownAsBefore":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -2142,7 +2142,7 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
 				return err
 			}
-			c.WithNamedKnownAs(alias, func(wq *CountryQuery) {
+			c.WithNamedKnownAsBefore(alias, func(wq *CountryQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -2511,6 +2511,30 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			d.withRegion = query
+		case "knownAsAfter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedKnownAsAfter(alias, func(wq *DistrictQuery) {
+				*wq = *query
+			})
+		case "knownAsBefore":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedKnownAsBefore(alias, func(wq *DistrictQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[district.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, district.FieldCreatedAt)
@@ -6529,6 +6553,30 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 				return err
 			}
 			r.withCountry = query
+		case "knownAsAfter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedKnownAsAfter(alias, func(wq *RegionQuery) {
+				*wq = *query
+			})
+		case "knownAsBefore":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedKnownAsBefore(alias, func(wq *RegionQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[region.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, region.FieldCreatedAt)
@@ -6893,6 +6941,30 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 				return err
 			}
 			s.withDistrict = query
+		case "knownAsAfter":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedKnownAsAfter(alias, func(wq *SettlementQuery) {
+				*wq = *query
+			})
+		case "knownAsBefore":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedKnownAsBefore(alias, func(wq *SettlementQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[settlement.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, settlement.FieldCreatedAt)

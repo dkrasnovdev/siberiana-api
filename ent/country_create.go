@@ -228,34 +228,34 @@ func (cc *CountryCreate) AddLocations(l ...*Location) *CountryCreate {
 	return cc.AddLocationIDs(ids...)
 }
 
-// AddKnownAsForIDs adds the "known_as_for" edge to the Country entity by IDs.
-func (cc *CountryCreate) AddKnownAsForIDs(ids ...int) *CountryCreate {
-	cc.mutation.AddKnownAsForIDs(ids...)
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Country entity by IDs.
+func (cc *CountryCreate) AddKnownAsAfterIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddKnownAsAfterIDs(ids...)
 	return cc
 }
 
-// AddKnownAsFor adds the "known_as_for" edges to the Country entity.
-func (cc *CountryCreate) AddKnownAsFor(c ...*Country) *CountryCreate {
+// AddKnownAsAfter adds the "known_as_after" edges to the Country entity.
+func (cc *CountryCreate) AddKnownAsAfter(c ...*Country) *CountryCreate {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cc.AddKnownAsForIDs(ids...)
+	return cc.AddKnownAsAfterIDs(ids...)
 }
 
-// AddKnownAIDs adds the "known_as" edge to the Country entity by IDs.
-func (cc *CountryCreate) AddKnownAIDs(ids ...int) *CountryCreate {
-	cc.mutation.AddKnownAIDs(ids...)
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Country entity by IDs.
+func (cc *CountryCreate) AddKnownAsBeforeIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddKnownAsBeforeIDs(ids...)
 	return cc
 }
 
-// AddKnownAs adds the "known_as" edges to the Country entity.
-func (cc *CountryCreate) AddKnownAs(c ...*Country) *CountryCreate {
+// AddKnownAsBefore adds the "known_as_before" edges to the Country entity.
+func (cc *CountryCreate) AddKnownAsBefore(c ...*Country) *CountryCreate {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cc.AddKnownAIDs(ids...)
+	return cc.AddKnownAsBeforeIDs(ids...)
 }
 
 // Mutation returns the CountryMutation object of the builder.
@@ -474,12 +474,12 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.KnownAsForIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   country.KnownAsForTable,
-			Columns: country.KnownAsForPrimaryKey,
+			Table:   country.KnownAsAfterTable,
+			Columns: country.KnownAsAfterPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -490,12 +490,12 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := cc.mutation.KnownAsIDs(); len(nodes) > 0 {
+	if nodes := cc.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   country.KnownAsTable,
-			Columns: country.KnownAsPrimaryKey,
+			Table:   country.KnownAsBeforeTable,
+			Columns: country.KnownAsBeforePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),

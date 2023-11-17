@@ -1321,27 +1321,52 @@ var (
 			},
 		},
 	}
-	// CountryKnownAsColumns holds the columns for the "country_known_as" table.
-	CountryKnownAsColumns = []*schema.Column{
+	// CountryKnownAsBeforeColumns holds the columns for the "country_known_as_before" table.
+	CountryKnownAsBeforeColumns = []*schema.Column{
 		{Name: "country_id", Type: field.TypeInt},
-		{Name: "known_as_for_id", Type: field.TypeInt},
+		{Name: "known_as_after_id", Type: field.TypeInt},
 	}
-	// CountryKnownAsTable holds the schema information for the "country_known_as" table.
-	CountryKnownAsTable = &schema.Table{
-		Name:       "country_known_as",
-		Columns:    CountryKnownAsColumns,
-		PrimaryKey: []*schema.Column{CountryKnownAsColumns[0], CountryKnownAsColumns[1]},
+	// CountryKnownAsBeforeTable holds the schema information for the "country_known_as_before" table.
+	CountryKnownAsBeforeTable = &schema.Table{
+		Name:       "country_known_as_before",
+		Columns:    CountryKnownAsBeforeColumns,
+		PrimaryKey: []*schema.Column{CountryKnownAsBeforeColumns[0], CountryKnownAsBeforeColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "country_known_as_country_id",
-				Columns:    []*schema.Column{CountryKnownAsColumns[0]},
+				Symbol:     "country_known_as_before_country_id",
+				Columns:    []*schema.Column{CountryKnownAsBeforeColumns[0]},
 				RefColumns: []*schema.Column{CountriesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "country_known_as_known_as_for_id",
-				Columns:    []*schema.Column{CountryKnownAsColumns[1]},
+				Symbol:     "country_known_as_before_known_as_after_id",
+				Columns:    []*schema.Column{CountryKnownAsBeforeColumns[1]},
 				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// DistrictKnownAsBeforeColumns holds the columns for the "district_known_as_before" table.
+	DistrictKnownAsBeforeColumns = []*schema.Column{
+		{Name: "district_id", Type: field.TypeInt},
+		{Name: "known_as_after_id", Type: field.TypeInt},
+	}
+	// DistrictKnownAsBeforeTable holds the schema information for the "district_known_as_before" table.
+	DistrictKnownAsBeforeTable = &schema.Table{
+		Name:       "district_known_as_before",
+		Columns:    DistrictKnownAsBeforeColumns,
+		PrimaryKey: []*schema.Column{DistrictKnownAsBeforeColumns[0], DistrictKnownAsBeforeColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "district_known_as_before_district_id",
+				Columns:    []*schema.Column{DistrictKnownAsBeforeColumns[0]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "district_known_as_before_known_as_after_id",
+				Columns:    []*schema.Column{DistrictKnownAsBeforeColumns[1]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -1621,6 +1646,56 @@ var (
 			},
 		},
 	}
+	// RegionKnownAsBeforeColumns holds the columns for the "region_known_as_before" table.
+	RegionKnownAsBeforeColumns = []*schema.Column{
+		{Name: "region_id", Type: field.TypeInt},
+		{Name: "known_as_after_id", Type: field.TypeInt},
+	}
+	// RegionKnownAsBeforeTable holds the schema information for the "region_known_as_before" table.
+	RegionKnownAsBeforeTable = &schema.Table{
+		Name:       "region_known_as_before",
+		Columns:    RegionKnownAsBeforeColumns,
+		PrimaryKey: []*schema.Column{RegionKnownAsBeforeColumns[0], RegionKnownAsBeforeColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "region_known_as_before_region_id",
+				Columns:    []*schema.Column{RegionKnownAsBeforeColumns[0]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "region_known_as_before_known_as_after_id",
+				Columns:    []*schema.Column{RegionKnownAsBeforeColumns[1]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// SettlementKnownAsBeforeColumns holds the columns for the "settlement_known_as_before" table.
+	SettlementKnownAsBeforeColumns = []*schema.Column{
+		{Name: "settlement_id", Type: field.TypeInt},
+		{Name: "known_as_after_id", Type: field.TypeInt},
+	}
+	// SettlementKnownAsBeforeTable holds the schema information for the "settlement_known_as_before" table.
+	SettlementKnownAsBeforeTable = &schema.Table{
+		Name:       "settlement_known_as_before",
+		Columns:    SettlementKnownAsBeforeColumns,
+		PrimaryKey: []*schema.Column{SettlementKnownAsBeforeColumns[0], SettlementKnownAsBeforeColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "settlement_known_as_before_settlement_id",
+				Columns:    []*schema.Column{SettlementKnownAsBeforeColumns[0]},
+				RefColumns: []*schema.Column{SettlementsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "settlement_known_as_before_known_as_after_id",
+				Columns:    []*schema.Column{SettlementKnownAsBeforeColumns[1]},
+				RefColumns: []*schema.Column{SettlementsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// TechniqueArtColumns holds the columns for the "technique_art" table.
 	TechniqueArtColumns = []*schema.Column{
 		{Name: "technique_id", Type: field.TypeInt},
@@ -1765,7 +1840,8 @@ var (
 		ArtGenreArtTable,
 		ArtStyleArtTable,
 		BookGenreBooksTable,
-		CountryKnownAsTable,
+		CountryKnownAsBeforeTable,
+		DistrictKnownAsBeforeTable,
 		MediumArtifactsTable,
 		MonumentSetsTable,
 		PersonCollectionsTable,
@@ -1777,6 +1853,8 @@ var (
 		ProjectArtifactsTable,
 		PublicationArtifactsTable,
 		PublicationPetroglyphsTable,
+		RegionKnownAsBeforeTable,
+		SettlementKnownAsBeforeTable,
 		TechniqueArtTable,
 		TechniqueArtifactsTable,
 		TechniquePetroglyphsTable,
@@ -1850,8 +1928,10 @@ func init() {
 	ArtStyleArtTable.ForeignKeys[1].RefTable = ArtsTable
 	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable
 	BookGenreBooksTable.ForeignKeys[1].RefTable = BooksTable
-	CountryKnownAsTable.ForeignKeys[0].RefTable = CountriesTable
-	CountryKnownAsTable.ForeignKeys[1].RefTable = CountriesTable
+	CountryKnownAsBeforeTable.ForeignKeys[0].RefTable = CountriesTable
+	CountryKnownAsBeforeTable.ForeignKeys[1].RefTable = CountriesTable
+	DistrictKnownAsBeforeTable.ForeignKeys[0].RefTable = DistrictsTable
+	DistrictKnownAsBeforeTable.ForeignKeys[1].RefTable = DistrictsTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	MonumentSetsTable.ForeignKeys[0].RefTable = MonumentsTable
@@ -1874,6 +1954,10 @@ func init() {
 	PublicationArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PublicationPetroglyphsTable.ForeignKeys[0].RefTable = PublicationsTable
 	PublicationPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
+	RegionKnownAsBeforeTable.ForeignKeys[0].RefTable = RegionsTable
+	RegionKnownAsBeforeTable.ForeignKeys[1].RefTable = RegionsTable
+	SettlementKnownAsBeforeTable.ForeignKeys[0].RefTable = SettlementsTable
+	SettlementKnownAsBeforeTable.ForeignKeys[1].RefTable = SettlementsTable
 	TechniqueArtTable.ForeignKeys[0].RefTable = TechniquesTable
 	TechniqueArtTable.ForeignKeys[1].RefTable = ArtsTable
 	TechniqueArtifactsTable.ForeignKeys[0].RefTable = TechniquesTable

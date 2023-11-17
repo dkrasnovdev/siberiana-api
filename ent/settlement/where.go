@@ -786,6 +786,52 @@ func HasDistrictWith(preds ...predicate.District) predicate.Settlement {
 	})
 }
 
+// HasKnownAsAfter applies the HasEdge predicate on the "known_as_after" edge.
+func HasKnownAsAfter() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, KnownAsAfterTable, KnownAsAfterPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasKnownAsAfterWith applies the HasEdge predicate on the "known_as_after" edge with a given conditions (other predicates).
+func HasKnownAsAfterWith(preds ...predicate.Settlement) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newKnownAsAfterStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasKnownAsBefore applies the HasEdge predicate on the "known_as_before" edge.
+func HasKnownAsBefore() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, KnownAsBeforeTable, KnownAsBeforePrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasKnownAsBeforeWith applies the HasEdge predicate on the "known_as_before" edge with a given conditions (other predicates).
+func HasKnownAsBeforeWith(preds ...predicate.Settlement) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newKnownAsBeforeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Settlement) predicate.Settlement {
 	return predicate.Settlement(sql.AndPredicates(predicates...))

@@ -53,10 +53,10 @@ type CountryEdges struct {
 	Regions []*Region `json:"regions,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
-	// KnownAsFor holds the value of the known_as_for edge.
-	KnownAsFor []*Country `json:"known_as_for,omitempty"`
-	// KnownAs holds the value of the known_as edge.
-	KnownAs []*Country `json:"known_as,omitempty"`
+	// KnownAsAfter holds the value of the known_as_after edge.
+	KnownAsAfter []*Country `json:"known_as_after,omitempty"`
+	// KnownAsBefore holds the value of the known_as_before edge.
+	KnownAsBefore []*Country `json:"known_as_before,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [8]bool
@@ -69,8 +69,8 @@ type CountryEdges struct {
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedRegions               map[string][]*Region
 	namedLocations             map[string][]*Location
-	namedKnownAsFor            map[string][]*Country
-	namedKnownAs               map[string][]*Country
+	namedKnownAsAfter          map[string][]*Country
+	namedKnownAsBefore         map[string][]*Country
 }
 
 // ArtOrErr returns the Art value or an error if the edge
@@ -127,22 +127,22 @@ func (e CountryEdges) LocationsOrErr() ([]*Location, error) {
 	return nil, &NotLoadedError{edge: "locations"}
 }
 
-// KnownAsForOrErr returns the KnownAsFor value or an error if the edge
+// KnownAsAfterOrErr returns the KnownAsAfter value or an error if the edge
 // was not loaded in eager-loading.
-func (e CountryEdges) KnownAsForOrErr() ([]*Country, error) {
+func (e CountryEdges) KnownAsAfterOrErr() ([]*Country, error) {
 	if e.loadedTypes[6] {
-		return e.KnownAsFor, nil
+		return e.KnownAsAfter, nil
 	}
-	return nil, &NotLoadedError{edge: "known_as_for"}
+	return nil, &NotLoadedError{edge: "known_as_after"}
 }
 
-// KnownAsOrErr returns the KnownAs value or an error if the edge
+// KnownAsBeforeOrErr returns the KnownAsBefore value or an error if the edge
 // was not loaded in eager-loading.
-func (e CountryEdges) KnownAsOrErr() ([]*Country, error) {
+func (e CountryEdges) KnownAsBeforeOrErr() ([]*Country, error) {
 	if e.loadedTypes[7] {
-		return e.KnownAs, nil
+		return e.KnownAsBefore, nil
 	}
-	return nil, &NotLoadedError{edge: "known_as"}
+	return nil, &NotLoadedError{edge: "known_as_before"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -268,14 +268,14 @@ func (c *Country) QueryLocations() *LocationQuery {
 	return NewCountryClient(c.config).QueryLocations(c)
 }
 
-// QueryKnownAsFor queries the "known_as_for" edge of the Country entity.
-func (c *Country) QueryKnownAsFor() *CountryQuery {
-	return NewCountryClient(c.config).QueryKnownAsFor(c)
+// QueryKnownAsAfter queries the "known_as_after" edge of the Country entity.
+func (c *Country) QueryKnownAsAfter() *CountryQuery {
+	return NewCountryClient(c.config).QueryKnownAsAfter(c)
 }
 
-// QueryKnownAs queries the "known_as" edge of the Country entity.
-func (c *Country) QueryKnownAs() *CountryQuery {
-	return NewCountryClient(c.config).QueryKnownAs(c)
+// QueryKnownAsBefore queries the "known_as_before" edge of the Country entity.
+func (c *Country) QueryKnownAsBefore() *CountryQuery {
+	return NewCountryClient(c.config).QueryKnownAsBefore(c)
 }
 
 // Update returns a builder for updating this Country.
@@ -472,51 +472,51 @@ func (c *Country) appendNamedLocations(name string, edges ...*Location) {
 	}
 }
 
-// NamedKnownAsFor returns the KnownAsFor named value or an error if the edge was not
+// NamedKnownAsAfter returns the KnownAsAfter named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Country) NamedKnownAsFor(name string) ([]*Country, error) {
-	if c.Edges.namedKnownAsFor == nil {
+func (c *Country) NamedKnownAsAfter(name string) ([]*Country, error) {
+	if c.Edges.namedKnownAsAfter == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedKnownAsFor[name]
+	nodes, ok := c.Edges.namedKnownAsAfter[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Country) appendNamedKnownAsFor(name string, edges ...*Country) {
-	if c.Edges.namedKnownAsFor == nil {
-		c.Edges.namedKnownAsFor = make(map[string][]*Country)
+func (c *Country) appendNamedKnownAsAfter(name string, edges ...*Country) {
+	if c.Edges.namedKnownAsAfter == nil {
+		c.Edges.namedKnownAsAfter = make(map[string][]*Country)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedKnownAsFor[name] = []*Country{}
+		c.Edges.namedKnownAsAfter[name] = []*Country{}
 	} else {
-		c.Edges.namedKnownAsFor[name] = append(c.Edges.namedKnownAsFor[name], edges...)
+		c.Edges.namedKnownAsAfter[name] = append(c.Edges.namedKnownAsAfter[name], edges...)
 	}
 }
 
-// NamedKnownAs returns the KnownAs named value or an error if the edge was not
+// NamedKnownAsBefore returns the KnownAsBefore named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (c *Country) NamedKnownAs(name string) ([]*Country, error) {
-	if c.Edges.namedKnownAs == nil {
+func (c *Country) NamedKnownAsBefore(name string) ([]*Country, error) {
+	if c.Edges.namedKnownAsBefore == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := c.Edges.namedKnownAs[name]
+	nodes, ok := c.Edges.namedKnownAsBefore[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (c *Country) appendNamedKnownAs(name string, edges ...*Country) {
-	if c.Edges.namedKnownAs == nil {
-		c.Edges.namedKnownAs = make(map[string][]*Country)
+func (c *Country) appendNamedKnownAsBefore(name string, edges ...*Country) {
+	if c.Edges.namedKnownAsBefore == nil {
+		c.Edges.namedKnownAsBefore = make(map[string][]*Country)
 	}
 	if len(edges) == 0 {
-		c.Edges.namedKnownAs[name] = []*Country{}
+		c.Edges.namedKnownAsBefore[name] = []*Country{}
 	} else {
-		c.Edges.namedKnownAs[name] = append(c.Edges.namedKnownAs[name], edges...)
+		c.Edges.namedKnownAsBefore[name] = append(c.Edges.namedKnownAsBefore[name], edges...)
 	}
 }
 

@@ -250,34 +250,34 @@ func (cu *CountryUpdate) AddLocations(l ...*Location) *CountryUpdate {
 	return cu.AddLocationIDs(ids...)
 }
 
-// AddKnownAsForIDs adds the "known_as_for" edge to the Country entity by IDs.
-func (cu *CountryUpdate) AddKnownAsForIDs(ids ...int) *CountryUpdate {
-	cu.mutation.AddKnownAsForIDs(ids...)
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Country entity by IDs.
+func (cu *CountryUpdate) AddKnownAsAfterIDs(ids ...int) *CountryUpdate {
+	cu.mutation.AddKnownAsAfterIDs(ids...)
 	return cu
 }
 
-// AddKnownAsFor adds the "known_as_for" edges to the Country entity.
-func (cu *CountryUpdate) AddKnownAsFor(c ...*Country) *CountryUpdate {
+// AddKnownAsAfter adds the "known_as_after" edges to the Country entity.
+func (cu *CountryUpdate) AddKnownAsAfter(c ...*Country) *CountryUpdate {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cu.AddKnownAsForIDs(ids...)
+	return cu.AddKnownAsAfterIDs(ids...)
 }
 
-// AddKnownAIDs adds the "known_as" edge to the Country entity by IDs.
-func (cu *CountryUpdate) AddKnownAIDs(ids ...int) *CountryUpdate {
-	cu.mutation.AddKnownAIDs(ids...)
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Country entity by IDs.
+func (cu *CountryUpdate) AddKnownAsBeforeIDs(ids ...int) *CountryUpdate {
+	cu.mutation.AddKnownAsBeforeIDs(ids...)
 	return cu
 }
 
-// AddKnownAs adds the "known_as" edges to the Country entity.
-func (cu *CountryUpdate) AddKnownAs(c ...*Country) *CountryUpdate {
+// AddKnownAsBefore adds the "known_as_before" edges to the Country entity.
+func (cu *CountryUpdate) AddKnownAsBefore(c ...*Country) *CountryUpdate {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cu.AddKnownAIDs(ids...)
+	return cu.AddKnownAsBeforeIDs(ids...)
 }
 
 // Mutation returns the CountryMutation object of the builder.
@@ -411,46 +411,46 @@ func (cu *CountryUpdate) RemoveLocations(l ...*Location) *CountryUpdate {
 	return cu.RemoveLocationIDs(ids...)
 }
 
-// ClearKnownAsFor clears all "known_as_for" edges to the Country entity.
-func (cu *CountryUpdate) ClearKnownAsFor() *CountryUpdate {
-	cu.mutation.ClearKnownAsFor()
+// ClearKnownAsAfter clears all "known_as_after" edges to the Country entity.
+func (cu *CountryUpdate) ClearKnownAsAfter() *CountryUpdate {
+	cu.mutation.ClearKnownAsAfter()
 	return cu
 }
 
-// RemoveKnownAsForIDs removes the "known_as_for" edge to Country entities by IDs.
-func (cu *CountryUpdate) RemoveKnownAsForIDs(ids ...int) *CountryUpdate {
-	cu.mutation.RemoveKnownAsForIDs(ids...)
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to Country entities by IDs.
+func (cu *CountryUpdate) RemoveKnownAsAfterIDs(ids ...int) *CountryUpdate {
+	cu.mutation.RemoveKnownAsAfterIDs(ids...)
 	return cu
 }
 
-// RemoveKnownAsFor removes "known_as_for" edges to Country entities.
-func (cu *CountryUpdate) RemoveKnownAsFor(c ...*Country) *CountryUpdate {
+// RemoveKnownAsAfter removes "known_as_after" edges to Country entities.
+func (cu *CountryUpdate) RemoveKnownAsAfter(c ...*Country) *CountryUpdate {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cu.RemoveKnownAsForIDs(ids...)
+	return cu.RemoveKnownAsAfterIDs(ids...)
 }
 
-// ClearKnownAs clears all "known_as" edges to the Country entity.
-func (cu *CountryUpdate) ClearKnownAs() *CountryUpdate {
-	cu.mutation.ClearKnownAs()
+// ClearKnownAsBefore clears all "known_as_before" edges to the Country entity.
+func (cu *CountryUpdate) ClearKnownAsBefore() *CountryUpdate {
+	cu.mutation.ClearKnownAsBefore()
 	return cu
 }
 
-// RemoveKnownAIDs removes the "known_as" edge to Country entities by IDs.
-func (cu *CountryUpdate) RemoveKnownAIDs(ids ...int) *CountryUpdate {
-	cu.mutation.RemoveKnownAIDs(ids...)
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to Country entities by IDs.
+func (cu *CountryUpdate) RemoveKnownAsBeforeIDs(ids ...int) *CountryUpdate {
+	cu.mutation.RemoveKnownAsBeforeIDs(ids...)
 	return cu
 }
 
-// RemoveKnownAs removes "known_as" edges to Country entities.
-func (cu *CountryUpdate) RemoveKnownAs(c ...*Country) *CountryUpdate {
+// RemoveKnownAsBefore removes "known_as_before" edges to Country entities.
+func (cu *CountryUpdate) RemoveKnownAsBefore(c ...*Country) *CountryUpdate {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cu.RemoveKnownAIDs(ids...)
+	return cu.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -813,12 +813,12 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.KnownAsForCleared() {
+	if cu.mutation.KnownAsAfterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   country.KnownAsForTable,
-			Columns: country.KnownAsForPrimaryKey,
+			Table:   country.KnownAsAfterTable,
+			Columns: country.KnownAsAfterPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -826,12 +826,12 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedKnownAsForIDs(); len(nodes) > 0 && !cu.mutation.KnownAsForCleared() {
+	if nodes := cu.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !cu.mutation.KnownAsAfterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   country.KnownAsForTable,
-			Columns: country.KnownAsForPrimaryKey,
+			Table:   country.KnownAsAfterTable,
+			Columns: country.KnownAsAfterPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -842,12 +842,12 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.KnownAsForIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   country.KnownAsForTable,
-			Columns: country.KnownAsForPrimaryKey,
+			Table:   country.KnownAsAfterTable,
+			Columns: country.KnownAsAfterPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -858,12 +858,12 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cu.mutation.KnownAsCleared() {
+	if cu.mutation.KnownAsBeforeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   country.KnownAsTable,
-			Columns: country.KnownAsPrimaryKey,
+			Table:   country.KnownAsBeforeTable,
+			Columns: country.KnownAsBeforePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -871,12 +871,12 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.RemovedKnownAsIDs(); len(nodes) > 0 && !cu.mutation.KnownAsCleared() {
+	if nodes := cu.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !cu.mutation.KnownAsBeforeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   country.KnownAsTable,
-			Columns: country.KnownAsPrimaryKey,
+			Table:   country.KnownAsBeforeTable,
+			Columns: country.KnownAsBeforePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -887,12 +887,12 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cu.mutation.KnownAsIDs(); len(nodes) > 0 {
+	if nodes := cu.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   country.KnownAsTable,
-			Columns: country.KnownAsPrimaryKey,
+			Table:   country.KnownAsBeforeTable,
+			Columns: country.KnownAsBeforePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -1139,34 +1139,34 @@ func (cuo *CountryUpdateOne) AddLocations(l ...*Location) *CountryUpdateOne {
 	return cuo.AddLocationIDs(ids...)
 }
 
-// AddKnownAsForIDs adds the "known_as_for" edge to the Country entity by IDs.
-func (cuo *CountryUpdateOne) AddKnownAsForIDs(ids ...int) *CountryUpdateOne {
-	cuo.mutation.AddKnownAsForIDs(ids...)
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Country entity by IDs.
+func (cuo *CountryUpdateOne) AddKnownAsAfterIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.AddKnownAsAfterIDs(ids...)
 	return cuo
 }
 
-// AddKnownAsFor adds the "known_as_for" edges to the Country entity.
-func (cuo *CountryUpdateOne) AddKnownAsFor(c ...*Country) *CountryUpdateOne {
+// AddKnownAsAfter adds the "known_as_after" edges to the Country entity.
+func (cuo *CountryUpdateOne) AddKnownAsAfter(c ...*Country) *CountryUpdateOne {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cuo.AddKnownAsForIDs(ids...)
+	return cuo.AddKnownAsAfterIDs(ids...)
 }
 
-// AddKnownAIDs adds the "known_as" edge to the Country entity by IDs.
-func (cuo *CountryUpdateOne) AddKnownAIDs(ids ...int) *CountryUpdateOne {
-	cuo.mutation.AddKnownAIDs(ids...)
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Country entity by IDs.
+func (cuo *CountryUpdateOne) AddKnownAsBeforeIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.AddKnownAsBeforeIDs(ids...)
 	return cuo
 }
 
-// AddKnownAs adds the "known_as" edges to the Country entity.
-func (cuo *CountryUpdateOne) AddKnownAs(c ...*Country) *CountryUpdateOne {
+// AddKnownAsBefore adds the "known_as_before" edges to the Country entity.
+func (cuo *CountryUpdateOne) AddKnownAsBefore(c ...*Country) *CountryUpdateOne {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cuo.AddKnownAIDs(ids...)
+	return cuo.AddKnownAsBeforeIDs(ids...)
 }
 
 // Mutation returns the CountryMutation object of the builder.
@@ -1300,46 +1300,46 @@ func (cuo *CountryUpdateOne) RemoveLocations(l ...*Location) *CountryUpdateOne {
 	return cuo.RemoveLocationIDs(ids...)
 }
 
-// ClearKnownAsFor clears all "known_as_for" edges to the Country entity.
-func (cuo *CountryUpdateOne) ClearKnownAsFor() *CountryUpdateOne {
-	cuo.mutation.ClearKnownAsFor()
+// ClearKnownAsAfter clears all "known_as_after" edges to the Country entity.
+func (cuo *CountryUpdateOne) ClearKnownAsAfter() *CountryUpdateOne {
+	cuo.mutation.ClearKnownAsAfter()
 	return cuo
 }
 
-// RemoveKnownAsForIDs removes the "known_as_for" edge to Country entities by IDs.
-func (cuo *CountryUpdateOne) RemoveKnownAsForIDs(ids ...int) *CountryUpdateOne {
-	cuo.mutation.RemoveKnownAsForIDs(ids...)
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to Country entities by IDs.
+func (cuo *CountryUpdateOne) RemoveKnownAsAfterIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.RemoveKnownAsAfterIDs(ids...)
 	return cuo
 }
 
-// RemoveKnownAsFor removes "known_as_for" edges to Country entities.
-func (cuo *CountryUpdateOne) RemoveKnownAsFor(c ...*Country) *CountryUpdateOne {
+// RemoveKnownAsAfter removes "known_as_after" edges to Country entities.
+func (cuo *CountryUpdateOne) RemoveKnownAsAfter(c ...*Country) *CountryUpdateOne {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cuo.RemoveKnownAsForIDs(ids...)
+	return cuo.RemoveKnownAsAfterIDs(ids...)
 }
 
-// ClearKnownAs clears all "known_as" edges to the Country entity.
-func (cuo *CountryUpdateOne) ClearKnownAs() *CountryUpdateOne {
-	cuo.mutation.ClearKnownAs()
+// ClearKnownAsBefore clears all "known_as_before" edges to the Country entity.
+func (cuo *CountryUpdateOne) ClearKnownAsBefore() *CountryUpdateOne {
+	cuo.mutation.ClearKnownAsBefore()
 	return cuo
 }
 
-// RemoveKnownAIDs removes the "known_as" edge to Country entities by IDs.
-func (cuo *CountryUpdateOne) RemoveKnownAIDs(ids ...int) *CountryUpdateOne {
-	cuo.mutation.RemoveKnownAIDs(ids...)
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to Country entities by IDs.
+func (cuo *CountryUpdateOne) RemoveKnownAsBeforeIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.RemoveKnownAsBeforeIDs(ids...)
 	return cuo
 }
 
-// RemoveKnownAs removes "known_as" edges to Country entities.
-func (cuo *CountryUpdateOne) RemoveKnownAs(c ...*Country) *CountryUpdateOne {
+// RemoveKnownAsBefore removes "known_as_before" edges to Country entities.
+func (cuo *CountryUpdateOne) RemoveKnownAsBefore(c ...*Country) *CountryUpdateOne {
 	ids := make([]int, len(c))
 	for i := range c {
 		ids[i] = c[i].ID
 	}
-	return cuo.RemoveKnownAIDs(ids...)
+	return cuo.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Where appends a list predicates to the CountryUpdate builder.
@@ -1732,12 +1732,12 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.KnownAsForCleared() {
+	if cuo.mutation.KnownAsAfterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   country.KnownAsForTable,
-			Columns: country.KnownAsForPrimaryKey,
+			Table:   country.KnownAsAfterTable,
+			Columns: country.KnownAsAfterPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -1745,12 +1745,12 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedKnownAsForIDs(); len(nodes) > 0 && !cuo.mutation.KnownAsForCleared() {
+	if nodes := cuo.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !cuo.mutation.KnownAsAfterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   country.KnownAsForTable,
-			Columns: country.KnownAsForPrimaryKey,
+			Table:   country.KnownAsAfterTable,
+			Columns: country.KnownAsAfterPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -1761,12 +1761,12 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.KnownAsForIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   country.KnownAsForTable,
-			Columns: country.KnownAsForPrimaryKey,
+			Table:   country.KnownAsAfterTable,
+			Columns: country.KnownAsAfterPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -1777,12 +1777,12 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if cuo.mutation.KnownAsCleared() {
+	if cuo.mutation.KnownAsBeforeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   country.KnownAsTable,
-			Columns: country.KnownAsPrimaryKey,
+			Table:   country.KnownAsBeforeTable,
+			Columns: country.KnownAsBeforePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -1790,12 +1790,12 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.RemovedKnownAsIDs(); len(nodes) > 0 && !cuo.mutation.KnownAsCleared() {
+	if nodes := cuo.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !cuo.mutation.KnownAsBeforeCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   country.KnownAsTable,
-			Columns: country.KnownAsPrimaryKey,
+			Table:   country.KnownAsBeforeTable,
+			Columns: country.KnownAsBeforePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
@@ -1806,12 +1806,12 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := cuo.mutation.KnownAsIDs(); len(nodes) > 0 {
+	if nodes := cuo.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   country.KnownAsTable,
-			Columns: country.KnownAsPrimaryKey,
+			Table:   country.KnownAsBeforeTable,
+			Columns: country.KnownAsBeforePrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),

@@ -568,26 +568,26 @@ func (c *Country) Locations(ctx context.Context) (result []*Location, err error)
 	return result, err
 }
 
-func (c *Country) KnownAsFor(ctx context.Context) (result []*Country, err error) {
+func (c *Country) KnownAsAfter(ctx context.Context) (result []*Country, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = c.NamedKnownAsFor(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = c.NamedKnownAsAfter(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = c.Edges.KnownAsForOrErr()
+		result, err = c.Edges.KnownAsAfterOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = c.QueryKnownAsFor().All(ctx)
+		result, err = c.QueryKnownAsAfter().All(ctx)
 	}
 	return result, err
 }
 
-func (c *Country) KnownAs(ctx context.Context) (result []*Country, err error) {
+func (c *Country) KnownAsBefore(ctx context.Context) (result []*Country, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = c.NamedKnownAs(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = c.NamedKnownAsBefore(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = c.Edges.KnownAsOrErr()
+		result, err = c.Edges.KnownAsBeforeOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = c.QueryKnownAs().All(ctx)
+		result, err = c.QueryKnownAsBefore().All(ctx)
 	}
 	return result, err
 }
@@ -694,6 +694,30 @@ func (d *District) Region(ctx context.Context) (*Region, error) {
 		result, err = d.QueryRegion().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (d *District) KnownAsAfter(ctx context.Context) (result []*District, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedKnownAsAfter(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.KnownAsAfterOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryKnownAsAfter().All(ctx)
+	}
+	return result, err
+}
+
+func (d *District) KnownAsBefore(ctx context.Context) (result []*District, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedKnownAsBefore(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.KnownAsBeforeOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryKnownAsBefore().All(ctx)
+	}
+	return result, err
 }
 
 func (e *Ethnos) Artifacts(ctx context.Context) (result []*Artifact, err error) {
@@ -1484,6 +1508,30 @@ func (r *Region) Country(ctx context.Context) (*Country, error) {
 	return result, MaskNotFound(err)
 }
 
+func (r *Region) KnownAsAfter(ctx context.Context) (result []*Region, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedKnownAsAfter(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.KnownAsAfterOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryKnownAsAfter().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Region) KnownAsBefore(ctx context.Context) (result []*Region, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedKnownAsBefore(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.KnownAsBeforeOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryKnownAsBefore().All(ctx)
+	}
+	return result, err
+}
+
 func (s *Set) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = s.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1582,6 +1630,30 @@ func (s *Settlement) District(ctx context.Context) (*District, error) {
 		result, err = s.QueryDistrict().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (s *Settlement) KnownAsAfter(ctx context.Context) (result []*Settlement, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedKnownAsAfter(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.KnownAsAfterOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryKnownAsAfter().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Settlement) KnownAsBefore(ctx context.Context) (result []*Settlement, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedKnownAsBefore(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.KnownAsBeforeOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryKnownAsBefore().All(ctx)
+	}
+	return result, err
 }
 
 func (t *Technique) Art(ctx context.Context) (result []*Art, err error) {

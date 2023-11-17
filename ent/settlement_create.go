@@ -252,6 +252,36 @@ func (sc *SettlementCreate) SetDistrict(d *District) *SettlementCreate {
 	return sc.SetDistrictID(d.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Settlement entity by IDs.
+func (sc *SettlementCreate) AddKnownAsAfterIDs(ids ...int) *SettlementCreate {
+	sc.mutation.AddKnownAsAfterIDs(ids...)
+	return sc
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the Settlement entity.
+func (sc *SettlementCreate) AddKnownAsAfter(s ...*Settlement) *SettlementCreate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return sc.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Settlement entity by IDs.
+func (sc *SettlementCreate) AddKnownAsBeforeIDs(ids ...int) *SettlementCreate {
+	sc.mutation.AddKnownAsBeforeIDs(ids...)
+	return sc
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the Settlement entity.
+func (sc *SettlementCreate) AddKnownAsBefore(s ...*Settlement) *SettlementCreate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return sc.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (sc *SettlementCreate) Mutation() *SettlementMutation {
 	return sc.mutation
@@ -484,6 +514,38 @@ func (sc *SettlementCreate) createSpec() (*Settlement, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.district_settlements = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   settlement.KnownAsAfterTable,
+			Columns: settlement.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   settlement.KnownAsBeforeTable,
+			Columns: settlement.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -248,6 +248,36 @@ func (dc *DistrictCreate) SetRegion(r *Region) *DistrictCreate {
 	return dc.SetRegionID(r.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the District entity by IDs.
+func (dc *DistrictCreate) AddKnownAsAfterIDs(ids ...int) *DistrictCreate {
+	dc.mutation.AddKnownAsAfterIDs(ids...)
+	return dc
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the District entity.
+func (dc *DistrictCreate) AddKnownAsAfter(d ...*District) *DistrictCreate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return dc.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the District entity by IDs.
+func (dc *DistrictCreate) AddKnownAsBeforeIDs(ids ...int) *DistrictCreate {
+	dc.mutation.AddKnownAsBeforeIDs(ids...)
+	return dc
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the District entity.
+func (dc *DistrictCreate) AddKnownAsBefore(d ...*District) *DistrictCreate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return dc.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the DistrictMutation object of the builder.
 func (dc *DistrictCreate) Mutation() *DistrictMutation {
 	return dc.mutation
@@ -479,6 +509,38 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.region_districts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := dc.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   district.KnownAsAfterTable,
+			Columns: district.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := dc.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   district.KnownAsBeforeTable,
+			Columns: district.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

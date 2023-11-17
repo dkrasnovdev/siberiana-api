@@ -45,6 +45,10 @@ const (
 	EdgeRegion = "region"
 	// EdgeDistrict holds the string denoting the district edge name in mutations.
 	EdgeDistrict = "district"
+	// EdgeKnownAsAfter holds the string denoting the known_as_after edge name in mutations.
+	EdgeKnownAsAfter = "known_as_after"
+	// EdgeKnownAsBefore holds the string denoting the known_as_before edge name in mutations.
+	EdgeKnownAsBefore = "known_as_before"
 	// Table holds the table name of the settlement in the database.
 	Table = "settlements"
 	// ArtTable is the table that holds the art relation/edge.
@@ -96,6 +100,10 @@ const (
 	DistrictInverseTable = "districts"
 	// DistrictColumn is the table column denoting the district relation/edge.
 	DistrictColumn = "district_settlements"
+	// KnownAsAfterTable is the table that holds the known_as_after relation/edge. The primary key declared below.
+	KnownAsAfterTable = "settlement_known_as_before"
+	// KnownAsBeforeTable is the table that holds the known_as_before relation/edge. The primary key declared below.
+	KnownAsBeforeTable = "settlement_known_as_before"
 )
 
 // Columns holds all SQL columns for settlement fields.
@@ -117,6 +125,15 @@ var ForeignKeys = []string{
 	"district_settlements",
 	"region_settlements",
 }
+
+var (
+	// KnownAsAfterPrimaryKey and KnownAsAfterColumn2 are the table columns denoting the
+	// primary key for the known_as_after relation (M2M).
+	KnownAsAfterPrimaryKey = []string{"settlement_id", "known_as_after_id"}
+	// KnownAsBeforePrimaryKey and KnownAsBeforeColumn2 are the table columns denoting the
+	// primary key for the known_as_before relation (M2M).
+	KnownAsBeforePrimaryKey = []string{"settlement_id", "known_as_after_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -280,6 +297,34 @@ func ByDistrictField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDistrictStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByKnownAsAfterCount orders the results by known_as_after count.
+func ByKnownAsAfterCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newKnownAsAfterStep(), opts...)
+	}
+}
+
+// ByKnownAsAfter orders the results by known_as_after terms.
+func ByKnownAsAfter(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newKnownAsAfterStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByKnownAsBeforeCount orders the results by known_as_before count.
+func ByKnownAsBeforeCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newKnownAsBeforeStep(), opts...)
+	}
+}
+
+// ByKnownAsBefore orders the results by known_as_before terms.
+func ByKnownAsBefore(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newKnownAsBeforeStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newArtStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -327,5 +372,19 @@ func newDistrictStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DistrictInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, DistrictTable, DistrictColumn),
+	)
+}
+func newKnownAsAfterStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, KnownAsAfterTable, KnownAsAfterPrimaryKey...),
+	)
+}
+func newKnownAsBeforeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, KnownAsBeforeTable, KnownAsBeforePrimaryKey...),
 	)
 }

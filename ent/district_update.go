@@ -270,6 +270,36 @@ func (du *DistrictUpdate) SetRegion(r *Region) *DistrictUpdate {
 	return du.SetRegionID(r.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the District entity by IDs.
+func (du *DistrictUpdate) AddKnownAsAfterIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddKnownAsAfterIDs(ids...)
+	return du
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the District entity.
+func (du *DistrictUpdate) AddKnownAsAfter(d ...*District) *DistrictUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return du.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the District entity by IDs.
+func (du *DistrictUpdate) AddKnownAsBeforeIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddKnownAsBeforeIDs(ids...)
+	return du
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the District entity.
+func (du *DistrictUpdate) AddKnownAsBefore(d ...*District) *DistrictUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return du.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the DistrictMutation object of the builder.
 func (du *DistrictUpdate) Mutation() *DistrictMutation {
 	return du.mutation
@@ -405,6 +435,48 @@ func (du *DistrictUpdate) RemoveLocations(l ...*Location) *DistrictUpdate {
 func (du *DistrictUpdate) ClearRegion() *DistrictUpdate {
 	du.mutation.ClearRegion()
 	return du
+}
+
+// ClearKnownAsAfter clears all "known_as_after" edges to the District entity.
+func (du *DistrictUpdate) ClearKnownAsAfter() *DistrictUpdate {
+	du.mutation.ClearKnownAsAfter()
+	return du
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to District entities by IDs.
+func (du *DistrictUpdate) RemoveKnownAsAfterIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveKnownAsAfterIDs(ids...)
+	return du
+}
+
+// RemoveKnownAsAfter removes "known_as_after" edges to District entities.
+func (du *DistrictUpdate) RemoveKnownAsAfter(d ...*District) *DistrictUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return du.RemoveKnownAsAfterIDs(ids...)
+}
+
+// ClearKnownAsBefore clears all "known_as_before" edges to the District entity.
+func (du *DistrictUpdate) ClearKnownAsBefore() *DistrictUpdate {
+	du.mutation.ClearKnownAsBefore()
+	return du
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to District entities by IDs.
+func (du *DistrictUpdate) RemoveKnownAsBeforeIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveKnownAsBeforeIDs(ids...)
+	return du
+}
+
+// RemoveKnownAsBefore removes "known_as_before" edges to District entities.
+func (du *DistrictUpdate) RemoveKnownAsBefore(d ...*District) *DistrictUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return du.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -796,6 +868,96 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if du.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   district.KnownAsAfterTable,
+			Columns: district.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !du.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   district.KnownAsAfterTable,
+			Columns: district.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   district.KnownAsAfterTable,
+			Columns: district.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if du.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   district.KnownAsBeforeTable,
+			Columns: district.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !du.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   district.KnownAsBeforeTable,
+			Columns: district.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   district.KnownAsBeforeTable,
+			Columns: district.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, du.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{district.Label}
@@ -1051,6 +1213,36 @@ func (duo *DistrictUpdateOne) SetRegion(r *Region) *DistrictUpdateOne {
 	return duo.SetRegionID(r.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the District entity by IDs.
+func (duo *DistrictUpdateOne) AddKnownAsAfterIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddKnownAsAfterIDs(ids...)
+	return duo
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the District entity.
+func (duo *DistrictUpdateOne) AddKnownAsAfter(d ...*District) *DistrictUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return duo.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the District entity by IDs.
+func (duo *DistrictUpdateOne) AddKnownAsBeforeIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddKnownAsBeforeIDs(ids...)
+	return duo
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the District entity.
+func (duo *DistrictUpdateOne) AddKnownAsBefore(d ...*District) *DistrictUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return duo.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the DistrictMutation object of the builder.
 func (duo *DistrictUpdateOne) Mutation() *DistrictMutation {
 	return duo.mutation
@@ -1186,6 +1378,48 @@ func (duo *DistrictUpdateOne) RemoveLocations(l ...*Location) *DistrictUpdateOne
 func (duo *DistrictUpdateOne) ClearRegion() *DistrictUpdateOne {
 	duo.mutation.ClearRegion()
 	return duo
+}
+
+// ClearKnownAsAfter clears all "known_as_after" edges to the District entity.
+func (duo *DistrictUpdateOne) ClearKnownAsAfter() *DistrictUpdateOne {
+	duo.mutation.ClearKnownAsAfter()
+	return duo
+}
+
+// RemoveKnownAsAfterIDs removes the "known_as_after" edge to District entities by IDs.
+func (duo *DistrictUpdateOne) RemoveKnownAsAfterIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveKnownAsAfterIDs(ids...)
+	return duo
+}
+
+// RemoveKnownAsAfter removes "known_as_after" edges to District entities.
+func (duo *DistrictUpdateOne) RemoveKnownAsAfter(d ...*District) *DistrictUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return duo.RemoveKnownAsAfterIDs(ids...)
+}
+
+// ClearKnownAsBefore clears all "known_as_before" edges to the District entity.
+func (duo *DistrictUpdateOne) ClearKnownAsBefore() *DistrictUpdateOne {
+	duo.mutation.ClearKnownAsBefore()
+	return duo
+}
+
+// RemoveKnownAsBeforeIDs removes the "known_as_before" edge to District entities by IDs.
+func (duo *DistrictUpdateOne) RemoveKnownAsBeforeIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveKnownAsBeforeIDs(ids...)
+	return duo
+}
+
+// RemoveKnownAsBefore removes "known_as_before" edges to District entities.
+func (duo *DistrictUpdateOne) RemoveKnownAsBefore(d ...*District) *DistrictUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return duo.RemoveKnownAsBeforeIDs(ids...)
 }
 
 // Where appends a list predicates to the DistrictUpdate builder.
@@ -1600,6 +1834,96 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if duo.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   district.KnownAsAfterTable,
+			Columns: district.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedKnownAsAfterIDs(); len(nodes) > 0 && !duo.mutation.KnownAsAfterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   district.KnownAsAfterTable,
+			Columns: district.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   district.KnownAsAfterTable,
+			Columns: district.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if duo.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   district.KnownAsBeforeTable,
+			Columns: district.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedKnownAsBeforeIDs(); len(nodes) > 0 && !duo.mutation.KnownAsBeforeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   district.KnownAsBeforeTable,
+			Columns: district.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   district.KnownAsBeforeTable,
+			Columns: district.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

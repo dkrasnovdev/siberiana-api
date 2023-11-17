@@ -280,6 +280,36 @@ func (rc *RegionCreate) SetCountry(c *Country) *RegionCreate {
 	return rc.SetCountryID(c.ID)
 }
 
+// AddKnownAsAfterIDs adds the "known_as_after" edge to the Region entity by IDs.
+func (rc *RegionCreate) AddKnownAsAfterIDs(ids ...int) *RegionCreate {
+	rc.mutation.AddKnownAsAfterIDs(ids...)
+	return rc
+}
+
+// AddKnownAsAfter adds the "known_as_after" edges to the Region entity.
+func (rc *RegionCreate) AddKnownAsAfter(r ...*Region) *RegionCreate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return rc.AddKnownAsAfterIDs(ids...)
+}
+
+// AddKnownAsBeforeIDs adds the "known_as_before" edge to the Region entity by IDs.
+func (rc *RegionCreate) AddKnownAsBeforeIDs(ids ...int) *RegionCreate {
+	rc.mutation.AddKnownAsBeforeIDs(ids...)
+	return rc
+}
+
+// AddKnownAsBefore adds the "known_as_before" edges to the Region entity.
+func (rc *RegionCreate) AddKnownAsBefore(r ...*Region) *RegionCreate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return rc.AddKnownAsBeforeIDs(ids...)
+}
+
 // Mutation returns the RegionMutation object of the builder.
 func (rc *RegionCreate) Mutation() *RegionMutation {
 	return rc.mutation
@@ -543,6 +573,38 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.country_regions = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.KnownAsAfterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   region.KnownAsAfterTable,
+			Columns: region.KnownAsAfterPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.KnownAsBeforeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   region.KnownAsBeforeTable,
+			Columns: region.KnownAsBeforePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

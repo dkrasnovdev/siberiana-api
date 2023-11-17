@@ -2756,15 +2756,15 @@ func (c *CountryClient) QueryLocations(co *Country) *LocationQuery {
 	return query
 }
 
-// QueryKnownAsFor queries the known_as_for edge of a Country.
-func (c *CountryClient) QueryKnownAsFor(co *Country) *CountryQuery {
+// QueryKnownAsAfter queries the known_as_after edge of a Country.
+func (c *CountryClient) QueryKnownAsAfter(co *Country) *CountryQuery {
 	query := (&CountryClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(country.Table, country.FieldID, id),
 			sqlgraph.To(country.Table, country.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, country.KnownAsForTable, country.KnownAsForPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, country.KnownAsAfterTable, country.KnownAsAfterPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -2772,15 +2772,15 @@ func (c *CountryClient) QueryKnownAsFor(co *Country) *CountryQuery {
 	return query
 }
 
-// QueryKnownAs queries the known_as edge of a Country.
-func (c *CountryClient) QueryKnownAs(co *Country) *CountryQuery {
+// QueryKnownAsBefore queries the known_as_before edge of a Country.
+func (c *CountryClient) QueryKnownAsBefore(co *Country) *CountryQuery {
 	query := (&CountryClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := co.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(country.Table, country.FieldID, id),
 			sqlgraph.To(country.Table, country.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, country.KnownAsTable, country.KnownAsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, country.KnownAsBeforeTable, country.KnownAsBeforePrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -3193,6 +3193,38 @@ func (c *DistrictClient) QueryRegion(d *District) *RegionQuery {
 			sqlgraph.From(district.Table, district.FieldID, id),
 			sqlgraph.To(region.Table, region.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, district.RegionTable, district.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryKnownAsAfter queries the known_as_after edge of a District.
+func (c *DistrictClient) QueryKnownAsAfter(d *District) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, district.KnownAsAfterTable, district.KnownAsAfterPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryKnownAsBefore queries the known_as_before edge of a District.
+func (c *DistrictClient) QueryKnownAsBefore(d *District) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, district.KnownAsBeforeTable, district.KnownAsBeforePrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
@@ -7466,6 +7498,38 @@ func (c *RegionClient) QueryCountry(r *Region) *CountryQuery {
 	return query
 }
 
+// QueryKnownAsAfter queries the known_as_after edge of a Region.
+func (c *RegionClient) QueryKnownAsAfter(r *Region) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, region.KnownAsAfterTable, region.KnownAsAfterPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryKnownAsBefore queries the known_as_before edge of a Region.
+func (c *RegionClient) QueryKnownAsBefore(r *Region) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, region.KnownAsBeforeTable, region.KnownAsBeforePrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *RegionClient) Hooks() []Hook {
 	hooks := c.hooks.Region
@@ -7871,6 +7935,38 @@ func (c *SettlementClient) QueryDistrict(s *Settlement) *DistrictQuery {
 			sqlgraph.From(settlement.Table, settlement.FieldID, id),
 			sqlgraph.To(district.Table, district.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, settlement.DistrictTable, settlement.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryKnownAsAfter queries the known_as_after edge of a Settlement.
+func (c *SettlementClient) QueryKnownAsAfter(s *Settlement) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, settlement.KnownAsAfterTable, settlement.KnownAsAfterPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryKnownAsBefore queries the known_as_before edge of a Settlement.
+func (c *SettlementClient) QueryKnownAsBefore(s *Settlement) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, settlement.KnownAsBeforeTable, settlement.KnownAsBeforePrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

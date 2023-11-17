@@ -8483,13 +8483,13 @@ type CountryWhereInput struct {
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
 
-	// "known_as_for" edge predicates.
-	HasKnownAsFor     *bool                `json:"hasKnownAsFor,omitempty"`
-	HasKnownAsForWith []*CountryWhereInput `json:"hasKnownAsForWith,omitempty"`
+	// "known_as_after" edge predicates.
+	HasKnownAsAfter     *bool                `json:"hasKnownAsAfter,omitempty"`
+	HasKnownAsAfterWith []*CountryWhereInput `json:"hasKnownAsAfterWith,omitempty"`
 
-	// "known_as" edge predicates.
-	HasKnownAs     *bool                `json:"hasKnownAs,omitempty"`
-	HasKnownAsWith []*CountryWhereInput `json:"hasKnownAsWith,omitempty"`
+	// "known_as_before" edge predicates.
+	HasKnownAsBefore     *bool                `json:"hasKnownAsBefore,omitempty"`
+	HasKnownAsBeforeWith []*CountryWhereInput `json:"hasKnownAsBeforeWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -9014,41 +9014,41 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 		}
 		predicates = append(predicates, country.HasLocationsWith(with...))
 	}
-	if i.HasKnownAsFor != nil {
-		p := country.HasKnownAsFor()
-		if !*i.HasKnownAsFor {
+	if i.HasKnownAsAfter != nil {
+		p := country.HasKnownAsAfter()
+		if !*i.HasKnownAsAfter {
 			p = country.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasKnownAsForWith) > 0 {
-		with := make([]predicate.Country, 0, len(i.HasKnownAsForWith))
-		for _, w := range i.HasKnownAsForWith {
+	if len(i.HasKnownAsAfterWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasKnownAsAfterWith))
+		for _, w := range i.HasKnownAsAfterWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasKnownAsForWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasKnownAsAfterWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, country.HasKnownAsForWith(with...))
+		predicates = append(predicates, country.HasKnownAsAfterWith(with...))
 	}
-	if i.HasKnownAs != nil {
-		p := country.HasKnownAs()
-		if !*i.HasKnownAs {
+	if i.HasKnownAsBefore != nil {
+		p := country.HasKnownAsBefore()
+		if !*i.HasKnownAsBefore {
 			p = country.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasKnownAsWith) > 0 {
-		with := make([]predicate.Country, 0, len(i.HasKnownAsWith))
-		for _, w := range i.HasKnownAsWith {
+	if len(i.HasKnownAsBeforeWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasKnownAsBeforeWith))
+		for _, w := range i.HasKnownAsBeforeWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasKnownAsWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasKnownAsBeforeWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, country.HasKnownAsWith(with...))
+		predicates = append(predicates, country.HasKnownAsBeforeWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -9834,6 +9834,14 @@ type DistrictWhereInput struct {
 	// "region" edge predicates.
 	HasRegion     *bool               `json:"hasRegion,omitempty"`
 	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
+
+	// "known_as_after" edge predicates.
+	HasKnownAsAfter     *bool                 `json:"hasKnownAsAfter,omitempty"`
+	HasKnownAsAfterWith []*DistrictWhereInput `json:"hasKnownAsAfterWith,omitempty"`
+
+	// "known_as_before" edge predicates.
+	HasKnownAsBefore     *bool                 `json:"hasKnownAsBefore,omitempty"`
+	HasKnownAsBeforeWith []*DistrictWhereInput `json:"hasKnownAsBeforeWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -10375,6 +10383,42 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, district.HasRegionWith(with...))
+	}
+	if i.HasKnownAsAfter != nil {
+		p := district.HasKnownAsAfter()
+		if !*i.HasKnownAsAfter {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsAfterWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasKnownAsAfterWith))
+		for _, w := range i.HasKnownAsAfterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsAfterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasKnownAsAfterWith(with...))
+	}
+	if i.HasKnownAsBefore != nil {
+		p := district.HasKnownAsBefore()
+		if !*i.HasKnownAsBefore {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsBeforeWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasKnownAsBeforeWith))
+		for _, w := range i.HasKnownAsBeforeWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsBeforeWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasKnownAsBeforeWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -26116,6 +26160,14 @@ type RegionWhereInput struct {
 	// "country" edge predicates.
 	HasCountry     *bool                `json:"hasCountry,omitempty"`
 	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
+
+	// "known_as_after" edge predicates.
+	HasKnownAsAfter     *bool               `json:"hasKnownAsAfter,omitempty"`
+	HasKnownAsAfterWith []*RegionWhereInput `json:"hasKnownAsAfterWith,omitempty"`
+
+	// "known_as_before" edge predicates.
+	HasKnownAsBefore     *bool               `json:"hasKnownAsBefore,omitempty"`
+	HasKnownAsBeforeWith []*RegionWhereInput `json:"hasKnownAsBeforeWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -26693,6 +26745,42 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, region.HasCountryWith(with...))
+	}
+	if i.HasKnownAsAfter != nil {
+		p := region.HasKnownAsAfter()
+		if !*i.HasKnownAsAfter {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsAfterWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasKnownAsAfterWith))
+		for _, w := range i.HasKnownAsAfterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsAfterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasKnownAsAfterWith(with...))
+	}
+	if i.HasKnownAsBefore != nil {
+		p := region.HasKnownAsBefore()
+		if !*i.HasKnownAsBefore {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsBeforeWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasKnownAsBeforeWith))
+		for _, w := range i.HasKnownAsBeforeWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsBeforeWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasKnownAsBeforeWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -27478,6 +27566,14 @@ type SettlementWhereInput struct {
 	// "district" edge predicates.
 	HasDistrict     *bool                 `json:"hasDistrict,omitempty"`
 	HasDistrictWith []*DistrictWhereInput `json:"hasDistrictWith,omitempty"`
+
+	// "known_as_after" edge predicates.
+	HasKnownAsAfter     *bool                   `json:"hasKnownAsAfter,omitempty"`
+	HasKnownAsAfterWith []*SettlementWhereInput `json:"hasKnownAsAfterWith,omitempty"`
+
+	// "known_as_before" edge predicates.
+	HasKnownAsBefore     *bool                   `json:"hasKnownAsBefore,omitempty"`
+	HasKnownAsBeforeWith []*SettlementWhereInput `json:"hasKnownAsBeforeWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -28019,6 +28115,42 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, settlement.HasDistrictWith(with...))
+	}
+	if i.HasKnownAsAfter != nil {
+		p := settlement.HasKnownAsAfter()
+		if !*i.HasKnownAsAfter {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsAfterWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasKnownAsAfterWith))
+		for _, w := range i.HasKnownAsAfterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsAfterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasKnownAsAfterWith(with...))
+	}
+	if i.HasKnownAsBefore != nil {
+		p := settlement.HasKnownAsBefore()
+		if !*i.HasKnownAsBefore {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsBeforeWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasKnownAsBeforeWith))
+		for _, w := range i.HasKnownAsBeforeWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsBeforeWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasKnownAsBeforeWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

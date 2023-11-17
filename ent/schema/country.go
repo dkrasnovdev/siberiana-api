@@ -57,7 +57,7 @@ func (Country) Edges() []ent.Edge {
 		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
 		edge.To("regions", Region.Type),
 		edge.From("locations", Location.Type).Ref("country"),
-		edge.To("known_as", Country.Type).
-			From("known_as_for"),
+		edge.To("known_as_before", Country.Type).
+			From("known_as_after"),
 	}
 }

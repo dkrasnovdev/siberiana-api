@@ -37,6 +37,8 @@ type SettlementQuery struct {
 	withLocations                  *LocationQuery
 	withRegion                     *RegionQuery
 	withDistrict                   *DistrictQuery
+	withKnownAsAfter               *SettlementQuery
+	withKnownAsBefore              *SettlementQuery
 	withFKs                        bool
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*Settlement) error
@@ -45,6 +47,8 @@ type SettlementQuery struct {
 	withNamedBooks                 map[string]*BookQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	withNamedLocations             map[string]*LocationQuery
+	withNamedKnownAsAfter          map[string]*SettlementQuery
+	withNamedKnownAsBefore         map[string]*SettlementQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -228,6 +232,50 @@ func (sq *SettlementQuery) QueryDistrict() *DistrictQuery {
 			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
 			sqlgraph.To(district.Table, district.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, settlement.DistrictTable, settlement.DistrictColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryKnownAsAfter chains the current query on the "known_as_after" edge.
+func (sq *SettlementQuery) QueryKnownAsAfter() *SettlementQuery {
+	query := (&SettlementClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, settlement.KnownAsAfterTable, settlement.KnownAsAfterPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryKnownAsBefore chains the current query on the "known_as_before" edge.
+func (sq *SettlementQuery) QueryKnownAsBefore() *SettlementQuery {
+	query := (&SettlementClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, settlement.KnownAsBeforeTable, settlement.KnownAsBeforePrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -434,6 +482,8 @@ func (sq *SettlementQuery) Clone() *SettlementQuery {
 		withLocations:             sq.withLocations.Clone(),
 		withRegion:                sq.withRegion.Clone(),
 		withDistrict:              sq.withDistrict.Clone(),
+		withKnownAsAfter:          sq.withKnownAsAfter.Clone(),
+		withKnownAsBefore:         sq.withKnownAsBefore.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
@@ -514,6 +564,28 @@ func (sq *SettlementQuery) WithDistrict(opts ...func(*DistrictQuery)) *Settlemen
 		opt(query)
 	}
 	sq.withDistrict = query
+	return sq
+}
+
+// WithKnownAsAfter tells the query-builder to eager-load the nodes that are connected to
+// the "known_as_after" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithKnownAsAfter(opts ...func(*SettlementQuery)) *SettlementQuery {
+	query := (&SettlementClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withKnownAsAfter = query
+	return sq
+}
+
+// WithKnownAsBefore tells the query-builder to eager-load the nodes that are connected to
+// the "known_as_before" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithKnownAsBefore(opts ...func(*SettlementQuery)) *SettlementQuery {
+	query := (&SettlementClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withKnownAsBefore = query
 	return sq
 }
 
@@ -602,7 +674,7 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Settlement{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [9]bool{
 			sq.withArt != nil,
 			sq.withArtifacts != nil,
 			sq.withBooks != nil,
@@ -610,6 +682,8 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			sq.withLocations != nil,
 			sq.withRegion != nil,
 			sq.withDistrict != nil,
+			sq.withKnownAsAfter != nil,
+			sq.withKnownAsBefore != nil,
 		}
 	)
 	if sq.withRegion != nil || sq.withDistrict != nil {
@@ -688,6 +762,20 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := sq.withKnownAsAfter; query != nil {
+		if err := sq.loadKnownAsAfter(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.KnownAsAfter = []*Settlement{} },
+			func(n *Settlement, e *Settlement) { n.Edges.KnownAsAfter = append(n.Edges.KnownAsAfter, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withKnownAsBefore; query != nil {
+		if err := sq.loadKnownAsBefore(ctx, query, nodes,
+			func(n *Settlement) { n.Edges.KnownAsBefore = []*Settlement{} },
+			func(n *Settlement, e *Settlement) { n.Edges.KnownAsBefore = append(n.Edges.KnownAsBefore, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range sq.withNamedArt {
 		if err := sq.loadArt(ctx, query, nodes,
 			func(n *Settlement) { n.appendNamedArt(name) },
@@ -720,6 +808,20 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := sq.loadLocations(ctx, query, nodes,
 			func(n *Settlement) { n.appendNamedLocations(name) },
 			func(n *Settlement, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedKnownAsAfter {
+		if err := sq.loadKnownAsAfter(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedKnownAsAfter(name) },
+			func(n *Settlement, e *Settlement) { n.appendNamedKnownAsAfter(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedKnownAsBefore {
+		if err := sq.loadKnownAsBefore(ctx, query, nodes,
+			func(n *Settlement) { n.appendNamedKnownAsBefore(name) },
+			func(n *Settlement, e *Settlement) { n.appendNamedKnownAsBefore(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -950,6 +1052,128 @@ func (sq *SettlementQuery) loadDistrict(ctx context.Context, query *DistrictQuer
 	}
 	return nil
 }
+func (sq *SettlementQuery) loadKnownAsAfter(ctx context.Context, query *SettlementQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Settlement)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Settlement)
+	nids := make(map[int]map[*Settlement]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(settlement.KnownAsAfterTable)
+		s.Join(joinT).On(s.C(settlement.FieldID), joinT.C(settlement.KnownAsAfterPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(settlement.KnownAsAfterPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(settlement.KnownAsAfterPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Settlement]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Settlement](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as_after" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (sq *SettlementQuery) loadKnownAsBefore(ctx context.Context, query *SettlementQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Settlement)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Settlement)
+	nids := make(map[int]map[*Settlement]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(settlement.KnownAsBeforeTable)
+		s.Join(joinT).On(s.C(settlement.FieldID), joinT.C(settlement.KnownAsBeforePrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(settlement.KnownAsBeforePrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(settlement.KnownAsBeforePrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Settlement]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Settlement](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as_before" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (sq *SettlementQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := sq.querySpec()
@@ -1102,6 +1326,34 @@ func (sq *SettlementQuery) WithNamedLocations(name string, opts ...func(*Locatio
 		sq.withNamedLocations = make(map[string]*LocationQuery)
 	}
 	sq.withNamedLocations[name] = query
+	return sq
+}
+
+// WithNamedKnownAsAfter tells the query-builder to eager-load the nodes that are connected to the "known_as_after"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithNamedKnownAsAfter(name string, opts ...func(*SettlementQuery)) *SettlementQuery {
+	query := (&SettlementClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedKnownAsAfter == nil {
+		sq.withNamedKnownAsAfter = make(map[string]*SettlementQuery)
+	}
+	sq.withNamedKnownAsAfter[name] = query
+	return sq
+}
+
+// WithNamedKnownAsBefore tells the query-builder to eager-load the nodes that are connected to the "known_as_before"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithNamedKnownAsBefore(name string, opts ...func(*SettlementQuery)) *SettlementQuery {
+	query := (&SettlementClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedKnownAsBefore == nil {
+		sq.withNamedKnownAsBefore = make(map[string]*SettlementQuery)
+	}
+	sq.withNamedKnownAsBefore[name] = query
 	return sq
 }
 
