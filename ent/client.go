@@ -2756,6 +2756,38 @@ func (c *CountryClient) QueryLocations(co *Country) *LocationQuery {
 	return query
 }
 
+// QueryKnownAsFor queries the known_as_for edge of a Country.
+func (c *CountryClient) QueryKnownAsFor(co *Country) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, country.KnownAsForTable, country.KnownAsForPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryKnownAs queries the known_as edge of a Country.
+func (c *CountryClient) QueryKnownAs(co *Country) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, country.KnownAsTable, country.KnownAsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *CountryClient) Hooks() []Hook {
 	hooks := c.hooks.Country

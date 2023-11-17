@@ -35,6 +35,8 @@ type CountryQuery struct {
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	withRegions                    *RegionQuery
 	withLocations                  *LocationQuery
+	withKnownAsFor                 *CountryQuery
+	withKnownAs                    *CountryQuery
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*Country) error
 	withNamedArt                   map[string]*ArtQuery
@@ -43,6 +45,8 @@ type CountryQuery struct {
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	withNamedRegions               map[string]*RegionQuery
 	withNamedLocations             map[string]*LocationQuery
+	withNamedKnownAsFor            map[string]*CountryQuery
+	withNamedKnownAs               map[string]*CountryQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -204,6 +208,50 @@ func (cq *CountryQuery) QueryLocations() *LocationQuery {
 			sqlgraph.From(country.Table, country.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, country.LocationsTable, country.LocationsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryKnownAsFor chains the current query on the "known_as_for" edge.
+func (cq *CountryQuery) QueryKnownAsFor() *CountryQuery {
+	query := (&CountryClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, country.KnownAsForTable, country.KnownAsForPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryKnownAs chains the current query on the "known_as" edge.
+func (cq *CountryQuery) QueryKnownAs() *CountryQuery {
+	query := (&CountryClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, country.KnownAsTable, country.KnownAsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -409,6 +457,8 @@ func (cq *CountryQuery) Clone() *CountryQuery {
 		withProtectedAreaPictures: cq.withProtectedAreaPictures.Clone(),
 		withRegions:               cq.withRegions.Clone(),
 		withLocations:             cq.withLocations.Clone(),
+		withKnownAsFor:            cq.withKnownAsFor.Clone(),
+		withKnownAs:               cq.withKnownAs.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
 		path: cq.path,
@@ -478,6 +528,28 @@ func (cq *CountryQuery) WithLocations(opts ...func(*LocationQuery)) *CountryQuer
 		opt(query)
 	}
 	cq.withLocations = query
+	return cq
+}
+
+// WithKnownAsFor tells the query-builder to eager-load the nodes that are connected to
+// the "known_as_for" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithKnownAsFor(opts ...func(*CountryQuery)) *CountryQuery {
+	query := (&CountryClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withKnownAsFor = query
+	return cq
+}
+
+// WithKnownAs tells the query-builder to eager-load the nodes that are connected to
+// the "known_as" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithKnownAs(opts ...func(*CountryQuery)) *CountryQuery {
+	query := (&CountryClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withKnownAs = query
 	return cq
 }
 
@@ -565,13 +637,15 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	var (
 		nodes       = []*Country{}
 		_spec       = cq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [8]bool{
 			cq.withArt != nil,
 			cq.withArtifacts != nil,
 			cq.withBooks != nil,
 			cq.withProtectedAreaPictures != nil,
 			cq.withRegions != nil,
 			cq.withLocations != nil,
+			cq.withKnownAsFor != nil,
+			cq.withKnownAs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -639,6 +713,20 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 			return nil, err
 		}
 	}
+	if query := cq.withKnownAsFor; query != nil {
+		if err := cq.loadKnownAsFor(ctx, query, nodes,
+			func(n *Country) { n.Edges.KnownAsFor = []*Country{} },
+			func(n *Country, e *Country) { n.Edges.KnownAsFor = append(n.Edges.KnownAsFor, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withKnownAs; query != nil {
+		if err := cq.loadKnownAs(ctx, query, nodes,
+			func(n *Country) { n.Edges.KnownAs = []*Country{} },
+			func(n *Country, e *Country) { n.Edges.KnownAs = append(n.Edges.KnownAs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedArt {
 		if err := cq.loadArt(ctx, query, nodes,
 			func(n *Country) { n.appendNamedArt(name) },
@@ -678,6 +766,20 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 		if err := cq.loadLocations(ctx, query, nodes,
 			func(n *Country) { n.appendNamedLocations(name) },
 			func(n *Country, e *Location) { n.appendNamedLocations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedKnownAsFor {
+		if err := cq.loadKnownAsFor(ctx, query, nodes,
+			func(n *Country) { n.appendNamedKnownAsFor(name) },
+			func(n *Country, e *Country) { n.appendNamedKnownAsFor(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedKnownAs {
+		if err := cq.loadKnownAs(ctx, query, nodes,
+			func(n *Country) { n.appendNamedKnownAs(name) },
+			func(n *Country, e *Country) { n.appendNamedKnownAs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -875,6 +977,128 @@ func (cq *CountryQuery) loadLocations(ctx context.Context, query *LocationQuery,
 	}
 	return nil
 }
+func (cq *CountryQuery) loadKnownAsFor(ctx context.Context, query *CountryQuery, nodes []*Country, init func(*Country), assign func(*Country, *Country)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Country)
+	nids := make(map[int]map[*Country]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(country.KnownAsForTable)
+		s.Join(joinT).On(s.C(country.FieldID), joinT.C(country.KnownAsForPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(country.KnownAsForPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(country.KnownAsForPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Country]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Country](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as_for" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (cq *CountryQuery) loadKnownAs(ctx context.Context, query *CountryQuery, nodes []*Country, init func(*Country), assign func(*Country, *Country)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Country)
+	nids := make(map[int]map[*Country]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(country.KnownAsTable)
+		s.Join(joinT).On(s.C(country.FieldID), joinT.C(country.KnownAsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(country.KnownAsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(country.KnownAsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Country]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Country](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "known_as" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cq *CountryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
@@ -1041,6 +1265,34 @@ func (cq *CountryQuery) WithNamedLocations(name string, opts ...func(*LocationQu
 		cq.withNamedLocations = make(map[string]*LocationQuery)
 	}
 	cq.withNamedLocations[name] = query
+	return cq
+}
+
+// WithNamedKnownAsFor tells the query-builder to eager-load the nodes that are connected to the "known_as_for"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedKnownAsFor(name string, opts ...func(*CountryQuery)) *CountryQuery {
+	query := (&CountryClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedKnownAsFor == nil {
+		cq.withNamedKnownAsFor = make(map[string]*CountryQuery)
+	}
+	cq.withNamedKnownAsFor[name] = query
+	return cq
+}
+
+// WithNamedKnownAs tells the query-builder to eager-load the nodes that are connected to the "known_as"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedKnownAs(name string, opts ...func(*CountryQuery)) *CountryQuery {
+	query := (&CountryClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedKnownAs == nil {
+		cq.withNamedKnownAs = make(map[string]*CountryQuery)
+	}
+	cq.withNamedKnownAs[name] = query
 	return cq
 }
 

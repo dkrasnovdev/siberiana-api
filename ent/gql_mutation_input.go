@@ -2262,6 +2262,8 @@ type CreateCountryInput struct {
 	ProtectedAreaPictureIDs []int
 	RegionIDs               []int
 	LocationIDs             []int
+	KnownAsForIDs           []int
+	KnownAIDs               []int
 }
 
 // Mutate applies the CreateCountryInput on the CountryMutation builder.
@@ -2308,6 +2310,12 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
+	if v := i.KnownAsForIDs; len(v) > 0 {
+		m.AddKnownAsForIDs(v...)
+	}
+	if v := i.KnownAIDs; len(v) > 0 {
+		m.AddKnownAIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateCountryInput on the CountryCreate builder.
@@ -2349,6 +2357,12 @@ type UpdateCountryInput struct {
 	ClearLocations                bool
 	AddLocationIDs                []int
 	RemoveLocationIDs             []int
+	ClearKnownAsFor               bool
+	AddKnownAsForIDs              []int
+	RemoveKnownAsForIDs           []int
+	ClearKnownAs                  bool
+	AddKnownAIDs                  []int
+	RemoveKnownAIDs               []int
 }
 
 // Mutate applies the UpdateCountryInput on the CountryMutation builder.
@@ -2445,6 +2459,24 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	}
 	if v := i.RemoveLocationIDs; len(v) > 0 {
 		m.RemoveLocationIDs(v...)
+	}
+	if i.ClearKnownAsFor {
+		m.ClearKnownAsFor()
+	}
+	if v := i.AddKnownAsForIDs; len(v) > 0 {
+		m.AddKnownAsForIDs(v...)
+	}
+	if v := i.RemoveKnownAsForIDs; len(v) > 0 {
+		m.RemoveKnownAsForIDs(v...)
+	}
+	if i.ClearKnownAs {
+		m.ClearKnownAs()
+	}
+	if v := i.AddKnownAIDs; len(v) > 0 {
+		m.AddKnownAIDs(v...)
+	}
+	if v := i.RemoveKnownAIDs; len(v) > 0 {
+		m.RemoveKnownAIDs(v...)
 	}
 }
 

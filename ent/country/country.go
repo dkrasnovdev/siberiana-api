@@ -43,6 +43,10 @@ const (
 	EdgeRegions = "regions"
 	// EdgeLocations holds the string denoting the locations edge name in mutations.
 	EdgeLocations = "locations"
+	// EdgeKnownAsFor holds the string denoting the known_as_for edge name in mutations.
+	EdgeKnownAsFor = "known_as_for"
+	// EdgeKnownAs holds the string denoting the known_as edge name in mutations.
+	EdgeKnownAs = "known_as"
 	// Table holds the table name of the country in the database.
 	Table = "countries"
 	// ArtTable is the table that holds the art relation/edge.
@@ -87,6 +91,10 @@ const (
 	LocationsInverseTable = "locations"
 	// LocationsColumn is the table column denoting the locations relation/edge.
 	LocationsColumn = "location_country"
+	// KnownAsForTable is the table that holds the known_as_for relation/edge. The primary key declared below.
+	KnownAsForTable = "country_known_as"
+	// KnownAsTable is the table that holds the known_as relation/edge. The primary key declared below.
+	KnownAsTable = "country_known_as"
 )
 
 // Columns holds all SQL columns for country fields.
@@ -101,6 +109,15 @@ var Columns = []string{
 	FieldDescription,
 	FieldExternalLink,
 }
+
+var (
+	// KnownAsForPrimaryKey and KnownAsForColumn2 are the table columns denoting the
+	// primary key for the known_as_for relation (M2M).
+	KnownAsForPrimaryKey = []string{"country_id", "known_as_for_id"}
+	// KnownAsPrimaryKey and KnownAsColumn2 are the table columns denoting the
+	// primary key for the known_as relation (M2M).
+	KnownAsPrimaryKey = []string{"country_id", "known_as_for_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -259,6 +276,34 @@ func ByLocations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newLocationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByKnownAsForCount orders the results by known_as_for count.
+func ByKnownAsForCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newKnownAsForStep(), opts...)
+	}
+}
+
+// ByKnownAsFor orders the results by known_as_for terms.
+func ByKnownAsFor(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newKnownAsForStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByKnownAsCount orders the results by known_as count.
+func ByKnownAsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newKnownAsStep(), opts...)
+	}
+}
+
+// ByKnownAs orders the results by known_as terms.
+func ByKnownAs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newKnownAsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newArtStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -299,5 +344,19 @@ func newLocationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LocationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, LocationsTable, LocationsColumn),
+	)
+}
+func newKnownAsForStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, KnownAsForTable, KnownAsForPrimaryKey...),
+	)
+}
+func newKnownAsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, KnownAsTable, KnownAsPrimaryKey...),
 	)
 }

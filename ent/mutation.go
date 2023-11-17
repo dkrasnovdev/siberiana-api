@@ -15597,6 +15597,12 @@ type CountryMutation struct {
 	locations                      map[int]struct{}
 	removedlocations               map[int]struct{}
 	clearedlocations               bool
+	known_as_for                   map[int]struct{}
+	removedknown_as_for            map[int]struct{}
+	clearedknown_as_for            bool
+	known_as                       map[int]struct{}
+	removedknown_as                map[int]struct{}
+	clearedknown_as                bool
 	done                           bool
 	oldValue                       func(context.Context) (*Country, error)
 	predicates                     []predicate.Country
@@ -16390,6 +16396,114 @@ func (m *CountryMutation) ResetLocations() {
 	m.removedlocations = nil
 }
 
+// AddKnownAsForIDs adds the "known_as_for" edge to the Country entity by ids.
+func (m *CountryMutation) AddKnownAsForIDs(ids ...int) {
+	if m.known_as_for == nil {
+		m.known_as_for = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as_for[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAsFor clears the "known_as_for" edge to the Country entity.
+func (m *CountryMutation) ClearKnownAsFor() {
+	m.clearedknown_as_for = true
+}
+
+// KnownAsForCleared reports if the "known_as_for" edge to the Country entity was cleared.
+func (m *CountryMutation) KnownAsForCleared() bool {
+	return m.clearedknown_as_for
+}
+
+// RemoveKnownAsForIDs removes the "known_as_for" edge to the Country entity by IDs.
+func (m *CountryMutation) RemoveKnownAsForIDs(ids ...int) {
+	if m.removedknown_as_for == nil {
+		m.removedknown_as_for = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as_for, ids[i])
+		m.removedknown_as_for[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAsFor returns the removed IDs of the "known_as_for" edge to the Country entity.
+func (m *CountryMutation) RemovedKnownAsForIDs() (ids []int) {
+	for id := range m.removedknown_as_for {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsForIDs returns the "known_as_for" edge IDs in the mutation.
+func (m *CountryMutation) KnownAsForIDs() (ids []int) {
+	for id := range m.known_as_for {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAsFor resets all changes to the "known_as_for" edge.
+func (m *CountryMutation) ResetKnownAsFor() {
+	m.known_as_for = nil
+	m.clearedknown_as_for = false
+	m.removedknown_as_for = nil
+}
+
+// AddKnownAIDs adds the "known_as" edge to the Country entity by ids.
+func (m *CountryMutation) AddKnownAIDs(ids ...int) {
+	if m.known_as == nil {
+		m.known_as = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.known_as[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKnownAs clears the "known_as" edge to the Country entity.
+func (m *CountryMutation) ClearKnownAs() {
+	m.clearedknown_as = true
+}
+
+// KnownAsCleared reports if the "known_as" edge to the Country entity was cleared.
+func (m *CountryMutation) KnownAsCleared() bool {
+	return m.clearedknown_as
+}
+
+// RemoveKnownAIDs removes the "known_as" edge to the Country entity by IDs.
+func (m *CountryMutation) RemoveKnownAIDs(ids ...int) {
+	if m.removedknown_as == nil {
+		m.removedknown_as = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.known_as, ids[i])
+		m.removedknown_as[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKnownAs returns the removed IDs of the "known_as" edge to the Country entity.
+func (m *CountryMutation) RemovedKnownAsIDs() (ids []int) {
+	for id := range m.removedknown_as {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KnownAsIDs returns the "known_as" edge IDs in the mutation.
+func (m *CountryMutation) KnownAsIDs() (ids []int) {
+	for id := range m.known_as {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKnownAs resets all changes to the "known_as" edge.
+func (m *CountryMutation) ResetKnownAs() {
+	m.known_as = nil
+	m.clearedknown_as = false
+	m.removedknown_as = nil
+}
+
 // Where appends a list predicates to the CountryMutation builder.
 func (m *CountryMutation) Where(ps ...predicate.Country) {
 	m.predicates = append(m.predicates, ps...)
@@ -16681,7 +16795,7 @@ func (m *CountryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CountryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 8)
 	if m.art != nil {
 		edges = append(edges, country.EdgeArt)
 	}
@@ -16699,6 +16813,12 @@ func (m *CountryMutation) AddedEdges() []string {
 	}
 	if m.locations != nil {
 		edges = append(edges, country.EdgeLocations)
+	}
+	if m.known_as_for != nil {
+		edges = append(edges, country.EdgeKnownAsFor)
+	}
+	if m.known_as != nil {
+		edges = append(edges, country.EdgeKnownAs)
 	}
 	return edges
 }
@@ -16743,13 +16863,25 @@ func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case country.EdgeKnownAsFor:
+		ids := make([]ent.Value, 0, len(m.known_as_for))
+		for id := range m.known_as_for {
+			ids = append(ids, id)
+		}
+		return ids
+	case country.EdgeKnownAs:
+		ids := make([]ent.Value, 0, len(m.known_as))
+		for id := range m.known_as {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CountryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 8)
 	if m.removedart != nil {
 		edges = append(edges, country.EdgeArt)
 	}
@@ -16767,6 +16899,12 @@ func (m *CountryMutation) RemovedEdges() []string {
 	}
 	if m.removedlocations != nil {
 		edges = append(edges, country.EdgeLocations)
+	}
+	if m.removedknown_as_for != nil {
+		edges = append(edges, country.EdgeKnownAsFor)
+	}
+	if m.removedknown_as != nil {
+		edges = append(edges, country.EdgeKnownAs)
 	}
 	return edges
 }
@@ -16811,13 +16949,25 @@ func (m *CountryMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case country.EdgeKnownAsFor:
+		ids := make([]ent.Value, 0, len(m.removedknown_as_for))
+		for id := range m.removedknown_as_for {
+			ids = append(ids, id)
+		}
+		return ids
+	case country.EdgeKnownAs:
+		ids := make([]ent.Value, 0, len(m.removedknown_as))
+		for id := range m.removedknown_as {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CountryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 8)
 	if m.clearedart {
 		edges = append(edges, country.EdgeArt)
 	}
@@ -16835,6 +16985,12 @@ func (m *CountryMutation) ClearedEdges() []string {
 	}
 	if m.clearedlocations {
 		edges = append(edges, country.EdgeLocations)
+	}
+	if m.clearedknown_as_for {
+		edges = append(edges, country.EdgeKnownAsFor)
+	}
+	if m.clearedknown_as {
+		edges = append(edges, country.EdgeKnownAs)
 	}
 	return edges
 }
@@ -16855,6 +17011,10 @@ func (m *CountryMutation) EdgeCleared(name string) bool {
 		return m.clearedregions
 	case country.EdgeLocations:
 		return m.clearedlocations
+	case country.EdgeKnownAsFor:
+		return m.clearedknown_as_for
+	case country.EdgeKnownAs:
+		return m.clearedknown_as
 	}
 	return false
 }
@@ -16888,6 +17048,12 @@ func (m *CountryMutation) ResetEdge(name string) error {
 		return nil
 	case country.EdgeLocations:
 		m.ResetLocations()
+		return nil
+	case country.EdgeKnownAsFor:
+		m.ResetKnownAsFor()
+		return nil
+	case country.EdgeKnownAs:
+		m.ResetKnownAs()
 		return nil
 	}
 	return fmt.Errorf("unknown Country edge %s", name)

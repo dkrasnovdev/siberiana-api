@@ -1321,6 +1321,31 @@ var (
 			},
 		},
 	}
+	// CountryKnownAsColumns holds the columns for the "country_known_as" table.
+	CountryKnownAsColumns = []*schema.Column{
+		{Name: "country_id", Type: field.TypeInt},
+		{Name: "known_as_for_id", Type: field.TypeInt},
+	}
+	// CountryKnownAsTable holds the schema information for the "country_known_as" table.
+	CountryKnownAsTable = &schema.Table{
+		Name:       "country_known_as",
+		Columns:    CountryKnownAsColumns,
+		PrimaryKey: []*schema.Column{CountryKnownAsColumns[0], CountryKnownAsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "country_known_as_country_id",
+				Columns:    []*schema.Column{CountryKnownAsColumns[0]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "country_known_as_known_as_for_id",
+				Columns:    []*schema.Column{CountryKnownAsColumns[1]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// MediumArtifactsColumns holds the columns for the "medium_artifacts" table.
 	MediumArtifactsColumns = []*schema.Column{
 		{Name: "medium_id", Type: field.TypeInt},
@@ -1740,6 +1765,7 @@ var (
 		ArtGenreArtTable,
 		ArtStyleArtTable,
 		BookGenreBooksTable,
+		CountryKnownAsTable,
 		MediumArtifactsTable,
 		MonumentSetsTable,
 		PersonCollectionsTable,
@@ -1824,6 +1850,8 @@ func init() {
 	ArtStyleArtTable.ForeignKeys[1].RefTable = ArtsTable
 	BookGenreBooksTable.ForeignKeys[0].RefTable = BookGenresTable
 	BookGenreBooksTable.ForeignKeys[1].RefTable = BooksTable
+	CountryKnownAsTable.ForeignKeys[0].RefTable = CountriesTable
+	CountryKnownAsTable.ForeignKeys[1].RefTable = CountriesTable
 	MediumArtifactsTable.ForeignKeys[0].RefTable = MediaTable
 	MediumArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	MonumentSetsTable.ForeignKeys[0].RefTable = MonumentsTable

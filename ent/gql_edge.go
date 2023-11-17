@@ -568,6 +568,30 @@ func (c *Country) Locations(ctx context.Context) (result []*Location, err error)
 	return result, err
 }
 
+func (c *Country) KnownAsFor(ctx context.Context) (result []*Country, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedKnownAsFor(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.KnownAsForOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryKnownAsFor().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Country) KnownAs(ctx context.Context) (result []*Country, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedKnownAs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.KnownAsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryKnownAs().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Culture) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)

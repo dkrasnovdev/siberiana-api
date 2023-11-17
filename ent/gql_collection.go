@@ -2121,6 +2121,30 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			c.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
+		case "knownAsFor":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedKnownAsFor(alias, func(wq *CountryQuery) {
+				*wq = *query
+			})
+		case "knownAs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedKnownAs(alias, func(wq *CountryQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[country.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, country.FieldCreatedAt)

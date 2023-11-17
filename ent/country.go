@@ -53,11 +53,15 @@ type CountryEdges struct {
 	Regions []*Region `json:"regions,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
+	// KnownAsFor holds the value of the known_as_for edge.
+	KnownAsFor []*Country `json:"known_as_for,omitempty"`
+	// KnownAs holds the value of the known_as edge.
+	KnownAs []*Country `json:"known_as,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [8]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
@@ -65,6 +69,8 @@ type CountryEdges struct {
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedRegions               map[string][]*Region
 	namedLocations             map[string][]*Location
+	namedKnownAsFor            map[string][]*Country
+	namedKnownAs               map[string][]*Country
 }
 
 // ArtOrErr returns the Art value or an error if the edge
@@ -119,6 +125,24 @@ func (e CountryEdges) LocationsOrErr() ([]*Location, error) {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
+}
+
+// KnownAsForOrErr returns the KnownAsFor value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) KnownAsForOrErr() ([]*Country, error) {
+	if e.loadedTypes[6] {
+		return e.KnownAsFor, nil
+	}
+	return nil, &NotLoadedError{edge: "known_as_for"}
+}
+
+// KnownAsOrErr returns the KnownAs value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) KnownAsOrErr() ([]*Country, error) {
+	if e.loadedTypes[7] {
+		return e.KnownAs, nil
+	}
+	return nil, &NotLoadedError{edge: "known_as"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -242,6 +266,16 @@ func (c *Country) QueryRegions() *RegionQuery {
 // QueryLocations queries the "locations" edge of the Country entity.
 func (c *Country) QueryLocations() *LocationQuery {
 	return NewCountryClient(c.config).QueryLocations(c)
+}
+
+// QueryKnownAsFor queries the "known_as_for" edge of the Country entity.
+func (c *Country) QueryKnownAsFor() *CountryQuery {
+	return NewCountryClient(c.config).QueryKnownAsFor(c)
+}
+
+// QueryKnownAs queries the "known_as" edge of the Country entity.
+func (c *Country) QueryKnownAs() *CountryQuery {
+	return NewCountryClient(c.config).QueryKnownAs(c)
 }
 
 // Update returns a builder for updating this Country.
@@ -435,6 +469,54 @@ func (c *Country) appendNamedLocations(name string, edges ...*Location) {
 		c.Edges.namedLocations[name] = []*Location{}
 	} else {
 		c.Edges.namedLocations[name] = append(c.Edges.namedLocations[name], edges...)
+	}
+}
+
+// NamedKnownAsFor returns the KnownAsFor named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedKnownAsFor(name string) ([]*Country, error) {
+	if c.Edges.namedKnownAsFor == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedKnownAsFor[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedKnownAsFor(name string, edges ...*Country) {
+	if c.Edges.namedKnownAsFor == nil {
+		c.Edges.namedKnownAsFor = make(map[string][]*Country)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedKnownAsFor[name] = []*Country{}
+	} else {
+		c.Edges.namedKnownAsFor[name] = append(c.Edges.namedKnownAsFor[name], edges...)
+	}
+}
+
+// NamedKnownAs returns the KnownAs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedKnownAs(name string) ([]*Country, error) {
+	if c.Edges.namedKnownAs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedKnownAs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedKnownAs(name string, edges ...*Country) {
+	if c.Edges.namedKnownAs == nil {
+		c.Edges.namedKnownAs = make(map[string][]*Country)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedKnownAs[name] = []*Country{}
+	} else {
+		c.Edges.namedKnownAs[name] = append(c.Edges.namedKnownAs[name], edges...)
 	}
 }
 

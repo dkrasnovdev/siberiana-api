@@ -8482,6 +8482,14 @@ type CountryWhereInput struct {
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
+
+	// "known_as_for" edge predicates.
+	HasKnownAsFor     *bool                `json:"hasKnownAsFor,omitempty"`
+	HasKnownAsForWith []*CountryWhereInput `json:"hasKnownAsForWith,omitempty"`
+
+	// "known_as" edge predicates.
+	HasKnownAs     *bool                `json:"hasKnownAs,omitempty"`
+	HasKnownAsWith []*CountryWhereInput `json:"hasKnownAsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -9005,6 +9013,42 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, country.HasLocationsWith(with...))
+	}
+	if i.HasKnownAsFor != nil {
+		p := country.HasKnownAsFor()
+		if !*i.HasKnownAsFor {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsForWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasKnownAsForWith))
+		for _, w := range i.HasKnownAsForWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsForWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasKnownAsForWith(with...))
+	}
+	if i.HasKnownAs != nil {
+		p := country.HasKnownAs()
+		if !*i.HasKnownAs {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasKnownAsWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasKnownAsWith))
+		for _, w := range i.HasKnownAsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasKnownAsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasKnownAsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

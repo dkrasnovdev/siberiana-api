@@ -228,6 +228,36 @@ func (cc *CountryCreate) AddLocations(l ...*Location) *CountryCreate {
 	return cc.AddLocationIDs(ids...)
 }
 
+// AddKnownAsForIDs adds the "known_as_for" edge to the Country entity by IDs.
+func (cc *CountryCreate) AddKnownAsForIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddKnownAsForIDs(ids...)
+	return cc
+}
+
+// AddKnownAsFor adds the "known_as_for" edges to the Country entity.
+func (cc *CountryCreate) AddKnownAsFor(c ...*Country) *CountryCreate {
+	ids := make([]int, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cc.AddKnownAsForIDs(ids...)
+}
+
+// AddKnownAIDs adds the "known_as" edge to the Country entity by IDs.
+func (cc *CountryCreate) AddKnownAIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddKnownAIDs(ids...)
+	return cc
+}
+
+// AddKnownAs adds the "known_as" edges to the Country entity.
+func (cc *CountryCreate) AddKnownAs(c ...*Country) *CountryCreate {
+	ids := make([]int, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return cc.AddKnownAIDs(ids...)
+}
+
 // Mutation returns the CountryMutation object of the builder.
 func (cc *CountryCreate) Mutation() *CountryMutation {
 	return cc.mutation
@@ -437,6 +467,38 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.KnownAsForIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   country.KnownAsForTable,
+			Columns: country.KnownAsForPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.KnownAsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   country.KnownAsTable,
+			Columns: country.KnownAsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

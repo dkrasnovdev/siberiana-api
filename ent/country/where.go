@@ -763,6 +763,52 @@ func HasLocationsWith(preds ...predicate.Location) predicate.Country {
 	})
 }
 
+// HasKnownAsFor applies the HasEdge predicate on the "known_as_for" edge.
+func HasKnownAsFor() predicate.Country {
+	return predicate.Country(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, KnownAsForTable, KnownAsForPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasKnownAsForWith applies the HasEdge predicate on the "known_as_for" edge with a given conditions (other predicates).
+func HasKnownAsForWith(preds ...predicate.Country) predicate.Country {
+	return predicate.Country(func(s *sql.Selector) {
+		step := newKnownAsForStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasKnownAs applies the HasEdge predicate on the "known_as" edge.
+func HasKnownAs() predicate.Country {
+	return predicate.Country(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, KnownAsTable, KnownAsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasKnownAsWith applies the HasEdge predicate on the "known_as" edge with a given conditions (other predicates).
+func HasKnownAsWith(preds ...predicate.Country) predicate.Country {
+	return predicate.Country(func(s *sql.Selector) {
+		step := newKnownAsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Country) predicate.Country {
 	return predicate.Country(sql.AndPredicates(predicates...))

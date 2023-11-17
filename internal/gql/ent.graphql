@@ -2383,6 +2383,8 @@ type Country implements Node {
   protectedAreaPictures: [ProtectedAreaPicture!]
   regions: [Region!]
   locations: [Location!]
+  knownAsFor: [Country!]
+  knownAs: [Country!]
 }
 """A connection to a list of items."""
 type CountryConnection {
@@ -2562,6 +2564,12 @@ input CountryWhereInput {
   """locations edge predicates"""
   hasLocations: Boolean
   hasLocationsWith: [LocationWhereInput!]
+  """known_as_for edge predicates"""
+  hasKnownAsFor: Boolean
+  hasKnownAsForWith: [CountryWhereInput!]
+  """known_as edge predicates"""
+  hasKnownAs: Boolean
+  hasKnownAsWith: [CountryWhereInput!]
 }
 """
 CreateArtGenreInput is used for create ArtGenre object.
@@ -2796,6 +2804,8 @@ input CreateCountryInput {
   protectedAreaPictureIDs: [ID!]
   regionIDs: [ID!]
   locationIDs: [ID!]
+  knownAsForIDs: [ID!]
+  knownAIDs: [ID!]
 }
 """
 CreateCultureInput is used for create Culture object.
@@ -10330,6 +10340,12 @@ input UpdateCountryInput {
   addLocationIDs: [ID!]
   removeLocationIDs: [ID!]
   clearLocations: Boolean
+  addKnownAsForIDs: [ID!]
+  removeKnownAsForIDs: [ID!]
+  clearKnownAsFor: Boolean
+  addKnownAIDs: [ID!]
+  removeKnownAIDs: [ID!]
+  clearKnownAs: Boolean
 }
 """
 UpdateCultureInput is used for update Culture object.
