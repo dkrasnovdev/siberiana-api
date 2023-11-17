@@ -14,11 +14,14 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // RegionUpdate is the builder for updating Region entities.
@@ -235,6 +238,36 @@ func (ru *RegionUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *Re
 	return ru.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddDistrictIDs adds the "districts" edge to the District entity by IDs.
+func (ru *RegionUpdate) AddDistrictIDs(ids ...int) *RegionUpdate {
+	ru.mutation.AddDistrictIDs(ids...)
+	return ru
+}
+
+// AddDistricts adds the "districts" edges to the District entity.
+func (ru *RegionUpdate) AddDistricts(d ...*District) *RegionUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ru.AddDistrictIDs(ids...)
+}
+
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by IDs.
+func (ru *RegionUpdate) AddSettlementIDs(ids ...int) *RegionUpdate {
+	ru.mutation.AddSettlementIDs(ids...)
+	return ru
+}
+
+// AddSettlements adds the "settlements" edges to the Settlement entity.
+func (ru *RegionUpdate) AddSettlements(s ...*Settlement) *RegionUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ru.AddSettlementIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (ru *RegionUpdate) AddLocationIDs(ids ...int) *RegionUpdate {
 	ru.mutation.AddLocationIDs(ids...)
@@ -248,6 +281,25 @@ func (ru *RegionUpdate) AddLocations(l ...*Location) *RegionUpdate {
 		ids[i] = l[i].ID
 	}
 	return ru.AddLocationIDs(ids...)
+}
+
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (ru *RegionUpdate) SetCountryID(id int) *RegionUpdate {
+	ru.mutation.SetCountryID(id)
+	return ru
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (ru *RegionUpdate) SetNillableCountryID(id *int) *RegionUpdate {
+	if id != nil {
+		ru = ru.SetCountryID(*id)
+	}
+	return ru
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (ru *RegionUpdate) SetCountry(c *Country) *RegionUpdate {
+	return ru.SetCountryID(c.ID)
 }
 
 // Mutation returns the RegionMutation object of the builder.
@@ -360,6 +412,48 @@ func (ru *RegionUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) 
 	return ru.RemoveProtectedAreaPictureIDs(ids...)
 }
 
+// ClearDistricts clears all "districts" edges to the District entity.
+func (ru *RegionUpdate) ClearDistricts() *RegionUpdate {
+	ru.mutation.ClearDistricts()
+	return ru
+}
+
+// RemoveDistrictIDs removes the "districts" edge to District entities by IDs.
+func (ru *RegionUpdate) RemoveDistrictIDs(ids ...int) *RegionUpdate {
+	ru.mutation.RemoveDistrictIDs(ids...)
+	return ru
+}
+
+// RemoveDistricts removes "districts" edges to District entities.
+func (ru *RegionUpdate) RemoveDistricts(d ...*District) *RegionUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ru.RemoveDistrictIDs(ids...)
+}
+
+// ClearSettlements clears all "settlements" edges to the Settlement entity.
+func (ru *RegionUpdate) ClearSettlements() *RegionUpdate {
+	ru.mutation.ClearSettlements()
+	return ru
+}
+
+// RemoveSettlementIDs removes the "settlements" edge to Settlement entities by IDs.
+func (ru *RegionUpdate) RemoveSettlementIDs(ids ...int) *RegionUpdate {
+	ru.mutation.RemoveSettlementIDs(ids...)
+	return ru
+}
+
+// RemoveSettlements removes "settlements" edges to Settlement entities.
+func (ru *RegionUpdate) RemoveSettlements(s ...*Settlement) *RegionUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ru.RemoveSettlementIDs(ids...)
+}
+
 // ClearLocations clears all "locations" edges to the Location entity.
 func (ru *RegionUpdate) ClearLocations() *RegionUpdate {
 	ru.mutation.ClearLocations()
@@ -379,6 +473,12 @@ func (ru *RegionUpdate) RemoveLocations(l ...*Location) *RegionUpdate {
 		ids[i] = l[i].ID
 	}
 	return ru.RemoveLocationIDs(ids...)
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (ru *RegionUpdate) ClearCountry() *RegionUpdate {
+	ru.mutation.ClearCountry()
+	return ru
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -696,6 +796,96 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ru.mutation.DistrictsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.DistrictsTable,
+			Columns: []string{region.DistrictsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedDistrictsIDs(); len(nodes) > 0 && !ru.mutation.DistrictsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.DistrictsTable,
+			Columns: []string{region.DistrictsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.DistrictsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.DistrictsTable,
+			Columns: []string{region.DistrictsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.SettlementsTable,
+			Columns: []string{region.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedSettlementsIDs(); len(nodes) > 0 && !ru.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.SettlementsTable,
+			Columns: []string{region.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.SettlementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.SettlementsTable,
+			Columns: []string{region.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ru.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -734,6 +924,35 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   region.CountryTable,
+			Columns: []string{region.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   region.CountryTable,
+			Columns: []string{region.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -962,6 +1181,36 @@ func (ruo *RegionUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture)
 	return ruo.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddDistrictIDs adds the "districts" edge to the District entity by IDs.
+func (ruo *RegionUpdateOne) AddDistrictIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.AddDistrictIDs(ids...)
+	return ruo
+}
+
+// AddDistricts adds the "districts" edges to the District entity.
+func (ruo *RegionUpdateOne) AddDistricts(d ...*District) *RegionUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ruo.AddDistrictIDs(ids...)
+}
+
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by IDs.
+func (ruo *RegionUpdateOne) AddSettlementIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.AddSettlementIDs(ids...)
+	return ruo
+}
+
+// AddSettlements adds the "settlements" edges to the Settlement entity.
+func (ruo *RegionUpdateOne) AddSettlements(s ...*Settlement) *RegionUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ruo.AddSettlementIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (ruo *RegionUpdateOne) AddLocationIDs(ids ...int) *RegionUpdateOne {
 	ruo.mutation.AddLocationIDs(ids...)
@@ -975,6 +1224,25 @@ func (ruo *RegionUpdateOne) AddLocations(l ...*Location) *RegionUpdateOne {
 		ids[i] = l[i].ID
 	}
 	return ruo.AddLocationIDs(ids...)
+}
+
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (ruo *RegionUpdateOne) SetCountryID(id int) *RegionUpdateOne {
+	ruo.mutation.SetCountryID(id)
+	return ruo
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (ruo *RegionUpdateOne) SetNillableCountryID(id *int) *RegionUpdateOne {
+	if id != nil {
+		ruo = ruo.SetCountryID(*id)
+	}
+	return ruo
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (ruo *RegionUpdateOne) SetCountry(c *Country) *RegionUpdateOne {
+	return ruo.SetCountryID(c.ID)
 }
 
 // Mutation returns the RegionMutation object of the builder.
@@ -1087,6 +1355,48 @@ func (ruo *RegionUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPictu
 	return ruo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
+// ClearDistricts clears all "districts" edges to the District entity.
+func (ruo *RegionUpdateOne) ClearDistricts() *RegionUpdateOne {
+	ruo.mutation.ClearDistricts()
+	return ruo
+}
+
+// RemoveDistrictIDs removes the "districts" edge to District entities by IDs.
+func (ruo *RegionUpdateOne) RemoveDistrictIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.RemoveDistrictIDs(ids...)
+	return ruo
+}
+
+// RemoveDistricts removes "districts" edges to District entities.
+func (ruo *RegionUpdateOne) RemoveDistricts(d ...*District) *RegionUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return ruo.RemoveDistrictIDs(ids...)
+}
+
+// ClearSettlements clears all "settlements" edges to the Settlement entity.
+func (ruo *RegionUpdateOne) ClearSettlements() *RegionUpdateOne {
+	ruo.mutation.ClearSettlements()
+	return ruo
+}
+
+// RemoveSettlementIDs removes the "settlements" edge to Settlement entities by IDs.
+func (ruo *RegionUpdateOne) RemoveSettlementIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.RemoveSettlementIDs(ids...)
+	return ruo
+}
+
+// RemoveSettlements removes "settlements" edges to Settlement entities.
+func (ruo *RegionUpdateOne) RemoveSettlements(s ...*Settlement) *RegionUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return ruo.RemoveSettlementIDs(ids...)
+}
+
 // ClearLocations clears all "locations" edges to the Location entity.
 func (ruo *RegionUpdateOne) ClearLocations() *RegionUpdateOne {
 	ruo.mutation.ClearLocations()
@@ -1106,6 +1416,12 @@ func (ruo *RegionUpdateOne) RemoveLocations(l ...*Location) *RegionUpdateOne {
 		ids[i] = l[i].ID
 	}
 	return ruo.RemoveLocationIDs(ids...)
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (ruo *RegionUpdateOne) ClearCountry() *RegionUpdateOne {
+	ruo.mutation.ClearCountry()
+	return ruo
 }
 
 // Where appends a list predicates to the RegionUpdate builder.
@@ -1453,6 +1769,96 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ruo.mutation.DistrictsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.DistrictsTable,
+			Columns: []string{region.DistrictsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedDistrictsIDs(); len(nodes) > 0 && !ruo.mutation.DistrictsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.DistrictsTable,
+			Columns: []string{region.DistrictsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.DistrictsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.DistrictsTable,
+			Columns: []string{region.DistrictsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.SettlementsTable,
+			Columns: []string{region.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedSettlementsIDs(); len(nodes) > 0 && !ruo.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.SettlementsTable,
+			Columns: []string{region.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.SettlementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.SettlementsTable,
+			Columns: []string{region.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ruo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1491,6 +1897,35 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.CountryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   region.CountryTable,
+			Columns: []string{region.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   region.CountryTable,
+			Columns: []string{region.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

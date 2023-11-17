@@ -544,6 +544,18 @@ func (c *Country) ProtectedAreaPictures(ctx context.Context) (result []*Protecte
 	return result, err
 }
 
+func (c *Country) Regions(ctx context.Context) (result []*Region, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedRegions(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.RegionsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryRegions().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Country) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
@@ -628,6 +640,18 @@ func (d *District) ProtectedAreaPictures(ctx context.Context) (result []*Protect
 	return result, err
 }
 
+func (d *District) Settlements(ctx context.Context) (result []*Settlement, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedSettlements(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.SettlementsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QuerySettlements().All(ctx)
+	}
+	return result, err
+}
+
 func (d *District) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = d.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
@@ -638,6 +662,14 @@ func (d *District) Locations(ctx context.Context) (result []*Location, err error
 		result, err = d.QueryLocations().All(ctx)
 	}
 	return result, err
+}
+
+func (d *District) Region(ctx context.Context) (*Region, error) {
+	result, err := d.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = d.QueryRegion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (e *Ethnos) Artifacts(ctx context.Context) (result []*Artifact, err error) {
@@ -1384,6 +1416,30 @@ func (r *Region) ProtectedAreaPictures(ctx context.Context) (result []*Protected
 	return result, err
 }
 
+func (r *Region) Districts(ctx context.Context) (result []*District, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedDistricts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.DistrictsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryDistricts().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Region) Settlements(ctx context.Context) (result []*Settlement, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedSettlements(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.SettlementsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QuerySettlements().All(ctx)
+	}
+	return result, err
+}
+
 func (r *Region) Locations(ctx context.Context) (result []*Location, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = r.NamedLocations(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1394,6 +1450,14 @@ func (r *Region) Locations(ctx context.Context) (result []*Location, err error) 
 		result, err = r.QueryLocations().All(ctx)
 	}
 	return result, err
+}
+
+func (r *Region) Country(ctx context.Context) (*Country, error) {
+	result, err := r.Edges.CountryOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryCountry().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (s *Set) Artifacts(ctx context.Context) (result []*Artifact, err error) {
@@ -1478,6 +1542,22 @@ func (s *Settlement) Locations(ctx context.Context) (result []*Location, err err
 		result, err = s.QueryLocations().All(ctx)
 	}
 	return result, err
+}
+
+func (s *Settlement) Region(ctx context.Context) (*Region, error) {
+	result, err := s.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryRegion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (s *Settlement) District(ctx context.Context) (*District, error) {
+	result, err := s.Edges.DistrictOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryDistrict().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (t *Technique) Art(ctx context.Context) (result []*Art, err error) {

@@ -740,6 +740,52 @@ func HasLocationsWith(preds ...predicate.Location) predicate.Settlement {
 	})
 }
 
+// HasRegion applies the HasEdge predicate on the "region" edge.
+func HasRegion() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRegionWith applies the HasEdge predicate on the "region" edge with a given conditions (other predicates).
+func HasRegionWith(preds ...predicate.Region) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newRegionStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDistrict applies the HasEdge predicate on the "district" edge.
+func HasDistrict() predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, DistrictTable, DistrictColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDistrictWith applies the HasEdge predicate on the "district" edge with a given conditions (other predicates).
+func HasDistrictWith(preds ...predicate.District) predicate.Settlement {
+	return predicate.Settlement(func(s *sql.Selector) {
+		step := newDistrictStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Settlement) predicate.Settlement {
 	return predicate.Settlement(sql.AndPredicates(predicates...))

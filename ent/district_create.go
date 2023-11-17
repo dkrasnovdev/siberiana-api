@@ -16,6 +16,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // DistrictCreate is the builder for creating a District entity.
@@ -197,6 +199,21 @@ func (dc *DistrictCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *
 	return dc.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by IDs.
+func (dc *DistrictCreate) AddSettlementIDs(ids ...int) *DistrictCreate {
+	dc.mutation.AddSettlementIDs(ids...)
+	return dc
+}
+
+// AddSettlements adds the "settlements" edges to the Settlement entity.
+func (dc *DistrictCreate) AddSettlements(s ...*Settlement) *DistrictCreate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return dc.AddSettlementIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (dc *DistrictCreate) AddLocationIDs(ids ...int) *DistrictCreate {
 	dc.mutation.AddLocationIDs(ids...)
@@ -210,6 +227,25 @@ func (dc *DistrictCreate) AddLocations(l ...*Location) *DistrictCreate {
 		ids[i] = l[i].ID
 	}
 	return dc.AddLocationIDs(ids...)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (dc *DistrictCreate) SetRegionID(id int) *DistrictCreate {
+	dc.mutation.SetRegionID(id)
+	return dc
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (dc *DistrictCreate) SetNillableRegionID(id *int) *DistrictCreate {
+	if id != nil {
+		dc = dc.SetRegionID(*id)
+	}
+	return dc
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (dc *DistrictCreate) SetRegion(r *Region) *DistrictCreate {
+	return dc.SetRegionID(r.ID)
 }
 
 // Mutation returns the DistrictMutation object of the builder.
@@ -396,6 +432,22 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := dc.mutation.SettlementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.SettlementsTable,
+			Columns: []string{district.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := dc.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -410,6 +462,23 @@ func (dc *DistrictCreate) createSpec() (*District, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := dc.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   district.RegionTable,
+			Columns: []string{district.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.region_districts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

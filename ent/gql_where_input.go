@@ -8475,6 +8475,10 @@ type CountryWhereInput struct {
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 
+	// "regions" edge predicates.
+	HasRegions     *bool               `json:"hasRegions,omitempty"`
+	HasRegionsWith []*RegionWhereInput `json:"hasRegionsWith,omitempty"`
+
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
@@ -8965,6 +8969,24 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, country.HasProtectedAreaPicturesWith(with...))
+	}
+	if i.HasRegions != nil {
+		p := country.HasRegions()
+		if !*i.HasRegions {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionsWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionsWith))
+		for _, w := range i.HasRegionsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasRegionsWith(with...))
 	}
 	if i.HasLocations != nil {
 		p := country.HasLocations()
@@ -9757,9 +9779,17 @@ type DistrictWhereInput struct {
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 
+	// "settlements" edge predicates.
+	HasSettlements     *bool                   `json:"hasSettlements,omitempty"`
+	HasSettlementsWith []*SettlementWhereInput `json:"hasSettlementsWith,omitempty"`
+
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -10248,6 +10278,24 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 		}
 		predicates = append(predicates, district.HasProtectedAreaPicturesWith(with...))
 	}
+	if i.HasSettlements != nil {
+		p := district.HasSettlements()
+		if !*i.HasSettlements {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSettlementsWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasSettlementsWith))
+		for _, w := range i.HasSettlementsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSettlementsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasSettlementsWith(with...))
+	}
 	if i.HasLocations != nil {
 		p := district.HasLocations()
 		if !*i.HasLocations {
@@ -10265,6 +10313,24 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, district.HasLocationsWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := district.HasRegion()
+		if !*i.HasRegion {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasRegionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -25991,9 +26057,21 @@ type RegionWhereInput struct {
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
 
+	// "districts" edge predicates.
+	HasDistricts     *bool                 `json:"hasDistricts,omitempty"`
+	HasDistrictsWith []*DistrictWhereInput `json:"hasDistrictsWith,omitempty"`
+
+	// "settlements" edge predicates.
+	HasSettlements     *bool                   `json:"hasSettlements,omitempty"`
+	HasSettlementsWith []*SettlementWhereInput `json:"hasSettlementsWith,omitempty"`
+
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
+
+	// "country" edge predicates.
+	HasCountry     *bool                `json:"hasCountry,omitempty"`
+	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -26500,6 +26578,42 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 		}
 		predicates = append(predicates, region.HasProtectedAreaPicturesWith(with...))
 	}
+	if i.HasDistricts != nil {
+		p := region.HasDistricts()
+		if !*i.HasDistricts {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDistrictsWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasDistrictsWith))
+		for _, w := range i.HasDistrictsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDistrictsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasDistrictsWith(with...))
+	}
+	if i.HasSettlements != nil {
+		p := region.HasSettlements()
+		if !*i.HasSettlements {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSettlementsWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasSettlementsWith))
+		for _, w := range i.HasSettlementsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSettlementsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasSettlementsWith(with...))
+	}
 	if i.HasLocations != nil {
 		p := region.HasLocations()
 		if !*i.HasLocations {
@@ -26517,6 +26631,24 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, region.HasLocationsWith(with...))
+	}
+	if i.HasCountry != nil {
+		p := region.HasCountry()
+		if !*i.HasCountry {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCountryWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasCountryWith))
+		for _, w := range i.HasCountryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCountryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasCountryWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -27294,6 +27426,14 @@ type SettlementWhereInput struct {
 	// "locations" edge predicates.
 	HasLocations     *bool                 `json:"hasLocations,omitempty"`
 	HasLocationsWith []*LocationWhereInput `json:"hasLocationsWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
+
+	// "district" edge predicates.
+	HasDistrict     *bool                 `json:"hasDistrict,omitempty"`
+	HasDistrictWith []*DistrictWhereInput `json:"hasDistrictWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -27799,6 +27939,42 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, settlement.HasLocationsWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := settlement.HasRegion()
+		if !*i.HasRegion {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasRegionWith(with...))
+	}
+	if i.HasDistrict != nil {
+		p := settlement.HasDistrict()
+		if !*i.HasDistrict {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDistrictWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasDistrictWith))
+		for _, w := range i.HasDistrictWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDistrictWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasDistrictWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

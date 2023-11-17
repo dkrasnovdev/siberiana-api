@@ -494,12 +494,21 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "region_districts", Type: field.TypeInt, Nullable: true},
 	}
 	// DistrictsTable holds the schema information for the "districts" table.
 	DistrictsTable = &schema.Table{
 		Name:       "districts",
 		Columns:    DistrictsColumns,
 		PrimaryKey: []*schema.Column{DistrictsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "districts_regions_districts",
+				Columns:    []*schema.Column{DistrictsColumns[9]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// EthnosColumns holds the columns for the "ethnos" table.
 	EthnosColumns = []*schema.Column{
@@ -1136,12 +1145,21 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "country_regions", Type: field.TypeInt, Nullable: true},
 	}
 	// RegionsTable holds the schema information for the "regions" table.
 	RegionsTable = &schema.Table{
 		Name:       "regions",
 		Columns:    RegionsColumns,
 		PrimaryKey: []*schema.Column{RegionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "regions_countries_regions",
+				Columns:    []*schema.Column{RegionsColumns[9]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// SetsColumns holds the columns for the "sets" table.
 	SetsColumns = []*schema.Column{
@@ -1172,12 +1190,28 @@ var (
 		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "district_settlements", Type: field.TypeInt, Nullable: true},
+		{Name: "region_settlements", Type: field.TypeInt, Nullable: true},
 	}
 	// SettlementsTable holds the schema information for the "settlements" table.
 	SettlementsTable = &schema.Table{
 		Name:       "settlements",
 		Columns:    SettlementsColumns,
 		PrimaryKey: []*schema.Column{SettlementsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "settlements_districts_settlements",
+				Columns:    []*schema.Column{SettlementsColumns[9]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "settlements_regions_settlements",
+				Columns:    []*schema.Column{SettlementsColumns[10]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// TechniquesColumns holds the columns for the "techniques" table.
 	TechniquesColumns = []*schema.Column{
@@ -1756,6 +1790,7 @@ func init() {
 	BooksTable.ForeignKeys[8].RefTable = RegionsTable
 	BooksTable.ForeignKeys[9].RefTable = SettlementsTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
+	DistrictsTable.ForeignKeys[0].RefTable = RegionsTable
 	LocationsTable.ForeignKeys[0].RefTable = CountriesTable
 	LocationsTable.ForeignKeys[1].RefTable = DistrictsTable
 	LocationsTable.ForeignKeys[2].RefTable = SettlementsTable
@@ -1780,6 +1815,9 @@ func init() {
 	ProtectedAreaPicturesTable.ForeignKeys[8].RefTable = SettlementsTable
 	ProxiesTable.ForeignKeys[0].RefTable = FavouritesTable
 	ProxiesTable.ForeignKeys[1].RefTable = PersonalsTable
+	RegionsTable.ForeignKeys[0].RefTable = CountriesTable
+	SettlementsTable.ForeignKeys[0].RefTable = DistrictsTable
+	SettlementsTable.ForeignKeys[1].RefTable = RegionsTable
 	ArtGenreArtTable.ForeignKeys[0].RefTable = ArtGenresTable
 	ArtGenreArtTable.ForeignKeys[1].RefTable = ArtsTable
 	ArtStyleArtTable.ForeignKeys[0].RefTable = ArtStylesTable

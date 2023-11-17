@@ -2260,6 +2260,7 @@ type CreateCountryInput struct {
 	ArtifactIDs             []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
+	RegionIDs               []int
 	LocationIDs             []int
 }
 
@@ -2301,6 +2302,9 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
+	if v := i.RegionIDs; len(v) > 0 {
+		m.AddRegionIDs(v...)
+	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
@@ -2339,6 +2343,9 @@ type UpdateCountryInput struct {
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
+	ClearRegions                  bool
+	AddRegionIDs                  []int
+	RemoveRegionIDs               []int
 	ClearLocations                bool
 	AddLocationIDs                []int
 	RemoveLocationIDs             []int
@@ -2420,6 +2427,15 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	}
 	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
 		m.RemoveProtectedAreaPictureIDs(v...)
+	}
+	if i.ClearRegions {
+		m.ClearRegions()
+	}
+	if v := i.AddRegionIDs; len(v) > 0 {
+		m.AddRegionIDs(v...)
+	}
+	if v := i.RemoveRegionIDs; len(v) > 0 {
+		m.RemoveRegionIDs(v...)
 	}
 	if i.ClearLocations {
 		m.ClearLocations()
@@ -2608,7 +2624,9 @@ type CreateDistrictInput struct {
 	ArtifactIDs             []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
+	SettlementIDs           []int
 	LocationIDs             []int
+	RegionID                *int
 }
 
 // Mutate applies the CreateDistrictInput on the DistrictMutation builder.
@@ -2649,8 +2667,14 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
+	if v := i.SettlementIDs; len(v) > 0 {
+		m.AddSettlementIDs(v...)
+	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
 	}
 }
 
@@ -2687,9 +2711,14 @@ type UpdateDistrictInput struct {
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
+	ClearSettlements              bool
+	AddSettlementIDs              []int
+	RemoveSettlementIDs           []int
 	ClearLocations                bool
 	AddLocationIDs                []int
 	RemoveLocationIDs             []int
+	ClearRegion                   bool
+	RegionID                      *int
 }
 
 // Mutate applies the UpdateDistrictInput on the DistrictMutation builder.
@@ -2769,6 +2798,15 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
 		m.RemoveProtectedAreaPictureIDs(v...)
 	}
+	if i.ClearSettlements {
+		m.ClearSettlements()
+	}
+	if v := i.AddSettlementIDs; len(v) > 0 {
+		m.AddSettlementIDs(v...)
+	}
+	if v := i.RemoveSettlementIDs; len(v) > 0 {
+		m.RemoveSettlementIDs(v...)
+	}
 	if i.ClearLocations {
 		m.ClearLocations()
 	}
@@ -2777,6 +2815,12 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.RemoveLocationIDs; len(v) > 0 {
 		m.RemoveLocationIDs(v...)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
 	}
 }
 
@@ -6871,7 +6915,10 @@ type CreateRegionInput struct {
 	BookIDs                 []int
 	PetroglyphIDs           []int
 	ProtectedAreaPictureIDs []int
+	DistrictIDs             []int
+	SettlementIDs           []int
 	LocationIDs             []int
+	CountryID               *int
 }
 
 // Mutate applies the CreateRegionInput on the RegionMutation builder.
@@ -6915,8 +6962,17 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
+	if v := i.DistrictIDs; len(v) > 0 {
+		m.AddDistrictIDs(v...)
+	}
+	if v := i.SettlementIDs; len(v) > 0 {
+		m.AddSettlementIDs(v...)
+	}
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
 	}
 }
 
@@ -6956,9 +7012,17 @@ type UpdateRegionInput struct {
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
+	ClearDistricts                bool
+	AddDistrictIDs                []int
+	RemoveDistrictIDs             []int
+	ClearSettlements              bool
+	AddSettlementIDs              []int
+	RemoveSettlementIDs           []int
 	ClearLocations                bool
 	AddLocationIDs                []int
 	RemoveLocationIDs             []int
+	ClearCountry                  bool
+	CountryID                     *int
 }
 
 // Mutate applies the UpdateRegionInput on the RegionMutation builder.
@@ -7047,6 +7111,24 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
 		m.RemoveProtectedAreaPictureIDs(v...)
 	}
+	if i.ClearDistricts {
+		m.ClearDistricts()
+	}
+	if v := i.AddDistrictIDs; len(v) > 0 {
+		m.AddDistrictIDs(v...)
+	}
+	if v := i.RemoveDistrictIDs; len(v) > 0 {
+		m.RemoveDistrictIDs(v...)
+	}
+	if i.ClearSettlements {
+		m.ClearSettlements()
+	}
+	if v := i.AddSettlementIDs; len(v) > 0 {
+		m.AddSettlementIDs(v...)
+	}
+	if v := i.RemoveSettlementIDs; len(v) > 0 {
+		m.RemoveSettlementIDs(v...)
+	}
 	if i.ClearLocations {
 		m.ClearLocations()
 	}
@@ -7055,6 +7137,12 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.RemoveLocationIDs; len(v) > 0 {
 		m.RemoveLocationIDs(v...)
+	}
+	if i.ClearCountry {
+		m.ClearCountry()
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
 	}
 }
 
@@ -7235,6 +7323,8 @@ type CreateSettlementInput struct {
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
 	LocationIDs             []int
+	RegionID                *int
+	DistrictID              *int
 }
 
 // Mutate applies the CreateSettlementInput on the SettlementMutation builder.
@@ -7278,6 +7368,12 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.LocationIDs; len(v) > 0 {
 		m.AddLocationIDs(v...)
 	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateSettlementInput on the SettlementCreate builder.
@@ -7316,6 +7412,10 @@ type UpdateSettlementInput struct {
 	ClearLocations                bool
 	AddLocationIDs                []int
 	RemoveLocationIDs             []int
+	ClearRegion                   bool
+	RegionID                      *int
+	ClearDistrict                 bool
+	DistrictID                    *int
 }
 
 // Mutate applies the UpdateSettlementInput on the SettlementMutation builder.
@@ -7403,6 +7503,18 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	}
 	if v := i.RemoveLocationIDs; len(v) > 0 {
 		m.RemoveLocationIDs(v...)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
+	if i.ClearDistrict {
+		m.ClearDistrict()
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
 	}
 }
 

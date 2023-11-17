@@ -19,6 +19,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // DistrictQuery is the builder for querying District entities.
@@ -32,13 +34,17 @@ type DistrictQuery struct {
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	withSettlements                *SettlementQuery
 	withLocations                  *LocationQuery
+	withRegion                     *RegionQuery
+	withFKs                        bool
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*District) error
 	withNamedArt                   map[string]*ArtQuery
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
+	withNamedSettlements           map[string]*SettlementQuery
 	withNamedLocations             map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -164,6 +170,28 @@ func (dq *DistrictQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery
 	return query
 }
 
+// QuerySettlements chains the current query on the "settlements" edge.
+func (dq *DistrictQuery) QuerySettlements() *SettlementQuery {
+	query := (&SettlementClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.SettlementsTable, district.SettlementsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryLocations chains the current query on the "locations" edge.
 func (dq *DistrictQuery) QueryLocations() *LocationQuery {
 	query := (&LocationClient{config: dq.config}).Query()
@@ -179,6 +207,28 @@ func (dq *DistrictQuery) QueryLocations() *LocationQuery {
 			sqlgraph.From(district.Table, district.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, district.LocationsTable, district.LocationsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegion chains the current query on the "region" edge.
+func (dq *DistrictQuery) QueryRegion() *RegionQuery {
+	query := (&RegionClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, district.RegionTable, district.RegionColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -382,7 +432,9 @@ func (dq *DistrictQuery) Clone() *DistrictQuery {
 		withArtifacts:             dq.withArtifacts.Clone(),
 		withBooks:                 dq.withBooks.Clone(),
 		withProtectedAreaPictures: dq.withProtectedAreaPictures.Clone(),
+		withSettlements:           dq.withSettlements.Clone(),
 		withLocations:             dq.withLocations.Clone(),
+		withRegion:                dq.withRegion.Clone(),
 		// clone intermediate query.
 		sql:  dq.sql.Clone(),
 		path: dq.path,
@@ -433,6 +485,17 @@ func (dq *DistrictQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPi
 	return dq
 }
 
+// WithSettlements tells the query-builder to eager-load the nodes that are connected to
+// the "settlements" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithSettlements(opts ...func(*SettlementQuery)) *DistrictQuery {
+	query := (&SettlementClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withSettlements = query
+	return dq
+}
+
 // WithLocations tells the query-builder to eager-load the nodes that are connected to
 // the "locations" edge. The optional arguments are used to configure the query builder of the edge.
 func (dq *DistrictQuery) WithLocations(opts ...func(*LocationQuery)) *DistrictQuery {
@@ -441,6 +504,17 @@ func (dq *DistrictQuery) WithLocations(opts ...func(*LocationQuery)) *DistrictQu
 		opt(query)
 	}
 	dq.withLocations = query
+	return dq
+}
+
+// WithRegion tells the query-builder to eager-load the nodes that are connected to
+// the "region" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithRegion(opts ...func(*RegionQuery)) *DistrictQuery {
+	query := (&RegionClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withRegion = query
 	return dq
 }
 
@@ -527,15 +601,24 @@ func (dq *DistrictQuery) prepareQuery(ctx context.Context) error {
 func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*District, error) {
 	var (
 		nodes       = []*District{}
+		withFKs     = dq.withFKs
 		_spec       = dq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [7]bool{
 			dq.withArt != nil,
 			dq.withArtifacts != nil,
 			dq.withBooks != nil,
 			dq.withProtectedAreaPictures != nil,
+			dq.withSettlements != nil,
 			dq.withLocations != nil,
+			dq.withRegion != nil,
 		}
 	)
+	if dq.withRegion != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, district.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*District).scanValues(nil, columns)
 	}
@@ -587,10 +670,23 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 			return nil, err
 		}
 	}
+	if query := dq.withSettlements; query != nil {
+		if err := dq.loadSettlements(ctx, query, nodes,
+			func(n *District) { n.Edges.Settlements = []*Settlement{} },
+			func(n *District, e *Settlement) { n.Edges.Settlements = append(n.Edges.Settlements, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := dq.withLocations; query != nil {
 		if err := dq.loadLocations(ctx, query, nodes,
 			func(n *District) { n.Edges.Locations = []*Location{} },
 			func(n *District, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := dq.withRegion; query != nil {
+		if err := dq.loadRegion(ctx, query, nodes, nil,
+			func(n *District, e *Region) { n.Edges.Region = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -619,6 +715,13 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		if err := dq.loadProtectedAreaPictures(ctx, query, nodes,
 			func(n *District) { n.appendNamedProtectedAreaPictures(name) },
 			func(n *District, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedSettlements {
+		if err := dq.loadSettlements(ctx, query, nodes,
+			func(n *District) { n.appendNamedSettlements(name) },
+			func(n *District, e *Settlement) { n.appendNamedSettlements(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -761,6 +864,37 @@ func (dq *DistrictQuery) loadProtectedAreaPictures(ctx context.Context, query *P
 	}
 	return nil
 }
+func (dq *DistrictQuery) loadSettlements(ctx context.Context, query *SettlementQuery, nodes []*District, init func(*District), assign func(*District, *Settlement)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*District)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Settlement(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(district.SettlementsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.district_settlements
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "district_settlements" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "district_settlements" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (dq *DistrictQuery) loadLocations(ctx context.Context, query *LocationQuery, nodes []*District, init func(*District), assign func(*District, *Location)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*District)
@@ -789,6 +923,38 @@ func (dq *DistrictQuery) loadLocations(ctx context.Context, query *LocationQuery
 			return fmt.Errorf(`unexpected referenced foreign-key "location_district" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (dq *DistrictQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes []*District, init func(*District), assign func(*District, *Region)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*District)
+	for i := range nodes {
+		if nodes[i].region_districts == nil {
+			continue
+		}
+		fk := *nodes[i].region_districts
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(region.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "region_districts" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }
@@ -930,6 +1096,20 @@ func (dq *DistrictQuery) WithNamedProtectedAreaPictures(name string, opts ...fun
 		dq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
 	}
 	dq.withNamedProtectedAreaPictures[name] = query
+	return dq
+}
+
+// WithNamedSettlements tells the query-builder to eager-load the nodes that are connected to the "settlements"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedSettlements(name string, opts ...func(*SettlementQuery)) *DistrictQuery {
+	query := (&SettlementClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedSettlements == nil {
+		dq.withNamedSettlements = make(map[string]*SettlementQuery)
+	}
+	dq.withNamedSettlements[name] = query
 	return dq
 }
 

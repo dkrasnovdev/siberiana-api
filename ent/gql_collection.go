@@ -2097,6 +2097,18 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			c.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
 				*wq = *query
 			})
+		case "regions":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedRegions(alias, func(wq *RegionQuery) {
+				*wq = *query
+			})
 		case "locations":
 			var (
 				alias = field.Alias
@@ -2441,6 +2453,18 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			d.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
 				*wq = *query
 			})
+		case "settlements":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedSettlements(alias, func(wq *SettlementQuery) {
+				*wq = *query
+			})
 		case "locations":
 			var (
 				alias = field.Alias
@@ -2453,6 +2477,16 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			d.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			d.withRegion = query
 		case "createdAt":
 			if _, ok := fieldSeen[district.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, district.FieldCreatedAt)
@@ -6425,6 +6459,30 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			r.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
 				*wq = *query
 			})
+		case "districts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedDistricts(alias, func(wq *DistrictQuery) {
+				*wq = *query
+			})
+		case "settlements":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedSettlements(alias, func(wq *SettlementQuery) {
+				*wq = *query
+			})
 		case "locations":
 			var (
 				alias = field.Alias
@@ -6437,6 +6495,16 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			r.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
+		case "country":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			r.withCountry = query
 		case "createdAt":
 			if _, ok := fieldSeen[region.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, region.FieldCreatedAt)
@@ -6781,6 +6849,26 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			s.WithNamedLocations(alias, func(wq *LocationQuery) {
 				*wq = *query
 			})
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			s.withRegion = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			s.withDistrict = query
 		case "createdAt":
 			if _, ok := fieldSeen[settlement.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, settlement.FieldCreatedAt)

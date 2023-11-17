@@ -39,6 +39,8 @@ const (
 	EdgeBooks = "books"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
+	// EdgeRegions holds the string denoting the regions edge name in mutations.
+	EdgeRegions = "regions"
 	// EdgeLocations holds the string denoting the locations edge name in mutations.
 	EdgeLocations = "locations"
 	// Table holds the table name of the country in the database.
@@ -71,6 +73,13 @@ const (
 	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
 	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesColumn = "country_protected_area_pictures"
+	// RegionsTable is the table that holds the regions relation/edge.
+	RegionsTable = "regions"
+	// RegionsInverseTable is the table name for the Region entity.
+	// It exists in this package in order to avoid circular dependency with the "region" package.
+	RegionsInverseTable = "regions"
+	// RegionsColumn is the table column denoting the regions relation/edge.
+	RegionsColumn = "country_regions"
 	// LocationsTable is the table that holds the locations relation/edge.
 	LocationsTable = "locations"
 	// LocationsInverseTable is the table name for the Location entity.
@@ -223,6 +232,20 @@ func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOp
 	}
 }
 
+// ByRegionsCount orders the results by regions count.
+func ByRegionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRegionsStep(), opts...)
+	}
+}
+
+// ByRegions orders the results by regions terms.
+func ByRegions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRegionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByLocationsCount orders the results by locations count.
 func ByLocationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -262,6 +285,13 @@ func newProtectedAreaPicturesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
+	)
+}
+func newRegionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RegionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RegionsTable, RegionsColumn),
 	)
 }
 func newLocationsStep() *sqlgraph.Step {

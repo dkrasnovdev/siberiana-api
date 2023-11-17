@@ -13,10 +13,13 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // RegionCreate is the builder for creating a Region entity.
@@ -213,6 +216,36 @@ func (rc *RegionCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *Re
 	return rc.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddDistrictIDs adds the "districts" edge to the District entity by IDs.
+func (rc *RegionCreate) AddDistrictIDs(ids ...int) *RegionCreate {
+	rc.mutation.AddDistrictIDs(ids...)
+	return rc
+}
+
+// AddDistricts adds the "districts" edges to the District entity.
+func (rc *RegionCreate) AddDistricts(d ...*District) *RegionCreate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return rc.AddDistrictIDs(ids...)
+}
+
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by IDs.
+func (rc *RegionCreate) AddSettlementIDs(ids ...int) *RegionCreate {
+	rc.mutation.AddSettlementIDs(ids...)
+	return rc
+}
+
+// AddSettlements adds the "settlements" edges to the Settlement entity.
+func (rc *RegionCreate) AddSettlements(s ...*Settlement) *RegionCreate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return rc.AddSettlementIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (rc *RegionCreate) AddLocationIDs(ids ...int) *RegionCreate {
 	rc.mutation.AddLocationIDs(ids...)
@@ -226,6 +259,25 @@ func (rc *RegionCreate) AddLocations(l ...*Location) *RegionCreate {
 		ids[i] = l[i].ID
 	}
 	return rc.AddLocationIDs(ids...)
+}
+
+// SetCountryID sets the "country" edge to the Country entity by ID.
+func (rc *RegionCreate) SetCountryID(id int) *RegionCreate {
+	rc.mutation.SetCountryID(id)
+	return rc
+}
+
+// SetNillableCountryID sets the "country" edge to the Country entity by ID if the given value is not nil.
+func (rc *RegionCreate) SetNillableCountryID(id *int) *RegionCreate {
+	if id != nil {
+		rc = rc.SetCountryID(*id)
+	}
+	return rc
+}
+
+// SetCountry sets the "country" edge to the Country entity.
+func (rc *RegionCreate) SetCountry(c *Country) *RegionCreate {
+	return rc.SetCountryID(c.ID)
 }
 
 // Mutation returns the RegionMutation object of the builder.
@@ -428,6 +480,38 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := rc.mutation.DistrictsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.DistrictsTable,
+			Columns: []string{region.DistrictsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.SettlementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.SettlementsTable,
+			Columns: []string{region.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := rc.mutation.LocationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -442,6 +526,23 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.CountryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   region.CountryTable,
+			Columns: []string{region.CountryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(country.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.country_regions = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

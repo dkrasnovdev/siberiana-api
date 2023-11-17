@@ -41,8 +41,14 @@ const (
 	EdgePetroglyphs = "petroglyphs"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
+	// EdgeDistricts holds the string denoting the districts edge name in mutations.
+	EdgeDistricts = "districts"
+	// EdgeSettlements holds the string denoting the settlements edge name in mutations.
+	EdgeSettlements = "settlements"
 	// EdgeLocations holds the string denoting the locations edge name in mutations.
 	EdgeLocations = "locations"
+	// EdgeCountry holds the string denoting the country edge name in mutations.
+	EdgeCountry = "country"
 	// Table holds the table name of the region in the database.
 	Table = "regions"
 	// ArtTable is the table that holds the art relation/edge.
@@ -80,6 +86,20 @@ const (
 	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
 	// ProtectedAreaPicturesColumn is the table column denoting the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesColumn = "region_protected_area_pictures"
+	// DistrictsTable is the table that holds the districts relation/edge.
+	DistrictsTable = "districts"
+	// DistrictsInverseTable is the table name for the District entity.
+	// It exists in this package in order to avoid circular dependency with the "district" package.
+	DistrictsInverseTable = "districts"
+	// DistrictsColumn is the table column denoting the districts relation/edge.
+	DistrictsColumn = "region_districts"
+	// SettlementsTable is the table that holds the settlements relation/edge.
+	SettlementsTable = "settlements"
+	// SettlementsInverseTable is the table name for the Settlement entity.
+	// It exists in this package in order to avoid circular dependency with the "settlement" package.
+	SettlementsInverseTable = "settlements"
+	// SettlementsColumn is the table column denoting the settlements relation/edge.
+	SettlementsColumn = "region_settlements"
 	// LocationsTable is the table that holds the locations relation/edge.
 	LocationsTable = "locations"
 	// LocationsInverseTable is the table name for the Location entity.
@@ -87,6 +107,13 @@ const (
 	LocationsInverseTable = "locations"
 	// LocationsColumn is the table column denoting the locations relation/edge.
 	LocationsColumn = "location_region"
+	// CountryTable is the table that holds the country relation/edge.
+	CountryTable = "regions"
+	// CountryInverseTable is the table name for the Country entity.
+	// It exists in this package in order to avoid circular dependency with the "country" package.
+	CountryInverseTable = "countries"
+	// CountryColumn is the table column denoting the country relation/edge.
+	CountryColumn = "country_regions"
 )
 
 // Columns holds all SQL columns for region fields.
@@ -102,10 +129,21 @@ var Columns = []string{
 	FieldExternalLink,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "regions"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"country_regions",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -246,6 +284,34 @@ func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOp
 	}
 }
 
+// ByDistrictsCount orders the results by districts count.
+func ByDistrictsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDistrictsStep(), opts...)
+	}
+}
+
+// ByDistricts orders the results by districts terms.
+func ByDistricts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDistrictsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySettlementsCount orders the results by settlements count.
+func BySettlementsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSettlementsStep(), opts...)
+	}
+}
+
+// BySettlements orders the results by settlements terms.
+func BySettlements(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSettlementsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByLocationsCount orders the results by locations count.
 func ByLocationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -257,6 +323,13 @@ func ByLocationsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByLocations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newLocationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCountryField orders the results by country field.
+func ByCountryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCountryStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newArtStep() *sqlgraph.Step {
@@ -294,10 +367,31 @@ func newProtectedAreaPicturesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesColumn),
 	)
 }
+func newDistrictsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DistrictsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DistrictsTable, DistrictsColumn),
+	)
+}
+func newSettlementsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SettlementsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SettlementsTable, SettlementsColumn),
+	)
+}
 func newLocationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LocationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, LocationsTable, LocationsColumn),
+	)
+}
+func newCountryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CountryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CountryTable, CountryColumn),
 	)
 }

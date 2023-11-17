@@ -9,6 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
@@ -35,8 +37,10 @@ type Settlement struct {
 	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SettlementQuery when eager-loading is set.
-	Edges        SettlementEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                SettlementEdges `json:"edges"`
+	district_settlements *int
+	region_settlements   *int
+	selectValues         sql.SelectValues
 }
 
 // SettlementEdges holds the relations/edges for other nodes in the graph.
@@ -51,11 +55,15 @@ type SettlementEdges struct {
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
+	// Region holds the value of the region edge.
+	Region *Region `json:"region,omitempty"`
+	// District holds the value of the district edge.
+	District *District `json:"district,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
@@ -109,6 +117,32 @@ func (e SettlementEdges) LocationsOrErr() ([]*Location, error) {
 	return nil, &NotLoadedError{edge: "locations"}
 }
 
+// RegionOrErr returns the Region value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SettlementEdges) RegionOrErr() (*Region, error) {
+	if e.loadedTypes[5] {
+		if e.Region == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: region.Label}
+		}
+		return e.Region, nil
+	}
+	return nil, &NotLoadedError{edge: "region"}
+}
+
+// DistrictOrErr returns the District value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SettlementEdges) DistrictOrErr() (*District, error) {
+	if e.loadedTypes[6] {
+		if e.District == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: district.Label}
+		}
+		return e.District, nil
+	}
+	return nil, &NotLoadedError{edge: "district"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Settlement) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -120,6 +154,10 @@ func (*Settlement) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case settlement.FieldCreatedAt, settlement.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case settlement.ForeignKeys[0]: // district_settlements
+			values[i] = new(sql.NullInt64)
+		case settlement.ForeignKeys[1]: // region_settlements
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -189,6 +227,20 @@ func (s *Settlement) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.ExternalLink = value.String
 			}
+		case settlement.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field district_settlements", value)
+			} else if value.Valid {
+				s.district_settlements = new(int)
+				*s.district_settlements = int(value.Int64)
+			}
+		case settlement.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field region_settlements", value)
+			} else if value.Valid {
+				s.region_settlements = new(int)
+				*s.region_settlements = int(value.Int64)
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -225,6 +277,16 @@ func (s *Settlement) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
 // QueryLocations queries the "locations" edge of the Settlement entity.
 func (s *Settlement) QueryLocations() *LocationQuery {
 	return NewSettlementClient(s.config).QueryLocations(s)
+}
+
+// QueryRegion queries the "region" edge of the Settlement entity.
+func (s *Settlement) QueryRegion() *RegionQuery {
+	return NewSettlementClient(s.config).QueryRegion(s)
+}
+
+// QueryDistrict queries the "district" edge of the Settlement entity.
+func (s *Settlement) QueryDistrict() *DistrictQuery {
+	return NewSettlementClient(s.config).QueryDistrict(s)
 }
 
 // Update returns a builder for updating this Settlement.

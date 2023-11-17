@@ -15591,6 +15591,9 @@ type CountryMutation struct {
 	protected_area_pictures        map[int]struct{}
 	removedprotected_area_pictures map[int]struct{}
 	clearedprotected_area_pictures bool
+	regions                        map[int]struct{}
+	removedregions                 map[int]struct{}
+	clearedregions                 bool
 	locations                      map[int]struct{}
 	removedlocations               map[int]struct{}
 	clearedlocations               bool
@@ -16279,6 +16282,60 @@ func (m *CountryMutation) ResetProtectedAreaPictures() {
 	m.removedprotected_area_pictures = nil
 }
 
+// AddRegionIDs adds the "regions" edge to the Region entity by ids.
+func (m *CountryMutation) AddRegionIDs(ids ...int) {
+	if m.regions == nil {
+		m.regions = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.regions[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRegions clears the "regions" edge to the Region entity.
+func (m *CountryMutation) ClearRegions() {
+	m.clearedregions = true
+}
+
+// RegionsCleared reports if the "regions" edge to the Region entity was cleared.
+func (m *CountryMutation) RegionsCleared() bool {
+	return m.clearedregions
+}
+
+// RemoveRegionIDs removes the "regions" edge to the Region entity by IDs.
+func (m *CountryMutation) RemoveRegionIDs(ids ...int) {
+	if m.removedregions == nil {
+		m.removedregions = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.regions, ids[i])
+		m.removedregions[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRegions returns the removed IDs of the "regions" edge to the Region entity.
+func (m *CountryMutation) RemovedRegionsIDs() (ids []int) {
+	for id := range m.removedregions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RegionsIDs returns the "regions" edge IDs in the mutation.
+func (m *CountryMutation) RegionsIDs() (ids []int) {
+	for id := range m.regions {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRegions resets all changes to the "regions" edge.
+func (m *CountryMutation) ResetRegions() {
+	m.regions = nil
+	m.clearedregions = false
+	m.removedregions = nil
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *CountryMutation) AddLocationIDs(ids ...int) {
 	if m.locations == nil {
@@ -16624,7 +16681,7 @@ func (m *CountryMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CountryMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.art != nil {
 		edges = append(edges, country.EdgeArt)
 	}
@@ -16636,6 +16693,9 @@ func (m *CountryMutation) AddedEdges() []string {
 	}
 	if m.protected_area_pictures != nil {
 		edges = append(edges, country.EdgeProtectedAreaPictures)
+	}
+	if m.regions != nil {
+		edges = append(edges, country.EdgeRegions)
 	}
 	if m.locations != nil {
 		edges = append(edges, country.EdgeLocations)
@@ -16671,6 +16731,12 @@ func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case country.EdgeRegions:
+		ids := make([]ent.Value, 0, len(m.regions))
+		for id := range m.regions {
+			ids = append(ids, id)
+		}
+		return ids
 	case country.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.locations))
 		for id := range m.locations {
@@ -16683,7 +16749,7 @@ func (m *CountryMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CountryMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedart != nil {
 		edges = append(edges, country.EdgeArt)
 	}
@@ -16695,6 +16761,9 @@ func (m *CountryMutation) RemovedEdges() []string {
 	}
 	if m.removedprotected_area_pictures != nil {
 		edges = append(edges, country.EdgeProtectedAreaPictures)
+	}
+	if m.removedregions != nil {
+		edges = append(edges, country.EdgeRegions)
 	}
 	if m.removedlocations != nil {
 		edges = append(edges, country.EdgeLocations)
@@ -16730,6 +16799,12 @@ func (m *CountryMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case country.EdgeRegions:
+		ids := make([]ent.Value, 0, len(m.removedregions))
+		for id := range m.removedregions {
+			ids = append(ids, id)
+		}
+		return ids
 	case country.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.removedlocations))
 		for id := range m.removedlocations {
@@ -16742,7 +16817,7 @@ func (m *CountryMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CountryMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedart {
 		edges = append(edges, country.EdgeArt)
 	}
@@ -16754,6 +16829,9 @@ func (m *CountryMutation) ClearedEdges() []string {
 	}
 	if m.clearedprotected_area_pictures {
 		edges = append(edges, country.EdgeProtectedAreaPictures)
+	}
+	if m.clearedregions {
+		edges = append(edges, country.EdgeRegions)
 	}
 	if m.clearedlocations {
 		edges = append(edges, country.EdgeLocations)
@@ -16773,6 +16851,8 @@ func (m *CountryMutation) EdgeCleared(name string) bool {
 		return m.clearedbooks
 	case country.EdgeProtectedAreaPictures:
 		return m.clearedprotected_area_pictures
+	case country.EdgeRegions:
+		return m.clearedregions
 	case country.EdgeLocations:
 		return m.clearedlocations
 	}
@@ -16802,6 +16882,9 @@ func (m *CountryMutation) ResetEdge(name string) error {
 		return nil
 	case country.EdgeProtectedAreaPictures:
 		m.ResetProtectedAreaPictures()
+		return nil
+	case country.EdgeRegions:
+		m.ResetRegions()
 		return nil
 	case country.EdgeLocations:
 		m.ResetLocations()
@@ -17834,9 +17917,14 @@ type DistrictMutation struct {
 	protected_area_pictures        map[int]struct{}
 	removedprotected_area_pictures map[int]struct{}
 	clearedprotected_area_pictures bool
+	settlements                    map[int]struct{}
+	removedsettlements             map[int]struct{}
+	clearedsettlements             bool
 	locations                      map[int]struct{}
 	removedlocations               map[int]struct{}
 	clearedlocations               bool
+	region                         *int
+	clearedregion                  bool
 	done                           bool
 	oldValue                       func(context.Context) (*District, error)
 	predicates                     []predicate.District
@@ -18522,6 +18610,60 @@ func (m *DistrictMutation) ResetProtectedAreaPictures() {
 	m.removedprotected_area_pictures = nil
 }
 
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by ids.
+func (m *DistrictMutation) AddSettlementIDs(ids ...int) {
+	if m.settlements == nil {
+		m.settlements = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.settlements[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSettlements clears the "settlements" edge to the Settlement entity.
+func (m *DistrictMutation) ClearSettlements() {
+	m.clearedsettlements = true
+}
+
+// SettlementsCleared reports if the "settlements" edge to the Settlement entity was cleared.
+func (m *DistrictMutation) SettlementsCleared() bool {
+	return m.clearedsettlements
+}
+
+// RemoveSettlementIDs removes the "settlements" edge to the Settlement entity by IDs.
+func (m *DistrictMutation) RemoveSettlementIDs(ids ...int) {
+	if m.removedsettlements == nil {
+		m.removedsettlements = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.settlements, ids[i])
+		m.removedsettlements[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSettlements returns the removed IDs of the "settlements" edge to the Settlement entity.
+func (m *DistrictMutation) RemovedSettlementsIDs() (ids []int) {
+	for id := range m.removedsettlements {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SettlementsIDs returns the "settlements" edge IDs in the mutation.
+func (m *DistrictMutation) SettlementsIDs() (ids []int) {
+	for id := range m.settlements {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSettlements resets all changes to the "settlements" edge.
+func (m *DistrictMutation) ResetSettlements() {
+	m.settlements = nil
+	m.clearedsettlements = false
+	m.removedsettlements = nil
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *DistrictMutation) AddLocationIDs(ids ...int) {
 	if m.locations == nil {
@@ -18574,6 +18716,45 @@ func (m *DistrictMutation) ResetLocations() {
 	m.locations = nil
 	m.clearedlocations = false
 	m.removedlocations = nil
+}
+
+// SetRegionID sets the "region" edge to the Region entity by id.
+func (m *DistrictMutation) SetRegionID(id int) {
+	m.region = &id
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (m *DistrictMutation) ClearRegion() {
+	m.clearedregion = true
+}
+
+// RegionCleared reports if the "region" edge to the Region entity was cleared.
+func (m *DistrictMutation) RegionCleared() bool {
+	return m.clearedregion
+}
+
+// RegionID returns the "region" edge ID in the mutation.
+func (m *DistrictMutation) RegionID() (id int, exists bool) {
+	if m.region != nil {
+		return *m.region, true
+	}
+	return
+}
+
+// RegionIDs returns the "region" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// RegionID instead. It exists only for internal usage by the builders.
+func (m *DistrictMutation) RegionIDs() (ids []int) {
+	if id := m.region; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetRegion resets all changes to the "region" edge.
+func (m *DistrictMutation) ResetRegion() {
+	m.region = nil
+	m.clearedregion = false
 }
 
 // Where appends a list predicates to the DistrictMutation builder.
@@ -18867,7 +19048,7 @@ func (m *DistrictMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *DistrictMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 7)
 	if m.art != nil {
 		edges = append(edges, district.EdgeArt)
 	}
@@ -18880,8 +19061,14 @@ func (m *DistrictMutation) AddedEdges() []string {
 	if m.protected_area_pictures != nil {
 		edges = append(edges, district.EdgeProtectedAreaPictures)
 	}
+	if m.settlements != nil {
+		edges = append(edges, district.EdgeSettlements)
+	}
 	if m.locations != nil {
 		edges = append(edges, district.EdgeLocations)
+	}
+	if m.region != nil {
+		edges = append(edges, district.EdgeRegion)
 	}
 	return edges
 }
@@ -18914,19 +19101,29 @@ func (m *DistrictMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case district.EdgeSettlements:
+		ids := make([]ent.Value, 0, len(m.settlements))
+		for id := range m.settlements {
+			ids = append(ids, id)
+		}
+		return ids
 	case district.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.locations))
 		for id := range m.locations {
 			ids = append(ids, id)
 		}
 		return ids
+	case district.EdgeRegion:
+		if id := m.region; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *DistrictMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 7)
 	if m.removedart != nil {
 		edges = append(edges, district.EdgeArt)
 	}
@@ -18938,6 +19135,9 @@ func (m *DistrictMutation) RemovedEdges() []string {
 	}
 	if m.removedprotected_area_pictures != nil {
 		edges = append(edges, district.EdgeProtectedAreaPictures)
+	}
+	if m.removedsettlements != nil {
+		edges = append(edges, district.EdgeSettlements)
 	}
 	if m.removedlocations != nil {
 		edges = append(edges, district.EdgeLocations)
@@ -18973,6 +19173,12 @@ func (m *DistrictMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case district.EdgeSettlements:
+		ids := make([]ent.Value, 0, len(m.removedsettlements))
+		for id := range m.removedsettlements {
+			ids = append(ids, id)
+		}
+		return ids
 	case district.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.removedlocations))
 		for id := range m.removedlocations {
@@ -18985,7 +19191,7 @@ func (m *DistrictMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *DistrictMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 7)
 	if m.clearedart {
 		edges = append(edges, district.EdgeArt)
 	}
@@ -18998,8 +19204,14 @@ func (m *DistrictMutation) ClearedEdges() []string {
 	if m.clearedprotected_area_pictures {
 		edges = append(edges, district.EdgeProtectedAreaPictures)
 	}
+	if m.clearedsettlements {
+		edges = append(edges, district.EdgeSettlements)
+	}
 	if m.clearedlocations {
 		edges = append(edges, district.EdgeLocations)
+	}
+	if m.clearedregion {
+		edges = append(edges, district.EdgeRegion)
 	}
 	return edges
 }
@@ -19016,8 +19228,12 @@ func (m *DistrictMutation) EdgeCleared(name string) bool {
 		return m.clearedbooks
 	case district.EdgeProtectedAreaPictures:
 		return m.clearedprotected_area_pictures
+	case district.EdgeSettlements:
+		return m.clearedsettlements
 	case district.EdgeLocations:
 		return m.clearedlocations
+	case district.EdgeRegion:
+		return m.clearedregion
 	}
 	return false
 }
@@ -19026,6 +19242,9 @@ func (m *DistrictMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *DistrictMutation) ClearEdge(name string) error {
 	switch name {
+	case district.EdgeRegion:
+		m.ClearRegion()
+		return nil
 	}
 	return fmt.Errorf("unknown District unique edge %s", name)
 }
@@ -19046,8 +19265,14 @@ func (m *DistrictMutation) ResetEdge(name string) error {
 	case district.EdgeProtectedAreaPictures:
 		m.ResetProtectedAreaPictures()
 		return nil
+	case district.EdgeSettlements:
+		m.ResetSettlements()
+		return nil
 	case district.EdgeLocations:
 		m.ResetLocations()
+		return nil
+	case district.EdgeRegion:
+		m.ResetRegion()
 		return nil
 	}
 	return fmt.Errorf("unknown District edge %s", name)
@@ -46057,9 +46282,17 @@ type RegionMutation struct {
 	protected_area_pictures        map[int]struct{}
 	removedprotected_area_pictures map[int]struct{}
 	clearedprotected_area_pictures bool
+	districts                      map[int]struct{}
+	removeddistricts               map[int]struct{}
+	cleareddistricts               bool
+	settlements                    map[int]struct{}
+	removedsettlements             map[int]struct{}
+	clearedsettlements             bool
 	locations                      map[int]struct{}
 	removedlocations               map[int]struct{}
 	clearedlocations               bool
+	country                        *int
+	clearedcountry                 bool
 	done                           bool
 	oldValue                       func(context.Context) (*Region, error)
 	predicates                     []predicate.Region
@@ -46799,6 +47032,114 @@ func (m *RegionMutation) ResetProtectedAreaPictures() {
 	m.removedprotected_area_pictures = nil
 }
 
+// AddDistrictIDs adds the "districts" edge to the District entity by ids.
+func (m *RegionMutation) AddDistrictIDs(ids ...int) {
+	if m.districts == nil {
+		m.districts = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.districts[ids[i]] = struct{}{}
+	}
+}
+
+// ClearDistricts clears the "districts" edge to the District entity.
+func (m *RegionMutation) ClearDistricts() {
+	m.cleareddistricts = true
+}
+
+// DistrictsCleared reports if the "districts" edge to the District entity was cleared.
+func (m *RegionMutation) DistrictsCleared() bool {
+	return m.cleareddistricts
+}
+
+// RemoveDistrictIDs removes the "districts" edge to the District entity by IDs.
+func (m *RegionMutation) RemoveDistrictIDs(ids ...int) {
+	if m.removeddistricts == nil {
+		m.removeddistricts = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.districts, ids[i])
+		m.removeddistricts[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedDistricts returns the removed IDs of the "districts" edge to the District entity.
+func (m *RegionMutation) RemovedDistrictsIDs() (ids []int) {
+	for id := range m.removeddistricts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// DistrictsIDs returns the "districts" edge IDs in the mutation.
+func (m *RegionMutation) DistrictsIDs() (ids []int) {
+	for id := range m.districts {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetDistricts resets all changes to the "districts" edge.
+func (m *RegionMutation) ResetDistricts() {
+	m.districts = nil
+	m.cleareddistricts = false
+	m.removeddistricts = nil
+}
+
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by ids.
+func (m *RegionMutation) AddSettlementIDs(ids ...int) {
+	if m.settlements == nil {
+		m.settlements = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.settlements[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSettlements clears the "settlements" edge to the Settlement entity.
+func (m *RegionMutation) ClearSettlements() {
+	m.clearedsettlements = true
+}
+
+// SettlementsCleared reports if the "settlements" edge to the Settlement entity was cleared.
+func (m *RegionMutation) SettlementsCleared() bool {
+	return m.clearedsettlements
+}
+
+// RemoveSettlementIDs removes the "settlements" edge to the Settlement entity by IDs.
+func (m *RegionMutation) RemoveSettlementIDs(ids ...int) {
+	if m.removedsettlements == nil {
+		m.removedsettlements = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.settlements, ids[i])
+		m.removedsettlements[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSettlements returns the removed IDs of the "settlements" edge to the Settlement entity.
+func (m *RegionMutation) RemovedSettlementsIDs() (ids []int) {
+	for id := range m.removedsettlements {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SettlementsIDs returns the "settlements" edge IDs in the mutation.
+func (m *RegionMutation) SettlementsIDs() (ids []int) {
+	for id := range m.settlements {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSettlements resets all changes to the "settlements" edge.
+func (m *RegionMutation) ResetSettlements() {
+	m.settlements = nil
+	m.clearedsettlements = false
+	m.removedsettlements = nil
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by ids.
 func (m *RegionMutation) AddLocationIDs(ids ...int) {
 	if m.locations == nil {
@@ -46851,6 +47192,45 @@ func (m *RegionMutation) ResetLocations() {
 	m.locations = nil
 	m.clearedlocations = false
 	m.removedlocations = nil
+}
+
+// SetCountryID sets the "country" edge to the Country entity by id.
+func (m *RegionMutation) SetCountryID(id int) {
+	m.country = &id
+}
+
+// ClearCountry clears the "country" edge to the Country entity.
+func (m *RegionMutation) ClearCountry() {
+	m.clearedcountry = true
+}
+
+// CountryCleared reports if the "country" edge to the Country entity was cleared.
+func (m *RegionMutation) CountryCleared() bool {
+	return m.clearedcountry
+}
+
+// CountryID returns the "country" edge ID in the mutation.
+func (m *RegionMutation) CountryID() (id int, exists bool) {
+	if m.country != nil {
+		return *m.country, true
+	}
+	return
+}
+
+// CountryIDs returns the "country" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CountryID instead. It exists only for internal usage by the builders.
+func (m *RegionMutation) CountryIDs() (ids []int) {
+	if id := m.country; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCountry resets all changes to the "country" edge.
+func (m *RegionMutation) ResetCountry() {
+	m.country = nil
+	m.clearedcountry = false
 }
 
 // Where appends a list predicates to the RegionMutation builder.
@@ -47144,7 +47524,7 @@ func (m *RegionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RegionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.art != nil {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -47160,8 +47540,17 @@ func (m *RegionMutation) AddedEdges() []string {
 	if m.protected_area_pictures != nil {
 		edges = append(edges, region.EdgeProtectedAreaPictures)
 	}
+	if m.districts != nil {
+		edges = append(edges, region.EdgeDistricts)
+	}
+	if m.settlements != nil {
+		edges = append(edges, region.EdgeSettlements)
+	}
 	if m.locations != nil {
 		edges = append(edges, region.EdgeLocations)
+	}
+	if m.country != nil {
+		edges = append(edges, region.EdgeCountry)
 	}
 	return edges
 }
@@ -47200,19 +47589,35 @@ func (m *RegionMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case region.EdgeDistricts:
+		ids := make([]ent.Value, 0, len(m.districts))
+		for id := range m.districts {
+			ids = append(ids, id)
+		}
+		return ids
+	case region.EdgeSettlements:
+		ids := make([]ent.Value, 0, len(m.settlements))
+		for id := range m.settlements {
+			ids = append(ids, id)
+		}
+		return ids
 	case region.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.locations))
 		for id := range m.locations {
 			ids = append(ids, id)
 		}
 		return ids
+	case region.EdgeCountry:
+		if id := m.country; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RegionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.removedart != nil {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -47227,6 +47632,12 @@ func (m *RegionMutation) RemovedEdges() []string {
 	}
 	if m.removedprotected_area_pictures != nil {
 		edges = append(edges, region.EdgeProtectedAreaPictures)
+	}
+	if m.removeddistricts != nil {
+		edges = append(edges, region.EdgeDistricts)
+	}
+	if m.removedsettlements != nil {
+		edges = append(edges, region.EdgeSettlements)
 	}
 	if m.removedlocations != nil {
 		edges = append(edges, region.EdgeLocations)
@@ -47268,6 +47679,18 @@ func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case region.EdgeDistricts:
+		ids := make([]ent.Value, 0, len(m.removeddistricts))
+		for id := range m.removeddistricts {
+			ids = append(ids, id)
+		}
+		return ids
+	case region.EdgeSettlements:
+		ids := make([]ent.Value, 0, len(m.removedsettlements))
+		for id := range m.removedsettlements {
+			ids = append(ids, id)
+		}
+		return ids
 	case region.EdgeLocations:
 		ids := make([]ent.Value, 0, len(m.removedlocations))
 		for id := range m.removedlocations {
@@ -47280,7 +47703,7 @@ func (m *RegionMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RegionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 9)
 	if m.clearedart {
 		edges = append(edges, region.EdgeArt)
 	}
@@ -47296,8 +47719,17 @@ func (m *RegionMutation) ClearedEdges() []string {
 	if m.clearedprotected_area_pictures {
 		edges = append(edges, region.EdgeProtectedAreaPictures)
 	}
+	if m.cleareddistricts {
+		edges = append(edges, region.EdgeDistricts)
+	}
+	if m.clearedsettlements {
+		edges = append(edges, region.EdgeSettlements)
+	}
 	if m.clearedlocations {
 		edges = append(edges, region.EdgeLocations)
+	}
+	if m.clearedcountry {
+		edges = append(edges, region.EdgeCountry)
 	}
 	return edges
 }
@@ -47316,8 +47748,14 @@ func (m *RegionMutation) EdgeCleared(name string) bool {
 		return m.clearedpetroglyphs
 	case region.EdgeProtectedAreaPictures:
 		return m.clearedprotected_area_pictures
+	case region.EdgeDistricts:
+		return m.cleareddistricts
+	case region.EdgeSettlements:
+		return m.clearedsettlements
 	case region.EdgeLocations:
 		return m.clearedlocations
+	case region.EdgeCountry:
+		return m.clearedcountry
 	}
 	return false
 }
@@ -47326,6 +47764,9 @@ func (m *RegionMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *RegionMutation) ClearEdge(name string) error {
 	switch name {
+	case region.EdgeCountry:
+		m.ClearCountry()
+		return nil
 	}
 	return fmt.Errorf("unknown Region unique edge %s", name)
 }
@@ -47349,8 +47790,17 @@ func (m *RegionMutation) ResetEdge(name string) error {
 	case region.EdgeProtectedAreaPictures:
 		m.ResetProtectedAreaPictures()
 		return nil
+	case region.EdgeDistricts:
+		m.ResetDistricts()
+		return nil
+	case region.EdgeSettlements:
+		m.ResetSettlements()
+		return nil
 	case region.EdgeLocations:
 		m.ResetLocations()
+		return nil
+	case region.EdgeCountry:
+		m.ResetCountry()
 		return nil
 	}
 	return fmt.Errorf("unknown Region edge %s", name)
@@ -48383,6 +48833,10 @@ type SettlementMutation struct {
 	locations                      map[int]struct{}
 	removedlocations               map[int]struct{}
 	clearedlocations               bool
+	region                         *int
+	clearedregion                  bool
+	district                       *int
+	cleareddistrict                bool
 	done                           bool
 	oldValue                       func(context.Context) (*Settlement, error)
 	predicates                     []predicate.Settlement
@@ -49122,6 +49576,84 @@ func (m *SettlementMutation) ResetLocations() {
 	m.removedlocations = nil
 }
 
+// SetRegionID sets the "region" edge to the Region entity by id.
+func (m *SettlementMutation) SetRegionID(id int) {
+	m.region = &id
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (m *SettlementMutation) ClearRegion() {
+	m.clearedregion = true
+}
+
+// RegionCleared reports if the "region" edge to the Region entity was cleared.
+func (m *SettlementMutation) RegionCleared() bool {
+	return m.clearedregion
+}
+
+// RegionID returns the "region" edge ID in the mutation.
+func (m *SettlementMutation) RegionID() (id int, exists bool) {
+	if m.region != nil {
+		return *m.region, true
+	}
+	return
+}
+
+// RegionIDs returns the "region" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// RegionID instead. It exists only for internal usage by the builders.
+func (m *SettlementMutation) RegionIDs() (ids []int) {
+	if id := m.region; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetRegion resets all changes to the "region" edge.
+func (m *SettlementMutation) ResetRegion() {
+	m.region = nil
+	m.clearedregion = false
+}
+
+// SetDistrictID sets the "district" edge to the District entity by id.
+func (m *SettlementMutation) SetDistrictID(id int) {
+	m.district = &id
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (m *SettlementMutation) ClearDistrict() {
+	m.cleareddistrict = true
+}
+
+// DistrictCleared reports if the "district" edge to the District entity was cleared.
+func (m *SettlementMutation) DistrictCleared() bool {
+	return m.cleareddistrict
+}
+
+// DistrictID returns the "district" edge ID in the mutation.
+func (m *SettlementMutation) DistrictID() (id int, exists bool) {
+	if m.district != nil {
+		return *m.district, true
+	}
+	return
+}
+
+// DistrictIDs returns the "district" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// DistrictID instead. It exists only for internal usage by the builders.
+func (m *SettlementMutation) DistrictIDs() (ids []int) {
+	if id := m.district; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetDistrict resets all changes to the "district" edge.
+func (m *SettlementMutation) ResetDistrict() {
+	m.district = nil
+	m.cleareddistrict = false
+}
+
 // Where appends a list predicates to the SettlementMutation builder.
 func (m *SettlementMutation) Where(ps ...predicate.Settlement) {
 	m.predicates = append(m.predicates, ps...)
@@ -49413,7 +49945,7 @@ func (m *SettlementMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SettlementMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 7)
 	if m.art != nil {
 		edges = append(edges, settlement.EdgeArt)
 	}
@@ -49428,6 +49960,12 @@ func (m *SettlementMutation) AddedEdges() []string {
 	}
 	if m.locations != nil {
 		edges = append(edges, settlement.EdgeLocations)
+	}
+	if m.region != nil {
+		edges = append(edges, settlement.EdgeRegion)
+	}
+	if m.district != nil {
+		edges = append(edges, settlement.EdgeDistrict)
 	}
 	return edges
 }
@@ -49466,13 +50004,21 @@ func (m *SettlementMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case settlement.EdgeRegion:
+		if id := m.region; id != nil {
+			return []ent.Value{*id}
+		}
+	case settlement.EdgeDistrict:
+		if id := m.district; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SettlementMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 7)
 	if m.removedart != nil {
 		edges = append(edges, settlement.EdgeArt)
 	}
@@ -49531,7 +50077,7 @@ func (m *SettlementMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SettlementMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 7)
 	if m.clearedart {
 		edges = append(edges, settlement.EdgeArt)
 	}
@@ -49546,6 +50092,12 @@ func (m *SettlementMutation) ClearedEdges() []string {
 	}
 	if m.clearedlocations {
 		edges = append(edges, settlement.EdgeLocations)
+	}
+	if m.clearedregion {
+		edges = append(edges, settlement.EdgeRegion)
+	}
+	if m.cleareddistrict {
+		edges = append(edges, settlement.EdgeDistrict)
 	}
 	return edges
 }
@@ -49564,6 +50116,10 @@ func (m *SettlementMutation) EdgeCleared(name string) bool {
 		return m.clearedprotected_area_pictures
 	case settlement.EdgeLocations:
 		return m.clearedlocations
+	case settlement.EdgeRegion:
+		return m.clearedregion
+	case settlement.EdgeDistrict:
+		return m.cleareddistrict
 	}
 	return false
 }
@@ -49572,6 +50128,12 @@ func (m *SettlementMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *SettlementMutation) ClearEdge(name string) error {
 	switch name {
+	case settlement.EdgeRegion:
+		m.ClearRegion()
+		return nil
+	case settlement.EdgeDistrict:
+		m.ClearDistrict()
+		return nil
 	}
 	return fmt.Errorf("unknown Settlement unique edge %s", name)
 }
@@ -49594,6 +50156,12 @@ func (m *SettlementMutation) ResetEdge(name string) error {
 		return nil
 	case settlement.EdgeLocations:
 		m.ResetLocations()
+		return nil
+	case settlement.EdgeRegion:
+		m.ResetRegion()
+		return nil
+	case settlement.EdgeDistrict:
+		m.ResetDistrict()
 		return nil
 	}
 	return fmt.Errorf("unknown Settlement edge %s", name)

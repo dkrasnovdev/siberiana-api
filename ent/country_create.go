@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 )
 
 // CountryCreate is the builder for creating a Country entity.
@@ -195,6 +196,21 @@ func (cc *CountryCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *C
 		ids[i] = p[i].ID
 	}
 	return cc.AddProtectedAreaPictureIDs(ids...)
+}
+
+// AddRegionIDs adds the "regions" edge to the Region entity by IDs.
+func (cc *CountryCreate) AddRegionIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddRegionIDs(ids...)
+	return cc
+}
+
+// AddRegions adds the "regions" edges to the Region entity.
+func (cc *CountryCreate) AddRegions(r ...*Region) *CountryCreate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return cc.AddRegionIDs(ids...)
 }
 
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
@@ -389,6 +405,22 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.RegionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.RegionsTable,
+			Columns: []string{country.RegionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

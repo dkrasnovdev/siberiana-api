@@ -14,9 +14,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
@@ -234,6 +236,44 @@ func (su *SettlementUpdate) AddLocations(l ...*Location) *SettlementUpdate {
 	return su.AddLocationIDs(ids...)
 }
 
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (su *SettlementUpdate) SetRegionID(id int) *SettlementUpdate {
+	su.mutation.SetRegionID(id)
+	return su
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (su *SettlementUpdate) SetNillableRegionID(id *int) *SettlementUpdate {
+	if id != nil {
+		su = su.SetRegionID(*id)
+	}
+	return su
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (su *SettlementUpdate) SetRegion(r *Region) *SettlementUpdate {
+	return su.SetRegionID(r.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (su *SettlementUpdate) SetDistrictID(id int) *SettlementUpdate {
+	su.mutation.SetDistrictID(id)
+	return su
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (su *SettlementUpdate) SetNillableDistrictID(id *int) *SettlementUpdate {
+	if id != nil {
+		su = su.SetDistrictID(*id)
+	}
+	return su
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (su *SettlementUpdate) SetDistrict(d *District) *SettlementUpdate {
+	return su.SetDistrictID(d.ID)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (su *SettlementUpdate) Mutation() *SettlementMutation {
 	return su.mutation
@@ -342,6 +382,18 @@ func (su *SettlementUpdate) RemoveLocations(l ...*Location) *SettlementUpdate {
 		ids[i] = l[i].ID
 	}
 	return su.RemoveLocationIDs(ids...)
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (su *SettlementUpdate) ClearRegion() *SettlementUpdate {
+	su.mutation.ClearRegion()
+	return su
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (su *SettlementUpdate) ClearDistrict() *SettlementUpdate {
+	su.mutation.ClearDistrict()
+	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -659,6 +711,64 @@ func (su *SettlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if su.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.RegionTable,
+			Columns: []string{settlement.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.RegionTable,
+			Columns: []string{settlement.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.DistrictTable,
+			Columns: []string{settlement.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.DistrictTable,
+			Columns: []string{settlement.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{settlement.Label}
@@ -880,6 +990,44 @@ func (suo *SettlementUpdateOne) AddLocations(l ...*Location) *SettlementUpdateOn
 	return suo.AddLocationIDs(ids...)
 }
 
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (suo *SettlementUpdateOne) SetRegionID(id int) *SettlementUpdateOne {
+	suo.mutation.SetRegionID(id)
+	return suo
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableRegionID(id *int) *SettlementUpdateOne {
+	if id != nil {
+		suo = suo.SetRegionID(*id)
+	}
+	return suo
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (suo *SettlementUpdateOne) SetRegion(r *Region) *SettlementUpdateOne {
+	return suo.SetRegionID(r.ID)
+}
+
+// SetDistrictID sets the "district" edge to the District entity by ID.
+func (suo *SettlementUpdateOne) SetDistrictID(id int) *SettlementUpdateOne {
+	suo.mutation.SetDistrictID(id)
+	return suo
+}
+
+// SetNillableDistrictID sets the "district" edge to the District entity by ID if the given value is not nil.
+func (suo *SettlementUpdateOne) SetNillableDistrictID(id *int) *SettlementUpdateOne {
+	if id != nil {
+		suo = suo.SetDistrictID(*id)
+	}
+	return suo
+}
+
+// SetDistrict sets the "district" edge to the District entity.
+func (suo *SettlementUpdateOne) SetDistrict(d *District) *SettlementUpdateOne {
+	return suo.SetDistrictID(d.ID)
+}
+
 // Mutation returns the SettlementMutation object of the builder.
 func (suo *SettlementUpdateOne) Mutation() *SettlementMutation {
 	return suo.mutation
@@ -988,6 +1136,18 @@ func (suo *SettlementUpdateOne) RemoveLocations(l ...*Location) *SettlementUpdat
 		ids[i] = l[i].ID
 	}
 	return suo.RemoveLocationIDs(ids...)
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (suo *SettlementUpdateOne) ClearRegion() *SettlementUpdateOne {
+	suo.mutation.ClearRegion()
+	return suo
+}
+
+// ClearDistrict clears the "district" edge to the District entity.
+func (suo *SettlementUpdateOne) ClearDistrict() *SettlementUpdateOne {
+	suo.mutation.ClearDistrict()
+	return suo
 }
 
 // Where appends a list predicates to the SettlementUpdate builder.
@@ -1328,6 +1488,64 @@ func (suo *SettlementUpdateOne) sqlSave(ctx context.Context) (_node *Settlement,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.RegionTable,
+			Columns: []string{settlement.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.RegionTable,
+			Columns: []string{settlement.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.DistrictCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.DistrictTable,
+			Columns: []string{settlement.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.DistrictIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   settlement.DistrictTable,
+			Columns: []string{settlement.DistrictColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(district.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -2724,6 +2724,22 @@ func (c *CountryClient) QueryProtectedAreaPictures(co *Country) *ProtectedAreaPi
 	return query
 }
 
+// QueryRegions queries the regions edge of a Country.
+func (c *CountryClient) QueryRegions(co *Country) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.RegionsTable, country.RegionsColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryLocations queries the locations edge of a Country.
 func (c *CountryClient) QueryLocations(co *Country) *LocationQuery {
 	query := (&LocationClient{config: c.config}).Query()
@@ -3104,6 +3120,22 @@ func (c *DistrictClient) QueryProtectedAreaPictures(d *District) *ProtectedAreaP
 	return query
 }
 
+// QuerySettlements queries the settlements edge of a District.
+func (c *DistrictClient) QuerySettlements(d *District) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.SettlementsTable, district.SettlementsColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryLocations queries the locations edge of a District.
 func (c *DistrictClient) QueryLocations(d *District) *LocationQuery {
 	query := (&LocationClient{config: c.config}).Query()
@@ -3113,6 +3145,22 @@ func (c *DistrictClient) QueryLocations(d *District) *LocationQuery {
 			sqlgraph.From(district.Table, district.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, district.LocationsTable, district.LocationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a District.
+func (c *DistrictClient) QueryRegion(d *District) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, district.RegionTable, district.RegionColumn),
 		)
 		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
 		return fromV, nil
@@ -7322,6 +7370,38 @@ func (c *RegionClient) QueryProtectedAreaPictures(r *Region) *ProtectedAreaPictu
 	return query
 }
 
+// QueryDistricts queries the districts edge of a Region.
+func (c *RegionClient) QueryDistricts(r *Region) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.DistrictsTable, region.DistrictsColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettlements queries the settlements edge of a Region.
+func (c *RegionClient) QuerySettlements(r *Region) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.SettlementsTable, region.SettlementsColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryLocations queries the locations edge of a Region.
 func (c *RegionClient) QueryLocations(r *Region) *LocationQuery {
 	query := (&LocationClient{config: c.config}).Query()
@@ -7331,6 +7411,22 @@ func (c *RegionClient) QueryLocations(r *Region) *LocationQuery {
 			sqlgraph.From(region.Table, region.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, region.LocationsTable, region.LocationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCountry queries the country edge of a Region.
+func (c *RegionClient) QueryCountry(r *Region) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, region.CountryTable, region.CountryColumn),
 		)
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
@@ -7711,6 +7807,38 @@ func (c *SettlementClient) QueryLocations(s *Settlement) *LocationQuery {
 			sqlgraph.From(settlement.Table, settlement.FieldID, id),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, settlement.LocationsTable, settlement.LocationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a Settlement.
+func (c *SettlementClient) QueryRegion(s *Settlement) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, settlement.RegionTable, settlement.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a Settlement.
+func (c *SettlementClient) QueryDistrict(s *Settlement) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, settlement.DistrictTable, settlement.DistrictColumn),
 		)
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil

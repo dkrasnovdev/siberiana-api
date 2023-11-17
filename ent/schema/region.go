@@ -56,6 +56,9 @@ func (Region) Edges() []ent.Edge {
 		edge.To("books", Book.Type),
 		edge.To("petroglyphs", Petroglyph.Type),
 		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
+		edge.To("districts", District.Type),
+		edge.To("settlements", Settlement.Type),
 		edge.From("locations", Location.Type).Ref("region"),
+		edge.From("country", Country.Type).Ref("regions").Unique(),
 	}
 }

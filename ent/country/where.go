@@ -717,6 +717,29 @@ func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predi
 	})
 }
 
+// HasRegions applies the HasEdge predicate on the "regions" edge.
+func HasRegions() predicate.Country {
+	return predicate.Country(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, RegionsTable, RegionsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRegionsWith applies the HasEdge predicate on the "regions" edge with a given conditions (other predicates).
+func HasRegionsWith(preds ...predicate.Region) predicate.Country {
+	return predicate.Country(func(s *sql.Selector) {
+		step := newRegionsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasLocations applies the HasEdge predicate on the "locations" edge.
 func HasLocations() predicate.Country {
 	return predicate.Country(func(s *sql.Selector) {

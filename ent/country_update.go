@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 )
 
 // CountryUpdate is the builder for updating Country entities.
@@ -219,6 +220,21 @@ func (cu *CountryUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *C
 	return cu.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddRegionIDs adds the "regions" edge to the Region entity by IDs.
+func (cu *CountryUpdate) AddRegionIDs(ids ...int) *CountryUpdate {
+	cu.mutation.AddRegionIDs(ids...)
+	return cu
+}
+
+// AddRegions adds the "regions" edges to the Region entity.
+func (cu *CountryUpdate) AddRegions(r ...*Region) *CountryUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return cu.AddRegionIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (cu *CountryUpdate) AddLocationIDs(ids ...int) *CountryUpdate {
 	cu.mutation.AddLocationIDs(ids...)
@@ -321,6 +337,27 @@ func (cu *CountryUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture)
 		ids[i] = p[i].ID
 	}
 	return cu.RemoveProtectedAreaPictureIDs(ids...)
+}
+
+// ClearRegions clears all "regions" edges to the Region entity.
+func (cu *CountryUpdate) ClearRegions() *CountryUpdate {
+	cu.mutation.ClearRegions()
+	return cu
+}
+
+// RemoveRegionIDs removes the "regions" edge to Region entities by IDs.
+func (cu *CountryUpdate) RemoveRegionIDs(ids ...int) *CountryUpdate {
+	cu.mutation.RemoveRegionIDs(ids...)
+	return cu
+}
+
+// RemoveRegions removes "regions" edges to Region entities.
+func (cu *CountryUpdate) RemoveRegions(r ...*Region) *CountryUpdate {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return cu.RemoveRegionIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -614,6 +651,51 @@ func (cu *CountryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cu.mutation.RegionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.RegionsTable,
+			Columns: []string{country.RegionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedRegionsIDs(); len(nodes) > 0 && !cu.mutation.RegionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.RegionsTable,
+			Columns: []string{country.RegionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RegionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.RegionsTable,
+			Columns: []string{country.RegionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if cu.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -865,6 +947,21 @@ func (cuo *CountryUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture
 	return cuo.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddRegionIDs adds the "regions" edge to the Region entity by IDs.
+func (cuo *CountryUpdateOne) AddRegionIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.AddRegionIDs(ids...)
+	return cuo
+}
+
+// AddRegions adds the "regions" edges to the Region entity.
+func (cuo *CountryUpdateOne) AddRegions(r ...*Region) *CountryUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return cuo.AddRegionIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (cuo *CountryUpdateOne) AddLocationIDs(ids ...int) *CountryUpdateOne {
 	cuo.mutation.AddLocationIDs(ids...)
@@ -967,6 +1064,27 @@ func (cuo *CountryUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPict
 		ids[i] = p[i].ID
 	}
 	return cuo.RemoveProtectedAreaPictureIDs(ids...)
+}
+
+// ClearRegions clears all "regions" edges to the Region entity.
+func (cuo *CountryUpdateOne) ClearRegions() *CountryUpdateOne {
+	cuo.mutation.ClearRegions()
+	return cuo
+}
+
+// RemoveRegionIDs removes the "regions" edge to Region entities by IDs.
+func (cuo *CountryUpdateOne) RemoveRegionIDs(ids ...int) *CountryUpdateOne {
+	cuo.mutation.RemoveRegionIDs(ids...)
+	return cuo
+}
+
+// RemoveRegions removes "regions" edges to Region entities.
+func (cuo *CountryUpdateOne) RemoveRegions(r ...*Region) *CountryUpdateOne {
+	ids := make([]int, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return cuo.RemoveRegionIDs(ids...)
 }
 
 // ClearLocations clears all "locations" edges to the Location entity.
@@ -1283,6 +1401,51 @@ func (cuo *CountryUpdateOne) sqlSave(ctx context.Context) (_node *Country, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.RegionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.RegionsTable,
+			Columns: []string{country.RegionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedRegionsIDs(); len(nodes) > 0 && !cuo.mutation.RegionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.RegionsTable,
+			Columns: []string{country.RegionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RegionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.RegionsTable,
+			Columns: []string{country.RegionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

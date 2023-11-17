@@ -717,6 +717,29 @@ func HasProtectedAreaPicturesWith(preds ...predicate.ProtectedAreaPicture) predi
 	})
 }
 
+// HasSettlements applies the HasEdge predicate on the "settlements" edge.
+func HasSettlements() predicate.District {
+	return predicate.District(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SettlementsTable, SettlementsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSettlementsWith applies the HasEdge predicate on the "settlements" edge with a given conditions (other predicates).
+func HasSettlementsWith(preds ...predicate.Settlement) predicate.District {
+	return predicate.District(func(s *sql.Selector) {
+		step := newSettlementsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasLocations applies the HasEdge predicate on the "locations" edge.
 func HasLocations() predicate.District {
 	return predicate.District(func(s *sql.Selector) {
@@ -732,6 +755,29 @@ func HasLocations() predicate.District {
 func HasLocationsWith(preds ...predicate.Location) predicate.District {
 	return predicate.District(func(s *sql.Selector) {
 		step := newLocationsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRegion applies the HasEdge predicate on the "region" edge.
+func HasRegion() predicate.District {
+	return predicate.District(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRegionWith applies the HasEdge predicate on the "region" edge with a given conditions (other predicates).
+func HasRegionWith(preds ...predicate.Region) predicate.District {
+	return predicate.District(func(s *sql.Selector) {
+		step := newRegionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

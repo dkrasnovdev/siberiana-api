@@ -41,6 +41,10 @@ const (
 	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeLocations holds the string denoting the locations edge name in mutations.
 	EdgeLocations = "locations"
+	// EdgeRegion holds the string denoting the region edge name in mutations.
+	EdgeRegion = "region"
+	// EdgeDistrict holds the string denoting the district edge name in mutations.
+	EdgeDistrict = "district"
 	// Table holds the table name of the settlement in the database.
 	Table = "settlements"
 	// ArtTable is the table that holds the art relation/edge.
@@ -78,6 +82,20 @@ const (
 	LocationsInverseTable = "locations"
 	// LocationsColumn is the table column denoting the locations relation/edge.
 	LocationsColumn = "location_settlement"
+	// RegionTable is the table that holds the region relation/edge.
+	RegionTable = "settlements"
+	// RegionInverseTable is the table name for the Region entity.
+	// It exists in this package in order to avoid circular dependency with the "region" package.
+	RegionInverseTable = "regions"
+	// RegionColumn is the table column denoting the region relation/edge.
+	RegionColumn = "region_settlements"
+	// DistrictTable is the table that holds the district relation/edge.
+	DistrictTable = "settlements"
+	// DistrictInverseTable is the table name for the District entity.
+	// It exists in this package in order to avoid circular dependency with the "district" package.
+	DistrictInverseTable = "districts"
+	// DistrictColumn is the table column denoting the district relation/edge.
+	DistrictColumn = "district_settlements"
 )
 
 // Columns holds all SQL columns for settlement fields.
@@ -93,10 +111,22 @@ var Columns = []string{
 	FieldExternalLink,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "settlements"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"district_settlements",
+	"region_settlements",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -236,6 +266,20 @@ func ByLocations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newLocationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByRegionField orders the results by region field.
+func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDistrictField orders the results by district field.
+func ByDistrictField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDistrictStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newArtStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -269,5 +313,19 @@ func newLocationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LocationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, LocationsTable, LocationsColumn),
+	)
+}
+func newRegionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RegionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
+	)
+}
+func newDistrictStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DistrictInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, DistrictTable, DistrictColumn),
 	)
 }

@@ -18,6 +18,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
+	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
 // DistrictUpdate is the builder for updating District entities.
@@ -219,6 +221,21 @@ func (du *DistrictUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *
 	return du.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by IDs.
+func (du *DistrictUpdate) AddSettlementIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddSettlementIDs(ids...)
+	return du
+}
+
+// AddSettlements adds the "settlements" edges to the Settlement entity.
+func (du *DistrictUpdate) AddSettlements(s ...*Settlement) *DistrictUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return du.AddSettlementIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (du *DistrictUpdate) AddLocationIDs(ids ...int) *DistrictUpdate {
 	du.mutation.AddLocationIDs(ids...)
@@ -232,6 +249,25 @@ func (du *DistrictUpdate) AddLocations(l ...*Location) *DistrictUpdate {
 		ids[i] = l[i].ID
 	}
 	return du.AddLocationIDs(ids...)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (du *DistrictUpdate) SetRegionID(id int) *DistrictUpdate {
+	du.mutation.SetRegionID(id)
+	return du
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (du *DistrictUpdate) SetNillableRegionID(id *int) *DistrictUpdate {
+	if id != nil {
+		du = du.SetRegionID(*id)
+	}
+	return du
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (du *DistrictUpdate) SetRegion(r *Region) *DistrictUpdate {
+	return du.SetRegionID(r.ID)
 }
 
 // Mutation returns the DistrictMutation object of the builder.
@@ -323,6 +359,27 @@ func (du *DistrictUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture
 	return du.RemoveProtectedAreaPictureIDs(ids...)
 }
 
+// ClearSettlements clears all "settlements" edges to the Settlement entity.
+func (du *DistrictUpdate) ClearSettlements() *DistrictUpdate {
+	du.mutation.ClearSettlements()
+	return du
+}
+
+// RemoveSettlementIDs removes the "settlements" edge to Settlement entities by IDs.
+func (du *DistrictUpdate) RemoveSettlementIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveSettlementIDs(ids...)
+	return du
+}
+
+// RemoveSettlements removes "settlements" edges to Settlement entities.
+func (du *DistrictUpdate) RemoveSettlements(s ...*Settlement) *DistrictUpdate {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return du.RemoveSettlementIDs(ids...)
+}
+
 // ClearLocations clears all "locations" edges to the Location entity.
 func (du *DistrictUpdate) ClearLocations() *DistrictUpdate {
 	du.mutation.ClearLocations()
@@ -342,6 +399,12 @@ func (du *DistrictUpdate) RemoveLocations(l ...*Location) *DistrictUpdate {
 		ids[i] = l[i].ID
 	}
 	return du.RemoveLocationIDs(ids...)
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (du *DistrictUpdate) ClearRegion() *DistrictUpdate {
+	du.mutation.ClearRegion()
+	return du
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -614,6 +677,51 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if du.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.SettlementsTable,
+			Columns: []string{district.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedSettlementsIDs(); len(nodes) > 0 && !du.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.SettlementsTable,
+			Columns: []string{district.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.SettlementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.SettlementsTable,
+			Columns: []string{district.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if du.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -652,6 +760,35 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if du.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   district.RegionTable,
+			Columns: []string{district.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   district.RegionTable,
+			Columns: []string{district.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -865,6 +1002,21 @@ func (duo *DistrictUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPictur
 	return duo.AddProtectedAreaPictureIDs(ids...)
 }
 
+// AddSettlementIDs adds the "settlements" edge to the Settlement entity by IDs.
+func (duo *DistrictUpdateOne) AddSettlementIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddSettlementIDs(ids...)
+	return duo
+}
+
+// AddSettlements adds the "settlements" edges to the Settlement entity.
+func (duo *DistrictUpdateOne) AddSettlements(s ...*Settlement) *DistrictUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return duo.AddSettlementIDs(ids...)
+}
+
 // AddLocationIDs adds the "locations" edge to the Location entity by IDs.
 func (duo *DistrictUpdateOne) AddLocationIDs(ids ...int) *DistrictUpdateOne {
 	duo.mutation.AddLocationIDs(ids...)
@@ -878,6 +1030,25 @@ func (duo *DistrictUpdateOne) AddLocations(l ...*Location) *DistrictUpdateOne {
 		ids[i] = l[i].ID
 	}
 	return duo.AddLocationIDs(ids...)
+}
+
+// SetRegionID sets the "region" edge to the Region entity by ID.
+func (duo *DistrictUpdateOne) SetRegionID(id int) *DistrictUpdateOne {
+	duo.mutation.SetRegionID(id)
+	return duo
+}
+
+// SetNillableRegionID sets the "region" edge to the Region entity by ID if the given value is not nil.
+func (duo *DistrictUpdateOne) SetNillableRegionID(id *int) *DistrictUpdateOne {
+	if id != nil {
+		duo = duo.SetRegionID(*id)
+	}
+	return duo
+}
+
+// SetRegion sets the "region" edge to the Region entity.
+func (duo *DistrictUpdateOne) SetRegion(r *Region) *DistrictUpdateOne {
+	return duo.SetRegionID(r.ID)
 }
 
 // Mutation returns the DistrictMutation object of the builder.
@@ -969,6 +1140,27 @@ func (duo *DistrictUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPic
 	return duo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
+// ClearSettlements clears all "settlements" edges to the Settlement entity.
+func (duo *DistrictUpdateOne) ClearSettlements() *DistrictUpdateOne {
+	duo.mutation.ClearSettlements()
+	return duo
+}
+
+// RemoveSettlementIDs removes the "settlements" edge to Settlement entities by IDs.
+func (duo *DistrictUpdateOne) RemoveSettlementIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveSettlementIDs(ids...)
+	return duo
+}
+
+// RemoveSettlements removes "settlements" edges to Settlement entities.
+func (duo *DistrictUpdateOne) RemoveSettlements(s ...*Settlement) *DistrictUpdateOne {
+	ids := make([]int, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return duo.RemoveSettlementIDs(ids...)
+}
+
 // ClearLocations clears all "locations" edges to the Location entity.
 func (duo *DistrictUpdateOne) ClearLocations() *DistrictUpdateOne {
 	duo.mutation.ClearLocations()
@@ -988,6 +1180,12 @@ func (duo *DistrictUpdateOne) RemoveLocations(l ...*Location) *DistrictUpdateOne
 		ids[i] = l[i].ID
 	}
 	return duo.RemoveLocationIDs(ids...)
+}
+
+// ClearRegion clears the "region" edge to the Region entity.
+func (duo *DistrictUpdateOne) ClearRegion() *DistrictUpdateOne {
+	duo.mutation.ClearRegion()
+	return duo
 }
 
 // Where appends a list predicates to the DistrictUpdate builder.
@@ -1290,6 +1488,51 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if duo.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.SettlementsTable,
+			Columns: []string{district.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedSettlementsIDs(); len(nodes) > 0 && !duo.mutation.SettlementsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.SettlementsTable,
+			Columns: []string{district.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.SettlementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.SettlementsTable,
+			Columns: []string{district.SettlementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(settlement.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if duo.mutation.LocationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1328,6 +1571,35 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(location.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if duo.mutation.RegionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   district.RegionTable,
+			Columns: []string{district.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RegionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   district.RegionTable,
+			Columns: []string{district.RegionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

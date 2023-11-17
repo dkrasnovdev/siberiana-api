@@ -49,18 +49,21 @@ type CountryEdges struct {
 	Books []*Book `json:"books,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
+	// Regions holds the value of the regions edge.
+	Regions []*Region `json:"regions,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+	namedRegions               map[string][]*Region
 	namedLocations             map[string][]*Location
 }
 
@@ -100,10 +103,19 @@ func (e CountryEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, err
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
 }
 
+// RegionsOrErr returns the Regions value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) RegionsOrErr() ([]*Region, error) {
+	if e.loadedTypes[4] {
+		return e.Regions, nil
+	}
+	return nil, &NotLoadedError{edge: "regions"}
+}
+
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e CountryEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
@@ -220,6 +232,11 @@ func (c *Country) QueryBooks() *BookQuery {
 // QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Country entity.
 func (c *Country) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
 	return NewCountryClient(c.config).QueryProtectedAreaPictures(c)
+}
+
+// QueryRegions queries the "regions" edge of the Country entity.
+func (c *Country) QueryRegions() *RegionQuery {
+	return NewCountryClient(c.config).QueryRegions(c)
 }
 
 // QueryLocations queries the "locations" edge of the Country entity.
@@ -370,6 +387,30 @@ func (c *Country) appendNamedProtectedAreaPictures(name string, edges ...*Protec
 		c.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
 	} else {
 		c.Edges.namedProtectedAreaPictures[name] = append(c.Edges.namedProtectedAreaPictures[name], edges...)
+	}
+}
+
+// NamedRegions returns the Regions named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedRegions(name string) ([]*Region, error) {
+	if c.Edges.namedRegions == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedRegions[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedRegions(name string, edges ...*Region) {
+	if c.Edges.namedRegions == nil {
+		c.Edges.namedRegions = make(map[string][]*Region)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedRegions[name] = []*Region{}
+	} else {
+		c.Edges.namedRegions[name] = append(c.Edges.namedRegions[name], edges...)
 	}
 }
 

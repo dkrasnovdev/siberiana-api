@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 )
 
 // District is the model entity for the District schema.
@@ -35,8 +36,9 @@ type District struct {
 	ExternalLink string `json:"external_link,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DistrictQuery when eager-loading is set.
-	Edges        DistrictEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges            DistrictEdges `json:"edges"`
+	region_districts *int
+	selectValues     sql.SelectValues
 }
 
 // DistrictEdges holds the relations/edges for other nodes in the graph.
@@ -49,18 +51,23 @@ type DistrictEdges struct {
 	Books []*Book `json:"books,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
+	// Settlements holds the value of the settlements edge.
+	Settlements []*Settlement `json:"settlements,omitempty"`
 	// Locations holds the value of the locations edge.
 	Locations []*Location `json:"locations,omitempty"`
+	// Region holds the value of the region edge.
+	Region *Region `json:"region,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [7]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
+	namedSettlements           map[string][]*Settlement
 	namedLocations             map[string][]*Location
 }
 
@@ -100,13 +107,35 @@ func (e DistrictEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, er
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
 }
 
+// SettlementsOrErr returns the Settlements value or an error if the edge
+// was not loaded in eager-loading.
+func (e DistrictEdges) SettlementsOrErr() ([]*Settlement, error) {
+	if e.loadedTypes[4] {
+		return e.Settlements, nil
+	}
+	return nil, &NotLoadedError{edge: "settlements"}
+}
+
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e DistrictEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
+}
+
+// RegionOrErr returns the Region value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DistrictEdges) RegionOrErr() (*Region, error) {
+	if e.loadedTypes[6] {
+		if e.Region == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: region.Label}
+		}
+		return e.Region, nil
+	}
+	return nil, &NotLoadedError{edge: "region"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -120,6 +149,8 @@ func (*District) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case district.FieldCreatedAt, district.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
+		case district.ForeignKeys[0]: // region_districts
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -189,6 +220,13 @@ func (d *District) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				d.ExternalLink = value.String
 			}
+		case district.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field region_districts", value)
+			} else if value.Valid {
+				d.region_districts = new(int)
+				*d.region_districts = int(value.Int64)
+			}
 		default:
 			d.selectValues.Set(columns[i], values[i])
 		}
@@ -222,9 +260,19 @@ func (d *District) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
 	return NewDistrictClient(d.config).QueryProtectedAreaPictures(d)
 }
 
+// QuerySettlements queries the "settlements" edge of the District entity.
+func (d *District) QuerySettlements() *SettlementQuery {
+	return NewDistrictClient(d.config).QuerySettlements(d)
+}
+
 // QueryLocations queries the "locations" edge of the District entity.
 func (d *District) QueryLocations() *LocationQuery {
 	return NewDistrictClient(d.config).QueryLocations(d)
+}
+
+// QueryRegion queries the "region" edge of the District entity.
+func (d *District) QueryRegion() *RegionQuery {
+	return NewDistrictClient(d.config).QueryRegion(d)
 }
 
 // Update returns a builder for updating this District.
@@ -370,6 +418,30 @@ func (d *District) appendNamedProtectedAreaPictures(name string, edges ...*Prote
 		d.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
 	} else {
 		d.Edges.namedProtectedAreaPictures[name] = append(d.Edges.namedProtectedAreaPictures[name], edges...)
+	}
+}
+
+// NamedSettlements returns the Settlements named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (d *District) NamedSettlements(name string) ([]*Settlement, error) {
+	if d.Edges.namedSettlements == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := d.Edges.namedSettlements[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (d *District) appendNamedSettlements(name string, edges ...*Settlement) {
+	if d.Edges.namedSettlements == nil {
+		d.Edges.namedSettlements = make(map[string][]*Settlement)
+	}
+	if len(edges) == 0 {
+		d.Edges.namedSettlements[name] = []*Settlement{}
+	} else {
+		d.Edges.namedSettlements[name] = append(d.Edges.namedSettlements[name], edges...)
 	}
 }
 

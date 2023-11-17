@@ -19,6 +19,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 )
 
 // CountryQuery is the builder for querying Country entities.
@@ -32,6 +33,7 @@ type CountryQuery struct {
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	withRegions                    *RegionQuery
 	withLocations                  *LocationQuery
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*Country) error
@@ -39,6 +41,7 @@ type CountryQuery struct {
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
+	withNamedRegions               map[string]*RegionQuery
 	withNamedLocations             map[string]*LocationQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -157,6 +160,28 @@ func (cq *CountryQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery 
 			sqlgraph.From(country.Table, country.FieldID, selector),
 			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, country.ProtectedAreaPicturesTable, country.ProtectedAreaPicturesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegions chains the current query on the "regions" edge.
+func (cq *CountryQuery) QueryRegions() *RegionQuery {
+	query := (&RegionClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.RegionsTable, country.RegionsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -382,6 +407,7 @@ func (cq *CountryQuery) Clone() *CountryQuery {
 		withArtifacts:             cq.withArtifacts.Clone(),
 		withBooks:                 cq.withBooks.Clone(),
 		withProtectedAreaPictures: cq.withProtectedAreaPictures.Clone(),
+		withRegions:               cq.withRegions.Clone(),
 		withLocations:             cq.withLocations.Clone(),
 		// clone intermediate query.
 		sql:  cq.sql.Clone(),
@@ -430,6 +456,17 @@ func (cq *CountryQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPic
 		opt(query)
 	}
 	cq.withProtectedAreaPictures = query
+	return cq
+}
+
+// WithRegions tells the query-builder to eager-load the nodes that are connected to
+// the "regions" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithRegions(opts ...func(*RegionQuery)) *CountryQuery {
+	query := (&RegionClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withRegions = query
 	return cq
 }
 
@@ -528,11 +565,12 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	var (
 		nodes       = []*Country{}
 		_spec       = cq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			cq.withArt != nil,
 			cq.withArtifacts != nil,
 			cq.withBooks != nil,
 			cq.withProtectedAreaPictures != nil,
+			cq.withRegions != nil,
 			cq.withLocations != nil,
 		}
 	)
@@ -587,6 +625,13 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 			return nil, err
 		}
 	}
+	if query := cq.withRegions; query != nil {
+		if err := cq.loadRegions(ctx, query, nodes,
+			func(n *Country) { n.Edges.Regions = []*Region{} },
+			func(n *Country, e *Region) { n.Edges.Regions = append(n.Edges.Regions, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := cq.withLocations; query != nil {
 		if err := cq.loadLocations(ctx, query, nodes,
 			func(n *Country) { n.Edges.Locations = []*Location{} },
@@ -619,6 +664,13 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 		if err := cq.loadProtectedAreaPictures(ctx, query, nodes,
 			func(n *Country) { n.appendNamedProtectedAreaPictures(name) },
 			func(n *Country, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedRegions {
+		if err := cq.loadRegions(ctx, query, nodes,
+			func(n *Country) { n.appendNamedRegions(name) },
+			func(n *Country, e *Region) { n.appendNamedRegions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -756,6 +808,37 @@ func (cq *CountryQuery) loadProtectedAreaPictures(ctx context.Context, query *Pr
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "country_protected_area_pictures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CountryQuery) loadRegions(ctx context.Context, query *RegionQuery, nodes []*Country, init func(*Country), assign func(*Country, *Region)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Country)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Region(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(country.RegionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.country_regions
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "country_regions" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "country_regions" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -930,6 +1013,20 @@ func (cq *CountryQuery) WithNamedProtectedAreaPictures(name string, opts ...func
 		cq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
 	}
 	cq.withNamedProtectedAreaPictures[name] = query
+	return cq
+}
+
+// WithNamedRegions tells the query-builder to eager-load the nodes that are connected to the "regions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedRegions(name string, opts ...func(*RegionQuery)) *CountryQuery {
+	query := (&RegionClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedRegions == nil {
+		cq.withNamedRegions = make(map[string]*RegionQuery)
+	}
+	cq.withNamedRegions[name] = query
 	return cq
 }
 

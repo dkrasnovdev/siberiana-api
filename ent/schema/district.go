@@ -55,6 +55,8 @@ func (District) Edges() []ent.Edge {
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
 		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
+		edge.To("settlements", Settlement.Type),
 		edge.From("locations", Location.Type).Ref("district"),
+		edge.From("region", Region.Type).Ref("districts").Unique(),
 	}
 }

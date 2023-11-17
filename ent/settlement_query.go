@@ -15,9 +15,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
+	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
 )
 
@@ -33,6 +35,9 @@ type SettlementQuery struct {
 	withBooks                      *BookQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	withLocations                  *LocationQuery
+	withRegion                     *RegionQuery
+	withDistrict                   *DistrictQuery
+	withFKs                        bool
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*Settlement) error
 	withNamedArt                   map[string]*ArtQuery
@@ -179,6 +184,50 @@ func (sq *SettlementQuery) QueryLocations() *LocationQuery {
 			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
 			sqlgraph.To(location.Table, location.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, settlement.LocationsTable, settlement.LocationsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRegion chains the current query on the "region" edge.
+func (sq *SettlementQuery) QueryRegion() *RegionQuery {
+	query := (&RegionClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, settlement.RegionTable, settlement.RegionColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDistrict chains the current query on the "district" edge.
+func (sq *SettlementQuery) QueryDistrict() *DistrictQuery {
+	query := (&DistrictClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, selector),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, settlement.DistrictTable, settlement.DistrictColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
@@ -383,6 +432,8 @@ func (sq *SettlementQuery) Clone() *SettlementQuery {
 		withBooks:                 sq.withBooks.Clone(),
 		withProtectedAreaPictures: sq.withProtectedAreaPictures.Clone(),
 		withLocations:             sq.withLocations.Clone(),
+		withRegion:                sq.withRegion.Clone(),
+		withDistrict:              sq.withDistrict.Clone(),
 		// clone intermediate query.
 		sql:  sq.sql.Clone(),
 		path: sq.path,
@@ -441,6 +492,28 @@ func (sq *SettlementQuery) WithLocations(opts ...func(*LocationQuery)) *Settleme
 		opt(query)
 	}
 	sq.withLocations = query
+	return sq
+}
+
+// WithRegion tells the query-builder to eager-load the nodes that are connected to
+// the "region" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithRegion(opts ...func(*RegionQuery)) *SettlementQuery {
+	query := (&RegionClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withRegion = query
+	return sq
+}
+
+// WithDistrict tells the query-builder to eager-load the nodes that are connected to
+// the "district" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SettlementQuery) WithDistrict(opts ...func(*DistrictQuery)) *SettlementQuery {
+	query := (&DistrictClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withDistrict = query
 	return sq
 }
 
@@ -527,15 +600,24 @@ func (sq *SettlementQuery) prepareQuery(ctx context.Context) error {
 func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Settlement, error) {
 	var (
 		nodes       = []*Settlement{}
+		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [7]bool{
 			sq.withArt != nil,
 			sq.withArtifacts != nil,
 			sq.withBooks != nil,
 			sq.withProtectedAreaPictures != nil,
 			sq.withLocations != nil,
+			sq.withRegion != nil,
+			sq.withDistrict != nil,
 		}
 	)
+	if sq.withRegion != nil || sq.withDistrict != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, settlement.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Settlement).scanValues(nil, columns)
 	}
@@ -591,6 +673,18 @@ func (sq *SettlementQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := sq.loadLocations(ctx, query, nodes,
 			func(n *Settlement) { n.Edges.Locations = []*Location{} },
 			func(n *Settlement, e *Location) { n.Edges.Locations = append(n.Edges.Locations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withRegion; query != nil {
+		if err := sq.loadRegion(ctx, query, nodes, nil,
+			func(n *Settlement, e *Region) { n.Edges.Region = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withDistrict; query != nil {
+		if err := sq.loadDistrict(ctx, query, nodes, nil,
+			func(n *Settlement, e *District) { n.Edges.District = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -789,6 +883,70 @@ func (sq *SettlementQuery) loadLocations(ctx context.Context, query *LocationQue
 			return fmt.Errorf(`unexpected referenced foreign-key "location_settlement" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (sq *SettlementQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *Region)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Settlement)
+	for i := range nodes {
+		if nodes[i].region_settlements == nil {
+			continue
+		}
+		fk := *nodes[i].region_settlements
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(region.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "region_settlements" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (sq *SettlementQuery) loadDistrict(ctx context.Context, query *DistrictQuery, nodes []*Settlement, init func(*Settlement), assign func(*Settlement, *District)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Settlement)
+	for i := range nodes {
+		if nodes[i].district_settlements == nil {
+			continue
+		}
+		fk := *nodes[i].district_settlements
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(district.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "district_settlements" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }
