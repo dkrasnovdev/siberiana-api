@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	e "github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/hook"
 	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
@@ -96,7 +97,7 @@ func (PersonalCollection) Hooks() []ent.Hook {
 }
 
 func OwnershipHook(next ent.Mutator) ent.Mutator {
-	return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	return hook.PersonalCollectionFunc(func(ctx context.Context, m *e.PersonalCollectionMutation) (ent.Value, error) {
 		v := rule.FromContext(ctx)
 		if v == nil {
 			return nil, fmt.Errorf("not authenticated")
@@ -105,11 +106,10 @@ func OwnershipHook(next ent.Mutator) ent.Mutator {
 
 		op := m.Op()
 
-		owner, _ := m.Field("created_by")
-		fields := m.Fields()
+		owner, _ := m.CreatedBy()
 
 		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && owner != usr {
-			return nil, fmt.Errorf("forbidden, fields: %v", fields)
+			return nil, fmt.Errorf("Operation is not allowed. User %s is not owner of the collection. Owner: %s", usr, owner)
 		}
 
 		return next.Mutate(ctx, m)
