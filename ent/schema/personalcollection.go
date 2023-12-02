@@ -78,11 +78,13 @@ func (PersonalCollection) Interceptors() []ent.Interceptor {
 		ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 			return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
 				var usr string
+				var isAdmin bool
 				v := rule.FromContext(ctx)
 				if v != nil {
 					usr = v.GetPreferredUsername()
+					isAdmin = v.IsAdministrator()
 				}
-				if q, ok := query.(*e.PersonalCollectionQuery); ok {
+				if q, ok := query.(*e.PersonalCollectionQuery); ok && !isAdmin {
 					q.Where(personalcollection.Or(personalcollection.IsPublic(true), personalcollection.CreatedBy(usr)))
 				}
 				return next.Query(ctx, query)
