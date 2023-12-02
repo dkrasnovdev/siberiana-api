@@ -588,7 +588,7 @@ func (r *mutationResolver) DeletePersonalCollection(ctx context.Context, id int)
 		Where(personalcollection.And(personalcollection.IDEQ(id), personalcollection.CreatedByEQ(user))).
 		Only(ctx)
 	if err != nil {
-		return "", fmt.Errorf("Operation not permitted")
+		return "", fmt.Errorf("Operation was not successful")
 	}
 	err = client.PersonalCollection.DeleteOneID(id).Exec(ctx)
 	if err != nil {
