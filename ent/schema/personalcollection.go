@@ -97,7 +97,8 @@ func (PersonalCollection) Hooks() []ent.Hook {
 
 func OwnershipHook(next ent.Mutator) ent.Mutator {
 	type Ownership interface {
-		CreatedBy() string
+		SetCreatedBy(string)
+		CreatedBy() (string, bool)
 	}
 	return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 		mx, ok := m.(Ownership)
@@ -112,7 +113,13 @@ func OwnershipHook(next ent.Mutator) ent.Mutator {
 
 		op := m.Op()
 
-		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && mx.CreatedBy() != usr {
+		owner, exists := mx.CreatedBy()
+
+		if !exists {
+			mx.SetCreatedBy(usr)
+		}
+
+		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && owner != usr {
 			return nil, fmt.Errorf("not allowed")
 		}
 
