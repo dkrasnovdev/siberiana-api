@@ -120,7 +120,7 @@ func OwnershipHook(next ent.Mutator) ent.Mutator {
 		}
 
 		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && owner != usr {
-			return nil, fmt.Errorf("not allowed")
+			return nil, fmt.Errorf("not allowed. usr: %s, owner: %s", usr, owner)
 		}
 
 		return next.Mutate(ctx, m)
