@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -67,6 +68,7 @@ func (Dendrochronology) Fields() []ent.Field {
 func (Dendrochronology) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("analysis", DendrochronologicalAnalysis.Type).
-			Ref("dendrochronology"),
+			Ref("dendrochronology").
+			Annotations(entsql.OnDelete(entsql.Cascade)),
 	}
 }

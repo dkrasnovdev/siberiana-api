@@ -430,7 +430,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "protected_area_pictures", "petroglyphs"}},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "dendrochronology", "protected_area_pictures", "petroglyphs"}},
 		{Name: "category_collections", Type: field.TypeInt},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.

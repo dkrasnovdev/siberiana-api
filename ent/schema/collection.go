@@ -58,7 +58,7 @@ func (Collection) Fields() []ent.Field {
 		field.String("slug").
 			Unique(),
 		field.Enum("type").
-			Values("art", "artifacts", "books", "protected_area_pictures", "petroglyphs").
+			Values("art", "artifacts", "books", "dendrochronology", "protected_area_pictures", "petroglyphs").
 			Optional().
 			Immutable(),
 	}

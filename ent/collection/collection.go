@@ -182,6 +182,7 @@ const (
 	TypeArt                   Type = "art"
 	TypeArtifacts             Type = "artifacts"
 	TypeBooks                 Type = "books"
+	TypeDendrochronology      Type = "dendrochronology"
 	TypeProtectedAreaPictures Type = "protected_area_pictures"
 	TypePetroglyphs           Type = "petroglyphs"
 )
@@ -193,7 +194,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeArt, TypeArtifacts, TypeBooks, TypeProtectedAreaPictures, TypePetroglyphs:
+	case TypeArt, TypeArtifacts, TypeBooks, TypeDendrochronology, TypeProtectedAreaPictures, TypePetroglyphs:
 		return nil
 	default:
 		return fmt.Errorf("collection: invalid enum value for type field: %q", _type)
