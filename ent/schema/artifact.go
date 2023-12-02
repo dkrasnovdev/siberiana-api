@@ -101,7 +101,7 @@ func (Artifact) Edges() []ent.Edge {
 		edge.From("settlement", Settlement.Type).Ref("artifacts").Unique(),
 		edge.From("district", District.Type).Ref("artifacts").Unique(),
 		edge.From("region", Region.Type).Ref("artifacts").Unique(),
-		edge.From("personal", Personal.Type).Ref("artifacts"),
+		edge.From("personal_collection", PersonalCollection.Type).Ref("artifacts"),
 	}
 }
 

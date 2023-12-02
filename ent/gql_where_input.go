@@ -34,7 +34,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -402,6 +402,10 @@ type ArtWhereInput struct {
 	// "region" edge predicates.
 	HasRegion     *bool               `json:"hasRegion,omitempty"`
 	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
+
+	// "personal_collection" edge predicates.
+	HasPersonalCollection     *bool                           `json:"hasPersonalCollection,omitempty"`
+	HasPersonalCollectionWith []*PersonalCollectionWhereInput `json:"hasPersonalCollectionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -1432,6 +1436,24 @@ func (i *ArtWhereInput) P() (predicate.Art, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, art.HasRegionWith(with...))
+	}
+	if i.HasPersonalCollection != nil {
+		p := art.HasPersonalCollection()
+		if !*i.HasPersonalCollection {
+			p = art.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPersonalCollectionWith) > 0 {
+		with := make([]predicate.PersonalCollection, 0, len(i.HasPersonalCollectionWith))
+		for _, w := range i.HasPersonalCollectionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPersonalCollectionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, art.HasPersonalCollectionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -3116,9 +3138,9 @@ type ArtifactWhereInput struct {
 	HasRegion     *bool               `json:"hasRegion,omitempty"`
 	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 
-	// "personal" edge predicates.
-	HasPersonal     *bool                 `json:"hasPersonal,omitempty"`
-	HasPersonalWith []*PersonalWhereInput `json:"hasPersonalWith,omitempty"`
+	// "personal_collection" edge predicates.
+	HasPersonalCollection     *bool                           `json:"hasPersonalCollection,omitempty"`
+	HasPersonalCollectionWith []*PersonalCollectionWhereInput `json:"hasPersonalCollectionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -4615,23 +4637,23 @@ func (i *ArtifactWhereInput) P() (predicate.Artifact, error) {
 		}
 		predicates = append(predicates, artifact.HasRegionWith(with...))
 	}
-	if i.HasPersonal != nil {
-		p := artifact.HasPersonal()
-		if !*i.HasPersonal {
+	if i.HasPersonalCollection != nil {
+		p := artifact.HasPersonalCollection()
+		if !*i.HasPersonalCollection {
 			p = artifact.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPersonalWith) > 0 {
-		with := make([]predicate.Personal, 0, len(i.HasPersonalWith))
-		for _, w := range i.HasPersonalWith {
+	if len(i.HasPersonalCollectionWith) > 0 {
+		with := make([]predicate.PersonalCollection, 0, len(i.HasPersonalCollectionWith))
+		for _, w := range i.HasPersonalCollectionWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPersonalWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasPersonalCollectionWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, artifact.HasPersonalWith(with...))
+		predicates = append(predicates, artifact.HasPersonalCollectionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -5253,9 +5275,9 @@ type BookWhereInput struct {
 	HasRegion     *bool               `json:"hasRegion,omitempty"`
 	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 
-	// "personal" edge predicates.
-	HasPersonal     *bool                 `json:"hasPersonal,omitempty"`
-	HasPersonalWith []*PersonalWhereInput `json:"hasPersonalWith,omitempty"`
+	// "personal_collection" edge predicates.
+	HasPersonalCollection     *bool                           `json:"hasPersonalCollection,omitempty"`
+	HasPersonalCollectionWith []*PersonalCollectionWhereInput `json:"hasPersonalCollectionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -5981,23 +6003,23 @@ func (i *BookWhereInput) P() (predicate.Book, error) {
 		}
 		predicates = append(predicates, book.HasRegionWith(with...))
 	}
-	if i.HasPersonal != nil {
-		p := book.HasPersonal()
-		if !*i.HasPersonal {
+	if i.HasPersonalCollection != nil {
+		p := book.HasPersonalCollection()
+		if !*i.HasPersonalCollection {
 			p = book.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPersonalWith) > 0 {
-		with := make([]predicate.Personal, 0, len(i.HasPersonalWith))
-		for _, w := range i.HasPersonalWith {
+	if len(i.HasPersonalCollectionWith) > 0 {
+		with := make([]predicate.PersonalCollection, 0, len(i.HasPersonalCollectionWith))
+		for _, w := range i.HasPersonalCollectionWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPersonalWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasPersonalCollectionWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, book.HasPersonalWith(with...))
+		predicates = append(predicates, book.HasPersonalCollectionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -20627,12 +20649,12 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 	}
 }
 
-// PersonalWhereInput represents a where input for filtering Personal queries.
-type PersonalWhereInput struct {
-	Predicates []predicate.Personal  `json:"-"`
-	Not        *PersonalWhereInput   `json:"not,omitempty"`
-	Or         []*PersonalWhereInput `json:"or,omitempty"`
-	And        []*PersonalWhereInput `json:"and,omitempty"`
+// PersonalCollectionWhereInput represents a where input for filtering PersonalCollection queries.
+type PersonalCollectionWhereInput struct {
+	Predicates []predicate.PersonalCollection  `json:"-"`
+	Not        *PersonalCollectionWhereInput   `json:"not,omitempty"`
+	Or         []*PersonalCollectionWhereInput `json:"or,omitempty"`
+	And        []*PersonalCollectionWhereInput `json:"and,omitempty"`
 
 	// "id" field predicates.
 	ID      *int  `json:"id,omitempty"`
@@ -20717,6 +20739,10 @@ type PersonalWhereInput struct {
 	IsPublic    *bool `json:"isPublic,omitempty"`
 	IsPublicNEQ *bool `json:"isPublicNEQ,omitempty"`
 
+	// "art" edge predicates.
+	HasArt     *bool            `json:"hasArt,omitempty"`
+	HasArtWith []*ArtWhereInput `json:"hasArtWith,omitempty"`
+
 	// "artifacts" edge predicates.
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
@@ -20735,18 +20761,18 @@ type PersonalWhereInput struct {
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
-func (i *PersonalWhereInput) AddPredicates(predicates ...predicate.Personal) {
+func (i *PersonalCollectionWhereInput) AddPredicates(predicates ...predicate.PersonalCollection) {
 	i.Predicates = append(i.Predicates, predicates...)
 }
 
-// Filter applies the PersonalWhereInput filter on the PersonalQuery builder.
-func (i *PersonalWhereInput) Filter(q *PersonalQuery) (*PersonalQuery, error) {
+// Filter applies the PersonalCollectionWhereInput filter on the PersonalCollectionQuery builder.
+func (i *PersonalCollectionWhereInput) Filter(q *PersonalCollectionQuery) (*PersonalCollectionQuery, error) {
 	if i == nil {
 		return q, nil
 	}
 	p, err := i.P()
 	if err != nil {
-		if err == ErrEmptyPersonalWhereInput {
+		if err == ErrEmptyPersonalCollectionWhereInput {
 			return q, nil
 		}
 		return nil, err
@@ -20754,19 +20780,19 @@ func (i *PersonalWhereInput) Filter(q *PersonalQuery) (*PersonalQuery, error) {
 	return q.Where(p), nil
 }
 
-// ErrEmptyPersonalWhereInput is returned in case the PersonalWhereInput is empty.
-var ErrEmptyPersonalWhereInput = errors.New("ent: empty predicate PersonalWhereInput")
+// ErrEmptyPersonalCollectionWhereInput is returned in case the PersonalCollectionWhereInput is empty.
+var ErrEmptyPersonalCollectionWhereInput = errors.New("ent: empty predicate PersonalCollectionWhereInput")
 
-// P returns a predicate for filtering personals.
+// P returns a predicate for filtering personalcollections.
 // An error is returned if the input is empty or invalid.
-func (i *PersonalWhereInput) P() (predicate.Personal, error) {
-	var predicates []predicate.Personal
+func (i *PersonalCollectionWhereInput) P() (predicate.PersonalCollection, error) {
+	var predicates []predicate.PersonalCollection
 	if i.Not != nil {
 		p, err := i.Not.P()
 		if err != nil {
 			return nil, fmt.Errorf("%w: field 'not'", err)
 		}
-		predicates = append(predicates, personal.Not(p))
+		predicates = append(predicates, personalcollection.Not(p))
 	}
 	switch n := len(i.Or); {
 	case n == 1:
@@ -20776,7 +20802,7 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 		}
 		predicates = append(predicates, p)
 	case n > 1:
-		or := make([]predicate.Personal, 0, n)
+		or := make([]predicate.PersonalCollection, 0, n)
 		for _, w := range i.Or {
 			p, err := w.P()
 			if err != nil {
@@ -20784,7 +20810,7 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 			}
 			or = append(or, p)
 		}
-		predicates = append(predicates, personal.Or(or...))
+		predicates = append(predicates, personalcollection.Or(or...))
 	}
 	switch n := len(i.And); {
 	case n == 1:
@@ -20794,7 +20820,7 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 		}
 		predicates = append(predicates, p)
 	case n > 1:
-		and := make([]predicate.Personal, 0, n)
+		and := make([]predicate.PersonalCollection, 0, n)
 		for _, w := range i.And {
 			p, err := w.P()
 			if err != nil {
@@ -20802,221 +20828,239 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 			}
 			and = append(and, p)
 		}
-		predicates = append(predicates, personal.And(and...))
+		predicates = append(predicates, personalcollection.And(and...))
 	}
 	predicates = append(predicates, i.Predicates...)
 	if i.ID != nil {
-		predicates = append(predicates, personal.IDEQ(*i.ID))
+		predicates = append(predicates, personalcollection.IDEQ(*i.ID))
 	}
 	if i.IDNEQ != nil {
-		predicates = append(predicates, personal.IDNEQ(*i.IDNEQ))
+		predicates = append(predicates, personalcollection.IDNEQ(*i.IDNEQ))
 	}
 	if len(i.IDIn) > 0 {
-		predicates = append(predicates, personal.IDIn(i.IDIn...))
+		predicates = append(predicates, personalcollection.IDIn(i.IDIn...))
 	}
 	if len(i.IDNotIn) > 0 {
-		predicates = append(predicates, personal.IDNotIn(i.IDNotIn...))
+		predicates = append(predicates, personalcollection.IDNotIn(i.IDNotIn...))
 	}
 	if i.IDGT != nil {
-		predicates = append(predicates, personal.IDGT(*i.IDGT))
+		predicates = append(predicates, personalcollection.IDGT(*i.IDGT))
 	}
 	if i.IDGTE != nil {
-		predicates = append(predicates, personal.IDGTE(*i.IDGTE))
+		predicates = append(predicates, personalcollection.IDGTE(*i.IDGTE))
 	}
 	if i.IDLT != nil {
-		predicates = append(predicates, personal.IDLT(*i.IDLT))
+		predicates = append(predicates, personalcollection.IDLT(*i.IDLT))
 	}
 	if i.IDLTE != nil {
-		predicates = append(predicates, personal.IDLTE(*i.IDLTE))
+		predicates = append(predicates, personalcollection.IDLTE(*i.IDLTE))
 	}
 	if i.CreatedAt != nil {
-		predicates = append(predicates, personal.CreatedAtEQ(*i.CreatedAt))
+		predicates = append(predicates, personalcollection.CreatedAtEQ(*i.CreatedAt))
 	}
 	if i.CreatedAtNEQ != nil {
-		predicates = append(predicates, personal.CreatedAtNEQ(*i.CreatedAtNEQ))
+		predicates = append(predicates, personalcollection.CreatedAtNEQ(*i.CreatedAtNEQ))
 	}
 	if len(i.CreatedAtIn) > 0 {
-		predicates = append(predicates, personal.CreatedAtIn(i.CreatedAtIn...))
+		predicates = append(predicates, personalcollection.CreatedAtIn(i.CreatedAtIn...))
 	}
 	if len(i.CreatedAtNotIn) > 0 {
-		predicates = append(predicates, personal.CreatedAtNotIn(i.CreatedAtNotIn...))
+		predicates = append(predicates, personalcollection.CreatedAtNotIn(i.CreatedAtNotIn...))
 	}
 	if i.CreatedAtGT != nil {
-		predicates = append(predicates, personal.CreatedAtGT(*i.CreatedAtGT))
+		predicates = append(predicates, personalcollection.CreatedAtGT(*i.CreatedAtGT))
 	}
 	if i.CreatedAtGTE != nil {
-		predicates = append(predicates, personal.CreatedAtGTE(*i.CreatedAtGTE))
+		predicates = append(predicates, personalcollection.CreatedAtGTE(*i.CreatedAtGTE))
 	}
 	if i.CreatedAtLT != nil {
-		predicates = append(predicates, personal.CreatedAtLT(*i.CreatedAtLT))
+		predicates = append(predicates, personalcollection.CreatedAtLT(*i.CreatedAtLT))
 	}
 	if i.CreatedAtLTE != nil {
-		predicates = append(predicates, personal.CreatedAtLTE(*i.CreatedAtLTE))
+		predicates = append(predicates, personalcollection.CreatedAtLTE(*i.CreatedAtLTE))
 	}
 	if i.CreatedBy != nil {
-		predicates = append(predicates, personal.CreatedByEQ(*i.CreatedBy))
+		predicates = append(predicates, personalcollection.CreatedByEQ(*i.CreatedBy))
 	}
 	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, personal.CreatedByNEQ(*i.CreatedByNEQ))
+		predicates = append(predicates, personalcollection.CreatedByNEQ(*i.CreatedByNEQ))
 	}
 	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, personal.CreatedByIn(i.CreatedByIn...))
+		predicates = append(predicates, personalcollection.CreatedByIn(i.CreatedByIn...))
 	}
 	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, personal.CreatedByNotIn(i.CreatedByNotIn...))
+		predicates = append(predicates, personalcollection.CreatedByNotIn(i.CreatedByNotIn...))
 	}
 	if i.CreatedByGT != nil {
-		predicates = append(predicates, personal.CreatedByGT(*i.CreatedByGT))
+		predicates = append(predicates, personalcollection.CreatedByGT(*i.CreatedByGT))
 	}
 	if i.CreatedByGTE != nil {
-		predicates = append(predicates, personal.CreatedByGTE(*i.CreatedByGTE))
+		predicates = append(predicates, personalcollection.CreatedByGTE(*i.CreatedByGTE))
 	}
 	if i.CreatedByLT != nil {
-		predicates = append(predicates, personal.CreatedByLT(*i.CreatedByLT))
+		predicates = append(predicates, personalcollection.CreatedByLT(*i.CreatedByLT))
 	}
 	if i.CreatedByLTE != nil {
-		predicates = append(predicates, personal.CreatedByLTE(*i.CreatedByLTE))
+		predicates = append(predicates, personalcollection.CreatedByLTE(*i.CreatedByLTE))
 	}
 	if i.CreatedByContains != nil {
-		predicates = append(predicates, personal.CreatedByContains(*i.CreatedByContains))
+		predicates = append(predicates, personalcollection.CreatedByContains(*i.CreatedByContains))
 	}
 	if i.CreatedByHasPrefix != nil {
-		predicates = append(predicates, personal.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+		predicates = append(predicates, personalcollection.CreatedByHasPrefix(*i.CreatedByHasPrefix))
 	}
 	if i.CreatedByHasSuffix != nil {
-		predicates = append(predicates, personal.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+		predicates = append(predicates, personalcollection.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
 	if i.CreatedByIsNil {
-		predicates = append(predicates, personal.CreatedByIsNil())
+		predicates = append(predicates, personalcollection.CreatedByIsNil())
 	}
 	if i.CreatedByNotNil {
-		predicates = append(predicates, personal.CreatedByNotNil())
+		predicates = append(predicates, personalcollection.CreatedByNotNil())
 	}
 	if i.CreatedByEqualFold != nil {
-		predicates = append(predicates, personal.CreatedByEqualFold(*i.CreatedByEqualFold))
+		predicates = append(predicates, personalcollection.CreatedByEqualFold(*i.CreatedByEqualFold))
 	}
 	if i.CreatedByContainsFold != nil {
-		predicates = append(predicates, personal.CreatedByContainsFold(*i.CreatedByContainsFold))
+		predicates = append(predicates, personalcollection.CreatedByContainsFold(*i.CreatedByContainsFold))
 	}
 	if i.UpdatedAt != nil {
-		predicates = append(predicates, personal.UpdatedAtEQ(*i.UpdatedAt))
+		predicates = append(predicates, personalcollection.UpdatedAtEQ(*i.UpdatedAt))
 	}
 	if i.UpdatedAtNEQ != nil {
-		predicates = append(predicates, personal.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+		predicates = append(predicates, personalcollection.UpdatedAtNEQ(*i.UpdatedAtNEQ))
 	}
 	if len(i.UpdatedAtIn) > 0 {
-		predicates = append(predicates, personal.UpdatedAtIn(i.UpdatedAtIn...))
+		predicates = append(predicates, personalcollection.UpdatedAtIn(i.UpdatedAtIn...))
 	}
 	if len(i.UpdatedAtNotIn) > 0 {
-		predicates = append(predicates, personal.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+		predicates = append(predicates, personalcollection.UpdatedAtNotIn(i.UpdatedAtNotIn...))
 	}
 	if i.UpdatedAtGT != nil {
-		predicates = append(predicates, personal.UpdatedAtGT(*i.UpdatedAtGT))
+		predicates = append(predicates, personalcollection.UpdatedAtGT(*i.UpdatedAtGT))
 	}
 	if i.UpdatedAtGTE != nil {
-		predicates = append(predicates, personal.UpdatedAtGTE(*i.UpdatedAtGTE))
+		predicates = append(predicates, personalcollection.UpdatedAtGTE(*i.UpdatedAtGTE))
 	}
 	if i.UpdatedAtLT != nil {
-		predicates = append(predicates, personal.UpdatedAtLT(*i.UpdatedAtLT))
+		predicates = append(predicates, personalcollection.UpdatedAtLT(*i.UpdatedAtLT))
 	}
 	if i.UpdatedAtLTE != nil {
-		predicates = append(predicates, personal.UpdatedAtLTE(*i.UpdatedAtLTE))
+		predicates = append(predicates, personalcollection.UpdatedAtLTE(*i.UpdatedAtLTE))
 	}
 	if i.UpdatedBy != nil {
-		predicates = append(predicates, personal.UpdatedByEQ(*i.UpdatedBy))
+		predicates = append(predicates, personalcollection.UpdatedByEQ(*i.UpdatedBy))
 	}
 	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, personal.UpdatedByNEQ(*i.UpdatedByNEQ))
+		predicates = append(predicates, personalcollection.UpdatedByNEQ(*i.UpdatedByNEQ))
 	}
 	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, personal.UpdatedByIn(i.UpdatedByIn...))
+		predicates = append(predicates, personalcollection.UpdatedByIn(i.UpdatedByIn...))
 	}
 	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, personal.UpdatedByNotIn(i.UpdatedByNotIn...))
+		predicates = append(predicates, personalcollection.UpdatedByNotIn(i.UpdatedByNotIn...))
 	}
 	if i.UpdatedByGT != nil {
-		predicates = append(predicates, personal.UpdatedByGT(*i.UpdatedByGT))
+		predicates = append(predicates, personalcollection.UpdatedByGT(*i.UpdatedByGT))
 	}
 	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, personal.UpdatedByGTE(*i.UpdatedByGTE))
+		predicates = append(predicates, personalcollection.UpdatedByGTE(*i.UpdatedByGTE))
 	}
 	if i.UpdatedByLT != nil {
-		predicates = append(predicates, personal.UpdatedByLT(*i.UpdatedByLT))
+		predicates = append(predicates, personalcollection.UpdatedByLT(*i.UpdatedByLT))
 	}
 	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, personal.UpdatedByLTE(*i.UpdatedByLTE))
+		predicates = append(predicates, personalcollection.UpdatedByLTE(*i.UpdatedByLTE))
 	}
 	if i.UpdatedByContains != nil {
-		predicates = append(predicates, personal.UpdatedByContains(*i.UpdatedByContains))
+		predicates = append(predicates, personalcollection.UpdatedByContains(*i.UpdatedByContains))
 	}
 	if i.UpdatedByHasPrefix != nil {
-		predicates = append(predicates, personal.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+		predicates = append(predicates, personalcollection.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
-		predicates = append(predicates, personal.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+		predicates = append(predicates, personalcollection.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
 	if i.UpdatedByIsNil {
-		predicates = append(predicates, personal.UpdatedByIsNil())
+		predicates = append(predicates, personalcollection.UpdatedByIsNil())
 	}
 	if i.UpdatedByNotNil {
-		predicates = append(predicates, personal.UpdatedByNotNil())
+		predicates = append(predicates, personalcollection.UpdatedByNotNil())
 	}
 	if i.UpdatedByEqualFold != nil {
-		predicates = append(predicates, personal.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+		predicates = append(predicates, personalcollection.UpdatedByEqualFold(*i.UpdatedByEqualFold))
 	}
 	if i.UpdatedByContainsFold != nil {
-		predicates = append(predicates, personal.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+		predicates = append(predicates, personalcollection.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
 	if i.DisplayName != nil {
-		predicates = append(predicates, personal.DisplayNameEQ(*i.DisplayName))
+		predicates = append(predicates, personalcollection.DisplayNameEQ(*i.DisplayName))
 	}
 	if i.DisplayNameNEQ != nil {
-		predicates = append(predicates, personal.DisplayNameNEQ(*i.DisplayNameNEQ))
+		predicates = append(predicates, personalcollection.DisplayNameNEQ(*i.DisplayNameNEQ))
 	}
 	if len(i.DisplayNameIn) > 0 {
-		predicates = append(predicates, personal.DisplayNameIn(i.DisplayNameIn...))
+		predicates = append(predicates, personalcollection.DisplayNameIn(i.DisplayNameIn...))
 	}
 	if len(i.DisplayNameNotIn) > 0 {
-		predicates = append(predicates, personal.DisplayNameNotIn(i.DisplayNameNotIn...))
+		predicates = append(predicates, personalcollection.DisplayNameNotIn(i.DisplayNameNotIn...))
 	}
 	if i.DisplayNameGT != nil {
-		predicates = append(predicates, personal.DisplayNameGT(*i.DisplayNameGT))
+		predicates = append(predicates, personalcollection.DisplayNameGT(*i.DisplayNameGT))
 	}
 	if i.DisplayNameGTE != nil {
-		predicates = append(predicates, personal.DisplayNameGTE(*i.DisplayNameGTE))
+		predicates = append(predicates, personalcollection.DisplayNameGTE(*i.DisplayNameGTE))
 	}
 	if i.DisplayNameLT != nil {
-		predicates = append(predicates, personal.DisplayNameLT(*i.DisplayNameLT))
+		predicates = append(predicates, personalcollection.DisplayNameLT(*i.DisplayNameLT))
 	}
 	if i.DisplayNameLTE != nil {
-		predicates = append(predicates, personal.DisplayNameLTE(*i.DisplayNameLTE))
+		predicates = append(predicates, personalcollection.DisplayNameLTE(*i.DisplayNameLTE))
 	}
 	if i.DisplayNameContains != nil {
-		predicates = append(predicates, personal.DisplayNameContains(*i.DisplayNameContains))
+		predicates = append(predicates, personalcollection.DisplayNameContains(*i.DisplayNameContains))
 	}
 	if i.DisplayNameHasPrefix != nil {
-		predicates = append(predicates, personal.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+		predicates = append(predicates, personalcollection.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
 	}
 	if i.DisplayNameHasSuffix != nil {
-		predicates = append(predicates, personal.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+		predicates = append(predicates, personalcollection.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
 	}
 	if i.DisplayNameEqualFold != nil {
-		predicates = append(predicates, personal.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+		predicates = append(predicates, personalcollection.DisplayNameEqualFold(*i.DisplayNameEqualFold))
 	}
 	if i.DisplayNameContainsFold != nil {
-		predicates = append(predicates, personal.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+		predicates = append(predicates, personalcollection.DisplayNameContainsFold(*i.DisplayNameContainsFold))
 	}
 	if i.IsPublic != nil {
-		predicates = append(predicates, personal.IsPublicEQ(*i.IsPublic))
+		predicates = append(predicates, personalcollection.IsPublicEQ(*i.IsPublic))
 	}
 	if i.IsPublicNEQ != nil {
-		predicates = append(predicates, personal.IsPublicNEQ(*i.IsPublicNEQ))
+		predicates = append(predicates, personalcollection.IsPublicNEQ(*i.IsPublicNEQ))
 	}
 
+	if i.HasArt != nil {
+		p := personalcollection.HasArt()
+		if !*i.HasArt {
+			p = personalcollection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasArtWith) > 0 {
+		with := make([]predicate.Art, 0, len(i.HasArtWith))
+		for _, w := range i.HasArtWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasArtWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, personalcollection.HasArtWith(with...))
+	}
 	if i.HasArtifacts != nil {
-		p := personal.HasArtifacts()
+		p := personalcollection.HasArtifacts()
 		if !*i.HasArtifacts {
-			p = personal.Not(p)
+			p = personalcollection.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
@@ -21029,12 +21073,12 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, personal.HasArtifactsWith(with...))
+		predicates = append(predicates, personalcollection.HasArtifactsWith(with...))
 	}
 	if i.HasPetroglyphs != nil {
-		p := personal.HasPetroglyphs()
+		p := personalcollection.HasPetroglyphs()
 		if !*i.HasPetroglyphs {
-			p = personal.Not(p)
+			p = personalcollection.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
@@ -21047,12 +21091,12 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, personal.HasPetroglyphsWith(with...))
+		predicates = append(predicates, personalcollection.HasPetroglyphsWith(with...))
 	}
 	if i.HasBooks != nil {
-		p := personal.HasBooks()
+		p := personalcollection.HasBooks()
 		if !*i.HasBooks {
-			p = personal.Not(p)
+			p = personalcollection.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
@@ -21065,12 +21109,12 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, personal.HasBooksWith(with...))
+		predicates = append(predicates, personalcollection.HasBooksWith(with...))
 	}
 	if i.HasProtectedAreaPictures != nil {
-		p := personal.HasProtectedAreaPictures()
+		p := personalcollection.HasProtectedAreaPictures()
 		if !*i.HasProtectedAreaPictures {
-			p = personal.Not(p)
+			p = personalcollection.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
@@ -21083,15 +21127,15 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, personal.HasProtectedAreaPicturesWith(with...))
+		predicates = append(predicates, personalcollection.HasProtectedAreaPicturesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
-		return nil, ErrEmptyPersonalWhereInput
+		return nil, ErrEmptyPersonalCollectionWhereInput
 	case 1:
 		return predicates[0], nil
 	default:
-		return personal.And(predicates...), nil
+		return personalcollection.And(predicates...), nil
 	}
 }
 
@@ -21602,9 +21646,9 @@ type PetroglyphWhereInput struct {
 	HasCollection     *bool                   `json:"hasCollection,omitempty"`
 	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
 
-	// "personal" edge predicates.
-	HasPersonal     *bool                 `json:"hasPersonal,omitempty"`
-	HasPersonalWith []*PersonalWhereInput `json:"hasPersonalWith,omitempty"`
+	// "personal_collection" edge predicates.
+	HasPersonalCollection     *bool                           `json:"hasPersonalCollection,omitempty"`
+	HasPersonalCollectionWith []*PersonalCollectionWhereInput `json:"hasPersonalCollectionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -23041,23 +23085,23 @@ func (i *PetroglyphWhereInput) P() (predicate.Petroglyph, error) {
 		}
 		predicates = append(predicates, petroglyph.HasCollectionWith(with...))
 	}
-	if i.HasPersonal != nil {
-		p := petroglyph.HasPersonal()
-		if !*i.HasPersonal {
+	if i.HasPersonalCollection != nil {
+		p := petroglyph.HasPersonalCollection()
+		if !*i.HasPersonalCollection {
 			p = petroglyph.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPersonalWith) > 0 {
-		with := make([]predicate.Personal, 0, len(i.HasPersonalWith))
-		for _, w := range i.HasPersonalWith {
+	if len(i.HasPersonalCollectionWith) > 0 {
+		with := make([]predicate.PersonalCollection, 0, len(i.HasPersonalCollectionWith))
+		for _, w := range i.HasPersonalCollectionWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPersonalWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasPersonalCollectionWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, petroglyph.HasPersonalWith(with...))
+		predicates = append(predicates, petroglyph.HasPersonalCollectionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -25409,9 +25453,9 @@ type ProtectedAreaPictureWhereInput struct {
 	HasRegion     *bool               `json:"hasRegion,omitempty"`
 	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
 
-	// "personal" edge predicates.
-	HasPersonal     *bool                 `json:"hasPersonal,omitempty"`
-	HasPersonalWith []*PersonalWhereInput `json:"hasPersonalWith,omitempty"`
+	// "personal_collection" edge predicates.
+	HasPersonalCollection     *bool                           `json:"hasPersonalCollection,omitempty"`
+	HasPersonalCollectionWith []*PersonalCollectionWhereInput `json:"hasPersonalCollectionWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -26113,23 +26157,23 @@ func (i *ProtectedAreaPictureWhereInput) P() (predicate.ProtectedAreaPicture, er
 		}
 		predicates = append(predicates, protectedareapicture.HasRegionWith(with...))
 	}
-	if i.HasPersonal != nil {
-		p := protectedareapicture.HasPersonal()
-		if !*i.HasPersonal {
+	if i.HasPersonalCollection != nil {
+		p := protectedareapicture.HasPersonalCollection()
+		if !*i.HasPersonalCollection {
 			p = protectedareapicture.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasPersonalWith) > 0 {
-		with := make([]predicate.Personal, 0, len(i.HasPersonalWith))
-		for _, w := range i.HasPersonalWith {
+	if len(i.HasPersonalCollectionWith) > 0 {
+		with := make([]predicate.PersonalCollection, 0, len(i.HasPersonalCollectionWith))
+		for _, w := range i.HasPersonalCollectionWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPersonalWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasPersonalCollectionWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, protectedareapicture.HasPersonalWith(with...))
+		predicates = append(predicates, protectedareapicture.HasPersonalCollectionWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

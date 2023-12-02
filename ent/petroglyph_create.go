@@ -16,7 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -626,19 +626,19 @@ func (pc *PetroglyphCreate) SetCollection(c *Collection) *PetroglyphCreate {
 	return pc.SetCollectionID(c.ID)
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
-func (pc *PetroglyphCreate) AddPersonalIDs(ids ...int) *PetroglyphCreate {
-	pc.mutation.AddPersonalIDs(ids...)
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (pc *PetroglyphCreate) AddPersonalCollectionIDs(ids ...int) *PetroglyphCreate {
+	pc.mutation.AddPersonalCollectionIDs(ids...)
 	return pc
 }
 
-// AddPersonal adds the "personal" edges to the Personal entity.
-func (pc *PetroglyphCreate) AddPersonal(p ...*Personal) *PetroglyphCreate {
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (pc *PetroglyphCreate) AddPersonalCollection(p ...*PersonalCollection) *PetroglyphCreate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return pc.AddPersonalIDs(ids...)
+	return pc.AddPersonalCollectionIDs(ids...)
 }
 
 // Mutation returns the PetroglyphMutation object of the builder.
@@ -1020,15 +1020,15 @@ func (pc *PetroglyphCreate) createSpec() (*Petroglyph, *sqlgraph.CreateSpec) {
 		_node.collection_petroglyphs = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pc.mutation.PersonalIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   petroglyph.PersonalTable,
-			Columns: petroglyph.PersonalPrimaryKey,
+			Table:   petroglyph.PersonalCollectionTable,
+			Columns: petroglyph.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -20,7 +20,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
@@ -411,19 +411,19 @@ func (bc *BookCreate) SetRegion(r *Region) *BookCreate {
 	return bc.SetRegionID(r.ID)
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
-func (bc *BookCreate) AddPersonalIDs(ids ...int) *BookCreate {
-	bc.mutation.AddPersonalIDs(ids...)
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (bc *BookCreate) AddPersonalCollectionIDs(ids ...int) *BookCreate {
+	bc.mutation.AddPersonalCollectionIDs(ids...)
 	return bc
 }
 
-// AddPersonal adds the "personal" edges to the Personal entity.
-func (bc *BookCreate) AddPersonal(p ...*Personal) *BookCreate {
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (bc *BookCreate) AddPersonalCollection(p ...*PersonalCollection) *BookCreate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return bc.AddPersonalIDs(ids...)
+	return bc.AddPersonalCollectionIDs(ids...)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -785,15 +785,15 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 		_node.region_books = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := bc.mutation.PersonalIDs(); len(nodes) > 0 {
+	if nodes := bc.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   book.PersonalTable,
-			Columns: book.PersonalPrimaryKey,
+			Table:   book.PersonalCollectionTable,
+			Columns: book.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

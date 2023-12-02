@@ -16,7 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -368,19 +368,19 @@ func (papc *ProtectedAreaPictureCreate) SetRegion(r *Region) *ProtectedAreaPictu
 	return papc.SetRegionID(r.ID)
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
-func (papc *ProtectedAreaPictureCreate) AddPersonalIDs(ids ...int) *ProtectedAreaPictureCreate {
-	papc.mutation.AddPersonalIDs(ids...)
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (papc *ProtectedAreaPictureCreate) AddPersonalCollectionIDs(ids ...int) *ProtectedAreaPictureCreate {
+	papc.mutation.AddPersonalCollectionIDs(ids...)
 	return papc
 }
 
-// AddPersonal adds the "personal" edges to the Personal entity.
-func (papc *ProtectedAreaPictureCreate) AddPersonal(p ...*Personal) *ProtectedAreaPictureCreate {
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (papc *ProtectedAreaPictureCreate) AddPersonalCollection(p ...*PersonalCollection) *ProtectedAreaPictureCreate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return papc.AddPersonalIDs(ids...)
+	return papc.AddPersonalCollectionIDs(ids...)
 }
 
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
@@ -688,15 +688,15 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 		_node.region_protected_area_pictures = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := papc.mutation.PersonalIDs(); len(nodes) > 0 {
+	if nodes := papc.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   protectedareapicture.PersonalTable,
-			Columns: protectedareapicture.PersonalPrimaryKey,
+			Table:   protectedareapicture.PersonalCollectionTable,
+			Columns: protectedareapicture.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

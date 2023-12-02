@@ -2383,21 +2383,21 @@ func HasCollectionWith(preds ...predicate.Collection) predicate.Petroglyph {
 	})
 }
 
-// HasPersonal applies the HasEdge predicate on the "personal" edge.
-func HasPersonal() predicate.Petroglyph {
+// HasPersonalCollection applies the HasEdge predicate on the "personal_collection" edge.
+func HasPersonalCollection() predicate.Petroglyph {
 	return predicate.Petroglyph(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, PersonalTable, PersonalPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, PersonalCollectionTable, PersonalCollectionPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasPersonalWith applies the HasEdge predicate on the "personal" edge with a given conditions (other predicates).
-func HasPersonalWith(preds ...predicate.Personal) predicate.Petroglyph {
+// HasPersonalCollectionWith applies the HasEdge predicate on the "personal_collection" edge with a given conditions (other predicates).
+func HasPersonalCollectionWith(preds ...predicate.PersonalCollection) predicate.Petroglyph {
 	return predicate.Petroglyph(func(s *sql.Selector) {
-		step := newPersonalStep()
+		step := newPersonalCollectionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -858,8 +858,8 @@ var (
 			},
 		},
 	}
-	// PersonalsColumns holds the columns for the "personals" table.
-	PersonalsColumns = []*schema.Column{
+	// PersonalCollectionsColumns holds the columns for the "personal_collections" table.
+	PersonalCollectionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
@@ -868,11 +868,11 @@ var (
 		{Name: "display_name", Type: field.TypeString},
 		{Name: "is_public", Type: field.TypeBool, Default: false},
 	}
-	// PersonalsTable holds the schema information for the "personals" table.
-	PersonalsTable = &schema.Table{
-		Name:       "personals",
-		Columns:    PersonalsColumns,
-		PrimaryKey: []*schema.Column{PersonalsColumns[0]},
+	// PersonalCollectionsTable holds the schema information for the "personal_collections" table.
+	PersonalCollectionsTable = &schema.Table{
+		Name:       "personal_collections",
+		Columns:    PersonalCollectionsColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionsColumns[0]},
 	}
 	// PetroglyphsColumns holds the columns for the "petroglyphs" table.
 	PetroglyphsColumns = []*schema.Column{
@@ -1598,101 +1598,126 @@ var (
 			},
 		},
 	}
-	// PersonalArtifactsColumns holds the columns for the "personal_artifacts" table.
-	PersonalArtifactsColumns = []*schema.Column{
-		{Name: "personal_id", Type: field.TypeInt},
-		{Name: "artifact_id", Type: field.TypeInt},
+	// PersonalCollectionArtColumns holds the columns for the "personal_collection_art" table.
+	PersonalCollectionArtColumns = []*schema.Column{
+		{Name: "personal_collection_id", Type: field.TypeInt},
+		{Name: "art_id", Type: field.TypeInt},
 	}
-	// PersonalArtifactsTable holds the schema information for the "personal_artifacts" table.
-	PersonalArtifactsTable = &schema.Table{
-		Name:       "personal_artifacts",
-		Columns:    PersonalArtifactsColumns,
-		PrimaryKey: []*schema.Column{PersonalArtifactsColumns[0], PersonalArtifactsColumns[1]},
+	// PersonalCollectionArtTable holds the schema information for the "personal_collection_art" table.
+	PersonalCollectionArtTable = &schema.Table{
+		Name:       "personal_collection_art",
+		Columns:    PersonalCollectionArtColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionArtColumns[0], PersonalCollectionArtColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "personal_artifacts_personal_id",
-				Columns:    []*schema.Column{PersonalArtifactsColumns[0]},
-				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				Symbol:     "personal_collection_art_personal_collection_id",
+				Columns:    []*schema.Column{PersonalCollectionArtColumns[0]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "personal_artifacts_artifact_id",
-				Columns:    []*schema.Column{PersonalArtifactsColumns[1]},
+				Symbol:     "personal_collection_art_art_id",
+				Columns:    []*schema.Column{PersonalCollectionArtColumns[1]},
+				RefColumns: []*schema.Column{ArtsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// PersonalCollectionArtifactsColumns holds the columns for the "personal_collection_artifacts" table.
+	PersonalCollectionArtifactsColumns = []*schema.Column{
+		{Name: "personal_collection_id", Type: field.TypeInt},
+		{Name: "artifact_id", Type: field.TypeInt},
+	}
+	// PersonalCollectionArtifactsTable holds the schema information for the "personal_collection_artifacts" table.
+	PersonalCollectionArtifactsTable = &schema.Table{
+		Name:       "personal_collection_artifacts",
+		Columns:    PersonalCollectionArtifactsColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionArtifactsColumns[0], PersonalCollectionArtifactsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_collection_artifacts_personal_collection_id",
+				Columns:    []*schema.Column{PersonalCollectionArtifactsColumns[0]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "personal_collection_artifacts_artifact_id",
+				Columns:    []*schema.Column{PersonalCollectionArtifactsColumns[1]},
 				RefColumns: []*schema.Column{ArtifactsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
-	// PersonalPetroglyphsColumns holds the columns for the "personal_petroglyphs" table.
-	PersonalPetroglyphsColumns = []*schema.Column{
-		{Name: "personal_id", Type: field.TypeInt},
+	// PersonalCollectionPetroglyphsColumns holds the columns for the "personal_collection_petroglyphs" table.
+	PersonalCollectionPetroglyphsColumns = []*schema.Column{
+		{Name: "personal_collection_id", Type: field.TypeInt},
 		{Name: "petroglyph_id", Type: field.TypeInt},
 	}
-	// PersonalPetroglyphsTable holds the schema information for the "personal_petroglyphs" table.
-	PersonalPetroglyphsTable = &schema.Table{
-		Name:       "personal_petroglyphs",
-		Columns:    PersonalPetroglyphsColumns,
-		PrimaryKey: []*schema.Column{PersonalPetroglyphsColumns[0], PersonalPetroglyphsColumns[1]},
+	// PersonalCollectionPetroglyphsTable holds the schema information for the "personal_collection_petroglyphs" table.
+	PersonalCollectionPetroglyphsTable = &schema.Table{
+		Name:       "personal_collection_petroglyphs",
+		Columns:    PersonalCollectionPetroglyphsColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionPetroglyphsColumns[0], PersonalCollectionPetroglyphsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "personal_petroglyphs_personal_id",
-				Columns:    []*schema.Column{PersonalPetroglyphsColumns[0]},
-				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				Symbol:     "personal_collection_petroglyphs_personal_collection_id",
+				Columns:    []*schema.Column{PersonalCollectionPetroglyphsColumns[0]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "personal_petroglyphs_petroglyph_id",
-				Columns:    []*schema.Column{PersonalPetroglyphsColumns[1]},
+				Symbol:     "personal_collection_petroglyphs_petroglyph_id",
+				Columns:    []*schema.Column{PersonalCollectionPetroglyphsColumns[1]},
 				RefColumns: []*schema.Column{PetroglyphsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
-	// PersonalBooksColumns holds the columns for the "personal_books" table.
-	PersonalBooksColumns = []*schema.Column{
-		{Name: "personal_id", Type: field.TypeInt},
+	// PersonalCollectionBooksColumns holds the columns for the "personal_collection_books" table.
+	PersonalCollectionBooksColumns = []*schema.Column{
+		{Name: "personal_collection_id", Type: field.TypeInt},
 		{Name: "book_id", Type: field.TypeInt},
 	}
-	// PersonalBooksTable holds the schema information for the "personal_books" table.
-	PersonalBooksTable = &schema.Table{
-		Name:       "personal_books",
-		Columns:    PersonalBooksColumns,
-		PrimaryKey: []*schema.Column{PersonalBooksColumns[0], PersonalBooksColumns[1]},
+	// PersonalCollectionBooksTable holds the schema information for the "personal_collection_books" table.
+	PersonalCollectionBooksTable = &schema.Table{
+		Name:       "personal_collection_books",
+		Columns:    PersonalCollectionBooksColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionBooksColumns[0], PersonalCollectionBooksColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "personal_books_personal_id",
-				Columns:    []*schema.Column{PersonalBooksColumns[0]},
-				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				Symbol:     "personal_collection_books_personal_collection_id",
+				Columns:    []*schema.Column{PersonalCollectionBooksColumns[0]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "personal_books_book_id",
-				Columns:    []*schema.Column{PersonalBooksColumns[1]},
+				Symbol:     "personal_collection_books_book_id",
+				Columns:    []*schema.Column{PersonalCollectionBooksColumns[1]},
 				RefColumns: []*schema.Column{BooksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
-	// PersonalProtectedAreaPicturesColumns holds the columns for the "personal_protected_area_pictures" table.
-	PersonalProtectedAreaPicturesColumns = []*schema.Column{
-		{Name: "personal_id", Type: field.TypeInt},
+	// PersonalCollectionProtectedAreaPicturesColumns holds the columns for the "personal_collection_protected_area_pictures" table.
+	PersonalCollectionProtectedAreaPicturesColumns = []*schema.Column{
+		{Name: "personal_collection_id", Type: field.TypeInt},
 		{Name: "protected_area_picture_id", Type: field.TypeInt},
 	}
-	// PersonalProtectedAreaPicturesTable holds the schema information for the "personal_protected_area_pictures" table.
-	PersonalProtectedAreaPicturesTable = &schema.Table{
-		Name:       "personal_protected_area_pictures",
-		Columns:    PersonalProtectedAreaPicturesColumns,
-		PrimaryKey: []*schema.Column{PersonalProtectedAreaPicturesColumns[0], PersonalProtectedAreaPicturesColumns[1]},
+	// PersonalCollectionProtectedAreaPicturesTable holds the schema information for the "personal_collection_protected_area_pictures" table.
+	PersonalCollectionProtectedAreaPicturesTable = &schema.Table{
+		Name:       "personal_collection_protected_area_pictures",
+		Columns:    PersonalCollectionProtectedAreaPicturesColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionProtectedAreaPicturesColumns[0], PersonalCollectionProtectedAreaPicturesColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "personal_protected_area_pictures_personal_id",
-				Columns:    []*schema.Column{PersonalProtectedAreaPicturesColumns[0]},
-				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				Symbol:     "personal_collection_protected_area_pictures_personal_collection_id",
+				Columns:    []*schema.Column{PersonalCollectionProtectedAreaPicturesColumns[0]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "personal_protected_area_pictures_protected_area_picture_id",
-				Columns:    []*schema.Column{PersonalProtectedAreaPicturesColumns[1]},
+				Symbol:     "personal_collection_protected_area_pictures_protected_area_picture_id",
+				Columns:    []*schema.Column{PersonalCollectionProtectedAreaPicturesColumns[1]},
 				RefColumns: []*schema.Column{ProtectedAreaPicturesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -1952,7 +1977,7 @@ var (
 		OrganizationsTable,
 		PeriodicalsTable,
 		PersonsTable,
-		PersonalsTable,
+		PersonalCollectionsTable,
 		PetroglyphsTable,
 		ProjectsTable,
 		ProtectedAreasTable,
@@ -1978,10 +2003,11 @@ var (
 		PersonVisitsTable,
 		PersonProjectsTable,
 		PersonPublicationsTable,
-		PersonalArtifactsTable,
-		PersonalPetroglyphsTable,
-		PersonalBooksTable,
-		PersonalProtectedAreaPicturesTable,
+		PersonalCollectionArtTable,
+		PersonalCollectionArtifactsTable,
+		PersonalCollectionPetroglyphsTable,
+		PersonalCollectionBooksTable,
+		PersonalCollectionProtectedAreaPicturesTable,
 		ProjectArtifactsTable,
 		PublicationArtifactsTable,
 		PublicationPetroglyphsTable,
@@ -2079,14 +2105,16 @@ func init() {
 	PersonProjectsTable.ForeignKeys[1].RefTable = ProjectsTable
 	PersonPublicationsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonPublicationsTable.ForeignKeys[1].RefTable = PublicationsTable
-	PersonalArtifactsTable.ForeignKeys[0].RefTable = PersonalsTable
-	PersonalArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
-	PersonalPetroglyphsTable.ForeignKeys[0].RefTable = PersonalsTable
-	PersonalPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
-	PersonalBooksTable.ForeignKeys[0].RefTable = PersonalsTable
-	PersonalBooksTable.ForeignKeys[1].RefTable = BooksTable
-	PersonalProtectedAreaPicturesTable.ForeignKeys[0].RefTable = PersonalsTable
-	PersonalProtectedAreaPicturesTable.ForeignKeys[1].RefTable = ProtectedAreaPicturesTable
+	PersonalCollectionArtTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
+	PersonalCollectionArtTable.ForeignKeys[1].RefTable = ArtsTable
+	PersonalCollectionArtifactsTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
+	PersonalCollectionArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	PersonalCollectionPetroglyphsTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
+	PersonalCollectionPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
+	PersonalCollectionBooksTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
+	PersonalCollectionBooksTable.ForeignKeys[1].RefTable = BooksTable
+	PersonalCollectionProtectedAreaPicturesTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
+	PersonalCollectionProtectedAreaPicturesTable.ForeignKeys[1].RefTable = ProtectedAreaPicturesTable
 	ProjectArtifactsTable.ForeignKeys[0].RefTable = ProjectsTable
 	ProjectArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PublicationArtifactsTable.ForeignKeys[0].RefTable = PublicationsTable

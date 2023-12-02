@@ -75,6 +75,6 @@ func (Book) Edges() []ent.Edge {
 		edge.From("settlement", Settlement.Type).Ref("books").Unique(),
 		edge.From("district", District.Type).Ref("books").Unique(),
 		edge.From("region", Region.Type).Ref("books").Unique(),
-		edge.From("personal", Personal.Type).Ref("books"),
+		edge.From("personal_collection", PersonalCollection.Type).Ref("books"),
 	}
 }

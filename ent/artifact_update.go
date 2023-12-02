@@ -25,7 +25,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -974,19 +974,19 @@ func (au *ArtifactUpdate) SetRegion(r *Region) *ArtifactUpdate {
 	return au.SetRegionID(r.ID)
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
-func (au *ArtifactUpdate) AddPersonalIDs(ids ...int) *ArtifactUpdate {
-	au.mutation.AddPersonalIDs(ids...)
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (au *ArtifactUpdate) AddPersonalCollectionIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.AddPersonalCollectionIDs(ids...)
 	return au
 }
 
-// AddPersonal adds the "personal" edges to the Personal entity.
-func (au *ArtifactUpdate) AddPersonal(p ...*Personal) *ArtifactUpdate {
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (au *ArtifactUpdate) AddPersonalCollection(p ...*PersonalCollection) *ArtifactUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return au.AddPersonalIDs(ids...)
+	return au.AddPersonalCollectionIDs(ids...)
 }
 
 // Mutation returns the ArtifactMutation object of the builder.
@@ -1183,25 +1183,25 @@ func (au *ArtifactUpdate) ClearRegion() *ArtifactUpdate {
 	return au
 }
 
-// ClearPersonal clears all "personal" edges to the Personal entity.
-func (au *ArtifactUpdate) ClearPersonal() *ArtifactUpdate {
-	au.mutation.ClearPersonal()
+// ClearPersonalCollection clears all "personal_collection" edges to the PersonalCollection entity.
+func (au *ArtifactUpdate) ClearPersonalCollection() *ArtifactUpdate {
+	au.mutation.ClearPersonalCollection()
 	return au
 }
 
-// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
-func (au *ArtifactUpdate) RemovePersonalIDs(ids ...int) *ArtifactUpdate {
-	au.mutation.RemovePersonalIDs(ids...)
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to PersonalCollection entities by IDs.
+func (au *ArtifactUpdate) RemovePersonalCollectionIDs(ids ...int) *ArtifactUpdate {
+	au.mutation.RemovePersonalCollectionIDs(ids...)
 	return au
 }
 
-// RemovePersonal removes "personal" edges to Personal entities.
-func (au *ArtifactUpdate) RemovePersonal(p ...*Personal) *ArtifactUpdate {
+// RemovePersonalCollection removes "personal_collection" edges to PersonalCollection entities.
+func (au *ArtifactUpdate) RemovePersonalCollection(p ...*PersonalCollection) *ArtifactUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return au.RemovePersonalIDs(ids...)
+	return au.RemovePersonalCollectionIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2093,28 +2093,28 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if au.mutation.PersonalCleared() {
+	if au.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   artifact.PersonalTable,
-			Columns: artifact.PersonalPrimaryKey,
+			Table:   artifact.PersonalCollectionTable,
+			Columns: artifact.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !au.mutation.PersonalCleared() {
+	if nodes := au.mutation.RemovedPersonalCollectionIDs(); len(nodes) > 0 && !au.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   artifact.PersonalTable,
-			Columns: artifact.PersonalPrimaryKey,
+			Table:   artifact.PersonalCollectionTable,
+			Columns: artifact.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2122,15 +2122,15 @@ func (au *ArtifactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := au.mutation.PersonalIDs(); len(nodes) > 0 {
+	if nodes := au.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   artifact.PersonalTable,
-			Columns: artifact.PersonalPrimaryKey,
+			Table:   artifact.PersonalCollectionTable,
+			Columns: artifact.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -3084,19 +3084,19 @@ func (auo *ArtifactUpdateOne) SetRegion(r *Region) *ArtifactUpdateOne {
 	return auo.SetRegionID(r.ID)
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
-func (auo *ArtifactUpdateOne) AddPersonalIDs(ids ...int) *ArtifactUpdateOne {
-	auo.mutation.AddPersonalIDs(ids...)
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (auo *ArtifactUpdateOne) AddPersonalCollectionIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.AddPersonalCollectionIDs(ids...)
 	return auo
 }
 
-// AddPersonal adds the "personal" edges to the Personal entity.
-func (auo *ArtifactUpdateOne) AddPersonal(p ...*Personal) *ArtifactUpdateOne {
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (auo *ArtifactUpdateOne) AddPersonalCollection(p ...*PersonalCollection) *ArtifactUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return auo.AddPersonalIDs(ids...)
+	return auo.AddPersonalCollectionIDs(ids...)
 }
 
 // Mutation returns the ArtifactMutation object of the builder.
@@ -3293,25 +3293,25 @@ func (auo *ArtifactUpdateOne) ClearRegion() *ArtifactUpdateOne {
 	return auo
 }
 
-// ClearPersonal clears all "personal" edges to the Personal entity.
-func (auo *ArtifactUpdateOne) ClearPersonal() *ArtifactUpdateOne {
-	auo.mutation.ClearPersonal()
+// ClearPersonalCollection clears all "personal_collection" edges to the PersonalCollection entity.
+func (auo *ArtifactUpdateOne) ClearPersonalCollection() *ArtifactUpdateOne {
+	auo.mutation.ClearPersonalCollection()
 	return auo
 }
 
-// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
-func (auo *ArtifactUpdateOne) RemovePersonalIDs(ids ...int) *ArtifactUpdateOne {
-	auo.mutation.RemovePersonalIDs(ids...)
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to PersonalCollection entities by IDs.
+func (auo *ArtifactUpdateOne) RemovePersonalCollectionIDs(ids ...int) *ArtifactUpdateOne {
+	auo.mutation.RemovePersonalCollectionIDs(ids...)
 	return auo
 }
 
-// RemovePersonal removes "personal" edges to Personal entities.
-func (auo *ArtifactUpdateOne) RemovePersonal(p ...*Personal) *ArtifactUpdateOne {
+// RemovePersonalCollection removes "personal_collection" edges to PersonalCollection entities.
+func (auo *ArtifactUpdateOne) RemovePersonalCollection(p ...*PersonalCollection) *ArtifactUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return auo.RemovePersonalIDs(ids...)
+	return auo.RemovePersonalCollectionIDs(ids...)
 }
 
 // Where appends a list predicates to the ArtifactUpdate builder.
@@ -4233,28 +4233,28 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if auo.mutation.PersonalCleared() {
+	if auo.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   artifact.PersonalTable,
-			Columns: artifact.PersonalPrimaryKey,
+			Table:   artifact.PersonalCollectionTable,
+			Columns: artifact.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !auo.mutation.PersonalCleared() {
+	if nodes := auo.mutation.RemovedPersonalCollectionIDs(); len(nodes) > 0 && !auo.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   artifact.PersonalTable,
-			Columns: artifact.PersonalPrimaryKey,
+			Table:   artifact.PersonalCollectionTable,
+			Columns: artifact.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -4262,15 +4262,15 @@ func (auo *ArtifactUpdateOne) sqlSave(ctx context.Context) (_node *Artifact, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := auo.mutation.PersonalIDs(); len(nodes) > 0 {
+	if nodes := auo.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   artifact.PersonalTable,
-			Columns: artifact.PersonalPrimaryKey,
+			Table:   artifact.PersonalCollectionTable,
+			Columns: artifact.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

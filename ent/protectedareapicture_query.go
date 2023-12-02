@@ -18,7 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -29,24 +29,24 @@ import (
 // ProtectedAreaPictureQuery is the builder for querying ProtectedAreaPicture entities.
 type ProtectedAreaPictureQuery struct {
 	config
-	ctx               *QueryContext
-	order             []protectedareapicture.OrderOption
-	inters            []Interceptor
-	predicates        []predicate.ProtectedAreaPicture
-	withAuthor        *PersonQuery
-	withCollection    *CollectionQuery
-	withProtectedArea *ProtectedAreaQuery
-	withLocation      *LocationQuery
-	withLicense       *LicenseQuery
-	withCountry       *CountryQuery
-	withSettlement    *SettlementQuery
-	withDistrict      *DistrictQuery
-	withRegion        *RegionQuery
-	withPersonal      *PersonalQuery
-	withFKs           bool
-	modifiers         []func(*sql.Selector)
-	loadTotal         []func(context.Context, []*ProtectedAreaPicture) error
-	withNamedPersonal map[string]*PersonalQuery
+	ctx                         *QueryContext
+	order                       []protectedareapicture.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.ProtectedAreaPicture
+	withAuthor                  *PersonQuery
+	withCollection              *CollectionQuery
+	withProtectedArea           *ProtectedAreaQuery
+	withLocation                *LocationQuery
+	withLicense                 *LicenseQuery
+	withCountry                 *CountryQuery
+	withSettlement              *SettlementQuery
+	withDistrict                *DistrictQuery
+	withRegion                  *RegionQuery
+	withPersonalCollection      *PersonalCollectionQuery
+	withFKs                     bool
+	modifiers                   []func(*sql.Selector)
+	loadTotal                   []func(context.Context, []*ProtectedAreaPicture) error
+	withNamedPersonalCollection map[string]*PersonalCollectionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -281,9 +281,9 @@ func (papq *ProtectedAreaPictureQuery) QueryRegion() *RegionQuery {
 	return query
 }
 
-// QueryPersonal chains the current query on the "personal" edge.
-func (papq *ProtectedAreaPictureQuery) QueryPersonal() *PersonalQuery {
-	query := (&PersonalClient{config: papq.config}).Query()
+// QueryPersonalCollection chains the current query on the "personal_collection" edge.
+func (papq *ProtectedAreaPictureQuery) QueryPersonalCollection() *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: papq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := papq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -294,8 +294,8 @@ func (papq *ProtectedAreaPictureQuery) QueryPersonal() *PersonalQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, protectedareapicture.PersonalTable, protectedareapicture.PersonalPrimaryKey...),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, protectedareapicture.PersonalCollectionTable, protectedareapicture.PersonalCollectionPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
 		return fromU, nil
@@ -490,21 +490,21 @@ func (papq *ProtectedAreaPictureQuery) Clone() *ProtectedAreaPictureQuery {
 		return nil
 	}
 	return &ProtectedAreaPictureQuery{
-		config:            papq.config,
-		ctx:               papq.ctx.Clone(),
-		order:             append([]protectedareapicture.OrderOption{}, papq.order...),
-		inters:            append([]Interceptor{}, papq.inters...),
-		predicates:        append([]predicate.ProtectedAreaPicture{}, papq.predicates...),
-		withAuthor:        papq.withAuthor.Clone(),
-		withCollection:    papq.withCollection.Clone(),
-		withProtectedArea: papq.withProtectedArea.Clone(),
-		withLocation:      papq.withLocation.Clone(),
-		withLicense:       papq.withLicense.Clone(),
-		withCountry:       papq.withCountry.Clone(),
-		withSettlement:    papq.withSettlement.Clone(),
-		withDistrict:      papq.withDistrict.Clone(),
-		withRegion:        papq.withRegion.Clone(),
-		withPersonal:      papq.withPersonal.Clone(),
+		config:                 papq.config,
+		ctx:                    papq.ctx.Clone(),
+		order:                  append([]protectedareapicture.OrderOption{}, papq.order...),
+		inters:                 append([]Interceptor{}, papq.inters...),
+		predicates:             append([]predicate.ProtectedAreaPicture{}, papq.predicates...),
+		withAuthor:             papq.withAuthor.Clone(),
+		withCollection:         papq.withCollection.Clone(),
+		withProtectedArea:      papq.withProtectedArea.Clone(),
+		withLocation:           papq.withLocation.Clone(),
+		withLicense:            papq.withLicense.Clone(),
+		withCountry:            papq.withCountry.Clone(),
+		withSettlement:         papq.withSettlement.Clone(),
+		withDistrict:           papq.withDistrict.Clone(),
+		withRegion:             papq.withRegion.Clone(),
+		withPersonalCollection: papq.withPersonalCollection.Clone(),
 		// clone intermediate query.
 		sql:  papq.sql.Clone(),
 		path: papq.path,
@@ -610,14 +610,14 @@ func (papq *ProtectedAreaPictureQuery) WithRegion(opts ...func(*RegionQuery)) *P
 	return papq
 }
 
-// WithPersonal tells the query-builder to eager-load the nodes that are connected to
-// the "personal" edge. The optional arguments are used to configure the query builder of the edge.
-func (papq *ProtectedAreaPictureQuery) WithPersonal(opts ...func(*PersonalQuery)) *ProtectedAreaPictureQuery {
-	query := (&PersonalClient{config: papq.config}).Query()
+// WithPersonalCollection tells the query-builder to eager-load the nodes that are connected to
+// the "personal_collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithPersonalCollection(opts ...func(*PersonalCollectionQuery)) *ProtectedAreaPictureQuery {
+	query := (&PersonalCollectionClient{config: papq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	papq.withPersonal = query
+	papq.withPersonalCollection = query
 	return papq
 }
 
@@ -716,7 +716,7 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 			papq.withSettlement != nil,
 			papq.withDistrict != nil,
 			papq.withRegion != nil,
-			papq.withPersonal != nil,
+			papq.withPersonalCollection != nil,
 		}
 	)
 	if papq.withAuthor != nil || papq.withCollection != nil || papq.withProtectedArea != nil || papq.withLocation != nil || papq.withLicense != nil || papq.withCountry != nil || papq.withSettlement != nil || papq.withDistrict != nil || papq.withRegion != nil {
@@ -800,17 +800,19 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 			return nil, err
 		}
 	}
-	if query := papq.withPersonal; query != nil {
-		if err := papq.loadPersonal(ctx, query, nodes,
-			func(n *ProtectedAreaPicture) { n.Edges.Personal = []*Personal{} },
-			func(n *ProtectedAreaPicture, e *Personal) { n.Edges.Personal = append(n.Edges.Personal, e) }); err != nil {
+	if query := papq.withPersonalCollection; query != nil {
+		if err := papq.loadPersonalCollection(ctx, query, nodes,
+			func(n *ProtectedAreaPicture) { n.Edges.PersonalCollection = []*PersonalCollection{} },
+			func(n *ProtectedAreaPicture, e *PersonalCollection) {
+				n.Edges.PersonalCollection = append(n.Edges.PersonalCollection, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range papq.withNamedPersonal {
-		if err := papq.loadPersonal(ctx, query, nodes,
-			func(n *ProtectedAreaPicture) { n.appendNamedPersonal(name) },
-			func(n *ProtectedAreaPicture, e *Personal) { n.appendNamedPersonal(name, e) }); err != nil {
+	for name, query := range papq.withNamedPersonalCollection {
+		if err := papq.loadPersonalCollection(ctx, query, nodes,
+			func(n *ProtectedAreaPicture) { n.appendNamedPersonalCollection(name) },
+			func(n *ProtectedAreaPicture, e *PersonalCollection) { n.appendNamedPersonalCollection(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1110,7 +1112,7 @@ func (papq *ProtectedAreaPictureQuery) loadRegion(ctx context.Context, query *Re
 	}
 	return nil
 }
-func (papq *ProtectedAreaPictureQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Personal)) error {
+func (papq *ProtectedAreaPictureQuery) loadPersonalCollection(ctx context.Context, query *PersonalCollectionQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *PersonalCollection)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*ProtectedAreaPicture)
 	nids := make(map[int]map[*ProtectedAreaPicture]struct{})
@@ -1122,11 +1124,11 @@ func (papq *ProtectedAreaPictureQuery) loadPersonal(ctx context.Context, query *
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(protectedareapicture.PersonalTable)
-		s.Join(joinT).On(s.C(personal.FieldID), joinT.C(protectedareapicture.PersonalPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(protectedareapicture.PersonalPrimaryKey[1]), edgeIDs...))
+		joinT := sql.Table(protectedareapicture.PersonalCollectionTable)
+		s.Join(joinT).On(s.C(personalcollection.FieldID), joinT.C(protectedareapicture.PersonalCollectionPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(protectedareapicture.PersonalCollectionPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(protectedareapicture.PersonalPrimaryKey[1]))
+		s.Select(joinT.C(protectedareapicture.PersonalCollectionPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1156,14 +1158,14 @@ func (papq *ProtectedAreaPictureQuery) loadPersonal(ctx context.Context, query *
 			}
 		})
 	})
-	neighbors, err := withInterceptors[[]*Personal](ctx, query, qr, query.inters)
+	neighbors, err := withInterceptors[[]*PersonalCollection](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "personal" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "personal_collection" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1256,17 +1258,17 @@ func (papq *ProtectedAreaPictureQuery) sqlQuery(ctx context.Context) *sql.Select
 	return selector
 }
 
-// WithNamedPersonal tells the query-builder to eager-load the nodes that are connected to the "personal"
+// WithNamedPersonalCollection tells the query-builder to eager-load the nodes that are connected to the "personal_collection"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (papq *ProtectedAreaPictureQuery) WithNamedPersonal(name string, opts ...func(*PersonalQuery)) *ProtectedAreaPictureQuery {
-	query := (&PersonalClient{config: papq.config}).Query()
+func (papq *ProtectedAreaPictureQuery) WithNamedPersonalCollection(name string, opts ...func(*PersonalCollectionQuery)) *ProtectedAreaPictureQuery {
+	query := (&PersonalCollectionClient{config: papq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if papq.withNamedPersonal == nil {
-		papq.withNamedPersonal = make(map[string]*PersonalQuery)
+	if papq.withNamedPersonalCollection == nil {
+		papq.withNamedPersonalCollection = make(map[string]*PersonalCollectionQuery)
 	}
-	papq.withNamedPersonal[name] = query
+	papq.withNamedPersonalCollection[name] = query
 	return papq
 }
 

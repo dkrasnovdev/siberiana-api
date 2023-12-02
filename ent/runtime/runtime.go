@@ -32,7 +32,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -782,43 +782,46 @@ func init() {
 	person.DefaultUpdatedAt = personDescUpdatedAt.Default.(func() time.Time)
 	// person.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	person.UpdateDefaultUpdatedAt = personDescUpdatedAt.UpdateDefault.(func() time.Time)
-	personalMixin := schema.Personal{}.Mixin()
-	personal.Policy = privacy.NewPolicies(schema.Personal{})
-	personal.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+	personalcollectionMixin := schema.PersonalCollection{}.Mixin()
+	personalcollection.Policy = privacy.NewPolicies(schema.PersonalCollection{})
+	personalcollection.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := personal.Policy.EvalMutation(ctx, m); err != nil {
+			if err := personalcollection.Policy.EvalMutation(ctx, m); err != nil {
 				return nil, err
 			}
 			return next.Mutate(ctx, m)
 		})
 	}
-	personalMixinHooks0 := personalMixin[0].Hooks()
+	personalcollectionMixinHooks0 := personalcollectionMixin[0].Hooks()
+	personalcollectionHooks := schema.PersonalCollection{}.Hooks()
 
-	personal.Hooks[1] = personalMixinHooks0[0]
-	personalInters := schema.Personal{}.Interceptors()
-	personal.Interceptors[0] = personalInters[0]
-	personalMixinFields0 := personalMixin[0].Fields()
-	_ = personalMixinFields0
-	personalFields := schema.Personal{}.Fields()
-	_ = personalFields
-	// personalDescCreatedAt is the schema descriptor for created_at field.
-	personalDescCreatedAt := personalMixinFields0[0].Descriptor()
-	// personal.DefaultCreatedAt holds the default value on creation for the created_at field.
-	personal.DefaultCreatedAt = personalDescCreatedAt.Default.(func() time.Time)
-	// personalDescUpdatedAt is the schema descriptor for updated_at field.
-	personalDescUpdatedAt := personalMixinFields0[2].Descriptor()
-	// personal.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	personal.DefaultUpdatedAt = personalDescUpdatedAt.Default.(func() time.Time)
-	// personal.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	personal.UpdateDefaultUpdatedAt = personalDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// personalDescDisplayName is the schema descriptor for display_name field.
-	personalDescDisplayName := personalFields[0].Descriptor()
-	// personal.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
-	personal.DisplayNameValidator = personalDescDisplayName.Validators[0].(func(string) error)
-	// personalDescIsPublic is the schema descriptor for is_public field.
-	personalDescIsPublic := personalFields[1].Descriptor()
-	// personal.DefaultIsPublic holds the default value on creation for the is_public field.
-	personal.DefaultIsPublic = personalDescIsPublic.Default.(bool)
+	personalcollection.Hooks[1] = personalcollectionMixinHooks0[0]
+
+	personalcollection.Hooks[2] = personalcollectionHooks[0]
+	personalcollectionInters := schema.PersonalCollection{}.Interceptors()
+	personalcollection.Interceptors[0] = personalcollectionInters[0]
+	personalcollectionMixinFields0 := personalcollectionMixin[0].Fields()
+	_ = personalcollectionMixinFields0
+	personalcollectionFields := schema.PersonalCollection{}.Fields()
+	_ = personalcollectionFields
+	// personalcollectionDescCreatedAt is the schema descriptor for created_at field.
+	personalcollectionDescCreatedAt := personalcollectionMixinFields0[0].Descriptor()
+	// personalcollection.DefaultCreatedAt holds the default value on creation for the created_at field.
+	personalcollection.DefaultCreatedAt = personalcollectionDescCreatedAt.Default.(func() time.Time)
+	// personalcollectionDescUpdatedAt is the schema descriptor for updated_at field.
+	personalcollectionDescUpdatedAt := personalcollectionMixinFields0[2].Descriptor()
+	// personalcollection.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	personalcollection.DefaultUpdatedAt = personalcollectionDescUpdatedAt.Default.(func() time.Time)
+	// personalcollection.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	personalcollection.UpdateDefaultUpdatedAt = personalcollectionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// personalcollectionDescDisplayName is the schema descriptor for display_name field.
+	personalcollectionDescDisplayName := personalcollectionFields[0].Descriptor()
+	// personalcollection.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
+	personalcollection.DisplayNameValidator = personalcollectionDescDisplayName.Validators[0].(func(string) error)
+	// personalcollectionDescIsPublic is the schema descriptor for is_public field.
+	personalcollectionDescIsPublic := personalcollectionFields[1].Descriptor()
+	// personalcollection.DefaultIsPublic holds the default value on creation for the is_public field.
+	personalcollection.DefaultIsPublic = personalcollectionDescIsPublic.Default.(bool)
 	petroglyphMixin := schema.Petroglyph{}.Mixin()
 	petroglyph.Policy = privacy.NewPolicies(schema.Petroglyph{})
 	petroglyph.Hooks[0] = func(next ent.Mutator) ent.Mutator {

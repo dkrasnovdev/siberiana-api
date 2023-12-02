@@ -100,15 +100,18 @@ type ArtEdges struct {
 	District *District `json:"district,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
+	// PersonalCollection holds the value of the personal_collection edge.
+	PersonalCollection []*PersonalCollection `json:"personal_collection,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
 
-	namedArtGenre   map[string][]*ArtGenre
-	namedArtStyle   map[string][]*ArtStyle
-	namedTechniques map[string][]*Technique
+	namedArtGenre           map[string][]*ArtGenre
+	namedArtStyle           map[string][]*ArtStyle
+	namedTechniques         map[string][]*Technique
+	namedPersonalCollection map[string][]*PersonalCollection
 }
 
 // AuthorOrErr returns the Author value or an error if the edge
@@ -214,6 +217,15 @@ func (e ArtEdges) RegionOrErr() (*Region, error) {
 		return e.Region, nil
 	}
 	return nil, &NotLoadedError{edge: "region"}
+}
+
+// PersonalCollectionOrErr returns the PersonalCollection value or an error if the edge
+// was not loaded in eager-loading.
+func (e ArtEdges) PersonalCollectionOrErr() ([]*PersonalCollection, error) {
+	if e.loadedTypes[9] {
+		return e.PersonalCollection, nil
+	}
+	return nil, &NotLoadedError{edge: "personal_collection"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -498,6 +510,11 @@ func (a *Art) QueryRegion() *RegionQuery {
 	return NewArtClient(a.config).QueryRegion(a)
 }
 
+// QueryPersonalCollection queries the "personal_collection" edge of the Art entity.
+func (a *Art) QueryPersonalCollection() *PersonalCollectionQuery {
+	return NewArtClient(a.config).QueryPersonalCollection(a)
+}
+
 // Update returns a builder for updating this Art.
 // Note that you need to call Art.Unwrap() before calling this method if this Art
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -659,6 +676,30 @@ func (a *Art) appendNamedTechniques(name string, edges ...*Technique) {
 		a.Edges.namedTechniques[name] = []*Technique{}
 	} else {
 		a.Edges.namedTechniques[name] = append(a.Edges.namedTechniques[name], edges...)
+	}
+}
+
+// NamedPersonalCollection returns the PersonalCollection named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Art) NamedPersonalCollection(name string) ([]*PersonalCollection, error) {
+	if a.Edges.namedPersonalCollection == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedPersonalCollection[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Art) appendNamedPersonalCollection(name string, edges ...*PersonalCollection) {
+	if a.Edges.namedPersonalCollection == nil {
+		a.Edges.namedPersonalCollection = make(map[string][]*PersonalCollection)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedPersonalCollection[name] = []*PersonalCollection{}
+	} else {
+		a.Edges.namedPersonalCollection[name] = append(a.Edges.namedPersonalCollection[name], edges...)
 	}
 }
 

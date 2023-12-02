@@ -62,8 +62,8 @@ const (
 	EdgeDistrict = "district"
 	// EdgeRegion holds the string denoting the region edge name in mutations.
 	EdgeRegion = "region"
-	// EdgePersonal holds the string denoting the personal edge name in mutations.
-	EdgePersonal = "personal"
+	// EdgePersonalCollection holds the string denoting the personal_collection edge name in mutations.
+	EdgePersonalCollection = "personal_collection"
 	// Table holds the table name of the protectedareapicture in the database.
 	Table = "protected_area_pictures"
 	// AuthorTable is the table that holds the author relation/edge.
@@ -129,11 +129,11 @@ const (
 	RegionInverseTable = "regions"
 	// RegionColumn is the table column denoting the region relation/edge.
 	RegionColumn = "region_protected_area_pictures"
-	// PersonalTable is the table that holds the personal relation/edge. The primary key declared below.
-	PersonalTable = "personal_protected_area_pictures"
-	// PersonalInverseTable is the table name for the Personal entity.
-	// It exists in this package in order to avoid circular dependency with the "personal" package.
-	PersonalInverseTable = "personals"
+	// PersonalCollectionTable is the table that holds the personal_collection relation/edge. The primary key declared below.
+	PersonalCollectionTable = "personal_collection_protected_area_pictures"
+	// PersonalCollectionInverseTable is the table name for the PersonalCollection entity.
+	// It exists in this package in order to avoid circular dependency with the "personalcollection" package.
+	PersonalCollectionInverseTable = "personal_collections"
 )
 
 // Columns holds all SQL columns for protectedareapicture fields.
@@ -169,9 +169,9 @@ var ForeignKeys = []string{
 }
 
 var (
-	// PersonalPrimaryKey and PersonalColumn2 are the table columns denoting the
-	// primary key for the personal relation (M2M).
-	PersonalPrimaryKey = []string{"personal_id", "protected_area_picture_id"}
+	// PersonalCollectionPrimaryKey and PersonalCollectionColumn2 are the table columns denoting the
+	// primary key for the personal_collection relation (M2M).
+	PersonalCollectionPrimaryKey = []string{"personal_collection_id", "protected_area_picture_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -363,17 +363,17 @@ func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByPersonalCount orders the results by personal count.
-func ByPersonalCount(opts ...sql.OrderTermOption) OrderOption {
+// ByPersonalCollectionCount orders the results by personal_collection count.
+func ByPersonalCollectionCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPersonalStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newPersonalCollectionStep(), opts...)
 	}
 }
 
-// ByPersonal orders the results by personal terms.
-func ByPersonal(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByPersonalCollection orders the results by personal_collection terms.
+func ByPersonalCollection(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPersonalStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newPersonalCollectionStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newAuthorStep() *sqlgraph.Step {
@@ -439,11 +439,11 @@ func newRegionStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
 	)
 }
-func newPersonalStep() *sqlgraph.Step {
+func newPersonalCollectionStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PersonalInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, PersonalTable, PersonalPrimaryKey...),
+		sqlgraph.To(PersonalCollectionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PersonalCollectionTable, PersonalCollectionPrimaryKey...),
 	)
 }
 

@@ -96,17 +96,17 @@ type BookEdges struct {
 	District *District `json:"district,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
-	// Personal holds the value of the personal edge.
-	Personal []*Personal `json:"personal,omitempty"`
+	// PersonalCollection holds the value of the personal_collection edge.
+	PersonalCollection []*PersonalCollection `json:"personal_collection,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
 	totalCount [13]map[string]int
 
-	namedAuthors    map[string][]*Person
-	namedBookGenres map[string][]*BookGenre
-	namedPersonal   map[string][]*Personal
+	namedAuthors            map[string][]*Person
+	namedBookGenres         map[string][]*BookGenre
+	namedPersonalCollection map[string][]*PersonalCollection
 }
 
 // AuthorsOrErr returns the Authors value or an error if the edge
@@ -257,13 +257,13 @@ func (e BookEdges) RegionOrErr() (*Region, error) {
 	return nil, &NotLoadedError{edge: "region"}
 }
 
-// PersonalOrErr returns the Personal value or an error if the edge
+// PersonalCollectionOrErr returns the PersonalCollection value or an error if the edge
 // was not loaded in eager-loading.
-func (e BookEdges) PersonalOrErr() ([]*Personal, error) {
+func (e BookEdges) PersonalCollectionOrErr() ([]*PersonalCollection, error) {
 	if e.loadedTypes[12] {
-		return e.Personal, nil
+		return e.PersonalCollection, nil
 	}
-	return nil, &NotLoadedError{edge: "personal"}
+	return nil, &NotLoadedError{edge: "personal_collection"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -545,9 +545,9 @@ func (b *Book) QueryRegion() *RegionQuery {
 	return NewBookClient(b.config).QueryRegion(b)
 }
 
-// QueryPersonal queries the "personal" edge of the Book entity.
-func (b *Book) QueryPersonal() *PersonalQuery {
-	return NewBookClient(b.config).QueryPersonal(b)
+// QueryPersonalCollection queries the "personal_collection" edge of the Book entity.
+func (b *Book) QueryPersonalCollection() *PersonalCollectionQuery {
+	return NewBookClient(b.config).QueryPersonalCollection(b)
 }
 
 // Update returns a builder for updating this Book.
@@ -663,27 +663,27 @@ func (b *Book) appendNamedBookGenres(name string, edges ...*BookGenre) {
 	}
 }
 
-// NamedPersonal returns the Personal named value or an error if the edge was not
+// NamedPersonalCollection returns the PersonalCollection named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (b *Book) NamedPersonal(name string) ([]*Personal, error) {
-	if b.Edges.namedPersonal == nil {
+func (b *Book) NamedPersonalCollection(name string) ([]*PersonalCollection, error) {
+	if b.Edges.namedPersonalCollection == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := b.Edges.namedPersonal[name]
+	nodes, ok := b.Edges.namedPersonalCollection[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (b *Book) appendNamedPersonal(name string, edges ...*Personal) {
-	if b.Edges.namedPersonal == nil {
-		b.Edges.namedPersonal = make(map[string][]*Personal)
+func (b *Book) appendNamedPersonalCollection(name string, edges ...*PersonalCollection) {
+	if b.Edges.namedPersonalCollection == nil {
+		b.Edges.namedPersonalCollection = make(map[string][]*PersonalCollection)
 	}
 	if len(edges) == 0 {
-		b.Edges.namedPersonal[name] = []*Personal{}
+		b.Edges.namedPersonalCollection[name] = []*PersonalCollection{}
 	} else {
-		b.Edges.namedPersonal[name] = append(b.Edges.namedPersonal[name], edges...)
+		b.Edges.namedPersonalCollection[name] = append(b.Edges.namedPersonalCollection[name], edges...)
 	}
 }
 

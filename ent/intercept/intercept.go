@@ -35,7 +35,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -836,31 +836,31 @@ func (f TraversePerson) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.PersonQuery", q)
 }
 
-// The PersonalFunc type is an adapter to allow the use of ordinary function as a Querier.
-type PersonalFunc func(context.Context, *ent.PersonalQuery) (ent.Value, error)
+// The PersonalCollectionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type PersonalCollectionFunc func(context.Context, *ent.PersonalCollectionQuery) (ent.Value, error)
 
 // Query calls f(ctx, q).
-func (f PersonalFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.PersonalQuery); ok {
+func (f PersonalCollectionFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.PersonalCollectionQuery); ok {
 		return f(ctx, q)
 	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.PersonalQuery", q)
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.PersonalCollectionQuery", q)
 }
 
-// The TraversePersonal type is an adapter to allow the use of ordinary function as Traverser.
-type TraversePersonal func(context.Context, *ent.PersonalQuery) error
+// The TraversePersonalCollection type is an adapter to allow the use of ordinary function as Traverser.
+type TraversePersonalCollection func(context.Context, *ent.PersonalCollectionQuery) error
 
 // Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraversePersonal) Intercept(next ent.Querier) ent.Querier {
+func (f TraversePersonalCollection) Intercept(next ent.Querier) ent.Querier {
 	return next
 }
 
 // Traverse calls f(ctx, q).
-func (f TraversePersonal) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.PersonalQuery); ok {
+func (f TraversePersonalCollection) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PersonalCollectionQuery); ok {
 		return f(ctx, q)
 	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.PersonalQuery", q)
+	return fmt.Errorf("unexpected query type %T. expect *ent.PersonalCollectionQuery", q)
 }
 
 // The PetroglyphFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1244,8 +1244,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.PeriodicalQuery, predicate.Periodical, periodical.OrderOption]{typ: ent.TypePeriodical, tq: q}, nil
 	case *ent.PersonQuery:
 		return &query[*ent.PersonQuery, predicate.Person, person.OrderOption]{typ: ent.TypePerson, tq: q}, nil
-	case *ent.PersonalQuery:
-		return &query[*ent.PersonalQuery, predicate.Personal, personal.OrderOption]{typ: ent.TypePersonal, tq: q}, nil
+	case *ent.PersonalCollectionQuery:
+		return &query[*ent.PersonalCollectionQuery, predicate.PersonalCollection, personalcollection.OrderOption]{typ: ent.TypePersonalCollection, tq: q}, nil
 	case *ent.PetroglyphQuery:
 		return &query[*ent.PetroglyphQuery, predicate.Petroglyph, petroglyph.OrderOption]{typ: ent.TypePetroglyph, tq: q}, nil
 	case *ent.ProjectQuery:

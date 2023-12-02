@@ -107,10 +107,15 @@ type Mutation {
   createPerson(input: CreatePersonInput!): Person!
   updatePerson(id: ID!, input: UpdatePersonInput!): Person!
   deletePerson(id: ID!): String!
-  # Personal
-  createPersonal(input: CreatePersonalInput!): Personal!
-  updatePersonal(id: ID!, input: UpdatePersonalInput!): Personal!
-  deletePersonal(id: ID!): String!
+  # PersonalCollection
+  createPersonalCollection(
+    input: CreatePersonalCollectionInput!
+  ): PersonalCollection!
+  updatePersonalCollection(
+    id: ID!
+    input: UpdatePersonalCollectionInput!
+  ): PersonalCollection!
+  deletePersonalCollection(id: ID!): String!
   # Project
   createProject(input: CreateProjectInput!): Project!
   updateProject(id: ID!, input: UpdateProjectInput!): Project!

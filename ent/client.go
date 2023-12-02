@@ -42,7 +42,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -117,8 +117,8 @@ type Client struct {
 	Periodical *PeriodicalClient
 	// Person is the client for interacting with the Person builders.
 	Person *PersonClient
-	// Personal is the client for interacting with the Personal builders.
-	Personal *PersonalClient
+	// PersonalCollection is the client for interacting with the PersonalCollection builders.
+	PersonalCollection *PersonalCollectionClient
 	// Petroglyph is the client for interacting with the Petroglyph builders.
 	Petroglyph *PetroglyphClient
 	// Project is the client for interacting with the Project builders.
@@ -185,7 +185,7 @@ func (c *Client) init() {
 	c.Organization = NewOrganizationClient(c.config)
 	c.Periodical = NewPeriodicalClient(c.config)
 	c.Person = NewPersonClient(c.config)
-	c.Personal = NewPersonalClient(c.config)
+	c.PersonalCollection = NewPersonalCollectionClient(c.config)
 	c.Petroglyph = NewPetroglyphClient(c.config)
 	c.Project = NewProjectClient(c.config)
 	c.ProtectedArea = NewProtectedAreaClient(c.config)
@@ -318,7 +318,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Organization:                NewOrganizationClient(cfg),
 		Periodical:                  NewPeriodicalClient(cfg),
 		Person:                      NewPersonClient(cfg),
-		Personal:                    NewPersonalClient(cfg),
+		PersonalCollection:          NewPersonalCollectionClient(cfg),
 		Petroglyph:                  NewPetroglyphClient(cfg),
 		Project:                     NewProjectClient(cfg),
 		ProtectedArea:               NewProtectedAreaClient(cfg),
@@ -377,7 +377,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Organization:                NewOrganizationClient(cfg),
 		Periodical:                  NewPeriodicalClient(cfg),
 		Person:                      NewPersonClient(cfg),
-		Personal:                    NewPersonalClient(cfg),
+		PersonalCollection:          NewPersonalCollectionClient(cfg),
 		Petroglyph:                  NewPetroglyphClient(cfg),
 		Project:                     NewProjectClient(cfg),
 		ProtectedArea:               NewProtectedAreaClient(cfg),
@@ -423,9 +423,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Category, c.Collection, c.Country, c.Culture, c.DendrochronologicalAnalysis,
 		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
 		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
-		c.Periodical, c.Person, c.Personal, c.Petroglyph, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
-		c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
+		c.Periodical, c.Person, c.PersonalCollection, c.Petroglyph, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Visit,
 	} {
 		n.Use(hooks...)
 	}
@@ -439,9 +440,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Category, c.Collection, c.Country, c.Culture, c.DendrochronologicalAnalysis,
 		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
 		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
-		c.Periodical, c.Person, c.Personal, c.Petroglyph, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
-		c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
+		c.Periodical, c.Person, c.PersonalCollection, c.Petroglyph, c.Project,
+		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
+		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
+		c.Visit,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -504,8 +506,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Periodical.mutate(ctx, m)
 	case *PersonMutation:
 		return c.Person.mutate(ctx, m)
-	case *PersonalMutation:
-		return c.Personal.mutate(ctx, m)
+	case *PersonalCollectionMutation:
+		return c.PersonalCollection.mutate(ctx, m)
 	case *PetroglyphMutation:
 		return c.Petroglyph.mutate(ctx, m)
 	case *ProjectMutation:
@@ -780,6 +782,22 @@ func (c *ArtClient) QueryRegion(a *Art) *RegionQuery {
 			sqlgraph.From(art.Table, art.FieldID, id),
 			sqlgraph.To(region.Table, region.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, art.RegionTable, art.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPersonalCollection queries the personal_collection edge of a Art.
+func (c *ArtClient) QueryPersonalCollection(a *Art) *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, id),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.PersonalCollectionTable, art.PersonalCollectionPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -1525,15 +1543,15 @@ func (c *ArtifactClient) QueryRegion(a *Artifact) *RegionQuery {
 	return query
 }
 
-// QueryPersonal queries the personal edge of a Artifact.
-func (c *ArtifactClient) QueryPersonal(a *Artifact) *PersonalQuery {
-	query := (&PersonalClient{config: c.config}).Query()
+// QueryPersonalCollection queries the personal_collection edge of a Artifact.
+func (c *ArtifactClient) QueryPersonalCollection(a *Artifact) *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := a.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(artifact.Table, artifact.FieldID, id),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PersonalTable, artifact.PersonalPrimaryKey...),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PersonalCollectionTable, artifact.PersonalCollectionPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
@@ -2002,15 +2020,15 @@ func (c *BookClient) QueryRegion(b *Book) *RegionQuery {
 	return query
 }
 
-// QueryPersonal queries the personal edge of a Book.
-func (c *BookClient) QueryPersonal(b *Book) *PersonalQuery {
-	query := (&PersonalClient{config: c.config}).Query()
+// QueryPersonalCollection queries the personal_collection edge of a Book.
+func (c *BookClient) QueryPersonalCollection(b *Book) *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := b.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(book.Table, book.FieldID, id),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, book.PersonalTable, book.PersonalPrimaryKey...),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, book.PersonalCollectionTable, book.PersonalCollectionPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
@@ -5884,107 +5902,107 @@ func (c *PersonClient) mutate(ctx context.Context, m *PersonMutation) (Value, er
 	}
 }
 
-// PersonalClient is a client for the Personal schema.
-type PersonalClient struct {
+// PersonalCollectionClient is a client for the PersonalCollection schema.
+type PersonalCollectionClient struct {
 	config
 }
 
-// NewPersonalClient returns a client for the Personal from the given config.
-func NewPersonalClient(c config) *PersonalClient {
-	return &PersonalClient{config: c}
+// NewPersonalCollectionClient returns a client for the PersonalCollection from the given config.
+func NewPersonalCollectionClient(c config) *PersonalCollectionClient {
+	return &PersonalCollectionClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `personal.Hooks(f(g(h())))`.
-func (c *PersonalClient) Use(hooks ...Hook) {
-	c.hooks.Personal = append(c.hooks.Personal, hooks...)
+// A call to `Use(f, g, h)` equals to `personalcollection.Hooks(f(g(h())))`.
+func (c *PersonalCollectionClient) Use(hooks ...Hook) {
+	c.hooks.PersonalCollection = append(c.hooks.PersonalCollection, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `personal.Intercept(f(g(h())))`.
-func (c *PersonalClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Personal = append(c.inters.Personal, interceptors...)
+// A call to `Intercept(f, g, h)` equals to `personalcollection.Intercept(f(g(h())))`.
+func (c *PersonalCollectionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.PersonalCollection = append(c.inters.PersonalCollection, interceptors...)
 }
 
-// Create returns a builder for creating a Personal entity.
-func (c *PersonalClient) Create() *PersonalCreate {
-	mutation := newPersonalMutation(c.config, OpCreate)
-	return &PersonalCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a PersonalCollection entity.
+func (c *PersonalCollectionClient) Create() *PersonalCollectionCreate {
+	mutation := newPersonalCollectionMutation(c.config, OpCreate)
+	return &PersonalCollectionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Personal entities.
-func (c *PersonalClient) CreateBulk(builders ...*PersonalCreate) *PersonalCreateBulk {
-	return &PersonalCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of PersonalCollection entities.
+func (c *PersonalCollectionClient) CreateBulk(builders ...*PersonalCollectionCreate) *PersonalCollectionCreateBulk {
+	return &PersonalCollectionCreateBulk{config: c.config, builders: builders}
 }
 
 // MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
 // a builder and applies setFunc on it.
-func (c *PersonalClient) MapCreateBulk(slice any, setFunc func(*PersonalCreate, int)) *PersonalCreateBulk {
+func (c *PersonalCollectionClient) MapCreateBulk(slice any, setFunc func(*PersonalCollectionCreate, int)) *PersonalCollectionCreateBulk {
 	rv := reflect.ValueOf(slice)
 	if rv.Kind() != reflect.Slice {
-		return &PersonalCreateBulk{err: fmt.Errorf("calling to PersonalClient.MapCreateBulk with wrong type %T, need slice", slice)}
+		return &PersonalCollectionCreateBulk{err: fmt.Errorf("calling to PersonalCollectionClient.MapCreateBulk with wrong type %T, need slice", slice)}
 	}
-	builders := make([]*PersonalCreate, rv.Len())
+	builders := make([]*PersonalCollectionCreate, rv.Len())
 	for i := 0; i < rv.Len(); i++ {
 		builders[i] = c.Create()
 		setFunc(builders[i], i)
 	}
-	return &PersonalCreateBulk{config: c.config, builders: builders}
+	return &PersonalCollectionCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Personal.
-func (c *PersonalClient) Update() *PersonalUpdate {
-	mutation := newPersonalMutation(c.config, OpUpdate)
-	return &PersonalUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for PersonalCollection.
+func (c *PersonalCollectionClient) Update() *PersonalCollectionUpdate {
+	mutation := newPersonalCollectionMutation(c.config, OpUpdate)
+	return &PersonalCollectionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *PersonalClient) UpdateOne(pe *Personal) *PersonalUpdateOne {
-	mutation := newPersonalMutation(c.config, OpUpdateOne, withPersonal(pe))
-	return &PersonalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *PersonalCollectionClient) UpdateOne(pc *PersonalCollection) *PersonalCollectionUpdateOne {
+	mutation := newPersonalCollectionMutation(c.config, OpUpdateOne, withPersonalCollection(pc))
+	return &PersonalCollectionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *PersonalClient) UpdateOneID(id int) *PersonalUpdateOne {
-	mutation := newPersonalMutation(c.config, OpUpdateOne, withPersonalID(id))
-	return &PersonalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *PersonalCollectionClient) UpdateOneID(id int) *PersonalCollectionUpdateOne {
+	mutation := newPersonalCollectionMutation(c.config, OpUpdateOne, withPersonalCollectionID(id))
+	return &PersonalCollectionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Personal.
-func (c *PersonalClient) Delete() *PersonalDelete {
-	mutation := newPersonalMutation(c.config, OpDelete)
-	return &PersonalDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for PersonalCollection.
+func (c *PersonalCollectionClient) Delete() *PersonalCollectionDelete {
+	mutation := newPersonalCollectionMutation(c.config, OpDelete)
+	return &PersonalCollectionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *PersonalClient) DeleteOne(pe *Personal) *PersonalDeleteOne {
-	return c.DeleteOneID(pe.ID)
+func (c *PersonalCollectionClient) DeleteOne(pc *PersonalCollection) *PersonalCollectionDeleteOne {
+	return c.DeleteOneID(pc.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *PersonalClient) DeleteOneID(id int) *PersonalDeleteOne {
-	builder := c.Delete().Where(personal.ID(id))
+func (c *PersonalCollectionClient) DeleteOneID(id int) *PersonalCollectionDeleteOne {
+	builder := c.Delete().Where(personalcollection.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &PersonalDeleteOne{builder}
+	return &PersonalCollectionDeleteOne{builder}
 }
 
-// Query returns a query builder for Personal.
-func (c *PersonalClient) Query() *PersonalQuery {
-	return &PersonalQuery{
+// Query returns a query builder for PersonalCollection.
+func (c *PersonalCollectionClient) Query() *PersonalCollectionQuery {
+	return &PersonalCollectionQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: TypePersonal},
+		ctx:    &QueryContext{Type: TypePersonalCollection},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a Personal entity by its id.
-func (c *PersonalClient) Get(ctx context.Context, id int) (*Personal, error) {
-	return c.Query().Where(personal.ID(id)).Only(ctx)
+// Get returns a PersonalCollection entity by its id.
+func (c *PersonalCollectionClient) Get(ctx context.Context, id int) (*PersonalCollection, error) {
+	return c.Query().Where(personalcollection.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *PersonalClient) GetX(ctx context.Context, id int) *Personal {
+func (c *PersonalCollectionClient) GetX(ctx context.Context, id int) *PersonalCollection {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -5992,94 +6010,110 @@ func (c *PersonalClient) GetX(ctx context.Context, id int) *Personal {
 	return obj
 }
 
-// QueryArtifacts queries the artifacts edge of a Personal.
-func (c *PersonalClient) QueryArtifacts(pe *Personal) *ArtifactQuery {
+// QueryArt queries the art edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryArt(pc *PersonalCollection) *ArtQuery {
+	query := (&ArtClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
+			sqlgraph.To(art.Table, art.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.ArtTable, personalcollection.ArtPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryArtifacts queries the artifacts edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryArtifacts(pc *PersonalCollection) *ArtifactQuery {
 	query := (&ArtifactClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
+		id := pc.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, personal.ArtifactsTable, personal.ArtifactsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.ArtifactsTable, personalcollection.ArtifactsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryPetroglyphs queries the petroglyphs edge of a Personal.
-func (c *PersonalClient) QueryPetroglyphs(pe *Personal) *PetroglyphQuery {
+// QueryPetroglyphs queries the petroglyphs edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryPetroglyphs(pc *PersonalCollection) *PetroglyphQuery {
 	query := (&PetroglyphClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
+		id := pc.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
 			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, personal.PetroglyphsTable, personal.PetroglyphsPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.PetroglyphsTable, personalcollection.PetroglyphsPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryBooks queries the books edge of a Personal.
-func (c *PersonalClient) QueryBooks(pe *Personal) *BookQuery {
+// QueryBooks queries the books edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryBooks(pc *PersonalCollection) *BookQuery {
 	query := (&BookClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
+		id := pc.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, personal.BooksTable, personal.BooksPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.BooksTable, personalcollection.BooksPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Personal.
-func (c *PersonalClient) QueryProtectedAreaPictures(pe *Personal) *ProtectedAreaPictureQuery {
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryProtectedAreaPictures(pc *PersonalCollection) *ProtectedAreaPictureQuery {
 	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pe.ID
+		id := pc.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
 			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, personal.ProtectedAreaPicturesTable, personal.ProtectedAreaPicturesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.ProtectedAreaPicturesTable, personalcollection.ProtectedAreaPicturesPrimaryKey...),
 		)
-		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // Hooks returns the client hooks.
-func (c *PersonalClient) Hooks() []Hook {
-	hooks := c.hooks.Personal
-	return append(hooks[:len(hooks):len(hooks)], personal.Hooks[:]...)
+func (c *PersonalCollectionClient) Hooks() []Hook {
+	hooks := c.hooks.PersonalCollection
+	return append(hooks[:len(hooks):len(hooks)], personalcollection.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
-func (c *PersonalClient) Interceptors() []Interceptor {
-	inters := c.inters.Personal
-	return append(inters[:len(inters):len(inters)], personal.Interceptors[:]...)
+func (c *PersonalCollectionClient) Interceptors() []Interceptor {
+	inters := c.inters.PersonalCollection
+	return append(inters[:len(inters):len(inters)], personalcollection.Interceptors[:]...)
 }
 
-func (c *PersonalClient) mutate(ctx context.Context, m *PersonalMutation) (Value, error) {
+func (c *PersonalCollectionClient) mutate(ctx context.Context, m *PersonalCollectionMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&PersonalCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&PersonalCollectionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&PersonalUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&PersonalCollectionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&PersonalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&PersonalCollectionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&PersonalDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&PersonalCollectionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown Personal mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown PersonalCollection mutation op: %q", m.Op())
 	}
 }
 
@@ -6335,15 +6369,15 @@ func (c *PetroglyphClient) QueryCollection(pe *Petroglyph) *CollectionQuery {
 	return query
 }
 
-// QueryPersonal queries the personal edge of a Petroglyph.
-func (c *PetroglyphClient) QueryPersonal(pe *Petroglyph) *PersonalQuery {
-	query := (&PersonalClient{config: c.config}).Query()
+// QueryPersonalCollection queries the personal_collection edge of a Petroglyph.
+func (c *PetroglyphClient) QueryPersonalCollection(pe *Petroglyph) *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pe.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, petroglyph.PersonalTable, petroglyph.PersonalPrimaryKey...),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, petroglyph.PersonalCollectionTable, petroglyph.PersonalCollectionPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -7112,15 +7146,15 @@ func (c *ProtectedAreaPictureClient) QueryRegion(pap *ProtectedAreaPicture) *Reg
 	return query
 }
 
-// QueryPersonal queries the personal edge of a ProtectedAreaPicture.
-func (c *ProtectedAreaPictureClient) QueryPersonal(pap *ProtectedAreaPicture) *PersonalQuery {
-	query := (&PersonalClient{config: c.config}).Query()
+// QueryPersonalCollection queries the personal_collection edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryPersonalCollection(pap *ProtectedAreaPicture) *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pap.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, protectedareapicture.PersonalTable, protectedareapicture.PersonalPrimaryKey...),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, protectedareapicture.PersonalCollectionTable, protectedareapicture.PersonalCollectionPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
 		return fromV, nil
@@ -8594,17 +8628,18 @@ type (
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
 		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
-		Model, Monument, Mound, Organization, Periodical, Person, Personal, Petroglyph,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
-		Publication, Publisher, Region, Set, Settlement, Technique, Visit []ent.Hook
+		Model, Monument, Mound, Organization, Periodical, Person, PersonalCollection,
+		Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
+		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
+		Technique, Visit []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
 		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
-		Model, Monument, Mound, Organization, Periodical, Person, Personal, Petroglyph,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
-		Publication, Publisher, Region, Set, Settlement, Technique,
-		Visit []ent.Interceptor
+		Model, Monument, Mound, Organization, Periodical, Person, PersonalCollection,
+		Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
+		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
+		Technique, Visit []ent.Interceptor
 	}
 )

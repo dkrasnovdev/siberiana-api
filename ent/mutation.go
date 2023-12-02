@@ -37,7 +37,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
@@ -90,7 +90,7 @@ const (
 	TypeOrganization                = "Organization"
 	TypePeriodical                  = "Periodical"
 	TypePerson                      = "Person"
-	TypePersonal                    = "Personal"
+	TypePersonalCollection          = "PersonalCollection"
 	TypePetroglyph                  = "Petroglyph"
 	TypeProject                     = "Project"
 	TypeProtectedArea               = "ProtectedArea"
@@ -163,6 +163,9 @@ type ArtMutation struct {
 	cleareddistrict              bool
 	region                       *int
 	clearedregion                bool
+	personal_collection          map[int]struct{}
+	removedpersonal_collection   map[int]struct{}
+	clearedpersonal_collection   bool
 	done                         bool
 	oldValue                     func(context.Context) (*Art, error)
 	predicates                   []predicate.Art
@@ -1877,6 +1880,60 @@ func (m *ArtMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by ids.
+func (m *ArtMutation) AddPersonalCollectionIDs(ids ...int) {
+	if m.personal_collection == nil {
+		m.personal_collection = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.personal_collection[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPersonalCollection clears the "personal_collection" edge to the PersonalCollection entity.
+func (m *ArtMutation) ClearPersonalCollection() {
+	m.clearedpersonal_collection = true
+}
+
+// PersonalCollectionCleared reports if the "personal_collection" edge to the PersonalCollection entity was cleared.
+func (m *ArtMutation) PersonalCollectionCleared() bool {
+	return m.clearedpersonal_collection
+}
+
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (m *ArtMutation) RemovePersonalCollectionIDs(ids ...int) {
+	if m.removedpersonal_collection == nil {
+		m.removedpersonal_collection = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.personal_collection, ids[i])
+		m.removedpersonal_collection[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPersonalCollection returns the removed IDs of the "personal_collection" edge to the PersonalCollection entity.
+func (m *ArtMutation) RemovedPersonalCollectionIDs() (ids []int) {
+	for id := range m.removedpersonal_collection {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PersonalCollectionIDs returns the "personal_collection" edge IDs in the mutation.
+func (m *ArtMutation) PersonalCollectionIDs() (ids []int) {
+	for id := range m.personal_collection {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPersonalCollection resets all changes to the "personal_collection" edge.
+func (m *ArtMutation) ResetPersonalCollection() {
+	m.personal_collection = nil
+	m.clearedpersonal_collection = false
+	m.removedpersonal_collection = nil
+}
+
 // Where appends a list predicates to the ArtMutation builder.
 func (m *ArtMutation) Where(ps ...predicate.Art) {
 	m.predicates = append(m.predicates, ps...)
@@ -2577,7 +2634,7 @@ func (m *ArtMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtMutation) AddedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.author != nil {
 		edges = append(edges, art.EdgeAuthor)
 	}
@@ -2604,6 +2661,9 @@ func (m *ArtMutation) AddedEdges() []string {
 	}
 	if m.region != nil {
 		edges = append(edges, art.EdgeRegion)
+	}
+	if m.personal_collection != nil {
+		edges = append(edges, art.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -2654,13 +2714,19 @@ func (m *ArtMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
+	case art.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.personal_collection))
+		for id := range m.personal_collection {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.removedart_genre != nil {
 		edges = append(edges, art.EdgeArtGenre)
 	}
@@ -2669,6 +2735,9 @@ func (m *ArtMutation) RemovedEdges() []string {
 	}
 	if m.removedtechniques != nil {
 		edges = append(edges, art.EdgeTechniques)
+	}
+	if m.removedpersonal_collection != nil {
+		edges = append(edges, art.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -2695,13 +2764,19 @@ func (m *ArtMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case art.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.removedpersonal_collection))
+		for id := range m.removedpersonal_collection {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.clearedauthor {
 		edges = append(edges, art.EdgeAuthor)
 	}
@@ -2729,6 +2804,9 @@ func (m *ArtMutation) ClearedEdges() []string {
 	if m.clearedregion {
 		edges = append(edges, art.EdgeRegion)
 	}
+	if m.clearedpersonal_collection {
+		edges = append(edges, art.EdgePersonalCollection)
+	}
 	return edges
 }
 
@@ -2754,6 +2832,8 @@ func (m *ArtMutation) EdgeCleared(name string) bool {
 		return m.cleareddistrict
 	case art.EdgeRegion:
 		return m.clearedregion
+	case art.EdgePersonalCollection:
+		return m.clearedpersonal_collection
 	}
 	return false
 }
@@ -2814,6 +2894,9 @@ func (m *ArtMutation) ResetEdge(name string) error {
 		return nil
 	case art.EdgeRegion:
 		m.ResetRegion()
+		return nil
+	case art.EdgePersonalCollection:
+		m.ResetPersonalCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown Art edge %s", name)
@@ -4734,9 +4817,9 @@ type ArtifactMutation struct {
 	cleareddistrict              bool
 	region                       *int
 	clearedregion                bool
-	personal                     map[int]struct{}
-	removedpersonal              map[int]struct{}
-	clearedpersonal              bool
+	personal_collection          map[int]struct{}
+	removedpersonal_collection   map[int]struct{}
+	clearedpersonal_collection   bool
 	done                         bool
 	oldValue                     func(context.Context) (*Artifact, error)
 	predicates                   []predicate.Artifact
@@ -7214,58 +7297,58 @@ func (m *ArtifactMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
-func (m *ArtifactMutation) AddPersonalIDs(ids ...int) {
-	if m.personal == nil {
-		m.personal = make(map[int]struct{})
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by ids.
+func (m *ArtifactMutation) AddPersonalCollectionIDs(ids ...int) {
+	if m.personal_collection == nil {
+		m.personal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.personal[ids[i]] = struct{}{}
+		m.personal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPersonal clears the "personal" edge to the Personal entity.
-func (m *ArtifactMutation) ClearPersonal() {
-	m.clearedpersonal = true
+// ClearPersonalCollection clears the "personal_collection" edge to the PersonalCollection entity.
+func (m *ArtifactMutation) ClearPersonalCollection() {
+	m.clearedpersonal_collection = true
 }
 
-// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
-func (m *ArtifactMutation) PersonalCleared() bool {
-	return m.clearedpersonal
+// PersonalCollectionCleared reports if the "personal_collection" edge to the PersonalCollection entity was cleared.
+func (m *ArtifactMutation) PersonalCollectionCleared() bool {
+	return m.clearedpersonal_collection
 }
 
-// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
-func (m *ArtifactMutation) RemovePersonalIDs(ids ...int) {
-	if m.removedpersonal == nil {
-		m.removedpersonal = make(map[int]struct{})
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (m *ArtifactMutation) RemovePersonalCollectionIDs(ids ...int) {
+	if m.removedpersonal_collection == nil {
+		m.removedpersonal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.personal, ids[i])
-		m.removedpersonal[ids[i]] = struct{}{}
+		delete(m.personal_collection, ids[i])
+		m.removedpersonal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
-func (m *ArtifactMutation) RemovedPersonalIDs() (ids []int) {
-	for id := range m.removedpersonal {
+// RemovedPersonalCollection returns the removed IDs of the "personal_collection" edge to the PersonalCollection entity.
+func (m *ArtifactMutation) RemovedPersonalCollectionIDs() (ids []int) {
+	for id := range m.removedpersonal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PersonalIDs returns the "personal" edge IDs in the mutation.
-func (m *ArtifactMutation) PersonalIDs() (ids []int) {
-	for id := range m.personal {
+// PersonalCollectionIDs returns the "personal_collection" edge IDs in the mutation.
+func (m *ArtifactMutation) PersonalCollectionIDs() (ids []int) {
+	for id := range m.personal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPersonal resets all changes to the "personal" edge.
-func (m *ArtifactMutation) ResetPersonal() {
-	m.personal = nil
-	m.clearedpersonal = false
-	m.removedpersonal = nil
+// ResetPersonalCollection resets all changes to the "personal_collection" edge.
+func (m *ArtifactMutation) ResetPersonalCollection() {
+	m.personal_collection = nil
+	m.clearedpersonal_collection = false
+	m.removedpersonal_collection = nil
 }
 
 // Where appends a list predicates to the ArtifactMutation builder.
@@ -8187,8 +8270,8 @@ func (m *ArtifactMutation) AddedEdges() []string {
 	if m.region != nil {
 		edges = append(edges, artifact.EdgeRegion)
 	}
-	if m.personal != nil {
-		edges = append(edges, artifact.EdgePersonal)
+	if m.personal_collection != nil {
+		edges = append(edges, artifact.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -8283,9 +8366,9 @@ func (m *ArtifactMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
-	case artifact.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.personal))
-		for id := range m.personal {
+	case artifact.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.personal_collection))
+		for id := range m.personal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -8311,8 +8394,8 @@ func (m *ArtifactMutation) RemovedEdges() []string {
 	if m.removedpublications != nil {
 		edges = append(edges, artifact.EdgePublications)
 	}
-	if m.removedpersonal != nil {
-		edges = append(edges, artifact.EdgePersonal)
+	if m.removedpersonal_collection != nil {
+		edges = append(edges, artifact.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -8351,9 +8434,9 @@ func (m *ArtifactMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case artifact.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.removedpersonal))
-		for id := range m.removedpersonal {
+	case artifact.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.removedpersonal_collection))
+		for id := range m.removedpersonal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -8421,8 +8504,8 @@ func (m *ArtifactMutation) ClearedEdges() []string {
 	if m.clearedregion {
 		edges = append(edges, artifact.EdgeRegion)
 	}
-	if m.clearedpersonal {
-		edges = append(edges, artifact.EdgePersonal)
+	if m.clearedpersonal_collection {
+		edges = append(edges, artifact.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -8469,8 +8552,8 @@ func (m *ArtifactMutation) EdgeCleared(name string) bool {
 		return m.cleareddistrict
 	case artifact.EdgeRegion:
 		return m.clearedregion
-	case artifact.EdgePersonal:
-		return m.clearedpersonal
+	case artifact.EdgePersonalCollection:
+		return m.clearedpersonal_collection
 	}
 	return false
 }
@@ -8586,8 +8669,8 @@ func (m *ArtifactMutation) ResetEdge(name string) error {
 	case artifact.EdgeRegion:
 		m.ResetRegion()
 		return nil
-	case artifact.EdgePersonal:
-		m.ResetPersonal()
+	case artifact.EdgePersonalCollection:
+		m.ResetPersonalCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown Artifact edge %s", name)
@@ -9660,9 +9743,9 @@ type BookMutation struct {
 	cleareddistrict              bool
 	region                       *int
 	clearedregion                bool
-	personal                     map[int]struct{}
-	removedpersonal              map[int]struct{}
-	clearedpersonal              bool
+	personal_collection          map[int]struct{}
+	removedpersonal_collection   map[int]struct{}
+	clearedpersonal_collection   bool
 	done                         bool
 	oldValue                     func(context.Context) (*Book, error)
 	predicates                   []predicate.Book
@@ -10928,58 +11011,58 @@ func (m *BookMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
-func (m *BookMutation) AddPersonalIDs(ids ...int) {
-	if m.personal == nil {
-		m.personal = make(map[int]struct{})
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by ids.
+func (m *BookMutation) AddPersonalCollectionIDs(ids ...int) {
+	if m.personal_collection == nil {
+		m.personal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.personal[ids[i]] = struct{}{}
+		m.personal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPersonal clears the "personal" edge to the Personal entity.
-func (m *BookMutation) ClearPersonal() {
-	m.clearedpersonal = true
+// ClearPersonalCollection clears the "personal_collection" edge to the PersonalCollection entity.
+func (m *BookMutation) ClearPersonalCollection() {
+	m.clearedpersonal_collection = true
 }
 
-// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
-func (m *BookMutation) PersonalCleared() bool {
-	return m.clearedpersonal
+// PersonalCollectionCleared reports if the "personal_collection" edge to the PersonalCollection entity was cleared.
+func (m *BookMutation) PersonalCollectionCleared() bool {
+	return m.clearedpersonal_collection
 }
 
-// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
-func (m *BookMutation) RemovePersonalIDs(ids ...int) {
-	if m.removedpersonal == nil {
-		m.removedpersonal = make(map[int]struct{})
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (m *BookMutation) RemovePersonalCollectionIDs(ids ...int) {
+	if m.removedpersonal_collection == nil {
+		m.removedpersonal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.personal, ids[i])
-		m.removedpersonal[ids[i]] = struct{}{}
+		delete(m.personal_collection, ids[i])
+		m.removedpersonal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
-func (m *BookMutation) RemovedPersonalIDs() (ids []int) {
-	for id := range m.removedpersonal {
+// RemovedPersonalCollection returns the removed IDs of the "personal_collection" edge to the PersonalCollection entity.
+func (m *BookMutation) RemovedPersonalCollectionIDs() (ids []int) {
+	for id := range m.removedpersonal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PersonalIDs returns the "personal" edge IDs in the mutation.
-func (m *BookMutation) PersonalIDs() (ids []int) {
-	for id := range m.personal {
+// PersonalCollectionIDs returns the "personal_collection" edge IDs in the mutation.
+func (m *BookMutation) PersonalCollectionIDs() (ids []int) {
+	for id := range m.personal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPersonal resets all changes to the "personal" edge.
-func (m *BookMutation) ResetPersonal() {
-	m.personal = nil
-	m.clearedpersonal = false
-	m.removedpersonal = nil
+// ResetPersonalCollection resets all changes to the "personal_collection" edge.
+func (m *BookMutation) ResetPersonalCollection() {
+	m.personal_collection = nil
+	m.clearedpersonal_collection = false
+	m.removedpersonal_collection = nil
 }
 
 // Where appends a list predicates to the BookMutation builder.
@@ -11440,8 +11523,8 @@ func (m *BookMutation) AddedEdges() []string {
 	if m.region != nil {
 		edges = append(edges, book.EdgeRegion)
 	}
-	if m.personal != nil {
-		edges = append(edges, book.EdgePersonal)
+	if m.personal_collection != nil {
+		edges = append(edges, book.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -11502,9 +11585,9 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
-	case book.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.personal))
-		for id := range m.personal {
+	case book.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.personal_collection))
+		for id := range m.personal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -11521,8 +11604,8 @@ func (m *BookMutation) RemovedEdges() []string {
 	if m.removedbook_genres != nil {
 		edges = append(edges, book.EdgeBookGenres)
 	}
-	if m.removedpersonal != nil {
-		edges = append(edges, book.EdgePersonal)
+	if m.removedpersonal_collection != nil {
+		edges = append(edges, book.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -11543,9 +11626,9 @@ func (m *BookMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case book.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.removedpersonal))
-		for id := range m.removedpersonal {
+	case book.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.removedpersonal_collection))
+		for id := range m.removedpersonal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -11592,8 +11675,8 @@ func (m *BookMutation) ClearedEdges() []string {
 	if m.clearedregion {
 		edges = append(edges, book.EdgeRegion)
 	}
-	if m.clearedpersonal {
-		edges = append(edges, book.EdgePersonal)
+	if m.clearedpersonal_collection {
+		edges = append(edges, book.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -11626,8 +11709,8 @@ func (m *BookMutation) EdgeCleared(name string) bool {
 		return m.cleareddistrict
 	case book.EdgeRegion:
 		return m.clearedregion
-	case book.EdgePersonal:
-		return m.clearedpersonal
+	case book.EdgePersonalCollection:
+		return m.clearedpersonal_collection
 	}
 	return false
 }
@@ -11710,8 +11793,8 @@ func (m *BookMutation) ResetEdge(name string) error {
 	case book.EdgeRegion:
 		m.ResetRegion()
 		return nil
-	case book.EdgePersonal:
-		m.ResetPersonal()
+	case book.EdgePersonalCollection:
+		m.ResetPersonalCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown Book edge %s", name)
@@ -37509,8 +37592,8 @@ func (m *PersonMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Person edge %s", name)
 }
 
-// PersonalMutation represents an operation that mutates the Personal nodes in the graph.
-type PersonalMutation struct {
+// PersonalCollectionMutation represents an operation that mutates the PersonalCollection nodes in the graph.
+type PersonalCollectionMutation struct {
 	config
 	op                             Op
 	typ                            string
@@ -37522,6 +37605,9 @@ type PersonalMutation struct {
 	display_name                   *string
 	is_public                      *bool
 	clearedFields                  map[string]struct{}
+	art                            map[int]struct{}
+	removedart                     map[int]struct{}
+	clearedart                     bool
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
 	clearedartifacts               bool
@@ -37535,21 +37621,21 @@ type PersonalMutation struct {
 	removedprotected_area_pictures map[int]struct{}
 	clearedprotected_area_pictures bool
 	done                           bool
-	oldValue                       func(context.Context) (*Personal, error)
-	predicates                     []predicate.Personal
+	oldValue                       func(context.Context) (*PersonalCollection, error)
+	predicates                     []predicate.PersonalCollection
 }
 
-var _ ent.Mutation = (*PersonalMutation)(nil)
+var _ ent.Mutation = (*PersonalCollectionMutation)(nil)
 
-// personalOption allows management of the mutation configuration using functional options.
-type personalOption func(*PersonalMutation)
+// personalcollectionOption allows management of the mutation configuration using functional options.
+type personalcollectionOption func(*PersonalCollectionMutation)
 
-// newPersonalMutation creates new mutation for the Personal entity.
-func newPersonalMutation(c config, op Op, opts ...personalOption) *PersonalMutation {
-	m := &PersonalMutation{
+// newPersonalCollectionMutation creates new mutation for the PersonalCollection entity.
+func newPersonalCollectionMutation(c config, op Op, opts ...personalcollectionOption) *PersonalCollectionMutation {
+	m := &PersonalCollectionMutation{
 		config:        c,
 		op:            op,
-		typ:           TypePersonal,
+		typ:           TypePersonalCollection,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -37558,20 +37644,20 @@ func newPersonalMutation(c config, op Op, opts ...personalOption) *PersonalMutat
 	return m
 }
 
-// withPersonalID sets the ID field of the mutation.
-func withPersonalID(id int) personalOption {
-	return func(m *PersonalMutation) {
+// withPersonalCollectionID sets the ID field of the mutation.
+func withPersonalCollectionID(id int) personalcollectionOption {
+	return func(m *PersonalCollectionMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Personal
+			value *PersonalCollection
 		)
-		m.oldValue = func(ctx context.Context) (*Personal, error) {
+		m.oldValue = func(ctx context.Context) (*PersonalCollection, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Personal.Get(ctx, id)
+					value, err = m.Client().PersonalCollection.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -37580,10 +37666,10 @@ func withPersonalID(id int) personalOption {
 	}
 }
 
-// withPersonal sets the old Personal of the mutation.
-func withPersonal(node *Personal) personalOption {
-	return func(m *PersonalMutation) {
-		m.oldValue = func(context.Context) (*Personal, error) {
+// withPersonalCollection sets the old PersonalCollection of the mutation.
+func withPersonalCollection(node *PersonalCollection) personalcollectionOption {
+	return func(m *PersonalCollectionMutation) {
+		m.oldValue = func(context.Context) (*PersonalCollection, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -37592,7 +37678,7 @@ func withPersonal(node *Personal) personalOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m PersonalMutation) Client() *Client {
+func (m PersonalCollectionMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -37600,7 +37686,7 @@ func (m PersonalMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m PersonalMutation) Tx() (*Tx, error) {
+func (m PersonalCollectionMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -37611,7 +37697,7 @@ func (m PersonalMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *PersonalMutation) ID() (id int, exists bool) {
+func (m *PersonalCollectionMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -37622,7 +37708,7 @@ func (m *PersonalMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *PersonalMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *PersonalCollectionMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -37631,19 +37717,19 @@ func (m *PersonalMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Personal.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().PersonalCollection.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (m *PersonalMutation) SetCreatedAt(t time.Time) {
+func (m *PersonalCollectionMutation) SetCreatedAt(t time.Time) {
 	m.created_at = &t
 }
 
 // CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *PersonalMutation) CreatedAt() (r time.Time, exists bool) {
+func (m *PersonalCollectionMutation) CreatedAt() (r time.Time, exists bool) {
 	v := m.created_at
 	if v == nil {
 		return
@@ -37651,10 +37737,10 @@ func (m *PersonalMutation) CreatedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldCreatedAt returns the old "created_at" field's value of the Personal entity.
-// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// OldCreatedAt returns the old "created_at" field's value of the PersonalCollection entity.
+// If the PersonalCollection object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonalMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+func (m *PersonalCollectionMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
 	}
@@ -37669,17 +37755,17 @@ func (m *PersonalMutation) OldCreatedAt(ctx context.Context) (v time.Time, err e
 }
 
 // ResetCreatedAt resets all changes to the "created_at" field.
-func (m *PersonalMutation) ResetCreatedAt() {
+func (m *PersonalCollectionMutation) ResetCreatedAt() {
 	m.created_at = nil
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (m *PersonalMutation) SetCreatedBy(s string) {
+func (m *PersonalCollectionMutation) SetCreatedBy(s string) {
 	m.created_by = &s
 }
 
 // CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *PersonalMutation) CreatedBy() (r string, exists bool) {
+func (m *PersonalCollectionMutation) CreatedBy() (r string, exists bool) {
 	v := m.created_by
 	if v == nil {
 		return
@@ -37687,10 +37773,10 @@ func (m *PersonalMutation) CreatedBy() (r string, exists bool) {
 	return *v, true
 }
 
-// OldCreatedBy returns the old "created_by" field's value of the Personal entity.
-// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// OldCreatedBy returns the old "created_by" field's value of the PersonalCollection entity.
+// If the PersonalCollection object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonalMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+func (m *PersonalCollectionMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
 	}
@@ -37705,30 +37791,30 @@ func (m *PersonalMutation) OldCreatedBy(ctx context.Context) (v string, err erro
 }
 
 // ClearCreatedBy clears the value of the "created_by" field.
-func (m *PersonalMutation) ClearCreatedBy() {
+func (m *PersonalCollectionMutation) ClearCreatedBy() {
 	m.created_by = nil
-	m.clearedFields[personal.FieldCreatedBy] = struct{}{}
+	m.clearedFields[personalcollection.FieldCreatedBy] = struct{}{}
 }
 
 // CreatedByCleared returns if the "created_by" field was cleared in this mutation.
-func (m *PersonalMutation) CreatedByCleared() bool {
-	_, ok := m.clearedFields[personal.FieldCreatedBy]
+func (m *PersonalCollectionMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[personalcollection.FieldCreatedBy]
 	return ok
 }
 
 // ResetCreatedBy resets all changes to the "created_by" field.
-func (m *PersonalMutation) ResetCreatedBy() {
+func (m *PersonalCollectionMutation) ResetCreatedBy() {
 	m.created_by = nil
-	delete(m.clearedFields, personal.FieldCreatedBy)
+	delete(m.clearedFields, personalcollection.FieldCreatedBy)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (m *PersonalMutation) SetUpdatedAt(t time.Time) {
+func (m *PersonalCollectionMutation) SetUpdatedAt(t time.Time) {
 	m.updated_at = &t
 }
 
 // UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *PersonalMutation) UpdatedAt() (r time.Time, exists bool) {
+func (m *PersonalCollectionMutation) UpdatedAt() (r time.Time, exists bool) {
 	v := m.updated_at
 	if v == nil {
 		return
@@ -37736,10 +37822,10 @@ func (m *PersonalMutation) UpdatedAt() (r time.Time, exists bool) {
 	return *v, true
 }
 
-// OldUpdatedAt returns the old "updated_at" field's value of the Personal entity.
-// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// OldUpdatedAt returns the old "updated_at" field's value of the PersonalCollection entity.
+// If the PersonalCollection object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonalMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+func (m *PersonalCollectionMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
 	}
@@ -37754,17 +37840,17 @@ func (m *PersonalMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err e
 }
 
 // ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *PersonalMutation) ResetUpdatedAt() {
+func (m *PersonalCollectionMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (m *PersonalMutation) SetUpdatedBy(s string) {
+func (m *PersonalCollectionMutation) SetUpdatedBy(s string) {
 	m.updated_by = &s
 }
 
 // UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *PersonalMutation) UpdatedBy() (r string, exists bool) {
+func (m *PersonalCollectionMutation) UpdatedBy() (r string, exists bool) {
 	v := m.updated_by
 	if v == nil {
 		return
@@ -37772,10 +37858,10 @@ func (m *PersonalMutation) UpdatedBy() (r string, exists bool) {
 	return *v, true
 }
 
-// OldUpdatedBy returns the old "updated_by" field's value of the Personal entity.
-// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// OldUpdatedBy returns the old "updated_by" field's value of the PersonalCollection entity.
+// If the PersonalCollection object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonalMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+func (m *PersonalCollectionMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
 	}
@@ -37790,30 +37876,30 @@ func (m *PersonalMutation) OldUpdatedBy(ctx context.Context) (v string, err erro
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *PersonalMutation) ClearUpdatedBy() {
+func (m *PersonalCollectionMutation) ClearUpdatedBy() {
 	m.updated_by = nil
-	m.clearedFields[personal.FieldUpdatedBy] = struct{}{}
+	m.clearedFields[personalcollection.FieldUpdatedBy] = struct{}{}
 }
 
 // UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *PersonalMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[personal.FieldUpdatedBy]
+func (m *PersonalCollectionMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[personalcollection.FieldUpdatedBy]
 	return ok
 }
 
 // ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *PersonalMutation) ResetUpdatedBy() {
+func (m *PersonalCollectionMutation) ResetUpdatedBy() {
 	m.updated_by = nil
-	delete(m.clearedFields, personal.FieldUpdatedBy)
+	delete(m.clearedFields, personalcollection.FieldUpdatedBy)
 }
 
 // SetDisplayName sets the "display_name" field.
-func (m *PersonalMutation) SetDisplayName(s string) {
+func (m *PersonalCollectionMutation) SetDisplayName(s string) {
 	m.display_name = &s
 }
 
 // DisplayName returns the value of the "display_name" field in the mutation.
-func (m *PersonalMutation) DisplayName() (r string, exists bool) {
+func (m *PersonalCollectionMutation) DisplayName() (r string, exists bool) {
 	v := m.display_name
 	if v == nil {
 		return
@@ -37821,10 +37907,10 @@ func (m *PersonalMutation) DisplayName() (r string, exists bool) {
 	return *v, true
 }
 
-// OldDisplayName returns the old "display_name" field's value of the Personal entity.
-// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// OldDisplayName returns the old "display_name" field's value of the PersonalCollection entity.
+// If the PersonalCollection object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonalMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+func (m *PersonalCollectionMutation) OldDisplayName(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
 	}
@@ -37839,17 +37925,17 @@ func (m *PersonalMutation) OldDisplayName(ctx context.Context) (v string, err er
 }
 
 // ResetDisplayName resets all changes to the "display_name" field.
-func (m *PersonalMutation) ResetDisplayName() {
+func (m *PersonalCollectionMutation) ResetDisplayName() {
 	m.display_name = nil
 }
 
 // SetIsPublic sets the "is_public" field.
-func (m *PersonalMutation) SetIsPublic(b bool) {
+func (m *PersonalCollectionMutation) SetIsPublic(b bool) {
 	m.is_public = &b
 }
 
 // IsPublic returns the value of the "is_public" field in the mutation.
-func (m *PersonalMutation) IsPublic() (r bool, exists bool) {
+func (m *PersonalCollectionMutation) IsPublic() (r bool, exists bool) {
 	v := m.is_public
 	if v == nil {
 		return
@@ -37857,10 +37943,10 @@ func (m *PersonalMutation) IsPublic() (r bool, exists bool) {
 	return *v, true
 }
 
-// OldIsPublic returns the old "is_public" field's value of the Personal entity.
-// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// OldIsPublic returns the old "is_public" field's value of the PersonalCollection entity.
+// If the PersonalCollection object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PersonalMutation) OldIsPublic(ctx context.Context) (v bool, err error) {
+func (m *PersonalCollectionMutation) OldIsPublic(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldIsPublic is only allowed on UpdateOne operations")
 	}
@@ -37875,12 +37961,66 @@ func (m *PersonalMutation) OldIsPublic(ctx context.Context) (v bool, err error) 
 }
 
 // ResetIsPublic resets all changes to the "is_public" field.
-func (m *PersonalMutation) ResetIsPublic() {
+func (m *PersonalCollectionMutation) ResetIsPublic() {
 	m.is_public = nil
 }
 
+// AddArtIDs adds the "art" edge to the Art entity by ids.
+func (m *PersonalCollectionMutation) AddArtIDs(ids ...int) {
+	if m.art == nil {
+		m.art = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.art[ids[i]] = struct{}{}
+	}
+}
+
+// ClearArt clears the "art" edge to the Art entity.
+func (m *PersonalCollectionMutation) ClearArt() {
+	m.clearedart = true
+}
+
+// ArtCleared reports if the "art" edge to the Art entity was cleared.
+func (m *PersonalCollectionMutation) ArtCleared() bool {
+	return m.clearedart
+}
+
+// RemoveArtIDs removes the "art" edge to the Art entity by IDs.
+func (m *PersonalCollectionMutation) RemoveArtIDs(ids ...int) {
+	if m.removedart == nil {
+		m.removedart = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.art, ids[i])
+		m.removedart[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedArt returns the removed IDs of the "art" edge to the Art entity.
+func (m *PersonalCollectionMutation) RemovedArtIDs() (ids []int) {
+	for id := range m.removedart {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ArtIDs returns the "art" edge IDs in the mutation.
+func (m *PersonalCollectionMutation) ArtIDs() (ids []int) {
+	for id := range m.art {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetArt resets all changes to the "art" edge.
+func (m *PersonalCollectionMutation) ResetArt() {
+	m.art = nil
+	m.clearedart = false
+	m.removedart = nil
+}
+
 // AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
-func (m *PersonalMutation) AddArtifactIDs(ids ...int) {
+func (m *PersonalCollectionMutation) AddArtifactIDs(ids ...int) {
 	if m.artifacts == nil {
 		m.artifacts = make(map[int]struct{})
 	}
@@ -37890,17 +38030,17 @@ func (m *PersonalMutation) AddArtifactIDs(ids ...int) {
 }
 
 // ClearArtifacts clears the "artifacts" edge to the Artifact entity.
-func (m *PersonalMutation) ClearArtifacts() {
+func (m *PersonalCollectionMutation) ClearArtifacts() {
 	m.clearedartifacts = true
 }
 
 // ArtifactsCleared reports if the "artifacts" edge to the Artifact entity was cleared.
-func (m *PersonalMutation) ArtifactsCleared() bool {
+func (m *PersonalCollectionMutation) ArtifactsCleared() bool {
 	return m.clearedartifacts
 }
 
 // RemoveArtifactIDs removes the "artifacts" edge to the Artifact entity by IDs.
-func (m *PersonalMutation) RemoveArtifactIDs(ids ...int) {
+func (m *PersonalCollectionMutation) RemoveArtifactIDs(ids ...int) {
 	if m.removedartifacts == nil {
 		m.removedartifacts = make(map[int]struct{})
 	}
@@ -37911,7 +38051,7 @@ func (m *PersonalMutation) RemoveArtifactIDs(ids ...int) {
 }
 
 // RemovedArtifacts returns the removed IDs of the "artifacts" edge to the Artifact entity.
-func (m *PersonalMutation) RemovedArtifactsIDs() (ids []int) {
+func (m *PersonalCollectionMutation) RemovedArtifactsIDs() (ids []int) {
 	for id := range m.removedartifacts {
 		ids = append(ids, id)
 	}
@@ -37919,7 +38059,7 @@ func (m *PersonalMutation) RemovedArtifactsIDs() (ids []int) {
 }
 
 // ArtifactsIDs returns the "artifacts" edge IDs in the mutation.
-func (m *PersonalMutation) ArtifactsIDs() (ids []int) {
+func (m *PersonalCollectionMutation) ArtifactsIDs() (ids []int) {
 	for id := range m.artifacts {
 		ids = append(ids, id)
 	}
@@ -37927,14 +38067,14 @@ func (m *PersonalMutation) ArtifactsIDs() (ids []int) {
 }
 
 // ResetArtifacts resets all changes to the "artifacts" edge.
-func (m *PersonalMutation) ResetArtifacts() {
+func (m *PersonalCollectionMutation) ResetArtifacts() {
 	m.artifacts = nil
 	m.clearedartifacts = false
 	m.removedartifacts = nil
 }
 
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
-func (m *PersonalMutation) AddPetroglyphIDs(ids ...int) {
+func (m *PersonalCollectionMutation) AddPetroglyphIDs(ids ...int) {
 	if m.petroglyphs == nil {
 		m.petroglyphs = make(map[int]struct{})
 	}
@@ -37944,17 +38084,17 @@ func (m *PersonalMutation) AddPetroglyphIDs(ids ...int) {
 }
 
 // ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
-func (m *PersonalMutation) ClearPetroglyphs() {
+func (m *PersonalCollectionMutation) ClearPetroglyphs() {
 	m.clearedpetroglyphs = true
 }
 
 // PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
-func (m *PersonalMutation) PetroglyphsCleared() bool {
+func (m *PersonalCollectionMutation) PetroglyphsCleared() bool {
 	return m.clearedpetroglyphs
 }
 
 // RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
-func (m *PersonalMutation) RemovePetroglyphIDs(ids ...int) {
+func (m *PersonalCollectionMutation) RemovePetroglyphIDs(ids ...int) {
 	if m.removedpetroglyphs == nil {
 		m.removedpetroglyphs = make(map[int]struct{})
 	}
@@ -37965,7 +38105,7 @@ func (m *PersonalMutation) RemovePetroglyphIDs(ids ...int) {
 }
 
 // RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
-func (m *PersonalMutation) RemovedPetroglyphsIDs() (ids []int) {
+func (m *PersonalCollectionMutation) RemovedPetroglyphsIDs() (ids []int) {
 	for id := range m.removedpetroglyphs {
 		ids = append(ids, id)
 	}
@@ -37973,7 +38113,7 @@ func (m *PersonalMutation) RemovedPetroglyphsIDs() (ids []int) {
 }
 
 // PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
-func (m *PersonalMutation) PetroglyphsIDs() (ids []int) {
+func (m *PersonalCollectionMutation) PetroglyphsIDs() (ids []int) {
 	for id := range m.petroglyphs {
 		ids = append(ids, id)
 	}
@@ -37981,14 +38121,14 @@ func (m *PersonalMutation) PetroglyphsIDs() (ids []int) {
 }
 
 // ResetPetroglyphs resets all changes to the "petroglyphs" edge.
-func (m *PersonalMutation) ResetPetroglyphs() {
+func (m *PersonalCollectionMutation) ResetPetroglyphs() {
 	m.petroglyphs = nil
 	m.clearedpetroglyphs = false
 	m.removedpetroglyphs = nil
 }
 
 // AddBookIDs adds the "books" edge to the Book entity by ids.
-func (m *PersonalMutation) AddBookIDs(ids ...int) {
+func (m *PersonalCollectionMutation) AddBookIDs(ids ...int) {
 	if m.books == nil {
 		m.books = make(map[int]struct{})
 	}
@@ -37998,17 +38138,17 @@ func (m *PersonalMutation) AddBookIDs(ids ...int) {
 }
 
 // ClearBooks clears the "books" edge to the Book entity.
-func (m *PersonalMutation) ClearBooks() {
+func (m *PersonalCollectionMutation) ClearBooks() {
 	m.clearedbooks = true
 }
 
 // BooksCleared reports if the "books" edge to the Book entity was cleared.
-func (m *PersonalMutation) BooksCleared() bool {
+func (m *PersonalCollectionMutation) BooksCleared() bool {
 	return m.clearedbooks
 }
 
 // RemoveBookIDs removes the "books" edge to the Book entity by IDs.
-func (m *PersonalMutation) RemoveBookIDs(ids ...int) {
+func (m *PersonalCollectionMutation) RemoveBookIDs(ids ...int) {
 	if m.removedbooks == nil {
 		m.removedbooks = make(map[int]struct{})
 	}
@@ -38019,7 +38159,7 @@ func (m *PersonalMutation) RemoveBookIDs(ids ...int) {
 }
 
 // RemovedBooks returns the removed IDs of the "books" edge to the Book entity.
-func (m *PersonalMutation) RemovedBooksIDs() (ids []int) {
+func (m *PersonalCollectionMutation) RemovedBooksIDs() (ids []int) {
 	for id := range m.removedbooks {
 		ids = append(ids, id)
 	}
@@ -38027,7 +38167,7 @@ func (m *PersonalMutation) RemovedBooksIDs() (ids []int) {
 }
 
 // BooksIDs returns the "books" edge IDs in the mutation.
-func (m *PersonalMutation) BooksIDs() (ids []int) {
+func (m *PersonalCollectionMutation) BooksIDs() (ids []int) {
 	for id := range m.books {
 		ids = append(ids, id)
 	}
@@ -38035,14 +38175,14 @@ func (m *PersonalMutation) BooksIDs() (ids []int) {
 }
 
 // ResetBooks resets all changes to the "books" edge.
-func (m *PersonalMutation) ResetBooks() {
+func (m *PersonalCollectionMutation) ResetBooks() {
 	m.books = nil
 	m.clearedbooks = false
 	m.removedbooks = nil
 }
 
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
-func (m *PersonalMutation) AddProtectedAreaPictureIDs(ids ...int) {
+func (m *PersonalCollectionMutation) AddProtectedAreaPictureIDs(ids ...int) {
 	if m.protected_area_pictures == nil {
 		m.protected_area_pictures = make(map[int]struct{})
 	}
@@ -38052,17 +38192,17 @@ func (m *PersonalMutation) AddProtectedAreaPictureIDs(ids ...int) {
 }
 
 // ClearProtectedAreaPictures clears the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
-func (m *PersonalMutation) ClearProtectedAreaPictures() {
+func (m *PersonalCollectionMutation) ClearProtectedAreaPictures() {
 	m.clearedprotected_area_pictures = true
 }
 
 // ProtectedAreaPicturesCleared reports if the "protected_area_pictures" edge to the ProtectedAreaPicture entity was cleared.
-func (m *PersonalMutation) ProtectedAreaPicturesCleared() bool {
+func (m *PersonalCollectionMutation) ProtectedAreaPicturesCleared() bool {
 	return m.clearedprotected_area_pictures
 }
 
 // RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
-func (m *PersonalMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
+func (m *PersonalCollectionMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
 	if m.removedprotected_area_pictures == nil {
 		m.removedprotected_area_pictures = make(map[int]struct{})
 	}
@@ -38073,7 +38213,7 @@ func (m *PersonalMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
 }
 
 // RemovedProtectedAreaPictures returns the removed IDs of the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
-func (m *PersonalMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
+func (m *PersonalCollectionMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
 	for id := range m.removedprotected_area_pictures {
 		ids = append(ids, id)
 	}
@@ -38081,7 +38221,7 @@ func (m *PersonalMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
 }
 
 // ProtectedAreaPicturesIDs returns the "protected_area_pictures" edge IDs in the mutation.
-func (m *PersonalMutation) ProtectedAreaPicturesIDs() (ids []int) {
+func (m *PersonalCollectionMutation) ProtectedAreaPicturesIDs() (ids []int) {
 	for id := range m.protected_area_pictures {
 		ids = append(ids, id)
 	}
@@ -38089,21 +38229,21 @@ func (m *PersonalMutation) ProtectedAreaPicturesIDs() (ids []int) {
 }
 
 // ResetProtectedAreaPictures resets all changes to the "protected_area_pictures" edge.
-func (m *PersonalMutation) ResetProtectedAreaPictures() {
+func (m *PersonalCollectionMutation) ResetProtectedAreaPictures() {
 	m.protected_area_pictures = nil
 	m.clearedprotected_area_pictures = false
 	m.removedprotected_area_pictures = nil
 }
 
-// Where appends a list predicates to the PersonalMutation builder.
-func (m *PersonalMutation) Where(ps ...predicate.Personal) {
+// Where appends a list predicates to the PersonalCollectionMutation builder.
+func (m *PersonalCollectionMutation) Where(ps ...predicate.PersonalCollection) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the PersonalMutation builder. Using this method,
+// WhereP appends storage-level predicates to the PersonalCollectionMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *PersonalMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Personal, len(ps))
+func (m *PersonalCollectionMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.PersonalCollection, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -38111,42 +38251,42 @@ func (m *PersonalMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *PersonalMutation) Op() Op {
+func (m *PersonalCollectionMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *PersonalMutation) SetOp(op Op) {
+func (m *PersonalCollectionMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (Personal).
-func (m *PersonalMutation) Type() string {
+// Type returns the node type of this mutation (PersonalCollection).
+func (m *PersonalCollectionMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *PersonalMutation) Fields() []string {
+func (m *PersonalCollectionMutation) Fields() []string {
 	fields := make([]string, 0, 6)
 	if m.created_at != nil {
-		fields = append(fields, personal.FieldCreatedAt)
+		fields = append(fields, personalcollection.FieldCreatedAt)
 	}
 	if m.created_by != nil {
-		fields = append(fields, personal.FieldCreatedBy)
+		fields = append(fields, personalcollection.FieldCreatedBy)
 	}
 	if m.updated_at != nil {
-		fields = append(fields, personal.FieldUpdatedAt)
+		fields = append(fields, personalcollection.FieldUpdatedAt)
 	}
 	if m.updated_by != nil {
-		fields = append(fields, personal.FieldUpdatedBy)
+		fields = append(fields, personalcollection.FieldUpdatedBy)
 	}
 	if m.display_name != nil {
-		fields = append(fields, personal.FieldDisplayName)
+		fields = append(fields, personalcollection.FieldDisplayName)
 	}
 	if m.is_public != nil {
-		fields = append(fields, personal.FieldIsPublic)
+		fields = append(fields, personalcollection.FieldIsPublic)
 	}
 	return fields
 }
@@ -38154,19 +38294,19 @@ func (m *PersonalMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *PersonalMutation) Field(name string) (ent.Value, bool) {
+func (m *PersonalCollectionMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case personal.FieldCreatedAt:
+	case personalcollection.FieldCreatedAt:
 		return m.CreatedAt()
-	case personal.FieldCreatedBy:
+	case personalcollection.FieldCreatedBy:
 		return m.CreatedBy()
-	case personal.FieldUpdatedAt:
+	case personalcollection.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case personal.FieldUpdatedBy:
+	case personalcollection.FieldUpdatedBy:
 		return m.UpdatedBy()
-	case personal.FieldDisplayName:
+	case personalcollection.FieldDisplayName:
 		return m.DisplayName()
-	case personal.FieldIsPublic:
+	case personalcollection.FieldIsPublic:
 		return m.IsPublic()
 	}
 	return nil, false
@@ -38175,65 +38315,65 @@ func (m *PersonalMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *PersonalMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *PersonalCollectionMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case personal.FieldCreatedAt:
+	case personalcollection.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
-	case personal.FieldCreatedBy:
+	case personalcollection.FieldCreatedBy:
 		return m.OldCreatedBy(ctx)
-	case personal.FieldUpdatedAt:
+	case personalcollection.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case personal.FieldUpdatedBy:
+	case personalcollection.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
-	case personal.FieldDisplayName:
+	case personalcollection.FieldDisplayName:
 		return m.OldDisplayName(ctx)
-	case personal.FieldIsPublic:
+	case personalcollection.FieldIsPublic:
 		return m.OldIsPublic(ctx)
 	}
-	return nil, fmt.Errorf("unknown Personal field %s", name)
+	return nil, fmt.Errorf("unknown PersonalCollection field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *PersonalMutation) SetField(name string, value ent.Value) error {
+func (m *PersonalCollectionMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case personal.FieldCreatedAt:
+	case personalcollection.FieldCreatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedAt(v)
 		return nil
-	case personal.FieldCreatedBy:
+	case personalcollection.FieldCreatedBy:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedBy(v)
 		return nil
-	case personal.FieldUpdatedAt:
+	case personalcollection.FieldUpdatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
 		return nil
-	case personal.FieldUpdatedBy:
+	case personalcollection.FieldUpdatedBy:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedBy(v)
 		return nil
-	case personal.FieldDisplayName:
+	case personalcollection.FieldDisplayName:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
 		return nil
-	case personal.FieldIsPublic:
+	case personalcollection.FieldIsPublic:
 		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -38241,132 +38381,141 @@ func (m *PersonalMutation) SetField(name string, value ent.Value) error {
 		m.SetIsPublic(v)
 		return nil
 	}
-	return fmt.Errorf("unknown Personal field %s", name)
+	return fmt.Errorf("unknown PersonalCollection field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *PersonalMutation) AddedFields() []string {
+func (m *PersonalCollectionMutation) AddedFields() []string {
 	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *PersonalMutation) AddedField(name string) (ent.Value, bool) {
+func (m *PersonalCollectionMutation) AddedField(name string) (ent.Value, bool) {
 	return nil, false
 }
 
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *PersonalMutation) AddField(name string, value ent.Value) error {
+func (m *PersonalCollectionMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Personal numeric field %s", name)
+	return fmt.Errorf("unknown PersonalCollection numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *PersonalMutation) ClearedFields() []string {
+func (m *PersonalCollectionMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(personal.FieldCreatedBy) {
-		fields = append(fields, personal.FieldCreatedBy)
+	if m.FieldCleared(personalcollection.FieldCreatedBy) {
+		fields = append(fields, personalcollection.FieldCreatedBy)
 	}
-	if m.FieldCleared(personal.FieldUpdatedBy) {
-		fields = append(fields, personal.FieldUpdatedBy)
+	if m.FieldCleared(personalcollection.FieldUpdatedBy) {
+		fields = append(fields, personalcollection.FieldUpdatedBy)
 	}
 	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *PersonalMutation) FieldCleared(name string) bool {
+func (m *PersonalCollectionMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *PersonalMutation) ClearField(name string) error {
+func (m *PersonalCollectionMutation) ClearField(name string) error {
 	switch name {
-	case personal.FieldCreatedBy:
+	case personalcollection.FieldCreatedBy:
 		m.ClearCreatedBy()
 		return nil
-	case personal.FieldUpdatedBy:
+	case personalcollection.FieldUpdatedBy:
 		m.ClearUpdatedBy()
 		return nil
 	}
-	return fmt.Errorf("unknown Personal nullable field %s", name)
+	return fmt.Errorf("unknown PersonalCollection nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *PersonalMutation) ResetField(name string) error {
+func (m *PersonalCollectionMutation) ResetField(name string) error {
 	switch name {
-	case personal.FieldCreatedAt:
+	case personalcollection.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
-	case personal.FieldCreatedBy:
+	case personalcollection.FieldCreatedBy:
 		m.ResetCreatedBy()
 		return nil
-	case personal.FieldUpdatedAt:
+	case personalcollection.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case personal.FieldUpdatedBy:
+	case personalcollection.FieldUpdatedBy:
 		m.ResetUpdatedBy()
 		return nil
-	case personal.FieldDisplayName:
+	case personalcollection.FieldDisplayName:
 		m.ResetDisplayName()
 		return nil
-	case personal.FieldIsPublic:
+	case personalcollection.FieldIsPublic:
 		m.ResetIsPublic()
 		return nil
 	}
-	return fmt.Errorf("unknown Personal field %s", name)
+	return fmt.Errorf("unknown PersonalCollection field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *PersonalMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+func (m *PersonalCollectionMutation) AddedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.art != nil {
+		edges = append(edges, personalcollection.EdgeArt)
+	}
 	if m.artifacts != nil {
-		edges = append(edges, personal.EdgeArtifacts)
+		edges = append(edges, personalcollection.EdgeArtifacts)
 	}
 	if m.petroglyphs != nil {
-		edges = append(edges, personal.EdgePetroglyphs)
+		edges = append(edges, personalcollection.EdgePetroglyphs)
 	}
 	if m.books != nil {
-		edges = append(edges, personal.EdgeBooks)
+		edges = append(edges, personalcollection.EdgeBooks)
 	}
 	if m.protected_area_pictures != nil {
-		edges = append(edges, personal.EdgeProtectedAreaPictures)
+		edges = append(edges, personalcollection.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *PersonalMutation) AddedIDs(name string) []ent.Value {
+func (m *PersonalCollectionMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case personal.EdgeArtifacts:
+	case personalcollection.EdgeArt:
+		ids := make([]ent.Value, 0, len(m.art))
+		for id := range m.art {
+			ids = append(ids, id)
+		}
+		return ids
+	case personalcollection.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.artifacts))
 		for id := range m.artifacts {
 			ids = append(ids, id)
 		}
 		return ids
-	case personal.EdgePetroglyphs:
+	case personalcollection.EdgePetroglyphs:
 		ids := make([]ent.Value, 0, len(m.petroglyphs))
 		for id := range m.petroglyphs {
 			ids = append(ids, id)
 		}
 		return ids
-	case personal.EdgeBooks:
+	case personalcollection.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.books))
 		for id := range m.books {
 			ids = append(ids, id)
 		}
 		return ids
-	case personal.EdgeProtectedAreaPictures:
+	case personalcollection.EdgeProtectedAreaPictures:
 		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
 		for id := range m.protected_area_pictures {
 			ids = append(ids, id)
@@ -38377,46 +38526,55 @@ func (m *PersonalMutation) AddedIDs(name string) []ent.Value {
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *PersonalMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+func (m *PersonalCollectionMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.removedart != nil {
+		edges = append(edges, personalcollection.EdgeArt)
+	}
 	if m.removedartifacts != nil {
-		edges = append(edges, personal.EdgeArtifacts)
+		edges = append(edges, personalcollection.EdgeArtifacts)
 	}
 	if m.removedpetroglyphs != nil {
-		edges = append(edges, personal.EdgePetroglyphs)
+		edges = append(edges, personalcollection.EdgePetroglyphs)
 	}
 	if m.removedbooks != nil {
-		edges = append(edges, personal.EdgeBooks)
+		edges = append(edges, personalcollection.EdgeBooks)
 	}
 	if m.removedprotected_area_pictures != nil {
-		edges = append(edges, personal.EdgeProtectedAreaPictures)
+		edges = append(edges, personalcollection.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *PersonalMutation) RemovedIDs(name string) []ent.Value {
+func (m *PersonalCollectionMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case personal.EdgeArtifacts:
+	case personalcollection.EdgeArt:
+		ids := make([]ent.Value, 0, len(m.removedart))
+		for id := range m.removedart {
+			ids = append(ids, id)
+		}
+		return ids
+	case personalcollection.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.removedartifacts))
 		for id := range m.removedartifacts {
 			ids = append(ids, id)
 		}
 		return ids
-	case personal.EdgePetroglyphs:
+	case personalcollection.EdgePetroglyphs:
 		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
 		for id := range m.removedpetroglyphs {
 			ids = append(ids, id)
 		}
 		return ids
-	case personal.EdgeBooks:
+	case personalcollection.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.removedbooks))
 		for id := range m.removedbooks {
 			ids = append(ids, id)
 		}
 		return ids
-	case personal.EdgeProtectedAreaPictures:
+	case personalcollection.EdgeProtectedAreaPictures:
 		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
 		for id := range m.removedprotected_area_pictures {
 			ids = append(ids, id)
@@ -38427,34 +38585,39 @@ func (m *PersonalMutation) RemovedIDs(name string) []ent.Value {
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *PersonalMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+func (m *PersonalCollectionMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 5)
+	if m.clearedart {
+		edges = append(edges, personalcollection.EdgeArt)
+	}
 	if m.clearedartifacts {
-		edges = append(edges, personal.EdgeArtifacts)
+		edges = append(edges, personalcollection.EdgeArtifacts)
 	}
 	if m.clearedpetroglyphs {
-		edges = append(edges, personal.EdgePetroglyphs)
+		edges = append(edges, personalcollection.EdgePetroglyphs)
 	}
 	if m.clearedbooks {
-		edges = append(edges, personal.EdgeBooks)
+		edges = append(edges, personalcollection.EdgeBooks)
 	}
 	if m.clearedprotected_area_pictures {
-		edges = append(edges, personal.EdgeProtectedAreaPictures)
+		edges = append(edges, personalcollection.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *PersonalMutation) EdgeCleared(name string) bool {
+func (m *PersonalCollectionMutation) EdgeCleared(name string) bool {
 	switch name {
-	case personal.EdgeArtifacts:
+	case personalcollection.EdgeArt:
+		return m.clearedart
+	case personalcollection.EdgeArtifacts:
 		return m.clearedartifacts
-	case personal.EdgePetroglyphs:
+	case personalcollection.EdgePetroglyphs:
 		return m.clearedpetroglyphs
-	case personal.EdgeBooks:
+	case personalcollection.EdgeBooks:
 		return m.clearedbooks
-	case personal.EdgeProtectedAreaPictures:
+	case personalcollection.EdgeProtectedAreaPictures:
 		return m.clearedprotected_area_pictures
 	}
 	return false
@@ -38462,30 +38625,33 @@ func (m *PersonalMutation) EdgeCleared(name string) bool {
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *PersonalMutation) ClearEdge(name string) error {
+func (m *PersonalCollectionMutation) ClearEdge(name string) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown Personal unique edge %s", name)
+	return fmt.Errorf("unknown PersonalCollection unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *PersonalMutation) ResetEdge(name string) error {
+func (m *PersonalCollectionMutation) ResetEdge(name string) error {
 	switch name {
-	case personal.EdgeArtifacts:
+	case personalcollection.EdgeArt:
+		m.ResetArt()
+		return nil
+	case personalcollection.EdgeArtifacts:
 		m.ResetArtifacts()
 		return nil
-	case personal.EdgePetroglyphs:
+	case personalcollection.EdgePetroglyphs:
 		m.ResetPetroglyphs()
 		return nil
-	case personal.EdgeBooks:
+	case personalcollection.EdgeBooks:
 		m.ResetBooks()
 		return nil
-	case personal.EdgeProtectedAreaPictures:
+	case personalcollection.EdgeProtectedAreaPictures:
 		m.ResetProtectedAreaPictures()
 		return nil
 	}
-	return fmt.Errorf("unknown Personal edge %s", name)
+	return fmt.Errorf("unknown PersonalCollection edge %s", name)
 }
 
 // PetroglyphMutation represents an operation that mutates the Petroglyph nodes in the graph.
@@ -38555,9 +38721,9 @@ type PetroglyphMutation struct {
 	clearedaccounting_documentation_author  bool
 	collection                              *int
 	clearedcollection                       bool
-	personal                                map[int]struct{}
-	removedpersonal                         map[int]struct{}
-	clearedpersonal                         bool
+	personal_collection                     map[int]struct{}
+	removedpersonal_collection              map[int]struct{}
+	clearedpersonal_collection              bool
 	done                                    bool
 	oldValue                                func(context.Context) (*Petroglyph, error)
 	predicates                              []predicate.Petroglyph
@@ -40747,58 +40913,58 @@ func (m *PetroglyphMutation) ResetCollection() {
 	m.clearedcollection = false
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
-func (m *PetroglyphMutation) AddPersonalIDs(ids ...int) {
-	if m.personal == nil {
-		m.personal = make(map[int]struct{})
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by ids.
+func (m *PetroglyphMutation) AddPersonalCollectionIDs(ids ...int) {
+	if m.personal_collection == nil {
+		m.personal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.personal[ids[i]] = struct{}{}
+		m.personal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPersonal clears the "personal" edge to the Personal entity.
-func (m *PetroglyphMutation) ClearPersonal() {
-	m.clearedpersonal = true
+// ClearPersonalCollection clears the "personal_collection" edge to the PersonalCollection entity.
+func (m *PetroglyphMutation) ClearPersonalCollection() {
+	m.clearedpersonal_collection = true
 }
 
-// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
-func (m *PetroglyphMutation) PersonalCleared() bool {
-	return m.clearedpersonal
+// PersonalCollectionCleared reports if the "personal_collection" edge to the PersonalCollection entity was cleared.
+func (m *PetroglyphMutation) PersonalCollectionCleared() bool {
+	return m.clearedpersonal_collection
 }
 
-// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
-func (m *PetroglyphMutation) RemovePersonalIDs(ids ...int) {
-	if m.removedpersonal == nil {
-		m.removedpersonal = make(map[int]struct{})
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (m *PetroglyphMutation) RemovePersonalCollectionIDs(ids ...int) {
+	if m.removedpersonal_collection == nil {
+		m.removedpersonal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.personal, ids[i])
-		m.removedpersonal[ids[i]] = struct{}{}
+		delete(m.personal_collection, ids[i])
+		m.removedpersonal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
-func (m *PetroglyphMutation) RemovedPersonalIDs() (ids []int) {
-	for id := range m.removedpersonal {
+// RemovedPersonalCollection returns the removed IDs of the "personal_collection" edge to the PersonalCollection entity.
+func (m *PetroglyphMutation) RemovedPersonalCollectionIDs() (ids []int) {
+	for id := range m.removedpersonal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PersonalIDs returns the "personal" edge IDs in the mutation.
-func (m *PetroglyphMutation) PersonalIDs() (ids []int) {
-	for id := range m.personal {
+// PersonalCollectionIDs returns the "personal_collection" edge IDs in the mutation.
+func (m *PetroglyphMutation) PersonalCollectionIDs() (ids []int) {
+	for id := range m.personal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPersonal resets all changes to the "personal" edge.
-func (m *PetroglyphMutation) ResetPersonal() {
-	m.personal = nil
-	m.clearedpersonal = false
-	m.removedpersonal = nil
+// ResetPersonalCollection resets all changes to the "personal_collection" edge.
+func (m *PetroglyphMutation) ResetPersonalCollection() {
+	m.personal_collection = nil
+	m.clearedpersonal_collection = false
+	m.removedpersonal_collection = nil
 }
 
 // Where appends a list predicates to the PetroglyphMutation builder.
@@ -41759,8 +41925,8 @@ func (m *PetroglyphMutation) AddedEdges() []string {
 	if m.collection != nil {
 		edges = append(edges, petroglyph.EdgeCollection)
 	}
-	if m.personal != nil {
-		edges = append(edges, petroglyph.EdgePersonal)
+	if m.personal_collection != nil {
+		edges = append(edges, petroglyph.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -41809,9 +41975,9 @@ func (m *PetroglyphMutation) AddedIDs(name string) []ent.Value {
 		if id := m.collection; id != nil {
 			return []ent.Value{*id}
 		}
-	case petroglyph.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.personal))
-		for id := range m.personal {
+	case petroglyph.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.personal_collection))
+		for id := range m.personal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -41828,8 +41994,8 @@ func (m *PetroglyphMutation) RemovedEdges() []string {
 	if m.removedtechniques != nil {
 		edges = append(edges, petroglyph.EdgeTechniques)
 	}
-	if m.removedpersonal != nil {
-		edges = append(edges, petroglyph.EdgePersonal)
+	if m.removedpersonal_collection != nil {
+		edges = append(edges, petroglyph.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -41850,9 +42016,9 @@ func (m *PetroglyphMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case petroglyph.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.removedpersonal))
-		for id := range m.removedpersonal {
+	case petroglyph.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.removedpersonal_collection))
+		for id := range m.removedpersonal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -41890,8 +42056,8 @@ func (m *PetroglyphMutation) ClearedEdges() []string {
 	if m.clearedcollection {
 		edges = append(edges, petroglyph.EdgeCollection)
 	}
-	if m.clearedpersonal {
-		edges = append(edges, petroglyph.EdgePersonal)
+	if m.clearedpersonal_collection {
+		edges = append(edges, petroglyph.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -41918,8 +42084,8 @@ func (m *PetroglyphMutation) EdgeCleared(name string) bool {
 		return m.clearedaccounting_documentation_author
 	case petroglyph.EdgeCollection:
 		return m.clearedcollection
-	case petroglyph.EdgePersonal:
-		return m.clearedpersonal
+	case petroglyph.EdgePersonalCollection:
+		return m.clearedpersonal_collection
 	}
 	return false
 }
@@ -41984,8 +42150,8 @@ func (m *PetroglyphMutation) ResetEdge(name string) error {
 	case petroglyph.EdgeCollection:
 		m.ResetCollection()
 		return nil
-	case petroglyph.EdgePersonal:
-		m.ResetPersonal()
+	case petroglyph.EdgePersonalCollection:
+		m.ResetPersonalCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown Petroglyph edge %s", name)
@@ -45530,9 +45696,9 @@ type ProtectedAreaPictureMutation struct {
 	cleareddistrict              bool
 	region                       *int
 	clearedregion                bool
-	personal                     map[int]struct{}
-	removedpersonal              map[int]struct{}
-	clearedpersonal              bool
+	personal_collection          map[int]struct{}
+	removedpersonal_collection   map[int]struct{}
+	clearedpersonal_collection   bool
 	done                         bool
 	oldValue                     func(context.Context) (*ProtectedAreaPicture, error)
 	predicates                   []predicate.ProtectedAreaPicture
@@ -46614,58 +46780,58 @@ func (m *ProtectedAreaPictureMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
-func (m *ProtectedAreaPictureMutation) AddPersonalIDs(ids ...int) {
-	if m.personal == nil {
-		m.personal = make(map[int]struct{})
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by ids.
+func (m *ProtectedAreaPictureMutation) AddPersonalCollectionIDs(ids ...int) {
+	if m.personal_collection == nil {
+		m.personal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.personal[ids[i]] = struct{}{}
+		m.personal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// ClearPersonal clears the "personal" edge to the Personal entity.
-func (m *ProtectedAreaPictureMutation) ClearPersonal() {
-	m.clearedpersonal = true
+// ClearPersonalCollection clears the "personal_collection" edge to the PersonalCollection entity.
+func (m *ProtectedAreaPictureMutation) ClearPersonalCollection() {
+	m.clearedpersonal_collection = true
 }
 
-// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
-func (m *ProtectedAreaPictureMutation) PersonalCleared() bool {
-	return m.clearedpersonal
+// PersonalCollectionCleared reports if the "personal_collection" edge to the PersonalCollection entity was cleared.
+func (m *ProtectedAreaPictureMutation) PersonalCollectionCleared() bool {
+	return m.clearedpersonal_collection
 }
 
-// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
-func (m *ProtectedAreaPictureMutation) RemovePersonalIDs(ids ...int) {
-	if m.removedpersonal == nil {
-		m.removedpersonal = make(map[int]struct{})
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (m *ProtectedAreaPictureMutation) RemovePersonalCollectionIDs(ids ...int) {
+	if m.removedpersonal_collection == nil {
+		m.removedpersonal_collection = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.personal, ids[i])
-		m.removedpersonal[ids[i]] = struct{}{}
+		delete(m.personal_collection, ids[i])
+		m.removedpersonal_collection[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
-func (m *ProtectedAreaPictureMutation) RemovedPersonalIDs() (ids []int) {
-	for id := range m.removedpersonal {
+// RemovedPersonalCollection returns the removed IDs of the "personal_collection" edge to the PersonalCollection entity.
+func (m *ProtectedAreaPictureMutation) RemovedPersonalCollectionIDs() (ids []int) {
+	for id := range m.removedpersonal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// PersonalIDs returns the "personal" edge IDs in the mutation.
-func (m *ProtectedAreaPictureMutation) PersonalIDs() (ids []int) {
-	for id := range m.personal {
+// PersonalCollectionIDs returns the "personal_collection" edge IDs in the mutation.
+func (m *ProtectedAreaPictureMutation) PersonalCollectionIDs() (ids []int) {
+	for id := range m.personal_collection {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetPersonal resets all changes to the "personal" edge.
-func (m *ProtectedAreaPictureMutation) ResetPersonal() {
-	m.personal = nil
-	m.clearedpersonal = false
-	m.removedpersonal = nil
+// ResetPersonalCollection resets all changes to the "personal_collection" edge.
+func (m *ProtectedAreaPictureMutation) ResetPersonalCollection() {
+	m.personal_collection = nil
+	m.clearedpersonal_collection = false
+	m.removedpersonal_collection = nil
 }
 
 // Where appends a list predicates to the ProtectedAreaPictureMutation builder.
@@ -47102,8 +47268,8 @@ func (m *ProtectedAreaPictureMutation) AddedEdges() []string {
 	if m.region != nil {
 		edges = append(edges, protectedareapicture.EdgeRegion)
 	}
-	if m.personal != nil {
-		edges = append(edges, protectedareapicture.EdgePersonal)
+	if m.personal_collection != nil {
+		edges = append(edges, protectedareapicture.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -47148,9 +47314,9 @@ func (m *ProtectedAreaPictureMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
-	case protectedareapicture.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.personal))
-		for id := range m.personal {
+	case protectedareapicture.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.personal_collection))
+		for id := range m.personal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -47161,8 +47327,8 @@ func (m *ProtectedAreaPictureMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProtectedAreaPictureMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 10)
-	if m.removedpersonal != nil {
-		edges = append(edges, protectedareapicture.EdgePersonal)
+	if m.removedpersonal_collection != nil {
+		edges = append(edges, protectedareapicture.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -47171,9 +47337,9 @@ func (m *ProtectedAreaPictureMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *ProtectedAreaPictureMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case protectedareapicture.EdgePersonal:
-		ids := make([]ent.Value, 0, len(m.removedpersonal))
-		for id := range m.removedpersonal {
+	case protectedareapicture.EdgePersonalCollection:
+		ids := make([]ent.Value, 0, len(m.removedpersonal_collection))
+		for id := range m.removedpersonal_collection {
 			ids = append(ids, id)
 		}
 		return ids
@@ -47211,8 +47377,8 @@ func (m *ProtectedAreaPictureMutation) ClearedEdges() []string {
 	if m.clearedregion {
 		edges = append(edges, protectedareapicture.EdgeRegion)
 	}
-	if m.clearedpersonal {
-		edges = append(edges, protectedareapicture.EdgePersonal)
+	if m.clearedpersonal_collection {
+		edges = append(edges, protectedareapicture.EdgePersonalCollection)
 	}
 	return edges
 }
@@ -47239,8 +47405,8 @@ func (m *ProtectedAreaPictureMutation) EdgeCleared(name string) bool {
 		return m.cleareddistrict
 	case protectedareapicture.EdgeRegion:
 		return m.clearedregion
-	case protectedareapicture.EdgePersonal:
-		return m.clearedpersonal
+	case protectedareapicture.EdgePersonalCollection:
+		return m.clearedpersonal_collection
 	}
 	return false
 }
@@ -47311,8 +47477,8 @@ func (m *ProtectedAreaPictureMutation) ResetEdge(name string) error {
 	case protectedareapicture.EdgeRegion:
 		m.ResetRegion()
 		return nil
-	case protectedareapicture.EdgePersonal:
-		m.ResetPersonal()
+	case protectedareapicture.EdgePersonalCollection:
+		m.ResetPersonalCollection()
 		return nil
 	}
 	return fmt.Errorf("unknown ProtectedAreaPicture edge %s", name)

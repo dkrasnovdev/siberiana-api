@@ -1063,21 +1063,21 @@ func HasRegionWith(preds ...predicate.Region) predicate.ProtectedAreaPicture {
 	})
 }
 
-// HasPersonal applies the HasEdge predicate on the "personal" edge.
-func HasPersonal() predicate.ProtectedAreaPicture {
+// HasPersonalCollection applies the HasEdge predicate on the "personal_collection" edge.
+func HasPersonalCollection() predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, PersonalTable, PersonalPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, PersonalCollectionTable, PersonalCollectionPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasPersonalWith applies the HasEdge predicate on the "personal" edge with a given conditions (other predicates).
-func HasPersonalWith(preds ...predicate.Personal) predicate.ProtectedAreaPicture {
+// HasPersonalCollectionWith applies the HasEdge predicate on the "personal_collection" edge with a given conditions (other predicates).
+func HasPersonalCollectionWith(preds ...predicate.PersonalCollection) predicate.ProtectedAreaPicture {
 	return predicate.ProtectedAreaPicture(func(s *sql.Selector) {
-		step := newPersonalStep()
+		step := newPersonalCollectionStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

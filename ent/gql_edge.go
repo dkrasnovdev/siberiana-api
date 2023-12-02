@@ -92,6 +92,18 @@ func (a *Art) Region(ctx context.Context) (*Region, error) {
 	return result, MaskNotFound(err)
 }
 
+func (a *Art) PersonalCollection(ctx context.Context) (result []*PersonalCollection, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = a.NamedPersonalCollection(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = a.Edges.PersonalCollectionOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = a.QueryPersonalCollection().All(ctx)
+	}
+	return result, err
+}
+
 func (ag *ArtGenre) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = ag.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
@@ -288,14 +300,14 @@ func (a *Artifact) Region(ctx context.Context) (*Region, error) {
 	return result, MaskNotFound(err)
 }
 
-func (a *Artifact) Personal(ctx context.Context) (result []*Personal, err error) {
+func (a *Artifact) PersonalCollection(ctx context.Context) (result []*PersonalCollection, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = a.NamedPersonal(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = a.NamedPersonalCollection(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = a.Edges.PersonalOrErr()
+		result, err = a.Edges.PersonalCollectionOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = a.QueryPersonal().All(ctx)
+		result, err = a.QueryPersonalCollection().All(ctx)
 	}
 	return result, err
 }
@@ -404,14 +416,14 @@ func (b *Book) Region(ctx context.Context) (*Region, error) {
 	return result, MaskNotFound(err)
 }
 
-func (b *Book) Personal(ctx context.Context) (result []*Personal, err error) {
+func (b *Book) PersonalCollection(ctx context.Context) (result []*PersonalCollection, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = b.NamedPersonal(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = b.NamedPersonalCollection(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = b.Edges.PersonalOrErr()
+		result, err = b.Edges.PersonalCollectionOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = b.QueryPersonal().All(ctx)
+		result, err = b.QueryPersonalCollection().All(ctx)
 	}
 	return result, err
 }
@@ -1152,50 +1164,62 @@ func (pe *Person) Affiliation(ctx context.Context) (*Organization, error) {
 	return result, MaskNotFound(err)
 }
 
-func (pe *Personal) Artifacts(ctx context.Context) (result []*Artifact, err error) {
+func (pc *PersonalCollection) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = pc.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pe.Edges.ArtifactsOrErr()
+		result, err = pc.Edges.ArtOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pe.QueryArtifacts().All(ctx)
+		result, err = pc.QueryArt().All(ctx)
 	}
 	return result, err
 }
 
-func (pe *Personal) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+func (pc *PersonalCollection) Artifacts(ctx context.Context) (result []*Artifact, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = pc.NamedArtifacts(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pe.Edges.PetroglyphsOrErr()
+		result, err = pc.Edges.ArtifactsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pe.QueryPetroglyphs().All(ctx)
+		result, err = pc.QueryArtifacts().All(ctx)
 	}
 	return result, err
 }
 
-func (pe *Personal) Books(ctx context.Context) (result []*Book, err error) {
+func (pc *PersonalCollection) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = pc.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pe.Edges.BooksOrErr()
+		result, err = pc.Edges.PetroglyphsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pe.QueryBooks().All(ctx)
+		result, err = pc.QueryPetroglyphs().All(ctx)
 	}
 	return result, err
 }
 
-func (pe *Personal) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+func (pc *PersonalCollection) Books(ctx context.Context) (result []*Book, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = pc.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pe.Edges.ProtectedAreaPicturesOrErr()
+		result, err = pc.Edges.BooksOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pe.QueryProtectedAreaPictures().All(ctx)
+		result, err = pc.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (pc *PersonalCollection) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pc.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pc.Edges.ProtectedAreaPicturesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pc.QueryProtectedAreaPictures().All(ctx)
 	}
 	return result, err
 }
@@ -1280,14 +1304,14 @@ func (pe *Petroglyph) Collection(ctx context.Context) (*Collection, error) {
 	return result, err
 }
 
-func (pe *Petroglyph) Personal(ctx context.Context) (result []*Personal, err error) {
+func (pe *Petroglyph) PersonalCollection(ctx context.Context) (result []*PersonalCollection, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedPersonal(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = pe.NamedPersonalCollection(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pe.Edges.PersonalOrErr()
+		result, err = pe.Edges.PersonalCollectionOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pe.QueryPersonal().All(ctx)
+		result, err = pe.QueryPersonalCollection().All(ctx)
 	}
 	return result, err
 }
@@ -1420,14 +1444,14 @@ func (pap *ProtectedAreaPicture) Region(ctx context.Context) (*Region, error) {
 	return result, MaskNotFound(err)
 }
 
-func (pap *ProtectedAreaPicture) Personal(ctx context.Context) (result []*Personal, err error) {
+func (pap *ProtectedAreaPicture) PersonalCollection(ctx context.Context) (result []*PersonalCollection, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pap.NamedPersonal(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = pap.NamedPersonalCollection(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pap.Edges.PersonalOrErr()
+		result, err = pap.Edges.PersonalCollectionOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pap.QueryPersonal().All(ctx)
+		result, err = pap.QueryPersonalCollection().All(ctx)
 	}
 	return result, err
 }

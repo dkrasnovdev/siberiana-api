@@ -25,7 +25,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -38,39 +38,39 @@ import (
 // ArtifactQuery is the builder for querying Artifact entities.
 type ArtifactQuery struct {
 	config
-	ctx                     *QueryContext
-	order                   []artifact.OrderOption
-	inters                  []Interceptor
-	predicates              []predicate.Artifact
-	withAuthors             *PersonQuery
-	withDonor               *PersonQuery
-	withMediums             *MediumQuery
-	withTechniques          *TechniqueQuery
-	withProjects            *ProjectQuery
-	withPublications        *PublicationQuery
-	withCulturalAffiliation *CultureQuery
-	withEthnos              *EthnosQuery
-	withOrganization        *OrganizationQuery
-	withMonument            *MonumentQuery
-	withModel               *ModelQuery
-	withSet                 *SetQuery
-	withLocation            *LocationQuery
-	withCollection          *CollectionQuery
-	withLicense             *LicenseQuery
-	withCountry             *CountryQuery
-	withSettlement          *SettlementQuery
-	withDistrict            *DistrictQuery
-	withRegion              *RegionQuery
-	withPersonal            *PersonalQuery
-	withFKs                 bool
-	modifiers               []func(*sql.Selector)
-	loadTotal               []func(context.Context, []*Artifact) error
-	withNamedAuthors        map[string]*PersonQuery
-	withNamedMediums        map[string]*MediumQuery
-	withNamedTechniques     map[string]*TechniqueQuery
-	withNamedProjects       map[string]*ProjectQuery
-	withNamedPublications   map[string]*PublicationQuery
-	withNamedPersonal       map[string]*PersonalQuery
+	ctx                         *QueryContext
+	order                       []artifact.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Artifact
+	withAuthors                 *PersonQuery
+	withDonor                   *PersonQuery
+	withMediums                 *MediumQuery
+	withTechniques              *TechniqueQuery
+	withProjects                *ProjectQuery
+	withPublications            *PublicationQuery
+	withCulturalAffiliation     *CultureQuery
+	withEthnos                  *EthnosQuery
+	withOrganization            *OrganizationQuery
+	withMonument                *MonumentQuery
+	withModel                   *ModelQuery
+	withSet                     *SetQuery
+	withLocation                *LocationQuery
+	withCollection              *CollectionQuery
+	withLicense                 *LicenseQuery
+	withCountry                 *CountryQuery
+	withSettlement              *SettlementQuery
+	withDistrict                *DistrictQuery
+	withRegion                  *RegionQuery
+	withPersonalCollection      *PersonalCollectionQuery
+	withFKs                     bool
+	modifiers                   []func(*sql.Selector)
+	loadTotal                   []func(context.Context, []*Artifact) error
+	withNamedAuthors            map[string]*PersonQuery
+	withNamedMediums            map[string]*MediumQuery
+	withNamedTechniques         map[string]*TechniqueQuery
+	withNamedProjects           map[string]*ProjectQuery
+	withNamedPublications       map[string]*PublicationQuery
+	withNamedPersonalCollection map[string]*PersonalCollectionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -525,9 +525,9 @@ func (aq *ArtifactQuery) QueryRegion() *RegionQuery {
 	return query
 }
 
-// QueryPersonal chains the current query on the "personal" edge.
-func (aq *ArtifactQuery) QueryPersonal() *PersonalQuery {
-	query := (&PersonalClient{config: aq.config}).Query()
+// QueryPersonalCollection chains the current query on the "personal_collection" edge.
+func (aq *ArtifactQuery) QueryPersonalCollection() *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: aq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := aq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -538,8 +538,8 @@ func (aq *ArtifactQuery) QueryPersonal() *PersonalQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PersonalTable, artifact.PersonalPrimaryKey...),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PersonalCollectionTable, artifact.PersonalCollectionPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
 		return fromU, nil
@@ -758,7 +758,7 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		withSettlement:          aq.withSettlement.Clone(),
 		withDistrict:            aq.withDistrict.Clone(),
 		withRegion:              aq.withRegion.Clone(),
-		withPersonal:            aq.withPersonal.Clone(),
+		withPersonalCollection:  aq.withPersonalCollection.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
@@ -974,14 +974,14 @@ func (aq *ArtifactQuery) WithRegion(opts ...func(*RegionQuery)) *ArtifactQuery {
 	return aq
 }
 
-// WithPersonal tells the query-builder to eager-load the nodes that are connected to
-// the "personal" edge. The optional arguments are used to configure the query builder of the edge.
-func (aq *ArtifactQuery) WithPersonal(opts ...func(*PersonalQuery)) *ArtifactQuery {
-	query := (&PersonalClient{config: aq.config}).Query()
+// WithPersonalCollection tells the query-builder to eager-load the nodes that are connected to
+// the "personal_collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithPersonalCollection(opts ...func(*PersonalCollectionQuery)) *ArtifactQuery {
+	query := (&PersonalCollectionClient{config: aq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	aq.withPersonal = query
+	aq.withPersonalCollection = query
 	return aq
 }
 
@@ -1090,7 +1090,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withSettlement != nil,
 			aq.withDistrict != nil,
 			aq.withRegion != nil,
-			aq.withPersonal != nil,
+			aq.withPersonalCollection != nil,
 		}
 	)
 	if aq.withDonor != nil || aq.withCulturalAffiliation != nil || aq.withEthnos != nil || aq.withOrganization != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
@@ -1239,10 +1239,12 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			return nil, err
 		}
 	}
-	if query := aq.withPersonal; query != nil {
-		if err := aq.loadPersonal(ctx, query, nodes,
-			func(n *Artifact) { n.Edges.Personal = []*Personal{} },
-			func(n *Artifact, e *Personal) { n.Edges.Personal = append(n.Edges.Personal, e) }); err != nil {
+	if query := aq.withPersonalCollection; query != nil {
+		if err := aq.loadPersonalCollection(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.PersonalCollection = []*PersonalCollection{} },
+			func(n *Artifact, e *PersonalCollection) {
+				n.Edges.PersonalCollection = append(n.Edges.PersonalCollection, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -1281,10 +1283,10 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			return nil, err
 		}
 	}
-	for name, query := range aq.withNamedPersonal {
-		if err := aq.loadPersonal(ctx, query, nodes,
-			func(n *Artifact) { n.appendNamedPersonal(name) },
-			func(n *Artifact, e *Personal) { n.appendNamedPersonal(name, e) }); err != nil {
+	for name, query := range aq.withNamedPersonalCollection {
+		if err := aq.loadPersonalCollection(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedPersonalCollection(name) },
+			func(n *Artifact, e *PersonalCollection) { n.appendNamedPersonalCollection(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2049,7 +2051,7 @@ func (aq *ArtifactQuery) loadRegion(ctx context.Context, query *RegionQuery, nod
 	}
 	return nil
 }
-func (aq *ArtifactQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Personal)) error {
+func (aq *ArtifactQuery) loadPersonalCollection(ctx context.Context, query *PersonalCollectionQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *PersonalCollection)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Artifact)
 	nids := make(map[int]map[*Artifact]struct{})
@@ -2061,11 +2063,11 @@ func (aq *ArtifactQuery) loadPersonal(ctx context.Context, query *PersonalQuery,
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(artifact.PersonalTable)
-		s.Join(joinT).On(s.C(personal.FieldID), joinT.C(artifact.PersonalPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(artifact.PersonalPrimaryKey[1]), edgeIDs...))
+		joinT := sql.Table(artifact.PersonalCollectionTable)
+		s.Join(joinT).On(s.C(personalcollection.FieldID), joinT.C(artifact.PersonalCollectionPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.PersonalCollectionPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(artifact.PersonalPrimaryKey[1]))
+		s.Select(joinT.C(artifact.PersonalCollectionPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -2095,14 +2097,14 @@ func (aq *ArtifactQuery) loadPersonal(ctx context.Context, query *PersonalQuery,
 			}
 		})
 	})
-	neighbors, err := withInterceptors[[]*Personal](ctx, query, qr, query.inters)
+	neighbors, err := withInterceptors[[]*PersonalCollection](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "personal" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "personal_collection" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -2265,17 +2267,17 @@ func (aq *ArtifactQuery) WithNamedPublications(name string, opts ...func(*Public
 	return aq
 }
 
-// WithNamedPersonal tells the query-builder to eager-load the nodes that are connected to the "personal"
+// WithNamedPersonalCollection tells the query-builder to eager-load the nodes that are connected to the "personal_collection"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (aq *ArtifactQuery) WithNamedPersonal(name string, opts ...func(*PersonalQuery)) *ArtifactQuery {
-	query := (&PersonalClient{config: aq.config}).Query()
+func (aq *ArtifactQuery) WithNamedPersonalCollection(name string, opts ...func(*PersonalCollectionQuery)) *ArtifactQuery {
+	query := (&PersonalCollectionClient{config: aq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if aq.withNamedPersonal == nil {
-		aq.withNamedPersonal = make(map[string]*PersonalQuery)
+	if aq.withNamedPersonalCollection == nil {
+		aq.withNamedPersonalCollection = make(map[string]*PersonalCollectionQuery)
 	}
-	aq.withNamedPersonal[name] = query
+	aq.withNamedPersonalCollection[name] = query
 	return aq
 }
 

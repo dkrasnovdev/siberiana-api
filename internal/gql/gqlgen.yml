@@ -41,7 +41,7 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/periodical
   - github.com/dkrasnovdev/siberiana-api/ent/petroglyph
   - github.com/dkrasnovdev/siberiana-api/ent/person
-  - github.com/dkrasnovdev/siberiana-api/ent/personal
+  - github.com/dkrasnovdev/siberiana-api/ent/personalcollection
   - github.com/dkrasnovdev/siberiana-api/ent/project
   - github.com/dkrasnovdev/siberiana-api/ent/protectedarea
   - github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory

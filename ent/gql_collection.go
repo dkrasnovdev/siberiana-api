@@ -34,7 +34,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -166,6 +166,18 @@ func (a *ArtQuery) collectField(ctx context.Context, opCtx *graphql.OperationCon
 				return err
 			}
 			a.withRegion = query
+		case "personalCollection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonalCollectionClient{config: a.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalcollectionImplementors)...); err != nil {
+				return err
+			}
+			a.WithNamedPersonalCollection(alias, func(wq *PersonalCollectionQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[art.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, art.FieldCreatedAt)
@@ -850,16 +862,16 @@ func (a *ArtifactQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 				return err
 			}
 			a.withRegion = query
-		case "personal":
+		case "personalCollection":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PersonalClient{config: a.config}).Query()
+				query = (&PersonalCollectionClient{config: a.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalImplementors)...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalcollectionImplementors)...); err != nil {
 				return err
 			}
-			a.WithNamedPersonal(alias, func(wq *PersonalQuery) {
+			a.WithNamedPersonalCollection(alias, func(wq *PersonalCollectionQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -1356,16 +1368,16 @@ func (b *BookQuery) collectField(ctx context.Context, opCtx *graphql.OperationCo
 				return err
 			}
 			b.withRegion = query
-		case "personal":
+		case "personalCollection":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PersonalClient{config: b.config}).Query()
+				query = (&PersonalCollectionClient{config: b.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalImplementors)...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalcollectionImplementors)...); err != nil {
 				return err
 			}
-			b.WithNamedPersonal(alias, func(wq *PersonalQuery) {
+			b.WithNamedPersonalCollection(alias, func(wq *PersonalCollectionQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -5140,103 +5152,115 @@ func newPersonPaginateArgs(rv map[string]any) *personPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pe *PersonalQuery) CollectFields(ctx context.Context, satisfies ...string) (*PersonalQuery, error) {
+func (pc *PersonalCollectionQuery) CollectFields(ctx context.Context, satisfies ...string) (*PersonalCollectionQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return pe, nil
+		return pc, nil
 	}
-	if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+	if err := pc.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
 		return nil, err
 	}
-	return pe, nil
+	return pc, nil
 }
 
-func (pe *PersonalQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+func (pc *PersonalCollectionQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
 	path = append([]string(nil), path...)
 	var (
 		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(personal.Columns))
-		selectedFields = []string{personal.FieldID}
+		fieldSeen      = make(map[string]struct{}, len(personalcollection.Columns))
+		selectedFields = []string{personalcollection.FieldID}
 	)
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
+		case "art":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ArtClient{config: pc.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artImplementors)...); err != nil {
+				return err
+			}
+			pc.WithNamedArt(alias, func(wq *ArtQuery) {
+				*wq = *query
+			})
 		case "artifacts":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ArtifactClient{config: pe.config}).Query()
+				query = (&ArtifactClient{config: pc.config}).Query()
 			)
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, artifactImplementors)...); err != nil {
 				return err
 			}
-			pe.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
+			pc.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
 		case "petroglyphs":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PetroglyphClient{config: pe.config}).Query()
+				query = (&PetroglyphClient{config: pc.config}).Query()
 			)
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
 				return err
 			}
-			pe.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
+			pc.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
 				*wq = *query
 			})
 		case "books":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&BookClient{config: pe.config}).Query()
+				query = (&BookClient{config: pc.config}).Query()
 			)
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, bookImplementors)...); err != nil {
 				return err
 			}
-			pe.WithNamedBooks(alias, func(wq *BookQuery) {
+			pc.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
 		case "protectedAreaPictures":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&ProtectedAreaPictureClient{config: pe.config}).Query()
+				query = (&ProtectedAreaPictureClient{config: pc.config}).Query()
 			)
 			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, protectedareapictureImplementors)...); err != nil {
 				return err
 			}
-			pe.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
+			pc.WithNamedProtectedAreaPictures(alias, func(wq *ProtectedAreaPictureQuery) {
 				*wq = *query
 			})
 		case "createdAt":
-			if _, ok := fieldSeen[personal.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, personal.FieldCreatedAt)
-				fieldSeen[personal.FieldCreatedAt] = struct{}{}
+			if _, ok := fieldSeen[personalcollection.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, personalcollection.FieldCreatedAt)
+				fieldSeen[personalcollection.FieldCreatedAt] = struct{}{}
 			}
 		case "createdBy":
-			if _, ok := fieldSeen[personal.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, personal.FieldCreatedBy)
-				fieldSeen[personal.FieldCreatedBy] = struct{}{}
+			if _, ok := fieldSeen[personalcollection.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, personalcollection.FieldCreatedBy)
+				fieldSeen[personalcollection.FieldCreatedBy] = struct{}{}
 			}
 		case "updatedAt":
-			if _, ok := fieldSeen[personal.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, personal.FieldUpdatedAt)
-				fieldSeen[personal.FieldUpdatedAt] = struct{}{}
+			if _, ok := fieldSeen[personalcollection.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, personalcollection.FieldUpdatedAt)
+				fieldSeen[personalcollection.FieldUpdatedAt] = struct{}{}
 			}
 		case "updatedBy":
-			if _, ok := fieldSeen[personal.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, personal.FieldUpdatedBy)
-				fieldSeen[personal.FieldUpdatedBy] = struct{}{}
+			if _, ok := fieldSeen[personalcollection.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, personalcollection.FieldUpdatedBy)
+				fieldSeen[personalcollection.FieldUpdatedBy] = struct{}{}
 			}
 		case "displayName":
-			if _, ok := fieldSeen[personal.FieldDisplayName]; !ok {
-				selectedFields = append(selectedFields, personal.FieldDisplayName)
-				fieldSeen[personal.FieldDisplayName] = struct{}{}
+			if _, ok := fieldSeen[personalcollection.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, personalcollection.FieldDisplayName)
+				fieldSeen[personalcollection.FieldDisplayName] = struct{}{}
 			}
 		case "isPublic":
-			if _, ok := fieldSeen[personal.FieldIsPublic]; !ok {
-				selectedFields = append(selectedFields, personal.FieldIsPublic)
-				fieldSeen[personal.FieldIsPublic] = struct{}{}
+			if _, ok := fieldSeen[personalcollection.FieldIsPublic]; !ok {
+				selectedFields = append(selectedFields, personalcollection.FieldIsPublic)
+				fieldSeen[personalcollection.FieldIsPublic] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -5245,19 +5269,19 @@ func (pe *PersonalQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 		}
 	}
 	if !unknownSeen {
-		pe.Select(selectedFields...)
+		pc.Select(selectedFields...)
 	}
 	return nil
 }
 
-type personalPaginateArgs struct {
+type personalcollectionPaginateArgs struct {
 	first, last   *int
 	after, before *Cursor
-	opts          []PersonalPaginateOption
+	opts          []PersonalCollectionPaginateOption
 }
 
-func newPersonalPaginateArgs(rv map[string]any) *personalPaginateArgs {
-	args := &personalPaginateArgs{}
+func newPersonalCollectionPaginateArgs(rv map[string]any) *personalcollectionPaginateArgs {
+	args := &personalcollectionPaginateArgs{}
 	if rv == nil {
 		return args
 	}
@@ -5275,10 +5299,10 @@ func newPersonalPaginateArgs(rv map[string]any) *personalPaginateArgs {
 	}
 	if v, ok := rv[orderByField]; ok {
 		switch v := v.(type) {
-		case []*PersonalOrder:
-			args.opts = append(args.opts, WithPersonalOrder(v))
+		case []*PersonalCollectionOrder:
+			args.opts = append(args.opts, WithPersonalCollectionOrder(v))
 		case []any:
-			var orders []*PersonalOrder
+			var orders []*PersonalCollectionOrder
 			for i := range v {
 				mv, ok := v[i].(map[string]any)
 				if !ok {
@@ -5286,7 +5310,7 @@ func newPersonalPaginateArgs(rv map[string]any) *personalPaginateArgs {
 				}
 				var (
 					err1, err2 error
-					order      = &PersonalOrder{Field: &PersonalOrderField{}, Direction: entgql.OrderDirectionAsc}
+					order      = &PersonalCollectionOrder{Field: &PersonalCollectionOrderField{}, Direction: entgql.OrderDirectionAsc}
 				)
 				if d, ok := mv[directionField]; ok {
 					err1 = order.Direction.UnmarshalGQL(d)
@@ -5298,11 +5322,11 @@ func newPersonalPaginateArgs(rv map[string]any) *personalPaginateArgs {
 					orders = append(orders, order)
 				}
 			}
-			args.opts = append(args.opts, WithPersonalOrder(orders))
+			args.opts = append(args.opts, WithPersonalCollectionOrder(orders))
 		}
 	}
-	if v, ok := rv[whereField].(*PersonalWhereInput); ok {
-		args.opts = append(args.opts, WithPersonalFilter(v.Filter))
+	if v, ok := rv[whereField].(*PersonalCollectionWhereInput); ok {
+		args.opts = append(args.opts, WithPersonalCollectionFilter(v.Filter))
 	}
 	return args
 }
@@ -5422,16 +5446,16 @@ func (pe *PetroglyphQuery) collectField(ctx context.Context, opCtx *graphql.Oper
 				return err
 			}
 			pe.withCollection = query
-		case "personal":
+		case "personalCollection":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PersonalClient{config: pe.config}).Query()
+				query = (&PersonalCollectionClient{config: pe.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalImplementors)...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalcollectionImplementors)...); err != nil {
 				return err
 			}
-			pe.WithNamedPersonal(alias, func(wq *PersonalQuery) {
+			pe.WithNamedPersonalCollection(alias, func(wq *PersonalCollectionQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -6257,16 +6281,16 @@ func (pap *ProtectedAreaPictureQuery) collectField(ctx context.Context, opCtx *g
 				return err
 			}
 			pap.withRegion = query
-		case "personal":
+		case "personalCollection":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&PersonalClient{config: pap.config}).Query()
+				query = (&PersonalCollectionClient{config: pap.config}).Query()
 			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalImplementors)...); err != nil {
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalcollectionImplementors)...); err != nil {
 				return err
 			}
-			pap.WithNamedPersonal(alias, func(wq *PersonalQuery) {
+			pap.WithNamedPersonalCollection(alias, func(wq *PersonalCollectionQuery) {
 				*wq = *query
 			})
 		case "createdAt":

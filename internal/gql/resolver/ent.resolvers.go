@@ -153,9 +153,9 @@ func (r *queryResolver) Persons(ctx context.Context, after *entgql.Cursor[int], 
 	return r.client.Person.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonOrder(orderBy), ent.WithPersonFilter(where.Filter))
 }
 
-// Personals is the resolver for the personals field.
-func (r *queryResolver) Personals(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonalOrder, where *ent.PersonalWhereInput) (*ent.PersonalConnection, error) {
-	return r.client.Personal.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonalOrder(orderBy), ent.WithPersonalFilter(where.Filter))
+// PersonalCollections is the resolver for the personalCollections field.
+func (r *queryResolver) PersonalCollections(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PersonalCollectionOrder, where *ent.PersonalCollectionWhereInput) (*ent.PersonalCollectionConnection, error) {
+	return r.client.PersonalCollection.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPersonalCollectionOrder(orderBy), ent.WithPersonalCollectionFilter(where.Filter))
 }
 
 // Petroglyphs is the resolver for the petroglyphs field.

@@ -41,7 +41,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -9954,20 +9954,20 @@ func (pe *Person) ToEdge(order *PersonOrder) *PersonEdge {
 	}
 }
 
-// PersonalEdge is the edge representation of Personal.
-type PersonalEdge struct {
-	Node   *Personal `json:"node"`
-	Cursor Cursor    `json:"cursor"`
+// PersonalCollectionEdge is the edge representation of PersonalCollection.
+type PersonalCollectionEdge struct {
+	Node   *PersonalCollection `json:"node"`
+	Cursor Cursor              `json:"cursor"`
 }
 
-// PersonalConnection is the connection containing edges to Personal.
-type PersonalConnection struct {
-	Edges      []*PersonalEdge `json:"edges"`
-	PageInfo   PageInfo        `json:"pageInfo"`
-	TotalCount int             `json:"totalCount"`
+// PersonalCollectionConnection is the connection containing edges to PersonalCollection.
+type PersonalCollectionConnection struct {
+	Edges      []*PersonalCollectionEdge `json:"edges"`
+	PageInfo   PageInfo                  `json:"pageInfo"`
+	TotalCount int                       `json:"totalCount"`
 }
 
-func (c *PersonalConnection) build(nodes []*Personal, pager *personalPager, after *Cursor, first *int, before *Cursor, last *int) {
+func (c *PersonalCollectionConnection) build(nodes []*PersonalCollection, pager *personalcollectionPager, after *Cursor, first *int, before *Cursor, last *int) {
 	c.PageInfo.HasNextPage = before != nil
 	c.PageInfo.HasPreviousPage = after != nil
 	if first != nil && *first+1 == len(nodes) {
@@ -9977,21 +9977,21 @@ func (c *PersonalConnection) build(nodes []*Personal, pager *personalPager, afte
 		c.PageInfo.HasPreviousPage = true
 		nodes = nodes[:len(nodes)-1]
 	}
-	var nodeAt func(int) *Personal
+	var nodeAt func(int) *PersonalCollection
 	if last != nil {
 		n := len(nodes) - 1
-		nodeAt = func(i int) *Personal {
+		nodeAt = func(i int) *PersonalCollection {
 			return nodes[n-i]
 		}
 	} else {
-		nodeAt = func(i int) *Personal {
+		nodeAt = func(i int) *PersonalCollection {
 			return nodes[i]
 		}
 	}
-	c.Edges = make([]*PersonalEdge, len(nodes))
+	c.Edges = make([]*PersonalCollectionEdge, len(nodes))
 	for i := range nodes {
 		node := nodeAt(i)
-		c.Edges[i] = &PersonalEdge{
+		c.Edges[i] = &PersonalCollectionEdge{
 			Node:   node,
 			Cursor: pager.toCursor(node),
 		}
@@ -10005,12 +10005,12 @@ func (c *PersonalConnection) build(nodes []*Personal, pager *personalPager, afte
 	}
 }
 
-// PersonalPaginateOption enables pagination customization.
-type PersonalPaginateOption func(*personalPager) error
+// PersonalCollectionPaginateOption enables pagination customization.
+type PersonalCollectionPaginateOption func(*personalcollectionPager) error
 
-// WithPersonalOrder configures pagination ordering.
-func WithPersonalOrder(order []*PersonalOrder) PersonalPaginateOption {
-	return func(pager *personalPager) error {
+// WithPersonalCollectionOrder configures pagination ordering.
+func WithPersonalCollectionOrder(order []*PersonalCollectionOrder) PersonalCollectionPaginateOption {
+	return func(pager *personalcollectionPager) error {
 		for _, o := range order {
 			if err := o.Direction.Validate(); err != nil {
 				return err
@@ -10021,25 +10021,25 @@ func WithPersonalOrder(order []*PersonalOrder) PersonalPaginateOption {
 	}
 }
 
-// WithPersonalFilter configures pagination filter.
-func WithPersonalFilter(filter func(*PersonalQuery) (*PersonalQuery, error)) PersonalPaginateOption {
-	return func(pager *personalPager) error {
+// WithPersonalCollectionFilter configures pagination filter.
+func WithPersonalCollectionFilter(filter func(*PersonalCollectionQuery) (*PersonalCollectionQuery, error)) PersonalCollectionPaginateOption {
+	return func(pager *personalcollectionPager) error {
 		if filter == nil {
-			return errors.New("PersonalQuery filter cannot be nil")
+			return errors.New("PersonalCollectionQuery filter cannot be nil")
 		}
 		pager.filter = filter
 		return nil
 	}
 }
 
-type personalPager struct {
+type personalcollectionPager struct {
 	reverse bool
-	order   []*PersonalOrder
-	filter  func(*PersonalQuery) (*PersonalQuery, error)
+	order   []*PersonalCollectionOrder
+	filter  func(*PersonalCollectionQuery) (*PersonalCollectionQuery, error)
 }
 
-func newPersonalPager(opts []PersonalPaginateOption, reverse bool) (*personalPager, error) {
-	pager := &personalPager{reverse: reverse}
+func newPersonalCollectionPager(opts []PersonalCollectionPaginateOption, reverse bool) (*personalcollectionPager, error) {
+	pager := &personalcollectionPager{reverse: reverse}
 	for _, opt := range opts {
 		if err := opt(pager); err != nil {
 			return nil, err
@@ -10053,22 +10053,22 @@ func newPersonalPager(opts []PersonalPaginateOption, reverse bool) (*personalPag
 	return pager, nil
 }
 
-func (p *personalPager) applyFilter(query *PersonalQuery) (*PersonalQuery, error) {
+func (p *personalcollectionPager) applyFilter(query *PersonalCollectionQuery) (*PersonalCollectionQuery, error) {
 	if p.filter != nil {
 		return p.filter(query)
 	}
 	return query, nil
 }
 
-func (p *personalPager) toCursor(pe *Personal) Cursor {
+func (p *personalcollectionPager) toCursor(pc *PersonalCollection) Cursor {
 	cs := make([]any, 0, len(p.order))
 	for _, po := range p.order {
-		cs = append(cs, po.Field.toCursor(pe).Value)
+		cs = append(cs, po.Field.toCursor(pc).Value)
 	}
-	return Cursor{ID: pe.ID, Value: cs}
+	return Cursor{ID: pc.ID, Value: cs}
 }
 
-func (p *personalPager) applyCursors(query *PersonalQuery, after, before *Cursor) (*PersonalQuery, error) {
+func (p *personalcollectionPager) applyCursors(query *PersonalCollectionQuery, after, before *Cursor) (*PersonalCollectionQuery, error) {
 	idDirection := entgql.OrderDirectionAsc
 	if p.reverse {
 		idDirection = entgql.OrderDirectionDesc
@@ -10083,7 +10083,7 @@ func (p *personalPager) applyCursors(query *PersonalQuery, after, before *Cursor
 		directions = append(directions, direction)
 	}
 	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
-		FieldID:     DefaultPersonalOrder.Field.column,
+		FieldID:     DefaultPersonalCollectionOrder.Field.column,
 		DirectionID: idDirection,
 		Fields:      fields,
 		Directions:  directions,
@@ -10097,7 +10097,7 @@ func (p *personalPager) applyCursors(query *PersonalQuery, after, before *Cursor
 	return query, nil
 }
 
-func (p *personalPager) applyOrder(query *PersonalQuery) *PersonalQuery {
+func (p *personalcollectionPager) applyOrder(query *PersonalCollectionQuery) *PersonalCollectionQuery {
 	var defaultOrdered bool
 	for _, o := range p.order {
 		direction := o.Direction
@@ -10105,7 +10105,7 @@ func (p *personalPager) applyOrder(query *PersonalQuery) *PersonalQuery {
 			direction = direction.Reverse()
 		}
 		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
-		if o.Field.column == DefaultPersonalOrder.Field.column {
+		if o.Field.column == DefaultPersonalCollectionOrder.Field.column {
 			defaultOrdered = true
 		}
 		if len(query.ctx.Fields) > 0 {
@@ -10117,12 +10117,12 @@ func (p *personalPager) applyOrder(query *PersonalQuery) *PersonalQuery {
 		if p.reverse {
 			direction = direction.Reverse()
 		}
-		query = query.Order(DefaultPersonalOrder.Field.toTerm(direction.OrderTermOption()))
+		query = query.Order(DefaultPersonalCollectionOrder.Field.toTerm(direction.OrderTermOption()))
 	}
 	return query
 }
 
-func (p *personalPager) orderExpr(query *PersonalQuery) sql.Querier {
+func (p *personalcollectionPager) orderExpr(query *PersonalCollectionQuery) sql.Querier {
 	if len(query.ctx.Fields) > 0 {
 		for _, o := range p.order {
 			query.ctx.AppendFieldOnce(o.Field.column)
@@ -10141,32 +10141,32 @@ func (p *personalPager) orderExpr(query *PersonalQuery) sql.Querier {
 		if p.reverse {
 			direction = direction.Reverse()
 		}
-		b.Ident(DefaultPersonalOrder.Field.column).Pad().WriteString(string(direction))
+		b.Ident(DefaultPersonalCollectionOrder.Field.column).Pad().WriteString(string(direction))
 	})
 }
 
-// Paginate executes the query and returns a relay based cursor connection to Personal.
-func (pe *PersonalQuery) Paginate(
+// Paginate executes the query and returns a relay based cursor connection to PersonalCollection.
+func (pc *PersonalCollectionQuery) Paginate(
 	ctx context.Context,
 	after *Cursor, first *int, before *Cursor, last *int,
-	offset *int, opts ...PersonalPaginateOption,
-) (*PersonalConnection, error) {
+	offset *int, opts ...PersonalCollectionPaginateOption,
+) (*PersonalCollectionConnection, error) {
 	if err := validateFirstLast(first, last); err != nil {
 		return nil, err
 	}
-	pager, err := newPersonalPager(opts, last != nil)
+	pager, err := newPersonalCollectionPager(opts, last != nil)
 	if err != nil {
 		return nil, err
 	}
-	if pe, err = pager.applyFilter(pe); err != nil {
+	if pc, err = pager.applyFilter(pc); err != nil {
 		return nil, err
 	}
-	conn := &PersonalConnection{Edges: []*PersonalEdge{}}
+	conn := &PersonalCollectionConnection{Edges: []*PersonalCollectionEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
 		if hasPagination || ignoredEdges {
-			c := pe.Clone()
+			c := pc.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -10178,23 +10178,23 @@ func (pe *PersonalQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if pe, err = pager.applyCursors(pe, after, before); err != nil {
+	if pc, err = pager.applyCursors(pc, after, before); err != nil {
 		return nil, err
 	}
 	if offset != nil && *offset != 0 {
-		pe.Offset(*offset)
+		pc.Offset(*offset)
 
 	}
 	if limit := paginateLimit(first, last); limit != 0 {
-		pe.Limit(limit)
+		pc.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := pe.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := pc.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
-	pe = pager.applyOrder(pe)
-	nodes, err := pe.All(ctx)
+	pc = pager.applyOrder(pc)
+	nodes, err := pc.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -10203,108 +10203,108 @@ func (pe *PersonalQuery) Paginate(
 }
 
 var (
-	// PersonalOrderFieldCreatedAt orders Personal by created_at.
-	PersonalOrderFieldCreatedAt = &PersonalOrderField{
-		Value: func(pe *Personal) (ent.Value, error) {
-			return pe.CreatedAt, nil
+	// PersonalCollectionOrderFieldCreatedAt orders PersonalCollection by created_at.
+	PersonalCollectionOrderFieldCreatedAt = &PersonalCollectionOrderField{
+		Value: func(pc *PersonalCollection) (ent.Value, error) {
+			return pc.CreatedAt, nil
 		},
-		column: personal.FieldCreatedAt,
-		toTerm: personal.ByCreatedAt,
-		toCursor: func(pe *Personal) Cursor {
+		column: personalcollection.FieldCreatedAt,
+		toTerm: personalcollection.ByCreatedAt,
+		toCursor: func(pc *PersonalCollection) Cursor {
 			return Cursor{
-				ID:    pe.ID,
-				Value: pe.CreatedAt,
+				ID:    pc.ID,
+				Value: pc.CreatedAt,
 			}
 		},
 	}
-	// PersonalOrderFieldUpdatedAt orders Personal by updated_at.
-	PersonalOrderFieldUpdatedAt = &PersonalOrderField{
-		Value: func(pe *Personal) (ent.Value, error) {
-			return pe.UpdatedAt, nil
+	// PersonalCollectionOrderFieldUpdatedAt orders PersonalCollection by updated_at.
+	PersonalCollectionOrderFieldUpdatedAt = &PersonalCollectionOrderField{
+		Value: func(pc *PersonalCollection) (ent.Value, error) {
+			return pc.UpdatedAt, nil
 		},
-		column: personal.FieldUpdatedAt,
-		toTerm: personal.ByUpdatedAt,
-		toCursor: func(pe *Personal) Cursor {
+		column: personalcollection.FieldUpdatedAt,
+		toTerm: personalcollection.ByUpdatedAt,
+		toCursor: func(pc *PersonalCollection) Cursor {
 			return Cursor{
-				ID:    pe.ID,
-				Value: pe.UpdatedAt,
+				ID:    pc.ID,
+				Value: pc.UpdatedAt,
 			}
 		},
 	}
 )
 
 // String implement fmt.Stringer interface.
-func (f PersonalOrderField) String() string {
+func (f PersonalCollectionOrderField) String() string {
 	var str string
 	switch f.column {
-	case PersonalOrderFieldCreatedAt.column:
+	case PersonalCollectionOrderFieldCreatedAt.column:
 		str = "CREATED_AT"
-	case PersonalOrderFieldUpdatedAt.column:
+	case PersonalCollectionOrderFieldUpdatedAt.column:
 		str = "UPDATED_AT"
 	}
 	return str
 }
 
 // MarshalGQL implements graphql.Marshaler interface.
-func (f PersonalOrderField) MarshalGQL(w io.Writer) {
+func (f PersonalCollectionOrderField) MarshalGQL(w io.Writer) {
 	io.WriteString(w, strconv.Quote(f.String()))
 }
 
 // UnmarshalGQL implements graphql.Unmarshaler interface.
-func (f *PersonalOrderField) UnmarshalGQL(v interface{}) error {
+func (f *PersonalCollectionOrderField) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("PersonalOrderField %T must be a string", v)
+		return fmt.Errorf("PersonalCollectionOrderField %T must be a string", v)
 	}
 	switch str {
 	case "CREATED_AT":
-		*f = *PersonalOrderFieldCreatedAt
+		*f = *PersonalCollectionOrderFieldCreatedAt
 	case "UPDATED_AT":
-		*f = *PersonalOrderFieldUpdatedAt
+		*f = *PersonalCollectionOrderFieldUpdatedAt
 	default:
-		return fmt.Errorf("%s is not a valid PersonalOrderField", str)
+		return fmt.Errorf("%s is not a valid PersonalCollectionOrderField", str)
 	}
 	return nil
 }
 
-// PersonalOrderField defines the ordering field of Personal.
-type PersonalOrderField struct {
-	// Value extracts the ordering value from the given Personal.
-	Value    func(*Personal) (ent.Value, error)
+// PersonalCollectionOrderField defines the ordering field of PersonalCollection.
+type PersonalCollectionOrderField struct {
+	// Value extracts the ordering value from the given PersonalCollection.
+	Value    func(*PersonalCollection) (ent.Value, error)
 	column   string // field or computed.
-	toTerm   func(...sql.OrderTermOption) personal.OrderOption
-	toCursor func(*Personal) Cursor
+	toTerm   func(...sql.OrderTermOption) personalcollection.OrderOption
+	toCursor func(*PersonalCollection) Cursor
 }
 
-// PersonalOrder defines the ordering of Personal.
-type PersonalOrder struct {
-	Direction OrderDirection      `json:"direction"`
-	Field     *PersonalOrderField `json:"field"`
+// PersonalCollectionOrder defines the ordering of PersonalCollection.
+type PersonalCollectionOrder struct {
+	Direction OrderDirection                `json:"direction"`
+	Field     *PersonalCollectionOrderField `json:"field"`
 }
 
-// DefaultPersonalOrder is the default ordering of Personal.
-var DefaultPersonalOrder = &PersonalOrder{
+// DefaultPersonalCollectionOrder is the default ordering of PersonalCollection.
+var DefaultPersonalCollectionOrder = &PersonalCollectionOrder{
 	Direction: entgql.OrderDirectionAsc,
-	Field: &PersonalOrderField{
-		Value: func(pe *Personal) (ent.Value, error) {
-			return pe.ID, nil
+	Field: &PersonalCollectionOrderField{
+		Value: func(pc *PersonalCollection) (ent.Value, error) {
+			return pc.ID, nil
 		},
-		column: personal.FieldID,
-		toTerm: personal.ByID,
-		toCursor: func(pe *Personal) Cursor {
-			return Cursor{ID: pe.ID}
+		column: personalcollection.FieldID,
+		toTerm: personalcollection.ByID,
+		toCursor: func(pc *PersonalCollection) Cursor {
+			return Cursor{ID: pc.ID}
 		},
 	},
 }
 
-// ToEdge converts Personal into PersonalEdge.
-func (pe *Personal) ToEdge(order *PersonalOrder) *PersonalEdge {
+// ToEdge converts PersonalCollection into PersonalCollectionEdge.
+func (pc *PersonalCollection) ToEdge(order *PersonalCollectionOrder) *PersonalCollectionEdge {
 	if order == nil {
-		order = DefaultPersonalOrder
+		order = DefaultPersonalCollectionOrder
 	}
-	return &PersonalEdge{
-		Node:   pe,
-		Cursor: order.Field.toCursor(pe),
+	return &PersonalCollectionEdge{
+		Node:   pc,
+		Cursor: order.Field.toCursor(pc),
 	}
 }
 

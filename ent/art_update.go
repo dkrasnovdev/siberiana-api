@@ -19,6 +19,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
@@ -642,6 +643,21 @@ func (au *ArtUpdate) SetRegion(r *Region) *ArtUpdate {
 	return au.SetRegionID(r.ID)
 }
 
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (au *ArtUpdate) AddPersonalCollectionIDs(ids ...int) *ArtUpdate {
+	au.mutation.AddPersonalCollectionIDs(ids...)
+	return au
+}
+
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (au *ArtUpdate) AddPersonalCollection(p ...*PersonalCollection) *ArtUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.AddPersonalCollectionIDs(ids...)
+}
+
 // Mutation returns the ArtMutation object of the builder.
 func (au *ArtUpdate) Mutation() *ArtMutation {
 	return au.mutation
@@ -744,6 +760,27 @@ func (au *ArtUpdate) ClearDistrict() *ArtUpdate {
 func (au *ArtUpdate) ClearRegion() *ArtUpdate {
 	au.mutation.ClearRegion()
 	return au
+}
+
+// ClearPersonalCollection clears all "personal_collection" edges to the PersonalCollection entity.
+func (au *ArtUpdate) ClearPersonalCollection() *ArtUpdate {
+	au.mutation.ClearPersonalCollection()
+	return au
+}
+
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to PersonalCollection entities by IDs.
+func (au *ArtUpdate) RemovePersonalCollectionIDs(ids ...int) *ArtUpdate {
+	au.mutation.RemovePersonalCollectionIDs(ids...)
+	return au
+}
+
+// RemovePersonalCollection removes "personal_collection" edges to PersonalCollection entities.
+func (au *ArtUpdate) RemovePersonalCollection(p ...*PersonalCollection) *ArtUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return au.RemovePersonalCollectionIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1264,6 +1301,51 @@ func (au *ArtUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if au.mutation.PersonalCollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.PersonalCollectionTable,
+			Columns: art.PersonalCollectionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.RemovedPersonalCollectionIDs(); len(nodes) > 0 && !au.mutation.PersonalCollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.PersonalCollectionTable,
+			Columns: art.PersonalCollectionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := au.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.PersonalCollectionTable,
+			Columns: art.PersonalCollectionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1895,6 +1977,21 @@ func (auo *ArtUpdateOne) SetRegion(r *Region) *ArtUpdateOne {
 	return auo.SetRegionID(r.ID)
 }
 
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (auo *ArtUpdateOne) AddPersonalCollectionIDs(ids ...int) *ArtUpdateOne {
+	auo.mutation.AddPersonalCollectionIDs(ids...)
+	return auo
+}
+
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (auo *ArtUpdateOne) AddPersonalCollection(p ...*PersonalCollection) *ArtUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.AddPersonalCollectionIDs(ids...)
+}
+
 // Mutation returns the ArtMutation object of the builder.
 func (auo *ArtUpdateOne) Mutation() *ArtMutation {
 	return auo.mutation
@@ -1997,6 +2094,27 @@ func (auo *ArtUpdateOne) ClearDistrict() *ArtUpdateOne {
 func (auo *ArtUpdateOne) ClearRegion() *ArtUpdateOne {
 	auo.mutation.ClearRegion()
 	return auo
+}
+
+// ClearPersonalCollection clears all "personal_collection" edges to the PersonalCollection entity.
+func (auo *ArtUpdateOne) ClearPersonalCollection() *ArtUpdateOne {
+	auo.mutation.ClearPersonalCollection()
+	return auo
+}
+
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to PersonalCollection entities by IDs.
+func (auo *ArtUpdateOne) RemovePersonalCollectionIDs(ids ...int) *ArtUpdateOne {
+	auo.mutation.RemovePersonalCollectionIDs(ids...)
+	return auo
+}
+
+// RemovePersonalCollection removes "personal_collection" edges to PersonalCollection entities.
+func (auo *ArtUpdateOne) RemovePersonalCollection(p ...*PersonalCollection) *ArtUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return auo.RemovePersonalCollectionIDs(ids...)
 }
 
 // Where appends a list predicates to the ArtUpdate builder.
@@ -2547,6 +2665,51 @@ func (auo *ArtUpdateOne) sqlSave(ctx context.Context) (_node *Art, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if auo.mutation.PersonalCollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.PersonalCollectionTable,
+			Columns: art.PersonalCollectionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.RemovedPersonalCollectionIDs(); len(nodes) > 0 && !auo.mutation.PersonalCollectionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.PersonalCollectionTable,
+			Columns: art.PersonalCollectionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := auo.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   art.PersonalCollectionTable,
+			Columns: art.PersonalCollectionPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

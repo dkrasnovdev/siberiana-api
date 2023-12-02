@@ -150,20 +150,20 @@ type ArtifactEdges struct {
 	District *District `json:"district,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
-	// Personal holds the value of the personal edge.
-	Personal []*Personal `json:"personal,omitempty"`
+	// PersonalCollection holds the value of the personal_collection edge.
+	PersonalCollection []*PersonalCollection `json:"personal_collection,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
 	totalCount [20]map[string]int
 
-	namedAuthors      map[string][]*Person
-	namedMediums      map[string][]*Medium
-	namedTechniques   map[string][]*Technique
-	namedProjects     map[string][]*Project
-	namedPublications map[string][]*Publication
-	namedPersonal     map[string][]*Personal
+	namedAuthors            map[string][]*Person
+	namedMediums            map[string][]*Medium
+	namedTechniques         map[string][]*Technique
+	namedProjects           map[string][]*Project
+	namedPublications       map[string][]*Publication
+	namedPersonalCollection map[string][]*PersonalCollection
 }
 
 // AuthorsOrErr returns the Authors value or an error if the edge
@@ -393,13 +393,13 @@ func (e ArtifactEdges) RegionOrErr() (*Region, error) {
 	return nil, &NotLoadedError{edge: "region"}
 }
 
-// PersonalOrErr returns the Personal value or an error if the edge
+// PersonalCollectionOrErr returns the PersonalCollection value or an error if the edge
 // was not loaded in eager-loading.
-func (e ArtifactEdges) PersonalOrErr() ([]*Personal, error) {
+func (e ArtifactEdges) PersonalCollectionOrErr() ([]*PersonalCollection, error) {
 	if e.loadedTypes[19] {
-		return e.Personal, nil
+		return e.PersonalCollection, nil
 	}
-	return nil, &NotLoadedError{edge: "personal"}
+	return nil, &NotLoadedError{edge: "personal_collection"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -848,9 +848,9 @@ func (a *Artifact) QueryRegion() *RegionQuery {
 	return NewArtifactClient(a.config).QueryRegion(a)
 }
 
-// QueryPersonal queries the "personal" edge of the Artifact entity.
-func (a *Artifact) QueryPersonal() *PersonalQuery {
-	return NewArtifactClient(a.config).QueryPersonal(a)
+// QueryPersonalCollection queries the "personal_collection" edge of the Artifact entity.
+func (a *Artifact) QueryPersonalCollection() *PersonalCollectionQuery {
+	return NewArtifactClient(a.config).QueryPersonalCollection(a)
 }
 
 // Update returns a builder for updating this Artifact.
@@ -1086,27 +1086,27 @@ func (a *Artifact) appendNamedPublications(name string, edges ...*Publication) {
 	}
 }
 
-// NamedPersonal returns the Personal named value or an error if the edge was not
+// NamedPersonalCollection returns the PersonalCollection named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (a *Artifact) NamedPersonal(name string) ([]*Personal, error) {
-	if a.Edges.namedPersonal == nil {
+func (a *Artifact) NamedPersonalCollection(name string) ([]*PersonalCollection, error) {
+	if a.Edges.namedPersonalCollection == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := a.Edges.namedPersonal[name]
+	nodes, ok := a.Edges.namedPersonalCollection[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (a *Artifact) appendNamedPersonal(name string, edges ...*Personal) {
-	if a.Edges.namedPersonal == nil {
-		a.Edges.namedPersonal = make(map[string][]*Personal)
+func (a *Artifact) appendNamedPersonalCollection(name string, edges ...*PersonalCollection) {
+	if a.Edges.namedPersonalCollection == nil {
+		a.Edges.namedPersonalCollection = make(map[string][]*PersonalCollection)
 	}
 	if len(edges) == 0 {
-		a.Edges.namedPersonal[name] = []*Personal{}
+		a.Edges.namedPersonalCollection[name] = []*PersonalCollection{}
 	} else {
-		a.Edges.namedPersonal[name] = append(a.Edges.namedPersonal[name], edges...)
+		a.Edges.namedPersonalCollection[name] = append(a.Edges.namedPersonalCollection[name], edges...)
 	}
 }
 

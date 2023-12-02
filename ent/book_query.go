@@ -22,7 +22,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -32,29 +32,29 @@ import (
 // BookQuery is the builder for querying Book entities.
 type BookQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []book.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.Book
-	withAuthors         *PersonQuery
-	withBookGenres      *BookGenreQuery
-	withCollection      *CollectionQuery
-	withPeriodical      *PeriodicalQuery
-	withPublisher       *PublisherQuery
-	withLicense         *LicenseQuery
-	withLocation        *LocationQuery
-	withLibrary         *OrganizationQuery
-	withCountry         *CountryQuery
-	withSettlement      *SettlementQuery
-	withDistrict        *DistrictQuery
-	withRegion          *RegionQuery
-	withPersonal        *PersonalQuery
-	withFKs             bool
-	modifiers           []func(*sql.Selector)
-	loadTotal           []func(context.Context, []*Book) error
-	withNamedAuthors    map[string]*PersonQuery
-	withNamedBookGenres map[string]*BookGenreQuery
-	withNamedPersonal   map[string]*PersonalQuery
+	ctx                         *QueryContext
+	order                       []book.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Book
+	withAuthors                 *PersonQuery
+	withBookGenres              *BookGenreQuery
+	withCollection              *CollectionQuery
+	withPeriodical              *PeriodicalQuery
+	withPublisher               *PublisherQuery
+	withLicense                 *LicenseQuery
+	withLocation                *LocationQuery
+	withLibrary                 *OrganizationQuery
+	withCountry                 *CountryQuery
+	withSettlement              *SettlementQuery
+	withDistrict                *DistrictQuery
+	withRegion                  *RegionQuery
+	withPersonalCollection      *PersonalCollectionQuery
+	withFKs                     bool
+	modifiers                   []func(*sql.Selector)
+	loadTotal                   []func(context.Context, []*Book) error
+	withNamedAuthors            map[string]*PersonQuery
+	withNamedBookGenres         map[string]*BookGenreQuery
+	withNamedPersonalCollection map[string]*PersonalCollectionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -355,9 +355,9 @@ func (bq *BookQuery) QueryRegion() *RegionQuery {
 	return query
 }
 
-// QueryPersonal chains the current query on the "personal" edge.
-func (bq *BookQuery) QueryPersonal() *PersonalQuery {
-	query := (&PersonalClient{config: bq.config}).Query()
+// QueryPersonalCollection chains the current query on the "personal_collection" edge.
+func (bq *BookQuery) QueryPersonalCollection() *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: bq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := bq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -368,8 +368,8 @@ func (bq *BookQuery) QueryPersonal() *PersonalQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(book.Table, book.FieldID, selector),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, book.PersonalTable, book.PersonalPrimaryKey...),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, book.PersonalCollectionTable, book.PersonalCollectionPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
 		return fromU, nil
@@ -564,24 +564,24 @@ func (bq *BookQuery) Clone() *BookQuery {
 		return nil
 	}
 	return &BookQuery{
-		config:         bq.config,
-		ctx:            bq.ctx.Clone(),
-		order:          append([]book.OrderOption{}, bq.order...),
-		inters:         append([]Interceptor{}, bq.inters...),
-		predicates:     append([]predicate.Book{}, bq.predicates...),
-		withAuthors:    bq.withAuthors.Clone(),
-		withBookGenres: bq.withBookGenres.Clone(),
-		withCollection: bq.withCollection.Clone(),
-		withPeriodical: bq.withPeriodical.Clone(),
-		withPublisher:  bq.withPublisher.Clone(),
-		withLicense:    bq.withLicense.Clone(),
-		withLocation:   bq.withLocation.Clone(),
-		withLibrary:    bq.withLibrary.Clone(),
-		withCountry:    bq.withCountry.Clone(),
-		withSettlement: bq.withSettlement.Clone(),
-		withDistrict:   bq.withDistrict.Clone(),
-		withRegion:     bq.withRegion.Clone(),
-		withPersonal:   bq.withPersonal.Clone(),
+		config:                 bq.config,
+		ctx:                    bq.ctx.Clone(),
+		order:                  append([]book.OrderOption{}, bq.order...),
+		inters:                 append([]Interceptor{}, bq.inters...),
+		predicates:             append([]predicate.Book{}, bq.predicates...),
+		withAuthors:            bq.withAuthors.Clone(),
+		withBookGenres:         bq.withBookGenres.Clone(),
+		withCollection:         bq.withCollection.Clone(),
+		withPeriodical:         bq.withPeriodical.Clone(),
+		withPublisher:          bq.withPublisher.Clone(),
+		withLicense:            bq.withLicense.Clone(),
+		withLocation:           bq.withLocation.Clone(),
+		withLibrary:            bq.withLibrary.Clone(),
+		withCountry:            bq.withCountry.Clone(),
+		withSettlement:         bq.withSettlement.Clone(),
+		withDistrict:           bq.withDistrict.Clone(),
+		withRegion:             bq.withRegion.Clone(),
+		withPersonalCollection: bq.withPersonalCollection.Clone(),
 		// clone intermediate query.
 		sql:  bq.sql.Clone(),
 		path: bq.path,
@@ -720,14 +720,14 @@ func (bq *BookQuery) WithRegion(opts ...func(*RegionQuery)) *BookQuery {
 	return bq
 }
 
-// WithPersonal tells the query-builder to eager-load the nodes that are connected to
-// the "personal" edge. The optional arguments are used to configure the query builder of the edge.
-func (bq *BookQuery) WithPersonal(opts ...func(*PersonalQuery)) *BookQuery {
-	query := (&PersonalClient{config: bq.config}).Query()
+// WithPersonalCollection tells the query-builder to eager-load the nodes that are connected to
+// the "personal_collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithPersonalCollection(opts ...func(*PersonalCollectionQuery)) *BookQuery {
+	query := (&PersonalCollectionClient{config: bq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	bq.withPersonal = query
+	bq.withPersonalCollection = query
 	return bq
 }
 
@@ -829,7 +829,7 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 			bq.withSettlement != nil,
 			bq.withDistrict != nil,
 			bq.withRegion != nil,
-			bq.withPersonal != nil,
+			bq.withPersonalCollection != nil,
 		}
 	)
 	if bq.withCollection != nil || bq.withPeriodical != nil || bq.withPublisher != nil || bq.withLicense != nil || bq.withLocation != nil || bq.withLibrary != nil || bq.withCountry != nil || bq.withSettlement != nil || bq.withDistrict != nil || bq.withRegion != nil {
@@ -933,10 +933,12 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 			return nil, err
 		}
 	}
-	if query := bq.withPersonal; query != nil {
-		if err := bq.loadPersonal(ctx, query, nodes,
-			func(n *Book) { n.Edges.Personal = []*Personal{} },
-			func(n *Book, e *Personal) { n.Edges.Personal = append(n.Edges.Personal, e) }); err != nil {
+	if query := bq.withPersonalCollection; query != nil {
+		if err := bq.loadPersonalCollection(ctx, query, nodes,
+			func(n *Book) { n.Edges.PersonalCollection = []*PersonalCollection{} },
+			func(n *Book, e *PersonalCollection) {
+				n.Edges.PersonalCollection = append(n.Edges.PersonalCollection, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -954,10 +956,10 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 			return nil, err
 		}
 	}
-	for name, query := range bq.withNamedPersonal {
-		if err := bq.loadPersonal(ctx, query, nodes,
-			func(n *Book) { n.appendNamedPersonal(name) },
-			func(n *Book, e *Personal) { n.appendNamedPersonal(name, e) }); err != nil {
+	for name, query := range bq.withNamedPersonalCollection {
+		if err := bq.loadPersonalCollection(ctx, query, nodes,
+			func(n *Book) { n.appendNamedPersonalCollection(name) },
+			func(n *Book, e *PersonalCollection) { n.appendNamedPersonalCollection(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1411,7 +1413,7 @@ func (bq *BookQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes [
 	}
 	return nil
 }
-func (bq *BookQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nodes []*Book, init func(*Book), assign func(*Book, *Personal)) error {
+func (bq *BookQuery) loadPersonalCollection(ctx context.Context, query *PersonalCollectionQuery, nodes []*Book, init func(*Book), assign func(*Book, *PersonalCollection)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*Book)
 	nids := make(map[int]map[*Book]struct{})
@@ -1423,11 +1425,11 @@ func (bq *BookQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nod
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(book.PersonalTable)
-		s.Join(joinT).On(s.C(personal.FieldID), joinT.C(book.PersonalPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(book.PersonalPrimaryKey[1]), edgeIDs...))
+		joinT := sql.Table(book.PersonalCollectionTable)
+		s.Join(joinT).On(s.C(personalcollection.FieldID), joinT.C(book.PersonalCollectionPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(book.PersonalCollectionPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(book.PersonalPrimaryKey[1]))
+		s.Select(joinT.C(book.PersonalCollectionPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -1457,14 +1459,14 @@ func (bq *BookQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nod
 			}
 		})
 	})
-	neighbors, err := withInterceptors[[]*Personal](ctx, query, qr, query.inters)
+	neighbors, err := withInterceptors[[]*PersonalCollection](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "personal" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "personal_collection" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1585,17 +1587,17 @@ func (bq *BookQuery) WithNamedBookGenres(name string, opts ...func(*BookGenreQue
 	return bq
 }
 
-// WithNamedPersonal tells the query-builder to eager-load the nodes that are connected to the "personal"
+// WithNamedPersonalCollection tells the query-builder to eager-load the nodes that are connected to the "personal_collection"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (bq *BookQuery) WithNamedPersonal(name string, opts ...func(*PersonalQuery)) *BookQuery {
-	query := (&PersonalClient{config: bq.config}).Query()
+func (bq *BookQuery) WithNamedPersonalCollection(name string, opts ...func(*PersonalCollectionQuery)) *BookQuery {
+	query := (&PersonalCollectionClient{config: bq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if bq.withNamedPersonal == nil {
-		bq.withNamedPersonal = make(map[string]*PersonalQuery)
+	if bq.withNamedPersonalCollection == nil {
+		bq.withNamedPersonalCollection = make(map[string]*PersonalCollectionQuery)
 	}
-	bq.withNamedPersonal[name] = query
+	bq.withNamedPersonalCollection[name] = query
 	return bq
 }
 

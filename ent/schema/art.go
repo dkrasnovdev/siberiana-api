@@ -72,5 +72,6 @@ func (Art) Edges() []ent.Edge {
 		edge.From("settlement", Settlement.Type).Ref("art").Unique(),
 		edge.From("district", District.Type).Ref("art").Unique(),
 		edge.From("region", Region.Type).Ref("art").Unique(),
+		edge.From("personal_collection", PersonalCollection.Type).Ref("art"),
 	}
 }

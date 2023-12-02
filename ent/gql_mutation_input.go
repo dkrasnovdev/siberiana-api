@@ -20,37 +20,38 @@ import (
 
 // CreateArtInput represents a mutation input for creating arts.
 type CreateArtInput struct {
-	CreatedAt            *time.Time
-	CreatedBy            *string
-	UpdatedAt            *time.Time
-	UpdatedBy            *string
-	Dating               *string
-	DatingStart          *int
-	DatingEnd            *int
-	DisplayName          *string
-	Abbreviation         *string
-	Description          *string
-	ExternalLink         *string
-	Status               *art.Status
-	PrimaryImageURL      *string
-	AdditionalImagesUrls []string
-	Height               *float64
-	Width                *float64
-	Length               *float64
-	Depth                *float64
-	Diameter             *float64
-	Weight               *string
-	Dimensions           *string
-	Number               *string
-	AuthorID             *int
-	ArtGenreIDs          []int
-	ArtStyleIDs          []int
-	TechniqueIDs         []int
-	CollectionID         int
-	CountryID            *int
-	SettlementID         *int
-	DistrictID           *int
-	RegionID             *int
+	CreatedAt             *time.Time
+	CreatedBy             *string
+	UpdatedAt             *time.Time
+	UpdatedBy             *string
+	Dating                *string
+	DatingStart           *int
+	DatingEnd             *int
+	DisplayName           *string
+	Abbreviation          *string
+	Description           *string
+	ExternalLink          *string
+	Status                *art.Status
+	PrimaryImageURL       *string
+	AdditionalImagesUrls  []string
+	Height                *float64
+	Width                 *float64
+	Length                *float64
+	Depth                 *float64
+	Diameter              *float64
+	Weight                *string
+	Dimensions            *string
+	Number                *string
+	AuthorID              *int
+	ArtGenreIDs           []int
+	ArtStyleIDs           []int
+	TechniqueIDs          []int
+	CollectionID          int
+	CountryID             *int
+	SettlementID          *int
+	DistrictID            *int
+	RegionID              *int
+	PersonalCollectionIDs []int
 }
 
 // Mutate applies the CreateArtInput on the ArtMutation builder.
@@ -146,6 +147,9 @@ func (i *CreateArtInput) Mutate(m *ArtMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
+	if v := i.PersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateArtInput on the ArtCreate builder.
@@ -156,68 +160,71 @@ func (c *ArtCreate) SetInput(i CreateArtInput) *ArtCreate {
 
 // UpdateArtInput represents a mutation input for updating arts.
 type UpdateArtInput struct {
-	ClearCreatedBy             bool
-	CreatedBy                  *string
-	UpdatedAt                  *time.Time
-	ClearUpdatedBy             bool
-	UpdatedBy                  *string
-	ClearDating                bool
-	Dating                     *string
-	ClearDatingStart           bool
-	DatingStart                *int
-	ClearDatingEnd             bool
-	DatingEnd                  *int
-	ClearDisplayName           bool
-	DisplayName                *string
-	ClearAbbreviation          bool
-	Abbreviation               *string
-	ClearDescription           bool
-	Description                *string
-	ClearExternalLink          bool
-	ExternalLink               *string
-	ClearStatus                bool
-	Status                     *art.Status
-	ClearPrimaryImageURL       bool
-	PrimaryImageURL            *string
-	ClearAdditionalImagesUrls  bool
-	AdditionalImagesUrls       []string
-	AppendAdditionalImagesUrls []string
-	ClearHeight                bool
-	Height                     *float64
-	ClearWidth                 bool
-	Width                      *float64
-	ClearLength                bool
-	Length                     *float64
-	ClearDepth                 bool
-	Depth                      *float64
-	ClearDiameter              bool
-	Diameter                   *float64
-	ClearWeight                bool
-	Weight                     *string
-	ClearDimensions            bool
-	Dimensions                 *string
-	ClearNumber                bool
-	Number                     *string
-	ClearAuthor                bool
-	AuthorID                   *int
-	ClearArtGenre              bool
-	AddArtGenreIDs             []int
-	RemoveArtGenreIDs          []int
-	ClearArtStyle              bool
-	AddArtStyleIDs             []int
-	RemoveArtStyleIDs          []int
-	ClearTechniques            bool
-	AddTechniqueIDs            []int
-	RemoveTechniqueIDs         []int
-	CollectionID               *int
-	ClearCountry               bool
-	CountryID                  *int
-	ClearSettlement            bool
-	SettlementID               *int
-	ClearDistrict              bool
-	DistrictID                 *int
-	ClearRegion                bool
-	RegionID                   *int
+	ClearCreatedBy              bool
+	CreatedBy                   *string
+	UpdatedAt                   *time.Time
+	ClearUpdatedBy              bool
+	UpdatedBy                   *string
+	ClearDating                 bool
+	Dating                      *string
+	ClearDatingStart            bool
+	DatingStart                 *int
+	ClearDatingEnd              bool
+	DatingEnd                   *int
+	ClearDisplayName            bool
+	DisplayName                 *string
+	ClearAbbreviation           bool
+	Abbreviation                *string
+	ClearDescription            bool
+	Description                 *string
+	ClearExternalLink           bool
+	ExternalLink                *string
+	ClearStatus                 bool
+	Status                      *art.Status
+	ClearPrimaryImageURL        bool
+	PrimaryImageURL             *string
+	ClearAdditionalImagesUrls   bool
+	AdditionalImagesUrls        []string
+	AppendAdditionalImagesUrls  []string
+	ClearHeight                 bool
+	Height                      *float64
+	ClearWidth                  bool
+	Width                       *float64
+	ClearLength                 bool
+	Length                      *float64
+	ClearDepth                  bool
+	Depth                       *float64
+	ClearDiameter               bool
+	Diameter                    *float64
+	ClearWeight                 bool
+	Weight                      *string
+	ClearDimensions             bool
+	Dimensions                  *string
+	ClearNumber                 bool
+	Number                      *string
+	ClearAuthor                 bool
+	AuthorID                    *int
+	ClearArtGenre               bool
+	AddArtGenreIDs              []int
+	RemoveArtGenreIDs           []int
+	ClearArtStyle               bool
+	AddArtStyleIDs              []int
+	RemoveArtStyleIDs           []int
+	ClearTechniques             bool
+	AddTechniqueIDs             []int
+	RemoveTechniqueIDs          []int
+	CollectionID                *int
+	ClearCountry                bool
+	CountryID                   *int
+	ClearSettlement             bool
+	SettlementID                *int
+	ClearDistrict               bool
+	DistrictID                  *int
+	ClearRegion                 bool
+	RegionID                    *int
+	ClearPersonalCollection     bool
+	AddPersonalCollectionIDs    []int
+	RemovePersonalCollectionIDs []int
 }
 
 // Mutate applies the UpdateArtInput on the ArtMutation builder.
@@ -407,6 +414,15 @@ func (i *UpdateArtInput) Mutate(m *ArtMutation) {
 	}
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
+	}
+	if i.ClearPersonalCollection {
+		m.ClearPersonalCollection()
+	}
+	if v := i.AddPersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
+	}
+	if v := i.RemovePersonalCollectionIDs; len(v) > 0 {
+		m.RemovePersonalCollectionIDs(v...)
 	}
 }
 
@@ -740,7 +756,7 @@ type CreateArtifactInput struct {
 	SettlementID          *int
 	DistrictID            *int
 	RegionID              *int
-	PersonalIDs           []int
+	PersonalCollectionIDs []int
 }
 
 // Mutate applies the CreateArtifactInput on the ArtifactMutation builder.
@@ -887,8 +903,8 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
-	if v := i.PersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.PersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
 }
 
@@ -900,107 +916,107 @@ func (c *ArtifactCreate) SetInput(i CreateArtifactInput) *ArtifactCreate {
 
 // UpdateArtifactInput represents a mutation input for updating artifacts.
 type UpdateArtifactInput struct {
-	ClearCreatedBy             bool
-	CreatedBy                  *string
-	UpdatedAt                  *time.Time
-	ClearUpdatedBy             bool
-	UpdatedBy                  *string
-	ClearDating                bool
-	Dating                     *string
-	ClearDatingStart           bool
-	DatingStart                *int
-	ClearDatingEnd             bool
-	DatingEnd                  *int
-	ClearDisplayName           bool
-	DisplayName                *string
-	ClearAbbreviation          bool
-	Abbreviation               *string
-	ClearDescription           bool
-	Description                *string
-	ClearExternalLink          bool
-	ExternalLink               *string
-	ClearStatus                bool
-	Status                     *artifact.Status
-	ClearPrimaryImageURL       bool
-	PrimaryImageURL            *string
-	ClearAdditionalImagesUrls  bool
-	AdditionalImagesUrls       []string
-	AppendAdditionalImagesUrls []string
-	ClearHeight                bool
-	Height                     *float64
-	ClearWidth                 bool
-	Width                      *float64
-	ClearLength                bool
-	Length                     *float64
-	ClearDepth                 bool
-	Depth                      *float64
-	ClearDiameter              bool
-	Diameter                   *float64
-	ClearWeight                bool
-	Weight                     *string
-	ClearDimensions            bool
-	Dimensions                 *string
-	ClearDeletedAt             bool
-	DeletedAt                  *time.Time
-	ClearDeletedBy             bool
-	DeletedBy                  *string
-	ClearChemicalComposition   bool
-	ChemicalComposition        *string
-	ClearKpNumber              bool
-	KpNumber                   *string
-	ClearGoskatalogNumber      bool
-	GoskatalogNumber           *string
-	ClearInventoryNumber       bool
-	InventoryNumber            *string
-	ClearTypology              bool
-	Typology                   *string
-	ClearAdmissionDate         bool
-	AdmissionDate              *time.Time
-	ClearAuthors               bool
-	AddAuthorIDs               []int
-	RemoveAuthorIDs            []int
-	ClearDonor                 bool
-	DonorID                    *int
-	ClearMediums               bool
-	AddMediumIDs               []int
-	RemoveMediumIDs            []int
-	ClearTechniques            bool
-	AddTechniqueIDs            []int
-	RemoveTechniqueIDs         []int
-	ClearProjects              bool
-	AddProjectIDs              []int
-	RemoveProjectIDs           []int
-	ClearPublications          bool
-	AddPublicationIDs          []int
-	RemovePublicationIDs       []int
-	ClearCulturalAffiliation   bool
-	CulturalAffiliationID      *int
-	ClearEthnos                bool
-	EthnosID                   *int
-	ClearOrganization          bool
-	OrganizationID             *int
-	ClearMonument              bool
-	MonumentID                 *int
-	ClearModel                 bool
-	ModelID                    *int
-	ClearSet                   bool
-	SetID                      *int
-	ClearLocation              bool
-	LocationID                 *int
-	CollectionID               *int
-	ClearLicense               bool
-	LicenseID                  *int
-	ClearCountry               bool
-	CountryID                  *int
-	ClearSettlement            bool
-	SettlementID               *int
-	ClearDistrict              bool
-	DistrictID                 *int
-	ClearRegion                bool
-	RegionID                   *int
-	ClearPersonal              bool
-	AddPersonalIDs             []int
-	RemovePersonalIDs          []int
+	ClearCreatedBy              bool
+	CreatedBy                   *string
+	UpdatedAt                   *time.Time
+	ClearUpdatedBy              bool
+	UpdatedBy                   *string
+	ClearDating                 bool
+	Dating                      *string
+	ClearDatingStart            bool
+	DatingStart                 *int
+	ClearDatingEnd              bool
+	DatingEnd                   *int
+	ClearDisplayName            bool
+	DisplayName                 *string
+	ClearAbbreviation           bool
+	Abbreviation                *string
+	ClearDescription            bool
+	Description                 *string
+	ClearExternalLink           bool
+	ExternalLink                *string
+	ClearStatus                 bool
+	Status                      *artifact.Status
+	ClearPrimaryImageURL        bool
+	PrimaryImageURL             *string
+	ClearAdditionalImagesUrls   bool
+	AdditionalImagesUrls        []string
+	AppendAdditionalImagesUrls  []string
+	ClearHeight                 bool
+	Height                      *float64
+	ClearWidth                  bool
+	Width                       *float64
+	ClearLength                 bool
+	Length                      *float64
+	ClearDepth                  bool
+	Depth                       *float64
+	ClearDiameter               bool
+	Diameter                    *float64
+	ClearWeight                 bool
+	Weight                      *string
+	ClearDimensions             bool
+	Dimensions                  *string
+	ClearDeletedAt              bool
+	DeletedAt                   *time.Time
+	ClearDeletedBy              bool
+	DeletedBy                   *string
+	ClearChemicalComposition    bool
+	ChemicalComposition         *string
+	ClearKpNumber               bool
+	KpNumber                    *string
+	ClearGoskatalogNumber       bool
+	GoskatalogNumber            *string
+	ClearInventoryNumber        bool
+	InventoryNumber             *string
+	ClearTypology               bool
+	Typology                    *string
+	ClearAdmissionDate          bool
+	AdmissionDate               *time.Time
+	ClearAuthors                bool
+	AddAuthorIDs                []int
+	RemoveAuthorIDs             []int
+	ClearDonor                  bool
+	DonorID                     *int
+	ClearMediums                bool
+	AddMediumIDs                []int
+	RemoveMediumIDs             []int
+	ClearTechniques             bool
+	AddTechniqueIDs             []int
+	RemoveTechniqueIDs          []int
+	ClearProjects               bool
+	AddProjectIDs               []int
+	RemoveProjectIDs            []int
+	ClearPublications           bool
+	AddPublicationIDs           []int
+	RemovePublicationIDs        []int
+	ClearCulturalAffiliation    bool
+	CulturalAffiliationID       *int
+	ClearEthnos                 bool
+	EthnosID                    *int
+	ClearOrganization           bool
+	OrganizationID              *int
+	ClearMonument               bool
+	MonumentID                  *int
+	ClearModel                  bool
+	ModelID                     *int
+	ClearSet                    bool
+	SetID                       *int
+	ClearLocation               bool
+	LocationID                  *int
+	CollectionID                *int
+	ClearLicense                bool
+	LicenseID                   *int
+	ClearCountry                bool
+	CountryID                   *int
+	ClearSettlement             bool
+	SettlementID                *int
+	ClearDistrict               bool
+	DistrictID                  *int
+	ClearRegion                 bool
+	RegionID                    *int
+	ClearPersonalCollection     bool
+	AddPersonalCollectionIDs    []int
+	RemovePersonalCollectionIDs []int
 }
 
 // Mutate applies the UpdateArtifactInput on the ArtifactMutation builder.
@@ -1299,14 +1315,14 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
-	if i.ClearPersonal {
-		m.ClearPersonal()
+	if i.ClearPersonalCollection {
+		m.ClearPersonalCollection()
 	}
-	if v := i.AddPersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.AddPersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
-	if v := i.RemovePersonalIDs; len(v) > 0 {
-		m.RemovePersonalIDs(v...)
+	if v := i.RemovePersonalCollectionIDs; len(v) > 0 {
+		m.RemovePersonalCollectionIDs(v...)
 	}
 }
 
@@ -1324,32 +1340,32 @@ func (c *ArtifactUpdateOne) SetInput(i UpdateArtifactInput) *ArtifactUpdateOne {
 
 // CreateBookInput represents a mutation input for creating books.
 type CreateBookInput struct {
-	CreatedAt            *time.Time
-	CreatedBy            *string
-	UpdatedAt            *time.Time
-	UpdatedBy            *string
-	DisplayName          *string
-	Abbreviation         *string
-	Description          *string
-	ExternalLink         *string
-	Status               *book.Status
-	PrimaryImageURL      *string
-	AdditionalImagesUrls []string
-	Files                []string
-	Year                 *int
-	AuthorIDs            []int
-	BookGenreIDs         []int
-	CollectionID         int
-	PeriodicalID         *int
-	PublisherID          *int
-	LicenseID            *int
-	LocationID           *int
-	LibraryID            *int
-	CountryID            *int
-	SettlementID         *int
-	DistrictID           *int
-	RegionID             *int
-	PersonalIDs          []int
+	CreatedAt             *time.Time
+	CreatedBy             *string
+	UpdatedAt             *time.Time
+	UpdatedBy             *string
+	DisplayName           *string
+	Abbreviation          *string
+	Description           *string
+	ExternalLink          *string
+	Status                *book.Status
+	PrimaryImageURL       *string
+	AdditionalImagesUrls  []string
+	Files                 []string
+	Year                  *int
+	AuthorIDs             []int
+	BookGenreIDs          []int
+	CollectionID          int
+	PeriodicalID          *int
+	PublisherID           *int
+	LicenseID             *int
+	LocationID            *int
+	LibraryID             *int
+	CountryID             *int
+	SettlementID          *int
+	DistrictID            *int
+	RegionID              *int
+	PersonalCollectionIDs []int
 }
 
 // Mutate applies the CreateBookInput on the BookMutation builder.
@@ -1427,8 +1443,8 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
-	if v := i.PersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.PersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
 }
 
@@ -1440,59 +1456,59 @@ func (c *BookCreate) SetInput(i CreateBookInput) *BookCreate {
 
 // UpdateBookInput represents a mutation input for updating books.
 type UpdateBookInput struct {
-	ClearCreatedBy             bool
-	CreatedBy                  *string
-	UpdatedAt                  *time.Time
-	ClearUpdatedBy             bool
-	UpdatedBy                  *string
-	ClearDisplayName           bool
-	DisplayName                *string
-	ClearAbbreviation          bool
-	Abbreviation               *string
-	ClearDescription           bool
-	Description                *string
-	ClearExternalLink          bool
-	ExternalLink               *string
-	ClearStatus                bool
-	Status                     *book.Status
-	ClearPrimaryImageURL       bool
-	PrimaryImageURL            *string
-	ClearAdditionalImagesUrls  bool
-	AdditionalImagesUrls       []string
-	AppendAdditionalImagesUrls []string
-	ClearFiles                 bool
-	Files                      []string
-	AppendFiles                []string
-	ClearYear                  bool
-	Year                       *int
-	ClearAuthors               bool
-	AddAuthorIDs               []int
-	RemoveAuthorIDs            []int
-	ClearBookGenres            bool
-	AddBookGenreIDs            []int
-	RemoveBookGenreIDs         []int
-	CollectionID               *int
-	ClearPeriodical            bool
-	PeriodicalID               *int
-	ClearPublisher             bool
-	PublisherID                *int
-	ClearLicense               bool
-	LicenseID                  *int
-	ClearLocation              bool
-	LocationID                 *int
-	ClearLibrary               bool
-	LibraryID                  *int
-	ClearCountry               bool
-	CountryID                  *int
-	ClearSettlement            bool
-	SettlementID               *int
-	ClearDistrict              bool
-	DistrictID                 *int
-	ClearRegion                bool
-	RegionID                   *int
-	ClearPersonal              bool
-	AddPersonalIDs             []int
-	RemovePersonalIDs          []int
+	ClearCreatedBy              bool
+	CreatedBy                   *string
+	UpdatedAt                   *time.Time
+	ClearUpdatedBy              bool
+	UpdatedBy                   *string
+	ClearDisplayName            bool
+	DisplayName                 *string
+	ClearAbbreviation           bool
+	Abbreviation                *string
+	ClearDescription            bool
+	Description                 *string
+	ClearExternalLink           bool
+	ExternalLink                *string
+	ClearStatus                 bool
+	Status                      *book.Status
+	ClearPrimaryImageURL        bool
+	PrimaryImageURL             *string
+	ClearAdditionalImagesUrls   bool
+	AdditionalImagesUrls        []string
+	AppendAdditionalImagesUrls  []string
+	ClearFiles                  bool
+	Files                       []string
+	AppendFiles                 []string
+	ClearYear                   bool
+	Year                        *int
+	ClearAuthors                bool
+	AddAuthorIDs                []int
+	RemoveAuthorIDs             []int
+	ClearBookGenres             bool
+	AddBookGenreIDs             []int
+	RemoveBookGenreIDs          []int
+	CollectionID                *int
+	ClearPeriodical             bool
+	PeriodicalID                *int
+	ClearPublisher              bool
+	PublisherID                 *int
+	ClearLicense                bool
+	LicenseID                   *int
+	ClearLocation               bool
+	LocationID                  *int
+	ClearLibrary                bool
+	LibraryID                   *int
+	ClearCountry                bool
+	CountryID                   *int
+	ClearSettlement             bool
+	SettlementID                *int
+	ClearDistrict               bool
+	DistrictID                  *int
+	ClearRegion                 bool
+	RegionID                    *int
+	ClearPersonalCollection     bool
+	AddPersonalCollectionIDs    []int
+	RemovePersonalCollectionIDs []int
 }
 
 // Mutate applies the UpdateBookInput on the BookMutation builder.
@@ -1647,14 +1663,14 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
-	if i.ClearPersonal {
-		m.ClearPersonal()
+	if i.ClearPersonalCollection {
+		m.ClearPersonalCollection()
 	}
-	if v := i.AddPersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.AddPersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
-	if v := i.RemovePersonalIDs; len(v) > 0 {
-		m.RemovePersonalIDs(v...)
+	if v := i.RemovePersonalCollectionIDs; len(v) > 0 {
+		m.RemovePersonalCollectionIDs(v...)
 	}
 }
 
@@ -5564,22 +5580,23 @@ func (c *PersonUpdateOne) SetInput(i UpdatePersonInput) *PersonUpdateOne {
 	return c
 }
 
-// CreatePersonalInput represents a mutation input for creating personals.
-type CreatePersonalInput struct {
+// CreatePersonalCollectionInput represents a mutation input for creating personalcollections.
+type CreatePersonalCollectionInput struct {
 	CreatedAt               *time.Time
 	CreatedBy               *string
 	UpdatedAt               *time.Time
 	UpdatedBy               *string
 	DisplayName             string
 	IsPublic                *bool
+	ArtIDs                  []int
 	ArtifactIDs             []int
 	PetroglyphIDs           []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
 }
 
-// Mutate applies the CreatePersonalInput on the PersonalMutation builder.
-func (i *CreatePersonalInput) Mutate(m *PersonalMutation) {
+// Mutate applies the CreatePersonalCollectionInput on the PersonalCollectionMutation builder.
+func (i *CreatePersonalCollectionInput) Mutate(m *PersonalCollectionMutation) {
 	if v := i.CreatedAt; v != nil {
 		m.SetCreatedAt(*v)
 	}
@@ -5596,6 +5613,9 @@ func (i *CreatePersonalInput) Mutate(m *PersonalMutation) {
 	if v := i.IsPublic; v != nil {
 		m.SetIsPublic(*v)
 	}
+	if v := i.ArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
@@ -5610,14 +5630,14 @@ func (i *CreatePersonalInput) Mutate(m *PersonalMutation) {
 	}
 }
 
-// SetInput applies the change-set in the CreatePersonalInput on the PersonalCreate builder.
-func (c *PersonalCreate) SetInput(i CreatePersonalInput) *PersonalCreate {
+// SetInput applies the change-set in the CreatePersonalCollectionInput on the PersonalCollectionCreate builder.
+func (c *PersonalCollectionCreate) SetInput(i CreatePersonalCollectionInput) *PersonalCollectionCreate {
 	i.Mutate(c.Mutation())
 	return c
 }
 
-// UpdatePersonalInput represents a mutation input for updating personals.
-type UpdatePersonalInput struct {
+// UpdatePersonalCollectionInput represents a mutation input for updating personalcollections.
+type UpdatePersonalCollectionInput struct {
 	ClearCreatedBy                bool
 	CreatedBy                     *string
 	UpdatedAt                     *time.Time
@@ -5625,6 +5645,9 @@ type UpdatePersonalInput struct {
 	UpdatedBy                     *string
 	DisplayName                   *string
 	IsPublic                      *bool
+	ClearArt                      bool
+	AddArtIDs                     []int
+	RemoveArtIDs                  []int
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
@@ -5639,8 +5662,8 @@ type UpdatePersonalInput struct {
 	RemoveProtectedAreaPictureIDs []int
 }
 
-// Mutate applies the UpdatePersonalInput on the PersonalMutation builder.
-func (i *UpdatePersonalInput) Mutate(m *PersonalMutation) {
+// Mutate applies the UpdatePersonalCollectionInput on the PersonalCollectionMutation builder.
+func (i *UpdatePersonalCollectionInput) Mutate(m *PersonalCollectionMutation) {
 	if i.ClearCreatedBy {
 		m.ClearCreatedBy()
 	}
@@ -5661,6 +5684,15 @@ func (i *UpdatePersonalInput) Mutate(m *PersonalMutation) {
 	}
 	if v := i.IsPublic; v != nil {
 		m.SetIsPublic(*v)
+	}
+	if i.ClearArt {
+		m.ClearArt()
+	}
+	if v := i.AddArtIDs; len(v) > 0 {
+		m.AddArtIDs(v...)
+	}
+	if v := i.RemoveArtIDs; len(v) > 0 {
+		m.RemoveArtIDs(v...)
 	}
 	if i.ClearArtifacts {
 		m.ClearArtifacts()
@@ -5700,14 +5732,14 @@ func (i *UpdatePersonalInput) Mutate(m *PersonalMutation) {
 	}
 }
 
-// SetInput applies the change-set in the UpdatePersonalInput on the PersonalUpdate builder.
-func (c *PersonalUpdate) SetInput(i UpdatePersonalInput) *PersonalUpdate {
+// SetInput applies the change-set in the UpdatePersonalCollectionInput on the PersonalCollectionUpdate builder.
+func (c *PersonalCollectionUpdate) SetInput(i UpdatePersonalCollectionInput) *PersonalCollectionUpdate {
 	i.Mutate(c.Mutation())
 	return c
 }
 
-// SetInput applies the change-set in the UpdatePersonalInput on the PersonalUpdateOne builder.
-func (c *PersonalUpdateOne) SetInput(i UpdatePersonalInput) *PersonalUpdateOne {
+// SetInput applies the change-set in the UpdatePersonalCollectionInput on the PersonalCollectionUpdateOne builder.
+func (c *PersonalCollectionUpdateOne) SetInput(i UpdatePersonalCollectionInput) *PersonalCollectionUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -5755,7 +5787,7 @@ type CreatePetroglyphInput struct {
 	AccountingDocumentationAddressID   *int
 	AccountingDocumentationAuthorID    *int
 	CollectionID                       int
-	PersonalIDs                        []int
+	PersonalCollectionIDs              []int
 }
 
 // Mutate applies the CreatePetroglyphInput on the PetroglyphMutation builder.
@@ -5881,8 +5913,8 @@ func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 		m.SetAccountingDocumentationAuthorID(*v)
 	}
 	m.SetCollectionID(i.CollectionID)
-	if v := i.PersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.PersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
 }
 
@@ -5975,9 +6007,9 @@ type UpdatePetroglyphInput struct {
 	ClearAccountingDocumentationAuthor      bool
 	AccountingDocumentationAuthorID         *int
 	CollectionID                            *int
-	ClearPersonal                           bool
-	AddPersonalIDs                          []int
-	RemovePersonalIDs                       []int
+	ClearPersonalCollection                 bool
+	AddPersonalCollectionIDs                []int
+	RemovePersonalCollectionIDs             []int
 }
 
 // Mutate applies the UpdatePetroglyphInput on the PetroglyphMutation builder.
@@ -6225,14 +6257,14 @@ func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
 	}
-	if i.ClearPersonal {
-		m.ClearPersonal()
+	if i.ClearPersonalCollection {
+		m.ClearPersonalCollection()
 	}
-	if v := i.AddPersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.AddPersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
-	if v := i.RemovePersonalIDs; len(v) > 0 {
-		m.RemovePersonalIDs(v...)
+	if v := i.RemovePersonalCollectionIDs; len(v) > 0 {
+		m.RemovePersonalCollectionIDs(v...)
 	}
 }
 
@@ -6764,29 +6796,29 @@ func (c *ProtectedAreaCategoryUpdateOne) SetInput(i UpdateProtectedAreaCategoryI
 
 // CreateProtectedAreaPictureInput represents a mutation input for creating protectedareapictures.
 type CreateProtectedAreaPictureInput struct {
-	CreatedAt            *time.Time
-	CreatedBy            *string
-	UpdatedAt            *time.Time
-	UpdatedBy            *string
-	DisplayName          *string
-	Abbreviation         *string
-	Description          *string
-	ExternalLink         *string
-	Status               *protectedareapicture.Status
-	PrimaryImageURL      *string
-	AdditionalImagesUrls []string
-	ShootingDate         *time.Time
-	Geometry             *types.Geometry
-	AuthorID             *int
-	CollectionID         int
-	ProtectedAreaID      *int
-	LocationID           *int
-	LicenseID            *int
-	CountryID            *int
-	SettlementID         *int
-	DistrictID           *int
-	RegionID             *int
-	PersonalIDs          []int
+	CreatedAt             *time.Time
+	CreatedBy             *string
+	UpdatedAt             *time.Time
+	UpdatedBy             *string
+	DisplayName           *string
+	Abbreviation          *string
+	Description           *string
+	ExternalLink          *string
+	Status                *protectedareapicture.Status
+	PrimaryImageURL       *string
+	AdditionalImagesUrls  []string
+	ShootingDate          *time.Time
+	Geometry              *types.Geometry
+	AuthorID              *int
+	CollectionID          int
+	ProtectedAreaID       *int
+	LocationID            *int
+	LicenseID             *int
+	CountryID             *int
+	SettlementID          *int
+	DistrictID            *int
+	RegionID              *int
+	PersonalCollectionIDs []int
 }
 
 // Mutate applies the CreateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
@@ -6855,8 +6887,8 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
-	if v := i.PersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.PersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
 }
 
@@ -6868,50 +6900,50 @@ func (c *ProtectedAreaPictureCreate) SetInput(i CreateProtectedAreaPictureInput)
 
 // UpdateProtectedAreaPictureInput represents a mutation input for updating protectedareapictures.
 type UpdateProtectedAreaPictureInput struct {
-	ClearCreatedBy             bool
-	CreatedBy                  *string
-	UpdatedAt                  *time.Time
-	ClearUpdatedBy             bool
-	UpdatedBy                  *string
-	ClearDisplayName           bool
-	DisplayName                *string
-	ClearAbbreviation          bool
-	Abbreviation               *string
-	ClearDescription           bool
-	Description                *string
-	ClearExternalLink          bool
-	ExternalLink               *string
-	ClearStatus                bool
-	Status                     *protectedareapicture.Status
-	ClearPrimaryImageURL       bool
-	PrimaryImageURL            *string
-	ClearAdditionalImagesUrls  bool
-	AdditionalImagesUrls       []string
-	AppendAdditionalImagesUrls []string
-	ClearShootingDate          bool
-	ShootingDate               *time.Time
-	ClearGeometry              bool
-	Geometry                   *types.Geometry
-	ClearAuthor                bool
-	AuthorID                   *int
-	CollectionID               *int
-	ClearProtectedArea         bool
-	ProtectedAreaID            *int
-	ClearLocation              bool
-	LocationID                 *int
-	ClearLicense               bool
-	LicenseID                  *int
-	ClearCountry               bool
-	CountryID                  *int
-	ClearSettlement            bool
-	SettlementID               *int
-	ClearDistrict              bool
-	DistrictID                 *int
-	ClearRegion                bool
-	RegionID                   *int
-	ClearPersonal              bool
-	AddPersonalIDs             []int
-	RemovePersonalIDs          []int
+	ClearCreatedBy              bool
+	CreatedBy                   *string
+	UpdatedAt                   *time.Time
+	ClearUpdatedBy              bool
+	UpdatedBy                   *string
+	ClearDisplayName            bool
+	DisplayName                 *string
+	ClearAbbreviation           bool
+	Abbreviation                *string
+	ClearDescription            bool
+	Description                 *string
+	ClearExternalLink           bool
+	ExternalLink                *string
+	ClearStatus                 bool
+	Status                      *protectedareapicture.Status
+	ClearPrimaryImageURL        bool
+	PrimaryImageURL             *string
+	ClearAdditionalImagesUrls   bool
+	AdditionalImagesUrls        []string
+	AppendAdditionalImagesUrls  []string
+	ClearShootingDate           bool
+	ShootingDate                *time.Time
+	ClearGeometry               bool
+	Geometry                    *types.Geometry
+	ClearAuthor                 bool
+	AuthorID                    *int
+	CollectionID                *int
+	ClearProtectedArea          bool
+	ProtectedAreaID             *int
+	ClearLocation               bool
+	LocationID                  *int
+	ClearLicense                bool
+	LicenseID                   *int
+	ClearCountry                bool
+	CountryID                   *int
+	ClearSettlement             bool
+	SettlementID                *int
+	ClearDistrict               bool
+	DistrictID                  *int
+	ClearRegion                 bool
+	RegionID                    *int
+	ClearPersonalCollection     bool
+	AddPersonalCollectionIDs    []int
+	RemovePersonalCollectionIDs []int
 }
 
 // Mutate applies the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
@@ -7039,14 +7071,14 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
-	if i.ClearPersonal {
-		m.ClearPersonal()
+	if i.ClearPersonalCollection {
+		m.ClearPersonalCollection()
 	}
-	if v := i.AddPersonalIDs; len(v) > 0 {
-		m.AddPersonalIDs(v...)
+	if v := i.AddPersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
 	}
-	if v := i.RemovePersonalIDs; len(v) > 0 {
-		m.RemovePersonalIDs(v...)
+	if v := i.RemovePersonalCollectionIDs; len(v) > 0 {
+		m.RemovePersonalCollectionIDs(v...)
 	}
 }
 

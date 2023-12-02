@@ -333,16 +333,16 @@ func (f PersonFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, erro
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonMutation", m)
 }
 
-// The PersonalFunc type is an adapter to allow the use of ordinary
-// function as Personal mutator.
-type PersonalFunc func(context.Context, *ent.PersonalMutation) (ent.Value, error)
+// The PersonalCollectionFunc type is an adapter to allow the use of ordinary
+// function as PersonalCollection mutator.
+type PersonalCollectionFunc func(context.Context, *ent.PersonalCollectionMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f PersonalFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.PersonalMutation); ok {
+func (f PersonalCollectionFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.PersonalCollectionMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonalMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PersonalCollectionMutation", m)
 }
 
 // The PetroglyphFunc type is an adapter to allow the use of ordinary

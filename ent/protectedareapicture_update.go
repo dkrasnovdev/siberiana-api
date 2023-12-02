@@ -18,7 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -427,19 +427,19 @@ func (papu *ProtectedAreaPictureUpdate) SetRegion(r *Region) *ProtectedAreaPictu
 	return papu.SetRegionID(r.ID)
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
-func (papu *ProtectedAreaPictureUpdate) AddPersonalIDs(ids ...int) *ProtectedAreaPictureUpdate {
-	papu.mutation.AddPersonalIDs(ids...)
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (papu *ProtectedAreaPictureUpdate) AddPersonalCollectionIDs(ids ...int) *ProtectedAreaPictureUpdate {
+	papu.mutation.AddPersonalCollectionIDs(ids...)
 	return papu
 }
 
-// AddPersonal adds the "personal" edges to the Personal entity.
-func (papu *ProtectedAreaPictureUpdate) AddPersonal(p ...*Personal) *ProtectedAreaPictureUpdate {
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (papu *ProtectedAreaPictureUpdate) AddPersonalCollection(p ...*PersonalCollection) *ProtectedAreaPictureUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return papu.AddPersonalIDs(ids...)
+	return papu.AddPersonalCollectionIDs(ids...)
 }
 
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
@@ -501,25 +501,25 @@ func (papu *ProtectedAreaPictureUpdate) ClearRegion() *ProtectedAreaPictureUpdat
 	return papu
 }
 
-// ClearPersonal clears all "personal" edges to the Personal entity.
-func (papu *ProtectedAreaPictureUpdate) ClearPersonal() *ProtectedAreaPictureUpdate {
-	papu.mutation.ClearPersonal()
+// ClearPersonalCollection clears all "personal_collection" edges to the PersonalCollection entity.
+func (papu *ProtectedAreaPictureUpdate) ClearPersonalCollection() *ProtectedAreaPictureUpdate {
+	papu.mutation.ClearPersonalCollection()
 	return papu
 }
 
-// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
-func (papu *ProtectedAreaPictureUpdate) RemovePersonalIDs(ids ...int) *ProtectedAreaPictureUpdate {
-	papu.mutation.RemovePersonalIDs(ids...)
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to PersonalCollection entities by IDs.
+func (papu *ProtectedAreaPictureUpdate) RemovePersonalCollectionIDs(ids ...int) *ProtectedAreaPictureUpdate {
+	papu.mutation.RemovePersonalCollectionIDs(ids...)
 	return papu
 }
 
-// RemovePersonal removes "personal" edges to Personal entities.
-func (papu *ProtectedAreaPictureUpdate) RemovePersonal(p ...*Personal) *ProtectedAreaPictureUpdate {
+// RemovePersonalCollection removes "personal_collection" edges to PersonalCollection entities.
+func (papu *ProtectedAreaPictureUpdate) RemovePersonalCollection(p ...*PersonalCollection) *ProtectedAreaPictureUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return papu.RemovePersonalIDs(ids...)
+	return papu.RemovePersonalCollectionIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -924,28 +924,28 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if papu.mutation.PersonalCleared() {
+	if papu.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   protectedareapicture.PersonalTable,
-			Columns: protectedareapicture.PersonalPrimaryKey,
+			Table:   protectedareapicture.PersonalCollectionTable,
+			Columns: protectedareapicture.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := papu.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !papu.mutation.PersonalCleared() {
+	if nodes := papu.mutation.RemovedPersonalCollectionIDs(); len(nodes) > 0 && !papu.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   protectedareapicture.PersonalTable,
-			Columns: protectedareapicture.PersonalPrimaryKey,
+			Table:   protectedareapicture.PersonalCollectionTable,
+			Columns: protectedareapicture.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -953,15 +953,15 @@ func (papu *ProtectedAreaPictureUpdate) sqlSave(ctx context.Context) (n int, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := papu.mutation.PersonalIDs(); len(nodes) > 0 {
+	if nodes := papu.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   protectedareapicture.PersonalTable,
-			Columns: protectedareapicture.PersonalPrimaryKey,
+			Table:   protectedareapicture.PersonalCollectionTable,
+			Columns: protectedareapicture.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1376,19 +1376,19 @@ func (papuo *ProtectedAreaPictureUpdateOne) SetRegion(r *Region) *ProtectedAreaP
 	return papuo.SetRegionID(r.ID)
 }
 
-// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
-func (papuo *ProtectedAreaPictureUpdateOne) AddPersonalIDs(ids ...int) *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.AddPersonalIDs(ids...)
+// AddPersonalCollectionIDs adds the "personal_collection" edge to the PersonalCollection entity by IDs.
+func (papuo *ProtectedAreaPictureUpdateOne) AddPersonalCollectionIDs(ids ...int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.AddPersonalCollectionIDs(ids...)
 	return papuo
 }
 
-// AddPersonal adds the "personal" edges to the Personal entity.
-func (papuo *ProtectedAreaPictureUpdateOne) AddPersonal(p ...*Personal) *ProtectedAreaPictureUpdateOne {
+// AddPersonalCollection adds the "personal_collection" edges to the PersonalCollection entity.
+func (papuo *ProtectedAreaPictureUpdateOne) AddPersonalCollection(p ...*PersonalCollection) *ProtectedAreaPictureUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return papuo.AddPersonalIDs(ids...)
+	return papuo.AddPersonalCollectionIDs(ids...)
 }
 
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
@@ -1450,25 +1450,25 @@ func (papuo *ProtectedAreaPictureUpdateOne) ClearRegion() *ProtectedAreaPictureU
 	return papuo
 }
 
-// ClearPersonal clears all "personal" edges to the Personal entity.
-func (papuo *ProtectedAreaPictureUpdateOne) ClearPersonal() *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.ClearPersonal()
+// ClearPersonalCollection clears all "personal_collection" edges to the PersonalCollection entity.
+func (papuo *ProtectedAreaPictureUpdateOne) ClearPersonalCollection() *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.ClearPersonalCollection()
 	return papuo
 }
 
-// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
-func (papuo *ProtectedAreaPictureUpdateOne) RemovePersonalIDs(ids ...int) *ProtectedAreaPictureUpdateOne {
-	papuo.mutation.RemovePersonalIDs(ids...)
+// RemovePersonalCollectionIDs removes the "personal_collection" edge to PersonalCollection entities by IDs.
+func (papuo *ProtectedAreaPictureUpdateOne) RemovePersonalCollectionIDs(ids ...int) *ProtectedAreaPictureUpdateOne {
+	papuo.mutation.RemovePersonalCollectionIDs(ids...)
 	return papuo
 }
 
-// RemovePersonal removes "personal" edges to Personal entities.
-func (papuo *ProtectedAreaPictureUpdateOne) RemovePersonal(p ...*Personal) *ProtectedAreaPictureUpdateOne {
+// RemovePersonalCollection removes "personal_collection" edges to PersonalCollection entities.
+func (papuo *ProtectedAreaPictureUpdateOne) RemovePersonalCollection(p ...*PersonalCollection) *ProtectedAreaPictureUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return papuo.RemovePersonalIDs(ids...)
+	return papuo.RemovePersonalCollectionIDs(ids...)
 }
 
 // Where appends a list predicates to the ProtectedAreaPictureUpdate builder.
@@ -1903,28 +1903,28 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if papuo.mutation.PersonalCleared() {
+	if papuo.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   protectedareapicture.PersonalTable,
-			Columns: protectedareapicture.PersonalPrimaryKey,
+			Table:   protectedareapicture.PersonalCollectionTable,
+			Columns: protectedareapicture.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := papuo.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !papuo.mutation.PersonalCleared() {
+	if nodes := papuo.mutation.RemovedPersonalCollectionIDs(); len(nodes) > 0 && !papuo.mutation.PersonalCollectionCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   protectedareapicture.PersonalTable,
-			Columns: protectedareapicture.PersonalPrimaryKey,
+			Table:   protectedareapicture.PersonalCollectionTable,
+			Columns: protectedareapicture.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1932,15 +1932,15 @@ func (papuo *ProtectedAreaPictureUpdateOne) sqlSave(ctx context.Context) (_node 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := papuo.mutation.PersonalIDs(); len(nodes) > 0 {
+	if nodes := papuo.mutation.PersonalCollectionIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   protectedareapicture.PersonalTable,
-			Columns: protectedareapicture.PersonalPrimaryKey,
+			Table:   protectedareapicture.PersonalCollectionTable,
+			Columns: protectedareapicture.PersonalCollectionPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(personalcollection.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -561,26 +561,26 @@ func (r *mutationResolver) DeletePerson(ctx context.Context, id int) (string, er
 	return "Person has been deleted", nil
 }
 
-// CreatePersonal is the resolver for the createPersonal field.
-func (r *mutationResolver) CreatePersonal(ctx context.Context, input ent.CreatePersonalInput) (*ent.Personal, error) {
+// CreatePersonalCollection is the resolver for the createPersonalCollection field.
+func (r *mutationResolver) CreatePersonalCollection(ctx context.Context, input ent.CreatePersonalCollectionInput) (*ent.PersonalCollection, error) {
 	client := ent.FromContext(ctx)
-	return client.Personal.Create().SetInput(input).Save(ctx)
+	return client.PersonalCollection.Create().SetInput(input).Save(ctx)
 }
 
-// UpdatePersonal is the resolver for the updatePersonal field.
-func (r *mutationResolver) UpdatePersonal(ctx context.Context, id int, input ent.UpdatePersonalInput) (*ent.Personal, error) {
+// UpdatePersonalCollection is the resolver for the updatePersonalCollection field.
+func (r *mutationResolver) UpdatePersonalCollection(ctx context.Context, id int, input ent.UpdatePersonalCollectionInput) (*ent.PersonalCollection, error) {
 	client := ent.FromContext(ctx)
-	return client.Personal.UpdateOneID(id).SetInput(input).Save(ctx)
+	return client.PersonalCollection.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
-// DeletePersonal is the resolver for the deletePersonal field.
-func (r *mutationResolver) DeletePersonal(ctx context.Context, id int) (string, error) {
+// DeletePersonalCollection is the resolver for the deletePersonalCollection field.
+func (r *mutationResolver) DeletePersonalCollection(ctx context.Context, id int) (string, error) {
 	client := ent.FromContext(ctx)
-	err := client.Personal.DeleteOneID(id).Exec(ctx)
+	err := client.PersonalCollection.DeleteOneID(id).Exec(ctx)
 	if err != nil {
 		return "", err
 	}
-	return "Personal has been deleted", nil
+	return "Personal Collection has been deleted", nil
 }
 
 // CreateProject is the resolver for the createProject field.

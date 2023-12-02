@@ -758,28 +758,28 @@ func (f PersonMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PersonMutation", m)
 }
 
-// The PersonalQueryRuleFunc type is an adapter to allow the use of ordinary
+// The PersonalCollectionQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
-type PersonalQueryRuleFunc func(context.Context, *ent.PersonalQuery) error
+type PersonalCollectionQueryRuleFunc func(context.Context, *ent.PersonalCollectionQuery) error
 
 // EvalQuery return f(ctx, q).
-func (f PersonalQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.PersonalQuery); ok {
+func (f PersonalCollectionQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.PersonalCollectionQuery); ok {
 		return f(ctx, q)
 	}
-	return Denyf("ent/privacy: unexpected query type %T, expect *ent.PersonalQuery", q)
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.PersonalCollectionQuery", q)
 }
 
-// The PersonalMutationRuleFunc type is an adapter to allow the use of ordinary
+// The PersonalCollectionMutationRuleFunc type is an adapter to allow the use of ordinary
 // functions as a mutation rule.
-type PersonalMutationRuleFunc func(context.Context, *ent.PersonalMutation) error
+type PersonalCollectionMutationRuleFunc func(context.Context, *ent.PersonalCollectionMutation) error
 
 // EvalMutation calls f(ctx, m).
-func (f PersonalMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
-	if m, ok := m.(*ent.PersonalMutation); ok {
+func (f PersonalCollectionMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.PersonalCollectionMutation); ok {
 		return f(ctx, m)
 	}
-	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PersonalMutation", m)
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.PersonalCollectionMutation", m)
 }
 
 // The PetroglyphQueryRuleFunc type is an adapter to allow the use of ordinary

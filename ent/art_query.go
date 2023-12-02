@@ -19,6 +19,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
@@ -28,25 +29,27 @@ import (
 // ArtQuery is the builder for querying Art entities.
 type ArtQuery struct {
 	config
-	ctx                 *QueryContext
-	order               []art.OrderOption
-	inters              []Interceptor
-	predicates          []predicate.Art
-	withAuthor          *PersonQuery
-	withArtGenre        *ArtGenreQuery
-	withArtStyle        *ArtStyleQuery
-	withTechniques      *TechniqueQuery
-	withCollection      *CollectionQuery
-	withCountry         *CountryQuery
-	withSettlement      *SettlementQuery
-	withDistrict        *DistrictQuery
-	withRegion          *RegionQuery
-	withFKs             bool
-	modifiers           []func(*sql.Selector)
-	loadTotal           []func(context.Context, []*Art) error
-	withNamedArtGenre   map[string]*ArtGenreQuery
-	withNamedArtStyle   map[string]*ArtStyleQuery
-	withNamedTechniques map[string]*TechniqueQuery
+	ctx                         *QueryContext
+	order                       []art.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Art
+	withAuthor                  *PersonQuery
+	withArtGenre                *ArtGenreQuery
+	withArtStyle                *ArtStyleQuery
+	withTechniques              *TechniqueQuery
+	withCollection              *CollectionQuery
+	withCountry                 *CountryQuery
+	withSettlement              *SettlementQuery
+	withDistrict                *DistrictQuery
+	withRegion                  *RegionQuery
+	withPersonalCollection      *PersonalCollectionQuery
+	withFKs                     bool
+	modifiers                   []func(*sql.Selector)
+	loadTotal                   []func(context.Context, []*Art) error
+	withNamedArtGenre           map[string]*ArtGenreQuery
+	withNamedArtStyle           map[string]*ArtStyleQuery
+	withNamedTechniques         map[string]*TechniqueQuery
+	withNamedPersonalCollection map[string]*PersonalCollectionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -281,6 +284,28 @@ func (aq *ArtQuery) QueryRegion() *RegionQuery {
 	return query
 }
 
+// QueryPersonalCollection chains the current query on the "personal_collection" edge.
+func (aq *ArtQuery) QueryPersonalCollection() *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(art.Table, art.FieldID, selector),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, art.PersonalCollectionTable, art.PersonalCollectionPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Art entity from the query.
 // Returns a *NotFoundError when no Art was found.
 func (aq *ArtQuery) First(ctx context.Context) (*Art, error) {
@@ -468,20 +493,21 @@ func (aq *ArtQuery) Clone() *ArtQuery {
 		return nil
 	}
 	return &ArtQuery{
-		config:         aq.config,
-		ctx:            aq.ctx.Clone(),
-		order:          append([]art.OrderOption{}, aq.order...),
-		inters:         append([]Interceptor{}, aq.inters...),
-		predicates:     append([]predicate.Art{}, aq.predicates...),
-		withAuthor:     aq.withAuthor.Clone(),
-		withArtGenre:   aq.withArtGenre.Clone(),
-		withArtStyle:   aq.withArtStyle.Clone(),
-		withTechniques: aq.withTechniques.Clone(),
-		withCollection: aq.withCollection.Clone(),
-		withCountry:    aq.withCountry.Clone(),
-		withSettlement: aq.withSettlement.Clone(),
-		withDistrict:   aq.withDistrict.Clone(),
-		withRegion:     aq.withRegion.Clone(),
+		config:                 aq.config,
+		ctx:                    aq.ctx.Clone(),
+		order:                  append([]art.OrderOption{}, aq.order...),
+		inters:                 append([]Interceptor{}, aq.inters...),
+		predicates:             append([]predicate.Art{}, aq.predicates...),
+		withAuthor:             aq.withAuthor.Clone(),
+		withArtGenre:           aq.withArtGenre.Clone(),
+		withArtStyle:           aq.withArtStyle.Clone(),
+		withTechniques:         aq.withTechniques.Clone(),
+		withCollection:         aq.withCollection.Clone(),
+		withCountry:            aq.withCountry.Clone(),
+		withSettlement:         aq.withSettlement.Clone(),
+		withDistrict:           aq.withDistrict.Clone(),
+		withRegion:             aq.withRegion.Clone(),
+		withPersonalCollection: aq.withPersonalCollection.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
@@ -587,6 +613,17 @@ func (aq *ArtQuery) WithRegion(opts ...func(*RegionQuery)) *ArtQuery {
 	return aq
 }
 
+// WithPersonalCollection tells the query-builder to eager-load the nodes that are connected to
+// the "personal_collection" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithPersonalCollection(opts ...func(*PersonalCollectionQuery)) *ArtQuery {
+	query := (&PersonalCollectionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withPersonalCollection = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -672,7 +709,7 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 		nodes       = []*Art{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			aq.withAuthor != nil,
 			aq.withArtGenre != nil,
 			aq.withArtStyle != nil,
@@ -682,6 +719,7 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 			aq.withSettlement != nil,
 			aq.withDistrict != nil,
 			aq.withRegion != nil,
+			aq.withPersonalCollection != nil,
 		}
 	)
 	if aq.withAuthor != nil || aq.withCollection != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
@@ -768,6 +806,15 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 			return nil, err
 		}
 	}
+	if query := aq.withPersonalCollection; query != nil {
+		if err := aq.loadPersonalCollection(ctx, query, nodes,
+			func(n *Art) { n.Edges.PersonalCollection = []*PersonalCollection{} },
+			func(n *Art, e *PersonalCollection) {
+				n.Edges.PersonalCollection = append(n.Edges.PersonalCollection, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range aq.withNamedArtGenre {
 		if err := aq.loadArtGenre(ctx, query, nodes,
 			func(n *Art) { n.appendNamedArtGenre(name) },
@@ -786,6 +833,13 @@ func (aq *ArtQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art, err
 		if err := aq.loadTechniques(ctx, query, nodes,
 			func(n *Art) { n.appendNamedTechniques(name) },
 			func(n *Art, e *Technique) { n.appendNamedTechniques(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedPersonalCollection {
+		if err := aq.loadPersonalCollection(ctx, query, nodes,
+			func(n *Art) { n.appendNamedPersonalCollection(name) },
+			func(n *Art, e *PersonalCollection) { n.appendNamedPersonalCollection(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1172,6 +1226,67 @@ func (aq *ArtQuery) loadRegion(ctx context.Context, query *RegionQuery, nodes []
 	}
 	return nil
 }
+func (aq *ArtQuery) loadPersonalCollection(ctx context.Context, query *PersonalCollectionQuery, nodes []*Art, init func(*Art), assign func(*Art, *PersonalCollection)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Art)
+	nids := make(map[int]map[*Art]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(art.PersonalCollectionTable)
+		s.Join(joinT).On(s.C(personalcollection.FieldID), joinT.C(art.PersonalCollectionPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(art.PersonalCollectionPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(art.PersonalCollectionPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Art]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*PersonalCollection](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "personal_collection" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (aq *ArtQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := aq.querySpec()
@@ -1296,6 +1411,20 @@ func (aq *ArtQuery) WithNamedTechniques(name string, opts ...func(*TechniqueQuer
 		aq.withNamedTechniques = make(map[string]*TechniqueQuery)
 	}
 	aq.withNamedTechniques[name] = query
+	return aq
+}
+
+// WithNamedPersonalCollection tells the query-builder to eager-load the nodes that are connected to the "personal_collection"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtQuery) WithNamedPersonalCollection(name string, opts ...func(*PersonalCollectionQuery)) *ArtQuery {
+	query := (&PersonalCollectionClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedPersonalCollection == nil {
+		aq.withNamedPersonalCollection = make(map[string]*PersonalCollectionQuery)
+	}
+	aq.withNamedPersonalCollection[name] = query
 	return aq
 }
 

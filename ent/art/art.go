@@ -80,6 +80,8 @@ const (
 	EdgeDistrict = "district"
 	// EdgeRegion holds the string denoting the region edge name in mutations.
 	EdgeRegion = "region"
+	// EdgePersonalCollection holds the string denoting the personal_collection edge name in mutations.
+	EdgePersonalCollection = "personal_collection"
 	// Table holds the table name of the art in the database.
 	Table = "arts"
 	// AuthorTable is the table that holds the author relation/edge.
@@ -139,6 +141,11 @@ const (
 	RegionInverseTable = "regions"
 	// RegionColumn is the table column denoting the region relation/edge.
 	RegionColumn = "region_art"
+	// PersonalCollectionTable is the table that holds the personal_collection relation/edge. The primary key declared below.
+	PersonalCollectionTable = "personal_collection_art"
+	// PersonalCollectionInverseTable is the table name for the PersonalCollection entity.
+	// It exists in this package in order to avoid circular dependency with the "personalcollection" package.
+	PersonalCollectionInverseTable = "personal_collections"
 )
 
 // Columns holds all SQL columns for art fields.
@@ -189,6 +196,9 @@ var (
 	// TechniquesPrimaryKey and TechniquesColumn2 are the table columns denoting the
 	// primary key for the techniques relation (M2M).
 	TechniquesPrimaryKey = []string{"technique_id", "art_id"}
+	// PersonalCollectionPrimaryKey and PersonalCollectionColumn2 are the table columns denoting the
+	// primary key for the personal_collection relation (M2M).
+	PersonalCollectionPrimaryKey = []string{"personal_collection_id", "art_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -445,6 +455,20 @@ func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByPersonalCollectionCount orders the results by personal_collection count.
+func ByPersonalCollectionCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPersonalCollectionStep(), opts...)
+	}
+}
+
+// ByPersonalCollection orders the results by personal_collection terms.
+func ByPersonalCollection(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPersonalCollectionStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newAuthorStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -506,6 +530,13 @@ func newRegionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RegionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
+	)
+}
+func newPersonalCollectionStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PersonalCollectionInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PersonalCollectionTable, PersonalCollectionPrimaryKey...),
 	)
 }
 

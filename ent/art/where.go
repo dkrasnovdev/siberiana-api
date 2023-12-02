@@ -1657,6 +1657,29 @@ func HasRegionWith(preds ...predicate.Region) predicate.Art {
 	})
 }
 
+// HasPersonalCollection applies the HasEdge predicate on the "personal_collection" edge.
+func HasPersonalCollection() predicate.Art {
+	return predicate.Art(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, PersonalCollectionTable, PersonalCollectionPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPersonalCollectionWith applies the HasEdge predicate on the "personal_collection" edge with a given conditions (other predicates).
+func HasPersonalCollectionWith(preds ...predicate.PersonalCollection) predicate.Art {
+	return predicate.Art(func(s *sql.Selector) {
+		step := newPersonalCollectionStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Art) predicate.Art {
 	return predicate.Art(sql.AndPredicates(predicates...))

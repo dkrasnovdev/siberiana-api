@@ -87,8 +87,8 @@ type Periodical func(*sql.Selector)
 // Person is the predicate function for person builders.
 type Person func(*sql.Selector)
 
-// Personal is the predicate function for personal builders.
-type Personal func(*sql.Selector)
+// PersonalCollection is the predicate function for personalcollection builders.
+type PersonalCollection func(*sql.Selector)
 
 // Petroglyph is the predicate function for petroglyph builders.
 type Petroglyph func(*sql.Selector)

@@ -40,7 +40,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
-	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
@@ -197,10 +197,10 @@ var personImplementors = []string{"Person", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Person) IsNode() {}
 
-var personalImplementors = []string{"Personal", "Node"}
+var personalcollectionImplementors = []string{"PersonalCollection", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
-func (*Personal) IsNode() {}
+func (*PersonalCollection) IsNode() {}
 
 var petroglyphImplementors = []string{"Petroglyph", "Node"}
 
@@ -644,10 +644,10 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
-	case personal.Table:
-		query := c.Personal.Query().
-			Where(personal.ID(id))
-		query, err := query.CollectFields(ctx, personalImplementors...)
+	case personalcollection.Table:
+		query := c.PersonalCollection.Query().
+			Where(personalcollection.ID(id))
+		query, err := query.CollectFields(ctx, personalcollectionImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1305,10 +1305,10 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
-	case personal.Table:
-		query := c.Personal.Query().
-			Where(personal.IDIn(ids...))
-		query, err := query.CollectFields(ctx, personalImplementors...)
+	case personalcollection.Table:
+		query := c.PersonalCollection.Query().
+			Where(personalcollection.IDIn(ids...))
+		query, err := query.CollectFields(ctx, personalcollectionImplementors...)
 		if err != nil {
 			return nil, err
 		}
