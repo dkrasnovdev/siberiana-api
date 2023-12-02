@@ -14019,6 +14019,9 @@ type CollectionMutation struct {
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
 	clearedartifacts               bool
+	dendrochronology               map[int]struct{}
+	removeddendrochronology        map[int]struct{}
+	cleareddendrochronology        bool
 	petroglyphs                    map[int]struct{}
 	removedpetroglyphs             map[int]struct{}
 	clearedpetroglyphs             bool
@@ -14907,6 +14910,60 @@ func (m *CollectionMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by ids.
+func (m *CollectionMutation) AddDendrochronologyIDs(ids ...int) {
+	if m.dendrochronology == nil {
+		m.dendrochronology = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.dendrochronology[ids[i]] = struct{}{}
+	}
+}
+
+// ClearDendrochronology clears the "dendrochronology" edge to the Dendrochronology entity.
+func (m *CollectionMutation) ClearDendrochronology() {
+	m.cleareddendrochronology = true
+}
+
+// DendrochronologyCleared reports if the "dendrochronology" edge to the Dendrochronology entity was cleared.
+func (m *CollectionMutation) DendrochronologyCleared() bool {
+	return m.cleareddendrochronology
+}
+
+// RemoveDendrochronologyIDs removes the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (m *CollectionMutation) RemoveDendrochronologyIDs(ids ...int) {
+	if m.removeddendrochronology == nil {
+		m.removeddendrochronology = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.dendrochronology, ids[i])
+		m.removeddendrochronology[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedDendrochronology returns the removed IDs of the "dendrochronology" edge to the Dendrochronology entity.
+func (m *CollectionMutation) RemovedDendrochronologyIDs() (ids []int) {
+	for id := range m.removeddendrochronology {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// DendrochronologyIDs returns the "dendrochronology" edge IDs in the mutation.
+func (m *CollectionMutation) DendrochronologyIDs() (ids []int) {
+	for id := range m.dendrochronology {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetDendrochronology resets all changes to the "dendrochronology" edge.
+func (m *CollectionMutation) ResetDendrochronology() {
+	m.dendrochronology = nil
+	m.cleareddendrochronology = false
+	m.removeddendrochronology = nil
+}
+
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
 func (m *CollectionMutation) AddPetroglyphIDs(ids ...int) {
 	if m.petroglyphs == nil {
@@ -15585,12 +15642,15 @@ func (m *CollectionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CollectionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.art != nil {
 		edges = append(edges, collection.EdgeArt)
 	}
 	if m.artifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.dendrochronology != nil {
+		edges = append(edges, collection.EdgeDendrochronology)
 	}
 	if m.petroglyphs != nil {
 		edges = append(edges, collection.EdgePetroglyphs)
@@ -15623,6 +15683,12 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 	case collection.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.artifacts))
 		for id := range m.artifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case collection.EdgeDendrochronology:
+		ids := make([]ent.Value, 0, len(m.dendrochronology))
+		for id := range m.dendrochronology {
 			ids = append(ids, id)
 		}
 		return ids
@@ -15660,12 +15726,15 @@ func (m *CollectionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CollectionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.removedart != nil {
 		edges = append(edges, collection.EdgeArt)
 	}
 	if m.removedartifacts != nil {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.removeddendrochronology != nil {
+		edges = append(edges, collection.EdgeDendrochronology)
 	}
 	if m.removedpetroglyphs != nil {
 		edges = append(edges, collection.EdgePetroglyphs)
@@ -15695,6 +15764,12 @@ func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 	case collection.EdgeArtifacts:
 		ids := make([]ent.Value, 0, len(m.removedartifacts))
 		for id := range m.removedartifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case collection.EdgeDendrochronology:
+		ids := make([]ent.Value, 0, len(m.removeddendrochronology))
+		for id := range m.removeddendrochronology {
 			ids = append(ids, id)
 		}
 		return ids
@@ -15728,12 +15803,15 @@ func (m *CollectionMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CollectionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.clearedart {
 		edges = append(edges, collection.EdgeArt)
 	}
 	if m.clearedartifacts {
 		edges = append(edges, collection.EdgeArtifacts)
+	}
+	if m.cleareddendrochronology {
+		edges = append(edges, collection.EdgeDendrochronology)
 	}
 	if m.clearedpetroglyphs {
 		edges = append(edges, collection.EdgePetroglyphs)
@@ -15761,6 +15839,8 @@ func (m *CollectionMutation) EdgeCleared(name string) bool {
 		return m.clearedart
 	case collection.EdgeArtifacts:
 		return m.clearedartifacts
+	case collection.EdgeDendrochronology:
+		return m.cleareddendrochronology
 	case collection.EdgePetroglyphs:
 		return m.clearedpetroglyphs
 	case collection.EdgeBooks:
@@ -15795,6 +15875,9 @@ func (m *CollectionMutation) ResetEdge(name string) error {
 		return nil
 	case collection.EdgeArtifacts:
 		m.ResetArtifacts()
+		return nil
+	case collection.EdgeDendrochronology:
+		m.ResetDendrochronology()
 		return nil
 	case collection.EdgePetroglyphs:
 		m.ResetPetroglyphs()
@@ -37611,12 +37694,15 @@ type PersonalCollectionMutation struct {
 	artifacts                      map[int]struct{}
 	removedartifacts               map[int]struct{}
 	clearedartifacts               bool
-	petroglyphs                    map[int]struct{}
-	removedpetroglyphs             map[int]struct{}
-	clearedpetroglyphs             bool
 	books                          map[int]struct{}
 	removedbooks                   map[int]struct{}
 	clearedbooks                   bool
+	dendrochronology               map[int]struct{}
+	removeddendrochronology        map[int]struct{}
+	cleareddendrochronology        bool
+	petroglyphs                    map[int]struct{}
+	removedpetroglyphs             map[int]struct{}
+	clearedpetroglyphs             bool
 	protected_area_pictures        map[int]struct{}
 	removedprotected_area_pictures map[int]struct{}
 	clearedprotected_area_pictures bool
@@ -38073,60 +38159,6 @@ func (m *PersonalCollectionMutation) ResetArtifacts() {
 	m.removedartifacts = nil
 }
 
-// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
-func (m *PersonalCollectionMutation) AddPetroglyphIDs(ids ...int) {
-	if m.petroglyphs == nil {
-		m.petroglyphs = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.petroglyphs[ids[i]] = struct{}{}
-	}
-}
-
-// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
-func (m *PersonalCollectionMutation) ClearPetroglyphs() {
-	m.clearedpetroglyphs = true
-}
-
-// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
-func (m *PersonalCollectionMutation) PetroglyphsCleared() bool {
-	return m.clearedpetroglyphs
-}
-
-// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
-func (m *PersonalCollectionMutation) RemovePetroglyphIDs(ids ...int) {
-	if m.removedpetroglyphs == nil {
-		m.removedpetroglyphs = make(map[int]struct{})
-	}
-	for i := range ids {
-		delete(m.petroglyphs, ids[i])
-		m.removedpetroglyphs[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
-func (m *PersonalCollectionMutation) RemovedPetroglyphsIDs() (ids []int) {
-	for id := range m.removedpetroglyphs {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
-func (m *PersonalCollectionMutation) PetroglyphsIDs() (ids []int) {
-	for id := range m.petroglyphs {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
-func (m *PersonalCollectionMutation) ResetPetroglyphs() {
-	m.petroglyphs = nil
-	m.clearedpetroglyphs = false
-	m.removedpetroglyphs = nil
-}
-
 // AddBookIDs adds the "books" edge to the Book entity by ids.
 func (m *PersonalCollectionMutation) AddBookIDs(ids ...int) {
 	if m.books == nil {
@@ -38179,6 +38211,114 @@ func (m *PersonalCollectionMutation) ResetBooks() {
 	m.books = nil
 	m.clearedbooks = false
 	m.removedbooks = nil
+}
+
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by ids.
+func (m *PersonalCollectionMutation) AddDendrochronologyIDs(ids ...int) {
+	if m.dendrochronology == nil {
+		m.dendrochronology = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.dendrochronology[ids[i]] = struct{}{}
+	}
+}
+
+// ClearDendrochronology clears the "dendrochronology" edge to the Dendrochronology entity.
+func (m *PersonalCollectionMutation) ClearDendrochronology() {
+	m.cleareddendrochronology = true
+}
+
+// DendrochronologyCleared reports if the "dendrochronology" edge to the Dendrochronology entity was cleared.
+func (m *PersonalCollectionMutation) DendrochronologyCleared() bool {
+	return m.cleareddendrochronology
+}
+
+// RemoveDendrochronologyIDs removes the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (m *PersonalCollectionMutation) RemoveDendrochronologyIDs(ids ...int) {
+	if m.removeddendrochronology == nil {
+		m.removeddendrochronology = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.dendrochronology, ids[i])
+		m.removeddendrochronology[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedDendrochronology returns the removed IDs of the "dendrochronology" edge to the Dendrochronology entity.
+func (m *PersonalCollectionMutation) RemovedDendrochronologyIDs() (ids []int) {
+	for id := range m.removeddendrochronology {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// DendrochronologyIDs returns the "dendrochronology" edge IDs in the mutation.
+func (m *PersonalCollectionMutation) DendrochronologyIDs() (ids []int) {
+	for id := range m.dendrochronology {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetDendrochronology resets all changes to the "dendrochronology" edge.
+func (m *PersonalCollectionMutation) ResetDendrochronology() {
+	m.dendrochronology = nil
+	m.cleareddendrochronology = false
+	m.removeddendrochronology = nil
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *PersonalCollectionMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *PersonalCollectionMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *PersonalCollectionMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *PersonalCollectionMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *PersonalCollectionMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *PersonalCollectionMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *PersonalCollectionMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
 }
 
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
@@ -38468,18 +38608,21 @@ func (m *PersonalCollectionMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonalCollectionMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.art != nil {
 		edges = append(edges, personalcollection.EdgeArt)
 	}
 	if m.artifacts != nil {
 		edges = append(edges, personalcollection.EdgeArtifacts)
 	}
-	if m.petroglyphs != nil {
-		edges = append(edges, personalcollection.EdgePetroglyphs)
-	}
 	if m.books != nil {
 		edges = append(edges, personalcollection.EdgeBooks)
+	}
+	if m.dendrochronology != nil {
+		edges = append(edges, personalcollection.EdgeDendrochronology)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, personalcollection.EdgePetroglyphs)
 	}
 	if m.protected_area_pictures != nil {
 		edges = append(edges, personalcollection.EdgeProtectedAreaPictures)
@@ -38503,15 +38646,21 @@ func (m *PersonalCollectionMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case personalcollection.EdgePetroglyphs:
-		ids := make([]ent.Value, 0, len(m.petroglyphs))
-		for id := range m.petroglyphs {
-			ids = append(ids, id)
-		}
-		return ids
 	case personalcollection.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.books))
 		for id := range m.books {
+			ids = append(ids, id)
+		}
+		return ids
+	case personalcollection.EdgeDendrochronology:
+		ids := make([]ent.Value, 0, len(m.dendrochronology))
+		for id := range m.dendrochronology {
+			ids = append(ids, id)
+		}
+		return ids
+	case personalcollection.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38527,18 +38676,21 @@ func (m *PersonalCollectionMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonalCollectionMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedart != nil {
 		edges = append(edges, personalcollection.EdgeArt)
 	}
 	if m.removedartifacts != nil {
 		edges = append(edges, personalcollection.EdgeArtifacts)
 	}
-	if m.removedpetroglyphs != nil {
-		edges = append(edges, personalcollection.EdgePetroglyphs)
-	}
 	if m.removedbooks != nil {
 		edges = append(edges, personalcollection.EdgeBooks)
+	}
+	if m.removeddendrochronology != nil {
+		edges = append(edges, personalcollection.EdgeDendrochronology)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, personalcollection.EdgePetroglyphs)
 	}
 	if m.removedprotected_area_pictures != nil {
 		edges = append(edges, personalcollection.EdgeProtectedAreaPictures)
@@ -38562,15 +38714,21 @@ func (m *PersonalCollectionMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case personalcollection.EdgePetroglyphs:
-		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
-		for id := range m.removedpetroglyphs {
-			ids = append(ids, id)
-		}
-		return ids
 	case personalcollection.EdgeBooks:
 		ids := make([]ent.Value, 0, len(m.removedbooks))
 		for id := range m.removedbooks {
+			ids = append(ids, id)
+		}
+		return ids
+	case personalcollection.EdgeDendrochronology:
+		ids := make([]ent.Value, 0, len(m.removeddendrochronology))
+		for id := range m.removeddendrochronology {
+			ids = append(ids, id)
+		}
+		return ids
+	case personalcollection.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38586,18 +38744,21 @@ func (m *PersonalCollectionMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonalCollectionMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedart {
 		edges = append(edges, personalcollection.EdgeArt)
 	}
 	if m.clearedartifacts {
 		edges = append(edges, personalcollection.EdgeArtifacts)
 	}
-	if m.clearedpetroglyphs {
-		edges = append(edges, personalcollection.EdgePetroglyphs)
-	}
 	if m.clearedbooks {
 		edges = append(edges, personalcollection.EdgeBooks)
+	}
+	if m.cleareddendrochronology {
+		edges = append(edges, personalcollection.EdgeDendrochronology)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, personalcollection.EdgePetroglyphs)
 	}
 	if m.clearedprotected_area_pictures {
 		edges = append(edges, personalcollection.EdgeProtectedAreaPictures)
@@ -38613,10 +38774,12 @@ func (m *PersonalCollectionMutation) EdgeCleared(name string) bool {
 		return m.clearedart
 	case personalcollection.EdgeArtifacts:
 		return m.clearedartifacts
-	case personalcollection.EdgePetroglyphs:
-		return m.clearedpetroglyphs
 	case personalcollection.EdgeBooks:
 		return m.clearedbooks
+	case personalcollection.EdgeDendrochronology:
+		return m.cleareddendrochronology
+	case personalcollection.EdgePetroglyphs:
+		return m.clearedpetroglyphs
 	case personalcollection.EdgeProtectedAreaPictures:
 		return m.clearedprotected_area_pictures
 	}
@@ -38641,11 +38804,14 @@ func (m *PersonalCollectionMutation) ResetEdge(name string) error {
 	case personalcollection.EdgeArtifacts:
 		m.ResetArtifacts()
 		return nil
-	case personalcollection.EdgePetroglyphs:
-		m.ResetPetroglyphs()
-		return nil
 	case personalcollection.EdgeBooks:
 		m.ResetBooks()
+		return nil
+	case personalcollection.EdgeDendrochronology:
+		m.ResetDendrochronology()
+		return nil
+	case personalcollection.EdgePetroglyphs:
+		m.ResetPetroglyphs()
 		return nil
 	case personalcollection.EdgeProtectedAreaPictures:
 		m.ResetProtectedAreaPictures()

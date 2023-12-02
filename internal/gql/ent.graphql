@@ -2119,6 +2119,7 @@ type Collection implements Node {
   type: CollectionType
   art: [Art!]
   artifacts: [Artifact!]
+  dendrochronology: [Dendrochronology!]
   petroglyphs: [Petroglyph!]
   books: [Book!]
   protectedAreaPictures: [ProtectedAreaPicture!]
@@ -2364,6 +2365,9 @@ input CollectionWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
+  """dendrochronology edge predicates"""
+  hasDendrochronology: Boolean
+  hasDendrochronologyWith: [DendrochronologyWhereInput!]
   """petroglyphs edge predicates"""
   hasPetroglyphs: Boolean
   hasPetroglyphsWith: [PetroglyphWhereInput!]
@@ -2795,6 +2799,7 @@ input CreateCollectionInput {
   type: CollectionType
   artIDs: [ID!]
   artifactIDs: [ID!]
+  dendrochronologyIDs: [ID!]
   petroglyphIDs: [ID!]
   bookIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
@@ -3145,8 +3150,9 @@ input CreatePersonalCollectionInput {
   isPublic: Boolean
   artIDs: [ID!]
   artifactIDs: [ID!]
-  petroglyphIDs: [ID!]
   bookIDs: [ID!]
+  dendrochronologyIDs: [ID!]
+  petroglyphIDs: [ID!]
   protectedAreaPictureIDs: [ID!]
 }
 """
@@ -6821,8 +6827,9 @@ type PersonalCollection implements Node {
   isPublic: Boolean!
   art: [Art!]
   artifacts: [Artifact!]
-  petroglyphs: [Petroglyph!]
   books: [Book!]
+  dendrochronology: [Dendrochronology!]
+  petroglyphs: [Petroglyph!]
   protectedAreaPictures: [ProtectedAreaPicture!]
 }
 """A connection to a list of items."""
@@ -6943,12 +6950,15 @@ input PersonalCollectionWhereInput {
   """artifacts edge predicates"""
   hasArtifacts: Boolean
   hasArtifactsWith: [ArtifactWhereInput!]
-  """petroglyphs edge predicates"""
-  hasPetroglyphs: Boolean
-  hasPetroglyphsWith: [PetroglyphWhereInput!]
   """books edge predicates"""
   hasBooks: Boolean
   hasBooksWith: [BookWhereInput!]
+  """dendrochronology edge predicates"""
+  hasDendrochronology: Boolean
+  hasDendrochronologyWith: [DendrochronologyWhereInput!]
+  """petroglyphs edge predicates"""
+  hasPetroglyphs: Boolean
+  hasPetroglyphsWith: [PetroglyphWhereInput!]
   """protected_area_pictures edge predicates"""
   hasProtectedAreaPictures: Boolean
   hasProtectedAreaPicturesWith: [ProtectedAreaPictureWhereInput!]
@@ -10786,6 +10796,9 @@ input UpdateCollectionInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
+  addDendrochronologyIDs: [ID!]
+  removeDendrochronologyIDs: [ID!]
+  clearDendrochronology: Boolean
   addPetroglyphIDs: [ID!]
   removePetroglyphIDs: [ID!]
   clearPetroglyphs: Boolean
@@ -11373,12 +11386,15 @@ input UpdatePersonalCollectionInput {
   addArtifactIDs: [ID!]
   removeArtifactIDs: [ID!]
   clearArtifacts: Boolean
-  addPetroglyphIDs: [ID!]
-  removePetroglyphIDs: [ID!]
-  clearPetroglyphs: Boolean
   addBookIDs: [ID!]
   removeBookIDs: [ID!]
   clearBooks: Boolean
+  addDendrochronologyIDs: [ID!]
+  removeDendrochronologyIDs: [ID!]
+  clearDendrochronology: Boolean
+  addPetroglyphIDs: [ID!]
+  removePetroglyphIDs: [ID!]
+  clearPetroglyphs: Boolean
   addProtectedAreaPictureIDs: [ID!]
   removeProtectedAreaPictureIDs: [ID!]
   clearProtectedAreaPictures: Boolean

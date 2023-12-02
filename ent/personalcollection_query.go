@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -30,15 +31,17 @@ type PersonalCollectionQuery struct {
 	predicates                     []predicate.PersonalCollection
 	withArt                        *ArtQuery
 	withArtifacts                  *ArtifactQuery
-	withPetroglyphs                *PetroglyphQuery
 	withBooks                      *BookQuery
+	withDendrochronology           *DendrochronologyQuery
+	withPetroglyphs                *PetroglyphQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	modifiers                      []func(*sql.Selector)
 	loadTotal                      []func(context.Context, []*PersonalCollection) error
 	withNamedArt                   map[string]*ArtQuery
 	withNamedArtifacts             map[string]*ArtifactQuery
-	withNamedPetroglyphs           map[string]*PetroglyphQuery
 	withNamedBooks                 map[string]*BookQuery
+	withNamedDendrochronology      map[string]*DendrochronologyQuery
+	withNamedPetroglyphs           map[string]*PetroglyphQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -120,28 +123,6 @@ func (pcq *PersonalCollectionQuery) QueryArtifacts() *ArtifactQuery {
 	return query
 }
 
-// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
-func (pcq *PersonalCollectionQuery) QueryPetroglyphs() *PetroglyphQuery {
-	query := (&PetroglyphClient{config: pcq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pcq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := pcq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, selector),
-			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.PetroglyphsTable, personalcollection.PetroglyphsPrimaryKey...),
-		)
-		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryBooks chains the current query on the "books" edge.
 func (pcq *PersonalCollectionQuery) QueryBooks() *BookQuery {
 	query := (&BookClient{config: pcq.config}).Query()
@@ -157,6 +138,50 @@ func (pcq *PersonalCollectionQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.BooksTable, personalcollection.BooksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDendrochronology chains the current query on the "dendrochronology" edge.
+func (pcq *PersonalCollectionQuery) QueryDendrochronology() *DendrochronologyQuery {
+	query := (&DendrochronologyClient{config: pcq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, selector),
+			sqlgraph.To(dendrochronology.Table, dendrochronology.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, personalcollection.DendrochronologyTable, personalcollection.DendrochronologyColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
+func (pcq *PersonalCollectionQuery) QueryPetroglyphs() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: pcq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.PetroglyphsTable, personalcollection.PetroglyphsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
 		return fromU, nil
@@ -380,8 +405,9 @@ func (pcq *PersonalCollectionQuery) Clone() *PersonalCollectionQuery {
 		predicates:                append([]predicate.PersonalCollection{}, pcq.predicates...),
 		withArt:                   pcq.withArt.Clone(),
 		withArtifacts:             pcq.withArtifacts.Clone(),
-		withPetroglyphs:           pcq.withPetroglyphs.Clone(),
 		withBooks:                 pcq.withBooks.Clone(),
+		withDendrochronology:      pcq.withDendrochronology.Clone(),
+		withPetroglyphs:           pcq.withPetroglyphs.Clone(),
 		withProtectedAreaPictures: pcq.withProtectedAreaPictures.Clone(),
 		// clone intermediate query.
 		sql:  pcq.sql.Clone(),
@@ -411,17 +437,6 @@ func (pcq *PersonalCollectionQuery) WithArtifacts(opts ...func(*ArtifactQuery)) 
 	return pcq
 }
 
-// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
-// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
-func (pcq *PersonalCollectionQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *PersonalCollectionQuery {
-	query := (&PetroglyphClient{config: pcq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	pcq.withPetroglyphs = query
-	return pcq
-}
-
 // WithBooks tells the query-builder to eager-load the nodes that are connected to
 // the "books" edge. The optional arguments are used to configure the query builder of the edge.
 func (pcq *PersonalCollectionQuery) WithBooks(opts ...func(*BookQuery)) *PersonalCollectionQuery {
@@ -430,6 +445,28 @@ func (pcq *PersonalCollectionQuery) WithBooks(opts ...func(*BookQuery)) *Persona
 		opt(query)
 	}
 	pcq.withBooks = query
+	return pcq
+}
+
+// WithDendrochronology tells the query-builder to eager-load the nodes that are connected to
+// the "dendrochronology" edge. The optional arguments are used to configure the query builder of the edge.
+func (pcq *PersonalCollectionQuery) WithDendrochronology(opts ...func(*DendrochronologyQuery)) *PersonalCollectionQuery {
+	query := (&DendrochronologyClient{config: pcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pcq.withDendrochronology = query
+	return pcq
+}
+
+// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
+func (pcq *PersonalCollectionQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *PersonalCollectionQuery {
+	query := (&PetroglyphClient{config: pcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pcq.withPetroglyphs = query
 	return pcq
 }
 
@@ -528,11 +565,12 @@ func (pcq *PersonalCollectionQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	var (
 		nodes       = []*PersonalCollection{}
 		_spec       = pcq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			pcq.withArt != nil,
 			pcq.withArtifacts != nil,
-			pcq.withPetroglyphs != nil,
 			pcq.withBooks != nil,
+			pcq.withDendrochronology != nil,
+			pcq.withPetroglyphs != nil,
 			pcq.withProtectedAreaPictures != nil,
 		}
 	)
@@ -571,17 +609,26 @@ func (pcq *PersonalCollectionQuery) sqlAll(ctx context.Context, hooks ...queryHo
 			return nil, err
 		}
 	}
-	if query := pcq.withPetroglyphs; query != nil {
-		if err := pcq.loadPetroglyphs(ctx, query, nodes,
-			func(n *PersonalCollection) { n.Edges.Petroglyphs = []*Petroglyph{} },
-			func(n *PersonalCollection, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := pcq.withBooks; query != nil {
 		if err := pcq.loadBooks(ctx, query, nodes,
 			func(n *PersonalCollection) { n.Edges.Books = []*Book{} },
 			func(n *PersonalCollection, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pcq.withDendrochronology; query != nil {
+		if err := pcq.loadDendrochronology(ctx, query, nodes,
+			func(n *PersonalCollection) { n.Edges.Dendrochronology = []*Dendrochronology{} },
+			func(n *PersonalCollection, e *Dendrochronology) {
+				n.Edges.Dendrochronology = append(n.Edges.Dendrochronology, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := pcq.withPetroglyphs; query != nil {
+		if err := pcq.loadPetroglyphs(ctx, query, nodes,
+			func(n *PersonalCollection) { n.Edges.Petroglyphs = []*Petroglyph{} },
+			func(n *PersonalCollection, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -608,17 +655,24 @@ func (pcq *PersonalCollectionQuery) sqlAll(ctx context.Context, hooks ...queryHo
 			return nil, err
 		}
 	}
-	for name, query := range pcq.withNamedPetroglyphs {
-		if err := pcq.loadPetroglyphs(ctx, query, nodes,
-			func(n *PersonalCollection) { n.appendNamedPetroglyphs(name) },
-			func(n *PersonalCollection, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range pcq.withNamedBooks {
 		if err := pcq.loadBooks(ctx, query, nodes,
 			func(n *PersonalCollection) { n.appendNamedBooks(name) },
 			func(n *PersonalCollection, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pcq.withNamedDendrochronology {
+		if err := pcq.loadDendrochronology(ctx, query, nodes,
+			func(n *PersonalCollection) { n.appendNamedDendrochronology(name) },
+			func(n *PersonalCollection, e *Dendrochronology) { n.appendNamedDendrochronology(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pcq.withNamedPetroglyphs {
+		if err := pcq.loadPetroglyphs(ctx, query, nodes,
+			func(n *PersonalCollection) { n.appendNamedPetroglyphs(name) },
+			func(n *PersonalCollection, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -759,67 +813,6 @@ func (pcq *PersonalCollectionQuery) loadArtifacts(ctx context.Context, query *Ar
 	}
 	return nil
 }
-func (pcq *PersonalCollectionQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*PersonalCollection, init func(*PersonalCollection), assign func(*PersonalCollection, *Petroglyph)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[int]*PersonalCollection)
-	nids := make(map[int]map[*PersonalCollection]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(personalcollection.PetroglyphsTable)
-		s.Join(joinT).On(s.C(petroglyph.FieldID), joinT.C(personalcollection.PetroglyphsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(personalcollection.PetroglyphsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(personalcollection.PetroglyphsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullInt64)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := int(values[0].(*sql.NullInt64).Int64)
-				inValue := int(values[1].(*sql.NullInt64).Int64)
-				if nids[inValue] == nil {
-					nids[inValue] = map[*PersonalCollection]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Petroglyph](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "petroglyphs" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (pcq *PersonalCollectionQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*PersonalCollection, init func(*PersonalCollection), assign func(*PersonalCollection, *Book)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*PersonalCollection)
@@ -874,6 +867,98 @@ func (pcq *PersonalCollectionQuery) loadBooks(ctx context.Context, query *BookQu
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "books" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pcq *PersonalCollectionQuery) loadDendrochronology(ctx context.Context, query *DendrochronologyQuery, nodes []*PersonalCollection, init func(*PersonalCollection), assign func(*PersonalCollection, *Dendrochronology)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*PersonalCollection)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Dendrochronology(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(personalcollection.DendrochronologyColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.personal_collection_dendrochronology
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "personal_collection_dendrochronology" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "personal_collection_dendrochronology" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (pcq *PersonalCollectionQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*PersonalCollection, init func(*PersonalCollection), assign func(*PersonalCollection, *Petroglyph)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*PersonalCollection)
+	nids := make(map[int]map[*PersonalCollection]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(personalcollection.PetroglyphsTable)
+		s.Join(joinT).On(s.C(petroglyph.FieldID), joinT.C(personalcollection.PetroglyphsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(personalcollection.PetroglyphsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(personalcollection.PetroglyphsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*PersonalCollection]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Petroglyph](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "petroglyphs" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -1055,20 +1140,6 @@ func (pcq *PersonalCollectionQuery) WithNamedArtifacts(name string, opts ...func
 	return pcq
 }
 
-// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pcq *PersonalCollectionQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *PersonalCollectionQuery {
-	query := (&PetroglyphClient{config: pcq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if pcq.withNamedPetroglyphs == nil {
-		pcq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
-	}
-	pcq.withNamedPetroglyphs[name] = query
-	return pcq
-}
-
 // WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (pcq *PersonalCollectionQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *PersonalCollectionQuery {
@@ -1080,6 +1151,34 @@ func (pcq *PersonalCollectionQuery) WithNamedBooks(name string, opts ...func(*Bo
 		pcq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	pcq.withNamedBooks[name] = query
+	return pcq
+}
+
+// WithNamedDendrochronology tells the query-builder to eager-load the nodes that are connected to the "dendrochronology"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pcq *PersonalCollectionQuery) WithNamedDendrochronology(name string, opts ...func(*DendrochronologyQuery)) *PersonalCollectionQuery {
+	query := (&DendrochronologyClient{config: pcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pcq.withNamedDendrochronology == nil {
+		pcq.withNamedDendrochronology = make(map[string]*DendrochronologyQuery)
+	}
+	pcq.withNamedDendrochronology[name] = query
+	return pcq
+}
+
+// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pcq *PersonalCollectionQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *PersonalCollectionQuery {
+	query := (&PetroglyphClient{config: pcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pcq.withNamedPetroglyphs == nil {
+		pcq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
+	}
+	pcq.withNamedPetroglyphs[name] = query
 	return pcq
 }
 

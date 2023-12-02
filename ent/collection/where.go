@@ -996,6 +996,29 @@ func HasArtifactsWith(preds ...predicate.Artifact) predicate.Collection {
 	})
 }
 
+// HasDendrochronology applies the HasEdge predicate on the "dendrochronology" edge.
+func HasDendrochronology() predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DendrochronologyTable, DendrochronologyColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDendrochronologyWith applies the HasEdge predicate on the "dendrochronology" edge with a given conditions (other predicates).
+func HasDendrochronologyWith(preds ...predicate.Dendrochronology) predicate.Collection {
+	return predicate.Collection(func(s *sql.Selector) {
+		step := newDendrochronologyStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPetroglyphs applies the HasEdge predicate on the "petroglyphs" edge.
 func HasPetroglyphs() predicate.Collection {
 	return predicate.Collection(func(s *sql.Selector) {

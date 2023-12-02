@@ -7639,6 +7639,10 @@ type CollectionWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "dendrochronology" edge predicates.
+	HasDendrochronology     *bool                         `json:"hasDendrochronology,omitempty"`
+	HasDendrochronologyWith []*DendrochronologyWhereInput `json:"hasDendrochronologyWith,omitempty"`
+
 	// "petroglyphs" edge predicates.
 	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
 	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
@@ -8286,6 +8290,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, collection.HasArtifactsWith(with...))
+	}
+	if i.HasDendrochronology != nil {
+		p := collection.HasDendrochronology()
+		if !*i.HasDendrochronology {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDendrochronologyWith) > 0 {
+		with := make([]predicate.Dendrochronology, 0, len(i.HasDendrochronologyWith))
+		for _, w := range i.HasDendrochronologyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDendrochronologyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasDendrochronologyWith(with...))
 	}
 	if i.HasPetroglyphs != nil {
 		p := collection.HasPetroglyphs()
@@ -20747,13 +20769,17 @@ type PersonalCollectionWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
-	// "petroglyphs" edge predicates.
-	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
-	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
-
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "dendrochronology" edge predicates.
+	HasDendrochronology     *bool                         `json:"hasDendrochronology,omitempty"`
+	HasDendrochronologyWith []*DendrochronologyWhereInput `json:"hasDendrochronologyWith,omitempty"`
+
+	// "petroglyphs" edge predicates.
+	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
+	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
 
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
@@ -21075,24 +21101,6 @@ func (i *PersonalCollectionWhereInput) P() (predicate.PersonalCollection, error)
 		}
 		predicates = append(predicates, personalcollection.HasArtifactsWith(with...))
 	}
-	if i.HasPetroglyphs != nil {
-		p := personalcollection.HasPetroglyphs()
-		if !*i.HasPetroglyphs {
-			p = personalcollection.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasPetroglyphsWith) > 0 {
-		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
-		for _, w := range i.HasPetroglyphsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, personalcollection.HasPetroglyphsWith(with...))
-	}
 	if i.HasBooks != nil {
 		p := personalcollection.HasBooks()
 		if !*i.HasBooks {
@@ -21110,6 +21118,42 @@ func (i *PersonalCollectionWhereInput) P() (predicate.PersonalCollection, error)
 			with = append(with, p)
 		}
 		predicates = append(predicates, personalcollection.HasBooksWith(with...))
+	}
+	if i.HasDendrochronology != nil {
+		p := personalcollection.HasDendrochronology()
+		if !*i.HasDendrochronology {
+			p = personalcollection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDendrochronologyWith) > 0 {
+		with := make([]predicate.Dendrochronology, 0, len(i.HasDendrochronologyWith))
+		for _, w := range i.HasDendrochronologyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDendrochronologyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, personalcollection.HasDendrochronologyWith(with...))
+	}
+	if i.HasPetroglyphs != nil {
+		p := personalcollection.HasPetroglyphs()
+		if !*i.HasPetroglyphs {
+			p = personalcollection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPetroglyphsWith) > 0 {
+		with := make([]predicate.Petroglyph, 0, len(i.HasPetroglyphsWith))
+		for _, w := range i.HasPetroglyphsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPetroglyphsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, personalcollection.HasPetroglyphsWith(with...))
 	}
 	if i.HasProtectedAreaPictures != nil {
 		p := personalcollection.HasProtectedAreaPictures()

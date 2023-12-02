@@ -2503,6 +2503,22 @@ func (c *CollectionClient) QueryArtifacts(co *Collection) *ArtifactQuery {
 	return query
 }
 
+// QueryDendrochronology queries the dendrochronology edge of a Collection.
+func (c *CollectionClient) QueryDendrochronology(co *Collection) *DendrochronologyQuery {
+	query := (&DendrochronologyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(dendrochronology.Table, dendrochronology.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.DendrochronologyTable, collection.DendrochronologyColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPetroglyphs queries the petroglyphs edge of a Collection.
 func (c *CollectionClient) QueryPetroglyphs(co *Collection) *PetroglyphQuery {
 	query := (&PetroglyphClient{config: c.config}).Query()
@@ -6042,22 +6058,6 @@ func (c *PersonalCollectionClient) QueryArtifacts(pc *PersonalCollection) *Artif
 	return query
 }
 
-// QueryPetroglyphs queries the petroglyphs edge of a PersonalCollection.
-func (c *PersonalCollectionClient) QueryPetroglyphs(pc *PersonalCollection) *PetroglyphQuery {
-	query := (&PetroglyphClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pc.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
-			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.PetroglyphsTable, personalcollection.PetroglyphsPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryBooks queries the books edge of a PersonalCollection.
 func (c *PersonalCollectionClient) QueryBooks(pc *PersonalCollection) *BookQuery {
 	query := (&BookClient{config: c.config}).Query()
@@ -6067,6 +6067,38 @@ func (c *PersonalCollectionClient) QueryBooks(pc *PersonalCollection) *BookQuery
 			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.BooksTable, personalcollection.BooksPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDendrochronology queries the dendrochronology edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryDendrochronology(pc *PersonalCollection) *DendrochronologyQuery {
+	query := (&DendrochronologyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
+			sqlgraph.To(dendrochronology.Table, dendrochronology.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, personalcollection.DendrochronologyTable, personalcollection.DendrochronologyColumn),
+		)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs queries the petroglyphs edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryPetroglyphs(pc *PersonalCollection) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.PetroglyphsTable, personalcollection.PetroglyphsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil

@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/category"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -276,6 +277,21 @@ func (cu *CollectionUpdate) AddArtifacts(a ...*Artifact) *CollectionUpdate {
 	return cu.AddArtifactIDs(ids...)
 }
 
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (cu *CollectionUpdate) AddDendrochronologyIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.AddDendrochronologyIDs(ids...)
+	return cu
+}
+
+// AddDendrochronology adds the "dendrochronology" edges to the Dendrochronology entity.
+func (cu *CollectionUpdate) AddDendrochronology(d ...*Dendrochronology) *CollectionUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return cu.AddDendrochronologyIDs(ids...)
+}
+
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
 func (cu *CollectionUpdate) AddPetroglyphIDs(ids ...int) *CollectionUpdate {
 	cu.mutation.AddPetroglyphIDs(ids...)
@@ -392,6 +408,27 @@ func (cu *CollectionUpdate) RemoveArtifacts(a ...*Artifact) *CollectionUpdate {
 		ids[i] = a[i].ID
 	}
 	return cu.RemoveArtifactIDs(ids...)
+}
+
+// ClearDendrochronology clears all "dendrochronology" edges to the Dendrochronology entity.
+func (cu *CollectionUpdate) ClearDendrochronology() *CollectionUpdate {
+	cu.mutation.ClearDendrochronology()
+	return cu
+}
+
+// RemoveDendrochronologyIDs removes the "dendrochronology" edge to Dendrochronology entities by IDs.
+func (cu *CollectionUpdate) RemoveDendrochronologyIDs(ids ...int) *CollectionUpdate {
+	cu.mutation.RemoveDendrochronologyIDs(ids...)
+	return cu
+}
+
+// RemoveDendrochronology removes "dendrochronology" edges to Dendrochronology entities.
+func (cu *CollectionUpdate) RemoveDendrochronology(d ...*Dendrochronology) *CollectionUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return cu.RemoveDendrochronologyIDs(ids...)
 }
 
 // ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
@@ -703,6 +740,51 @@ func (cu *CollectionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.DendrochronologyTable,
+			Columns: []string{collection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedDendrochronologyIDs(); len(nodes) > 0 && !cu.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.DendrochronologyTable,
+			Columns: []string{collection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.DendrochronologyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.DendrochronologyTable,
+			Columns: []string{collection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1179,6 +1261,21 @@ func (cuo *CollectionUpdateOne) AddArtifacts(a ...*Artifact) *CollectionUpdateOn
 	return cuo.AddArtifactIDs(ids...)
 }
 
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (cuo *CollectionUpdateOne) AddDendrochronologyIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.AddDendrochronologyIDs(ids...)
+	return cuo
+}
+
+// AddDendrochronology adds the "dendrochronology" edges to the Dendrochronology entity.
+func (cuo *CollectionUpdateOne) AddDendrochronology(d ...*Dendrochronology) *CollectionUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return cuo.AddDendrochronologyIDs(ids...)
+}
+
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
 func (cuo *CollectionUpdateOne) AddPetroglyphIDs(ids ...int) *CollectionUpdateOne {
 	cuo.mutation.AddPetroglyphIDs(ids...)
@@ -1295,6 +1392,27 @@ func (cuo *CollectionUpdateOne) RemoveArtifacts(a ...*Artifact) *CollectionUpdat
 		ids[i] = a[i].ID
 	}
 	return cuo.RemoveArtifactIDs(ids...)
+}
+
+// ClearDendrochronology clears all "dendrochronology" edges to the Dendrochronology entity.
+func (cuo *CollectionUpdateOne) ClearDendrochronology() *CollectionUpdateOne {
+	cuo.mutation.ClearDendrochronology()
+	return cuo
+}
+
+// RemoveDendrochronologyIDs removes the "dendrochronology" edge to Dendrochronology entities by IDs.
+func (cuo *CollectionUpdateOne) RemoveDendrochronologyIDs(ids ...int) *CollectionUpdateOne {
+	cuo.mutation.RemoveDendrochronologyIDs(ids...)
+	return cuo
+}
+
+// RemoveDendrochronology removes "dendrochronology" edges to Dendrochronology entities.
+func (cuo *CollectionUpdateOne) RemoveDendrochronology(d ...*Dendrochronology) *CollectionUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return cuo.RemoveDendrochronologyIDs(ids...)
 }
 
 // ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
@@ -1636,6 +1754,51 @@ func (cuo *CollectionUpdateOne) sqlSave(ctx context.Context) (_node *Collection,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.DendrochronologyTable,
+			Columns: []string{collection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedDendrochronologyIDs(); len(nodes) > 0 && !cuo.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.DendrochronologyTable,
+			Columns: []string{collection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.DendrochronologyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.DendrochronologyTable,
+			Columns: []string{collection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -17,6 +17,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/category"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -32,6 +33,7 @@ type CollectionQuery struct {
 	predicates                     []predicate.Collection
 	withArt                        *ArtQuery
 	withArtifacts                  *ArtifactQuery
+	withDendrochronology           *DendrochronologyQuery
 	withPetroglyphs                *PetroglyphQuery
 	withBooks                      *BookQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
@@ -42,6 +44,7 @@ type CollectionQuery struct {
 	loadTotal                      []func(context.Context, []*Collection) error
 	withNamedArt                   map[string]*ArtQuery
 	withNamedArtifacts             map[string]*ArtifactQuery
+	withNamedDendrochronology      map[string]*DendrochronologyQuery
 	withNamedPetroglyphs           map[string]*PetroglyphQuery
 	withNamedBooks                 map[string]*BookQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
@@ -119,6 +122,28 @@ func (cq *CollectionQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(collection.Table, collection.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, collection.ArtifactsTable, collection.ArtifactsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDendrochronology chains the current query on the "dendrochronology" edge.
+func (cq *CollectionQuery) QueryDendrochronology() *DendrochronologyQuery {
+	query := (&DendrochronologyClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, selector),
+			sqlgraph.To(dendrochronology.Table, dendrochronology.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.DendrochronologyTable, collection.DendrochronologyColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -430,6 +455,7 @@ func (cq *CollectionQuery) Clone() *CollectionQuery {
 		predicates:                append([]predicate.Collection{}, cq.predicates...),
 		withArt:                   cq.withArt.Clone(),
 		withArtifacts:             cq.withArtifacts.Clone(),
+		withDendrochronology:      cq.withDendrochronology.Clone(),
 		withPetroglyphs:           cq.withPetroglyphs.Clone(),
 		withBooks:                 cq.withBooks.Clone(),
 		withProtectedAreaPictures: cq.withProtectedAreaPictures.Clone(),
@@ -460,6 +486,17 @@ func (cq *CollectionQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *Collecti
 		opt(query)
 	}
 	cq.withArtifacts = query
+	return cq
+}
+
+// WithDendrochronology tells the query-builder to eager-load the nodes that are connected to
+// the "dendrochronology" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithDendrochronology(opts ...func(*DendrochronologyQuery)) *CollectionQuery {
+	query := (&DendrochronologyClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withDendrochronology = query
 	return cq
 }
 
@@ -603,9 +640,10 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		nodes       = []*Collection{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			cq.withArt != nil,
 			cq.withArtifacts != nil,
+			cq.withDendrochronology != nil,
 			cq.withPetroglyphs != nil,
 			cq.withBooks != nil,
 			cq.withProtectedAreaPictures != nil,
@@ -651,6 +689,15 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		if err := cq.loadArtifacts(ctx, query, nodes,
 			func(n *Collection) { n.Edges.Artifacts = []*Artifact{} },
 			func(n *Collection, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withDendrochronology; query != nil {
+		if err := cq.loadDendrochronology(ctx, query, nodes,
+			func(n *Collection) { n.Edges.Dendrochronology = []*Dendrochronology{} },
+			func(n *Collection, e *Dendrochronology) {
+				n.Edges.Dendrochronology = append(n.Edges.Dendrochronology, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -701,6 +748,13 @@ func (cq *CollectionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*C
 		if err := cq.loadArtifacts(ctx, query, nodes,
 			func(n *Collection) { n.appendNamedArtifacts(name) },
 			func(n *Collection, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedDendrochronology {
+		if err := cq.loadDendrochronology(ctx, query, nodes,
+			func(n *Collection) { n.appendNamedDendrochronology(name) },
+			func(n *Collection, e *Dendrochronology) { n.appendNamedDendrochronology(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -797,6 +851,37 @@ func (cq *CollectionQuery) loadArtifacts(ctx context.Context, query *ArtifactQue
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "collection_artifacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CollectionQuery) loadDendrochronology(ctx context.Context, query *DendrochronologyQuery, nodes []*Collection, init func(*Collection), assign func(*Collection, *Dendrochronology)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Collection)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Dendrochronology(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(collection.DendrochronologyColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.collection_dendrochronology
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "collection_dendrochronology" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "collection_dendrochronology" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -1098,6 +1183,20 @@ func (cq *CollectionQuery) WithNamedArtifacts(name string, opts ...func(*Artifac
 		cq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	cq.withNamedArtifacts[name] = query
+	return cq
+}
+
+// WithNamedDendrochronology tells the query-builder to eager-load the nodes that are connected to the "dendrochronology"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CollectionQuery) WithNamedDendrochronology(name string, opts ...func(*DendrochronologyQuery)) *CollectionQuery {
+	query := (&DendrochronologyClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedDendrochronology == nil {
+		cq.withNamedDendrochronology = make(map[string]*DendrochronologyQuery)
+	}
+	cq.withNamedDendrochronology[name] = query
 	return cq
 }
 

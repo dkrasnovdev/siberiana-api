@@ -25,6 +25,7 @@ type DendrochronologyQuery struct {
 	inters            []Interceptor
 	predicates        []predicate.Dendrochronology
 	withAnalysis      *DendrochronologicalAnalysisQuery
+	withFKs           bool
 	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*Dendrochronology) error
 	withNamedAnalysis map[string]*DendrochronologicalAnalysisQuery
@@ -379,11 +380,15 @@ func (dq *DendrochronologyQuery) prepareQuery(ctx context.Context) error {
 func (dq *DendrochronologyQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dendrochronology, error) {
 	var (
 		nodes       = []*Dendrochronology{}
+		withFKs     = dq.withFKs
 		_spec       = dq.querySpec()
 		loadedTypes = [1]bool{
 			dq.withAnalysis != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, dendrochronology.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Dendrochronology).scanValues(nil, columns)
 	}

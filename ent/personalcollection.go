@@ -41,22 +41,25 @@ type PersonalCollectionEdges struct {
 	Art []*Art `json:"art,omitempty"`
 	// Artifacts holds the value of the artifacts edge.
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
-	// Petroglyphs holds the value of the petroglyphs edge.
-	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// Dendrochronology holds the value of the dendrochronology edge.
+	Dendrochronology []*Dendrochronology `json:"dendrochronology,omitempty"`
+	// Petroglyphs holds the value of the petroglyphs edge.
+	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
-	namedPetroglyphs           map[string][]*Petroglyph
 	namedBooks                 map[string][]*Book
+	namedDendrochronology      map[string][]*Dendrochronology
+	namedPetroglyphs           map[string][]*Petroglyph
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 }
 
@@ -78,28 +81,37 @@ func (e PersonalCollectionEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	return nil, &NotLoadedError{edge: "artifacts"}
 }
 
-// PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
-// was not loaded in eager-loading.
-func (e PersonalCollectionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
-	if e.loadedTypes[2] {
-		return e.Petroglyphs, nil
-	}
-	return nil, &NotLoadedError{edge: "petroglyphs"}
-}
-
 // BooksOrErr returns the Books value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalCollectionEdges) BooksOrErr() ([]*Book, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.Books, nil
 	}
 	return nil, &NotLoadedError{edge: "books"}
 }
 
+// DendrochronologyOrErr returns the Dendrochronology value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonalCollectionEdges) DendrochronologyOrErr() ([]*Dendrochronology, error) {
+	if e.loadedTypes[3] {
+		return e.Dendrochronology, nil
+	}
+	return nil, &NotLoadedError{edge: "dendrochronology"}
+}
+
+// PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonalCollectionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
+	if e.loadedTypes[4] {
+		return e.Petroglyphs, nil
+	}
+	return nil, &NotLoadedError{edge: "petroglyphs"}
+}
+
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalCollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -198,14 +210,19 @@ func (pc *PersonalCollection) QueryArtifacts() *ArtifactQuery {
 	return NewPersonalCollectionClient(pc.config).QueryArtifacts(pc)
 }
 
-// QueryPetroglyphs queries the "petroglyphs" edge of the PersonalCollection entity.
-func (pc *PersonalCollection) QueryPetroglyphs() *PetroglyphQuery {
-	return NewPersonalCollectionClient(pc.config).QueryPetroglyphs(pc)
-}
-
 // QueryBooks queries the "books" edge of the PersonalCollection entity.
 func (pc *PersonalCollection) QueryBooks() *BookQuery {
 	return NewPersonalCollectionClient(pc.config).QueryBooks(pc)
+}
+
+// QueryDendrochronology queries the "dendrochronology" edge of the PersonalCollection entity.
+func (pc *PersonalCollection) QueryDendrochronology() *DendrochronologyQuery {
+	return NewPersonalCollectionClient(pc.config).QueryDendrochronology(pc)
+}
+
+// QueryPetroglyphs queries the "petroglyphs" edge of the PersonalCollection entity.
+func (pc *PersonalCollection) QueryPetroglyphs() *PetroglyphQuery {
+	return NewPersonalCollectionClient(pc.config).QueryPetroglyphs(pc)
 }
 
 // QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the PersonalCollection entity.
@@ -305,30 +322,6 @@ func (pc *PersonalCollection) appendNamedArtifacts(name string, edges ...*Artifa
 	}
 }
 
-// NamedPetroglyphs returns the Petroglyphs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (pc *PersonalCollection) NamedPetroglyphs(name string) ([]*Petroglyph, error) {
-	if pc.Edges.namedPetroglyphs == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := pc.Edges.namedPetroglyphs[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (pc *PersonalCollection) appendNamedPetroglyphs(name string, edges ...*Petroglyph) {
-	if pc.Edges.namedPetroglyphs == nil {
-		pc.Edges.namedPetroglyphs = make(map[string][]*Petroglyph)
-	}
-	if len(edges) == 0 {
-		pc.Edges.namedPetroglyphs[name] = []*Petroglyph{}
-	} else {
-		pc.Edges.namedPetroglyphs[name] = append(pc.Edges.namedPetroglyphs[name], edges...)
-	}
-}
-
 // NamedBooks returns the Books named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (pc *PersonalCollection) NamedBooks(name string) ([]*Book, error) {
@@ -350,6 +343,54 @@ func (pc *PersonalCollection) appendNamedBooks(name string, edges ...*Book) {
 		pc.Edges.namedBooks[name] = []*Book{}
 	} else {
 		pc.Edges.namedBooks[name] = append(pc.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedDendrochronology returns the Dendrochronology named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pc *PersonalCollection) NamedDendrochronology(name string) ([]*Dendrochronology, error) {
+	if pc.Edges.namedDendrochronology == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pc.Edges.namedDendrochronology[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pc *PersonalCollection) appendNamedDendrochronology(name string, edges ...*Dendrochronology) {
+	if pc.Edges.namedDendrochronology == nil {
+		pc.Edges.namedDendrochronology = make(map[string][]*Dendrochronology)
+	}
+	if len(edges) == 0 {
+		pc.Edges.namedDendrochronology[name] = []*Dendrochronology{}
+	} else {
+		pc.Edges.namedDendrochronology[name] = append(pc.Edges.namedDendrochronology[name], edges...)
+	}
+}
+
+// NamedPetroglyphs returns the Petroglyphs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pc *PersonalCollection) NamedPetroglyphs(name string) ([]*Petroglyph, error) {
+	if pc.Edges.namedPetroglyphs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pc.Edges.namedPetroglyphs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pc *PersonalCollection) appendNamedPetroglyphs(name string, edges ...*Petroglyph) {
+	if pc.Edges.namedPetroglyphs == nil {
+		pc.Edges.namedPetroglyphs = make(map[string][]*Petroglyph)
+	}
+	if len(edges) == 0 {
+		pc.Edges.namedPetroglyphs[name] = []*Petroglyph{}
+	} else {
+		pc.Edges.namedPetroglyphs[name] = append(pc.Edges.namedPetroglyphs[name], edges...)
 	}
 }
 

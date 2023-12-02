@@ -1868,6 +1868,18 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			c.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "dendrochronology":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DendrochronologyClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, dendrochronologyImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedDendrochronology(alias, func(wq *DendrochronologyQuery) {
+				*wq = *query
+			})
 		case "petroglyphs":
 			var (
 				alias = field.Alias
@@ -5196,18 +5208,6 @@ func (pc *PersonalCollectionQuery) collectField(ctx context.Context, opCtx *grap
 			pc.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
-		case "petroglyphs":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&PetroglyphClient{config: pc.config}).Query()
-			)
-			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
-				return err
-			}
-			pc.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
-				*wq = *query
-			})
 		case "books":
 			var (
 				alias = field.Alias
@@ -5218,6 +5218,30 @@ func (pc *PersonalCollectionQuery) collectField(ctx context.Context, opCtx *grap
 				return err
 			}
 			pc.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "dendrochronology":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DendrochronologyClient{config: pc.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, dendrochronologyImplementors)...); err != nil {
+				return err
+			}
+			pc.WithNamedDendrochronology(alias, func(wq *DendrochronologyQuery) {
+				*wq = *query
+			})
+		case "petroglyphs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PetroglyphClient{config: pc.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, petroglyphImplementors)...); err != nil {
+				return err
+			}
+			pc.WithNamedPetroglyphs(alias, func(wq *PetroglyphQuery) {
 				*wq = *query
 			})
 		case "protectedAreaPictures":

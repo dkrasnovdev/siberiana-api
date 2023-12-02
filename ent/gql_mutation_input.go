@@ -2030,6 +2030,7 @@ type CreateCollectionInput struct {
 	Type                    *collection.Type
 	ArtIDs                  []int
 	ArtifactIDs             []int
+	DendrochronologyIDs     []int
 	PetroglyphIDs           []int
 	BookIDs                 []int
 	ProtectedAreaPictureIDs []int
@@ -2085,6 +2086,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
+	if v := i.DendrochronologyIDs; len(v) > 0 {
+		m.AddDendrochronologyIDs(v...)
+	}
 	if v := i.PetroglyphIDs; len(v) > 0 {
 		m.AddPetroglyphIDs(v...)
 	}
@@ -2137,6 +2141,9 @@ type UpdateCollectionInput struct {
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
+	ClearDendrochronology         bool
+	AddDendrochronologyIDs        []int
+	RemoveDendrochronologyIDs     []int
 	ClearPetroglyphs              bool
 	AddPetroglyphIDs              []int
 	RemovePetroglyphIDs           []int
@@ -2240,6 +2247,15 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	}
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearDendrochronology {
+		m.ClearDendrochronology()
+	}
+	if v := i.AddDendrochronologyIDs; len(v) > 0 {
+		m.AddDendrochronologyIDs(v...)
+	}
+	if v := i.RemoveDendrochronologyIDs; len(v) > 0 {
+		m.RemoveDendrochronologyIDs(v...)
 	}
 	if i.ClearPetroglyphs {
 		m.ClearPetroglyphs()
@@ -5590,8 +5606,9 @@ type CreatePersonalCollectionInput struct {
 	IsPublic                *bool
 	ArtIDs                  []int
 	ArtifactIDs             []int
-	PetroglyphIDs           []int
 	BookIDs                 []int
+	DendrochronologyIDs     []int
+	PetroglyphIDs           []int
 	ProtectedAreaPictureIDs []int
 }
 
@@ -5619,11 +5636,14 @@ func (i *CreatePersonalCollectionInput) Mutate(m *PersonalCollectionMutation) {
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
 	}
-	if v := i.PetroglyphIDs; len(v) > 0 {
-		m.AddPetroglyphIDs(v...)
-	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
+	}
+	if v := i.DendrochronologyIDs; len(v) > 0 {
+		m.AddDendrochronologyIDs(v...)
+	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
 	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
@@ -5651,12 +5671,15 @@ type UpdatePersonalCollectionInput struct {
 	ClearArtifacts                bool
 	AddArtifactIDs                []int
 	RemoveArtifactIDs             []int
-	ClearPetroglyphs              bool
-	AddPetroglyphIDs              []int
-	RemovePetroglyphIDs           []int
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
+	ClearDendrochronology         bool
+	AddDendrochronologyIDs        []int
+	RemoveDendrochronologyIDs     []int
+	ClearPetroglyphs              bool
+	AddPetroglyphIDs              []int
+	RemovePetroglyphIDs           []int
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
@@ -5703,15 +5726,6 @@ func (i *UpdatePersonalCollectionInput) Mutate(m *PersonalCollectionMutation) {
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
 	}
-	if i.ClearPetroglyphs {
-		m.ClearPetroglyphs()
-	}
-	if v := i.AddPetroglyphIDs; len(v) > 0 {
-		m.AddPetroglyphIDs(v...)
-	}
-	if v := i.RemovePetroglyphIDs; len(v) > 0 {
-		m.RemovePetroglyphIDs(v...)
-	}
 	if i.ClearBooks {
 		m.ClearBooks()
 	}
@@ -5720,6 +5734,24 @@ func (i *UpdatePersonalCollectionInput) Mutate(m *PersonalCollectionMutation) {
 	}
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
+	}
+	if i.ClearDendrochronology {
+		m.ClearDendrochronology()
+	}
+	if v := i.AddDendrochronologyIDs; len(v) > 0 {
+		m.AddDendrochronologyIDs(v...)
+	}
+	if v := i.RemoveDendrochronologyIDs; len(v) > 0 {
+		m.RemoveDendrochronologyIDs(v...)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
 	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()

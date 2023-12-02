@@ -436,29 +436,6 @@ func HasArtifactsWith(preds ...predicate.Artifact) predicate.PersonalCollection 
 	})
 }
 
-// HasPetroglyphs applies the HasEdge predicate on the "petroglyphs" edge.
-func HasPetroglyphs() predicate.PersonalCollection {
-	return predicate.PersonalCollection(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasPetroglyphsWith applies the HasEdge predicate on the "petroglyphs" edge with a given conditions (other predicates).
-func HasPetroglyphsWith(preds ...predicate.Petroglyph) predicate.PersonalCollection {
-	return predicate.PersonalCollection(func(s *sql.Selector) {
-		step := newPetroglyphsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasBooks applies the HasEdge predicate on the "books" edge.
 func HasBooks() predicate.PersonalCollection {
 	return predicate.PersonalCollection(func(s *sql.Selector) {
@@ -474,6 +451,52 @@ func HasBooks() predicate.PersonalCollection {
 func HasBooksWith(preds ...predicate.Book) predicate.PersonalCollection {
 	return predicate.PersonalCollection(func(s *sql.Selector) {
 		step := newBooksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDendrochronology applies the HasEdge predicate on the "dendrochronology" edge.
+func HasDendrochronology() predicate.PersonalCollection {
+	return predicate.PersonalCollection(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DendrochronologyTable, DendrochronologyColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDendrochronologyWith applies the HasEdge predicate on the "dendrochronology" edge with a given conditions (other predicates).
+func HasDendrochronologyWith(preds ...predicate.Dendrochronology) predicate.PersonalCollection {
+	return predicate.PersonalCollection(func(s *sql.Selector) {
+		step := newDendrochronologyStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPetroglyphs applies the HasEdge predicate on the "petroglyphs" edge.
+func HasPetroglyphs() predicate.PersonalCollection {
+	return predicate.PersonalCollection(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPetroglyphsWith applies the HasEdge predicate on the "petroglyphs" edge with a given conditions (other predicates).
+func HasPetroglyphsWith(preds ...predicate.Petroglyph) predicate.PersonalCollection {
+	return predicate.PersonalCollection(func(s *sql.Selector) {
+		step := newPetroglyphsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

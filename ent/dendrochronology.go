@@ -60,8 +60,10 @@ type Dendrochronology struct {
 	ChartURL string `json:"chart_url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DendrochronologyQuery when eager-loading is set.
-	Edges        DendrochronologyEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                                DendrochronologyEdges `json:"edges"`
+	collection_dendrochronology          *int
+	personal_collection_dendrochronology *int
+	selectValues                         sql.SelectValues
 }
 
 // DendrochronologyEdges holds the relations/edges for other nodes in the graph.
@@ -99,6 +101,10 @@ func (*Dendrochronology) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case dendrochronology.FieldCreatedAt, dendrochronology.FieldUpdatedAt, dendrochronology.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case dendrochronology.ForeignKeys[0]: // collection_dendrochronology
+			values[i] = new(sql.NullInt64)
+		case dendrochronology.ForeignKeys[1]: // personal_collection_dendrochronology
+			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -241,6 +247,20 @@ func (d *Dendrochronology) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field chart_url", values[i])
 			} else if value.Valid {
 				d.ChartURL = value.String
+			}
+		case dendrochronology.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field collection_dendrochronology", value)
+			} else if value.Valid {
+				d.collection_dendrochronology = new(int)
+				*d.collection_dendrochronology = int(value.Int64)
+			}
+		case dendrochronology.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field personal_collection_dendrochronology", value)
+			} else if value.Valid {
+				d.personal_collection_dendrochronology = new(int)
+				*d.personal_collection_dendrochronology = int(value.Int64)
 			}
 		default:
 			d.selectValues.Set(columns[i], values[i])

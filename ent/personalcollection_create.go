@@ -13,6 +13,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -131,21 +132,6 @@ func (pcc *PersonalCollectionCreate) AddArtifacts(a ...*Artifact) *PersonalColle
 	return pcc.AddArtifactIDs(ids...)
 }
 
-// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
-func (pcc *PersonalCollectionCreate) AddPetroglyphIDs(ids ...int) *PersonalCollectionCreate {
-	pcc.mutation.AddPetroglyphIDs(ids...)
-	return pcc
-}
-
-// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
-func (pcc *PersonalCollectionCreate) AddPetroglyphs(p ...*Petroglyph) *PersonalCollectionCreate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pcc.AddPetroglyphIDs(ids...)
-}
-
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pcc *PersonalCollectionCreate) AddBookIDs(ids ...int) *PersonalCollectionCreate {
 	pcc.mutation.AddBookIDs(ids...)
@@ -159,6 +145,36 @@ func (pcc *PersonalCollectionCreate) AddBooks(b ...*Book) *PersonalCollectionCre
 		ids[i] = b[i].ID
 	}
 	return pcc.AddBookIDs(ids...)
+}
+
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (pcc *PersonalCollectionCreate) AddDendrochronologyIDs(ids ...int) *PersonalCollectionCreate {
+	pcc.mutation.AddDendrochronologyIDs(ids...)
+	return pcc
+}
+
+// AddDendrochronology adds the "dendrochronology" edges to the Dendrochronology entity.
+func (pcc *PersonalCollectionCreate) AddDendrochronology(d ...*Dendrochronology) *PersonalCollectionCreate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return pcc.AddDendrochronologyIDs(ids...)
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (pcc *PersonalCollectionCreate) AddPetroglyphIDs(ids ...int) *PersonalCollectionCreate {
+	pcc.mutation.AddPetroglyphIDs(ids...)
+	return pcc
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (pcc *PersonalCollectionCreate) AddPetroglyphs(p ...*Petroglyph) *PersonalCollectionCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pcc.AddPetroglyphIDs(ids...)
 }
 
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
@@ -335,22 +351,6 @@ func (pcc *PersonalCollectionCreate) createSpec() (*PersonalCollection, *sqlgrap
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := pcc.mutation.PetroglyphsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   personalcollection.PetroglyphsTable,
-			Columns: personalcollection.PetroglyphsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := pcc.mutation.BooksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -360,6 +360,38 @@ func (pcc *PersonalCollectionCreate) createSpec() (*PersonalCollection, *sqlgrap
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pcc.mutation.DendrochronologyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   personalcollection.DendrochronologyTable,
+			Columns: []string{personalcollection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pcc.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.PetroglyphsTable,
+			Columns: personalcollection.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

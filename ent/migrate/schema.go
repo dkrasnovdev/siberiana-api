@@ -537,12 +537,28 @@ var (
 		{Name: "analysis_url", Type: field.TypeString, Nullable: true},
 		{Name: "data_url", Type: field.TypeString, Nullable: true},
 		{Name: "chart_url", Type: field.TypeString, Nullable: true},
+		{Name: "collection_dendrochronology", Type: field.TypeInt, Nullable: true},
+		{Name: "personal_collection_dendrochronology", Type: field.TypeInt, Nullable: true},
 	}
 	// DendrochronologiesTable holds the schema information for the "dendrochronologies" table.
 	DendrochronologiesTable = &schema.Table{
 		Name:       "dendrochronologies",
 		Columns:    DendrochronologiesColumns,
 		PrimaryKey: []*schema.Column{DendrochronologiesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "dendrochronologies_collections_dendrochronology",
+				Columns:    []*schema.Column{DendrochronologiesColumns[21]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "dendrochronologies_personal_collections_dendrochronology",
+				Columns:    []*schema.Column{DendrochronologiesColumns[22]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// DistrictsColumns holds the columns for the "districts" table.
 	DistrictsColumns = []*schema.Column{
@@ -1648,31 +1664,6 @@ var (
 			},
 		},
 	}
-	// PersonalCollectionPetroglyphsColumns holds the columns for the "personal_collection_petroglyphs" table.
-	PersonalCollectionPetroglyphsColumns = []*schema.Column{
-		{Name: "personal_collection_id", Type: field.TypeInt},
-		{Name: "petroglyph_id", Type: field.TypeInt},
-	}
-	// PersonalCollectionPetroglyphsTable holds the schema information for the "personal_collection_petroglyphs" table.
-	PersonalCollectionPetroglyphsTable = &schema.Table{
-		Name:       "personal_collection_petroglyphs",
-		Columns:    PersonalCollectionPetroglyphsColumns,
-		PrimaryKey: []*schema.Column{PersonalCollectionPetroglyphsColumns[0], PersonalCollectionPetroglyphsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "personal_collection_petroglyphs_personal_collection_id",
-				Columns:    []*schema.Column{PersonalCollectionPetroglyphsColumns[0]},
-				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "personal_collection_petroglyphs_petroglyph_id",
-				Columns:    []*schema.Column{PersonalCollectionPetroglyphsColumns[1]},
-				RefColumns: []*schema.Column{PetroglyphsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// PersonalCollectionBooksColumns holds the columns for the "personal_collection_books" table.
 	PersonalCollectionBooksColumns = []*schema.Column{
 		{Name: "personal_collection_id", Type: field.TypeInt},
@@ -1694,6 +1685,31 @@ var (
 				Symbol:     "personal_collection_books_book_id",
 				Columns:    []*schema.Column{PersonalCollectionBooksColumns[1]},
 				RefColumns: []*schema.Column{BooksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// PersonalCollectionPetroglyphsColumns holds the columns for the "personal_collection_petroglyphs" table.
+	PersonalCollectionPetroglyphsColumns = []*schema.Column{
+		{Name: "personal_collection_id", Type: field.TypeInt},
+		{Name: "petroglyph_id", Type: field.TypeInt},
+	}
+	// PersonalCollectionPetroglyphsTable holds the schema information for the "personal_collection_petroglyphs" table.
+	PersonalCollectionPetroglyphsTable = &schema.Table{
+		Name:       "personal_collection_petroglyphs",
+		Columns:    PersonalCollectionPetroglyphsColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionPetroglyphsColumns[0], PersonalCollectionPetroglyphsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_collection_petroglyphs_personal_collection_id",
+				Columns:    []*schema.Column{PersonalCollectionPetroglyphsColumns[0]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "personal_collection_petroglyphs_petroglyph_id",
+				Columns:    []*schema.Column{PersonalCollectionPetroglyphsColumns[1]},
+				RefColumns: []*schema.Column{PetroglyphsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -2005,8 +2021,8 @@ var (
 		PersonPublicationsTable,
 		PersonalCollectionArtTable,
 		PersonalCollectionArtifactsTable,
-		PersonalCollectionPetroglyphsTable,
 		PersonalCollectionBooksTable,
+		PersonalCollectionPetroglyphsTable,
 		PersonalCollectionProtectedAreaPicturesTable,
 		ProjectArtifactsTable,
 		PublicationArtifactsTable,
@@ -2053,6 +2069,8 @@ func init() {
 	BooksTable.ForeignKeys[9].RefTable = SettlementsTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
 	DendrochronologicalAnalysesTable.ForeignKeys[0].RefTable = DendrochronologiesTable
+	DendrochronologiesTable.ForeignKeys[0].RefTable = CollectionsTable
+	DendrochronologiesTable.ForeignKeys[1].RefTable = PersonalCollectionsTable
 	DistrictsTable.ForeignKeys[0].RefTable = RegionsTable
 	LocationsTable.ForeignKeys[0].RefTable = CountriesTable
 	LocationsTable.ForeignKeys[1].RefTable = DistrictsTable
@@ -2109,10 +2127,10 @@ func init() {
 	PersonalCollectionArtTable.ForeignKeys[1].RefTable = ArtsTable
 	PersonalCollectionArtifactsTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
 	PersonalCollectionArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
-	PersonalCollectionPetroglyphsTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
-	PersonalCollectionPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
 	PersonalCollectionBooksTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
 	PersonalCollectionBooksTable.ForeignKeys[1].RefTable = BooksTable
+	PersonalCollectionPetroglyphsTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
+	PersonalCollectionPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
 	PersonalCollectionProtectedAreaPicturesTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
 	PersonalCollectionProtectedAreaPicturesTable.ForeignKeys[1].RefTable = ProtectedAreaPicturesTable
 	ProjectArtifactsTable.ForeignKeys[0].RefTable = ProjectsTable

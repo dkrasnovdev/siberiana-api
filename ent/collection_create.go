@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/category"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -235,6 +236,21 @@ func (cc *CollectionCreate) AddArtifacts(a ...*Artifact) *CollectionCreate {
 		ids[i] = a[i].ID
 	}
 	return cc.AddArtifactIDs(ids...)
+}
+
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (cc *CollectionCreate) AddDendrochronologyIDs(ids ...int) *CollectionCreate {
+	cc.mutation.AddDendrochronologyIDs(ids...)
+	return cc
+}
+
+// AddDendrochronology adds the "dendrochronology" edges to the Dendrochronology entity.
+func (cc *CollectionCreate) AddDendrochronology(d ...*Dendrochronology) *CollectionCreate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return cc.AddDendrochronologyIDs(ids...)
 }
 
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
@@ -488,6 +504,22 @@ func (cc *CollectionCreate) createSpec() (*Collection, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.DendrochronologyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   collection.DendrochronologyTable,
+			Columns: []string{collection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

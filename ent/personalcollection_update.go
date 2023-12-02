@@ -14,6 +14,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/art"
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -129,21 +130,6 @@ func (pcu *PersonalCollectionUpdate) AddArtifacts(a ...*Artifact) *PersonalColle
 	return pcu.AddArtifactIDs(ids...)
 }
 
-// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
-func (pcu *PersonalCollectionUpdate) AddPetroglyphIDs(ids ...int) *PersonalCollectionUpdate {
-	pcu.mutation.AddPetroglyphIDs(ids...)
-	return pcu
-}
-
-// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
-func (pcu *PersonalCollectionUpdate) AddPetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pcu.AddPetroglyphIDs(ids...)
-}
-
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pcu *PersonalCollectionUpdate) AddBookIDs(ids ...int) *PersonalCollectionUpdate {
 	pcu.mutation.AddBookIDs(ids...)
@@ -157,6 +143,36 @@ func (pcu *PersonalCollectionUpdate) AddBooks(b ...*Book) *PersonalCollectionUpd
 		ids[i] = b[i].ID
 	}
 	return pcu.AddBookIDs(ids...)
+}
+
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (pcu *PersonalCollectionUpdate) AddDendrochronologyIDs(ids ...int) *PersonalCollectionUpdate {
+	pcu.mutation.AddDendrochronologyIDs(ids...)
+	return pcu
+}
+
+// AddDendrochronology adds the "dendrochronology" edges to the Dendrochronology entity.
+func (pcu *PersonalCollectionUpdate) AddDendrochronology(d ...*Dendrochronology) *PersonalCollectionUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return pcu.AddDendrochronologyIDs(ids...)
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (pcu *PersonalCollectionUpdate) AddPetroglyphIDs(ids ...int) *PersonalCollectionUpdate {
+	pcu.mutation.AddPetroglyphIDs(ids...)
+	return pcu
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (pcu *PersonalCollectionUpdate) AddPetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pcu.AddPetroglyphIDs(ids...)
 }
 
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
@@ -221,27 +237,6 @@ func (pcu *PersonalCollectionUpdate) RemoveArtifacts(a ...*Artifact) *PersonalCo
 	return pcu.RemoveArtifactIDs(ids...)
 }
 
-// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
-func (pcu *PersonalCollectionUpdate) ClearPetroglyphs() *PersonalCollectionUpdate {
-	pcu.mutation.ClearPetroglyphs()
-	return pcu
-}
-
-// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
-func (pcu *PersonalCollectionUpdate) RemovePetroglyphIDs(ids ...int) *PersonalCollectionUpdate {
-	pcu.mutation.RemovePetroglyphIDs(ids...)
-	return pcu
-}
-
-// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
-func (pcu *PersonalCollectionUpdate) RemovePetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pcu.RemovePetroglyphIDs(ids...)
-}
-
 // ClearBooks clears all "books" edges to the Book entity.
 func (pcu *PersonalCollectionUpdate) ClearBooks() *PersonalCollectionUpdate {
 	pcu.mutation.ClearBooks()
@@ -261,6 +256,48 @@ func (pcu *PersonalCollectionUpdate) RemoveBooks(b ...*Book) *PersonalCollection
 		ids[i] = b[i].ID
 	}
 	return pcu.RemoveBookIDs(ids...)
+}
+
+// ClearDendrochronology clears all "dendrochronology" edges to the Dendrochronology entity.
+func (pcu *PersonalCollectionUpdate) ClearDendrochronology() *PersonalCollectionUpdate {
+	pcu.mutation.ClearDendrochronology()
+	return pcu
+}
+
+// RemoveDendrochronologyIDs removes the "dendrochronology" edge to Dendrochronology entities by IDs.
+func (pcu *PersonalCollectionUpdate) RemoveDendrochronologyIDs(ids ...int) *PersonalCollectionUpdate {
+	pcu.mutation.RemoveDendrochronologyIDs(ids...)
+	return pcu
+}
+
+// RemoveDendrochronology removes "dendrochronology" edges to Dendrochronology entities.
+func (pcu *PersonalCollectionUpdate) RemoveDendrochronology(d ...*Dendrochronology) *PersonalCollectionUpdate {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return pcu.RemoveDendrochronologyIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (pcu *PersonalCollectionUpdate) ClearPetroglyphs() *PersonalCollectionUpdate {
+	pcu.mutation.ClearPetroglyphs()
+	return pcu
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (pcu *PersonalCollectionUpdate) RemovePetroglyphIDs(ids ...int) *PersonalCollectionUpdate {
+	pcu.mutation.RemovePetroglyphIDs(ids...)
+	return pcu
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (pcu *PersonalCollectionUpdate) RemovePetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pcu.RemovePetroglyphIDs(ids...)
 }
 
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
@@ -459,51 +496,6 @@ func (pcu *PersonalCollectionUpdate) sqlSave(ctx context.Context) (n int, err er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pcu.mutation.PetroglyphsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   personalcollection.PetroglyphsTable,
-			Columns: personalcollection.PetroglyphsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pcu.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !pcu.mutation.PetroglyphsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   personalcollection.PetroglyphsTable,
-			Columns: personalcollection.PetroglyphsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pcu.mutation.PetroglyphsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   personalcollection.PetroglyphsTable,
-			Columns: personalcollection.PetroglyphsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if pcu.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -542,6 +534,96 @@ func (pcu *PersonalCollectionUpdate) sqlSave(ctx context.Context) (n int, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pcu.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   personalcollection.DendrochronologyTable,
+			Columns: []string{personalcollection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcu.mutation.RemovedDendrochronologyIDs(); len(nodes) > 0 && !pcu.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   personalcollection.DendrochronologyTable,
+			Columns: []string{personalcollection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcu.mutation.DendrochronologyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   personalcollection.DendrochronologyTable,
+			Columns: []string{personalcollection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pcu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.PetroglyphsTable,
+			Columns: personalcollection.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcu.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !pcu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.PetroglyphsTable,
+			Columns: personalcollection.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcu.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.PetroglyphsTable,
+			Columns: personalcollection.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -710,21 +792,6 @@ func (pcuo *PersonalCollectionUpdateOne) AddArtifacts(a ...*Artifact) *PersonalC
 	return pcuo.AddArtifactIDs(ids...)
 }
 
-// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
-func (pcuo *PersonalCollectionUpdateOne) AddPetroglyphIDs(ids ...int) *PersonalCollectionUpdateOne {
-	pcuo.mutation.AddPetroglyphIDs(ids...)
-	return pcuo
-}
-
-// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
-func (pcuo *PersonalCollectionUpdateOne) AddPetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pcuo.AddPetroglyphIDs(ids...)
-}
-
 // AddBookIDs adds the "books" edge to the Book entity by IDs.
 func (pcuo *PersonalCollectionUpdateOne) AddBookIDs(ids ...int) *PersonalCollectionUpdateOne {
 	pcuo.mutation.AddBookIDs(ids...)
@@ -738,6 +805,36 @@ func (pcuo *PersonalCollectionUpdateOne) AddBooks(b ...*Book) *PersonalCollectio
 		ids[i] = b[i].ID
 	}
 	return pcuo.AddBookIDs(ids...)
+}
+
+// AddDendrochronologyIDs adds the "dendrochronology" edge to the Dendrochronology entity by IDs.
+func (pcuo *PersonalCollectionUpdateOne) AddDendrochronologyIDs(ids ...int) *PersonalCollectionUpdateOne {
+	pcuo.mutation.AddDendrochronologyIDs(ids...)
+	return pcuo
+}
+
+// AddDendrochronology adds the "dendrochronology" edges to the Dendrochronology entity.
+func (pcuo *PersonalCollectionUpdateOne) AddDendrochronology(d ...*Dendrochronology) *PersonalCollectionUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return pcuo.AddDendrochronologyIDs(ids...)
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (pcuo *PersonalCollectionUpdateOne) AddPetroglyphIDs(ids ...int) *PersonalCollectionUpdateOne {
+	pcuo.mutation.AddPetroglyphIDs(ids...)
+	return pcuo
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (pcuo *PersonalCollectionUpdateOne) AddPetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pcuo.AddPetroglyphIDs(ids...)
 }
 
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
@@ -802,27 +899,6 @@ func (pcuo *PersonalCollectionUpdateOne) RemoveArtifacts(a ...*Artifact) *Person
 	return pcuo.RemoveArtifactIDs(ids...)
 }
 
-// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
-func (pcuo *PersonalCollectionUpdateOne) ClearPetroglyphs() *PersonalCollectionUpdateOne {
-	pcuo.mutation.ClearPetroglyphs()
-	return pcuo
-}
-
-// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
-func (pcuo *PersonalCollectionUpdateOne) RemovePetroglyphIDs(ids ...int) *PersonalCollectionUpdateOne {
-	pcuo.mutation.RemovePetroglyphIDs(ids...)
-	return pcuo
-}
-
-// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
-func (pcuo *PersonalCollectionUpdateOne) RemovePetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return pcuo.RemovePetroglyphIDs(ids...)
-}
-
 // ClearBooks clears all "books" edges to the Book entity.
 func (pcuo *PersonalCollectionUpdateOne) ClearBooks() *PersonalCollectionUpdateOne {
 	pcuo.mutation.ClearBooks()
@@ -842,6 +918,48 @@ func (pcuo *PersonalCollectionUpdateOne) RemoveBooks(b ...*Book) *PersonalCollec
 		ids[i] = b[i].ID
 	}
 	return pcuo.RemoveBookIDs(ids...)
+}
+
+// ClearDendrochronology clears all "dendrochronology" edges to the Dendrochronology entity.
+func (pcuo *PersonalCollectionUpdateOne) ClearDendrochronology() *PersonalCollectionUpdateOne {
+	pcuo.mutation.ClearDendrochronology()
+	return pcuo
+}
+
+// RemoveDendrochronologyIDs removes the "dendrochronology" edge to Dendrochronology entities by IDs.
+func (pcuo *PersonalCollectionUpdateOne) RemoveDendrochronologyIDs(ids ...int) *PersonalCollectionUpdateOne {
+	pcuo.mutation.RemoveDendrochronologyIDs(ids...)
+	return pcuo
+}
+
+// RemoveDendrochronology removes "dendrochronology" edges to Dendrochronology entities.
+func (pcuo *PersonalCollectionUpdateOne) RemoveDendrochronology(d ...*Dendrochronology) *PersonalCollectionUpdateOne {
+	ids := make([]int, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return pcuo.RemoveDendrochronologyIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (pcuo *PersonalCollectionUpdateOne) ClearPetroglyphs() *PersonalCollectionUpdateOne {
+	pcuo.mutation.ClearPetroglyphs()
+	return pcuo
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (pcuo *PersonalCollectionUpdateOne) RemovePetroglyphIDs(ids ...int) *PersonalCollectionUpdateOne {
+	pcuo.mutation.RemovePetroglyphIDs(ids...)
+	return pcuo
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (pcuo *PersonalCollectionUpdateOne) RemovePetroglyphs(p ...*Petroglyph) *PersonalCollectionUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pcuo.RemovePetroglyphIDs(ids...)
 }
 
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
@@ -1070,51 +1188,6 @@ func (pcuo *PersonalCollectionUpdateOne) sqlSave(ctx context.Context) (_node *Pe
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pcuo.mutation.PetroglyphsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   personalcollection.PetroglyphsTable,
-			Columns: personalcollection.PetroglyphsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pcuo.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !pcuo.mutation.PetroglyphsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   personalcollection.PetroglyphsTable,
-			Columns: personalcollection.PetroglyphsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pcuo.mutation.PetroglyphsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   personalcollection.PetroglyphsTable,
-			Columns: personalcollection.PetroglyphsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if pcuo.mutation.BooksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1153,6 +1226,96 @@ func (pcuo *PersonalCollectionUpdateOne) sqlSave(ctx context.Context) (_node *Pe
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pcuo.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   personalcollection.DendrochronologyTable,
+			Columns: []string{personalcollection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcuo.mutation.RemovedDendrochronologyIDs(); len(nodes) > 0 && !pcuo.mutation.DendrochronologyCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   personalcollection.DendrochronologyTable,
+			Columns: []string{personalcollection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcuo.mutation.DendrochronologyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   personalcollection.DendrochronologyTable,
+			Columns: []string{personalcollection.DendrochronologyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pcuo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.PetroglyphsTable,
+			Columns: personalcollection.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcuo.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !pcuo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.PetroglyphsTable,
+			Columns: personalcollection.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcuo.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.PetroglyphsTable,
+			Columns: personalcollection.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

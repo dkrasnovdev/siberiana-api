@@ -31,10 +31,12 @@ const (
 	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
-	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
-	EdgePetroglyphs = "petroglyphs"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
+	// EdgeDendrochronology holds the string denoting the dendrochronology edge name in mutations.
+	EdgeDendrochronology = "dendrochronology"
+	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
+	EdgePetroglyphs = "petroglyphs"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// Table holds the table name of the personalcollection in the database.
@@ -49,16 +51,23 @@ const (
 	// ArtifactsInverseTable is the table name for the Artifact entity.
 	// It exists in this package in order to avoid circular dependency with the "artifact" package.
 	ArtifactsInverseTable = "artifacts"
-	// PetroglyphsTable is the table that holds the petroglyphs relation/edge. The primary key declared below.
-	PetroglyphsTable = "personal_collection_petroglyphs"
-	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
-	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
-	PetroglyphsInverseTable = "petroglyphs"
 	// BooksTable is the table that holds the books relation/edge. The primary key declared below.
 	BooksTable = "personal_collection_books"
 	// BooksInverseTable is the table name for the Book entity.
 	// It exists in this package in order to avoid circular dependency with the "book" package.
 	BooksInverseTable = "books"
+	// DendrochronologyTable is the table that holds the dendrochronology relation/edge.
+	DendrochronologyTable = "dendrochronologies"
+	// DendrochronologyInverseTable is the table name for the Dendrochronology entity.
+	// It exists in this package in order to avoid circular dependency with the "dendrochronology" package.
+	DendrochronologyInverseTable = "dendrochronologies"
+	// DendrochronologyColumn is the table column denoting the dendrochronology relation/edge.
+	DendrochronologyColumn = "personal_collection_dendrochronology"
+	// PetroglyphsTable is the table that holds the petroglyphs relation/edge. The primary key declared below.
+	PetroglyphsTable = "personal_collection_petroglyphs"
+	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsInverseTable = "petroglyphs"
 	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge. The primary key declared below.
 	ProtectedAreaPicturesTable = "personal_collection_protected_area_pictures"
 	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
@@ -84,12 +93,12 @@ var (
 	// ArtifactsPrimaryKey and ArtifactsColumn2 are the table columns denoting the
 	// primary key for the artifacts relation (M2M).
 	ArtifactsPrimaryKey = []string{"personal_collection_id", "artifact_id"}
-	// PetroglyphsPrimaryKey and PetroglyphsColumn2 are the table columns denoting the
-	// primary key for the petroglyphs relation (M2M).
-	PetroglyphsPrimaryKey = []string{"personal_collection_id", "petroglyph_id"}
 	// BooksPrimaryKey and BooksColumn2 are the table columns denoting the
 	// primary key for the books relation (M2M).
 	BooksPrimaryKey = []string{"personal_collection_id", "book_id"}
+	// PetroglyphsPrimaryKey and PetroglyphsColumn2 are the table columns denoting the
+	// primary key for the petroglyphs relation (M2M).
+	PetroglyphsPrimaryKey = []string{"personal_collection_id", "petroglyph_id"}
 	// ProtectedAreaPicturesPrimaryKey and ProtectedAreaPicturesColumn2 are the table columns denoting the
 	// primary key for the protected_area_pictures relation (M2M).
 	ProtectedAreaPicturesPrimaryKey = []string{"personal_collection_id", "protected_area_picture_id"}
@@ -192,20 +201,6 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByPetroglyphsCount orders the results by petroglyphs count.
-func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsStep(), opts...)
-	}
-}
-
-// ByPetroglyphs orders the results by petroglyphs terms.
-func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByBooksCount orders the results by books count.
 func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -217,6 +212,34 @@ func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
 func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newBooksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDendrochronologyCount orders the results by dendrochronology count.
+func ByDendrochronologyCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDendrochronologyStep(), opts...)
+	}
+}
+
+// ByDendrochronology orders the results by dendrochronology terms.
+func ByDendrochronology(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDendrochronologyStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPetroglyphsCount orders the results by petroglyphs count.
+func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsStep(), opts...)
+	}
+}
+
+// ByPetroglyphs orders the results by petroglyphs terms.
+func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -247,18 +270,25 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
 	)
 }
-func newPetroglyphsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(PetroglyphsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
-	)
-}
 func newBooksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BooksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, BooksTable, BooksPrimaryKey...),
+	)
+}
+func newDendrochronologyStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DendrochronologyInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DendrochronologyTable, DendrochronologyColumn),
+	)
+}
+func newPetroglyphsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
 	)
 }
 func newProtectedAreaPicturesStep() *sqlgraph.Step {

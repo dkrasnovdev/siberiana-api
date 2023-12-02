@@ -476,6 +476,18 @@ func (c *Collection) Artifacts(ctx context.Context) (result []*Artifact, err err
 	return result, err
 }
 
+func (c *Collection) Dendrochronology(ctx context.Context) (result []*Dendrochronology, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedDendrochronology(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.DendrochronologyOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryDendrochronology().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Collection) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1188,18 +1200,6 @@ func (pc *PersonalCollection) Artifacts(ctx context.Context) (result []*Artifact
 	return result, err
 }
 
-func (pc *PersonalCollection) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pc.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = pc.Edges.PetroglyphsOrErr()
-	}
-	if IsNotLoaded(err) {
-		result, err = pc.QueryPetroglyphs().All(ctx)
-	}
-	return result, err
-}
-
 func (pc *PersonalCollection) Books(ctx context.Context) (result []*Book, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pc.NamedBooks(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1208,6 +1208,30 @@ func (pc *PersonalCollection) Books(ctx context.Context) (result []*Book, err er
 	}
 	if IsNotLoaded(err) {
 		result, err = pc.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (pc *PersonalCollection) Dendrochronology(ctx context.Context) (result []*Dendrochronology, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pc.NamedDendrochronology(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pc.Edges.DendrochronologyOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pc.QueryDendrochronology().All(ctx)
+	}
+	return result, err
+}
+
+func (pc *PersonalCollection) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pc.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pc.Edges.PetroglyphsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pc.QueryPetroglyphs().All(ctx)
 	}
 	return result, err
 }

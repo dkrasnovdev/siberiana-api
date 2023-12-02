@@ -50,6 +50,8 @@ const (
 	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeDendrochronology holds the string denoting the dendrochronology edge name in mutations.
+	EdgeDendrochronology = "dendrochronology"
 	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
 	EdgePetroglyphs = "petroglyphs"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
@@ -76,6 +78,13 @@ const (
 	ArtifactsInverseTable = "artifacts"
 	// ArtifactsColumn is the table column denoting the artifacts relation/edge.
 	ArtifactsColumn = "collection_artifacts"
+	// DendrochronologyTable is the table that holds the dendrochronology relation/edge.
+	DendrochronologyTable = "dendrochronologies"
+	// DendrochronologyInverseTable is the table name for the Dendrochronology entity.
+	// It exists in this package in order to avoid circular dependency with the "dendrochronology" package.
+	DendrochronologyInverseTable = "dendrochronologies"
+	// DendrochronologyColumn is the table column denoting the dendrochronology relation/edge.
+	DendrochronologyColumn = "collection_dendrochronology"
 	// PetroglyphsTable is the table that holds the petroglyphs relation/edge.
 	PetroglyphsTable = "petroglyphs"
 	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
@@ -302,6 +311,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByDendrochronologyCount orders the results by dendrochronology count.
+func ByDendrochronologyCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDendrochronologyStep(), opts...)
+	}
+}
+
+// ByDendrochronology orders the results by dendrochronology terms.
+func ByDendrochronology(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDendrochronologyStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPetroglyphsCount orders the results by petroglyphs count.
 func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -376,6 +399,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ArtifactsTable, ArtifactsColumn),
+	)
+}
+func newDendrochronologyStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DendrochronologyInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DendrochronologyTable, DendrochronologyColumn),
 	)
 }
 func newPetroglyphsStep() *sqlgraph.Step {

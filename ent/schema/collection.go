@@ -71,6 +71,8 @@ func (Collection) Edges() []ent.Edge {
 			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("artifacts", Artifact.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),
+		edge.To("dendrochronology", Dendrochronology.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("petroglyphs", Petroglyph.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("books", Book.Type).
