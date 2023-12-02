@@ -96,15 +96,7 @@ func (PersonalCollection) Hooks() []ent.Hook {
 }
 
 func OwnershipHook(next ent.Mutator) ent.Mutator {
-	type Ownership interface {
-		SetCreatedBy(string)
-		CreatedBy() (string, bool)
-	}
 	return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-		mx, ok := m.(Ownership)
-		if !ok {
-			return nil, fmt.Errorf("unexpected audit-log call from mutation type %T", m)
-		}
 		v := rule.FromContext(ctx)
 		if v == nil {
 			return nil, fmt.Errorf("not authenticated")
@@ -113,10 +105,9 @@ func OwnershipHook(next ent.Mutator) ent.Mutator {
 
 		op := m.Op()
 
-		owner, exists := mx.CreatedBy()
-
+		owner, exists := m.Field("created_by")
 		if !exists {
-			mx.SetCreatedBy(usr)
+			return nil, fmt.Errorf("created_by field not found")
 		}
 
 		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && owner != usr {
