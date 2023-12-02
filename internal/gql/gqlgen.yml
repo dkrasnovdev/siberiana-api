@@ -25,6 +25,8 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/category
   - github.com/dkrasnovdev/siberiana-api/ent/collection
   - github.com/dkrasnovdev/siberiana-api/ent/culture
+  - github.com/dkrasnovdev/siberiana-api/ent/dendrochronology
+  - github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis
   - github.com/dkrasnovdev/siberiana-api/ent/district
   - github.com/dkrasnovdev/siberiana-api/ent/ethnos
   - github.com/dkrasnovdev/siberiana-api/ent/favourite

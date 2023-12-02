@@ -141,6 +141,30 @@ func (f CultureFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, err
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CultureMutation", m)
 }
 
+// The DendrochronologicalAnalysisFunc type is an adapter to allow the use of ordinary
+// function as DendrochronologicalAnalysis mutator.
+type DendrochronologicalAnalysisFunc func(context.Context, *ent.DendrochronologicalAnalysisMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DendrochronologicalAnalysisFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DendrochronologicalAnalysisMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DendrochronologicalAnalysisMutation", m)
+}
+
+// The DendrochronologyFunc type is an adapter to allow the use of ordinary
+// function as Dendrochronology mutator.
+type DendrochronologyFunc func(context.Context, *ent.DendrochronologyMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DendrochronologyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.DendrochronologyMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.DendrochronologyMutation", m)
+}
+
 // The DistrictFunc type is an adapter to allow the use of ordinary
 // function as District mutator.
 type DistrictFunc func(context.Context, *ent.DistrictMutation) (ent.Value, error)

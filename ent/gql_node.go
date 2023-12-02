@@ -24,6 +24,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -115,6 +117,16 @@ var cultureImplementors = []string{"Culture", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Culture) IsNode() {}
+
+var dendrochronologicalanalysisImplementors = []string{"DendrochronologicalAnalysis", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DendrochronologicalAnalysis) IsNode() {}
+
+var dendrochronologyImplementors = []string{"Dendrochronology", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Dendrochronology) IsNode() {}
 
 var districtImplementors = []string{"District", "Node"}
 
@@ -438,6 +450,30 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Culture.Query().
 			Where(culture.ID(id))
 		query, err := query.CollectFields(ctx, cultureImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case dendrochronologicalanalysis.Table:
+		query := c.DendrochronologicalAnalysis.Query().
+			Where(dendrochronologicalanalysis.ID(id))
+		query, err := query.CollectFields(ctx, dendrochronologicalanalysisImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case dendrochronology.Table:
+		query := c.Dendrochronology.Query().
+			Where(dendrochronology.ID(id))
+		query, err := query.CollectFields(ctx, dendrochronologyImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1019,6 +1055,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Culture.Query().
 			Where(culture.IDIn(ids...))
 		query, err := query.CollectFields(ctx, cultureImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case dendrochronologicalanalysis.Table:
+		query := c.DendrochronologicalAnalysis.Query().
+			Where(dendrochronologicalanalysis.IDIn(ids...))
+		query, err := query.CollectFields(ctx, dendrochronologicalanalysisImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case dendrochronology.Table:
+		query := c.Dendrochronology.Query().
+			Where(dendrochronology.IDIn(ids...))
+		query, err := query.CollectFields(ctx, dendrochronologyImplementors...)
 		if err != nil {
 			return nil, err
 		}

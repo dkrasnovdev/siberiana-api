@@ -43,6 +43,22 @@ type Mutation {
   createFavourite(input: CreateFavouriteInput!): Favourite!
   updateFavourite(id: ID!, input: UpdateFavouriteInput!): Favourite!
   deleteFavourite(id: ID!): String!
+  # Dendrochronology
+  createDendrochronology(input: CreateDendrochronologyInput!): Dendrochronology!
+  updateDendrochronology(
+    id: ID!
+    input: UpdateDendrochronologyInput!
+  ): Dendrochronology!
+  deleteDendrochronology(id: ID!): String!
+  # DendrochronologicalAnalysis
+  createDendrochronologicalAnalysis(
+    input: CreateDendrochronologicalAnalysisInput!
+  ): DendrochronologicalAnalysis!
+  updateDendrochronologicalAnalysis(
+    id: ID!
+    input: UpdateDendrochronologicalAnalysisInput!
+  ): DendrochronologicalAnalysis!
+  deleteDendrochronologicalAnalysis(id: ID!): String!
   # District
   createDistrict(input: CreateDistrictInput!): District!
   updateDistrict(id: ID!, input: UpdateDistrictInput!): District!

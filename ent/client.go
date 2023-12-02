@@ -26,6 +26,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -84,6 +86,10 @@ type Client struct {
 	Country *CountryClient
 	// Culture is the client for interacting with the Culture builders.
 	Culture *CultureClient
+	// DendrochronologicalAnalysis is the client for interacting with the DendrochronologicalAnalysis builders.
+	DendrochronologicalAnalysis *DendrochronologicalAnalysisClient
+	// Dendrochronology is the client for interacting with the Dendrochronology builders.
+	Dendrochronology *DendrochronologyClient
 	// District is the client for interacting with the District builders.
 	District *DistrictClient
 	// Ethnos is the client for interacting with the Ethnos builders.
@@ -166,6 +172,8 @@ func (c *Client) init() {
 	c.Collection = NewCollectionClient(c.config)
 	c.Country = NewCountryClient(c.config)
 	c.Culture = NewCultureClient(c.config)
+	c.DendrochronologicalAnalysis = NewDendrochronologicalAnalysisClient(c.config)
+	c.Dendrochronology = NewDendrochronologyClient(c.config)
 	c.District = NewDistrictClient(c.config)
 	c.Ethnos = NewEthnosClient(c.config)
 	c.Favourite = NewFavouriteClient(c.config)
@@ -285,47 +293,49 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                   ctx,
-		config:                cfg,
-		Art:                   NewArtClient(cfg),
-		ArtGenre:              NewArtGenreClient(cfg),
-		ArtStyle:              NewArtStyleClient(cfg),
-		Artifact:              NewArtifactClient(cfg),
-		AuditLog:              NewAuditLogClient(cfg),
-		Book:                  NewBookClient(cfg),
-		BookGenre:             NewBookGenreClient(cfg),
-		Category:              NewCategoryClient(cfg),
-		Collection:            NewCollectionClient(cfg),
-		Country:               NewCountryClient(cfg),
-		Culture:               NewCultureClient(cfg),
-		District:              NewDistrictClient(cfg),
-		Ethnos:                NewEthnosClient(cfg),
-		Favourite:             NewFavouriteClient(cfg),
-		Interview:             NewInterviewClient(cfg),
-		Keyword:               NewKeywordClient(cfg),
-		License:               NewLicenseClient(cfg),
-		Location:              NewLocationClient(cfg),
-		Medium:                NewMediumClient(cfg),
-		Model:                 NewModelClient(cfg),
-		Monument:              NewMonumentClient(cfg),
-		Mound:                 NewMoundClient(cfg),
-		Organization:          NewOrganizationClient(cfg),
-		Periodical:            NewPeriodicalClient(cfg),
-		Person:                NewPersonClient(cfg),
-		Personal:              NewPersonalClient(cfg),
-		Petroglyph:            NewPetroglyphClient(cfg),
-		Project:               NewProjectClient(cfg),
-		ProtectedArea:         NewProtectedAreaClient(cfg),
-		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
-		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
-		Proxy:                 NewProxyClient(cfg),
-		Publication:           NewPublicationClient(cfg),
-		Publisher:             NewPublisherClient(cfg),
-		Region:                NewRegionClient(cfg),
-		Set:                   NewSetClient(cfg),
-		Settlement:            NewSettlementClient(cfg),
-		Technique:             NewTechniqueClient(cfg),
-		Visit:                 NewVisitClient(cfg),
+		ctx:                         ctx,
+		config:                      cfg,
+		Art:                         NewArtClient(cfg),
+		ArtGenre:                    NewArtGenreClient(cfg),
+		ArtStyle:                    NewArtStyleClient(cfg),
+		Artifact:                    NewArtifactClient(cfg),
+		AuditLog:                    NewAuditLogClient(cfg),
+		Book:                        NewBookClient(cfg),
+		BookGenre:                   NewBookGenreClient(cfg),
+		Category:                    NewCategoryClient(cfg),
+		Collection:                  NewCollectionClient(cfg),
+		Country:                     NewCountryClient(cfg),
+		Culture:                     NewCultureClient(cfg),
+		DendrochronologicalAnalysis: NewDendrochronologicalAnalysisClient(cfg),
+		Dendrochronology:            NewDendrochronologyClient(cfg),
+		District:                    NewDistrictClient(cfg),
+		Ethnos:                      NewEthnosClient(cfg),
+		Favourite:                   NewFavouriteClient(cfg),
+		Interview:                   NewInterviewClient(cfg),
+		Keyword:                     NewKeywordClient(cfg),
+		License:                     NewLicenseClient(cfg),
+		Location:                    NewLocationClient(cfg),
+		Medium:                      NewMediumClient(cfg),
+		Model:                       NewModelClient(cfg),
+		Monument:                    NewMonumentClient(cfg),
+		Mound:                       NewMoundClient(cfg),
+		Organization:                NewOrganizationClient(cfg),
+		Periodical:                  NewPeriodicalClient(cfg),
+		Person:                      NewPersonClient(cfg),
+		Personal:                    NewPersonalClient(cfg),
+		Petroglyph:                  NewPetroglyphClient(cfg),
+		Project:                     NewProjectClient(cfg),
+		ProtectedArea:               NewProtectedAreaClient(cfg),
+		ProtectedAreaCategory:       NewProtectedAreaCategoryClient(cfg),
+		ProtectedAreaPicture:        NewProtectedAreaPictureClient(cfg),
+		Proxy:                       NewProxyClient(cfg),
+		Publication:                 NewPublicationClient(cfg),
+		Publisher:                   NewPublisherClient(cfg),
+		Region:                      NewRegionClient(cfg),
+		Set:                         NewSetClient(cfg),
+		Settlement:                  NewSettlementClient(cfg),
+		Technique:                   NewTechniqueClient(cfg),
+		Visit:                       NewVisitClient(cfg),
 	}, nil
 }
 
@@ -343,47 +353,49 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                   ctx,
-		config:                cfg,
-		Art:                   NewArtClient(cfg),
-		ArtGenre:              NewArtGenreClient(cfg),
-		ArtStyle:              NewArtStyleClient(cfg),
-		Artifact:              NewArtifactClient(cfg),
-		AuditLog:              NewAuditLogClient(cfg),
-		Book:                  NewBookClient(cfg),
-		BookGenre:             NewBookGenreClient(cfg),
-		Category:              NewCategoryClient(cfg),
-		Collection:            NewCollectionClient(cfg),
-		Country:               NewCountryClient(cfg),
-		Culture:               NewCultureClient(cfg),
-		District:              NewDistrictClient(cfg),
-		Ethnos:                NewEthnosClient(cfg),
-		Favourite:             NewFavouriteClient(cfg),
-		Interview:             NewInterviewClient(cfg),
-		Keyword:               NewKeywordClient(cfg),
-		License:               NewLicenseClient(cfg),
-		Location:              NewLocationClient(cfg),
-		Medium:                NewMediumClient(cfg),
-		Model:                 NewModelClient(cfg),
-		Monument:              NewMonumentClient(cfg),
-		Mound:                 NewMoundClient(cfg),
-		Organization:          NewOrganizationClient(cfg),
-		Periodical:            NewPeriodicalClient(cfg),
-		Person:                NewPersonClient(cfg),
-		Personal:              NewPersonalClient(cfg),
-		Petroglyph:            NewPetroglyphClient(cfg),
-		Project:               NewProjectClient(cfg),
-		ProtectedArea:         NewProtectedAreaClient(cfg),
-		ProtectedAreaCategory: NewProtectedAreaCategoryClient(cfg),
-		ProtectedAreaPicture:  NewProtectedAreaPictureClient(cfg),
-		Proxy:                 NewProxyClient(cfg),
-		Publication:           NewPublicationClient(cfg),
-		Publisher:             NewPublisherClient(cfg),
-		Region:                NewRegionClient(cfg),
-		Set:                   NewSetClient(cfg),
-		Settlement:            NewSettlementClient(cfg),
-		Technique:             NewTechniqueClient(cfg),
-		Visit:                 NewVisitClient(cfg),
+		ctx:                         ctx,
+		config:                      cfg,
+		Art:                         NewArtClient(cfg),
+		ArtGenre:                    NewArtGenreClient(cfg),
+		ArtStyle:                    NewArtStyleClient(cfg),
+		Artifact:                    NewArtifactClient(cfg),
+		AuditLog:                    NewAuditLogClient(cfg),
+		Book:                        NewBookClient(cfg),
+		BookGenre:                   NewBookGenreClient(cfg),
+		Category:                    NewCategoryClient(cfg),
+		Collection:                  NewCollectionClient(cfg),
+		Country:                     NewCountryClient(cfg),
+		Culture:                     NewCultureClient(cfg),
+		DendrochronologicalAnalysis: NewDendrochronologicalAnalysisClient(cfg),
+		Dendrochronology:            NewDendrochronologyClient(cfg),
+		District:                    NewDistrictClient(cfg),
+		Ethnos:                      NewEthnosClient(cfg),
+		Favourite:                   NewFavouriteClient(cfg),
+		Interview:                   NewInterviewClient(cfg),
+		Keyword:                     NewKeywordClient(cfg),
+		License:                     NewLicenseClient(cfg),
+		Location:                    NewLocationClient(cfg),
+		Medium:                      NewMediumClient(cfg),
+		Model:                       NewModelClient(cfg),
+		Monument:                    NewMonumentClient(cfg),
+		Mound:                       NewMoundClient(cfg),
+		Organization:                NewOrganizationClient(cfg),
+		Periodical:                  NewPeriodicalClient(cfg),
+		Person:                      NewPersonClient(cfg),
+		Personal:                    NewPersonalClient(cfg),
+		Petroglyph:                  NewPetroglyphClient(cfg),
+		Project:                     NewProjectClient(cfg),
+		ProtectedArea:               NewProtectedAreaClient(cfg),
+		ProtectedAreaCategory:       NewProtectedAreaCategoryClient(cfg),
+		ProtectedAreaPicture:        NewProtectedAreaPictureClient(cfg),
+		Proxy:                       NewProxyClient(cfg),
+		Publication:                 NewPublicationClient(cfg),
+		Publisher:                   NewPublisherClient(cfg),
+		Region:                      NewRegionClient(cfg),
+		Set:                         NewSetClient(cfg),
+		Settlement:                  NewSettlementClient(cfg),
+		Technique:                   NewTechniqueClient(cfg),
+		Visit:                       NewVisitClient(cfg),
 	}, nil
 }
 
@@ -414,12 +426,12 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Ethnos,
-		c.Favourite, c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model,
-		c.Monument, c.Mound, c.Organization, c.Periodical, c.Person, c.Personal,
-		c.Petroglyph, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
-		c.ProtectedAreaPicture, c.Proxy, c.Publication, c.Publisher, c.Region, c.Set,
-		c.Settlement, c.Technique, c.Visit,
+		c.Category, c.Collection, c.Country, c.Culture, c.DendrochronologicalAnalysis,
+		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
+		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
+		c.Periodical, c.Person, c.Personal, c.Petroglyph, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
+		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
 	} {
 		n.Use(hooks...)
 	}
@@ -430,12 +442,12 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
-		c.Category, c.Collection, c.Country, c.Culture, c.District, c.Ethnos,
-		c.Favourite, c.Interview, c.Keyword, c.License, c.Location, c.Medium, c.Model,
-		c.Monument, c.Mound, c.Organization, c.Periodical, c.Person, c.Personal,
-		c.Petroglyph, c.Project, c.ProtectedArea, c.ProtectedAreaCategory,
-		c.ProtectedAreaPicture, c.Proxy, c.Publication, c.Publisher, c.Region, c.Set,
-		c.Settlement, c.Technique, c.Visit,
+		c.Category, c.Collection, c.Country, c.Culture, c.DendrochronologicalAnalysis,
+		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
+		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
+		c.Periodical, c.Person, c.Personal, c.Petroglyph, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
+		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -466,6 +478,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Country.mutate(ctx, m)
 	case *CultureMutation:
 		return c.Culture.mutate(ctx, m)
+	case *DendrochronologicalAnalysisMutation:
+		return c.DendrochronologicalAnalysis.mutate(ctx, m)
+	case *DendrochronologyMutation:
+		return c.Dendrochronology.mutate(ctx, m)
 	case *DistrictMutation:
 		return c.District.mutate(ctx, m)
 	case *EthnosMutation:
@@ -2977,6 +2993,307 @@ func (c *CultureClient) mutate(ctx context.Context, m *CultureMutation) (Value, 
 		return (&CultureDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Culture mutation op: %q", m.Op())
+	}
+}
+
+// DendrochronologicalAnalysisClient is a client for the DendrochronologicalAnalysis schema.
+type DendrochronologicalAnalysisClient struct {
+	config
+}
+
+// NewDendrochronologicalAnalysisClient returns a client for the DendrochronologicalAnalysis from the given config.
+func NewDendrochronologicalAnalysisClient(c config) *DendrochronologicalAnalysisClient {
+	return &DendrochronologicalAnalysisClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `dendrochronologicalanalysis.Hooks(f(g(h())))`.
+func (c *DendrochronologicalAnalysisClient) Use(hooks ...Hook) {
+	c.hooks.DendrochronologicalAnalysis = append(c.hooks.DendrochronologicalAnalysis, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `dendrochronologicalanalysis.Intercept(f(g(h())))`.
+func (c *DendrochronologicalAnalysisClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DendrochronologicalAnalysis = append(c.inters.DendrochronologicalAnalysis, interceptors...)
+}
+
+// Create returns a builder for creating a DendrochronologicalAnalysis entity.
+func (c *DendrochronologicalAnalysisClient) Create() *DendrochronologicalAnalysisCreate {
+	mutation := newDendrochronologicalAnalysisMutation(c.config, OpCreate)
+	return &DendrochronologicalAnalysisCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DendrochronologicalAnalysis entities.
+func (c *DendrochronologicalAnalysisClient) CreateBulk(builders ...*DendrochronologicalAnalysisCreate) *DendrochronologicalAnalysisCreateBulk {
+	return &DendrochronologicalAnalysisCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DendrochronologicalAnalysisClient) MapCreateBulk(slice any, setFunc func(*DendrochronologicalAnalysisCreate, int)) *DendrochronologicalAnalysisCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DendrochronologicalAnalysisCreateBulk{err: fmt.Errorf("calling to DendrochronologicalAnalysisClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DendrochronologicalAnalysisCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DendrochronologicalAnalysisCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DendrochronologicalAnalysis.
+func (c *DendrochronologicalAnalysisClient) Update() *DendrochronologicalAnalysisUpdate {
+	mutation := newDendrochronologicalAnalysisMutation(c.config, OpUpdate)
+	return &DendrochronologicalAnalysisUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DendrochronologicalAnalysisClient) UpdateOne(da *DendrochronologicalAnalysis) *DendrochronologicalAnalysisUpdateOne {
+	mutation := newDendrochronologicalAnalysisMutation(c.config, OpUpdateOne, withDendrochronologicalAnalysis(da))
+	return &DendrochronologicalAnalysisUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DendrochronologicalAnalysisClient) UpdateOneID(id int) *DendrochronologicalAnalysisUpdateOne {
+	mutation := newDendrochronologicalAnalysisMutation(c.config, OpUpdateOne, withDendrochronologicalAnalysisID(id))
+	return &DendrochronologicalAnalysisUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DendrochronologicalAnalysis.
+func (c *DendrochronologicalAnalysisClient) Delete() *DendrochronologicalAnalysisDelete {
+	mutation := newDendrochronologicalAnalysisMutation(c.config, OpDelete)
+	return &DendrochronologicalAnalysisDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DendrochronologicalAnalysisClient) DeleteOne(da *DendrochronologicalAnalysis) *DendrochronologicalAnalysisDeleteOne {
+	return c.DeleteOneID(da.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DendrochronologicalAnalysisClient) DeleteOneID(id int) *DendrochronologicalAnalysisDeleteOne {
+	builder := c.Delete().Where(dendrochronologicalanalysis.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DendrochronologicalAnalysisDeleteOne{builder}
+}
+
+// Query returns a query builder for DendrochronologicalAnalysis.
+func (c *DendrochronologicalAnalysisClient) Query() *DendrochronologicalAnalysisQuery {
+	return &DendrochronologicalAnalysisQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDendrochronologicalAnalysis},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DendrochronologicalAnalysis entity by its id.
+func (c *DendrochronologicalAnalysisClient) Get(ctx context.Context, id int) (*DendrochronologicalAnalysis, error) {
+	return c.Query().Where(dendrochronologicalanalysis.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DendrochronologicalAnalysisClient) GetX(ctx context.Context, id int) *DendrochronologicalAnalysis {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryDendrochronology queries the dendrochronology edge of a DendrochronologicalAnalysis.
+func (c *DendrochronologicalAnalysisClient) QueryDendrochronology(da *DendrochronologicalAnalysis) *DendrochronologyQuery {
+	query := (&DendrochronologyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := da.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dendrochronologicalanalysis.Table, dendrochronologicalanalysis.FieldID, id),
+			sqlgraph.To(dendrochronology.Table, dendrochronology.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, dendrochronologicalanalysis.DendrochronologyTable, dendrochronologicalanalysis.DendrochronologyColumn),
+		)
+		fromV = sqlgraph.Neighbors(da.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DendrochronologicalAnalysisClient) Hooks() []Hook {
+	hooks := c.hooks.DendrochronologicalAnalysis
+	return append(hooks[:len(hooks):len(hooks)], dendrochronologicalanalysis.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DendrochronologicalAnalysisClient) Interceptors() []Interceptor {
+	return c.inters.DendrochronologicalAnalysis
+}
+
+func (c *DendrochronologicalAnalysisClient) mutate(ctx context.Context, m *DendrochronologicalAnalysisMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DendrochronologicalAnalysisCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DendrochronologicalAnalysisUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DendrochronologicalAnalysisUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DendrochronologicalAnalysisDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown DendrochronologicalAnalysis mutation op: %q", m.Op())
+	}
+}
+
+// DendrochronologyClient is a client for the Dendrochronology schema.
+type DendrochronologyClient struct {
+	config
+}
+
+// NewDendrochronologyClient returns a client for the Dendrochronology from the given config.
+func NewDendrochronologyClient(c config) *DendrochronologyClient {
+	return &DendrochronologyClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `dendrochronology.Hooks(f(g(h())))`.
+func (c *DendrochronologyClient) Use(hooks ...Hook) {
+	c.hooks.Dendrochronology = append(c.hooks.Dendrochronology, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `dendrochronology.Intercept(f(g(h())))`.
+func (c *DendrochronologyClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Dendrochronology = append(c.inters.Dendrochronology, interceptors...)
+}
+
+// Create returns a builder for creating a Dendrochronology entity.
+func (c *DendrochronologyClient) Create() *DendrochronologyCreate {
+	mutation := newDendrochronologyMutation(c.config, OpCreate)
+	return &DendrochronologyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Dendrochronology entities.
+func (c *DendrochronologyClient) CreateBulk(builders ...*DendrochronologyCreate) *DendrochronologyCreateBulk {
+	return &DendrochronologyCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DendrochronologyClient) MapCreateBulk(slice any, setFunc func(*DendrochronologyCreate, int)) *DendrochronologyCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DendrochronologyCreateBulk{err: fmt.Errorf("calling to DendrochronologyClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DendrochronologyCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DendrochronologyCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Dendrochronology.
+func (c *DendrochronologyClient) Update() *DendrochronologyUpdate {
+	mutation := newDendrochronologyMutation(c.config, OpUpdate)
+	return &DendrochronologyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DendrochronologyClient) UpdateOne(d *Dendrochronology) *DendrochronologyUpdateOne {
+	mutation := newDendrochronologyMutation(c.config, OpUpdateOne, withDendrochronology(d))
+	return &DendrochronologyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DendrochronologyClient) UpdateOneID(id int) *DendrochronologyUpdateOne {
+	mutation := newDendrochronologyMutation(c.config, OpUpdateOne, withDendrochronologyID(id))
+	return &DendrochronologyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Dendrochronology.
+func (c *DendrochronologyClient) Delete() *DendrochronologyDelete {
+	mutation := newDendrochronologyMutation(c.config, OpDelete)
+	return &DendrochronologyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DendrochronologyClient) DeleteOne(d *Dendrochronology) *DendrochronologyDeleteOne {
+	return c.DeleteOneID(d.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DendrochronologyClient) DeleteOneID(id int) *DendrochronologyDeleteOne {
+	builder := c.Delete().Where(dendrochronology.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DendrochronologyDeleteOne{builder}
+}
+
+// Query returns a query builder for Dendrochronology.
+func (c *DendrochronologyClient) Query() *DendrochronologyQuery {
+	return &DendrochronologyQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDendrochronology},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Dendrochronology entity by its id.
+func (c *DendrochronologyClient) Get(ctx context.Context, id int) (*Dendrochronology, error) {
+	return c.Query().Where(dendrochronology.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DendrochronologyClient) GetX(ctx context.Context, id int) *Dendrochronology {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryAnalysis queries the analysis edge of a Dendrochronology.
+func (c *DendrochronologyClient) QueryAnalysis(d *Dendrochronology) *DendrochronologicalAnalysisQuery {
+	query := (&DendrochronologicalAnalysisClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(dendrochronology.Table, dendrochronology.FieldID, id),
+			sqlgraph.To(dendrochronologicalanalysis.Table, dendrochronologicalanalysis.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, dendrochronology.AnalysisTable, dendrochronology.AnalysisColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DendrochronologyClient) Hooks() []Hook {
+	hooks := c.hooks.Dendrochronology
+	return append(hooks[:len(hooks):len(hooks)], dendrochronology.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DendrochronologyClient) Interceptors() []Interceptor {
+	inters := c.inters.Dendrochronology
+	return append(inters[:len(inters):len(inters)], dendrochronology.Interceptors[:]...)
+}
+
+func (c *DendrochronologyClient) mutate(ctx context.Context, m *DendrochronologyMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DendrochronologyCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DendrochronologyUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DendrochronologyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DendrochronologyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Dendrochronology mutation op: %q", m.Op())
 	}
 }
 
@@ -8352,18 +8669,19 @@ func (c *VisitClient) mutate(ctx context.Context, m *VisitMutation) (Value, erro
 type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Ethnos, Favourite, Interview, Keyword,
-		License, Location, Medium, Model, Monument, Mound, Organization, Periodical,
-		Person, Personal, Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
-		ProtectedAreaPicture, Proxy, Publication, Publisher, Region, Set, Settlement,
-		Technique, Visit []ent.Hook
+		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
+		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
+		Model, Monument, Mound, Organization, Periodical, Person, Personal, Petroglyph,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Publication, Publisher, Region, Set, Settlement, Technique, Visit []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
-		Collection, Country, Culture, District, Ethnos, Favourite, Interview, Keyword,
-		License, Location, Medium, Model, Monument, Mound, Organization, Periodical,
-		Person, Personal, Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
-		ProtectedAreaPicture, Proxy, Publication, Publisher, Region, Set, Settlement,
-		Technique, Visit []ent.Interceptor
+		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
+		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
+		Model, Monument, Mound, Organization, Periodical, Person, Personal, Petroglyph,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Publication, Publisher, Region, Set, Settlement, Technique,
+		Visit []ent.Interceptor
 	}
 )

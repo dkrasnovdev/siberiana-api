@@ -25,6 +25,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -4189,6 +4191,732 @@ func (c *Culture) ToEdge(order *CultureOrder) *CultureEdge {
 	return &CultureEdge{
 		Node:   c,
 		Cursor: order.Field.toCursor(c),
+	}
+}
+
+// DendrochronologicalAnalysisEdge is the edge representation of DendrochronologicalAnalysis.
+type DendrochronologicalAnalysisEdge struct {
+	Node   *DendrochronologicalAnalysis `json:"node"`
+	Cursor Cursor                       `json:"cursor"`
+}
+
+// DendrochronologicalAnalysisConnection is the connection containing edges to DendrochronologicalAnalysis.
+type DendrochronologicalAnalysisConnection struct {
+	Edges      []*DendrochronologicalAnalysisEdge `json:"edges"`
+	PageInfo   PageInfo                           `json:"pageInfo"`
+	TotalCount int                                `json:"totalCount"`
+}
+
+func (c *DendrochronologicalAnalysisConnection) build(nodes []*DendrochronologicalAnalysis, pager *dendrochronologicalanalysisPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *DendrochronologicalAnalysis
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DendrochronologicalAnalysis {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DendrochronologicalAnalysis {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DendrochronologicalAnalysisEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DendrochronologicalAnalysisEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DendrochronologicalAnalysisPaginateOption enables pagination customization.
+type DendrochronologicalAnalysisPaginateOption func(*dendrochronologicalanalysisPager) error
+
+// WithDendrochronologicalAnalysisOrder configures pagination ordering.
+func WithDendrochronologicalAnalysisOrder(order []*DendrochronologicalAnalysisOrder) DendrochronologicalAnalysisPaginateOption {
+	return func(pager *dendrochronologicalanalysisPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithDendrochronologicalAnalysisFilter configures pagination filter.
+func WithDendrochronologicalAnalysisFilter(filter func(*DendrochronologicalAnalysisQuery) (*DendrochronologicalAnalysisQuery, error)) DendrochronologicalAnalysisPaginateOption {
+	return func(pager *dendrochronologicalanalysisPager) error {
+		if filter == nil {
+			return errors.New("DendrochronologicalAnalysisQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type dendrochronologicalanalysisPager struct {
+	reverse bool
+	order   []*DendrochronologicalAnalysisOrder
+	filter  func(*DendrochronologicalAnalysisQuery) (*DendrochronologicalAnalysisQuery, error)
+}
+
+func newDendrochronologicalAnalysisPager(opts []DendrochronologicalAnalysisPaginateOption, reverse bool) (*dendrochronologicalanalysisPager, error) {
+	pager := &dendrochronologicalanalysisPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *dendrochronologicalanalysisPager) applyFilter(query *DendrochronologicalAnalysisQuery) (*DendrochronologicalAnalysisQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *dendrochronologicalanalysisPager) toCursor(da *DendrochronologicalAnalysis) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(da).Value)
+	}
+	return Cursor{ID: da.ID, Value: cs}
+}
+
+func (p *dendrochronologicalanalysisPager) applyCursors(query *DendrochronologicalAnalysisQuery, after, before *Cursor) (*DendrochronologicalAnalysisQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultDendrochronologicalAnalysisOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *dendrochronologicalanalysisPager) applyOrder(query *DendrochronologicalAnalysisQuery) *DendrochronologicalAnalysisQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultDendrochronologicalAnalysisOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultDendrochronologicalAnalysisOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *dendrochronologicalanalysisPager) orderExpr(query *DendrochronologicalAnalysisQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultDendrochronologicalAnalysisOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DendrochronologicalAnalysis.
+func (da *DendrochronologicalAnalysisQuery) Paginate(
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...DendrochronologicalAnalysisPaginateOption,
+) (*DendrochronologicalAnalysisConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDendrochronologicalAnalysisPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if da, err = pager.applyFilter(da); err != nil {
+		return nil, err
+	}
+	conn := &DendrochronologicalAnalysisConnection{Edges: []*DendrochronologicalAnalysisEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
+		if hasPagination || ignoredEdges {
+			c := da.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if da, err = pager.applyCursors(da, after, before); err != nil {
+		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		da.Offset(*offset)
+
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		da.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := da.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	da = pager.applyOrder(da)
+	nodes, err := da.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DendrochronologicalAnalysisOrderFieldCreatedAt orders DendrochronologicalAnalysis by created_at.
+	DendrochronologicalAnalysisOrderFieldCreatedAt = &DendrochronologicalAnalysisOrderField{
+		Value: func(da *DendrochronologicalAnalysis) (ent.Value, error) {
+			return da.CreatedAt, nil
+		},
+		column: dendrochronologicalanalysis.FieldCreatedAt,
+		toTerm: dendrochronologicalanalysis.ByCreatedAt,
+		toCursor: func(da *DendrochronologicalAnalysis) Cursor {
+			return Cursor{
+				ID:    da.ID,
+				Value: da.CreatedAt,
+			}
+		},
+	}
+	// DendrochronologicalAnalysisOrderFieldUpdatedAt orders DendrochronologicalAnalysis by updated_at.
+	DendrochronologicalAnalysisOrderFieldUpdatedAt = &DendrochronologicalAnalysisOrderField{
+		Value: func(da *DendrochronologicalAnalysis) (ent.Value, error) {
+			return da.UpdatedAt, nil
+		},
+		column: dendrochronologicalanalysis.FieldUpdatedAt,
+		toTerm: dendrochronologicalanalysis.ByUpdatedAt,
+		toCursor: func(da *DendrochronologicalAnalysis) Cursor {
+			return Cursor{
+				ID:    da.ID,
+				Value: da.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DendrochronologicalAnalysisOrderField) String() string {
+	var str string
+	switch f.column {
+	case DendrochronologicalAnalysisOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case DendrochronologicalAnalysisOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DendrochronologicalAnalysisOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DendrochronologicalAnalysisOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DendrochronologicalAnalysisOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *DendrochronologicalAnalysisOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *DendrochronologicalAnalysisOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid DendrochronologicalAnalysisOrderField", str)
+	}
+	return nil
+}
+
+// DendrochronologicalAnalysisOrderField defines the ordering field of DendrochronologicalAnalysis.
+type DendrochronologicalAnalysisOrderField struct {
+	// Value extracts the ordering value from the given DendrochronologicalAnalysis.
+	Value    func(*DendrochronologicalAnalysis) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) dendrochronologicalanalysis.OrderOption
+	toCursor func(*DendrochronologicalAnalysis) Cursor
+}
+
+// DendrochronologicalAnalysisOrder defines the ordering of DendrochronologicalAnalysis.
+type DendrochronologicalAnalysisOrder struct {
+	Direction OrderDirection                         `json:"direction"`
+	Field     *DendrochronologicalAnalysisOrderField `json:"field"`
+}
+
+// DefaultDendrochronologicalAnalysisOrder is the default ordering of DendrochronologicalAnalysis.
+var DefaultDendrochronologicalAnalysisOrder = &DendrochronologicalAnalysisOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DendrochronologicalAnalysisOrderField{
+		Value: func(da *DendrochronologicalAnalysis) (ent.Value, error) {
+			return da.ID, nil
+		},
+		column: dendrochronologicalanalysis.FieldID,
+		toTerm: dendrochronologicalanalysis.ByID,
+		toCursor: func(da *DendrochronologicalAnalysis) Cursor {
+			return Cursor{ID: da.ID}
+		},
+	},
+}
+
+// ToEdge converts DendrochronologicalAnalysis into DendrochronologicalAnalysisEdge.
+func (da *DendrochronologicalAnalysis) ToEdge(order *DendrochronologicalAnalysisOrder) *DendrochronologicalAnalysisEdge {
+	if order == nil {
+		order = DefaultDendrochronologicalAnalysisOrder
+	}
+	return &DendrochronologicalAnalysisEdge{
+		Node:   da,
+		Cursor: order.Field.toCursor(da),
+	}
+}
+
+// DendrochronologyEdge is the edge representation of Dendrochronology.
+type DendrochronologyEdge struct {
+	Node   *Dendrochronology `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// DendrochronologyConnection is the connection containing edges to Dendrochronology.
+type DendrochronologyConnection struct {
+	Edges      []*DendrochronologyEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *DendrochronologyConnection) build(nodes []*Dendrochronology, pager *dendrochronologyPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Dendrochronology
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Dendrochronology {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Dendrochronology {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DendrochronologyEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DendrochronologyEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DendrochronologyPaginateOption enables pagination customization.
+type DendrochronologyPaginateOption func(*dendrochronologyPager) error
+
+// WithDendrochronologyOrder configures pagination ordering.
+func WithDendrochronologyOrder(order []*DendrochronologyOrder) DendrochronologyPaginateOption {
+	return func(pager *dendrochronologyPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithDendrochronologyFilter configures pagination filter.
+func WithDendrochronologyFilter(filter func(*DendrochronologyQuery) (*DendrochronologyQuery, error)) DendrochronologyPaginateOption {
+	return func(pager *dendrochronologyPager) error {
+		if filter == nil {
+			return errors.New("DendrochronologyQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type dendrochronologyPager struct {
+	reverse bool
+	order   []*DendrochronologyOrder
+	filter  func(*DendrochronologyQuery) (*DendrochronologyQuery, error)
+}
+
+func newDendrochronologyPager(opts []DendrochronologyPaginateOption, reverse bool) (*dendrochronologyPager, error) {
+	pager := &dendrochronologyPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *dendrochronologyPager) applyFilter(query *DendrochronologyQuery) (*DendrochronologyQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *dendrochronologyPager) toCursor(d *Dendrochronology) Cursor {
+	cs := make([]any, 0, len(p.order))
+	for _, po := range p.order {
+		cs = append(cs, po.Field.toCursor(d).Value)
+	}
+	return Cursor{ID: d.ID, Value: cs}
+}
+
+func (p *dendrochronologyPager) applyCursors(query *DendrochronologyQuery, after, before *Cursor) (*DendrochronologyQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultDendrochronologyOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, predicate := range predicates {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *dendrochronologyPager) applyOrder(query *DendrochronologyQuery) *DendrochronologyQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultDendrochronologyOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultDendrochronologyOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *dendrochronologyPager) orderExpr(query *DendrochronologyQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultDendrochronologyOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Dendrochronology.
+func (d *DendrochronologyQuery) Paginate(
+	ctx context.Context,
+	after *Cursor, first *int, before *Cursor, last *int,
+	offset *int, opts ...DendrochronologyPaginateOption,
+) (*DendrochronologyConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDendrochronologyPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if d, err = pager.applyFilter(d); err != nil {
+		return nil, err
+	}
+	conn := &DendrochronologyConnection{Edges: []*DendrochronologyEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil || offset != nil
+		if hasPagination || ignoredEdges {
+			c := d.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if d, err = pager.applyCursors(d, after, before); err != nil {
+		return nil, err
+	}
+	if offset != nil && *offset != 0 {
+		d.Offset(*offset)
+
+	}
+	if limit := paginateLimit(first, last); limit != 0 {
+		d.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := d.collectField(ctx, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	d = pager.applyOrder(d)
+	nodes, err := d.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DendrochronologyOrderFieldCreatedAt orders Dendrochronology by created_at.
+	DendrochronologyOrderFieldCreatedAt = &DendrochronologyOrderField{
+		Value: func(d *Dendrochronology) (ent.Value, error) {
+			return d.CreatedAt, nil
+		},
+		column: dendrochronology.FieldCreatedAt,
+		toTerm: dendrochronology.ByCreatedAt,
+		toCursor: func(d *Dendrochronology) Cursor {
+			return Cursor{
+				ID:    d.ID,
+				Value: d.CreatedAt,
+			}
+		},
+	}
+	// DendrochronologyOrderFieldUpdatedAt orders Dendrochronology by updated_at.
+	DendrochronologyOrderFieldUpdatedAt = &DendrochronologyOrderField{
+		Value: func(d *Dendrochronology) (ent.Value, error) {
+			return d.UpdatedAt, nil
+		},
+		column: dendrochronology.FieldUpdatedAt,
+		toTerm: dendrochronology.ByUpdatedAt,
+		toCursor: func(d *Dendrochronology) Cursor {
+			return Cursor{
+				ID:    d.ID,
+				Value: d.UpdatedAt,
+			}
+		},
+	}
+	// DendrochronologyOrderFieldDisplayName orders Dendrochronology by display_name.
+	DendrochronologyOrderFieldDisplayName = &DendrochronologyOrderField{
+		Value: func(d *Dendrochronology) (ent.Value, error) {
+			return d.DisplayName, nil
+		},
+		column: dendrochronology.FieldDisplayName,
+		toTerm: dendrochronology.ByDisplayName,
+		toCursor: func(d *Dendrochronology) Cursor {
+			return Cursor{
+				ID:    d.ID,
+				Value: d.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DendrochronologyOrderField) String() string {
+	var str string
+	switch f.column {
+	case DendrochronologyOrderFieldCreatedAt.column:
+		str = "CREATED_AT"
+	case DendrochronologyOrderFieldUpdatedAt.column:
+		str = "UPDATED_AT"
+	case DendrochronologyOrderFieldDisplayName.column:
+		str = "DISPLAY_NAME"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DendrochronologyOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DendrochronologyOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DendrochronologyOrderField %T must be a string", v)
+	}
+	switch str {
+	case "CREATED_AT":
+		*f = *DendrochronologyOrderFieldCreatedAt
+	case "UPDATED_AT":
+		*f = *DendrochronologyOrderFieldUpdatedAt
+	case "DISPLAY_NAME":
+		*f = *DendrochronologyOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid DendrochronologyOrderField", str)
+	}
+	return nil
+}
+
+// DendrochronologyOrderField defines the ordering field of Dendrochronology.
+type DendrochronologyOrderField struct {
+	// Value extracts the ordering value from the given Dendrochronology.
+	Value    func(*Dendrochronology) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) dendrochronology.OrderOption
+	toCursor func(*Dendrochronology) Cursor
+}
+
+// DendrochronologyOrder defines the ordering of Dendrochronology.
+type DendrochronologyOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *DendrochronologyOrderField `json:"field"`
+}
+
+// DefaultDendrochronologyOrder is the default ordering of Dendrochronology.
+var DefaultDendrochronologyOrder = &DendrochronologyOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DendrochronologyOrderField{
+		Value: func(d *Dendrochronology) (ent.Value, error) {
+			return d.ID, nil
+		},
+		column: dendrochronology.FieldID,
+		toTerm: dendrochronology.ByID,
+		toCursor: func(d *Dendrochronology) Cursor {
+			return Cursor{ID: d.ID}
+		},
+	},
+}
+
+// ToEdge converts Dendrochronology into DendrochronologyEdge.
+func (d *Dendrochronology) ToEdge(order *DendrochronologyOrder) *DendrochronologyEdge {
+	if order == nil {
+		order = DefaultDendrochronologyOrder
+	}
+	return &DendrochronologyEdge{
+		Node:   d,
+		Cursor: order.Field.toCursor(d),
 	}
 }
 

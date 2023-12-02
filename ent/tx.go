@@ -34,6 +34,10 @@ type Tx struct {
 	Country *CountryClient
 	// Culture is the client for interacting with the Culture builders.
 	Culture *CultureClient
+	// DendrochronologicalAnalysis is the client for interacting with the DendrochronologicalAnalysis builders.
+	DendrochronologicalAnalysis *DendrochronologicalAnalysisClient
+	// Dendrochronology is the client for interacting with the Dendrochronology builders.
+	Dendrochronology *DendrochronologyClient
 	// District is the client for interacting with the District builders.
 	District *DistrictClient
 	// Ethnos is the client for interacting with the Ethnos builders.
@@ -232,6 +236,8 @@ func (tx *Tx) init() {
 	tx.Collection = NewCollectionClient(tx.config)
 	tx.Country = NewCountryClient(tx.config)
 	tx.Culture = NewCultureClient(tx.config)
+	tx.DendrochronologicalAnalysis = NewDendrochronologicalAnalysisClient(tx.config)
+	tx.Dendrochronology = NewDendrochronologyClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
 	tx.Ethnos = NewEthnosClient(tx.config)
 	tx.Favourite = NewFavouriteClient(tx.config)

@@ -616,6 +616,26 @@ func (c *Culture) Petroglyphs(ctx context.Context) (result []*Petroglyph, err er
 	return result, err
 }
 
+func (da *DendrochronologicalAnalysis) Dendrochronology(ctx context.Context) (*Dendrochronology, error) {
+	result, err := da.Edges.DendrochronologyOrErr()
+	if IsNotLoaded(err) {
+		result, err = da.QueryDendrochronology().Only(ctx)
+	}
+	return result, err
+}
+
+func (d *Dendrochronology) Analysis(ctx context.Context) (result []*DendrochronologicalAnalysis, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedAnalysis(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.AnalysisOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryAnalysis().All(ctx)
+	}
+	return result, err
+}
+
 func (d *District) Art(ctx context.Context) (result []*Art, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = d.NamedArt(graphql.GetFieldContext(ctx).Field.Alias)

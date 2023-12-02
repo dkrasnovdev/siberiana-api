@@ -9,6 +9,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -2638,6 +2639,412 @@ func (c *CultureUpdate) SetInput(i UpdateCultureInput) *CultureUpdate {
 
 // SetInput applies the change-set in the UpdateCultureInput on the CultureUpdateOne builder.
 func (c *CultureUpdateOne) SetInput(i UpdateCultureInput) *CultureUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDendrochronologicalAnalysisInput represents a mutation input for creating dendrochronologicalanalyses.
+type CreateDendrochronologicalAnalysisInput struct {
+	CreatedAt              *time.Time
+	CreatedBy              *string
+	UpdatedAt              *time.Time
+	UpdatedBy              *string
+	DisplayName            string
+	StartYear              int
+	EndYear                int
+	NumberOfRings          int
+	CoefficientCorrelation float64
+	StandardDeviation      float64
+	Sensitivity            float64
+	SamplingLocation       string
+	DendrochronologyID     int
+}
+
+// Mutate applies the CreateDendrochronologicalAnalysisInput on the DendrochronologicalAnalysisMutation builder.
+func (i *CreateDendrochronologicalAnalysisInput) Mutate(m *DendrochronologicalAnalysisMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	m.SetDisplayName(i.DisplayName)
+	m.SetStartYear(i.StartYear)
+	m.SetEndYear(i.EndYear)
+	m.SetNumberOfRings(i.NumberOfRings)
+	m.SetCoefficientCorrelation(i.CoefficientCorrelation)
+	m.SetStandardDeviation(i.StandardDeviation)
+	m.SetSensitivity(i.Sensitivity)
+	m.SetSamplingLocation(i.SamplingLocation)
+	m.SetDendrochronologyID(i.DendrochronologyID)
+}
+
+// SetInput applies the change-set in the CreateDendrochronologicalAnalysisInput on the DendrochronologicalAnalysisCreate builder.
+func (c *DendrochronologicalAnalysisCreate) SetInput(i CreateDendrochronologicalAnalysisInput) *DendrochronologicalAnalysisCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDendrochronologicalAnalysisInput represents a mutation input for updating dendrochronologicalanalyses.
+type UpdateDendrochronologicalAnalysisInput struct {
+	ClearCreatedBy         bool
+	CreatedBy              *string
+	UpdatedAt              *time.Time
+	ClearUpdatedBy         bool
+	UpdatedBy              *string
+	DisplayName            *string
+	StartYear              *int
+	EndYear                *int
+	NumberOfRings          *int
+	CoefficientCorrelation *float64
+	StandardDeviation      *float64
+	Sensitivity            *float64
+	SamplingLocation       *string
+	DendrochronologyID     *int
+}
+
+// Mutate applies the UpdateDendrochronologicalAnalysisInput on the DendrochronologicalAnalysisMutation builder.
+func (i *UpdateDendrochronologicalAnalysisInput) Mutate(m *DendrochronologicalAnalysisMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.StartYear; v != nil {
+		m.SetStartYear(*v)
+	}
+	if v := i.EndYear; v != nil {
+		m.SetEndYear(*v)
+	}
+	if v := i.NumberOfRings; v != nil {
+		m.SetNumberOfRings(*v)
+	}
+	if v := i.CoefficientCorrelation; v != nil {
+		m.SetCoefficientCorrelation(*v)
+	}
+	if v := i.StandardDeviation; v != nil {
+		m.SetStandardDeviation(*v)
+	}
+	if v := i.Sensitivity; v != nil {
+		m.SetSensitivity(*v)
+	}
+	if v := i.SamplingLocation; v != nil {
+		m.SetSamplingLocation(*v)
+	}
+	if v := i.DendrochronologyID; v != nil {
+		m.SetDendrochronologyID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDendrochronologicalAnalysisInput on the DendrochronologicalAnalysisUpdate builder.
+func (c *DendrochronologicalAnalysisUpdate) SetInput(i UpdateDendrochronologicalAnalysisInput) *DendrochronologicalAnalysisUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDendrochronologicalAnalysisInput on the DendrochronologicalAnalysisUpdateOne builder.
+func (c *DendrochronologicalAnalysisUpdateOne) SetInput(i UpdateDendrochronologicalAnalysisInput) *DendrochronologicalAnalysisUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDendrochronologyInput represents a mutation input for creating dendrochronologies.
+type CreateDendrochronologyInput struct {
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	Dating               *string
+	DatingStart          *int
+	DatingEnd            *int
+	DisplayName          *string
+	Abbreviation         *string
+	Description          *string
+	ExternalLink         *string
+	Status               *dendrochronology.Status
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	DeletedAt            *time.Time
+	DeletedBy            *string
+	AnalysisData         *string
+	AnalysisURL          *string
+	DataURL              *string
+	ChartURL             *string
+	AnalysiIDs           []int
+}
+
+// Mutate applies the CreateDendrochronologyInput on the DendrochronologyMutation builder.
+func (i *CreateDendrochronologyInput) Mutate(m *DendrochronologyMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
+	if v := i.AnalysisData; v != nil {
+		m.SetAnalysisData(*v)
+	}
+	if v := i.AnalysisURL; v != nil {
+		m.SetAnalysisURL(*v)
+	}
+	if v := i.DataURL; v != nil {
+		m.SetDataURL(*v)
+	}
+	if v := i.ChartURL; v != nil {
+		m.SetChartURL(*v)
+	}
+	if v := i.AnalysiIDs; len(v) > 0 {
+		m.AddAnalysiIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateDendrochronologyInput on the DendrochronologyCreate builder.
+func (c *DendrochronologyCreate) SetInput(i CreateDendrochronologyInput) *DendrochronologyCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDendrochronologyInput represents a mutation input for updating dendrochronologies.
+type UpdateDendrochronologyInput struct {
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDating                bool
+	Dating                     *string
+	ClearDatingStart           bool
+	DatingStart                *int
+	ClearDatingEnd             bool
+	DatingEnd                  *int
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearStatus                bool
+	Status                     *dendrochronology.Status
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearDeletedAt             bool
+	DeletedAt                  *time.Time
+	ClearDeletedBy             bool
+	DeletedBy                  *string
+	ClearAnalysisData          bool
+	AnalysisData               *string
+	ClearAnalysisURL           bool
+	AnalysisURL                *string
+	ClearDataURL               bool
+	DataURL                    *string
+	ClearChartURL              bool
+	ChartURL                   *string
+	ClearAnalysis              bool
+	AddAnalysiIDs              []int
+	RemoveAnalysiIDs           []int
+}
+
+// Mutate applies the UpdateDendrochronologyInput on the DendrochronologyMutation builder.
+func (i *UpdateDendrochronologyInput) Mutate(m *DendrochronologyMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDating {
+		m.ClearDating()
+	}
+	if v := i.Dating; v != nil {
+		m.SetDating(*v)
+	}
+	if i.ClearDatingStart {
+		m.ClearDatingStart()
+	}
+	if v := i.DatingStart; v != nil {
+		m.SetDatingStart(*v)
+	}
+	if i.ClearDatingEnd {
+		m.ClearDatingEnd()
+	}
+	if v := i.DatingEnd; v != nil {
+		m.SetDatingEnd(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearDeletedAt {
+		m.ClearDeletedAt()
+	}
+	if v := i.DeletedAt; v != nil {
+		m.SetDeletedAt(*v)
+	}
+	if i.ClearDeletedBy {
+		m.ClearDeletedBy()
+	}
+	if v := i.DeletedBy; v != nil {
+		m.SetDeletedBy(*v)
+	}
+	if i.ClearAnalysisData {
+		m.ClearAnalysisData()
+	}
+	if v := i.AnalysisData; v != nil {
+		m.SetAnalysisData(*v)
+	}
+	if i.ClearAnalysisURL {
+		m.ClearAnalysisURL()
+	}
+	if v := i.AnalysisURL; v != nil {
+		m.SetAnalysisURL(*v)
+	}
+	if i.ClearDataURL {
+		m.ClearDataURL()
+	}
+	if v := i.DataURL; v != nil {
+		m.SetDataURL(*v)
+	}
+	if i.ClearChartURL {
+		m.ClearChartURL()
+	}
+	if v := i.ChartURL; v != nil {
+		m.SetChartURL(*v)
+	}
+	if i.ClearAnalysis {
+		m.ClearAnalysis()
+	}
+	if v := i.AddAnalysiIDs; len(v) > 0 {
+		m.AddAnalysiIDs(v...)
+	}
+	if v := i.RemoveAnalysiIDs; len(v) > 0 {
+		m.RemoveAnalysiIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDendrochronologyInput on the DendrochronologyUpdate builder.
+func (c *DendrochronologyUpdate) SetInput(i UpdateDendrochronologyInput) *DendrochronologyUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDendrochronologyInput on the DendrochronologyUpdateOne builder.
+func (c *DendrochronologyUpdateOne) SetInput(i UpdateDendrochronologyInput) *DendrochronologyUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

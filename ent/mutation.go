@@ -22,6 +22,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -62,45 +64,47 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeArt                   = "Art"
-	TypeArtGenre              = "ArtGenre"
-	TypeArtStyle              = "ArtStyle"
-	TypeArtifact              = "Artifact"
-	TypeAuditLog              = "AuditLog"
-	TypeBook                  = "Book"
-	TypeBookGenre             = "BookGenre"
-	TypeCategory              = "Category"
-	TypeCollection            = "Collection"
-	TypeCountry               = "Country"
-	TypeCulture               = "Culture"
-	TypeDistrict              = "District"
-	TypeEthnos                = "Ethnos"
-	TypeFavourite             = "Favourite"
-	TypeInterview             = "Interview"
-	TypeKeyword               = "Keyword"
-	TypeLicense               = "License"
-	TypeLocation              = "Location"
-	TypeMedium                = "Medium"
-	TypeModel                 = "Model"
-	TypeMonument              = "Monument"
-	TypeMound                 = "Mound"
-	TypeOrganization          = "Organization"
-	TypePeriodical            = "Periodical"
-	TypePerson                = "Person"
-	TypePersonal              = "Personal"
-	TypePetroglyph            = "Petroglyph"
-	TypeProject               = "Project"
-	TypeProtectedArea         = "ProtectedArea"
-	TypeProtectedAreaCategory = "ProtectedAreaCategory"
-	TypeProtectedAreaPicture  = "ProtectedAreaPicture"
-	TypeProxy                 = "Proxy"
-	TypePublication           = "Publication"
-	TypePublisher             = "Publisher"
-	TypeRegion                = "Region"
-	TypeSet                   = "Set"
-	TypeSettlement            = "Settlement"
-	TypeTechnique             = "Technique"
-	TypeVisit                 = "Visit"
+	TypeArt                         = "Art"
+	TypeArtGenre                    = "ArtGenre"
+	TypeArtStyle                    = "ArtStyle"
+	TypeArtifact                    = "Artifact"
+	TypeAuditLog                    = "AuditLog"
+	TypeBook                        = "Book"
+	TypeBookGenre                   = "BookGenre"
+	TypeCategory                    = "Category"
+	TypeCollection                  = "Collection"
+	TypeCountry                     = "Country"
+	TypeCulture                     = "Culture"
+	TypeDendrochronologicalAnalysis = "DendrochronologicalAnalysis"
+	TypeDendrochronology            = "Dendrochronology"
+	TypeDistrict                    = "District"
+	TypeEthnos                      = "Ethnos"
+	TypeFavourite                   = "Favourite"
+	TypeInterview                   = "Interview"
+	TypeKeyword                     = "Keyword"
+	TypeLicense                     = "License"
+	TypeLocation                    = "Location"
+	TypeMedium                      = "Medium"
+	TypeModel                       = "Model"
+	TypeMonument                    = "Monument"
+	TypeMound                       = "Mound"
+	TypeOrganization                = "Organization"
+	TypePeriodical                  = "Periodical"
+	TypePerson                      = "Person"
+	TypePersonal                    = "Personal"
+	TypePetroglyph                  = "Petroglyph"
+	TypeProject                     = "Project"
+	TypeProtectedArea               = "ProtectedArea"
+	TypeProtectedAreaCategory       = "ProtectedAreaCategory"
+	TypeProtectedAreaPicture        = "ProtectedAreaPicture"
+	TypeProxy                       = "Proxy"
+	TypePublication                 = "Publication"
+	TypePublisher                   = "Publisher"
+	TypeRegion                      = "Region"
+	TypeSet                         = "Set"
+	TypeSettlement                  = "Settlement"
+	TypeTechnique                   = "Technique"
+	TypeVisit                       = "Visit"
 )
 
 // ArtMutation represents an operation that mutates the Art nodes in the graph.
@@ -18054,6 +18058,3113 @@ func (m *CultureMutation) ResetEdge(name string) error {
 		return nil
 	}
 	return fmt.Errorf("unknown Culture edge %s", name)
+}
+
+// DendrochronologicalAnalysisMutation represents an operation that mutates the DendrochronologicalAnalysis nodes in the graph.
+type DendrochronologicalAnalysisMutation struct {
+	config
+	op                         Op
+	typ                        string
+	id                         *int
+	created_at                 *time.Time
+	created_by                 *string
+	updated_at                 *time.Time
+	updated_by                 *string
+	display_name               *string
+	start_year                 *int
+	addstart_year              *int
+	end_year                   *int
+	addend_year                *int
+	number_of_rings            *int
+	addnumber_of_rings         *int
+	coefficient_correlation    *float64
+	addcoefficient_correlation *float64
+	standard_deviation         *float64
+	addstandard_deviation      *float64
+	sensitivity                *float64
+	addsensitivity             *float64
+	sampling_location          *string
+	clearedFields              map[string]struct{}
+	dendrochronology           *int
+	cleareddendrochronology    bool
+	done                       bool
+	oldValue                   func(context.Context) (*DendrochronologicalAnalysis, error)
+	predicates                 []predicate.DendrochronologicalAnalysis
+}
+
+var _ ent.Mutation = (*DendrochronologicalAnalysisMutation)(nil)
+
+// dendrochronologicalanalysisOption allows management of the mutation configuration using functional options.
+type dendrochronologicalanalysisOption func(*DendrochronologicalAnalysisMutation)
+
+// newDendrochronologicalAnalysisMutation creates new mutation for the DendrochronologicalAnalysis entity.
+func newDendrochronologicalAnalysisMutation(c config, op Op, opts ...dendrochronologicalanalysisOption) *DendrochronologicalAnalysisMutation {
+	m := &DendrochronologicalAnalysisMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeDendrochronologicalAnalysis,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withDendrochronologicalAnalysisID sets the ID field of the mutation.
+func withDendrochronologicalAnalysisID(id int) dendrochronologicalanalysisOption {
+	return func(m *DendrochronologicalAnalysisMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *DendrochronologicalAnalysis
+		)
+		m.oldValue = func(ctx context.Context) (*DendrochronologicalAnalysis, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().DendrochronologicalAnalysis.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withDendrochronologicalAnalysis sets the old DendrochronologicalAnalysis of the mutation.
+func withDendrochronologicalAnalysis(node *DendrochronologicalAnalysis) dendrochronologicalanalysisOption {
+	return func(m *DendrochronologicalAnalysisMutation) {
+		m.oldValue = func(context.Context) (*DendrochronologicalAnalysis, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m DendrochronologicalAnalysisMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m DendrochronologicalAnalysisMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *DendrochronologicalAnalysisMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *DendrochronologicalAnalysisMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().DendrochronologicalAnalysis.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *DendrochronologicalAnalysisMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *DendrochronologicalAnalysisMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *DendrochronologicalAnalysisMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *DendrochronologicalAnalysisMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[dendrochronologicalanalysis.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *DendrochronologicalAnalysisMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[dendrochronologicalanalysis.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *DendrochronologicalAnalysisMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, dendrochronologicalanalysis.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *DendrochronologicalAnalysisMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *DendrochronologicalAnalysisMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *DendrochronologicalAnalysisMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *DendrochronologicalAnalysisMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[dendrochronologicalanalysis.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *DendrochronologicalAnalysisMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[dendrochronologicalanalysis.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *DendrochronologicalAnalysisMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, dendrochronologicalanalysis.FieldUpdatedBy)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *DendrochronologicalAnalysisMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *DendrochronologicalAnalysisMutation) ResetDisplayName() {
+	m.display_name = nil
+}
+
+// SetStartYear sets the "start_year" field.
+func (m *DendrochronologicalAnalysisMutation) SetStartYear(i int) {
+	m.start_year = &i
+	m.addstart_year = nil
+}
+
+// StartYear returns the value of the "start_year" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) StartYear() (r int, exists bool) {
+	v := m.start_year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStartYear returns the old "start_year" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldStartYear(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStartYear is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStartYear requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStartYear: %w", err)
+	}
+	return oldValue.StartYear, nil
+}
+
+// AddStartYear adds i to the "start_year" field.
+func (m *DendrochronologicalAnalysisMutation) AddStartYear(i int) {
+	if m.addstart_year != nil {
+		*m.addstart_year += i
+	} else {
+		m.addstart_year = &i
+	}
+}
+
+// AddedStartYear returns the value that was added to the "start_year" field in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedStartYear() (r int, exists bool) {
+	v := m.addstart_year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetStartYear resets all changes to the "start_year" field.
+func (m *DendrochronologicalAnalysisMutation) ResetStartYear() {
+	m.start_year = nil
+	m.addstart_year = nil
+}
+
+// SetEndYear sets the "end_year" field.
+func (m *DendrochronologicalAnalysisMutation) SetEndYear(i int) {
+	m.end_year = &i
+	m.addend_year = nil
+}
+
+// EndYear returns the value of the "end_year" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) EndYear() (r int, exists bool) {
+	v := m.end_year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEndYear returns the old "end_year" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldEndYear(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEndYear is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEndYear requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEndYear: %w", err)
+	}
+	return oldValue.EndYear, nil
+}
+
+// AddEndYear adds i to the "end_year" field.
+func (m *DendrochronologicalAnalysisMutation) AddEndYear(i int) {
+	if m.addend_year != nil {
+		*m.addend_year += i
+	} else {
+		m.addend_year = &i
+	}
+}
+
+// AddedEndYear returns the value that was added to the "end_year" field in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedEndYear() (r int, exists bool) {
+	v := m.addend_year
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetEndYear resets all changes to the "end_year" field.
+func (m *DendrochronologicalAnalysisMutation) ResetEndYear() {
+	m.end_year = nil
+	m.addend_year = nil
+}
+
+// SetNumberOfRings sets the "number_of_rings" field.
+func (m *DendrochronologicalAnalysisMutation) SetNumberOfRings(i int) {
+	m.number_of_rings = &i
+	m.addnumber_of_rings = nil
+}
+
+// NumberOfRings returns the value of the "number_of_rings" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) NumberOfRings() (r int, exists bool) {
+	v := m.number_of_rings
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNumberOfRings returns the old "number_of_rings" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldNumberOfRings(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNumberOfRings is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNumberOfRings requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNumberOfRings: %w", err)
+	}
+	return oldValue.NumberOfRings, nil
+}
+
+// AddNumberOfRings adds i to the "number_of_rings" field.
+func (m *DendrochronologicalAnalysisMutation) AddNumberOfRings(i int) {
+	if m.addnumber_of_rings != nil {
+		*m.addnumber_of_rings += i
+	} else {
+		m.addnumber_of_rings = &i
+	}
+}
+
+// AddedNumberOfRings returns the value that was added to the "number_of_rings" field in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedNumberOfRings() (r int, exists bool) {
+	v := m.addnumber_of_rings
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetNumberOfRings resets all changes to the "number_of_rings" field.
+func (m *DendrochronologicalAnalysisMutation) ResetNumberOfRings() {
+	m.number_of_rings = nil
+	m.addnumber_of_rings = nil
+}
+
+// SetCoefficientCorrelation sets the "coefficient_correlation" field.
+func (m *DendrochronologicalAnalysisMutation) SetCoefficientCorrelation(f float64) {
+	m.coefficient_correlation = &f
+	m.addcoefficient_correlation = nil
+}
+
+// CoefficientCorrelation returns the value of the "coefficient_correlation" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) CoefficientCorrelation() (r float64, exists bool) {
+	v := m.coefficient_correlation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCoefficientCorrelation returns the old "coefficient_correlation" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldCoefficientCorrelation(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCoefficientCorrelation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCoefficientCorrelation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCoefficientCorrelation: %w", err)
+	}
+	return oldValue.CoefficientCorrelation, nil
+}
+
+// AddCoefficientCorrelation adds f to the "coefficient_correlation" field.
+func (m *DendrochronologicalAnalysisMutation) AddCoefficientCorrelation(f float64) {
+	if m.addcoefficient_correlation != nil {
+		*m.addcoefficient_correlation += f
+	} else {
+		m.addcoefficient_correlation = &f
+	}
+}
+
+// AddedCoefficientCorrelation returns the value that was added to the "coefficient_correlation" field in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedCoefficientCorrelation() (r float64, exists bool) {
+	v := m.addcoefficient_correlation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCoefficientCorrelation resets all changes to the "coefficient_correlation" field.
+func (m *DendrochronologicalAnalysisMutation) ResetCoefficientCorrelation() {
+	m.coefficient_correlation = nil
+	m.addcoefficient_correlation = nil
+}
+
+// SetStandardDeviation sets the "standard_deviation" field.
+func (m *DendrochronologicalAnalysisMutation) SetStandardDeviation(f float64) {
+	m.standard_deviation = &f
+	m.addstandard_deviation = nil
+}
+
+// StandardDeviation returns the value of the "standard_deviation" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) StandardDeviation() (r float64, exists bool) {
+	v := m.standard_deviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStandardDeviation returns the old "standard_deviation" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldStandardDeviation(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStandardDeviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStandardDeviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStandardDeviation: %w", err)
+	}
+	return oldValue.StandardDeviation, nil
+}
+
+// AddStandardDeviation adds f to the "standard_deviation" field.
+func (m *DendrochronologicalAnalysisMutation) AddStandardDeviation(f float64) {
+	if m.addstandard_deviation != nil {
+		*m.addstandard_deviation += f
+	} else {
+		m.addstandard_deviation = &f
+	}
+}
+
+// AddedStandardDeviation returns the value that was added to the "standard_deviation" field in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedStandardDeviation() (r float64, exists bool) {
+	v := m.addstandard_deviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetStandardDeviation resets all changes to the "standard_deviation" field.
+func (m *DendrochronologicalAnalysisMutation) ResetStandardDeviation() {
+	m.standard_deviation = nil
+	m.addstandard_deviation = nil
+}
+
+// SetSensitivity sets the "sensitivity" field.
+func (m *DendrochronologicalAnalysisMutation) SetSensitivity(f float64) {
+	m.sensitivity = &f
+	m.addsensitivity = nil
+}
+
+// Sensitivity returns the value of the "sensitivity" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) Sensitivity() (r float64, exists bool) {
+	v := m.sensitivity
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSensitivity returns the old "sensitivity" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldSensitivity(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSensitivity is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSensitivity requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSensitivity: %w", err)
+	}
+	return oldValue.Sensitivity, nil
+}
+
+// AddSensitivity adds f to the "sensitivity" field.
+func (m *DendrochronologicalAnalysisMutation) AddSensitivity(f float64) {
+	if m.addsensitivity != nil {
+		*m.addsensitivity += f
+	} else {
+		m.addsensitivity = &f
+	}
+}
+
+// AddedSensitivity returns the value that was added to the "sensitivity" field in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedSensitivity() (r float64, exists bool) {
+	v := m.addsensitivity
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetSensitivity resets all changes to the "sensitivity" field.
+func (m *DendrochronologicalAnalysisMutation) ResetSensitivity() {
+	m.sensitivity = nil
+	m.addsensitivity = nil
+}
+
+// SetSamplingLocation sets the "sampling_location" field.
+func (m *DendrochronologicalAnalysisMutation) SetSamplingLocation(s string) {
+	m.sampling_location = &s
+}
+
+// SamplingLocation returns the value of the "sampling_location" field in the mutation.
+func (m *DendrochronologicalAnalysisMutation) SamplingLocation() (r string, exists bool) {
+	v := m.sampling_location
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSamplingLocation returns the old "sampling_location" field's value of the DendrochronologicalAnalysis entity.
+// If the DendrochronologicalAnalysis object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologicalAnalysisMutation) OldSamplingLocation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSamplingLocation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSamplingLocation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSamplingLocation: %w", err)
+	}
+	return oldValue.SamplingLocation, nil
+}
+
+// ResetSamplingLocation resets all changes to the "sampling_location" field.
+func (m *DendrochronologicalAnalysisMutation) ResetSamplingLocation() {
+	m.sampling_location = nil
+}
+
+// SetDendrochronologyID sets the "dendrochronology" edge to the Dendrochronology entity by id.
+func (m *DendrochronologicalAnalysisMutation) SetDendrochronologyID(id int) {
+	m.dendrochronology = &id
+}
+
+// ClearDendrochronology clears the "dendrochronology" edge to the Dendrochronology entity.
+func (m *DendrochronologicalAnalysisMutation) ClearDendrochronology() {
+	m.cleareddendrochronology = true
+}
+
+// DendrochronologyCleared reports if the "dendrochronology" edge to the Dendrochronology entity was cleared.
+func (m *DendrochronologicalAnalysisMutation) DendrochronologyCleared() bool {
+	return m.cleareddendrochronology
+}
+
+// DendrochronologyID returns the "dendrochronology" edge ID in the mutation.
+func (m *DendrochronologicalAnalysisMutation) DendrochronologyID() (id int, exists bool) {
+	if m.dendrochronology != nil {
+		return *m.dendrochronology, true
+	}
+	return
+}
+
+// DendrochronologyIDs returns the "dendrochronology" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// DendrochronologyID instead. It exists only for internal usage by the builders.
+func (m *DendrochronologicalAnalysisMutation) DendrochronologyIDs() (ids []int) {
+	if id := m.dendrochronology; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetDendrochronology resets all changes to the "dendrochronology" edge.
+func (m *DendrochronologicalAnalysisMutation) ResetDendrochronology() {
+	m.dendrochronology = nil
+	m.cleareddendrochronology = false
+}
+
+// Where appends a list predicates to the DendrochronologicalAnalysisMutation builder.
+func (m *DendrochronologicalAnalysisMutation) Where(ps ...predicate.DendrochronologicalAnalysis) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the DendrochronologicalAnalysisMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *DendrochronologicalAnalysisMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.DendrochronologicalAnalysis, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *DendrochronologicalAnalysisMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *DendrochronologicalAnalysisMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (DendrochronologicalAnalysis).
+func (m *DendrochronologicalAnalysisMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *DendrochronologicalAnalysisMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.created_at != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldUpdatedBy)
+	}
+	if m.display_name != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldDisplayName)
+	}
+	if m.start_year != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldStartYear)
+	}
+	if m.end_year != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldEndYear)
+	}
+	if m.number_of_rings != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldNumberOfRings)
+	}
+	if m.coefficient_correlation != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldCoefficientCorrelation)
+	}
+	if m.standard_deviation != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldStandardDeviation)
+	}
+	if m.sensitivity != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldSensitivity)
+	}
+	if m.sampling_location != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldSamplingLocation)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *DendrochronologicalAnalysisMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case dendrochronologicalanalysis.FieldCreatedAt:
+		return m.CreatedAt()
+	case dendrochronologicalanalysis.FieldCreatedBy:
+		return m.CreatedBy()
+	case dendrochronologicalanalysis.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case dendrochronologicalanalysis.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case dendrochronologicalanalysis.FieldDisplayName:
+		return m.DisplayName()
+	case dendrochronologicalanalysis.FieldStartYear:
+		return m.StartYear()
+	case dendrochronologicalanalysis.FieldEndYear:
+		return m.EndYear()
+	case dendrochronologicalanalysis.FieldNumberOfRings:
+		return m.NumberOfRings()
+	case dendrochronologicalanalysis.FieldCoefficientCorrelation:
+		return m.CoefficientCorrelation()
+	case dendrochronologicalanalysis.FieldStandardDeviation:
+		return m.StandardDeviation()
+	case dendrochronologicalanalysis.FieldSensitivity:
+		return m.Sensitivity()
+	case dendrochronologicalanalysis.FieldSamplingLocation:
+		return m.SamplingLocation()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *DendrochronologicalAnalysisMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case dendrochronologicalanalysis.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case dendrochronologicalanalysis.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case dendrochronologicalanalysis.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case dendrochronologicalanalysis.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case dendrochronologicalanalysis.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case dendrochronologicalanalysis.FieldStartYear:
+		return m.OldStartYear(ctx)
+	case dendrochronologicalanalysis.FieldEndYear:
+		return m.OldEndYear(ctx)
+	case dendrochronologicalanalysis.FieldNumberOfRings:
+		return m.OldNumberOfRings(ctx)
+	case dendrochronologicalanalysis.FieldCoefficientCorrelation:
+		return m.OldCoefficientCorrelation(ctx)
+	case dendrochronologicalanalysis.FieldStandardDeviation:
+		return m.OldStandardDeviation(ctx)
+	case dendrochronologicalanalysis.FieldSensitivity:
+		return m.OldSensitivity(ctx)
+	case dendrochronologicalanalysis.FieldSamplingLocation:
+		return m.OldSamplingLocation(ctx)
+	}
+	return nil, fmt.Errorf("unknown DendrochronologicalAnalysis field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DendrochronologicalAnalysisMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case dendrochronologicalanalysis.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case dendrochronologicalanalysis.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case dendrochronologicalanalysis.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case dendrochronologicalanalysis.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case dendrochronologicalanalysis.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case dendrochronologicalanalysis.FieldStartYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStartYear(v)
+		return nil
+	case dendrochronologicalanalysis.FieldEndYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEndYear(v)
+		return nil
+	case dendrochronologicalanalysis.FieldNumberOfRings:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNumberOfRings(v)
+		return nil
+	case dendrochronologicalanalysis.FieldCoefficientCorrelation:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCoefficientCorrelation(v)
+		return nil
+	case dendrochronologicalanalysis.FieldStandardDeviation:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStandardDeviation(v)
+		return nil
+	case dendrochronologicalanalysis.FieldSensitivity:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSensitivity(v)
+		return nil
+	case dendrochronologicalanalysis.FieldSamplingLocation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSamplingLocation(v)
+		return nil
+	}
+	return fmt.Errorf("unknown DendrochronologicalAnalysis field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedFields() []string {
+	var fields []string
+	if m.addstart_year != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldStartYear)
+	}
+	if m.addend_year != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldEndYear)
+	}
+	if m.addnumber_of_rings != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldNumberOfRings)
+	}
+	if m.addcoefficient_correlation != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldCoefficientCorrelation)
+	}
+	if m.addstandard_deviation != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldStandardDeviation)
+	}
+	if m.addsensitivity != nil {
+		fields = append(fields, dendrochronologicalanalysis.FieldSensitivity)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *DendrochronologicalAnalysisMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case dendrochronologicalanalysis.FieldStartYear:
+		return m.AddedStartYear()
+	case dendrochronologicalanalysis.FieldEndYear:
+		return m.AddedEndYear()
+	case dendrochronologicalanalysis.FieldNumberOfRings:
+		return m.AddedNumberOfRings()
+	case dendrochronologicalanalysis.FieldCoefficientCorrelation:
+		return m.AddedCoefficientCorrelation()
+	case dendrochronologicalanalysis.FieldStandardDeviation:
+		return m.AddedStandardDeviation()
+	case dendrochronologicalanalysis.FieldSensitivity:
+		return m.AddedSensitivity()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DendrochronologicalAnalysisMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case dendrochronologicalanalysis.FieldStartYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStartYear(v)
+		return nil
+	case dendrochronologicalanalysis.FieldEndYear:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddEndYear(v)
+		return nil
+	case dendrochronologicalanalysis.FieldNumberOfRings:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddNumberOfRings(v)
+		return nil
+	case dendrochronologicalanalysis.FieldCoefficientCorrelation:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCoefficientCorrelation(v)
+		return nil
+	case dendrochronologicalanalysis.FieldStandardDeviation:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddStandardDeviation(v)
+		return nil
+	case dendrochronologicalanalysis.FieldSensitivity:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddSensitivity(v)
+		return nil
+	}
+	return fmt.Errorf("unknown DendrochronologicalAnalysis numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *DendrochronologicalAnalysisMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(dendrochronologicalanalysis.FieldCreatedBy) {
+		fields = append(fields, dendrochronologicalanalysis.FieldCreatedBy)
+	}
+	if m.FieldCleared(dendrochronologicalanalysis.FieldUpdatedBy) {
+		fields = append(fields, dendrochronologicalanalysis.FieldUpdatedBy)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *DendrochronologicalAnalysisMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *DendrochronologicalAnalysisMutation) ClearField(name string) error {
+	switch name {
+	case dendrochronologicalanalysis.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case dendrochronologicalanalysis.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	}
+	return fmt.Errorf("unknown DendrochronologicalAnalysis nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *DendrochronologicalAnalysisMutation) ResetField(name string) error {
+	switch name {
+	case dendrochronologicalanalysis.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case dendrochronologicalanalysis.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case dendrochronologicalanalysis.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case dendrochronologicalanalysis.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case dendrochronologicalanalysis.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case dendrochronologicalanalysis.FieldStartYear:
+		m.ResetStartYear()
+		return nil
+	case dendrochronologicalanalysis.FieldEndYear:
+		m.ResetEndYear()
+		return nil
+	case dendrochronologicalanalysis.FieldNumberOfRings:
+		m.ResetNumberOfRings()
+		return nil
+	case dendrochronologicalanalysis.FieldCoefficientCorrelation:
+		m.ResetCoefficientCorrelation()
+		return nil
+	case dendrochronologicalanalysis.FieldStandardDeviation:
+		m.ResetStandardDeviation()
+		return nil
+	case dendrochronologicalanalysis.FieldSensitivity:
+		m.ResetSensitivity()
+		return nil
+	case dendrochronologicalanalysis.FieldSamplingLocation:
+		m.ResetSamplingLocation()
+		return nil
+	}
+	return fmt.Errorf("unknown DendrochronologicalAnalysis field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.dendrochronology != nil {
+		edges = append(edges, dendrochronologicalanalysis.EdgeDendrochronology)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *DendrochronologicalAnalysisMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case dendrochronologicalanalysis.EdgeDendrochronology:
+		if id := m.dendrochronology; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *DendrochronologicalAnalysisMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *DendrochronologicalAnalysisMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *DendrochronologicalAnalysisMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.cleareddendrochronology {
+		edges = append(edges, dendrochronologicalanalysis.EdgeDendrochronology)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *DendrochronologicalAnalysisMutation) EdgeCleared(name string) bool {
+	switch name {
+	case dendrochronologicalanalysis.EdgeDendrochronology:
+		return m.cleareddendrochronology
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *DendrochronologicalAnalysisMutation) ClearEdge(name string) error {
+	switch name {
+	case dendrochronologicalanalysis.EdgeDendrochronology:
+		m.ClearDendrochronology()
+		return nil
+	}
+	return fmt.Errorf("unknown DendrochronologicalAnalysis unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *DendrochronologicalAnalysisMutation) ResetEdge(name string) error {
+	switch name {
+	case dendrochronologicalanalysis.EdgeDendrochronology:
+		m.ResetDendrochronology()
+		return nil
+	}
+	return fmt.Errorf("unknown DendrochronologicalAnalysis edge %s", name)
+}
+
+// DendrochronologyMutation represents an operation that mutates the Dendrochronology nodes in the graph.
+type DendrochronologyMutation struct {
+	config
+	op                           Op
+	typ                          string
+	id                           *int
+	created_at                   *time.Time
+	created_by                   *string
+	updated_at                   *time.Time
+	updated_by                   *string
+	dating                       *string
+	dating_start                 *int
+	adddating_start              *int
+	dating_end                   *int
+	adddating_end                *int
+	display_name                 *string
+	abbreviation                 *string
+	description                  *string
+	external_link                *string
+	status                       *dendrochronology.Status
+	primary_image_url            *string
+	additional_images_urls       *[]string
+	appendadditional_images_urls []string
+	deleted_at                   *time.Time
+	deleted_by                   *string
+	analysis_data                *string
+	analysis_url                 *string
+	data_url                     *string
+	chart_url                    *string
+	clearedFields                map[string]struct{}
+	analysis                     map[int]struct{}
+	removedanalysis              map[int]struct{}
+	clearedanalysis              bool
+	done                         bool
+	oldValue                     func(context.Context) (*Dendrochronology, error)
+	predicates                   []predicate.Dendrochronology
+}
+
+var _ ent.Mutation = (*DendrochronologyMutation)(nil)
+
+// dendrochronologyOption allows management of the mutation configuration using functional options.
+type dendrochronologyOption func(*DendrochronologyMutation)
+
+// newDendrochronologyMutation creates new mutation for the Dendrochronology entity.
+func newDendrochronologyMutation(c config, op Op, opts ...dendrochronologyOption) *DendrochronologyMutation {
+	m := &DendrochronologyMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeDendrochronology,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withDendrochronologyID sets the ID field of the mutation.
+func withDendrochronologyID(id int) dendrochronologyOption {
+	return func(m *DendrochronologyMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Dendrochronology
+		)
+		m.oldValue = func(ctx context.Context) (*Dendrochronology, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Dendrochronology.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withDendrochronology sets the old Dendrochronology of the mutation.
+func withDendrochronology(node *Dendrochronology) dendrochronologyOption {
+	return func(m *DendrochronologyMutation) {
+		m.oldValue = func(context.Context) (*Dendrochronology, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m DendrochronologyMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m DendrochronologyMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *DendrochronologyMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *DendrochronologyMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Dendrochronology.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *DendrochronologyMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *DendrochronologyMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *DendrochronologyMutation) ResetCreatedAt() {
+	m.created_at = nil
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *DendrochronologyMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *DendrochronologyMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *DendrochronologyMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[dendrochronology.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *DendrochronologyMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *DendrochronologyMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, dendrochronology.FieldCreatedBy)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *DendrochronologyMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *DendrochronologyMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *DendrochronologyMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *DendrochronologyMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *DendrochronologyMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *DendrochronologyMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[dendrochronology.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *DendrochronologyMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *DendrochronologyMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, dendrochronology.FieldUpdatedBy)
+}
+
+// SetDating sets the "dating" field.
+func (m *DendrochronologyMutation) SetDating(s string) {
+	m.dating = &s
+}
+
+// Dating returns the value of the "dating" field in the mutation.
+func (m *DendrochronologyMutation) Dating() (r string, exists bool) {
+	v := m.dating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDating returns the old "dating" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDating(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDating is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDating: %w", err)
+	}
+	return oldValue.Dating, nil
+}
+
+// ClearDating clears the value of the "dating" field.
+func (m *DendrochronologyMutation) ClearDating() {
+	m.dating = nil
+	m.clearedFields[dendrochronology.FieldDating] = struct{}{}
+}
+
+// DatingCleared returns if the "dating" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DatingCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDating]
+	return ok
+}
+
+// ResetDating resets all changes to the "dating" field.
+func (m *DendrochronologyMutation) ResetDating() {
+	m.dating = nil
+	delete(m.clearedFields, dendrochronology.FieldDating)
+}
+
+// SetDatingStart sets the "dating_start" field.
+func (m *DendrochronologyMutation) SetDatingStart(i int) {
+	m.dating_start = &i
+	m.adddating_start = nil
+}
+
+// DatingStart returns the value of the "dating_start" field in the mutation.
+func (m *DendrochronologyMutation) DatingStart() (r int, exists bool) {
+	v := m.dating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingStart returns the old "dating_start" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDatingStart(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingStart is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingStart requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingStart: %w", err)
+	}
+	return oldValue.DatingStart, nil
+}
+
+// AddDatingStart adds i to the "dating_start" field.
+func (m *DendrochronologyMutation) AddDatingStart(i int) {
+	if m.adddating_start != nil {
+		*m.adddating_start += i
+	} else {
+		m.adddating_start = &i
+	}
+}
+
+// AddedDatingStart returns the value that was added to the "dating_start" field in this mutation.
+func (m *DendrochronologyMutation) AddedDatingStart() (r int, exists bool) {
+	v := m.adddating_start
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingStart clears the value of the "dating_start" field.
+func (m *DendrochronologyMutation) ClearDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	m.clearedFields[dendrochronology.FieldDatingStart] = struct{}{}
+}
+
+// DatingStartCleared returns if the "dating_start" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DatingStartCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDatingStart]
+	return ok
+}
+
+// ResetDatingStart resets all changes to the "dating_start" field.
+func (m *DendrochronologyMutation) ResetDatingStart() {
+	m.dating_start = nil
+	m.adddating_start = nil
+	delete(m.clearedFields, dendrochronology.FieldDatingStart)
+}
+
+// SetDatingEnd sets the "dating_end" field.
+func (m *DendrochronologyMutation) SetDatingEnd(i int) {
+	m.dating_end = &i
+	m.adddating_end = nil
+}
+
+// DatingEnd returns the value of the "dating_end" field in the mutation.
+func (m *DendrochronologyMutation) DatingEnd() (r int, exists bool) {
+	v := m.dating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDatingEnd returns the old "dating_end" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDatingEnd(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDatingEnd is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDatingEnd requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDatingEnd: %w", err)
+	}
+	return oldValue.DatingEnd, nil
+}
+
+// AddDatingEnd adds i to the "dating_end" field.
+func (m *DendrochronologyMutation) AddDatingEnd(i int) {
+	if m.adddating_end != nil {
+		*m.adddating_end += i
+	} else {
+		m.adddating_end = &i
+	}
+}
+
+// AddedDatingEnd returns the value that was added to the "dating_end" field in this mutation.
+func (m *DendrochronologyMutation) AddedDatingEnd() (r int, exists bool) {
+	v := m.adddating_end
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearDatingEnd clears the value of the "dating_end" field.
+func (m *DendrochronologyMutation) ClearDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	m.clearedFields[dendrochronology.FieldDatingEnd] = struct{}{}
+}
+
+// DatingEndCleared returns if the "dating_end" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DatingEndCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDatingEnd]
+	return ok
+}
+
+// ResetDatingEnd resets all changes to the "dating_end" field.
+func (m *DendrochronologyMutation) ResetDatingEnd() {
+	m.dating_end = nil
+	m.adddating_end = nil
+	delete(m.clearedFields, dendrochronology.FieldDatingEnd)
+}
+
+// SetDisplayName sets the "display_name" field.
+func (m *DendrochronologyMutation) SetDisplayName(s string) {
+	m.display_name = &s
+}
+
+// DisplayName returns the value of the "display_name" field in the mutation.
+func (m *DendrochronologyMutation) DisplayName() (r string, exists bool) {
+	v := m.display_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayName returns the old "display_name" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDisplayName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayName: %w", err)
+	}
+	return oldValue.DisplayName, nil
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (m *DendrochronologyMutation) ClearDisplayName() {
+	m.display_name = nil
+	m.clearedFields[dendrochronology.FieldDisplayName] = struct{}{}
+}
+
+// DisplayNameCleared returns if the "display_name" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DisplayNameCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDisplayName]
+	return ok
+}
+
+// ResetDisplayName resets all changes to the "display_name" field.
+func (m *DendrochronologyMutation) ResetDisplayName() {
+	m.display_name = nil
+	delete(m.clearedFields, dendrochronology.FieldDisplayName)
+}
+
+// SetAbbreviation sets the "abbreviation" field.
+func (m *DendrochronologyMutation) SetAbbreviation(s string) {
+	m.abbreviation = &s
+}
+
+// Abbreviation returns the value of the "abbreviation" field in the mutation.
+func (m *DendrochronologyMutation) Abbreviation() (r string, exists bool) {
+	v := m.abbreviation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAbbreviation returns the old "abbreviation" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldAbbreviation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAbbreviation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAbbreviation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAbbreviation: %w", err)
+	}
+	return oldValue.Abbreviation, nil
+}
+
+// ClearAbbreviation clears the value of the "abbreviation" field.
+func (m *DendrochronologyMutation) ClearAbbreviation() {
+	m.abbreviation = nil
+	m.clearedFields[dendrochronology.FieldAbbreviation] = struct{}{}
+}
+
+// AbbreviationCleared returns if the "abbreviation" field was cleared in this mutation.
+func (m *DendrochronologyMutation) AbbreviationCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldAbbreviation]
+	return ok
+}
+
+// ResetAbbreviation resets all changes to the "abbreviation" field.
+func (m *DendrochronologyMutation) ResetAbbreviation() {
+	m.abbreviation = nil
+	delete(m.clearedFields, dendrochronology.FieldAbbreviation)
+}
+
+// SetDescription sets the "description" field.
+func (m *DendrochronologyMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *DendrochronologyMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *DendrochronologyMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[dendrochronology.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *DendrochronologyMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, dendrochronology.FieldDescription)
+}
+
+// SetExternalLink sets the "external_link" field.
+func (m *DendrochronologyMutation) SetExternalLink(s string) {
+	m.external_link = &s
+}
+
+// ExternalLink returns the value of the "external_link" field in the mutation.
+func (m *DendrochronologyMutation) ExternalLink() (r string, exists bool) {
+	v := m.external_link
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalLink returns the old "external_link" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldExternalLink(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalLink is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalLink requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalLink: %w", err)
+	}
+	return oldValue.ExternalLink, nil
+}
+
+// ClearExternalLink clears the value of the "external_link" field.
+func (m *DendrochronologyMutation) ClearExternalLink() {
+	m.external_link = nil
+	m.clearedFields[dendrochronology.FieldExternalLink] = struct{}{}
+}
+
+// ExternalLinkCleared returns if the "external_link" field was cleared in this mutation.
+func (m *DendrochronologyMutation) ExternalLinkCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldExternalLink]
+	return ok
+}
+
+// ResetExternalLink resets all changes to the "external_link" field.
+func (m *DendrochronologyMutation) ResetExternalLink() {
+	m.external_link = nil
+	delete(m.clearedFields, dendrochronology.FieldExternalLink)
+}
+
+// SetStatus sets the "status" field.
+func (m *DendrochronologyMutation) SetStatus(d dendrochronology.Status) {
+	m.status = &d
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *DendrochronologyMutation) Status() (r dendrochronology.Status, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldStatus(ctx context.Context) (v dendrochronology.Status, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ClearStatus clears the value of the "status" field.
+func (m *DendrochronologyMutation) ClearStatus() {
+	m.status = nil
+	m.clearedFields[dendrochronology.FieldStatus] = struct{}{}
+}
+
+// StatusCleared returns if the "status" field was cleared in this mutation.
+func (m *DendrochronologyMutation) StatusCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldStatus]
+	return ok
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *DendrochronologyMutation) ResetStatus() {
+	m.status = nil
+	delete(m.clearedFields, dendrochronology.FieldStatus)
+}
+
+// SetPrimaryImageURL sets the "primary_image_url" field.
+func (m *DendrochronologyMutation) SetPrimaryImageURL(s string) {
+	m.primary_image_url = &s
+}
+
+// PrimaryImageURL returns the value of the "primary_image_url" field in the mutation.
+func (m *DendrochronologyMutation) PrimaryImageURL() (r string, exists bool) {
+	v := m.primary_image_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPrimaryImageURL returns the old "primary_image_url" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldPrimaryImageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPrimaryImageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPrimaryImageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPrimaryImageURL: %w", err)
+	}
+	return oldValue.PrimaryImageURL, nil
+}
+
+// ClearPrimaryImageURL clears the value of the "primary_image_url" field.
+func (m *DendrochronologyMutation) ClearPrimaryImageURL() {
+	m.primary_image_url = nil
+	m.clearedFields[dendrochronology.FieldPrimaryImageURL] = struct{}{}
+}
+
+// PrimaryImageURLCleared returns if the "primary_image_url" field was cleared in this mutation.
+func (m *DendrochronologyMutation) PrimaryImageURLCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldPrimaryImageURL]
+	return ok
+}
+
+// ResetPrimaryImageURL resets all changes to the "primary_image_url" field.
+func (m *DendrochronologyMutation) ResetPrimaryImageURL() {
+	m.primary_image_url = nil
+	delete(m.clearedFields, dendrochronology.FieldPrimaryImageURL)
+}
+
+// SetAdditionalImagesUrls sets the "additional_images_urls" field.
+func (m *DendrochronologyMutation) SetAdditionalImagesUrls(s []string) {
+	m.additional_images_urls = &s
+	m.appendadditional_images_urls = nil
+}
+
+// AdditionalImagesUrls returns the value of the "additional_images_urls" field in the mutation.
+func (m *DendrochronologyMutation) AdditionalImagesUrls() (r []string, exists bool) {
+	v := m.additional_images_urls
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAdditionalImagesUrls returns the old "additional_images_urls" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldAdditionalImagesUrls(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAdditionalImagesUrls is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAdditionalImagesUrls requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAdditionalImagesUrls: %w", err)
+	}
+	return oldValue.AdditionalImagesUrls, nil
+}
+
+// AppendAdditionalImagesUrls adds s to the "additional_images_urls" field.
+func (m *DendrochronologyMutation) AppendAdditionalImagesUrls(s []string) {
+	m.appendadditional_images_urls = append(m.appendadditional_images_urls, s...)
+}
+
+// AppendedAdditionalImagesUrls returns the list of values that were appended to the "additional_images_urls" field in this mutation.
+func (m *DendrochronologyMutation) AppendedAdditionalImagesUrls() ([]string, bool) {
+	if len(m.appendadditional_images_urls) == 0 {
+		return nil, false
+	}
+	return m.appendadditional_images_urls, true
+}
+
+// ClearAdditionalImagesUrls clears the value of the "additional_images_urls" field.
+func (m *DendrochronologyMutation) ClearAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	m.clearedFields[dendrochronology.FieldAdditionalImagesUrls] = struct{}{}
+}
+
+// AdditionalImagesUrlsCleared returns if the "additional_images_urls" field was cleared in this mutation.
+func (m *DendrochronologyMutation) AdditionalImagesUrlsCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldAdditionalImagesUrls]
+	return ok
+}
+
+// ResetAdditionalImagesUrls resets all changes to the "additional_images_urls" field.
+func (m *DendrochronologyMutation) ResetAdditionalImagesUrls() {
+	m.additional_images_urls = nil
+	m.appendadditional_images_urls = nil
+	delete(m.clearedFields, dendrochronology.FieldAdditionalImagesUrls)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *DendrochronologyMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *DendrochronologyMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *DendrochronologyMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[dendrochronology.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *DendrochronologyMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, dendrochronology.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *DendrochronologyMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *DendrochronologyMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *DendrochronologyMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[dendrochronology.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *DendrochronologyMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, dendrochronology.FieldDeletedBy)
+}
+
+// SetAnalysisData sets the "analysis_data" field.
+func (m *DendrochronologyMutation) SetAnalysisData(s string) {
+	m.analysis_data = &s
+}
+
+// AnalysisData returns the value of the "analysis_data" field in the mutation.
+func (m *DendrochronologyMutation) AnalysisData() (r string, exists bool) {
+	v := m.analysis_data
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnalysisData returns the old "analysis_data" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldAnalysisData(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAnalysisData is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAnalysisData requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnalysisData: %w", err)
+	}
+	return oldValue.AnalysisData, nil
+}
+
+// ClearAnalysisData clears the value of the "analysis_data" field.
+func (m *DendrochronologyMutation) ClearAnalysisData() {
+	m.analysis_data = nil
+	m.clearedFields[dendrochronology.FieldAnalysisData] = struct{}{}
+}
+
+// AnalysisDataCleared returns if the "analysis_data" field was cleared in this mutation.
+func (m *DendrochronologyMutation) AnalysisDataCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldAnalysisData]
+	return ok
+}
+
+// ResetAnalysisData resets all changes to the "analysis_data" field.
+func (m *DendrochronologyMutation) ResetAnalysisData() {
+	m.analysis_data = nil
+	delete(m.clearedFields, dendrochronology.FieldAnalysisData)
+}
+
+// SetAnalysisURL sets the "analysis_url" field.
+func (m *DendrochronologyMutation) SetAnalysisURL(s string) {
+	m.analysis_url = &s
+}
+
+// AnalysisURL returns the value of the "analysis_url" field in the mutation.
+func (m *DendrochronologyMutation) AnalysisURL() (r string, exists bool) {
+	v := m.analysis_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnalysisURL returns the old "analysis_url" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldAnalysisURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAnalysisURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAnalysisURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnalysisURL: %w", err)
+	}
+	return oldValue.AnalysisURL, nil
+}
+
+// ClearAnalysisURL clears the value of the "analysis_url" field.
+func (m *DendrochronologyMutation) ClearAnalysisURL() {
+	m.analysis_url = nil
+	m.clearedFields[dendrochronology.FieldAnalysisURL] = struct{}{}
+}
+
+// AnalysisURLCleared returns if the "analysis_url" field was cleared in this mutation.
+func (m *DendrochronologyMutation) AnalysisURLCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldAnalysisURL]
+	return ok
+}
+
+// ResetAnalysisURL resets all changes to the "analysis_url" field.
+func (m *DendrochronologyMutation) ResetAnalysisURL() {
+	m.analysis_url = nil
+	delete(m.clearedFields, dendrochronology.FieldAnalysisURL)
+}
+
+// SetDataURL sets the "data_url" field.
+func (m *DendrochronologyMutation) SetDataURL(s string) {
+	m.data_url = &s
+}
+
+// DataURL returns the value of the "data_url" field in the mutation.
+func (m *DendrochronologyMutation) DataURL() (r string, exists bool) {
+	v := m.data_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDataURL returns the old "data_url" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldDataURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDataURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDataURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDataURL: %w", err)
+	}
+	return oldValue.DataURL, nil
+}
+
+// ClearDataURL clears the value of the "data_url" field.
+func (m *DendrochronologyMutation) ClearDataURL() {
+	m.data_url = nil
+	m.clearedFields[dendrochronology.FieldDataURL] = struct{}{}
+}
+
+// DataURLCleared returns if the "data_url" field was cleared in this mutation.
+func (m *DendrochronologyMutation) DataURLCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldDataURL]
+	return ok
+}
+
+// ResetDataURL resets all changes to the "data_url" field.
+func (m *DendrochronologyMutation) ResetDataURL() {
+	m.data_url = nil
+	delete(m.clearedFields, dendrochronology.FieldDataURL)
+}
+
+// SetChartURL sets the "chart_url" field.
+func (m *DendrochronologyMutation) SetChartURL(s string) {
+	m.chart_url = &s
+}
+
+// ChartURL returns the value of the "chart_url" field in the mutation.
+func (m *DendrochronologyMutation) ChartURL() (r string, exists bool) {
+	v := m.chart_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChartURL returns the old "chart_url" field's value of the Dendrochronology entity.
+// If the Dendrochronology object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *DendrochronologyMutation) OldChartURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChartURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChartURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChartURL: %w", err)
+	}
+	return oldValue.ChartURL, nil
+}
+
+// ClearChartURL clears the value of the "chart_url" field.
+func (m *DendrochronologyMutation) ClearChartURL() {
+	m.chart_url = nil
+	m.clearedFields[dendrochronology.FieldChartURL] = struct{}{}
+}
+
+// ChartURLCleared returns if the "chart_url" field was cleared in this mutation.
+func (m *DendrochronologyMutation) ChartURLCleared() bool {
+	_, ok := m.clearedFields[dendrochronology.FieldChartURL]
+	return ok
+}
+
+// ResetChartURL resets all changes to the "chart_url" field.
+func (m *DendrochronologyMutation) ResetChartURL() {
+	m.chart_url = nil
+	delete(m.clearedFields, dendrochronology.FieldChartURL)
+}
+
+// AddAnalysiIDs adds the "analysis" edge to the DendrochronologicalAnalysis entity by ids.
+func (m *DendrochronologyMutation) AddAnalysiIDs(ids ...int) {
+	if m.analysis == nil {
+		m.analysis = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.analysis[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAnalysis clears the "analysis" edge to the DendrochronologicalAnalysis entity.
+func (m *DendrochronologyMutation) ClearAnalysis() {
+	m.clearedanalysis = true
+}
+
+// AnalysisCleared reports if the "analysis" edge to the DendrochronologicalAnalysis entity was cleared.
+func (m *DendrochronologyMutation) AnalysisCleared() bool {
+	return m.clearedanalysis
+}
+
+// RemoveAnalysiIDs removes the "analysis" edge to the DendrochronologicalAnalysis entity by IDs.
+func (m *DendrochronologyMutation) RemoveAnalysiIDs(ids ...int) {
+	if m.removedanalysis == nil {
+		m.removedanalysis = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.analysis, ids[i])
+		m.removedanalysis[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAnalysis returns the removed IDs of the "analysis" edge to the DendrochronologicalAnalysis entity.
+func (m *DendrochronologyMutation) RemovedAnalysisIDs() (ids []int) {
+	for id := range m.removedanalysis {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AnalysisIDs returns the "analysis" edge IDs in the mutation.
+func (m *DendrochronologyMutation) AnalysisIDs() (ids []int) {
+	for id := range m.analysis {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAnalysis resets all changes to the "analysis" edge.
+func (m *DendrochronologyMutation) ResetAnalysis() {
+	m.analysis = nil
+	m.clearedanalysis = false
+	m.removedanalysis = nil
+}
+
+// Where appends a list predicates to the DendrochronologyMutation builder.
+func (m *DendrochronologyMutation) Where(ps ...predicate.Dendrochronology) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the DendrochronologyMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *DendrochronologyMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Dendrochronology, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *DendrochronologyMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *DendrochronologyMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Dendrochronology).
+func (m *DendrochronologyMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *DendrochronologyMutation) Fields() []string {
+	fields := make([]string, 0, 20)
+	if m.created_at != nil {
+		fields = append(fields, dendrochronology.FieldCreatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, dendrochronology.FieldCreatedBy)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, dendrochronology.FieldUpdatedAt)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, dendrochronology.FieldUpdatedBy)
+	}
+	if m.dating != nil {
+		fields = append(fields, dendrochronology.FieldDating)
+	}
+	if m.dating_start != nil {
+		fields = append(fields, dendrochronology.FieldDatingStart)
+	}
+	if m.dating_end != nil {
+		fields = append(fields, dendrochronology.FieldDatingEnd)
+	}
+	if m.display_name != nil {
+		fields = append(fields, dendrochronology.FieldDisplayName)
+	}
+	if m.abbreviation != nil {
+		fields = append(fields, dendrochronology.FieldAbbreviation)
+	}
+	if m.description != nil {
+		fields = append(fields, dendrochronology.FieldDescription)
+	}
+	if m.external_link != nil {
+		fields = append(fields, dendrochronology.FieldExternalLink)
+	}
+	if m.status != nil {
+		fields = append(fields, dendrochronology.FieldStatus)
+	}
+	if m.primary_image_url != nil {
+		fields = append(fields, dendrochronology.FieldPrimaryImageURL)
+	}
+	if m.additional_images_urls != nil {
+		fields = append(fields, dendrochronology.FieldAdditionalImagesUrls)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, dendrochronology.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, dendrochronology.FieldDeletedBy)
+	}
+	if m.analysis_data != nil {
+		fields = append(fields, dendrochronology.FieldAnalysisData)
+	}
+	if m.analysis_url != nil {
+		fields = append(fields, dendrochronology.FieldAnalysisURL)
+	}
+	if m.data_url != nil {
+		fields = append(fields, dendrochronology.FieldDataURL)
+	}
+	if m.chart_url != nil {
+		fields = append(fields, dendrochronology.FieldChartURL)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *DendrochronologyMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case dendrochronology.FieldCreatedAt:
+		return m.CreatedAt()
+	case dendrochronology.FieldCreatedBy:
+		return m.CreatedBy()
+	case dendrochronology.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case dendrochronology.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case dendrochronology.FieldDating:
+		return m.Dating()
+	case dendrochronology.FieldDatingStart:
+		return m.DatingStart()
+	case dendrochronology.FieldDatingEnd:
+		return m.DatingEnd()
+	case dendrochronology.FieldDisplayName:
+		return m.DisplayName()
+	case dendrochronology.FieldAbbreviation:
+		return m.Abbreviation()
+	case dendrochronology.FieldDescription:
+		return m.Description()
+	case dendrochronology.FieldExternalLink:
+		return m.ExternalLink()
+	case dendrochronology.FieldStatus:
+		return m.Status()
+	case dendrochronology.FieldPrimaryImageURL:
+		return m.PrimaryImageURL()
+	case dendrochronology.FieldAdditionalImagesUrls:
+		return m.AdditionalImagesUrls()
+	case dendrochronology.FieldDeletedAt:
+		return m.DeletedAt()
+	case dendrochronology.FieldDeletedBy:
+		return m.DeletedBy()
+	case dendrochronology.FieldAnalysisData:
+		return m.AnalysisData()
+	case dendrochronology.FieldAnalysisURL:
+		return m.AnalysisURL()
+	case dendrochronology.FieldDataURL:
+		return m.DataURL()
+	case dendrochronology.FieldChartURL:
+		return m.ChartURL()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *DendrochronologyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case dendrochronology.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case dendrochronology.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case dendrochronology.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case dendrochronology.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case dendrochronology.FieldDating:
+		return m.OldDating(ctx)
+	case dendrochronology.FieldDatingStart:
+		return m.OldDatingStart(ctx)
+	case dendrochronology.FieldDatingEnd:
+		return m.OldDatingEnd(ctx)
+	case dendrochronology.FieldDisplayName:
+		return m.OldDisplayName(ctx)
+	case dendrochronology.FieldAbbreviation:
+		return m.OldAbbreviation(ctx)
+	case dendrochronology.FieldDescription:
+		return m.OldDescription(ctx)
+	case dendrochronology.FieldExternalLink:
+		return m.OldExternalLink(ctx)
+	case dendrochronology.FieldStatus:
+		return m.OldStatus(ctx)
+	case dendrochronology.FieldPrimaryImageURL:
+		return m.OldPrimaryImageURL(ctx)
+	case dendrochronology.FieldAdditionalImagesUrls:
+		return m.OldAdditionalImagesUrls(ctx)
+	case dendrochronology.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case dendrochronology.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case dendrochronology.FieldAnalysisData:
+		return m.OldAnalysisData(ctx)
+	case dendrochronology.FieldAnalysisURL:
+		return m.OldAnalysisURL(ctx)
+	case dendrochronology.FieldDataURL:
+		return m.OldDataURL(ctx)
+	case dendrochronology.FieldChartURL:
+		return m.OldChartURL(ctx)
+	}
+	return nil, fmt.Errorf("unknown Dendrochronology field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DendrochronologyMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case dendrochronology.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case dendrochronology.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case dendrochronology.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case dendrochronology.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case dendrochronology.FieldDating:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDating(v)
+		return nil
+	case dendrochronology.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingStart(v)
+		return nil
+	case dendrochronology.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDatingEnd(v)
+		return nil
+	case dendrochronology.FieldDisplayName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayName(v)
+		return nil
+	case dendrochronology.FieldAbbreviation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAbbreviation(v)
+		return nil
+	case dendrochronology.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case dendrochronology.FieldExternalLink:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalLink(v)
+		return nil
+	case dendrochronology.FieldStatus:
+		v, ok := value.(dendrochronology.Status)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case dendrochronology.FieldPrimaryImageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPrimaryImageURL(v)
+		return nil
+	case dendrochronology.FieldAdditionalImagesUrls:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAdditionalImagesUrls(v)
+		return nil
+	case dendrochronology.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case dendrochronology.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case dendrochronology.FieldAnalysisData:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnalysisData(v)
+		return nil
+	case dendrochronology.FieldAnalysisURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnalysisURL(v)
+		return nil
+	case dendrochronology.FieldDataURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDataURL(v)
+		return nil
+	case dendrochronology.FieldChartURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChartURL(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Dendrochronology field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *DendrochronologyMutation) AddedFields() []string {
+	var fields []string
+	if m.adddating_start != nil {
+		fields = append(fields, dendrochronology.FieldDatingStart)
+	}
+	if m.adddating_end != nil {
+		fields = append(fields, dendrochronology.FieldDatingEnd)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *DendrochronologyMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case dendrochronology.FieldDatingStart:
+		return m.AddedDatingStart()
+	case dendrochronology.FieldDatingEnd:
+		return m.AddedDatingEnd()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *DendrochronologyMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case dendrochronology.FieldDatingStart:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDatingStart(v)
+		return nil
+	case dendrochronology.FieldDatingEnd:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDatingEnd(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Dendrochronology numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *DendrochronologyMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(dendrochronology.FieldCreatedBy) {
+		fields = append(fields, dendrochronology.FieldCreatedBy)
+	}
+	if m.FieldCleared(dendrochronology.FieldUpdatedBy) {
+		fields = append(fields, dendrochronology.FieldUpdatedBy)
+	}
+	if m.FieldCleared(dendrochronology.FieldDating) {
+		fields = append(fields, dendrochronology.FieldDating)
+	}
+	if m.FieldCleared(dendrochronology.FieldDatingStart) {
+		fields = append(fields, dendrochronology.FieldDatingStart)
+	}
+	if m.FieldCleared(dendrochronology.FieldDatingEnd) {
+		fields = append(fields, dendrochronology.FieldDatingEnd)
+	}
+	if m.FieldCleared(dendrochronology.FieldDisplayName) {
+		fields = append(fields, dendrochronology.FieldDisplayName)
+	}
+	if m.FieldCleared(dendrochronology.FieldAbbreviation) {
+		fields = append(fields, dendrochronology.FieldAbbreviation)
+	}
+	if m.FieldCleared(dendrochronology.FieldDescription) {
+		fields = append(fields, dendrochronology.FieldDescription)
+	}
+	if m.FieldCleared(dendrochronology.FieldExternalLink) {
+		fields = append(fields, dendrochronology.FieldExternalLink)
+	}
+	if m.FieldCleared(dendrochronology.FieldStatus) {
+		fields = append(fields, dendrochronology.FieldStatus)
+	}
+	if m.FieldCleared(dendrochronology.FieldPrimaryImageURL) {
+		fields = append(fields, dendrochronology.FieldPrimaryImageURL)
+	}
+	if m.FieldCleared(dendrochronology.FieldAdditionalImagesUrls) {
+		fields = append(fields, dendrochronology.FieldAdditionalImagesUrls)
+	}
+	if m.FieldCleared(dendrochronology.FieldDeletedAt) {
+		fields = append(fields, dendrochronology.FieldDeletedAt)
+	}
+	if m.FieldCleared(dendrochronology.FieldDeletedBy) {
+		fields = append(fields, dendrochronology.FieldDeletedBy)
+	}
+	if m.FieldCleared(dendrochronology.FieldAnalysisData) {
+		fields = append(fields, dendrochronology.FieldAnalysisData)
+	}
+	if m.FieldCleared(dendrochronology.FieldAnalysisURL) {
+		fields = append(fields, dendrochronology.FieldAnalysisURL)
+	}
+	if m.FieldCleared(dendrochronology.FieldDataURL) {
+		fields = append(fields, dendrochronology.FieldDataURL)
+	}
+	if m.FieldCleared(dendrochronology.FieldChartURL) {
+		fields = append(fields, dendrochronology.FieldChartURL)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *DendrochronologyMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *DendrochronologyMutation) ClearField(name string) error {
+	switch name {
+	case dendrochronology.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case dendrochronology.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case dendrochronology.FieldDating:
+		m.ClearDating()
+		return nil
+	case dendrochronology.FieldDatingStart:
+		m.ClearDatingStart()
+		return nil
+	case dendrochronology.FieldDatingEnd:
+		m.ClearDatingEnd()
+		return nil
+	case dendrochronology.FieldDisplayName:
+		m.ClearDisplayName()
+		return nil
+	case dendrochronology.FieldAbbreviation:
+		m.ClearAbbreviation()
+		return nil
+	case dendrochronology.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case dendrochronology.FieldExternalLink:
+		m.ClearExternalLink()
+		return nil
+	case dendrochronology.FieldStatus:
+		m.ClearStatus()
+		return nil
+	case dendrochronology.FieldPrimaryImageURL:
+		m.ClearPrimaryImageURL()
+		return nil
+	case dendrochronology.FieldAdditionalImagesUrls:
+		m.ClearAdditionalImagesUrls()
+		return nil
+	case dendrochronology.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case dendrochronology.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case dendrochronology.FieldAnalysisData:
+		m.ClearAnalysisData()
+		return nil
+	case dendrochronology.FieldAnalysisURL:
+		m.ClearAnalysisURL()
+		return nil
+	case dendrochronology.FieldDataURL:
+		m.ClearDataURL()
+		return nil
+	case dendrochronology.FieldChartURL:
+		m.ClearChartURL()
+		return nil
+	}
+	return fmt.Errorf("unknown Dendrochronology nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *DendrochronologyMutation) ResetField(name string) error {
+	switch name {
+	case dendrochronology.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case dendrochronology.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case dendrochronology.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case dendrochronology.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case dendrochronology.FieldDating:
+		m.ResetDating()
+		return nil
+	case dendrochronology.FieldDatingStart:
+		m.ResetDatingStart()
+		return nil
+	case dendrochronology.FieldDatingEnd:
+		m.ResetDatingEnd()
+		return nil
+	case dendrochronology.FieldDisplayName:
+		m.ResetDisplayName()
+		return nil
+	case dendrochronology.FieldAbbreviation:
+		m.ResetAbbreviation()
+		return nil
+	case dendrochronology.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case dendrochronology.FieldExternalLink:
+		m.ResetExternalLink()
+		return nil
+	case dendrochronology.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case dendrochronology.FieldPrimaryImageURL:
+		m.ResetPrimaryImageURL()
+		return nil
+	case dendrochronology.FieldAdditionalImagesUrls:
+		m.ResetAdditionalImagesUrls()
+		return nil
+	case dendrochronology.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case dendrochronology.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case dendrochronology.FieldAnalysisData:
+		m.ResetAnalysisData()
+		return nil
+	case dendrochronology.FieldAnalysisURL:
+		m.ResetAnalysisURL()
+		return nil
+	case dendrochronology.FieldDataURL:
+		m.ResetDataURL()
+		return nil
+	case dendrochronology.FieldChartURL:
+		m.ResetChartURL()
+		return nil
+	}
+	return fmt.Errorf("unknown Dendrochronology field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *DendrochronologyMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.analysis != nil {
+		edges = append(edges, dendrochronology.EdgeAnalysis)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *DendrochronologyMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case dendrochronology.EdgeAnalysis:
+		ids := make([]ent.Value, 0, len(m.analysis))
+		for id := range m.analysis {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *DendrochronologyMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedanalysis != nil {
+		edges = append(edges, dendrochronology.EdgeAnalysis)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *DendrochronologyMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case dendrochronology.EdgeAnalysis:
+		ids := make([]ent.Value, 0, len(m.removedanalysis))
+		for id := range m.removedanalysis {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *DendrochronologyMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedanalysis {
+		edges = append(edges, dendrochronology.EdgeAnalysis)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *DendrochronologyMutation) EdgeCleared(name string) bool {
+	switch name {
+	case dendrochronology.EdgeAnalysis:
+		return m.clearedanalysis
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *DendrochronologyMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Dendrochronology unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *DendrochronologyMutation) ResetEdge(name string) error {
+	switch name {
+	case dendrochronology.EdgeAnalysis:
+		m.ResetAnalysis()
+		return nil
+	}
+	return fmt.Errorf("unknown Dendrochronology edge %s", name)
 }
 
 // DistrictMutation represents an operation that mutates the District nodes in the graph.

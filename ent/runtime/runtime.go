@@ -17,6 +17,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -367,6 +369,67 @@ func init() {
 	culture.DefaultUpdatedAt = cultureDescUpdatedAt.Default.(func() time.Time)
 	// culture.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	culture.UpdateDefaultUpdatedAt = cultureDescUpdatedAt.UpdateDefault.(func() time.Time)
+	dendrochronologicalanalysisMixin := schema.DendrochronologicalAnalysis{}.Mixin()
+	dendrochronologicalanalysis.Policy = privacy.NewPolicies(schema.DendrochronologicalAnalysis{})
+	dendrochronologicalanalysis.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := dendrochronologicalanalysis.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	dendrochronologicalanalysisMixinHooks0 := dendrochronologicalanalysisMixin[0].Hooks()
+
+	dendrochronologicalanalysis.Hooks[1] = dendrochronologicalanalysisMixinHooks0[0]
+	dendrochronologicalanalysisMixinFields0 := dendrochronologicalanalysisMixin[0].Fields()
+	_ = dendrochronologicalanalysisMixinFields0
+	dendrochronologicalanalysisFields := schema.DendrochronologicalAnalysis{}.Fields()
+	_ = dendrochronologicalanalysisFields
+	// dendrochronologicalanalysisDescCreatedAt is the schema descriptor for created_at field.
+	dendrochronologicalanalysisDescCreatedAt := dendrochronologicalanalysisMixinFields0[0].Descriptor()
+	// dendrochronologicalanalysis.DefaultCreatedAt holds the default value on creation for the created_at field.
+	dendrochronologicalanalysis.DefaultCreatedAt = dendrochronologicalanalysisDescCreatedAt.Default.(func() time.Time)
+	// dendrochronologicalanalysisDescUpdatedAt is the schema descriptor for updated_at field.
+	dendrochronologicalanalysisDescUpdatedAt := dendrochronologicalanalysisMixinFields0[2].Descriptor()
+	// dendrochronologicalanalysis.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	dendrochronologicalanalysis.DefaultUpdatedAt = dendrochronologicalanalysisDescUpdatedAt.Default.(func() time.Time)
+	// dendrochronologicalanalysis.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	dendrochronologicalanalysis.UpdateDefaultUpdatedAt = dendrochronologicalanalysisDescUpdatedAt.UpdateDefault.(func() time.Time)
+	dendrochronologyMixin := schema.Dendrochronology{}.Mixin()
+	dendrochronology.Policy = privacy.NewPolicies(schema.Dendrochronology{})
+	dendrochronology.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := dendrochronology.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	dendrochronologyMixinHooks0 := dendrochronologyMixin[0].Hooks()
+	dendrochronologyMixinHooks5 := dendrochronologyMixin[5].Hooks()
+
+	dendrochronology.Hooks[1] = dendrochronologyMixinHooks0[0]
+
+	dendrochronology.Hooks[2] = dendrochronologyMixinHooks5[0]
+	dendrochronologyMixinInters5 := dendrochronologyMixin[5].Interceptors()
+	dendrochronology.Interceptors[0] = dendrochronologyMixinInters5[0]
+	dendrochronologyMixinFields0 := dendrochronologyMixin[0].Fields()
+	_ = dendrochronologyMixinFields0
+	dendrochronologyMixinFields3 := dendrochronologyMixin[3].Fields()
+	_ = dendrochronologyMixinFields3
+	dendrochronologyFields := schema.Dendrochronology{}.Fields()
+	_ = dendrochronologyFields
+	// dendrochronologyDescCreatedAt is the schema descriptor for created_at field.
+	dendrochronologyDescCreatedAt := dendrochronologyMixinFields0[0].Descriptor()
+	// dendrochronology.DefaultCreatedAt holds the default value on creation for the created_at field.
+	dendrochronology.DefaultCreatedAt = dendrochronologyDescCreatedAt.Default.(func() time.Time)
+	// dendrochronologyDescUpdatedAt is the schema descriptor for updated_at field.
+	dendrochronologyDescUpdatedAt := dendrochronologyMixinFields0[2].Descriptor()
+	// dendrochronology.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	dendrochronology.DefaultUpdatedAt = dendrochronologyDescUpdatedAt.Default.(func() time.Time)
+	// dendrochronology.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	dendrochronology.UpdateDefaultUpdatedAt = dendrochronologyDescUpdatedAt.UpdateDefault.(func() time.Time)
 	districtMixin := schema.District{}.Mixin()
 	district.Policy = privacy.NewPolicies(schema.District{})
 	district.Hooks[0] = func(next ent.Mutator) ent.Mutator {

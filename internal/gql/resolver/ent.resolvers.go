@@ -78,6 +78,16 @@ func (r *queryResolver) Cultures(ctx context.Context, after *entgql.Cursor[int],
 	return r.client.Culture.Query().Paginate(ctx, after, first, before, last, offset, ent.WithCultureOrder(orderBy), ent.WithCultureFilter(where.Filter))
 }
 
+// DendrochronologicalAnalyses is the resolver for the dendrochronologicalAnalyses field.
+func (r *queryResolver) DendrochronologicalAnalyses(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.DendrochronologicalAnalysisOrder, where *ent.DendrochronologicalAnalysisWhereInput) (*ent.DendrochronologicalAnalysisConnection, error) {
+	return r.client.DendrochronologicalAnalysis.Query().Paginate(ctx, after, first, before, last, offset, ent.WithDendrochronologicalAnalysisOrder(orderBy), ent.WithDendrochronologicalAnalysisFilter(where.Filter))
+}
+
+// Dendrochronologies is the resolver for the dendrochronologies field.
+func (r *queryResolver) Dendrochronologies(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.DendrochronologyOrder, where *ent.DendrochronologyWhereInput) (*ent.DendrochronologyConnection, error) {
+	return r.client.Dendrochronology.Query().Paginate(ctx, after, first, before, last, offset, ent.WithDendrochronologyOrder(orderBy), ent.WithDendrochronologyFilter(where.Filter))
+}
+
 // Districts is the resolver for the districts field.
 func (r *queryResolver) Districts(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.DistrictOrder, where *ent.DistrictWhereInput) (*ent.DistrictConnection, error) {
 	return r.client.District.Query().Paginate(ctx, after, first, before, last, offset, ent.WithDistrictOrder(orderBy), ent.WithDistrictFilter(where.Filter))

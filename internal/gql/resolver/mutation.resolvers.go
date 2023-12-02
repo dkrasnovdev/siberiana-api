@@ -253,6 +253,50 @@ func (r *mutationResolver) DeleteFavourite(ctx context.Context, id int) (string,
 	return "Favourite has been deleted", nil
 }
 
+// CreateDendrochronology is the resolver for the createDendrochronology field.
+func (r *mutationResolver) CreateDendrochronology(ctx context.Context, input ent.CreateDendrochronologyInput) (*ent.Dendrochronology, error) {
+	client := ent.FromContext(ctx)
+	return client.Dendrochronology.Create().SetInput(input).Save(ctx)
+}
+
+// UpdateDendrochronology is the resolver for the updateDendrochronology field.
+func (r *mutationResolver) UpdateDendrochronology(ctx context.Context, id int, input ent.UpdateDendrochronologyInput) (*ent.Dendrochronology, error) {
+	client := ent.FromContext(ctx)
+	return client.Dendrochronology.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteDendrochronology is the resolver for the deleteDendrochronology field.
+func (r *mutationResolver) DeleteDendrochronology(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.Dendrochronology.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "Dendrochronology has been deleted", nil
+}
+
+// CreateDendrochronologicalAnalysis is the resolver for the createDendrochronologicalAnalysis field.
+func (r *mutationResolver) CreateDendrochronologicalAnalysis(ctx context.Context, input ent.CreateDendrochronologicalAnalysisInput) (*ent.DendrochronologicalAnalysis, error) {
+	client := ent.FromContext(ctx)
+	return client.DendrochronologicalAnalysis.Create().SetInput(input).Save(ctx)
+}
+
+// UpdateDendrochronologicalAnalysis is the resolver for the updateDendrochronologicalAnalysis field.
+func (r *mutationResolver) UpdateDendrochronologicalAnalysis(ctx context.Context, id int, input ent.UpdateDendrochronologicalAnalysisInput) (*ent.DendrochronologicalAnalysis, error) {
+	client := ent.FromContext(ctx)
+	return client.DendrochronologicalAnalysis.UpdateOneID(id).SetInput(input).Save(ctx)
+}
+
+// DeleteDendrochronologicalAnalysis is the resolver for the deleteDendrochronologicalAnalysis field.
+func (r *mutationResolver) DeleteDendrochronologicalAnalysis(ctx context.Context, id int) (string, error) {
+	client := ent.FromContext(ctx)
+	err := client.DendrochronologicalAnalysis.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return "", err
+	}
+	return "DendrochronologicalAnalysis has been deleted", nil
+}
+
 // CreateDistrict is the resolver for the createDistrict field.
 func (r *mutationResolver) CreateDistrict(ctx context.Context, input ent.CreateDistrictInput) (*ent.District, error) {
 	client := ent.FromContext(ctx)

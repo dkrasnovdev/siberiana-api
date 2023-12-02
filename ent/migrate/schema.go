@@ -483,6 +483,67 @@ var (
 		Columns:    CulturesColumns,
 		PrimaryKey: []*schema.Column{CulturesColumns[0]},
 	}
+	// DendrochronologicalAnalysesColumns holds the columns for the "dendrochronological_analyses" table.
+	DendrochronologicalAnalysesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString},
+		{Name: "start_year", Type: field.TypeInt},
+		{Name: "end_year", Type: field.TypeInt},
+		{Name: "number_of_rings", Type: field.TypeInt},
+		{Name: "coefficient_correlation", Type: field.TypeFloat64},
+		{Name: "standard_deviation", Type: field.TypeFloat64},
+		{Name: "sensitivity", Type: field.TypeFloat64},
+		{Name: "sampling_location", Type: field.TypeString},
+		{Name: "dendrochronological_analysis_dendrochronology", Type: field.TypeInt},
+	}
+	// DendrochronologicalAnalysesTable holds the schema information for the "dendrochronological_analyses" table.
+	DendrochronologicalAnalysesTable = &schema.Table{
+		Name:       "dendrochronological_analyses",
+		Columns:    DendrochronologicalAnalysesColumns,
+		PrimaryKey: []*schema.Column{DendrochronologicalAnalysesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "dendrochronological_analyses_dendrochronologies_dendrochronology",
+				Columns:    []*schema.Column{DendrochronologicalAnalysesColumns[13]},
+				RefColumns: []*schema.Column{DendrochronologiesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// DendrochronologiesColumns holds the columns for the "dendrochronologies" table.
+	DendrochronologiesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "dating", Type: field.TypeString, Nullable: true},
+		{Name: "dating_start", Type: field.TypeInt, Nullable: true},
+		{Name: "dating_end", Type: field.TypeInt, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "analysis_data", Type: field.TypeString, Nullable: true},
+		{Name: "analysis_url", Type: field.TypeString, Nullable: true},
+		{Name: "data_url", Type: field.TypeString, Nullable: true},
+		{Name: "chart_url", Type: field.TypeString, Nullable: true},
+	}
+	// DendrochronologiesTable holds the schema information for the "dendrochronologies" table.
+	DendrochronologiesTable = &schema.Table{
+		Name:       "dendrochronologies",
+		Columns:    DendrochronologiesColumns,
+		PrimaryKey: []*schema.Column{DendrochronologiesColumns[0]},
+	}
 	// DistrictsColumns holds the columns for the "districts" table.
 	DistrictsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -1809,6 +1870,8 @@ var (
 		CollectionsTable,
 		CountriesTable,
 		CulturesTable,
+		DendrochronologicalAnalysesTable,
+		DendrochronologiesTable,
 		DistrictsTable,
 		EthnosTable,
 		FavouritesTable,
@@ -1894,6 +1957,7 @@ func init() {
 	BooksTable.ForeignKeys[8].RefTable = RegionsTable
 	BooksTable.ForeignKeys[9].RefTable = SettlementsTable
 	CollectionsTable.ForeignKeys[0].RefTable = CategoriesTable
+	DendrochronologicalAnalysesTable.ForeignKeys[0].RefTable = DendrochronologiesTable
 	DistrictsTable.ForeignKeys[0].RefTable = RegionsTable
 	LocationsTable.ForeignKeys[0].RefTable = CountriesTable
 	LocationsTable.ForeignKeys[1].RefTable = DistrictsTable

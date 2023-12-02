@@ -39,6 +39,12 @@ type Country func(*sql.Selector)
 // Culture is the predicate function for culture builders.
 type Culture func(*sql.Selector)
 
+// DendrochronologicalAnalysis is the predicate function for dendrochronologicalanalysis builders.
+type DendrochronologicalAnalysis func(*sql.Selector)
+
+// Dendrochronology is the predicate function for dendrochronology builders.
+type Dendrochronology func(*sql.Selector)
+
 // District is the predicate function for district builders.
 type District func(*sql.Selector)
 

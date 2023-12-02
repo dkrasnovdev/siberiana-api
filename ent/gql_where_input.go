@@ -18,6 +18,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -9665,6 +9667,1828 @@ func (i *CultureWhereInput) P() (predicate.Culture, error) {
 		return predicates[0], nil
 	default:
 		return culture.And(predicates...), nil
+	}
+}
+
+// DendrochronologicalAnalysisWhereInput represents a where input for filtering DendrochronologicalAnalysis queries.
+type DendrochronologicalAnalysisWhereInput struct {
+	Predicates []predicate.DendrochronologicalAnalysis  `json:"-"`
+	Not        *DendrochronologicalAnalysisWhereInput   `json:"not,omitempty"`
+	Or         []*DendrochronologicalAnalysisWhereInput `json:"or,omitempty"`
+	And        []*DendrochronologicalAnalysisWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "start_year" field predicates.
+	StartYear      *int  `json:"startYear,omitempty"`
+	StartYearNEQ   *int  `json:"startYearNEQ,omitempty"`
+	StartYearIn    []int `json:"startYearIn,omitempty"`
+	StartYearNotIn []int `json:"startYearNotIn,omitempty"`
+	StartYearGT    *int  `json:"startYearGT,omitempty"`
+	StartYearGTE   *int  `json:"startYearGTE,omitempty"`
+	StartYearLT    *int  `json:"startYearLT,omitempty"`
+	StartYearLTE   *int  `json:"startYearLTE,omitempty"`
+
+	// "end_year" field predicates.
+	EndYear      *int  `json:"endYear,omitempty"`
+	EndYearNEQ   *int  `json:"endYearNEQ,omitempty"`
+	EndYearIn    []int `json:"endYearIn,omitempty"`
+	EndYearNotIn []int `json:"endYearNotIn,omitempty"`
+	EndYearGT    *int  `json:"endYearGT,omitempty"`
+	EndYearGTE   *int  `json:"endYearGTE,omitempty"`
+	EndYearLT    *int  `json:"endYearLT,omitempty"`
+	EndYearLTE   *int  `json:"endYearLTE,omitempty"`
+
+	// "number_of_rings" field predicates.
+	NumberOfRings      *int  `json:"numberOfRings,omitempty"`
+	NumberOfRingsNEQ   *int  `json:"numberOfRingsNEQ,omitempty"`
+	NumberOfRingsIn    []int `json:"numberOfRingsIn,omitempty"`
+	NumberOfRingsNotIn []int `json:"numberOfRingsNotIn,omitempty"`
+	NumberOfRingsGT    *int  `json:"numberOfRingsGT,omitempty"`
+	NumberOfRingsGTE   *int  `json:"numberOfRingsGTE,omitempty"`
+	NumberOfRingsLT    *int  `json:"numberOfRingsLT,omitempty"`
+	NumberOfRingsLTE   *int  `json:"numberOfRingsLTE,omitempty"`
+
+	// "coefficient_correlation" field predicates.
+	CoefficientCorrelation      *float64  `json:"coefficientCorrelation,omitempty"`
+	CoefficientCorrelationNEQ   *float64  `json:"coefficientCorrelationNEQ,omitempty"`
+	CoefficientCorrelationIn    []float64 `json:"coefficientCorrelationIn,omitempty"`
+	CoefficientCorrelationNotIn []float64 `json:"coefficientCorrelationNotIn,omitempty"`
+	CoefficientCorrelationGT    *float64  `json:"coefficientCorrelationGT,omitempty"`
+	CoefficientCorrelationGTE   *float64  `json:"coefficientCorrelationGTE,omitempty"`
+	CoefficientCorrelationLT    *float64  `json:"coefficientCorrelationLT,omitempty"`
+	CoefficientCorrelationLTE   *float64  `json:"coefficientCorrelationLTE,omitempty"`
+
+	// "standard_deviation" field predicates.
+	StandardDeviation      *float64  `json:"standardDeviation,omitempty"`
+	StandardDeviationNEQ   *float64  `json:"standardDeviationNEQ,omitempty"`
+	StandardDeviationIn    []float64 `json:"standardDeviationIn,omitempty"`
+	StandardDeviationNotIn []float64 `json:"standardDeviationNotIn,omitempty"`
+	StandardDeviationGT    *float64  `json:"standardDeviationGT,omitempty"`
+	StandardDeviationGTE   *float64  `json:"standardDeviationGTE,omitempty"`
+	StandardDeviationLT    *float64  `json:"standardDeviationLT,omitempty"`
+	StandardDeviationLTE   *float64  `json:"standardDeviationLTE,omitempty"`
+
+	// "sensitivity" field predicates.
+	Sensitivity      *float64  `json:"sensitivity,omitempty"`
+	SensitivityNEQ   *float64  `json:"sensitivityNEQ,omitempty"`
+	SensitivityIn    []float64 `json:"sensitivityIn,omitempty"`
+	SensitivityNotIn []float64 `json:"sensitivityNotIn,omitempty"`
+	SensitivityGT    *float64  `json:"sensitivityGT,omitempty"`
+	SensitivityGTE   *float64  `json:"sensitivityGTE,omitempty"`
+	SensitivityLT    *float64  `json:"sensitivityLT,omitempty"`
+	SensitivityLTE   *float64  `json:"sensitivityLTE,omitempty"`
+
+	// "sampling_location" field predicates.
+	SamplingLocation             *string  `json:"samplingLocation,omitempty"`
+	SamplingLocationNEQ          *string  `json:"samplingLocationNEQ,omitempty"`
+	SamplingLocationIn           []string `json:"samplingLocationIn,omitempty"`
+	SamplingLocationNotIn        []string `json:"samplingLocationNotIn,omitempty"`
+	SamplingLocationGT           *string  `json:"samplingLocationGT,omitempty"`
+	SamplingLocationGTE          *string  `json:"samplingLocationGTE,omitempty"`
+	SamplingLocationLT           *string  `json:"samplingLocationLT,omitempty"`
+	SamplingLocationLTE          *string  `json:"samplingLocationLTE,omitempty"`
+	SamplingLocationContains     *string  `json:"samplingLocationContains,omitempty"`
+	SamplingLocationHasPrefix    *string  `json:"samplingLocationHasPrefix,omitempty"`
+	SamplingLocationHasSuffix    *string  `json:"samplingLocationHasSuffix,omitempty"`
+	SamplingLocationEqualFold    *string  `json:"samplingLocationEqualFold,omitempty"`
+	SamplingLocationContainsFold *string  `json:"samplingLocationContainsFold,omitempty"`
+
+	// "dendrochronology" edge predicates.
+	HasDendrochronology     *bool                         `json:"hasDendrochronology,omitempty"`
+	HasDendrochronologyWith []*DendrochronologyWhereInput `json:"hasDendrochronologyWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *DendrochronologicalAnalysisWhereInput) AddPredicates(predicates ...predicate.DendrochronologicalAnalysis) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the DendrochronologicalAnalysisWhereInput filter on the DendrochronologicalAnalysisQuery builder.
+func (i *DendrochronologicalAnalysisWhereInput) Filter(q *DendrochronologicalAnalysisQuery) (*DendrochronologicalAnalysisQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyDendrochronologicalAnalysisWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyDendrochronologicalAnalysisWhereInput is returned in case the DendrochronologicalAnalysisWhereInput is empty.
+var ErrEmptyDendrochronologicalAnalysisWhereInput = errors.New("ent: empty predicate DendrochronologicalAnalysisWhereInput")
+
+// P returns a predicate for filtering dendrochronologicalanalyses.
+// An error is returned if the input is empty or invalid.
+func (i *DendrochronologicalAnalysisWhereInput) P() (predicate.DendrochronologicalAnalysis, error) {
+	var predicates []predicate.DendrochronologicalAnalysis
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, dendrochronologicalanalysis.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.DendrochronologicalAnalysis, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, dendrochronologicalanalysis.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.DendrochronologicalAnalysis, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, dendrochronologicalanalysis.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.StartYear != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearEQ(*i.StartYear))
+	}
+	if i.StartYearNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearNEQ(*i.StartYearNEQ))
+	}
+	if len(i.StartYearIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearIn(i.StartYearIn...))
+	}
+	if len(i.StartYearNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearNotIn(i.StartYearNotIn...))
+	}
+	if i.StartYearGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearGT(*i.StartYearGT))
+	}
+	if i.StartYearGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearGTE(*i.StartYearGTE))
+	}
+	if i.StartYearLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearLT(*i.StartYearLT))
+	}
+	if i.StartYearLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StartYearLTE(*i.StartYearLTE))
+	}
+	if i.EndYear != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearEQ(*i.EndYear))
+	}
+	if i.EndYearNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearNEQ(*i.EndYearNEQ))
+	}
+	if len(i.EndYearIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearIn(i.EndYearIn...))
+	}
+	if len(i.EndYearNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearNotIn(i.EndYearNotIn...))
+	}
+	if i.EndYearGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearGT(*i.EndYearGT))
+	}
+	if i.EndYearGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearGTE(*i.EndYearGTE))
+	}
+	if i.EndYearLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearLT(*i.EndYearLT))
+	}
+	if i.EndYearLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.EndYearLTE(*i.EndYearLTE))
+	}
+	if i.NumberOfRings != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsEQ(*i.NumberOfRings))
+	}
+	if i.NumberOfRingsNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsNEQ(*i.NumberOfRingsNEQ))
+	}
+	if len(i.NumberOfRingsIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsIn(i.NumberOfRingsIn...))
+	}
+	if len(i.NumberOfRingsNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsNotIn(i.NumberOfRingsNotIn...))
+	}
+	if i.NumberOfRingsGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsGT(*i.NumberOfRingsGT))
+	}
+	if i.NumberOfRingsGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsGTE(*i.NumberOfRingsGTE))
+	}
+	if i.NumberOfRingsLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsLT(*i.NumberOfRingsLT))
+	}
+	if i.NumberOfRingsLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.NumberOfRingsLTE(*i.NumberOfRingsLTE))
+	}
+	if i.CoefficientCorrelation != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationEQ(*i.CoefficientCorrelation))
+	}
+	if i.CoefficientCorrelationNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationNEQ(*i.CoefficientCorrelationNEQ))
+	}
+	if len(i.CoefficientCorrelationIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationIn(i.CoefficientCorrelationIn...))
+	}
+	if len(i.CoefficientCorrelationNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationNotIn(i.CoefficientCorrelationNotIn...))
+	}
+	if i.CoefficientCorrelationGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationGT(*i.CoefficientCorrelationGT))
+	}
+	if i.CoefficientCorrelationGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationGTE(*i.CoefficientCorrelationGTE))
+	}
+	if i.CoefficientCorrelationLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationLT(*i.CoefficientCorrelationLT))
+	}
+	if i.CoefficientCorrelationLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.CoefficientCorrelationLTE(*i.CoefficientCorrelationLTE))
+	}
+	if i.StandardDeviation != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationEQ(*i.StandardDeviation))
+	}
+	if i.StandardDeviationNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationNEQ(*i.StandardDeviationNEQ))
+	}
+	if len(i.StandardDeviationIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationIn(i.StandardDeviationIn...))
+	}
+	if len(i.StandardDeviationNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationNotIn(i.StandardDeviationNotIn...))
+	}
+	if i.StandardDeviationGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationGT(*i.StandardDeviationGT))
+	}
+	if i.StandardDeviationGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationGTE(*i.StandardDeviationGTE))
+	}
+	if i.StandardDeviationLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationLT(*i.StandardDeviationLT))
+	}
+	if i.StandardDeviationLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.StandardDeviationLTE(*i.StandardDeviationLTE))
+	}
+	if i.Sensitivity != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityEQ(*i.Sensitivity))
+	}
+	if i.SensitivityNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityNEQ(*i.SensitivityNEQ))
+	}
+	if len(i.SensitivityIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityIn(i.SensitivityIn...))
+	}
+	if len(i.SensitivityNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityNotIn(i.SensitivityNotIn...))
+	}
+	if i.SensitivityGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityGT(*i.SensitivityGT))
+	}
+	if i.SensitivityGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityGTE(*i.SensitivityGTE))
+	}
+	if i.SensitivityLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityLT(*i.SensitivityLT))
+	}
+	if i.SensitivityLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SensitivityLTE(*i.SensitivityLTE))
+	}
+	if i.SamplingLocation != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationEQ(*i.SamplingLocation))
+	}
+	if i.SamplingLocationNEQ != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationNEQ(*i.SamplingLocationNEQ))
+	}
+	if len(i.SamplingLocationIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationIn(i.SamplingLocationIn...))
+	}
+	if len(i.SamplingLocationNotIn) > 0 {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationNotIn(i.SamplingLocationNotIn...))
+	}
+	if i.SamplingLocationGT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationGT(*i.SamplingLocationGT))
+	}
+	if i.SamplingLocationGTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationGTE(*i.SamplingLocationGTE))
+	}
+	if i.SamplingLocationLT != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationLT(*i.SamplingLocationLT))
+	}
+	if i.SamplingLocationLTE != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationLTE(*i.SamplingLocationLTE))
+	}
+	if i.SamplingLocationContains != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationContains(*i.SamplingLocationContains))
+	}
+	if i.SamplingLocationHasPrefix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationHasPrefix(*i.SamplingLocationHasPrefix))
+	}
+	if i.SamplingLocationHasSuffix != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationHasSuffix(*i.SamplingLocationHasSuffix))
+	}
+	if i.SamplingLocationEqualFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationEqualFold(*i.SamplingLocationEqualFold))
+	}
+	if i.SamplingLocationContainsFold != nil {
+		predicates = append(predicates, dendrochronologicalanalysis.SamplingLocationContainsFold(*i.SamplingLocationContainsFold))
+	}
+
+	if i.HasDendrochronology != nil {
+		p := dendrochronologicalanalysis.HasDendrochronology()
+		if !*i.HasDendrochronology {
+			p = dendrochronologicalanalysis.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDendrochronologyWith) > 0 {
+		with := make([]predicate.Dendrochronology, 0, len(i.HasDendrochronologyWith))
+		for _, w := range i.HasDendrochronologyWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDendrochronologyWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, dendrochronologicalanalysis.HasDendrochronologyWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyDendrochronologicalAnalysisWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return dendrochronologicalanalysis.And(predicates...), nil
+	}
+}
+
+// DendrochronologyWhereInput represents a where input for filtering Dendrochronology queries.
+type DendrochronologyWhereInput struct {
+	Predicates []predicate.Dendrochronology  `json:"-"`
+	Not        *DendrochronologyWhereInput   `json:"not,omitempty"`
+	Or         []*DendrochronologyWhereInput `json:"or,omitempty"`
+	And        []*DendrochronologyWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "dating" field predicates.
+	Dating             *string  `json:"dating,omitempty"`
+	DatingNEQ          *string  `json:"datingNEQ,omitempty"`
+	DatingIn           []string `json:"datingIn,omitempty"`
+	DatingNotIn        []string `json:"datingNotIn,omitempty"`
+	DatingGT           *string  `json:"datingGT,omitempty"`
+	DatingGTE          *string  `json:"datingGTE,omitempty"`
+	DatingLT           *string  `json:"datingLT,omitempty"`
+	DatingLTE          *string  `json:"datingLTE,omitempty"`
+	DatingContains     *string  `json:"datingContains,omitempty"`
+	DatingHasPrefix    *string  `json:"datingHasPrefix,omitempty"`
+	DatingHasSuffix    *string  `json:"datingHasSuffix,omitempty"`
+	DatingIsNil        bool     `json:"datingIsNil,omitempty"`
+	DatingNotNil       bool     `json:"datingNotNil,omitempty"`
+	DatingEqualFold    *string  `json:"datingEqualFold,omitempty"`
+	DatingContainsFold *string  `json:"datingContainsFold,omitempty"`
+
+	// "dating_start" field predicates.
+	DatingStart       *int  `json:"datingStart,omitempty"`
+	DatingStartNEQ    *int  `json:"datingStartNEQ,omitempty"`
+	DatingStartIn     []int `json:"datingStartIn,omitempty"`
+	DatingStartNotIn  []int `json:"datingStartNotIn,omitempty"`
+	DatingStartGT     *int  `json:"datingStartGT,omitempty"`
+	DatingStartGTE    *int  `json:"datingStartGTE,omitempty"`
+	DatingStartLT     *int  `json:"datingStartLT,omitempty"`
+	DatingStartLTE    *int  `json:"datingStartLTE,omitempty"`
+	DatingStartIsNil  bool  `json:"datingStartIsNil,omitempty"`
+	DatingStartNotNil bool  `json:"datingStartNotNil,omitempty"`
+
+	// "dating_end" field predicates.
+	DatingEnd       *int  `json:"datingEnd,omitempty"`
+	DatingEndNEQ    *int  `json:"datingEndNEQ,omitempty"`
+	DatingEndIn     []int `json:"datingEndIn,omitempty"`
+	DatingEndNotIn  []int `json:"datingEndNotIn,omitempty"`
+	DatingEndGT     *int  `json:"datingEndGT,omitempty"`
+	DatingEndGTE    *int  `json:"datingEndGTE,omitempty"`
+	DatingEndLT     *int  `json:"datingEndLT,omitempty"`
+	DatingEndLTE    *int  `json:"datingEndLTE,omitempty"`
+	DatingEndIsNil  bool  `json:"datingEndIsNil,omitempty"`
+	DatingEndNotNil bool  `json:"datingEndNotNil,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "status" field predicates.
+	Status       *dendrochronology.Status  `json:"status,omitempty"`
+	StatusNEQ    *dendrochronology.Status  `json:"statusNEQ,omitempty"`
+	StatusIn     []dendrochronology.Status `json:"statusIn,omitempty"`
+	StatusNotIn  []dendrochronology.Status `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                      `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                      `json:"statusNotNil,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "deleted_at" field predicates.
+	DeletedAt       *time.Time  `json:"deletedAt,omitempty"`
+	DeletedAtNEQ    *time.Time  `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGT     *time.Time  `json:"deletedAtGT,omitempty"`
+	DeletedAtGTE    *time.Time  `json:"deletedAtGTE,omitempty"`
+	DeletedAtLT     *time.Time  `json:"deletedAtLT,omitempty"`
+	DeletedAtLTE    *time.Time  `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil bool        `json:"deletedAtNotNil,omitempty"`
+
+	// "deleted_by" field predicates.
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNEQ          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGT           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGTE          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLT           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLTE          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        bool     `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "analysis_data" field predicates.
+	AnalysisData             *string  `json:"analysisData,omitempty"`
+	AnalysisDataNEQ          *string  `json:"analysisDataNEQ,omitempty"`
+	AnalysisDataIn           []string `json:"analysisDataIn,omitempty"`
+	AnalysisDataNotIn        []string `json:"analysisDataNotIn,omitempty"`
+	AnalysisDataGT           *string  `json:"analysisDataGT,omitempty"`
+	AnalysisDataGTE          *string  `json:"analysisDataGTE,omitempty"`
+	AnalysisDataLT           *string  `json:"analysisDataLT,omitempty"`
+	AnalysisDataLTE          *string  `json:"analysisDataLTE,omitempty"`
+	AnalysisDataContains     *string  `json:"analysisDataContains,omitempty"`
+	AnalysisDataHasPrefix    *string  `json:"analysisDataHasPrefix,omitempty"`
+	AnalysisDataHasSuffix    *string  `json:"analysisDataHasSuffix,omitempty"`
+	AnalysisDataIsNil        bool     `json:"analysisDataIsNil,omitempty"`
+	AnalysisDataNotNil       bool     `json:"analysisDataNotNil,omitempty"`
+	AnalysisDataEqualFold    *string  `json:"analysisDataEqualFold,omitempty"`
+	AnalysisDataContainsFold *string  `json:"analysisDataContainsFold,omitempty"`
+
+	// "analysis_url" field predicates.
+	AnalysisURL             *string  `json:"analysisURL,omitempty"`
+	AnalysisURLNEQ          *string  `json:"analysisURLNEQ,omitempty"`
+	AnalysisURLIn           []string `json:"analysisURLIn,omitempty"`
+	AnalysisURLNotIn        []string `json:"analysisURLNotIn,omitempty"`
+	AnalysisURLGT           *string  `json:"analysisURLGT,omitempty"`
+	AnalysisURLGTE          *string  `json:"analysisURLGTE,omitempty"`
+	AnalysisURLLT           *string  `json:"analysisURLLT,omitempty"`
+	AnalysisURLLTE          *string  `json:"analysisURLLTE,omitempty"`
+	AnalysisURLContains     *string  `json:"analysisURLContains,omitempty"`
+	AnalysisURLHasPrefix    *string  `json:"analysisURLHasPrefix,omitempty"`
+	AnalysisURLHasSuffix    *string  `json:"analysisURLHasSuffix,omitempty"`
+	AnalysisURLIsNil        bool     `json:"analysisURLIsNil,omitempty"`
+	AnalysisURLNotNil       bool     `json:"analysisURLNotNil,omitempty"`
+	AnalysisURLEqualFold    *string  `json:"analysisURLEqualFold,omitempty"`
+	AnalysisURLContainsFold *string  `json:"analysisURLContainsFold,omitempty"`
+
+	// "data_url" field predicates.
+	DataURL             *string  `json:"dataURL,omitempty"`
+	DataURLNEQ          *string  `json:"dataURLNEQ,omitempty"`
+	DataURLIn           []string `json:"dataURLIn,omitempty"`
+	DataURLNotIn        []string `json:"dataURLNotIn,omitempty"`
+	DataURLGT           *string  `json:"dataURLGT,omitempty"`
+	DataURLGTE          *string  `json:"dataURLGTE,omitempty"`
+	DataURLLT           *string  `json:"dataURLLT,omitempty"`
+	DataURLLTE          *string  `json:"dataURLLTE,omitempty"`
+	DataURLContains     *string  `json:"dataURLContains,omitempty"`
+	DataURLHasPrefix    *string  `json:"dataURLHasPrefix,omitempty"`
+	DataURLHasSuffix    *string  `json:"dataURLHasSuffix,omitempty"`
+	DataURLIsNil        bool     `json:"dataURLIsNil,omitempty"`
+	DataURLNotNil       bool     `json:"dataURLNotNil,omitempty"`
+	DataURLEqualFold    *string  `json:"dataURLEqualFold,omitempty"`
+	DataURLContainsFold *string  `json:"dataURLContainsFold,omitempty"`
+
+	// "chart_url" field predicates.
+	ChartURL             *string  `json:"chartURL,omitempty"`
+	ChartURLNEQ          *string  `json:"chartURLNEQ,omitempty"`
+	ChartURLIn           []string `json:"chartURLIn,omitempty"`
+	ChartURLNotIn        []string `json:"chartURLNotIn,omitempty"`
+	ChartURLGT           *string  `json:"chartURLGT,omitempty"`
+	ChartURLGTE          *string  `json:"chartURLGTE,omitempty"`
+	ChartURLLT           *string  `json:"chartURLLT,omitempty"`
+	ChartURLLTE          *string  `json:"chartURLLTE,omitempty"`
+	ChartURLContains     *string  `json:"chartURLContains,omitempty"`
+	ChartURLHasPrefix    *string  `json:"chartURLHasPrefix,omitempty"`
+	ChartURLHasSuffix    *string  `json:"chartURLHasSuffix,omitempty"`
+	ChartURLIsNil        bool     `json:"chartURLIsNil,omitempty"`
+	ChartURLNotNil       bool     `json:"chartURLNotNil,omitempty"`
+	ChartURLEqualFold    *string  `json:"chartURLEqualFold,omitempty"`
+	ChartURLContainsFold *string  `json:"chartURLContainsFold,omitempty"`
+
+	// "analysis" edge predicates.
+	HasAnalysis     *bool                                    `json:"hasAnalysis,omitempty"`
+	HasAnalysisWith []*DendrochronologicalAnalysisWhereInput `json:"hasAnalysisWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *DendrochronologyWhereInput) AddPredicates(predicates ...predicate.Dendrochronology) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the DendrochronologyWhereInput filter on the DendrochronologyQuery builder.
+func (i *DendrochronologyWhereInput) Filter(q *DendrochronologyQuery) (*DendrochronologyQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyDendrochronologyWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyDendrochronologyWhereInput is returned in case the DendrochronologyWhereInput is empty.
+var ErrEmptyDendrochronologyWhereInput = errors.New("ent: empty predicate DendrochronologyWhereInput")
+
+// P returns a predicate for filtering dendrochronologies.
+// An error is returned if the input is empty or invalid.
+func (i *DendrochronologyWhereInput) P() (predicate.Dendrochronology, error) {
+	var predicates []predicate.Dendrochronology
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, dendrochronology.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Dendrochronology, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, dendrochronology.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Dendrochronology, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, dendrochronology.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, dendrochronology.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, dendrochronology.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, dendrochronology.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, dendrochronology.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, dendrochronology.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, dendrochronology.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, dendrochronology.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, dendrochronology.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, dendrochronology.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, dendrochronology.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, dendrochronology.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, dendrochronology.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, dendrochronology.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, dendrochronology.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, dendrochronology.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, dendrochronology.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, dendrochronology.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, dendrochronology.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, dendrochronology.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, dendrochronology.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, dendrochronology.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, dendrochronology.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, dendrochronology.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, dendrochronology.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, dendrochronology.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, dendrochronology.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, dendrochronology.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, dendrochronology.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, dendrochronology.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, dendrochronology.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, dendrochronology.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, dendrochronology.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, dendrochronology.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, dendrochronology.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, dendrochronology.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, dendrochronology.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, dendrochronology.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.Dating != nil {
+		predicates = append(predicates, dendrochronology.DatingEQ(*i.Dating))
+	}
+	if i.DatingNEQ != nil {
+		predicates = append(predicates, dendrochronology.DatingNEQ(*i.DatingNEQ))
+	}
+	if len(i.DatingIn) > 0 {
+		predicates = append(predicates, dendrochronology.DatingIn(i.DatingIn...))
+	}
+	if len(i.DatingNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DatingNotIn(i.DatingNotIn...))
+	}
+	if i.DatingGT != nil {
+		predicates = append(predicates, dendrochronology.DatingGT(*i.DatingGT))
+	}
+	if i.DatingGTE != nil {
+		predicates = append(predicates, dendrochronology.DatingGTE(*i.DatingGTE))
+	}
+	if i.DatingLT != nil {
+		predicates = append(predicates, dendrochronology.DatingLT(*i.DatingLT))
+	}
+	if i.DatingLTE != nil {
+		predicates = append(predicates, dendrochronology.DatingLTE(*i.DatingLTE))
+	}
+	if i.DatingContains != nil {
+		predicates = append(predicates, dendrochronology.DatingContains(*i.DatingContains))
+	}
+	if i.DatingHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.DatingHasPrefix(*i.DatingHasPrefix))
+	}
+	if i.DatingHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.DatingHasSuffix(*i.DatingHasSuffix))
+	}
+	if i.DatingIsNil {
+		predicates = append(predicates, dendrochronology.DatingIsNil())
+	}
+	if i.DatingNotNil {
+		predicates = append(predicates, dendrochronology.DatingNotNil())
+	}
+	if i.DatingEqualFold != nil {
+		predicates = append(predicates, dendrochronology.DatingEqualFold(*i.DatingEqualFold))
+	}
+	if i.DatingContainsFold != nil {
+		predicates = append(predicates, dendrochronology.DatingContainsFold(*i.DatingContainsFold))
+	}
+	if i.DatingStart != nil {
+		predicates = append(predicates, dendrochronology.DatingStartEQ(*i.DatingStart))
+	}
+	if i.DatingStartNEQ != nil {
+		predicates = append(predicates, dendrochronology.DatingStartNEQ(*i.DatingStartNEQ))
+	}
+	if len(i.DatingStartIn) > 0 {
+		predicates = append(predicates, dendrochronology.DatingStartIn(i.DatingStartIn...))
+	}
+	if len(i.DatingStartNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DatingStartNotIn(i.DatingStartNotIn...))
+	}
+	if i.DatingStartGT != nil {
+		predicates = append(predicates, dendrochronology.DatingStartGT(*i.DatingStartGT))
+	}
+	if i.DatingStartGTE != nil {
+		predicates = append(predicates, dendrochronology.DatingStartGTE(*i.DatingStartGTE))
+	}
+	if i.DatingStartLT != nil {
+		predicates = append(predicates, dendrochronology.DatingStartLT(*i.DatingStartLT))
+	}
+	if i.DatingStartLTE != nil {
+		predicates = append(predicates, dendrochronology.DatingStartLTE(*i.DatingStartLTE))
+	}
+	if i.DatingStartIsNil {
+		predicates = append(predicates, dendrochronology.DatingStartIsNil())
+	}
+	if i.DatingStartNotNil {
+		predicates = append(predicates, dendrochronology.DatingStartNotNil())
+	}
+	if i.DatingEnd != nil {
+		predicates = append(predicates, dendrochronology.DatingEndEQ(*i.DatingEnd))
+	}
+	if i.DatingEndNEQ != nil {
+		predicates = append(predicates, dendrochronology.DatingEndNEQ(*i.DatingEndNEQ))
+	}
+	if len(i.DatingEndIn) > 0 {
+		predicates = append(predicates, dendrochronology.DatingEndIn(i.DatingEndIn...))
+	}
+	if len(i.DatingEndNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DatingEndNotIn(i.DatingEndNotIn...))
+	}
+	if i.DatingEndGT != nil {
+		predicates = append(predicates, dendrochronology.DatingEndGT(*i.DatingEndGT))
+	}
+	if i.DatingEndGTE != nil {
+		predicates = append(predicates, dendrochronology.DatingEndGTE(*i.DatingEndGTE))
+	}
+	if i.DatingEndLT != nil {
+		predicates = append(predicates, dendrochronology.DatingEndLT(*i.DatingEndLT))
+	}
+	if i.DatingEndLTE != nil {
+		predicates = append(predicates, dendrochronology.DatingEndLTE(*i.DatingEndLTE))
+	}
+	if i.DatingEndIsNil {
+		predicates = append(predicates, dendrochronology.DatingEndIsNil())
+	}
+	if i.DatingEndNotNil {
+		predicates = append(predicates, dendrochronology.DatingEndNotNil())
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, dendrochronology.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, dendrochronology.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, dendrochronology.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, dendrochronology.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, dendrochronology.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, dendrochronology.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, dendrochronology.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, dendrochronology.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, dendrochronology.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, dendrochronology.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, dendrochronology.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, dendrochronology.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, dendrochronology.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, dendrochronology.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, dendrochronology.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, dendrochronology.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, dendrochronology.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, dendrochronology.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, dendrochronology.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, dendrochronology.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, dendrochronology.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, dendrochronology.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, dendrochronology.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, dendrochronology.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Status != nil {
+		predicates = append(predicates, dendrochronology.StatusEQ(*i.Status))
+	}
+	if i.StatusNEQ != nil {
+		predicates = append(predicates, dendrochronology.StatusNEQ(*i.StatusNEQ))
+	}
+	if len(i.StatusIn) > 0 {
+		predicates = append(predicates, dendrochronology.StatusIn(i.StatusIn...))
+	}
+	if len(i.StatusNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.StatusIsNil {
+		predicates = append(predicates, dendrochronology.StatusIsNil())
+	}
+	if i.StatusNotNil {
+		predicates = append(predicates, dendrochronology.StatusNotNil())
+	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, dendrochronology.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.DeletedAt != nil {
+		predicates = append(predicates, dendrochronology.DeletedAtEQ(*i.DeletedAt))
+	}
+	if i.DeletedAtNEQ != nil {
+		predicates = append(predicates, dendrochronology.DeletedAtNEQ(*i.DeletedAtNEQ))
+	}
+	if len(i.DeletedAtIn) > 0 {
+		predicates = append(predicates, dendrochronology.DeletedAtIn(i.DeletedAtIn...))
+	}
+	if len(i.DeletedAtNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DeletedAtNotIn(i.DeletedAtNotIn...))
+	}
+	if i.DeletedAtGT != nil {
+		predicates = append(predicates, dendrochronology.DeletedAtGT(*i.DeletedAtGT))
+	}
+	if i.DeletedAtGTE != nil {
+		predicates = append(predicates, dendrochronology.DeletedAtGTE(*i.DeletedAtGTE))
+	}
+	if i.DeletedAtLT != nil {
+		predicates = append(predicates, dendrochronology.DeletedAtLT(*i.DeletedAtLT))
+	}
+	if i.DeletedAtLTE != nil {
+		predicates = append(predicates, dendrochronology.DeletedAtLTE(*i.DeletedAtLTE))
+	}
+	if i.DeletedAtIsNil {
+		predicates = append(predicates, dendrochronology.DeletedAtIsNil())
+	}
+	if i.DeletedAtNotNil {
+		predicates = append(predicates, dendrochronology.DeletedAtNotNil())
+	}
+	if i.DeletedBy != nil {
+		predicates = append(predicates, dendrochronology.DeletedByEQ(*i.DeletedBy))
+	}
+	if i.DeletedByNEQ != nil {
+		predicates = append(predicates, dendrochronology.DeletedByNEQ(*i.DeletedByNEQ))
+	}
+	if len(i.DeletedByIn) > 0 {
+		predicates = append(predicates, dendrochronology.DeletedByIn(i.DeletedByIn...))
+	}
+	if len(i.DeletedByNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DeletedByNotIn(i.DeletedByNotIn...))
+	}
+	if i.DeletedByGT != nil {
+		predicates = append(predicates, dendrochronology.DeletedByGT(*i.DeletedByGT))
+	}
+	if i.DeletedByGTE != nil {
+		predicates = append(predicates, dendrochronology.DeletedByGTE(*i.DeletedByGTE))
+	}
+	if i.DeletedByLT != nil {
+		predicates = append(predicates, dendrochronology.DeletedByLT(*i.DeletedByLT))
+	}
+	if i.DeletedByLTE != nil {
+		predicates = append(predicates, dendrochronology.DeletedByLTE(*i.DeletedByLTE))
+	}
+	if i.DeletedByContains != nil {
+		predicates = append(predicates, dendrochronology.DeletedByContains(*i.DeletedByContains))
+	}
+	if i.DeletedByHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.DeletedByHasPrefix(*i.DeletedByHasPrefix))
+	}
+	if i.DeletedByHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.DeletedByHasSuffix(*i.DeletedByHasSuffix))
+	}
+	if i.DeletedByIsNil {
+		predicates = append(predicates, dendrochronology.DeletedByIsNil())
+	}
+	if i.DeletedByNotNil {
+		predicates = append(predicates, dendrochronology.DeletedByNotNil())
+	}
+	if i.DeletedByEqualFold != nil {
+		predicates = append(predicates, dendrochronology.DeletedByEqualFold(*i.DeletedByEqualFold))
+	}
+	if i.DeletedByContainsFold != nil {
+		predicates = append(predicates, dendrochronology.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.AnalysisData != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataEQ(*i.AnalysisData))
+	}
+	if i.AnalysisDataNEQ != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataNEQ(*i.AnalysisDataNEQ))
+	}
+	if len(i.AnalysisDataIn) > 0 {
+		predicates = append(predicates, dendrochronology.AnalysisDataIn(i.AnalysisDataIn...))
+	}
+	if len(i.AnalysisDataNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.AnalysisDataNotIn(i.AnalysisDataNotIn...))
+	}
+	if i.AnalysisDataGT != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataGT(*i.AnalysisDataGT))
+	}
+	if i.AnalysisDataGTE != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataGTE(*i.AnalysisDataGTE))
+	}
+	if i.AnalysisDataLT != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataLT(*i.AnalysisDataLT))
+	}
+	if i.AnalysisDataLTE != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataLTE(*i.AnalysisDataLTE))
+	}
+	if i.AnalysisDataContains != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataContains(*i.AnalysisDataContains))
+	}
+	if i.AnalysisDataHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataHasPrefix(*i.AnalysisDataHasPrefix))
+	}
+	if i.AnalysisDataHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataHasSuffix(*i.AnalysisDataHasSuffix))
+	}
+	if i.AnalysisDataIsNil {
+		predicates = append(predicates, dendrochronology.AnalysisDataIsNil())
+	}
+	if i.AnalysisDataNotNil {
+		predicates = append(predicates, dendrochronology.AnalysisDataNotNil())
+	}
+	if i.AnalysisDataEqualFold != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataEqualFold(*i.AnalysisDataEqualFold))
+	}
+	if i.AnalysisDataContainsFold != nil {
+		predicates = append(predicates, dendrochronology.AnalysisDataContainsFold(*i.AnalysisDataContainsFold))
+	}
+	if i.AnalysisURL != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLEQ(*i.AnalysisURL))
+	}
+	if i.AnalysisURLNEQ != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLNEQ(*i.AnalysisURLNEQ))
+	}
+	if len(i.AnalysisURLIn) > 0 {
+		predicates = append(predicates, dendrochronology.AnalysisURLIn(i.AnalysisURLIn...))
+	}
+	if len(i.AnalysisURLNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.AnalysisURLNotIn(i.AnalysisURLNotIn...))
+	}
+	if i.AnalysisURLGT != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLGT(*i.AnalysisURLGT))
+	}
+	if i.AnalysisURLGTE != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLGTE(*i.AnalysisURLGTE))
+	}
+	if i.AnalysisURLLT != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLLT(*i.AnalysisURLLT))
+	}
+	if i.AnalysisURLLTE != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLLTE(*i.AnalysisURLLTE))
+	}
+	if i.AnalysisURLContains != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLContains(*i.AnalysisURLContains))
+	}
+	if i.AnalysisURLHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLHasPrefix(*i.AnalysisURLHasPrefix))
+	}
+	if i.AnalysisURLHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLHasSuffix(*i.AnalysisURLHasSuffix))
+	}
+	if i.AnalysisURLIsNil {
+		predicates = append(predicates, dendrochronology.AnalysisURLIsNil())
+	}
+	if i.AnalysisURLNotNil {
+		predicates = append(predicates, dendrochronology.AnalysisURLNotNil())
+	}
+	if i.AnalysisURLEqualFold != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLEqualFold(*i.AnalysisURLEqualFold))
+	}
+	if i.AnalysisURLContainsFold != nil {
+		predicates = append(predicates, dendrochronology.AnalysisURLContainsFold(*i.AnalysisURLContainsFold))
+	}
+	if i.DataURL != nil {
+		predicates = append(predicates, dendrochronology.DataURLEQ(*i.DataURL))
+	}
+	if i.DataURLNEQ != nil {
+		predicates = append(predicates, dendrochronology.DataURLNEQ(*i.DataURLNEQ))
+	}
+	if len(i.DataURLIn) > 0 {
+		predicates = append(predicates, dendrochronology.DataURLIn(i.DataURLIn...))
+	}
+	if len(i.DataURLNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.DataURLNotIn(i.DataURLNotIn...))
+	}
+	if i.DataURLGT != nil {
+		predicates = append(predicates, dendrochronology.DataURLGT(*i.DataURLGT))
+	}
+	if i.DataURLGTE != nil {
+		predicates = append(predicates, dendrochronology.DataURLGTE(*i.DataURLGTE))
+	}
+	if i.DataURLLT != nil {
+		predicates = append(predicates, dendrochronology.DataURLLT(*i.DataURLLT))
+	}
+	if i.DataURLLTE != nil {
+		predicates = append(predicates, dendrochronology.DataURLLTE(*i.DataURLLTE))
+	}
+	if i.DataURLContains != nil {
+		predicates = append(predicates, dendrochronology.DataURLContains(*i.DataURLContains))
+	}
+	if i.DataURLHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.DataURLHasPrefix(*i.DataURLHasPrefix))
+	}
+	if i.DataURLHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.DataURLHasSuffix(*i.DataURLHasSuffix))
+	}
+	if i.DataURLIsNil {
+		predicates = append(predicates, dendrochronology.DataURLIsNil())
+	}
+	if i.DataURLNotNil {
+		predicates = append(predicates, dendrochronology.DataURLNotNil())
+	}
+	if i.DataURLEqualFold != nil {
+		predicates = append(predicates, dendrochronology.DataURLEqualFold(*i.DataURLEqualFold))
+	}
+	if i.DataURLContainsFold != nil {
+		predicates = append(predicates, dendrochronology.DataURLContainsFold(*i.DataURLContainsFold))
+	}
+	if i.ChartURL != nil {
+		predicates = append(predicates, dendrochronology.ChartURLEQ(*i.ChartURL))
+	}
+	if i.ChartURLNEQ != nil {
+		predicates = append(predicates, dendrochronology.ChartURLNEQ(*i.ChartURLNEQ))
+	}
+	if len(i.ChartURLIn) > 0 {
+		predicates = append(predicates, dendrochronology.ChartURLIn(i.ChartURLIn...))
+	}
+	if len(i.ChartURLNotIn) > 0 {
+		predicates = append(predicates, dendrochronology.ChartURLNotIn(i.ChartURLNotIn...))
+	}
+	if i.ChartURLGT != nil {
+		predicates = append(predicates, dendrochronology.ChartURLGT(*i.ChartURLGT))
+	}
+	if i.ChartURLGTE != nil {
+		predicates = append(predicates, dendrochronology.ChartURLGTE(*i.ChartURLGTE))
+	}
+	if i.ChartURLLT != nil {
+		predicates = append(predicates, dendrochronology.ChartURLLT(*i.ChartURLLT))
+	}
+	if i.ChartURLLTE != nil {
+		predicates = append(predicates, dendrochronology.ChartURLLTE(*i.ChartURLLTE))
+	}
+	if i.ChartURLContains != nil {
+		predicates = append(predicates, dendrochronology.ChartURLContains(*i.ChartURLContains))
+	}
+	if i.ChartURLHasPrefix != nil {
+		predicates = append(predicates, dendrochronology.ChartURLHasPrefix(*i.ChartURLHasPrefix))
+	}
+	if i.ChartURLHasSuffix != nil {
+		predicates = append(predicates, dendrochronology.ChartURLHasSuffix(*i.ChartURLHasSuffix))
+	}
+	if i.ChartURLIsNil {
+		predicates = append(predicates, dendrochronology.ChartURLIsNil())
+	}
+	if i.ChartURLNotNil {
+		predicates = append(predicates, dendrochronology.ChartURLNotNil())
+	}
+	if i.ChartURLEqualFold != nil {
+		predicates = append(predicates, dendrochronology.ChartURLEqualFold(*i.ChartURLEqualFold))
+	}
+	if i.ChartURLContainsFold != nil {
+		predicates = append(predicates, dendrochronology.ChartURLContainsFold(*i.ChartURLContainsFold))
+	}
+
+	if i.HasAnalysis != nil {
+		p := dendrochronology.HasAnalysis()
+		if !*i.HasAnalysis {
+			p = dendrochronology.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAnalysisWith) > 0 {
+		with := make([]predicate.DendrochronologicalAnalysis, 0, len(i.HasAnalysisWith))
+		for _, w := range i.HasAnalysisWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAnalysisWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, dendrochronology.HasAnalysisWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyDendrochronologyWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return dendrochronology.And(predicates...), nil
 	}
 }
 

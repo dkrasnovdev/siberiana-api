@@ -19,6 +19,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -2404,6 +2406,368 @@ func newCulturePaginateArgs(rv map[string]any) *culturePaginateArgs {
 	}
 	if v, ok := rv[whereField].(*CultureWhereInput); ok {
 		args.opts = append(args.opts, WithCultureFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (da *DendrochronologicalAnalysisQuery) CollectFields(ctx context.Context, satisfies ...string) (*DendrochronologicalAnalysisQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return da, nil
+	}
+	if err := da.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return da, nil
+}
+
+func (da *DendrochronologicalAnalysisQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(dendrochronologicalanalysis.Columns))
+		selectedFields = []string{dendrochronologicalanalysis.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "dendrochronology":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DendrochronologyClient{config: da.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, dendrochronologyImplementors)...); err != nil {
+				return err
+			}
+			da.withDendrochronology = query
+		case "createdAt":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldCreatedAt)
+				fieldSeen[dendrochronologicalanalysis.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldCreatedBy)
+				fieldSeen[dendrochronologicalanalysis.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldUpdatedAt)
+				fieldSeen[dendrochronologicalanalysis.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldUpdatedBy)
+				fieldSeen[dendrochronologicalanalysis.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldDisplayName)
+				fieldSeen[dendrochronologicalanalysis.FieldDisplayName] = struct{}{}
+			}
+		case "startYear":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldStartYear]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldStartYear)
+				fieldSeen[dendrochronologicalanalysis.FieldStartYear] = struct{}{}
+			}
+		case "endYear":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldEndYear]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldEndYear)
+				fieldSeen[dendrochronologicalanalysis.FieldEndYear] = struct{}{}
+			}
+		case "numberOfRings":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldNumberOfRings]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldNumberOfRings)
+				fieldSeen[dendrochronologicalanalysis.FieldNumberOfRings] = struct{}{}
+			}
+		case "coefficientCorrelation":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldCoefficientCorrelation]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldCoefficientCorrelation)
+				fieldSeen[dendrochronologicalanalysis.FieldCoefficientCorrelation] = struct{}{}
+			}
+		case "standardDeviation":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldStandardDeviation]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldStandardDeviation)
+				fieldSeen[dendrochronologicalanalysis.FieldStandardDeviation] = struct{}{}
+			}
+		case "sensitivity":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldSensitivity]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldSensitivity)
+				fieldSeen[dendrochronologicalanalysis.FieldSensitivity] = struct{}{}
+			}
+		case "samplingLocation":
+			if _, ok := fieldSeen[dendrochronologicalanalysis.FieldSamplingLocation]; !ok {
+				selectedFields = append(selectedFields, dendrochronologicalanalysis.FieldSamplingLocation)
+				fieldSeen[dendrochronologicalanalysis.FieldSamplingLocation] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		da.Select(selectedFields...)
+	}
+	return nil
+}
+
+type dendrochronologicalanalysisPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DendrochronologicalAnalysisPaginateOption
+}
+
+func newDendrochronologicalAnalysisPaginateArgs(rv map[string]any) *dendrochronologicalanalysisPaginateArgs {
+	args := &dendrochronologicalanalysisPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DendrochronologicalAnalysisOrder:
+			args.opts = append(args.opts, WithDendrochronologicalAnalysisOrder(v))
+		case []any:
+			var orders []*DendrochronologicalAnalysisOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DendrochronologicalAnalysisOrder{Field: &DendrochronologicalAnalysisOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDendrochronologicalAnalysisOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*DendrochronologicalAnalysisWhereInput); ok {
+		args.opts = append(args.opts, WithDendrochronologicalAnalysisFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (d *DendrochronologyQuery) CollectFields(ctx context.Context, satisfies ...string) (*DendrochronologyQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return d, nil
+	}
+	if err := d.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return d, nil
+}
+
+func (d *DendrochronologyQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(dendrochronology.Columns))
+		selectedFields = []string{dendrochronology.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "analysis":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DendrochronologicalAnalysisClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, dendrochronologicalanalysisImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedAnalysis(alias, func(wq *DendrochronologicalAnalysisQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[dendrochronology.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldCreatedAt)
+				fieldSeen[dendrochronology.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[dendrochronology.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldCreatedBy)
+				fieldSeen[dendrochronology.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[dendrochronology.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldUpdatedAt)
+				fieldSeen[dendrochronology.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[dendrochronology.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldUpdatedBy)
+				fieldSeen[dendrochronology.FieldUpdatedBy] = struct{}{}
+			}
+		case "dating":
+			if _, ok := fieldSeen[dendrochronology.FieldDating]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDating)
+				fieldSeen[dendrochronology.FieldDating] = struct{}{}
+			}
+		case "datingStart":
+			if _, ok := fieldSeen[dendrochronology.FieldDatingStart]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDatingStart)
+				fieldSeen[dendrochronology.FieldDatingStart] = struct{}{}
+			}
+		case "datingEnd":
+			if _, ok := fieldSeen[dendrochronology.FieldDatingEnd]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDatingEnd)
+				fieldSeen[dendrochronology.FieldDatingEnd] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[dendrochronology.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDisplayName)
+				fieldSeen[dendrochronology.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[dendrochronology.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldAbbreviation)
+				fieldSeen[dendrochronology.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[dendrochronology.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDescription)
+				fieldSeen[dendrochronology.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[dendrochronology.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldExternalLink)
+				fieldSeen[dendrochronology.FieldExternalLink] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[dendrochronology.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldStatus)
+				fieldSeen[dendrochronology.FieldStatus] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[dendrochronology.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldPrimaryImageURL)
+				fieldSeen[dendrochronology.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[dendrochronology.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldAdditionalImagesUrls)
+				fieldSeen[dendrochronology.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[dendrochronology.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDeletedAt)
+				fieldSeen[dendrochronology.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[dendrochronology.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDeletedBy)
+				fieldSeen[dendrochronology.FieldDeletedBy] = struct{}{}
+			}
+		case "analysisData":
+			if _, ok := fieldSeen[dendrochronology.FieldAnalysisData]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldAnalysisData)
+				fieldSeen[dendrochronology.FieldAnalysisData] = struct{}{}
+			}
+		case "analysisURL":
+			if _, ok := fieldSeen[dendrochronology.FieldAnalysisURL]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldAnalysisURL)
+				fieldSeen[dendrochronology.FieldAnalysisURL] = struct{}{}
+			}
+		case "dataURL":
+			if _, ok := fieldSeen[dendrochronology.FieldDataURL]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldDataURL)
+				fieldSeen[dendrochronology.FieldDataURL] = struct{}{}
+			}
+		case "chartURL":
+			if _, ok := fieldSeen[dendrochronology.FieldChartURL]; !ok {
+				selectedFields = append(selectedFields, dendrochronology.FieldChartURL)
+				fieldSeen[dendrochronology.FieldChartURL] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		d.Select(selectedFields...)
+	}
+	return nil
+}
+
+type dendrochronologyPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DendrochronologyPaginateOption
+}
+
+func newDendrochronologyPaginateArgs(rv map[string]any) *dendrochronologyPaginateArgs {
+	args := &dendrochronologyPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DendrochronologyOrder:
+			args.opts = append(args.opts, WithDendrochronologyOrder(v))
+		case []any:
+			var orders []*DendrochronologyOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DendrochronologyOrder{Field: &DendrochronologyOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDendrochronologyOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*DendrochronologyWhereInput); ok {
+		args.opts = append(args.opts, WithDendrochronologyFilter(v.Filter))
 	}
 	return args
 }

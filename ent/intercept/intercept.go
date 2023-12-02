@@ -19,6 +19,8 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/culture"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis"
+	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
@@ -401,6 +403,60 @@ func (f TraverseCulture) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.CultureQuery", q)
+}
+
+// The DendrochronologicalAnalysisFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DendrochronologicalAnalysisFunc func(context.Context, *ent.DendrochronologicalAnalysisQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f DendrochronologicalAnalysisFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.DendrochronologicalAnalysisQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.DendrochronologicalAnalysisQuery", q)
+}
+
+// The TraverseDendrochronologicalAnalysis type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDendrochronologicalAnalysis func(context.Context, *ent.DendrochronologicalAnalysisQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDendrochronologicalAnalysis) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDendrochronologicalAnalysis) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.DendrochronologicalAnalysisQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.DendrochronologicalAnalysisQuery", q)
+}
+
+// The DendrochronologyFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DendrochronologyFunc func(context.Context, *ent.DendrochronologyQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f DendrochronologyFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.DendrochronologyQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.DendrochronologyQuery", q)
+}
+
+// The TraverseDendrochronology type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDendrochronology func(context.Context, *ent.DendrochronologyQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDendrochronology) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDendrochronology) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.DendrochronologyQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.DendrochronologyQuery", q)
 }
 
 // The DistrictFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1184,6 +1240,10 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.CountryQuery, predicate.Country, country.OrderOption]{typ: ent.TypeCountry, tq: q}, nil
 	case *ent.CultureQuery:
 		return &query[*ent.CultureQuery, predicate.Culture, culture.OrderOption]{typ: ent.TypeCulture, tq: q}, nil
+	case *ent.DendrochronologicalAnalysisQuery:
+		return &query[*ent.DendrochronologicalAnalysisQuery, predicate.DendrochronologicalAnalysis, dendrochronologicalanalysis.OrderOption]{typ: ent.TypeDendrochronologicalAnalysis, tq: q}, nil
+	case *ent.DendrochronologyQuery:
+		return &query[*ent.DendrochronologyQuery, predicate.Dendrochronology, dendrochronology.OrderOption]{typ: ent.TypeDendrochronology, tq: q}, nil
 	case *ent.DistrictQuery:
 		return &query[*ent.DistrictQuery, predicate.District, district.OrderOption]{typ: ent.TypeDistrict, tq: q}, nil
 	case *ent.EthnosQuery:

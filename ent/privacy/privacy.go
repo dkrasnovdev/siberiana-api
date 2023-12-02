@@ -374,6 +374,54 @@ func (f CultureMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutatio
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.CultureMutation", m)
 }
 
+// The DendrochronologicalAnalysisQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type DendrochronologicalAnalysisQueryRuleFunc func(context.Context, *ent.DendrochronologicalAnalysisQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f DendrochronologicalAnalysisQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.DendrochronologicalAnalysisQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.DendrochronologicalAnalysisQuery", q)
+}
+
+// The DendrochronologicalAnalysisMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type DendrochronologicalAnalysisMutationRuleFunc func(context.Context, *ent.DendrochronologicalAnalysisMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f DendrochronologicalAnalysisMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.DendrochronologicalAnalysisMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.DendrochronologicalAnalysisMutation", m)
+}
+
+// The DendrochronologyQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type DendrochronologyQueryRuleFunc func(context.Context, *ent.DendrochronologyQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f DendrochronologyQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.DendrochronologyQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("ent/privacy: unexpected query type %T, expect *ent.DendrochronologyQuery", q)
+}
+
+// The DendrochronologyMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type DendrochronologyMutationRuleFunc func(context.Context, *ent.DendrochronologyMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f DendrochronologyMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
+	if m, ok := m.(*ent.DendrochronologyMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.DendrochronologyMutation", m)
+}
+
 // The DistrictQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DistrictQueryRuleFunc func(context.Context, *ent.DistrictQuery) error
