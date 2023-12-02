@@ -106,9 +106,10 @@ func OwnershipHook(next ent.Mutator) ent.Mutator {
 		op := m.Op()
 
 		owner, _ := m.Field("created_by")
+		fields := m.Fields()
 
 		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && owner != usr {
-			return nil, fmt.Errorf("not allowed. usr: %s, owner: %s", usr, owner)
+			return nil, fmt.Errorf("forbidden, fields: %v", fields)
 		}
 
 		return next.Mutate(ctx, m)
