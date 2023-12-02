@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -41,11 +42,13 @@ type PetroglyphQuery struct {
 	withAccountingDocumentationAddress *LocationQuery
 	withAccountingDocumentationAuthor  *PersonQuery
 	withCollection                     *CollectionQuery
+	withPersonal                       *PersonalQuery
 	withFKs                            bool
 	modifiers                          []func(*sql.Selector)
 	loadTotal                          []func(context.Context, []*Petroglyph) error
 	withNamedPublications              map[string]*PublicationQuery
 	withNamedTechniques                map[string]*TechniqueQuery
+	withNamedPersonal                  map[string]*PersonalQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -280,6 +283,28 @@ func (pq *PetroglyphQuery) QueryCollection() *CollectionQuery {
 	return query
 }
 
+// QueryPersonal chains the current query on the "personal" edge.
+func (pq *PetroglyphQuery) QueryPersonal() *PersonalQuery {
+	query := (&PersonalClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, selector),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, petroglyph.PersonalTable, petroglyph.PersonalPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Petroglyph entity from the query.
 // Returns a *NotFoundError when no Petroglyph was found.
 func (pq *PetroglyphQuery) First(ctx context.Context) (*Petroglyph, error) {
@@ -481,6 +506,7 @@ func (pq *PetroglyphQuery) Clone() *PetroglyphQuery {
 		withAccountingDocumentationAddress: pq.withAccountingDocumentationAddress.Clone(),
 		withAccountingDocumentationAuthor:  pq.withAccountingDocumentationAuthor.Clone(),
 		withCollection:                     pq.withCollection.Clone(),
+		withPersonal:                       pq.withPersonal.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
@@ -586,6 +612,17 @@ func (pq *PetroglyphQuery) WithCollection(opts ...func(*CollectionQuery)) *Petro
 	return pq
 }
 
+// WithPersonal tells the query-builder to eager-load the nodes that are connected to
+// the "personal" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PetroglyphQuery) WithPersonal(opts ...func(*PersonalQuery)) *PetroglyphQuery {
+	query := (&PersonalClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPersonal = query
+	return pq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -671,7 +708,7 @@ func (pq *PetroglyphQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 		nodes       = []*Petroglyph{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			pq.withCulturalAffiliation != nil,
 			pq.withModel != nil,
 			pq.withMound != nil,
@@ -681,6 +718,7 @@ func (pq *PetroglyphQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 			pq.withAccountingDocumentationAddress != nil,
 			pq.withAccountingDocumentationAuthor != nil,
 			pq.withCollection != nil,
+			pq.withPersonal != nil,
 		}
 	)
 	if pq.withCulturalAffiliation != nil || pq.withModel != nil || pq.withMound != nil || pq.withRegion != nil || pq.withAccountingDocumentationAddress != nil || pq.withAccountingDocumentationAuthor != nil || pq.withCollection != nil {
@@ -766,6 +804,13 @@ func (pq *PetroglyphQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 			return nil, err
 		}
 	}
+	if query := pq.withPersonal; query != nil {
+		if err := pq.loadPersonal(ctx, query, nodes,
+			func(n *Petroglyph) { n.Edges.Personal = []*Personal{} },
+			func(n *Petroglyph, e *Personal) { n.Edges.Personal = append(n.Edges.Personal, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range pq.withNamedPublications {
 		if err := pq.loadPublications(ctx, query, nodes,
 			func(n *Petroglyph) { n.appendNamedPublications(name) },
@@ -777,6 +822,13 @@ func (pq *PetroglyphQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 		if err := pq.loadTechniques(ctx, query, nodes,
 			func(n *Petroglyph) { n.appendNamedTechniques(name) },
 			func(n *Petroglyph, e *Technique) { n.appendNamedTechniques(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedPersonal {
+		if err := pq.loadPersonal(ctx, query, nodes,
+			func(n *Petroglyph) { n.appendNamedPersonal(name) },
+			func(n *Petroglyph, e *Personal) { n.appendNamedPersonal(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1134,6 +1186,67 @@ func (pq *PetroglyphQuery) loadCollection(ctx context.Context, query *Collection
 	}
 	return nil
 }
+func (pq *PetroglyphQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nodes []*Petroglyph, init func(*Petroglyph), assign func(*Petroglyph, *Personal)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Petroglyph)
+	nids := make(map[int]map[*Petroglyph]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(petroglyph.PersonalTable)
+		s.Join(joinT).On(s.C(personal.FieldID), joinT.C(petroglyph.PersonalPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(petroglyph.PersonalPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(petroglyph.PersonalPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Petroglyph]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Personal](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "personal" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (pq *PetroglyphQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := pq.querySpec()
@@ -1244,6 +1357,20 @@ func (pq *PetroglyphQuery) WithNamedTechniques(name string, opts ...func(*Techni
 		pq.withNamedTechniques = make(map[string]*TechniqueQuery)
 	}
 	pq.withNamedTechniques[name] = query
+	return pq
+}
+
+// WithNamedPersonal tells the query-builder to eager-load the nodes that are connected to the "personal"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PetroglyphQuery) WithNamedPersonal(name string, opts ...func(*PersonalQuery)) *PetroglyphQuery {
+	query := (&PersonalClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedPersonal == nil {
+		pq.withNamedPersonal = make(map[string]*PersonalQuery)
+	}
+	pq.withNamedPersonal[name] = query
 	return pq
 }
 

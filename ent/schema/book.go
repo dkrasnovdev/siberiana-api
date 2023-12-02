@@ -71,10 +71,10 @@ func (Book) Edges() []ent.Edge {
 		edge.From("license", License.Type).Ref("books").Unique(),
 		edge.From("location", Location.Type).Ref("books").Unique(),
 		edge.From("library", Organization.Type).Ref("books").Unique(),
-
 		edge.From("country", Country.Type).Ref("books").Unique(),
 		edge.From("settlement", Settlement.Type).Ref("books").Unique(),
 		edge.From("district", District.Type).Ref("books").Unique(),
 		edge.From("region", Region.Type).Ref("books").Unique(),
+		edge.From("personal", Personal.Type).Ref("books"),
 	}
 }

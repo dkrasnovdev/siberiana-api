@@ -46,7 +46,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -227,11 +226,6 @@ var protectedareapictureImplementors = []string{"ProtectedAreaPicture", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ProtectedAreaPicture) IsNode() {}
-
-var proxyImplementors = []string{"Proxy", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*Proxy) IsNode() {}
 
 var publicationImplementors = []string{"Publication", "Node"}
 
@@ -714,18 +708,6 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.ProtectedAreaPicture.Query().
 			Where(protectedareapicture.ID(id))
 		query, err := query.CollectFields(ctx, protectedareapictureImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		n, err := query.Only(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return n, nil
-	case proxy.Table:
-		query := c.Proxy.Query().
-			Where(proxy.ID(id))
-		query, err := query.CollectFields(ctx, proxyImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1407,22 +1389,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.ProtectedAreaPicture.Query().
 			Where(protectedareapicture.IDIn(ids...))
 		query, err := query.CollectFields(ctx, protectedareapictureImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case proxy.Table:
-		query := c.Proxy.Query().
-			Where(proxy.IDIn(ids...))
-		query, err := query.CollectFields(ctx, proxyImplementors...)
 		if err != nil {
 			return nil, err
 		}

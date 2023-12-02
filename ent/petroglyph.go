@@ -123,14 +123,17 @@ type PetroglyphEdges struct {
 	AccountingDocumentationAuthor *Person `json:"accounting_documentation_author,omitempty"`
 	// Collection holds the value of the collection edge.
 	Collection *Collection `json:"collection,omitempty"`
+	// Personal holds the value of the personal edge.
+	Personal []*Personal `json:"personal,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
 
 	namedPublications map[string][]*Publication
 	namedTechniques   map[string][]*Technique
+	namedPersonal     map[string][]*Personal
 }
 
 // CulturalAffiliationOrErr returns the CulturalAffiliation value or an error if the edge
@@ -240,6 +243,15 @@ func (e PetroglyphEdges) CollectionOrErr() (*Collection, error) {
 		return e.Collection, nil
 	}
 	return nil, &NotLoadedError{edge: "collection"}
+}
+
+// PersonalOrErr returns the Personal value or an error if the edge
+// was not loaded in eager-loading.
+func (e PetroglyphEdges) PersonalOrErr() ([]*Personal, error) {
+	if e.loadedTypes[9] {
+		return e.Personal, nil
+	}
+	return nil, &NotLoadedError{edge: "personal"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -596,6 +608,11 @@ func (pe *Petroglyph) QueryCollection() *CollectionQuery {
 	return NewPetroglyphClient(pe.config).QueryCollection(pe)
 }
 
+// QueryPersonal queries the "personal" edge of the Petroglyph entity.
+func (pe *Petroglyph) QueryPersonal() *PersonalQuery {
+	return NewPetroglyphClient(pe.config).QueryPersonal(pe)
+}
+
 // Update returns a builder for updating this Petroglyph.
 // Note that you need to call Petroglyph.Unwrap() before calling this method if this Petroglyph
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -765,6 +782,30 @@ func (pe *Petroglyph) appendNamedTechniques(name string, edges ...*Technique) {
 		pe.Edges.namedTechniques[name] = []*Technique{}
 	} else {
 		pe.Edges.namedTechniques[name] = append(pe.Edges.namedTechniques[name], edges...)
+	}
+}
+
+// NamedPersonal returns the Personal named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Petroglyph) NamedPersonal(name string) ([]*Personal, error) {
+	if pe.Edges.namedPersonal == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedPersonal[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Petroglyph) appendNamedPersonal(name string, edges ...*Personal) {
+	if pe.Edges.namedPersonal == nil {
+		pe.Edges.namedPersonal = make(map[string][]*Personal)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedPersonal[name] = []*Personal{}
+	} else {
+		pe.Edges.namedPersonal[name] = append(pe.Edges.namedPersonal[name], edges...)
 	}
 }
 

@@ -596,7 +596,7 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Unique: true},
+		{Name: "owner_id", Type: field.TypeString},
 	}
 	// FavouritesTable holds the schema information for the "favourites" table.
 	FavouritesTable = &schema.Table{
@@ -866,8 +866,9 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Unique: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "display_name", Type: field.TypeString},
+		{Name: "is_public", Type: field.TypeBool, Default: false},
 	}
 	// PersonalsTable holds the schema information for the "personals" table.
 	PersonalsTable = &schema.Table{
@@ -1122,39 +1123,6 @@ var (
 				Symbol:     "protected_area_pictures_settlements_protected_area_pictures",
 				Columns:    []*schema.Column{ProtectedAreaPicturesColumns[22]},
 				RefColumns: []*schema.Column{SettlementsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-	}
-	// ProxiesColumns holds the columns for the "proxies" table.
-	ProxiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"artifacts", "books", "protected_area_pictures"}},
-		{Name: "ref_id", Type: field.TypeString},
-		{Name: "url", Type: field.TypeString},
-		{Name: "favourite_proxies", Type: field.TypeInt, Nullable: true},
-		{Name: "personal_proxies", Type: field.TypeInt, Nullable: true},
-	}
-	// ProxiesTable holds the schema information for the "proxies" table.
-	ProxiesTable = &schema.Table{
-		Name:       "proxies",
-		Columns:    ProxiesColumns,
-		PrimaryKey: []*schema.Column{ProxiesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "proxies_favourites_proxies",
-				Columns:    []*schema.Column{ProxiesColumns[8]},
-				RefColumns: []*schema.Column{FavouritesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "proxies_personals_proxies",
-				Columns:    []*schema.Column{ProxiesColumns[9]},
-				RefColumns: []*schema.Column{PersonalsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1632,6 +1600,106 @@ var (
 			},
 		},
 	}
+	// PersonalArtifactsColumns holds the columns for the "personal_artifacts" table.
+	PersonalArtifactsColumns = []*schema.Column{
+		{Name: "personal_id", Type: field.TypeInt},
+		{Name: "artifact_id", Type: field.TypeInt},
+	}
+	// PersonalArtifactsTable holds the schema information for the "personal_artifacts" table.
+	PersonalArtifactsTable = &schema.Table{
+		Name:       "personal_artifacts",
+		Columns:    PersonalArtifactsColumns,
+		PrimaryKey: []*schema.Column{PersonalArtifactsColumns[0], PersonalArtifactsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_artifacts_personal_id",
+				Columns:    []*schema.Column{PersonalArtifactsColumns[0]},
+				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "personal_artifacts_artifact_id",
+				Columns:    []*schema.Column{PersonalArtifactsColumns[1]},
+				RefColumns: []*schema.Column{ArtifactsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// PersonalPetroglyphsColumns holds the columns for the "personal_petroglyphs" table.
+	PersonalPetroglyphsColumns = []*schema.Column{
+		{Name: "personal_id", Type: field.TypeInt},
+		{Name: "petroglyph_id", Type: field.TypeInt},
+	}
+	// PersonalPetroglyphsTable holds the schema information for the "personal_petroglyphs" table.
+	PersonalPetroglyphsTable = &schema.Table{
+		Name:       "personal_petroglyphs",
+		Columns:    PersonalPetroglyphsColumns,
+		PrimaryKey: []*schema.Column{PersonalPetroglyphsColumns[0], PersonalPetroglyphsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_petroglyphs_personal_id",
+				Columns:    []*schema.Column{PersonalPetroglyphsColumns[0]},
+				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "personal_petroglyphs_petroglyph_id",
+				Columns:    []*schema.Column{PersonalPetroglyphsColumns[1]},
+				RefColumns: []*schema.Column{PetroglyphsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// PersonalBooksColumns holds the columns for the "personal_books" table.
+	PersonalBooksColumns = []*schema.Column{
+		{Name: "personal_id", Type: field.TypeInt},
+		{Name: "book_id", Type: field.TypeInt},
+	}
+	// PersonalBooksTable holds the schema information for the "personal_books" table.
+	PersonalBooksTable = &schema.Table{
+		Name:       "personal_books",
+		Columns:    PersonalBooksColumns,
+		PrimaryKey: []*schema.Column{PersonalBooksColumns[0], PersonalBooksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_books_personal_id",
+				Columns:    []*schema.Column{PersonalBooksColumns[0]},
+				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "personal_books_book_id",
+				Columns:    []*schema.Column{PersonalBooksColumns[1]},
+				RefColumns: []*schema.Column{BooksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// PersonalProtectedAreaPicturesColumns holds the columns for the "personal_protected_area_pictures" table.
+	PersonalProtectedAreaPicturesColumns = []*schema.Column{
+		{Name: "personal_id", Type: field.TypeInt},
+		{Name: "protected_area_picture_id", Type: field.TypeInt},
+	}
+	// PersonalProtectedAreaPicturesTable holds the schema information for the "personal_protected_area_pictures" table.
+	PersonalProtectedAreaPicturesTable = &schema.Table{
+		Name:       "personal_protected_area_pictures",
+		Columns:    PersonalProtectedAreaPicturesColumns,
+		PrimaryKey: []*schema.Column{PersonalProtectedAreaPicturesColumns[0], PersonalProtectedAreaPicturesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_protected_area_pictures_personal_id",
+				Columns:    []*schema.Column{PersonalProtectedAreaPicturesColumns[0]},
+				RefColumns: []*schema.Column{PersonalsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "personal_protected_area_pictures_protected_area_picture_id",
+				Columns:    []*schema.Column{PersonalProtectedAreaPicturesColumns[1]},
+				RefColumns: []*schema.Column{ProtectedAreaPicturesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProjectArtifactsColumns holds the columns for the "project_artifacts" table.
 	ProjectArtifactsColumns = []*schema.Column{
 		{Name: "project_id", Type: field.TypeInt},
@@ -1892,7 +1960,6 @@ var (
 		ProtectedAreasTable,
 		ProtectedAreaCategoriesTable,
 		ProtectedAreaPicturesTable,
-		ProxiesTable,
 		PublicationsTable,
 		PublishersTable,
 		RegionsTable,
@@ -1913,6 +1980,10 @@ var (
 		PersonVisitsTable,
 		PersonProjectsTable,
 		PersonPublicationsTable,
+		PersonalArtifactsTable,
+		PersonalPetroglyphsTable,
+		PersonalBooksTable,
+		PersonalProtectedAreaPicturesTable,
 		ProjectArtifactsTable,
 		PublicationArtifactsTable,
 		PublicationPetroglyphsTable,
@@ -1981,8 +2052,6 @@ func init() {
 	ProtectedAreaPicturesTable.ForeignKeys[6].RefTable = ProtectedAreasTable
 	ProtectedAreaPicturesTable.ForeignKeys[7].RefTable = RegionsTable
 	ProtectedAreaPicturesTable.ForeignKeys[8].RefTable = SettlementsTable
-	ProxiesTable.ForeignKeys[0].RefTable = FavouritesTable
-	ProxiesTable.ForeignKeys[1].RefTable = PersonalsTable
 	RegionsTable.ForeignKeys[0].RefTable = CountriesTable
 	SettlementsTable.ForeignKeys[0].RefTable = DistrictsTable
 	SettlementsTable.ForeignKeys[1].RefTable = RegionsTable
@@ -2012,6 +2081,14 @@ func init() {
 	PersonProjectsTable.ForeignKeys[1].RefTable = ProjectsTable
 	PersonPublicationsTable.ForeignKeys[0].RefTable = PersonsTable
 	PersonPublicationsTable.ForeignKeys[1].RefTable = PublicationsTable
+	PersonalArtifactsTable.ForeignKeys[0].RefTable = PersonalsTable
+	PersonalArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
+	PersonalPetroglyphsTable.ForeignKeys[0].RefTable = PersonalsTable
+	PersonalPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
+	PersonalBooksTable.ForeignKeys[0].RefTable = PersonalsTable
+	PersonalBooksTable.ForeignKeys[1].RefTable = BooksTable
+	PersonalProtectedAreaPicturesTable.ForeignKeys[0].RefTable = PersonalsTable
+	PersonalProtectedAreaPicturesTable.ForeignKeys[1].RefTable = ProtectedAreaPicturesTable
 	ProjectArtifactsTable.ForeignKeys[0].RefTable = ProjectsTable
 	ProjectArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PublicationArtifactsTable.ForeignKeys[0].RefTable = PublicationsTable

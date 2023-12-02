@@ -46,7 +46,6 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/protectedarea
   - github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory
   - github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture
-  - github.com/dkrasnovdev/siberiana-api/ent/proxy
   - github.com/dkrasnovdev/siberiana-api/ent/publication
   - github.com/dkrasnovdev/siberiana-api/ent/publisher
   - github.com/dkrasnovdev/siberiana-api/ent/region

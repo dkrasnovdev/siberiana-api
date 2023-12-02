@@ -38,7 +38,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -808,6 +807,8 @@ func init() {
 	personal.Hooks[1] = personalMixinHooks0[0]
 
 	personal.Hooks[2] = personalMixinHooks1[0]
+	personalInters := schema.Personal{}.Interceptors()
+	personal.Interceptors[0] = personalInters[0]
 	personalMixinFields0 := personalMixin[0].Fields()
 	_ = personalMixinFields0
 	personalMixinFields1 := personalMixin[1].Fields()
@@ -832,6 +833,10 @@ func init() {
 	personalDescDisplayName := personalFields[0].Descriptor()
 	// personal.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	personal.DisplayNameValidator = personalDescDisplayName.Validators[0].(func(string) error)
+	// personalDescIsPublic is the schema descriptor for is_public field.
+	personalDescIsPublic := personalFields[1].Descriptor()
+	// personal.DefaultIsPublic holds the default value on creation for the is_public field.
+	personal.DefaultIsPublic = personalDescIsPublic.Default.(bool)
 	petroglyphMixin := schema.Petroglyph{}.Mixin()
 	petroglyph.Policy = privacy.NewPolicies(schema.Petroglyph{})
 	petroglyph.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -988,33 +993,6 @@ func init() {
 	protectedareapicture.DefaultUpdatedAt = protectedareapictureDescUpdatedAt.Default.(func() time.Time)
 	// protectedareapicture.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	protectedareapicture.UpdateDefaultUpdatedAt = protectedareapictureDescUpdatedAt.UpdateDefault.(func() time.Time)
-	proxyMixin := schema.Proxy{}.Mixin()
-	proxy.Policy = privacy.NewPolicies(schema.Proxy{})
-	proxy.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := proxy.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	proxyMixinHooks0 := proxyMixin[0].Hooks()
-
-	proxy.Hooks[1] = proxyMixinHooks0[0]
-	proxyMixinFields0 := proxyMixin[0].Fields()
-	_ = proxyMixinFields0
-	proxyFields := schema.Proxy{}.Fields()
-	_ = proxyFields
-	// proxyDescCreatedAt is the schema descriptor for created_at field.
-	proxyDescCreatedAt := proxyMixinFields0[0].Descriptor()
-	// proxy.DefaultCreatedAt holds the default value on creation for the created_at field.
-	proxy.DefaultCreatedAt = proxyDescCreatedAt.Default.(func() time.Time)
-	// proxyDescUpdatedAt is the schema descriptor for updated_at field.
-	proxyDescUpdatedAt := proxyMixinFields0[2].Descriptor()
-	// proxy.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	proxy.DefaultUpdatedAt = proxyDescUpdatedAt.Default.(func() time.Time)
-	// proxy.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	proxy.UpdateDefaultUpdatedAt = proxyDescUpdatedAt.UpdateDefault.(func() time.Time)
 	publicationMixin := schema.Publication{}.Mixin()
 	publication.Policy = privacy.NewPolicies(schema.Publication{})
 	publication.Hooks[0] = func(next ent.Mutator) ent.Mutator {

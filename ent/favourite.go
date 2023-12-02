@@ -26,33 +26,8 @@ type Favourite struct {
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// OwnerID holds the value of the "owner_id" field.
-	OwnerID string `json:"owner_id,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the FavouriteQuery when eager-loading is set.
-	Edges        FavouriteEdges `json:"edges"`
+	OwnerID      string `json:"owner_id,omitempty"`
 	selectValues sql.SelectValues
-}
-
-// FavouriteEdges holds the relations/edges for other nodes in the graph.
-type FavouriteEdges struct {
-	// Proxies holds the value of the proxies edge.
-	Proxies []*Proxy `json:"proxies,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
-
-	namedProxies map[string][]*Proxy
-}
-
-// ProxiesOrErr returns the Proxies value or an error if the edge
-// was not loaded in eager-loading.
-func (e FavouriteEdges) ProxiesOrErr() ([]*Proxy, error) {
-	if e.loadedTypes[0] {
-		return e.Proxies, nil
-	}
-	return nil, &NotLoadedError{edge: "proxies"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -130,11 +105,6 @@ func (f *Favourite) Value(name string) (ent.Value, error) {
 	return f.selectValues.Get(name)
 }
 
-// QueryProxies queries the "proxies" edge of the Favourite entity.
-func (f *Favourite) QueryProxies() *ProxyQuery {
-	return NewFavouriteClient(f.config).QueryProxies(f)
-}
-
 // Update returns a builder for updating this Favourite.
 // Note that you need to call Favourite.Unwrap() before calling this method if this Favourite
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -174,30 +144,6 @@ func (f *Favourite) String() string {
 	builder.WriteString(f.OwnerID)
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedProxies returns the Proxies named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (f *Favourite) NamedProxies(name string) ([]*Proxy, error) {
-	if f.Edges.namedProxies == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := f.Edges.namedProxies[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (f *Favourite) appendNamedProxies(name string, edges ...*Proxy) {
-	if f.Edges.namedProxies == nil {
-		f.Edges.namedProxies = make(map[string][]*Proxy)
-	}
-	if len(edges) == 0 {
-		f.Edges.namedProxies[name] = []*Proxy{}
-	} else {
-		f.Edges.namedProxies[name] = append(f.Edges.namedProxies[name], edges...)
-	}
 }
 
 // Favourites is a parsable slice of Favourite.

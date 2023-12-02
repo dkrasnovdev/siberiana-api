@@ -96,14 +96,17 @@ type BookEdges struct {
 	District *District `json:"district,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
+	// Personal holds the value of the personal edge.
+	Personal []*Personal `json:"personal,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [13]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [13]map[string]int
 
 	namedAuthors    map[string][]*Person
 	namedBookGenres map[string][]*BookGenre
+	namedPersonal   map[string][]*Personal
 }
 
 // AuthorsOrErr returns the Authors value or an error if the edge
@@ -252,6 +255,15 @@ func (e BookEdges) RegionOrErr() (*Region, error) {
 		return e.Region, nil
 	}
 	return nil, &NotLoadedError{edge: "region"}
+}
+
+// PersonalOrErr returns the Personal value or an error if the edge
+// was not loaded in eager-loading.
+func (e BookEdges) PersonalOrErr() ([]*Personal, error) {
+	if e.loadedTypes[12] {
+		return e.Personal, nil
+	}
+	return nil, &NotLoadedError{edge: "personal"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -533,6 +545,11 @@ func (b *Book) QueryRegion() *RegionQuery {
 	return NewBookClient(b.config).QueryRegion(b)
 }
 
+// QueryPersonal queries the "personal" edge of the Book entity.
+func (b *Book) QueryPersonal() *PersonalQuery {
+	return NewBookClient(b.config).QueryPersonal(b)
+}
+
 // Update returns a builder for updating this Book.
 // Note that you need to call Book.Unwrap() before calling this method if this Book
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -643,6 +660,30 @@ func (b *Book) appendNamedBookGenres(name string, edges ...*BookGenre) {
 		b.Edges.namedBookGenres[name] = []*BookGenre{}
 	} else {
 		b.Edges.namedBookGenres[name] = append(b.Edges.namedBookGenres[name], edges...)
+	}
+}
+
+// NamedPersonal returns the Personal named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (b *Book) NamedPersonal(name string) ([]*Personal, error) {
+	if b.Edges.namedPersonal == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := b.Edges.namedPersonal[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (b *Book) appendNamedPersonal(name string, edges ...*Personal) {
+	if b.Edges.namedPersonal == nil {
+		b.Edges.namedPersonal = make(map[string][]*Personal)
+	}
+	if len(edges) == 0 {
+		b.Edges.namedPersonal[name] = []*Personal{}
+	} else {
+		b.Edges.namedPersonal[name] = append(b.Edges.namedPersonal[name], edges...)
 	}
 }
 

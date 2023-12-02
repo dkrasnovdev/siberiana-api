@@ -11,9 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // PersonalUpdate is the builder for updating Personal entities.
@@ -81,19 +84,78 @@ func (pu *PersonalUpdate) SetDisplayName(s string) *PersonalUpdate {
 	return pu
 }
 
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by IDs.
-func (pu *PersonalUpdate) AddProxyIDs(ids ...int) *PersonalUpdate {
-	pu.mutation.AddProxyIDs(ids...)
+// SetIsPublic sets the "is_public" field.
+func (pu *PersonalUpdate) SetIsPublic(b bool) *PersonalUpdate {
+	pu.mutation.SetIsPublic(b)
 	return pu
 }
 
-// AddProxies adds the "proxies" edges to the Proxy entity.
-func (pu *PersonalUpdate) AddProxies(p ...*Proxy) *PersonalUpdate {
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (pu *PersonalUpdate) SetNillableIsPublic(b *bool) *PersonalUpdate {
+	if b != nil {
+		pu.SetIsPublic(*b)
+	}
+	return pu
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (pu *PersonalUpdate) AddArtifactIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.AddArtifactIDs(ids...)
+	return pu
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (pu *PersonalUpdate) AddArtifacts(a ...*Artifact) *PersonalUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.AddArtifactIDs(ids...)
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (pu *PersonalUpdate) AddPetroglyphIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.AddPetroglyphIDs(ids...)
+	return pu
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (pu *PersonalUpdate) AddPetroglyphs(p ...*Petroglyph) *PersonalUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return pu.AddProxyIDs(ids...)
+	return pu.AddPetroglyphIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (pu *PersonalUpdate) AddBookIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.AddBookIDs(ids...)
+	return pu
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (pu *PersonalUpdate) AddBooks(b ...*Book) *PersonalUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pu.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (pu *PersonalUpdate) AddProtectedAreaPictureIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.AddProtectedAreaPictureIDs(ids...)
+	return pu
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pu *PersonalUpdate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonalUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddProtectedAreaPictureIDs(ids...)
 }
 
 // Mutation returns the PersonalMutation object of the builder.
@@ -101,25 +163,88 @@ func (pu *PersonalUpdate) Mutation() *PersonalMutation {
 	return pu.mutation
 }
 
-// ClearProxies clears all "proxies" edges to the Proxy entity.
-func (pu *PersonalUpdate) ClearProxies() *PersonalUpdate {
-	pu.mutation.ClearProxies()
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (pu *PersonalUpdate) ClearArtifacts() *PersonalUpdate {
+	pu.mutation.ClearArtifacts()
 	return pu
 }
 
-// RemoveProxyIDs removes the "proxies" edge to Proxy entities by IDs.
-func (pu *PersonalUpdate) RemoveProxyIDs(ids ...int) *PersonalUpdate {
-	pu.mutation.RemoveProxyIDs(ids...)
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (pu *PersonalUpdate) RemoveArtifactIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.RemoveArtifactIDs(ids...)
 	return pu
 }
 
-// RemoveProxies removes "proxies" edges to Proxy entities.
-func (pu *PersonalUpdate) RemoveProxies(p ...*Proxy) *PersonalUpdate {
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (pu *PersonalUpdate) RemoveArtifacts(a ...*Artifact) *PersonalUpdate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pu.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (pu *PersonalUpdate) ClearPetroglyphs() *PersonalUpdate {
+	pu.mutation.ClearPetroglyphs()
+	return pu
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (pu *PersonalUpdate) RemovePetroglyphIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.RemovePetroglyphIDs(ids...)
+	return pu
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (pu *PersonalUpdate) RemovePetroglyphs(p ...*Petroglyph) *PersonalUpdate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return pu.RemoveProxyIDs(ids...)
+	return pu.RemovePetroglyphIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (pu *PersonalUpdate) ClearBooks() *PersonalUpdate {
+	pu.mutation.ClearBooks()
+	return pu
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (pu *PersonalUpdate) RemoveBookIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.RemoveBookIDs(ids...)
+	return pu
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (pu *PersonalUpdate) RemoveBooks(b ...*Book) *PersonalUpdate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pu.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pu *PersonalUpdate) ClearProtectedAreaPictures() *PersonalUpdate {
+	pu.mutation.ClearProtectedAreaPictures()
+	return pu
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (pu *PersonalUpdate) RemoveProtectedAreaPictureIDs(ids ...int) *PersonalUpdate {
+	pu.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return pu
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (pu *PersonalUpdate) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonalUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -204,28 +329,31 @@ func (pu *PersonalUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.DisplayName(); ok {
 		_spec.SetField(personal.FieldDisplayName, field.TypeString, value)
 	}
-	if pu.mutation.ProxiesCleared() {
+	if value, ok := pu.mutation.IsPublic(); ok {
+		_spec.SetField(personal.FieldIsPublic, field.TypeBool, value)
+	}
+	if pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   personal.ProxiesTable,
-			Columns: []string{personal.ProxiesColumn},
+			Table:   personal.ArtifactsTable,
+			Columns: personal.ArtifactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.RemovedProxiesIDs(); len(nodes) > 0 && !pu.mutation.ProxiesCleared() {
+	if nodes := pu.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !pu.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   personal.ProxiesTable,
-			Columns: []string{personal.ProxiesColumn},
+			Table:   personal.ArtifactsTable,
+			Columns: personal.ArtifactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -233,15 +361,150 @@ func (pu *PersonalUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.ProxiesIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   personal.ProxiesTable,
-			Columns: []string{personal.ProxiesColumn},
+			Table:   personal.ArtifactsTable,
+			Columns: personal.ArtifactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.PetroglyphsTable,
+			Columns: personal.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !pu.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.PetroglyphsTable,
+			Columns: personal.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.PetroglyphsTable,
+			Columns: personal.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.BooksTable,
+			Columns: personal.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedBooksIDs(); len(nodes) > 0 && !pu.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.BooksTable,
+			Columns: personal.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.BooksTable,
+			Columns: personal.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.ProtectedAreaPicturesTable,
+			Columns: personal.ProtectedAreaPicturesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !pu.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.ProtectedAreaPicturesTable,
+			Columns: personal.ProtectedAreaPicturesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.ProtectedAreaPicturesTable,
+			Columns: personal.ProtectedAreaPicturesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -321,19 +584,78 @@ func (puo *PersonalUpdateOne) SetDisplayName(s string) *PersonalUpdateOne {
 	return puo
 }
 
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by IDs.
-func (puo *PersonalUpdateOne) AddProxyIDs(ids ...int) *PersonalUpdateOne {
-	puo.mutation.AddProxyIDs(ids...)
+// SetIsPublic sets the "is_public" field.
+func (puo *PersonalUpdateOne) SetIsPublic(b bool) *PersonalUpdateOne {
+	puo.mutation.SetIsPublic(b)
 	return puo
 }
 
-// AddProxies adds the "proxies" edges to the Proxy entity.
-func (puo *PersonalUpdateOne) AddProxies(p ...*Proxy) *PersonalUpdateOne {
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (puo *PersonalUpdateOne) SetNillableIsPublic(b *bool) *PersonalUpdateOne {
+	if b != nil {
+		puo.SetIsPublic(*b)
+	}
+	return puo
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (puo *PersonalUpdateOne) AddArtifactIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.AddArtifactIDs(ids...)
+	return puo
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (puo *PersonalUpdateOne) AddArtifacts(a ...*Artifact) *PersonalUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.AddArtifactIDs(ids...)
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (puo *PersonalUpdateOne) AddPetroglyphIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.AddPetroglyphIDs(ids...)
+	return puo
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (puo *PersonalUpdateOne) AddPetroglyphs(p ...*Petroglyph) *PersonalUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return puo.AddProxyIDs(ids...)
+	return puo.AddPetroglyphIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (puo *PersonalUpdateOne) AddBookIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.AddBookIDs(ids...)
+	return puo
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (puo *PersonalUpdateOne) AddBooks(b ...*Book) *PersonalUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return puo.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (puo *PersonalUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.AddProtectedAreaPictureIDs(ids...)
+	return puo
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (puo *PersonalUpdateOne) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonalUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddProtectedAreaPictureIDs(ids...)
 }
 
 // Mutation returns the PersonalMutation object of the builder.
@@ -341,25 +663,88 @@ func (puo *PersonalUpdateOne) Mutation() *PersonalMutation {
 	return puo.mutation
 }
 
-// ClearProxies clears all "proxies" edges to the Proxy entity.
-func (puo *PersonalUpdateOne) ClearProxies() *PersonalUpdateOne {
-	puo.mutation.ClearProxies()
+// ClearArtifacts clears all "artifacts" edges to the Artifact entity.
+func (puo *PersonalUpdateOne) ClearArtifacts() *PersonalUpdateOne {
+	puo.mutation.ClearArtifacts()
 	return puo
 }
 
-// RemoveProxyIDs removes the "proxies" edge to Proxy entities by IDs.
-func (puo *PersonalUpdateOne) RemoveProxyIDs(ids ...int) *PersonalUpdateOne {
-	puo.mutation.RemoveProxyIDs(ids...)
+// RemoveArtifactIDs removes the "artifacts" edge to Artifact entities by IDs.
+func (puo *PersonalUpdateOne) RemoveArtifactIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.RemoveArtifactIDs(ids...)
 	return puo
 }
 
-// RemoveProxies removes "proxies" edges to Proxy entities.
-func (puo *PersonalUpdateOne) RemoveProxies(p ...*Proxy) *PersonalUpdateOne {
+// RemoveArtifacts removes "artifacts" edges to Artifact entities.
+func (puo *PersonalUpdateOne) RemoveArtifacts(a ...*Artifact) *PersonalUpdateOne {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return puo.RemoveArtifactIDs(ids...)
+}
+
+// ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
+func (puo *PersonalUpdateOne) ClearPetroglyphs() *PersonalUpdateOne {
+	puo.mutation.ClearPetroglyphs()
+	return puo
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to Petroglyph entities by IDs.
+func (puo *PersonalUpdateOne) RemovePetroglyphIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.RemovePetroglyphIDs(ids...)
+	return puo
+}
+
+// RemovePetroglyphs removes "petroglyphs" edges to Petroglyph entities.
+func (puo *PersonalUpdateOne) RemovePetroglyphs(p ...*Petroglyph) *PersonalUpdateOne {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return puo.RemoveProxyIDs(ids...)
+	return puo.RemovePetroglyphIDs(ids...)
+}
+
+// ClearBooks clears all "books" edges to the Book entity.
+func (puo *PersonalUpdateOne) ClearBooks() *PersonalUpdateOne {
+	puo.mutation.ClearBooks()
+	return puo
+}
+
+// RemoveBookIDs removes the "books" edge to Book entities by IDs.
+func (puo *PersonalUpdateOne) RemoveBookIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.RemoveBookIDs(ids...)
+	return puo
+}
+
+// RemoveBooks removes "books" edges to Book entities.
+func (puo *PersonalUpdateOne) RemoveBooks(b ...*Book) *PersonalUpdateOne {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return puo.RemoveBookIDs(ids...)
+}
+
+// ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (puo *PersonalUpdateOne) ClearProtectedAreaPictures() *PersonalUpdateOne {
+	puo.mutation.ClearProtectedAreaPictures()
+	return puo
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to ProtectedAreaPicture entities by IDs.
+func (puo *PersonalUpdateOne) RemoveProtectedAreaPictureIDs(ids ...int) *PersonalUpdateOne {
+	puo.mutation.RemoveProtectedAreaPictureIDs(ids...)
+	return puo
+}
+
+// RemoveProtectedAreaPictures removes "protected_area_pictures" edges to ProtectedAreaPicture entities.
+func (puo *PersonalUpdateOne) RemoveProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonalUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemoveProtectedAreaPictureIDs(ids...)
 }
 
 // Where appends a list predicates to the PersonalUpdate builder.
@@ -474,28 +859,31 @@ func (puo *PersonalUpdateOne) sqlSave(ctx context.Context) (_node *Personal, err
 	if value, ok := puo.mutation.DisplayName(); ok {
 		_spec.SetField(personal.FieldDisplayName, field.TypeString, value)
 	}
-	if puo.mutation.ProxiesCleared() {
+	if value, ok := puo.mutation.IsPublic(); ok {
+		_spec.SetField(personal.FieldIsPublic, field.TypeBool, value)
+	}
+	if puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   personal.ProxiesTable,
-			Columns: []string{personal.ProxiesColumn},
+			Table:   personal.ArtifactsTable,
+			Columns: personal.ArtifactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.RemovedProxiesIDs(); len(nodes) > 0 && !puo.mutation.ProxiesCleared() {
+	if nodes := puo.mutation.RemovedArtifactsIDs(); len(nodes) > 0 && !puo.mutation.ArtifactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   personal.ProxiesTable,
-			Columns: []string{personal.ProxiesColumn},
+			Table:   personal.ArtifactsTable,
+			Columns: personal.ArtifactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -503,15 +891,150 @@ func (puo *PersonalUpdateOne) sqlSave(ctx context.Context) (_node *Personal, err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.ProxiesIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   personal.ProxiesTable,
-			Columns: []string{personal.ProxiesColumn},
+			Table:   personal.ArtifactsTable,
+			Columns: personal.ArtifactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.PetroglyphsTable,
+			Columns: personal.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedPetroglyphsIDs(); len(nodes) > 0 && !puo.mutation.PetroglyphsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.PetroglyphsTable,
+			Columns: personal.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.PetroglyphsTable,
+			Columns: personal.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.BooksTable,
+			Columns: personal.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedBooksIDs(); len(nodes) > 0 && !puo.mutation.BooksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.BooksTable,
+			Columns: personal.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.BooksTable,
+			Columns: personal.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.ProtectedAreaPicturesTable,
+			Columns: personal.ProtectedAreaPicturesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedProtectedAreaPicturesIDs(); len(nodes) > 0 && !puo.mutation.ProtectedAreaPicturesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.ProtectedAreaPicturesTable,
+			Columns: personal.ProtectedAreaPicturesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.ProtectedAreaPicturesTable,
+			Columns: personal.ProtectedAreaPicturesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

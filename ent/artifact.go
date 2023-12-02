@@ -150,17 +150,20 @@ type ArtifactEdges struct {
 	District *District `json:"district,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
+	// Personal holds the value of the personal edge.
+	Personal []*Personal `json:"personal,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
 	namedAuthors      map[string][]*Person
 	namedMediums      map[string][]*Medium
 	namedTechniques   map[string][]*Technique
 	namedProjects     map[string][]*Project
 	namedPublications map[string][]*Publication
+	namedPersonal     map[string][]*Personal
 }
 
 // AuthorsOrErr returns the Authors value or an error if the edge
@@ -388,6 +391,15 @@ func (e ArtifactEdges) RegionOrErr() (*Region, error) {
 		return e.Region, nil
 	}
 	return nil, &NotLoadedError{edge: "region"}
+}
+
+// PersonalOrErr returns the Personal value or an error if the edge
+// was not loaded in eager-loading.
+func (e ArtifactEdges) PersonalOrErr() ([]*Personal, error) {
+	if e.loadedTypes[19] {
+		return e.Personal, nil
+	}
+	return nil, &NotLoadedError{edge: "personal"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -836,6 +848,11 @@ func (a *Artifact) QueryRegion() *RegionQuery {
 	return NewArtifactClient(a.config).QueryRegion(a)
 }
 
+// QueryPersonal queries the "personal" edge of the Artifact entity.
+func (a *Artifact) QueryPersonal() *PersonalQuery {
+	return NewArtifactClient(a.config).QueryPersonal(a)
+}
+
 // Update returns a builder for updating this Artifact.
 // Note that you need to call Artifact.Unwrap() before calling this method if this Artifact
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -1066,6 +1083,30 @@ func (a *Artifact) appendNamedPublications(name string, edges ...*Publication) {
 		a.Edges.namedPublications[name] = []*Publication{}
 	} else {
 		a.Edges.namedPublications[name] = append(a.Edges.namedPublications[name], edges...)
+	}
+}
+
+// NamedPersonal returns the Personal named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (a *Artifact) NamedPersonal(name string) ([]*Personal, error) {
+	if a.Edges.namedPersonal == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := a.Edges.namedPersonal[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (a *Artifact) appendNamedPersonal(name string, edges ...*Personal) {
+	if a.Edges.namedPersonal == nil {
+		a.Edges.namedPersonal = make(map[string][]*Personal)
+	}
+	if len(edges) == 0 {
+		a.Edges.namedPersonal[name] = []*Personal{}
+	} else {
+		a.Edges.namedPersonal[name] = append(a.Edges.namedPersonal[name], edges...)
 	}
 }
 

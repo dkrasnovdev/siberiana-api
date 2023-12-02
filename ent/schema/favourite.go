@@ -4,7 +4,6 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
-	"entgo.io/ent/schema/edge"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
@@ -50,7 +49,5 @@ func (Favourite) Annotations() []schema.Annotation {
 
 // Edges of the Favourite.
 func (Favourite) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("proxies", Proxy.Type),
-	}
+	return []ent.Edge{}
 }

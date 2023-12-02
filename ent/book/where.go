@@ -1086,6 +1086,29 @@ func HasRegionWith(preds ...predicate.Region) predicate.Book {
 	})
 }
 
+// HasPersonal applies the HasEdge predicate on the "personal" edge.
+func HasPersonal() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, PersonalTable, PersonalPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPersonalWith applies the HasEdge predicate on the "personal" edge with a given conditions (other predicates).
+func HasPersonalWith(preds ...predicate.Personal) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newPersonalStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Book) predicate.Book {
 	return predicate.Book(sql.AndPredicates(predicates...))

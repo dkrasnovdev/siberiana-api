@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 )
 
 // FavouriteUpdate is the builder for updating Favourite entities.
@@ -75,45 +74,9 @@ func (fu *FavouriteUpdate) ClearUpdatedBy() *FavouriteUpdate {
 	return fu
 }
 
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by IDs.
-func (fu *FavouriteUpdate) AddProxyIDs(ids ...int) *FavouriteUpdate {
-	fu.mutation.AddProxyIDs(ids...)
-	return fu
-}
-
-// AddProxies adds the "proxies" edges to the Proxy entity.
-func (fu *FavouriteUpdate) AddProxies(p ...*Proxy) *FavouriteUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return fu.AddProxyIDs(ids...)
-}
-
 // Mutation returns the FavouriteMutation object of the builder.
 func (fu *FavouriteUpdate) Mutation() *FavouriteMutation {
 	return fu.mutation
-}
-
-// ClearProxies clears all "proxies" edges to the Proxy entity.
-func (fu *FavouriteUpdate) ClearProxies() *FavouriteUpdate {
-	fu.mutation.ClearProxies()
-	return fu
-}
-
-// RemoveProxyIDs removes the "proxies" edge to Proxy entities by IDs.
-func (fu *FavouriteUpdate) RemoveProxyIDs(ids ...int) *FavouriteUpdate {
-	fu.mutation.RemoveProxyIDs(ids...)
-	return fu
-}
-
-// RemoveProxies removes "proxies" edges to Proxy entities.
-func (fu *FavouriteUpdate) RemoveProxies(p ...*Proxy) *FavouriteUpdate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return fu.RemoveProxyIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -182,51 +145,6 @@ func (fu *FavouriteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.UpdatedByCleared() {
 		_spec.ClearField(favourite.FieldUpdatedBy, field.TypeString)
 	}
-	if fu.mutation.ProxiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   favourite.ProxiesTable,
-			Columns: []string{favourite.ProxiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fu.mutation.RemovedProxiesIDs(); len(nodes) > 0 && !fu.mutation.ProxiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   favourite.ProxiesTable,
-			Columns: []string{favourite.ProxiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fu.mutation.ProxiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   favourite.ProxiesTable,
-			Columns: []string{favourite.ProxiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if n, err = sqlgraph.UpdateNodes(ctx, fu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{favourite.Label}
@@ -293,45 +211,9 @@ func (fuo *FavouriteUpdateOne) ClearUpdatedBy() *FavouriteUpdateOne {
 	return fuo
 }
 
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by IDs.
-func (fuo *FavouriteUpdateOne) AddProxyIDs(ids ...int) *FavouriteUpdateOne {
-	fuo.mutation.AddProxyIDs(ids...)
-	return fuo
-}
-
-// AddProxies adds the "proxies" edges to the Proxy entity.
-func (fuo *FavouriteUpdateOne) AddProxies(p ...*Proxy) *FavouriteUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return fuo.AddProxyIDs(ids...)
-}
-
 // Mutation returns the FavouriteMutation object of the builder.
 func (fuo *FavouriteUpdateOne) Mutation() *FavouriteMutation {
 	return fuo.mutation
-}
-
-// ClearProxies clears all "proxies" edges to the Proxy entity.
-func (fuo *FavouriteUpdateOne) ClearProxies() *FavouriteUpdateOne {
-	fuo.mutation.ClearProxies()
-	return fuo
-}
-
-// RemoveProxyIDs removes the "proxies" edge to Proxy entities by IDs.
-func (fuo *FavouriteUpdateOne) RemoveProxyIDs(ids ...int) *FavouriteUpdateOne {
-	fuo.mutation.RemoveProxyIDs(ids...)
-	return fuo
-}
-
-// RemoveProxies removes "proxies" edges to Proxy entities.
-func (fuo *FavouriteUpdateOne) RemoveProxies(p ...*Proxy) *FavouriteUpdateOne {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return fuo.RemoveProxyIDs(ids...)
 }
 
 // Where appends a list predicates to the FavouriteUpdate builder.
@@ -429,51 +311,6 @@ func (fuo *FavouriteUpdateOne) sqlSave(ctx context.Context) (_node *Favourite, e
 	}
 	if fuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(favourite.FieldUpdatedBy, field.TypeString)
-	}
-	if fuo.mutation.ProxiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   favourite.ProxiesTable,
-			Columns: []string{favourite.ProxiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fuo.mutation.RemovedProxiesIDs(); len(nodes) > 0 && !fuo.mutation.ProxiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   favourite.ProxiesTable,
-			Columns: []string{favourite.ProxiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := fuo.mutation.ProxiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   favourite.ProxiesTable,
-			Columns: []string{favourite.ProxiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Favourite{config: fuo.config}
 	_spec.Assign = _node.assignValues

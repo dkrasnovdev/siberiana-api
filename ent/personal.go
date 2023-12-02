@@ -29,6 +29,8 @@ type Personal struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
+	// IsPublic holds the value of the "is_public" field.
+	IsPublic bool `json:"is_public,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PersonalQuery when eager-loading is set.
 	Edges        PersonalEdges `json:"edges"`
@@ -37,24 +39,60 @@ type Personal struct {
 
 // PersonalEdges holds the relations/edges for other nodes in the graph.
 type PersonalEdges struct {
-	// Proxies holds the value of the proxies edge.
-	Proxies []*Proxy `json:"proxies,omitempty"`
+	// Artifacts holds the value of the artifacts edge.
+	Artifacts []*Artifact `json:"artifacts,omitempty"`
+	// Petroglyphs holds the value of the petroglyphs edge.
+	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
+	// Books holds the value of the books edge.
+	Books []*Book `json:"books,omitempty"`
+	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
+	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [4]map[string]int
 
-	namedProxies map[string][]*Proxy
+	namedArtifacts             map[string][]*Artifact
+	namedPetroglyphs           map[string][]*Petroglyph
+	namedBooks                 map[string][]*Book
+	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 }
 
-// ProxiesOrErr returns the Proxies value or an error if the edge
+// ArtifactsOrErr returns the Artifacts value or an error if the edge
 // was not loaded in eager-loading.
-func (e PersonalEdges) ProxiesOrErr() ([]*Proxy, error) {
+func (e PersonalEdges) ArtifactsOrErr() ([]*Artifact, error) {
 	if e.loadedTypes[0] {
-		return e.Proxies, nil
+		return e.Artifacts, nil
 	}
-	return nil, &NotLoadedError{edge: "proxies"}
+	return nil, &NotLoadedError{edge: "artifacts"}
+}
+
+// PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonalEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
+	if e.loadedTypes[1] {
+		return e.Petroglyphs, nil
+	}
+	return nil, &NotLoadedError{edge: "petroglyphs"}
+}
+
+// BooksOrErr returns the Books value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonalEdges) BooksOrErr() ([]*Book, error) {
+	if e.loadedTypes[2] {
+		return e.Books, nil
+	}
+	return nil, &NotLoadedError{edge: "books"}
+}
+
+// ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonalEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
+	if e.loadedTypes[3] {
+		return e.ProtectedAreaPictures, nil
+	}
+	return nil, &NotLoadedError{edge: "protected_area_pictures"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -62,6 +100,8 @@ func (*Personal) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case personal.FieldIsPublic:
+			values[i] = new(sql.NullBool)
 		case personal.FieldID:
 			values[i] = new(sql.NullInt64)
 		case personal.FieldCreatedBy, personal.FieldUpdatedBy, personal.FieldOwnerID, personal.FieldDisplayName:
@@ -125,6 +165,12 @@ func (pe *Personal) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.DisplayName = value.String
 			}
+		case personal.FieldIsPublic:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_public", values[i])
+			} else if value.Valid {
+				pe.IsPublic = value.Bool
+			}
 		default:
 			pe.selectValues.Set(columns[i], values[i])
 		}
@@ -138,9 +184,24 @@ func (pe *Personal) Value(name string) (ent.Value, error) {
 	return pe.selectValues.Get(name)
 }
 
-// QueryProxies queries the "proxies" edge of the Personal entity.
-func (pe *Personal) QueryProxies() *ProxyQuery {
-	return NewPersonalClient(pe.config).QueryProxies(pe)
+// QueryArtifacts queries the "artifacts" edge of the Personal entity.
+func (pe *Personal) QueryArtifacts() *ArtifactQuery {
+	return NewPersonalClient(pe.config).QueryArtifacts(pe)
+}
+
+// QueryPetroglyphs queries the "petroglyphs" edge of the Personal entity.
+func (pe *Personal) QueryPetroglyphs() *PetroglyphQuery {
+	return NewPersonalClient(pe.config).QueryPetroglyphs(pe)
+}
+
+// QueryBooks queries the "books" edge of the Personal entity.
+func (pe *Personal) QueryBooks() *BookQuery {
+	return NewPersonalClient(pe.config).QueryBooks(pe)
+}
+
+// QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Personal entity.
+func (pe *Personal) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	return NewPersonalClient(pe.config).QueryProtectedAreaPictures(pe)
 }
 
 // Update returns a builder for updating this Personal.
@@ -183,31 +244,106 @@ func (pe *Personal) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pe.DisplayName)
+	builder.WriteString(", ")
+	builder.WriteString("is_public=")
+	builder.WriteString(fmt.Sprintf("%v", pe.IsPublic))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NamedProxies returns the Proxies named value or an error if the edge was not
+// NamedArtifacts returns the Artifacts named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pe *Personal) NamedProxies(name string) ([]*Proxy, error) {
-	if pe.Edges.namedProxies == nil {
+func (pe *Personal) NamedArtifacts(name string) ([]*Artifact, error) {
+	if pe.Edges.namedArtifacts == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pe.Edges.namedProxies[name]
+	nodes, ok := pe.Edges.namedArtifacts[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pe *Personal) appendNamedProxies(name string, edges ...*Proxy) {
-	if pe.Edges.namedProxies == nil {
-		pe.Edges.namedProxies = make(map[string][]*Proxy)
+func (pe *Personal) appendNamedArtifacts(name string, edges ...*Artifact) {
+	if pe.Edges.namedArtifacts == nil {
+		pe.Edges.namedArtifacts = make(map[string][]*Artifact)
 	}
 	if len(edges) == 0 {
-		pe.Edges.namedProxies[name] = []*Proxy{}
+		pe.Edges.namedArtifacts[name] = []*Artifact{}
 	} else {
-		pe.Edges.namedProxies[name] = append(pe.Edges.namedProxies[name], edges...)
+		pe.Edges.namedArtifacts[name] = append(pe.Edges.namedArtifacts[name], edges...)
+	}
+}
+
+// NamedPetroglyphs returns the Petroglyphs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Personal) NamedPetroglyphs(name string) ([]*Petroglyph, error) {
+	if pe.Edges.namedPetroglyphs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedPetroglyphs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Personal) appendNamedPetroglyphs(name string, edges ...*Petroglyph) {
+	if pe.Edges.namedPetroglyphs == nil {
+		pe.Edges.namedPetroglyphs = make(map[string][]*Petroglyph)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedPetroglyphs[name] = []*Petroglyph{}
+	} else {
+		pe.Edges.namedPetroglyphs[name] = append(pe.Edges.namedPetroglyphs[name], edges...)
+	}
+}
+
+// NamedBooks returns the Books named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Personal) NamedBooks(name string) ([]*Book, error) {
+	if pe.Edges.namedBooks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedBooks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Personal) appendNamedBooks(name string, edges ...*Book) {
+	if pe.Edges.namedBooks == nil {
+		pe.Edges.namedBooks = make(map[string][]*Book)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedBooks[name] = []*Book{}
+	} else {
+		pe.Edges.namedBooks[name] = append(pe.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedProtectedAreaPictures returns the ProtectedAreaPictures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pe *Personal) NamedProtectedAreaPictures(name string) ([]*ProtectedAreaPicture, error) {
+	if pe.Edges.namedProtectedAreaPictures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pe.Edges.namedProtectedAreaPictures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pe *Personal) appendNamedProtectedAreaPictures(name string, edges ...*ProtectedAreaPicture) {
+	if pe.Edges.namedProtectedAreaPictures == nil {
+		pe.Edges.namedProtectedAreaPictures = make(map[string][]*ProtectedAreaPicture)
+	}
+	if len(edges) == 0 {
+		pe.Edges.namedProtectedAreaPictures[name] = []*ProtectedAreaPicture{}
+	} else {
+		pe.Edges.namedProtectedAreaPictures[name] = append(pe.Edges.namedProtectedAreaPictures[name], edges...)
 	}
 }
 

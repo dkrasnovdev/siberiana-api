@@ -902,30 +902,6 @@ func (f ProtectedAreaPictureMutationRuleFunc) EvalMutation(ctx context.Context, 
 	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.ProtectedAreaPictureMutation", m)
 }
 
-// The ProxyQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type ProxyQueryRuleFunc func(context.Context, *ent.ProxyQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f ProxyQueryRuleFunc) EvalQuery(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.ProxyQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("ent/privacy: unexpected query type %T, expect *ent.ProxyQuery", q)
-}
-
-// The ProxyMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type ProxyMutationRuleFunc func(context.Context, *ent.ProxyMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f ProxyMutationRuleFunc) EvalMutation(ctx context.Context, m ent.Mutation) error {
-	if m, ok := m.(*ent.ProxyMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("ent/privacy: unexpected mutation type %T, expect *ent.ProxyMutation", m)
-}
-
 // The PublicationQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type PublicationQueryRuleFunc func(context.Context, *ent.PublicationQuery) error

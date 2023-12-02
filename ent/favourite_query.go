@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -14,20 +13,17 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 )
 
 // FavouriteQuery is the builder for querying Favourite entities.
 type FavouriteQuery struct {
 	config
-	ctx              *QueryContext
-	order            []favourite.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.Favourite
-	withProxies      *ProxyQuery
-	modifiers        []func(*sql.Selector)
-	loadTotal        []func(context.Context, []*Favourite) error
-	withNamedProxies map[string]*ProxyQuery
+	ctx        *QueryContext
+	order      []favourite.OrderOption
+	inters     []Interceptor
+	predicates []predicate.Favourite
+	modifiers  []func(*sql.Selector)
+	loadTotal  []func(context.Context, []*Favourite) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -62,28 +58,6 @@ func (fq *FavouriteQuery) Unique(unique bool) *FavouriteQuery {
 func (fq *FavouriteQuery) Order(o ...favourite.OrderOption) *FavouriteQuery {
 	fq.order = append(fq.order, o...)
 	return fq
-}
-
-// QueryProxies chains the current query on the "proxies" edge.
-func (fq *FavouriteQuery) QueryProxies() *ProxyQuery {
-	query := (&ProxyClient{config: fq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := fq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := fq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(favourite.Table, favourite.FieldID, selector),
-			sqlgraph.To(proxy.Table, proxy.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, favourite.ProxiesTable, favourite.ProxiesColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // First returns the first Favourite entity from the query.
@@ -273,27 +247,15 @@ func (fq *FavouriteQuery) Clone() *FavouriteQuery {
 		return nil
 	}
 	return &FavouriteQuery{
-		config:      fq.config,
-		ctx:         fq.ctx.Clone(),
-		order:       append([]favourite.OrderOption{}, fq.order...),
-		inters:      append([]Interceptor{}, fq.inters...),
-		predicates:  append([]predicate.Favourite{}, fq.predicates...),
-		withProxies: fq.withProxies.Clone(),
+		config:     fq.config,
+		ctx:        fq.ctx.Clone(),
+		order:      append([]favourite.OrderOption{}, fq.order...),
+		inters:     append([]Interceptor{}, fq.inters...),
+		predicates: append([]predicate.Favourite{}, fq.predicates...),
 		// clone intermediate query.
 		sql:  fq.sql.Clone(),
 		path: fq.path,
 	}
-}
-
-// WithProxies tells the query-builder to eager-load the nodes that are connected to
-// the "proxies" edge. The optional arguments are used to configure the query builder of the edge.
-func (fq *FavouriteQuery) WithProxies(opts ...func(*ProxyQuery)) *FavouriteQuery {
-	query := (&ProxyClient{config: fq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	fq.withProxies = query
-	return fq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -378,11 +340,8 @@ func (fq *FavouriteQuery) prepareQuery(ctx context.Context) error {
 
 func (fq *FavouriteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Favourite, error) {
 	var (
-		nodes       = []*Favourite{}
-		_spec       = fq.querySpec()
-		loadedTypes = [1]bool{
-			fq.withProxies != nil,
-		}
+		nodes = []*Favourite{}
+		_spec = fq.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Favourite).scanValues(nil, columns)
@@ -390,7 +349,6 @@ func (fq *FavouriteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Fa
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Favourite{config: fq.config}
 		nodes = append(nodes, node)
-		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if len(fq.modifiers) > 0 {
@@ -405,58 +363,12 @@ func (fq *FavouriteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Fa
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := fq.withProxies; query != nil {
-		if err := fq.loadProxies(ctx, query, nodes,
-			func(n *Favourite) { n.Edges.Proxies = []*Proxy{} },
-			func(n *Favourite, e *Proxy) { n.Edges.Proxies = append(n.Edges.Proxies, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range fq.withNamedProxies {
-		if err := fq.loadProxies(ctx, query, nodes,
-			func(n *Favourite) { n.appendNamedProxies(name) },
-			func(n *Favourite, e *Proxy) { n.appendNamedProxies(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for i := range fq.loadTotal {
 		if err := fq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
-}
-
-func (fq *FavouriteQuery) loadProxies(ctx context.Context, query *ProxyQuery, nodes []*Favourite, init func(*Favourite), assign func(*Favourite, *Proxy)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Favourite)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Proxy(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(favourite.ProxiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.favourite_proxies
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "favourite_proxies" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "favourite_proxies" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
 }
 
 func (fq *FavouriteQuery) sqlCount(ctx context.Context) (int, error) {
@@ -541,20 +453,6 @@ func (fq *FavouriteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// WithNamedProxies tells the query-builder to eager-load the nodes that are connected to the "proxies"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (fq *FavouriteQuery) WithNamedProxies(name string, opts ...func(*ProxyQuery)) *FavouriteQuery {
-	query := (&ProxyClient{config: fq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if fq.withNamedProxies == nil {
-		fq.withNamedProxies = make(map[string]*ProxyQuery)
-	}
-	fq.withNamedProxies[name] = query
-	return fq
 }
 
 // FavouriteGroupBy is the group-by builder for Favourite entities.

@@ -1,11 +1,15 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	e "github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
 	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
@@ -21,9 +25,6 @@ func (Personal) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			rule.DenyIfNoViewer(),
-			rule.AllowIfAdministrator(),
-			rule.AllowIfModerator(),
-			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{
 			privacy.AlwaysAllowRule(),
@@ -54,12 +55,35 @@ func (Personal) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("display_name").
 			NotEmpty(),
+		field.Bool("is_public").
+			Default(false),
 	}
 }
 
 // Edges of the Personal.
 func (Personal) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("proxies", Proxy.Type),
+		edge.To("artifacts", Artifact.Type),
+		edge.To("petroglyphs", Petroglyph.Type),
+		edge.To("books", Book.Type),
+		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
+	}
+}
+
+func (Personal) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		ent.InterceptFunc(func(next ent.Querier) ent.Querier {
+			return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
+				var owner string
+				viewer := rule.FromContext(ctx)
+				if viewer != nil {
+					owner = viewer.GetPreferredUsername()
+				}
+				if q, ok := query.(*e.PersonalQuery); ok {
+					q.Where(personal.Or(personal.IsPublic(true), personal.OwnerIDEQ(owner)))
+				}
+				return next.Query(ctx, query)
+			})
+		}),
 	}
 }

@@ -23,6 +23,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -769,6 +770,21 @@ func (ac *ArtifactCreate) SetRegion(r *Region) *ArtifactCreate {
 	return ac.SetRegionID(r.ID)
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
+func (ac *ArtifactCreate) AddPersonalIDs(ids ...int) *ArtifactCreate {
+	ac.mutation.AddPersonalIDs(ids...)
+	return ac
+}
+
+// AddPersonal adds the "personal" edges to the Personal entity.
+func (ac *ArtifactCreate) AddPersonal(p ...*Personal) *ArtifactCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ac.AddPersonalIDs(ids...)
+}
+
 // Mutation returns the ArtifactMutation object of the builder.
 func (ac *ArtifactCreate) Mutation() *ArtifactMutation {
 	return ac.mutation
@@ -1301,6 +1317,22 @@ func (ac *ArtifactCreate) createSpec() (*Artifact, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.region_artifacts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ac.mutation.PersonalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   artifact.PersonalTable,
+			Columns: artifact.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -62,6 +62,8 @@ const (
 	EdgeDistrict = "district"
 	// EdgeRegion holds the string denoting the region edge name in mutations.
 	EdgeRegion = "region"
+	// EdgePersonal holds the string denoting the personal edge name in mutations.
+	EdgePersonal = "personal"
 	// Table holds the table name of the protectedareapicture in the database.
 	Table = "protected_area_pictures"
 	// AuthorTable is the table that holds the author relation/edge.
@@ -127,6 +129,11 @@ const (
 	RegionInverseTable = "regions"
 	// RegionColumn is the table column denoting the region relation/edge.
 	RegionColumn = "region_protected_area_pictures"
+	// PersonalTable is the table that holds the personal relation/edge. The primary key declared below.
+	PersonalTable = "personal_protected_area_pictures"
+	// PersonalInverseTable is the table name for the Personal entity.
+	// It exists in this package in order to avoid circular dependency with the "personal" package.
+	PersonalInverseTable = "personals"
 )
 
 // Columns holds all SQL columns for protectedareapicture fields.
@@ -160,6 +167,12 @@ var ForeignKeys = []string{
 	"region_protected_area_pictures",
 	"settlement_protected_area_pictures",
 }
+
+var (
+	// PersonalPrimaryKey and PersonalColumn2 are the table columns denoting the
+	// primary key for the personal relation (M2M).
+	PersonalPrimaryKey = []string{"personal_id", "protected_area_picture_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -349,6 +362,20 @@ func ByRegionField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRegionStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByPersonalCount orders the results by personal count.
+func ByPersonalCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPersonalStep(), opts...)
+	}
+}
+
+// ByPersonal orders the results by personal terms.
+func ByPersonal(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPersonalStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newAuthorStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -410,6 +437,13 @@ func newRegionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RegionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, RegionTable, RegionColumn),
+	)
+}
+func newPersonalStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PersonalInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PersonalTable, PersonalPrimaryKey...),
 	)
 }
 

@@ -183,11 +183,6 @@ func (r *queryResolver) ProtectedAreaPictures(ctx context.Context, after *entgql
 	return r.client.ProtectedAreaPicture.Query().Paginate(ctx, after, first, before, last, offset, ent.WithProtectedAreaPictureOrder(orderBy), ent.WithProtectedAreaPictureFilter(where.Filter))
 }
 
-// Proxies is the resolver for the proxies field.
-func (r *queryResolver) Proxies(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.ProxyOrder, where *ent.ProxyWhereInput) (*ent.ProxyConnection, error) {
-	return r.client.Proxy.Query().Paginate(ctx, after, first, before, last, offset, ent.WithProxyOrder(orderBy), ent.WithProxyFilter(where.Filter))
-}
-
 // Publications is the resolver for the publications field.
 func (r *queryResolver) Publications(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.PublicationOrder, where *ent.PublicationWhereInput) (*ent.PublicationConnection, error) {
 	return r.client.Publication.Query().Paginate(ctx, after, first, before, last, offset, ent.WithPublicationOrder(orderBy), ent.WithPublicationFilter(where.Filter))

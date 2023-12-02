@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 )
 
 // FavouriteCreate is the builder for creating a Favourite entity.
@@ -81,21 +80,6 @@ func (fc *FavouriteCreate) SetNillableUpdatedBy(s *string) *FavouriteCreate {
 func (fc *FavouriteCreate) SetOwnerID(s string) *FavouriteCreate {
 	fc.mutation.SetOwnerID(s)
 	return fc
-}
-
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by IDs.
-func (fc *FavouriteCreate) AddProxyIDs(ids ...int) *FavouriteCreate {
-	fc.mutation.AddProxyIDs(ids...)
-	return fc
-}
-
-// AddProxies adds the "proxies" edges to the Proxy entity.
-func (fc *FavouriteCreate) AddProxies(p ...*Proxy) *FavouriteCreate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return fc.AddProxyIDs(ids...)
 }
 
 // Mutation returns the FavouriteMutation object of the builder.
@@ -213,22 +197,6 @@ func (fc *FavouriteCreate) createSpec() (*Favourite, *sqlgraph.CreateSpec) {
 	if value, ok := fc.mutation.OwnerID(); ok {
 		_spec.SetField(favourite.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
-	}
-	if nodes := fc.mutation.ProxiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   favourite.ProxiesTable,
-			Columns: []string{favourite.ProxiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

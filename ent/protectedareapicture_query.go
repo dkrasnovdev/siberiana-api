@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -17,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -40,9 +42,11 @@ type ProtectedAreaPictureQuery struct {
 	withSettlement    *SettlementQuery
 	withDistrict      *DistrictQuery
 	withRegion        *RegionQuery
+	withPersonal      *PersonalQuery
 	withFKs           bool
 	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*ProtectedAreaPicture) error
+	withNamedPersonal map[string]*PersonalQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -277,6 +281,28 @@ func (papq *ProtectedAreaPictureQuery) QueryRegion() *RegionQuery {
 	return query
 }
 
+// QueryPersonal chains the current query on the "personal" edge.
+func (papq *ProtectedAreaPictureQuery) QueryPersonal() *PersonalQuery {
+	query := (&PersonalClient{config: papq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := papq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := papq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, selector),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, protectedareapicture.PersonalTable, protectedareapicture.PersonalPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(papq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first ProtectedAreaPicture entity from the query.
 // Returns a *NotFoundError when no ProtectedAreaPicture was found.
 func (papq *ProtectedAreaPictureQuery) First(ctx context.Context) (*ProtectedAreaPicture, error) {
@@ -478,6 +504,7 @@ func (papq *ProtectedAreaPictureQuery) Clone() *ProtectedAreaPictureQuery {
 		withSettlement:    papq.withSettlement.Clone(),
 		withDistrict:      papq.withDistrict.Clone(),
 		withRegion:        papq.withRegion.Clone(),
+		withPersonal:      papq.withPersonal.Clone(),
 		// clone intermediate query.
 		sql:  papq.sql.Clone(),
 		path: papq.path,
@@ -583,6 +610,17 @@ func (papq *ProtectedAreaPictureQuery) WithRegion(opts ...func(*RegionQuery)) *P
 	return papq
 }
 
+// WithPersonal tells the query-builder to eager-load the nodes that are connected to
+// the "personal" edge. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithPersonal(opts ...func(*PersonalQuery)) *ProtectedAreaPictureQuery {
+	query := (&PersonalClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	papq.withPersonal = query
+	return papq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -668,7 +706,7 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 		nodes       = []*ProtectedAreaPicture{}
 		withFKs     = papq.withFKs
 		_spec       = papq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			papq.withAuthor != nil,
 			papq.withCollection != nil,
 			papq.withProtectedArea != nil,
@@ -678,6 +716,7 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 			papq.withSettlement != nil,
 			papq.withDistrict != nil,
 			papq.withRegion != nil,
+			papq.withPersonal != nil,
 		}
 	)
 	if papq.withAuthor != nil || papq.withCollection != nil || papq.withProtectedArea != nil || papq.withLocation != nil || papq.withLicense != nil || papq.withCountry != nil || papq.withSettlement != nil || papq.withDistrict != nil || papq.withRegion != nil {
@@ -758,6 +797,20 @@ func (papq *ProtectedAreaPictureQuery) sqlAll(ctx context.Context, hooks ...quer
 	if query := papq.withRegion; query != nil {
 		if err := papq.loadRegion(ctx, query, nodes, nil,
 			func(n *ProtectedAreaPicture, e *Region) { n.Edges.Region = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := papq.withPersonal; query != nil {
+		if err := papq.loadPersonal(ctx, query, nodes,
+			func(n *ProtectedAreaPicture) { n.Edges.Personal = []*Personal{} },
+			func(n *ProtectedAreaPicture, e *Personal) { n.Edges.Personal = append(n.Edges.Personal, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range papq.withNamedPersonal {
+		if err := papq.loadPersonal(ctx, query, nodes,
+			func(n *ProtectedAreaPicture) { n.appendNamedPersonal(name) },
+			func(n *ProtectedAreaPicture, e *Personal) { n.appendNamedPersonal(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1057,6 +1110,67 @@ func (papq *ProtectedAreaPictureQuery) loadRegion(ctx context.Context, query *Re
 	}
 	return nil
 }
+func (papq *ProtectedAreaPictureQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nodes []*ProtectedAreaPicture, init func(*ProtectedAreaPicture), assign func(*ProtectedAreaPicture, *Personal)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*ProtectedAreaPicture)
+	nids := make(map[int]map[*ProtectedAreaPicture]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(protectedareapicture.PersonalTable)
+		s.Join(joinT).On(s.C(personal.FieldID), joinT.C(protectedareapicture.PersonalPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(protectedareapicture.PersonalPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(protectedareapicture.PersonalPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ProtectedAreaPicture]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Personal](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "personal" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (papq *ProtectedAreaPictureQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := papq.querySpec()
@@ -1140,6 +1254,20 @@ func (papq *ProtectedAreaPictureQuery) sqlQuery(ctx context.Context) *sql.Select
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// WithNamedPersonal tells the query-builder to eager-load the nodes that are connected to the "personal"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (papq *ProtectedAreaPictureQuery) WithNamedPersonal(name string, opts ...func(*PersonalQuery)) *ProtectedAreaPictureQuery {
+	query := (&PersonalClient{config: papq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if papq.withNamedPersonal == nil {
+		papq.withNamedPersonal = make(map[string]*PersonalQuery)
+	}
+	papq.withNamedPersonal[name] = query
+	return papq
 }
 
 // ProtectedAreaPictureGroupBy is the group-by builder for ProtectedAreaPicture entities.

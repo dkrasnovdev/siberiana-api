@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -367,6 +368,21 @@ func (papc *ProtectedAreaPictureCreate) SetRegion(r *Region) *ProtectedAreaPictu
 	return papc.SetRegionID(r.ID)
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
+func (papc *ProtectedAreaPictureCreate) AddPersonalIDs(ids ...int) *ProtectedAreaPictureCreate {
+	papc.mutation.AddPersonalIDs(ids...)
+	return papc
+}
+
+// AddPersonal adds the "personal" edges to the Personal entity.
+func (papc *ProtectedAreaPictureCreate) AddPersonal(p ...*Personal) *ProtectedAreaPictureCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return papc.AddPersonalIDs(ids...)
+}
+
 // Mutation returns the ProtectedAreaPictureMutation object of the builder.
 func (papc *ProtectedAreaPictureCreate) Mutation() *ProtectedAreaPictureMutation {
 	return papc.mutation
@@ -670,6 +686,22 @@ func (papc *ProtectedAreaPictureCreate) createSpec() (*ProtectedAreaPicture, *sq
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.region_protected_area_pictures = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := papc.mutation.PersonalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   protectedareapicture.PersonalTable,
+			Columns: protectedareapicture.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -25,6 +25,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/monument"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/project"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -60,6 +61,7 @@ type ArtifactQuery struct {
 	withSettlement          *SettlementQuery
 	withDistrict            *DistrictQuery
 	withRegion              *RegionQuery
+	withPersonal            *PersonalQuery
 	withFKs                 bool
 	modifiers               []func(*sql.Selector)
 	loadTotal               []func(context.Context, []*Artifact) error
@@ -68,6 +70,7 @@ type ArtifactQuery struct {
 	withNamedTechniques     map[string]*TechniqueQuery
 	withNamedProjects       map[string]*ProjectQuery
 	withNamedPublications   map[string]*PublicationQuery
+	withNamedPersonal       map[string]*PersonalQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -522,6 +525,28 @@ func (aq *ArtifactQuery) QueryRegion() *RegionQuery {
 	return query
 }
 
+// QueryPersonal chains the current query on the "personal" edge.
+func (aq *ArtifactQuery) QueryPersonal() *PersonalQuery {
+	query := (&PersonalClient{config: aq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := aq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := aq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, selector),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PersonalTable, artifact.PersonalPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(aq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Artifact entity from the query.
 // Returns a *NotFoundError when no Artifact was found.
 func (aq *ArtifactQuery) First(ctx context.Context) (*Artifact, error) {
@@ -733,6 +758,7 @@ func (aq *ArtifactQuery) Clone() *ArtifactQuery {
 		withSettlement:          aq.withSettlement.Clone(),
 		withDistrict:            aq.withDistrict.Clone(),
 		withRegion:              aq.withRegion.Clone(),
+		withPersonal:            aq.withPersonal.Clone(),
 		// clone intermediate query.
 		sql:  aq.sql.Clone(),
 		path: aq.path,
@@ -948,6 +974,17 @@ func (aq *ArtifactQuery) WithRegion(opts ...func(*RegionQuery)) *ArtifactQuery {
 	return aq
 }
 
+// WithPersonal tells the query-builder to eager-load the nodes that are connected to
+// the "personal" edge. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithPersonal(opts ...func(*PersonalQuery)) *ArtifactQuery {
+	query := (&PersonalClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	aq.withPersonal = query
+	return aq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1033,7 +1070,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		nodes       = []*Artifact{}
 		withFKs     = aq.withFKs
 		_spec       = aq.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [20]bool{
 			aq.withAuthors != nil,
 			aq.withDonor != nil,
 			aq.withMediums != nil,
@@ -1053,6 +1090,7 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			aq.withSettlement != nil,
 			aq.withDistrict != nil,
 			aq.withRegion != nil,
+			aq.withPersonal != nil,
 		}
 	)
 	if aq.withDonor != nil || aq.withCulturalAffiliation != nil || aq.withEthnos != nil || aq.withOrganization != nil || aq.withMonument != nil || aq.withModel != nil || aq.withSet != nil || aq.withLocation != nil || aq.withCollection != nil || aq.withLicense != nil || aq.withCountry != nil || aq.withSettlement != nil || aq.withDistrict != nil || aq.withRegion != nil {
@@ -1201,6 +1239,13 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 			return nil, err
 		}
 	}
+	if query := aq.withPersonal; query != nil {
+		if err := aq.loadPersonal(ctx, query, nodes,
+			func(n *Artifact) { n.Edges.Personal = []*Personal{} },
+			func(n *Artifact, e *Personal) { n.Edges.Personal = append(n.Edges.Personal, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range aq.withNamedAuthors {
 		if err := aq.loadAuthors(ctx, query, nodes,
 			func(n *Artifact) { n.appendNamedAuthors(name) },
@@ -1233,6 +1278,13 @@ func (aq *ArtifactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Art
 		if err := aq.loadPublications(ctx, query, nodes,
 			func(n *Artifact) { n.appendNamedPublications(name) },
 			func(n *Artifact, e *Publication) { n.appendNamedPublications(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range aq.withNamedPersonal {
+		if err := aq.loadPersonal(ctx, query, nodes,
+			func(n *Artifact) { n.appendNamedPersonal(name) },
+			func(n *Artifact, e *Personal) { n.appendNamedPersonal(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1997,6 +2049,67 @@ func (aq *ArtifactQuery) loadRegion(ctx context.Context, query *RegionQuery, nod
 	}
 	return nil
 }
+func (aq *ArtifactQuery) loadPersonal(ctx context.Context, query *PersonalQuery, nodes []*Artifact, init func(*Artifact), assign func(*Artifact, *Personal)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Artifact)
+	nids := make(map[int]map[*Artifact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(artifact.PersonalTable)
+		s.Join(joinT).On(s.C(personal.FieldID), joinT.C(artifact.PersonalPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(artifact.PersonalPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(artifact.PersonalPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Artifact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Personal](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "personal" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (aq *ArtifactQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := aq.querySpec()
@@ -2149,6 +2262,20 @@ func (aq *ArtifactQuery) WithNamedPublications(name string, opts ...func(*Public
 		aq.withNamedPublications = make(map[string]*PublicationQuery)
 	}
 	aq.withNamedPublications[name] = query
+	return aq
+}
+
+// WithNamedPersonal tells the query-builder to eager-load the nodes that are connected to the "personal"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (aq *ArtifactQuery) WithNamedPersonal(name string, opts ...func(*PersonalQuery)) *ArtifactQuery {
+	query := (&PersonalClient{config: aq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if aq.withNamedPersonal == nil {
+		aq.withNamedPersonal = make(map[string]*PersonalQuery)
+	}
+	aq.withNamedPersonal[name] = query
 	return aq
 }
 

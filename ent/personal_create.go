@@ -10,8 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // PersonalCreate is the builder for creating a Personal entity.
@@ -89,19 +92,78 @@ func (pc *PersonalCreate) SetDisplayName(s string) *PersonalCreate {
 	return pc
 }
 
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by IDs.
-func (pc *PersonalCreate) AddProxyIDs(ids ...int) *PersonalCreate {
-	pc.mutation.AddProxyIDs(ids...)
+// SetIsPublic sets the "is_public" field.
+func (pc *PersonalCreate) SetIsPublic(b bool) *PersonalCreate {
+	pc.mutation.SetIsPublic(b)
 	return pc
 }
 
-// AddProxies adds the "proxies" edges to the Proxy entity.
-func (pc *PersonalCreate) AddProxies(p ...*Proxy) *PersonalCreate {
+// SetNillableIsPublic sets the "is_public" field if the given value is not nil.
+func (pc *PersonalCreate) SetNillableIsPublic(b *bool) *PersonalCreate {
+	if b != nil {
+		pc.SetIsPublic(*b)
+	}
+	return pc
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by IDs.
+func (pc *PersonalCreate) AddArtifactIDs(ids ...int) *PersonalCreate {
+	pc.mutation.AddArtifactIDs(ids...)
+	return pc
+}
+
+// AddArtifacts adds the "artifacts" edges to the Artifact entity.
+func (pc *PersonalCreate) AddArtifacts(a ...*Artifact) *PersonalCreate {
+	ids := make([]int, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return pc.AddArtifactIDs(ids...)
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (pc *PersonalCreate) AddPetroglyphIDs(ids ...int) *PersonalCreate {
+	pc.mutation.AddPetroglyphIDs(ids...)
+	return pc
+}
+
+// AddPetroglyphs adds the "petroglyphs" edges to the Petroglyph entity.
+func (pc *PersonalCreate) AddPetroglyphs(p ...*Petroglyph) *PersonalCreate {
 	ids := make([]int, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
 	}
-	return pc.AddProxyIDs(ids...)
+	return pc.AddPetroglyphIDs(ids...)
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by IDs.
+func (pc *PersonalCreate) AddBookIDs(ids ...int) *PersonalCreate {
+	pc.mutation.AddBookIDs(ids...)
+	return pc
+}
+
+// AddBooks adds the "books" edges to the Book entity.
+func (pc *PersonalCreate) AddBooks(b ...*Book) *PersonalCreate {
+	ids := make([]int, len(b))
+	for i := range b {
+		ids[i] = b[i].ID
+	}
+	return pc.AddBookIDs(ids...)
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (pc *PersonalCreate) AddProtectedAreaPictureIDs(ids ...int) *PersonalCreate {
+	pc.mutation.AddProtectedAreaPictureIDs(ids...)
+	return pc
+}
+
+// AddProtectedAreaPictures adds the "protected_area_pictures" edges to the ProtectedAreaPicture entity.
+func (pc *PersonalCreate) AddProtectedAreaPictures(p ...*ProtectedAreaPicture) *PersonalCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddProtectedAreaPictureIDs(ids...)
 }
 
 // Mutation returns the PersonalMutation object of the builder.
@@ -155,6 +217,10 @@ func (pc *PersonalCreate) defaults() error {
 		v := personal.DefaultUpdatedAt()
 		pc.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := pc.mutation.IsPublic(); !ok {
+		v := personal.DefaultIsPublic
+		pc.mutation.SetIsPublic(v)
+	}
 	return nil
 }
 
@@ -181,6 +247,9 @@ func (pc *PersonalCreate) check() error {
 		if err := personal.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`ent: validator failed for field "Personal.display_name": %w`, err)}
 		}
+	}
+	if _, ok := pc.mutation.IsPublic(); !ok {
+		return &ValidationError{Name: "is_public", err: errors.New(`ent: missing required field "Personal.is_public"`)}
 	}
 	return nil
 }
@@ -232,15 +301,67 @@ func (pc *PersonalCreate) createSpec() (*Personal, *sqlgraph.CreateSpec) {
 		_spec.SetField(personal.FieldDisplayName, field.TypeString, value)
 		_node.DisplayName = value
 	}
-	if nodes := pc.mutation.ProxiesIDs(); len(nodes) > 0 {
+	if value, ok := pc.mutation.IsPublic(); ok {
+		_spec.SetField(personal.FieldIsPublic, field.TypeBool, value)
+		_node.IsPublic = value
+	}
+	if nodes := pc.mutation.ArtifactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   personal.ProxiesTable,
-			Columns: []string{personal.ProxiesColumn},
+			Table:   personal.ArtifactsTable,
+			Columns: personal.ArtifactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(proxy.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(artifact.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.PetroglyphsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.PetroglyphsTable,
+			Columns: personal.PetroglyphsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(petroglyph.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.BooksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.BooksTable,
+			Columns: personal.BooksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ProtectedAreaPicturesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personal.ProtectedAreaPicturesTable,
+			Columns: personal.ProtectedAreaPicturesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(protectedareapicture.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

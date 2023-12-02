@@ -27,17 +27,38 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
-	// EdgeProxies holds the string denoting the proxies edge name in mutations.
-	EdgeProxies = "proxies"
+	// FieldIsPublic holds the string denoting the is_public field in the database.
+	FieldIsPublic = "is_public"
+	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
+	EdgeArtifacts = "artifacts"
+	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
+	EdgePetroglyphs = "petroglyphs"
+	// EdgeBooks holds the string denoting the books edge name in mutations.
+	EdgeBooks = "books"
+	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
+	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// Table holds the table name of the personal in the database.
 	Table = "personals"
-	// ProxiesTable is the table that holds the proxies relation/edge.
-	ProxiesTable = "proxies"
-	// ProxiesInverseTable is the table name for the Proxy entity.
-	// It exists in this package in order to avoid circular dependency with the "proxy" package.
-	ProxiesInverseTable = "proxies"
-	// ProxiesColumn is the table column denoting the proxies relation/edge.
-	ProxiesColumn = "personal_proxies"
+	// ArtifactsTable is the table that holds the artifacts relation/edge. The primary key declared below.
+	ArtifactsTable = "personal_artifacts"
+	// ArtifactsInverseTable is the table name for the Artifact entity.
+	// It exists in this package in order to avoid circular dependency with the "artifact" package.
+	ArtifactsInverseTable = "artifacts"
+	// PetroglyphsTable is the table that holds the petroglyphs relation/edge. The primary key declared below.
+	PetroglyphsTable = "personal_petroglyphs"
+	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
+	// It exists in this package in order to avoid circular dependency with the "petroglyph" package.
+	PetroglyphsInverseTable = "petroglyphs"
+	// BooksTable is the table that holds the books relation/edge. The primary key declared below.
+	BooksTable = "personal_books"
+	// BooksInverseTable is the table name for the Book entity.
+	// It exists in this package in order to avoid circular dependency with the "book" package.
+	BooksInverseTable = "books"
+	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge. The primary key declared below.
+	ProtectedAreaPicturesTable = "personal_protected_area_pictures"
+	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
+	// It exists in this package in order to avoid circular dependency with the "protectedareapicture" package.
+	ProtectedAreaPicturesInverseTable = "protected_area_pictures"
 )
 
 // Columns holds all SQL columns for personal fields.
@@ -49,7 +70,23 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldOwnerID,
 	FieldDisplayName,
+	FieldIsPublic,
 }
+
+var (
+	// ArtifactsPrimaryKey and ArtifactsColumn2 are the table columns denoting the
+	// primary key for the artifacts relation (M2M).
+	ArtifactsPrimaryKey = []string{"personal_id", "artifact_id"}
+	// PetroglyphsPrimaryKey and PetroglyphsColumn2 are the table columns denoting the
+	// primary key for the petroglyphs relation (M2M).
+	PetroglyphsPrimaryKey = []string{"personal_id", "petroglyph_id"}
+	// BooksPrimaryKey and BooksColumn2 are the table columns denoting the
+	// primary key for the books relation (M2M).
+	BooksPrimaryKey = []string{"personal_id", "book_id"}
+	// ProtectedAreaPicturesPrimaryKey and ProtectedAreaPicturesColumn2 are the table columns denoting the
+	// primary key for the protected_area_pictures relation (M2M).
+	ProtectedAreaPicturesPrimaryKey = []string{"personal_id", "protected_area_picture_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -67,8 +104,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/dkrasnovdev/siberiana-api/ent/runtime"
 var (
-	Hooks  [3]ent.Hook
-	Policy ent.Policy
+	Hooks        [3]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -79,6 +117,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	DisplayNameValidator func(string) error
+	// DefaultIsPublic holds the default value on creation for the "is_public" field.
+	DefaultIsPublic bool
 )
 
 // OrderOption defines the ordering options for the Personal queries.
@@ -119,23 +159,91 @@ func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
 }
 
-// ByProxiesCount orders the results by proxies count.
-func ByProxiesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByIsPublic orders the results by the is_public field.
+func ByIsPublic(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsPublic, opts...).ToFunc()
+}
+
+// ByArtifactsCount orders the results by artifacts count.
+func ByArtifactsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProxiesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newArtifactsStep(), opts...)
 	}
 }
 
-// ByProxies orders the results by proxies terms.
-func ByProxies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByArtifacts orders the results by artifacts terms.
+func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProxiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newArtifactsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newProxiesStep() *sqlgraph.Step {
+
+// ByPetroglyphsCount orders the results by petroglyphs count.
+func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetroglyphsStep(), opts...)
+	}
+}
+
+// ByPetroglyphs orders the results by petroglyphs terms.
+func ByPetroglyphs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetroglyphsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByBooksCount orders the results by books count.
+func ByBooksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBooksStep(), opts...)
+	}
+}
+
+// ByBooks orders the results by books terms.
+func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBooksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
+func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProtectedAreaPicturesStep(), opts...)
+	}
+}
+
+// ByProtectedAreaPictures orders the results by protected_area_pictures terms.
+func ByProtectedAreaPictures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProtectedAreaPicturesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newArtifactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProxiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ProxiesTable, ProxiesColumn),
+		sqlgraph.To(ArtifactsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
+	)
+}
+func newPetroglyphsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetroglyphsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, PetroglyphsTable, PetroglyphsPrimaryKey...),
+	)
+}
+func newBooksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BooksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, BooksTable, BooksPrimaryKey...),
+	)
+}
+func newProtectedAreaPicturesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProtectedAreaPicturesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProtectedAreaPicturesTable, ProtectedAreaPicturesPrimaryKey...),
 	)
 }

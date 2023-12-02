@@ -12,22 +12,31 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
+	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/personal"
+	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
+	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 )
 
 // PersonalQuery is the builder for querying Personal entities.
 type PersonalQuery struct {
 	config
-	ctx              *QueryContext
-	order            []personal.OrderOption
-	inters           []Interceptor
-	predicates       []predicate.Personal
-	withProxies      *ProxyQuery
-	modifiers        []func(*sql.Selector)
-	loadTotal        []func(context.Context, []*Personal) error
-	withNamedProxies map[string]*ProxyQuery
+	ctx                            *QueryContext
+	order                          []personal.OrderOption
+	inters                         []Interceptor
+	predicates                     []predicate.Personal
+	withArtifacts                  *ArtifactQuery
+	withPetroglyphs                *PetroglyphQuery
+	withBooks                      *BookQuery
+	withProtectedAreaPictures      *ProtectedAreaPictureQuery
+	modifiers                      []func(*sql.Selector)
+	loadTotal                      []func(context.Context, []*Personal) error
+	withNamedArtifacts             map[string]*ArtifactQuery
+	withNamedPetroglyphs           map[string]*PetroglyphQuery
+	withNamedBooks                 map[string]*BookQuery
+	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -64,9 +73,9 @@ func (pq *PersonalQuery) Order(o ...personal.OrderOption) *PersonalQuery {
 	return pq
 }
 
-// QueryProxies chains the current query on the "proxies" edge.
-func (pq *PersonalQuery) QueryProxies() *ProxyQuery {
-	query := (&ProxyClient{config: pq.config}).Query()
+// QueryArtifacts chains the current query on the "artifacts" edge.
+func (pq *PersonalQuery) QueryArtifacts() *ArtifactQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -77,8 +86,74 @@ func (pq *PersonalQuery) QueryProxies() *ProxyQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(personal.Table, personal.FieldID, selector),
-			sqlgraph.To(proxy.Table, proxy.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, personal.ProxiesTable, personal.ProxiesColumn),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.ArtifactsTable, personal.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs chains the current query on the "petroglyphs" edge.
+func (pq *PersonalQuery) QueryPetroglyphs() *PetroglyphQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personal.Table, personal.FieldID, selector),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.PetroglyphsTable, personal.PetroglyphsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBooks chains the current query on the "books" edge.
+func (pq *PersonalQuery) QueryBooks() *BookQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personal.Table, personal.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.BooksTable, personal.BooksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures chains the current query on the "protected_area_pictures" edge.
+func (pq *PersonalQuery) QueryProtectedAreaPictures() *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personal.Table, personal.FieldID, selector),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.ProtectedAreaPicturesTable, personal.ProtectedAreaPicturesPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -273,26 +348,62 @@ func (pq *PersonalQuery) Clone() *PersonalQuery {
 		return nil
 	}
 	return &PersonalQuery{
-		config:      pq.config,
-		ctx:         pq.ctx.Clone(),
-		order:       append([]personal.OrderOption{}, pq.order...),
-		inters:      append([]Interceptor{}, pq.inters...),
-		predicates:  append([]predicate.Personal{}, pq.predicates...),
-		withProxies: pq.withProxies.Clone(),
+		config:                    pq.config,
+		ctx:                       pq.ctx.Clone(),
+		order:                     append([]personal.OrderOption{}, pq.order...),
+		inters:                    append([]Interceptor{}, pq.inters...),
+		predicates:                append([]predicate.Personal{}, pq.predicates...),
+		withArtifacts:             pq.withArtifacts.Clone(),
+		withPetroglyphs:           pq.withPetroglyphs.Clone(),
+		withBooks:                 pq.withBooks.Clone(),
+		withProtectedAreaPictures: pq.withProtectedAreaPictures.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
 }
 
-// WithProxies tells the query-builder to eager-load the nodes that are connected to
-// the "proxies" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *PersonalQuery) WithProxies(opts ...func(*ProxyQuery)) *PersonalQuery {
-	query := (&ProxyClient{config: pq.config}).Query()
+// WithArtifacts tells the query-builder to eager-load the nodes that are connected to
+// the "artifacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonalQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *PersonalQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withProxies = query
+	pq.withArtifacts = query
+	return pq
+}
+
+// WithPetroglyphs tells the query-builder to eager-load the nodes that are connected to
+// the "petroglyphs" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonalQuery) WithPetroglyphs(opts ...func(*PetroglyphQuery)) *PersonalQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withPetroglyphs = query
+	return pq
+}
+
+// WithBooks tells the query-builder to eager-load the nodes that are connected to
+// the "books" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonalQuery) WithBooks(opts ...func(*BookQuery)) *PersonalQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withBooks = query
+	return pq
+}
+
+// WithProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to
+// the "protected_area_pictures" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonalQuery) WithProtectedAreaPictures(opts ...func(*ProtectedAreaPictureQuery)) *PersonalQuery {
+	query := (&ProtectedAreaPictureClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withProtectedAreaPictures = query
 	return pq
 }
 
@@ -380,8 +491,11 @@ func (pq *PersonalQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Per
 	var (
 		nodes       = []*Personal{}
 		_spec       = pq.querySpec()
-		loadedTypes = [1]bool{
-			pq.withProxies != nil,
+		loadedTypes = [4]bool{
+			pq.withArtifacts != nil,
+			pq.withPetroglyphs != nil,
+			pq.withBooks != nil,
+			pq.withProtectedAreaPictures != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -405,17 +519,61 @@ func (pq *PersonalQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Per
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pq.withProxies; query != nil {
-		if err := pq.loadProxies(ctx, query, nodes,
-			func(n *Personal) { n.Edges.Proxies = []*Proxy{} },
-			func(n *Personal, e *Proxy) { n.Edges.Proxies = append(n.Edges.Proxies, e) }); err != nil {
+	if query := pq.withArtifacts; query != nil {
+		if err := pq.loadArtifacts(ctx, query, nodes,
+			func(n *Personal) { n.Edges.Artifacts = []*Artifact{} },
+			func(n *Personal, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedProxies {
-		if err := pq.loadProxies(ctx, query, nodes,
-			func(n *Personal) { n.appendNamedProxies(name) },
-			func(n *Personal, e *Proxy) { n.appendNamedProxies(name, e) }); err != nil {
+	if query := pq.withPetroglyphs; query != nil {
+		if err := pq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Personal) { n.Edges.Petroglyphs = []*Petroglyph{} },
+			func(n *Personal, e *Petroglyph) { n.Edges.Petroglyphs = append(n.Edges.Petroglyphs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withBooks; query != nil {
+		if err := pq.loadBooks(ctx, query, nodes,
+			func(n *Personal) { n.Edges.Books = []*Book{} },
+			func(n *Personal, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withProtectedAreaPictures; query != nil {
+		if err := pq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Personal) { n.Edges.ProtectedAreaPictures = []*ProtectedAreaPicture{} },
+			func(n *Personal, e *ProtectedAreaPicture) {
+				n.Edges.ProtectedAreaPictures = append(n.Edges.ProtectedAreaPictures, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedArtifacts {
+		if err := pq.loadArtifacts(ctx, query, nodes,
+			func(n *Personal) { n.appendNamedArtifacts(name) },
+			func(n *Personal, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedPetroglyphs {
+		if err := pq.loadPetroglyphs(ctx, query, nodes,
+			func(n *Personal) { n.appendNamedPetroglyphs(name) },
+			func(n *Personal, e *Petroglyph) { n.appendNamedPetroglyphs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedBooks {
+		if err := pq.loadBooks(ctx, query, nodes,
+			func(n *Personal) { n.appendNamedBooks(name) },
+			func(n *Personal, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedProtectedAreaPictures {
+		if err := pq.loadProtectedAreaPictures(ctx, query, nodes,
+			func(n *Personal) { n.appendNamedProtectedAreaPictures(name) },
+			func(n *Personal, e *ProtectedAreaPicture) { n.appendNamedProtectedAreaPictures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -427,34 +585,247 @@ func (pq *PersonalQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Per
 	return nodes, nil
 }
 
-func (pq *PersonalQuery) loadProxies(ctx context.Context, query *ProxyQuery, nodes []*Personal, init func(*Personal), assign func(*Personal, *Proxy)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Personal)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+func (pq *PersonalQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, nodes []*Personal, init func(*Personal), assign func(*Personal, *Artifact)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Personal)
+	nids := make(map[int]map[*Personal]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Proxy(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(personal.ProxiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(personal.ArtifactsTable)
+		s.Join(joinT).On(s.C(artifact.FieldID), joinT.C(personal.ArtifactsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(personal.ArtifactsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(personal.ArtifactsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Personal]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Artifact](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.personal_proxies
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "personal_proxies" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "personal_proxies" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "artifacts" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *PersonalQuery) loadPetroglyphs(ctx context.Context, query *PetroglyphQuery, nodes []*Personal, init func(*Personal), assign func(*Personal, *Petroglyph)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Personal)
+	nids := make(map[int]map[*Personal]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(personal.PetroglyphsTable)
+		s.Join(joinT).On(s.C(petroglyph.FieldID), joinT.C(personal.PetroglyphsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(personal.PetroglyphsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(personal.PetroglyphsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Personal]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Petroglyph](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "petroglyphs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *PersonalQuery) loadBooks(ctx context.Context, query *BookQuery, nodes []*Personal, init func(*Personal), assign func(*Personal, *Book)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Personal)
+	nids := make(map[int]map[*Personal]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(personal.BooksTable)
+		s.Join(joinT).On(s.C(book.FieldID), joinT.C(personal.BooksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(personal.BooksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(personal.BooksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Personal]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Book](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "books" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *PersonalQuery) loadProtectedAreaPictures(ctx context.Context, query *ProtectedAreaPictureQuery, nodes []*Personal, init func(*Personal), assign func(*Personal, *ProtectedAreaPicture)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Personal)
+	nids := make(map[int]map[*Personal]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(personal.ProtectedAreaPicturesTable)
+		s.Join(joinT).On(s.C(protectedareapicture.FieldID), joinT.C(personal.ProtectedAreaPicturesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(personal.ProtectedAreaPicturesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(personal.ProtectedAreaPicturesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Personal]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ProtectedAreaPicture](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "protected_area_pictures" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -543,17 +914,59 @@ func (pq *PersonalQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
-// WithNamedProxies tells the query-builder to eager-load the nodes that are connected to the "proxies"
+// WithNamedArtifacts tells the query-builder to eager-load the nodes that are connected to the "artifacts"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *PersonalQuery) WithNamedProxies(name string, opts ...func(*ProxyQuery)) *PersonalQuery {
-	query := (&ProxyClient{config: pq.config}).Query()
+func (pq *PersonalQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQuery)) *PersonalQuery {
+	query := (&ArtifactClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if pq.withNamedProxies == nil {
-		pq.withNamedProxies = make(map[string]*ProxyQuery)
+	if pq.withNamedArtifacts == nil {
+		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
-	pq.withNamedProxies[name] = query
+	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedPetroglyphs tells the query-builder to eager-load the nodes that are connected to the "petroglyphs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonalQuery) WithNamedPetroglyphs(name string, opts ...func(*PetroglyphQuery)) *PersonalQuery {
+	query := (&PetroglyphClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedPetroglyphs == nil {
+		pq.withNamedPetroglyphs = make(map[string]*PetroglyphQuery)
+	}
+	pq.withNamedPetroglyphs[name] = query
+	return pq
+}
+
+// WithNamedBooks tells the query-builder to eager-load the nodes that are connected to the "books"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonalQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *PersonalQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedBooks == nil {
+		pq.withNamedBooks = make(map[string]*BookQuery)
+	}
+	pq.withNamedBooks[name] = query
+	return pq
+}
+
+// WithNamedProtectedAreaPictures tells the query-builder to eager-load the nodes that are connected to the "protected_area_pictures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonalQuery) WithNamedProtectedAreaPictures(name string, opts ...func(*ProtectedAreaPictureQuery)) *PersonalQuery {
+	query := (&ProtectedAreaPictureClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedProtectedAreaPictures == nil {
+		pq.withNamedProtectedAreaPictures = make(map[string]*ProtectedAreaPictureQuery)
+	}
+	pq.withNamedProtectedAreaPictures[name] = query
 	return pq
 }
 

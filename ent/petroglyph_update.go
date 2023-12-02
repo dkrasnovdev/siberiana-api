@@ -18,6 +18,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
@@ -847,6 +848,21 @@ func (pu *PetroglyphUpdate) SetCollection(c *Collection) *PetroglyphUpdate {
 	return pu.SetCollectionID(c.ID)
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
+func (pu *PetroglyphUpdate) AddPersonalIDs(ids ...int) *PetroglyphUpdate {
+	pu.mutation.AddPersonalIDs(ids...)
+	return pu
+}
+
+// AddPersonal adds the "personal" edges to the Personal entity.
+func (pu *PetroglyphUpdate) AddPersonal(p ...*Personal) *PetroglyphUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddPersonalIDs(ids...)
+}
+
 // Mutation returns the PetroglyphMutation object of the builder.
 func (pu *PetroglyphUpdate) Mutation() *PetroglyphMutation {
 	return pu.mutation
@@ -934,6 +950,27 @@ func (pu *PetroglyphUpdate) ClearAccountingDocumentationAuthor() *PetroglyphUpda
 func (pu *PetroglyphUpdate) ClearCollection() *PetroglyphUpdate {
 	pu.mutation.ClearCollection()
 	return pu
+}
+
+// ClearPersonal clears all "personal" edges to the Personal entity.
+func (pu *PetroglyphUpdate) ClearPersonal() *PetroglyphUpdate {
+	pu.mutation.ClearPersonal()
+	return pu
+}
+
+// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
+func (pu *PetroglyphUpdate) RemovePersonalIDs(ids ...int) *PetroglyphUpdate {
+	pu.mutation.RemovePersonalIDs(ids...)
+	return pu
+}
+
+// RemovePersonal removes "personal" edges to Personal entities.
+func (pu *PetroglyphUpdate) RemovePersonal(p ...*Personal) *PetroglyphUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemovePersonalIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1498,6 +1535,51 @@ func (pu *PetroglyphUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   petroglyph.PersonalTable,
+			Columns: petroglyph.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !pu.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   petroglyph.PersonalTable,
+			Columns: petroglyph.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.PersonalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   petroglyph.PersonalTable,
+			Columns: petroglyph.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -2333,6 +2415,21 @@ func (puo *PetroglyphUpdateOne) SetCollection(c *Collection) *PetroglyphUpdateOn
 	return puo.SetCollectionID(c.ID)
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
+func (puo *PetroglyphUpdateOne) AddPersonalIDs(ids ...int) *PetroglyphUpdateOne {
+	puo.mutation.AddPersonalIDs(ids...)
+	return puo
+}
+
+// AddPersonal adds the "personal" edges to the Personal entity.
+func (puo *PetroglyphUpdateOne) AddPersonal(p ...*Personal) *PetroglyphUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddPersonalIDs(ids...)
+}
+
 // Mutation returns the PetroglyphMutation object of the builder.
 func (puo *PetroglyphUpdateOne) Mutation() *PetroglyphMutation {
 	return puo.mutation
@@ -2420,6 +2517,27 @@ func (puo *PetroglyphUpdateOne) ClearAccountingDocumentationAuthor() *Petroglyph
 func (puo *PetroglyphUpdateOne) ClearCollection() *PetroglyphUpdateOne {
 	puo.mutation.ClearCollection()
 	return puo
+}
+
+// ClearPersonal clears all "personal" edges to the Personal entity.
+func (puo *PetroglyphUpdateOne) ClearPersonal() *PetroglyphUpdateOne {
+	puo.mutation.ClearPersonal()
+	return puo
+}
+
+// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
+func (puo *PetroglyphUpdateOne) RemovePersonalIDs(ids ...int) *PetroglyphUpdateOne {
+	puo.mutation.RemovePersonalIDs(ids...)
+	return puo
+}
+
+// RemovePersonal removes "personal" edges to Personal entities.
+func (puo *PetroglyphUpdateOne) RemovePersonal(p ...*Personal) *PetroglyphUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemovePersonalIDs(ids...)
 }
 
 // Where appends a list predicates to the PetroglyphUpdate builder.
@@ -3014,6 +3132,51 @@ func (puo *PetroglyphUpdateOne) sqlSave(ctx context.Context) (_node *Petroglyph,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(collection.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   petroglyph.PersonalTable,
+			Columns: petroglyph.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !puo.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   petroglyph.PersonalTable,
+			Columns: petroglyph.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.PersonalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   petroglyph.PersonalTable,
+			Columns: petroglyph.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

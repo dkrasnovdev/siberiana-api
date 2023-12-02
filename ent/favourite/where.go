@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 )
 
@@ -373,29 +372,6 @@ func OwnerIDEqualFold(v string) predicate.Favourite {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.Favourite {
 	return predicate.Favourite(sql.FieldContainsFold(FieldOwnerID, v))
-}
-
-// HasProxies applies the HasEdge predicate on the "proxies" edge.
-func HasProxies() predicate.Favourite {
-	return predicate.Favourite(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ProxiesTable, ProxiesColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasProxiesWith applies the HasEdge predicate on the "proxies" edge with a given conditions (other predicates).
-func HasProxiesWith(preds ...predicate.Proxy) predicate.Favourite {
-	return predicate.Favourite(func(s *sql.Selector) {
-		step := newProxiesStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
 }
 
 // And groups predicates with the AND operator between them.

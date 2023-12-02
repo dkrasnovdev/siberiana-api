@@ -89,11 +89,15 @@ type ProtectedAreaPictureEdges struct {
 	District *District `json:"district,omitempty"`
 	// Region holds the value of the region edge.
 	Region *Region `json:"region,omitempty"`
+	// Personal holds the value of the personal edge.
+	Personal []*Personal `json:"personal,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
+
+	namedPersonal map[string][]*Personal
 }
 
 // AuthorOrErr returns the Author value or an error if the edge
@@ -211,6 +215,15 @@ func (e ProtectedAreaPictureEdges) RegionOrErr() (*Region, error) {
 		return e.Region, nil
 	}
 	return nil, &NotLoadedError{edge: "region"}
+}
+
+// PersonalOrErr returns the Personal value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProtectedAreaPictureEdges) PersonalOrErr() ([]*Personal, error) {
+	if e.loadedTypes[9] {
+		return e.Personal, nil
+	}
+	return nil, &NotLoadedError{edge: "personal"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -469,6 +482,11 @@ func (pap *ProtectedAreaPicture) QueryRegion() *RegionQuery {
 	return NewProtectedAreaPictureClient(pap.config).QueryRegion(pap)
 }
 
+// QueryPersonal queries the "personal" edge of the ProtectedAreaPicture entity.
+func (pap *ProtectedAreaPicture) QueryPersonal() *PersonalQuery {
+	return NewProtectedAreaPictureClient(pap.config).QueryPersonal(pap)
+}
+
 // Update returns a builder for updating this ProtectedAreaPicture.
 // Note that you need to call ProtectedAreaPicture.Unwrap() before calling this method if this ProtectedAreaPicture
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -534,6 +552,30 @@ func (pap *ProtectedAreaPicture) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedPersonal returns the Personal named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pap *ProtectedAreaPicture) NamedPersonal(name string) ([]*Personal, error) {
+	if pap.Edges.namedPersonal == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pap.Edges.namedPersonal[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pap *ProtectedAreaPicture) appendNamedPersonal(name string, edges ...*Personal) {
+	if pap.Edges.namedPersonal == nil {
+		pap.Edges.namedPersonal = make(map[string][]*Personal)
+	}
+	if len(edges) == 0 {
+		pap.Edges.namedPersonal[name] = []*Personal{}
+	} else {
+		pap.Edges.namedPersonal[name] = append(pap.Edges.namedPersonal[name], edges...)
+	}
 }
 
 // ProtectedAreaPictures is a parsable slice of ProtectedAreaPicture.

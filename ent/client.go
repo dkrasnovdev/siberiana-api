@@ -48,7 +48,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -130,8 +129,6 @@ type Client struct {
 	ProtectedAreaCategory *ProtectedAreaCategoryClient
 	// ProtectedAreaPicture is the client for interacting with the ProtectedAreaPicture builders.
 	ProtectedAreaPicture *ProtectedAreaPictureClient
-	// Proxy is the client for interacting with the Proxy builders.
-	Proxy *ProxyClient
 	// Publication is the client for interacting with the Publication builders.
 	Publication *PublicationClient
 	// Publisher is the client for interacting with the Publisher builders.
@@ -194,7 +191,6 @@ func (c *Client) init() {
 	c.ProtectedArea = NewProtectedAreaClient(c.config)
 	c.ProtectedAreaCategory = NewProtectedAreaCategoryClient(c.config)
 	c.ProtectedAreaPicture = NewProtectedAreaPictureClient(c.config)
-	c.Proxy = NewProxyClient(c.config)
 	c.Publication = NewPublicationClient(c.config)
 	c.Publisher = NewPublisherClient(c.config)
 	c.Region = NewRegionClient(c.config)
@@ -328,7 +324,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ProtectedArea:               NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory:       NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:        NewProtectedAreaPictureClient(cfg),
-		Proxy:                       NewProxyClient(cfg),
 		Publication:                 NewPublicationClient(cfg),
 		Publisher:                   NewPublisherClient(cfg),
 		Region:                      NewRegionClient(cfg),
@@ -388,7 +383,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ProtectedArea:               NewProtectedAreaClient(cfg),
 		ProtectedAreaCategory:       NewProtectedAreaCategoryClient(cfg),
 		ProtectedAreaPicture:        NewProtectedAreaPictureClient(cfg),
-		Proxy:                       NewProxyClient(cfg),
 		Publication:                 NewPublicationClient(cfg),
 		Publisher:                   NewPublisherClient(cfg),
 		Region:                      NewRegionClient(cfg),
@@ -430,8 +424,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
 		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
 		c.Periodical, c.Person, c.Personal, c.Petroglyph, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
-		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
 	} {
 		n.Use(hooks...)
 	}
@@ -446,8 +440,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
 		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
 		c.Periodical, c.Person, c.Personal, c.Petroglyph, c.Project, c.ProtectedArea,
-		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Proxy, c.Publication,
-		c.Publisher, c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Technique, c.Visit,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -522,8 +516,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ProtectedAreaCategory.mutate(ctx, m)
 	case *ProtectedAreaPictureMutation:
 		return c.ProtectedAreaPicture.mutate(ctx, m)
-	case *ProxyMutation:
-		return c.Proxy.mutate(ctx, m)
 	case *PublicationMutation:
 		return c.Publication.mutate(ctx, m)
 	case *PublisherMutation:
@@ -1533,6 +1525,22 @@ func (c *ArtifactClient) QueryRegion(a *Artifact) *RegionQuery {
 	return query
 }
 
+// QueryPersonal queries the personal edge of a Artifact.
+func (c *ArtifactClient) QueryPersonal(a *Artifact) *PersonalQuery {
+	query := (&PersonalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := a.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(artifact.Table, artifact.FieldID, id),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, artifact.PersonalTable, artifact.PersonalPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ArtifactClient) Hooks() []Hook {
 	hooks := c.hooks.Artifact
@@ -1987,6 +1995,22 @@ func (c *BookClient) QueryRegion(b *Book) *RegionQuery {
 			sqlgraph.From(book.Table, book.FieldID, id),
 			sqlgraph.To(region.Table, region.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, book.RegionTable, book.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPersonal queries the personal edge of a Book.
+func (c *BookClient) QueryPersonal(b *Book) *PersonalQuery {
+	query := (&PersonalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := b.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, id),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, book.PersonalTable, book.PersonalPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(b.driver.Dialect(), step)
 		return fromV, nil
@@ -3831,22 +3855,6 @@ func (c *FavouriteClient) GetX(ctx context.Context, id int) *Favourite {
 		panic(err)
 	}
 	return obj
-}
-
-// QueryProxies queries the proxies edge of a Favourite.
-func (c *FavouriteClient) QueryProxies(f *Favourite) *ProxyQuery {
-	query := (&ProxyClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := f.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(favourite.Table, favourite.FieldID, id),
-			sqlgraph.To(proxy.Table, proxy.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, favourite.ProxiesTable, favourite.ProxiesColumn),
-		)
-		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // Hooks returns the client hooks.
@@ -5984,15 +5992,63 @@ func (c *PersonalClient) GetX(ctx context.Context, id int) *Personal {
 	return obj
 }
 
-// QueryProxies queries the proxies edge of a Personal.
-func (c *PersonalClient) QueryProxies(pe *Personal) *ProxyQuery {
-	query := (&ProxyClient{config: c.config}).Query()
+// QueryArtifacts queries the artifacts edge of a Personal.
+func (c *PersonalClient) QueryArtifacts(pe *Personal) *ArtifactQuery {
+	query := (&ArtifactClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pe.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(personal.Table, personal.FieldID, id),
-			sqlgraph.To(proxy.Table, proxy.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, personal.ProxiesTable, personal.ProxiesColumn),
+			sqlgraph.To(artifact.Table, artifact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.ArtifactsTable, personal.ArtifactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPetroglyphs queries the petroglyphs edge of a Personal.
+func (c *PersonalClient) QueryPetroglyphs(pe *Personal) *PetroglyphQuery {
+	query := (&PetroglyphClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.To(petroglyph.Table, petroglyph.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.PetroglyphsTable, personal.PetroglyphsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBooks queries the books edge of a Personal.
+func (c *PersonalClient) QueryBooks(pe *Personal) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.BooksTable, personal.BooksPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProtectedAreaPictures queries the protected_area_pictures edge of a Personal.
+func (c *PersonalClient) QueryProtectedAreaPictures(pe *Personal) *ProtectedAreaPictureQuery {
+	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personal.Table, personal.FieldID, id),
+			sqlgraph.To(protectedareapicture.Table, protectedareapicture.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personal.ProtectedAreaPicturesTable, personal.ProtectedAreaPicturesPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -6008,7 +6064,8 @@ func (c *PersonalClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *PersonalClient) Interceptors() []Interceptor {
-	return c.inters.Personal
+	inters := c.inters.Personal
+	return append(inters[:len(inters):len(inters)], personal.Interceptors[:]...)
 }
 
 func (c *PersonalClient) mutate(ctx context.Context, m *PersonalMutation) (Value, error) {
@@ -6271,6 +6328,22 @@ func (c *PetroglyphClient) QueryCollection(pe *Petroglyph) *CollectionQuery {
 			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
 			sqlgraph.To(collection.Table, collection.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, petroglyph.CollectionTable, petroglyph.CollectionColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPersonal queries the personal edge of a Petroglyph.
+func (c *PetroglyphClient) QueryPersonal(pe *Petroglyph) *PersonalQuery {
+	query := (&PersonalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(petroglyph.Table, petroglyph.FieldID, id),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, petroglyph.PersonalTable, petroglyph.PersonalPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -7039,6 +7112,22 @@ func (c *ProtectedAreaPictureClient) QueryRegion(pap *ProtectedAreaPicture) *Reg
 	return query
 }
 
+// QueryPersonal queries the personal edge of a ProtectedAreaPicture.
+func (c *ProtectedAreaPictureClient) QueryPersonal(pap *ProtectedAreaPicture) *PersonalQuery {
+	query := (&PersonalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(protectedareapicture.Table, protectedareapicture.FieldID, id),
+			sqlgraph.To(personal.Table, personal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, protectedareapicture.PersonalTable, protectedareapicture.PersonalPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(pap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProtectedAreaPictureClient) Hooks() []Hook {
 	hooks := c.hooks.ProtectedAreaPicture
@@ -7062,172 +7151,6 @@ func (c *ProtectedAreaPictureClient) mutate(ctx context.Context, m *ProtectedAre
 		return (&ProtectedAreaPictureDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ProtectedAreaPicture mutation op: %q", m.Op())
-	}
-}
-
-// ProxyClient is a client for the Proxy schema.
-type ProxyClient struct {
-	config
-}
-
-// NewProxyClient returns a client for the Proxy from the given config.
-func NewProxyClient(c config) *ProxyClient {
-	return &ProxyClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `proxy.Hooks(f(g(h())))`.
-func (c *ProxyClient) Use(hooks ...Hook) {
-	c.hooks.Proxy = append(c.hooks.Proxy, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `proxy.Intercept(f(g(h())))`.
-func (c *ProxyClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Proxy = append(c.inters.Proxy, interceptors...)
-}
-
-// Create returns a builder for creating a Proxy entity.
-func (c *ProxyClient) Create() *ProxyCreate {
-	mutation := newProxyMutation(c.config, OpCreate)
-	return &ProxyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of Proxy entities.
-func (c *ProxyClient) CreateBulk(builders ...*ProxyCreate) *ProxyCreateBulk {
-	return &ProxyCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *ProxyClient) MapCreateBulk(slice any, setFunc func(*ProxyCreate, int)) *ProxyCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &ProxyCreateBulk{err: fmt.Errorf("calling to ProxyClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*ProxyCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &ProxyCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for Proxy.
-func (c *ProxyClient) Update() *ProxyUpdate {
-	mutation := newProxyMutation(c.config, OpUpdate)
-	return &ProxyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ProxyClient) UpdateOne(pr *Proxy) *ProxyUpdateOne {
-	mutation := newProxyMutation(c.config, OpUpdateOne, withProxy(pr))
-	return &ProxyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ProxyClient) UpdateOneID(id int) *ProxyUpdateOne {
-	mutation := newProxyMutation(c.config, OpUpdateOne, withProxyID(id))
-	return &ProxyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for Proxy.
-func (c *ProxyClient) Delete() *ProxyDelete {
-	mutation := newProxyMutation(c.config, OpDelete)
-	return &ProxyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ProxyClient) DeleteOne(pr *Proxy) *ProxyDeleteOne {
-	return c.DeleteOneID(pr.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ProxyClient) DeleteOneID(id int) *ProxyDeleteOne {
-	builder := c.Delete().Where(proxy.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ProxyDeleteOne{builder}
-}
-
-// Query returns a query builder for Proxy.
-func (c *ProxyClient) Query() *ProxyQuery {
-	return &ProxyQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeProxy},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a Proxy entity by its id.
-func (c *ProxyClient) Get(ctx context.Context, id int) (*Proxy, error) {
-	return c.Query().Where(proxy.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ProxyClient) GetX(ctx context.Context, id int) *Proxy {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryFavourite queries the favourite edge of a Proxy.
-func (c *ProxyClient) QueryFavourite(pr *Proxy) *FavouriteQuery {
-	query := (&FavouriteClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(proxy.Table, proxy.FieldID, id),
-			sqlgraph.To(favourite.Table, favourite.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, proxy.FavouriteTable, proxy.FavouriteColumn),
-		)
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPersonal queries the personal edge of a Proxy.
-func (c *ProxyClient) QueryPersonal(pr *Proxy) *PersonalQuery {
-	query := (&PersonalClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := pr.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(proxy.Table, proxy.FieldID, id),
-			sqlgraph.To(personal.Table, personal.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, proxy.PersonalTable, proxy.PersonalColumn),
-		)
-		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *ProxyClient) Hooks() []Hook {
-	hooks := c.hooks.Proxy
-	return append(hooks[:len(hooks):len(hooks)], proxy.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *ProxyClient) Interceptors() []Interceptor {
-	return c.inters.Proxy
-}
-
-func (c *ProxyClient) mutate(ctx context.Context, m *ProxyMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ProxyCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ProxyUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ProxyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ProxyDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown Proxy mutation op: %q", m.Op())
 	}
 }
 
@@ -8672,7 +8595,7 @@ type (
 		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
 		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
 		Model, Monument, Mound, Organization, Periodical, Person, Personal, Petroglyph,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
 		Publication, Publisher, Region, Set, Settlement, Technique, Visit []ent.Hook
 	}
 	inters struct {
@@ -8680,7 +8603,7 @@ type (
 		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
 		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
 		Model, Monument, Mound, Organization, Periodical, Person, Personal, Petroglyph,
-		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture, Proxy,
+		Project, ProtectedArea, ProtectedAreaCategory, ProtectedAreaPicture,
 		Publication, Publisher, Region, Set, Settlement, Technique,
 		Visit []ent.Interceptor
 	}

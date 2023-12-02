@@ -671,28 +671,6 @@ func (r *mutationResolver) DeleteProtectedAreaPicture(ctx context.Context, id in
 	return "ProtectedAreaPicture has been deleted", nil
 }
 
-// CreateProxy is the resolver for the createProxy field.
-func (r *mutationResolver) CreateProxy(ctx context.Context, input ent.CreateProxyInput) (*ent.Proxy, error) {
-	client := ent.FromContext(ctx)
-	return client.Proxy.Create().SetInput(input).Save(ctx)
-}
-
-// UpdateProxy is the resolver for the updateProxy field.
-func (r *mutationResolver) UpdateProxy(ctx context.Context, id int, input ent.UpdateProxyInput) (*ent.Proxy, error) {
-	client := ent.FromContext(ctx)
-	return client.Proxy.UpdateOneID(id).SetInput(input).Save(ctx)
-}
-
-// DeleteProxy is the resolver for the deleteProxy field.
-func (r *mutationResolver) DeleteProxy(ctx context.Context, id int) (string, error) {
-	client := ent.FromContext(ctx)
-	err := client.Proxy.DeleteOneID(id).Exec(ctx)
-	if err != nil {
-		return "", err
-	}
-	return "Proxy has been deleted", nil
-}
-
 // CreatePublication is the resolver for the createPublication field.
 func (r *mutationResolver) CreatePublication(ctx context.Context, input ent.CreatePublicationInput) (*ent.Publication, error) {
 	client := ent.FromContext(ctx)

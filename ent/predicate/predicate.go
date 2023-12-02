@@ -105,9 +105,6 @@ type ProtectedAreaCategory func(*sql.Selector)
 // ProtectedAreaPicture is the predicate function for protectedareapicture builders.
 type ProtectedAreaPicture func(*sql.Selector)
 
-// Proxy is the predicate function for proxy builders.
-type Proxy func(*sql.Selector)
-
 // Publication is the predicate function for publication builders.
 type Publication func(*sql.Selector)
 

@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/mound"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -625,6 +626,21 @@ func (pc *PetroglyphCreate) SetCollection(c *Collection) *PetroglyphCreate {
 	return pc.SetCollectionID(c.ID)
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
+func (pc *PetroglyphCreate) AddPersonalIDs(ids ...int) *PetroglyphCreate {
+	pc.mutation.AddPersonalIDs(ids...)
+	return pc
+}
+
+// AddPersonal adds the "personal" edges to the Personal entity.
+func (pc *PetroglyphCreate) AddPersonal(p ...*Personal) *PetroglyphCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddPersonalIDs(ids...)
+}
+
 // Mutation returns the PetroglyphMutation object of the builder.
 func (pc *PetroglyphCreate) Mutation() *PetroglyphMutation {
 	return pc.mutation
@@ -1002,6 +1018,22 @@ func (pc *PetroglyphCreate) createSpec() (*Petroglyph, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.collection_petroglyphs = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.PersonalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   petroglyph.PersonalTable,
+			Columns: petroglyph.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

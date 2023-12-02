@@ -78,8 +78,6 @@ type Tx struct {
 	ProtectedAreaCategory *ProtectedAreaCategoryClient
 	// ProtectedAreaPicture is the client for interacting with the ProtectedAreaPicture builders.
 	ProtectedAreaPicture *ProtectedAreaPictureClient
-	// Proxy is the client for interacting with the Proxy builders.
-	Proxy *ProxyClient
 	// Publication is the client for interacting with the Publication builders.
 	Publication *PublicationClient
 	// Publisher is the client for interacting with the Publisher builders.
@@ -258,7 +256,6 @@ func (tx *Tx) init() {
 	tx.ProtectedArea = NewProtectedAreaClient(tx.config)
 	tx.ProtectedAreaCategory = NewProtectedAreaCategoryClient(tx.config)
 	tx.ProtectedAreaPicture = NewProtectedAreaPictureClient(tx.config)
-	tx.Proxy = NewProxyClient(tx.config)
 	tx.Publication = NewPublicationClient(tx.config)
 	tx.Publisher = NewPublisherClient(tx.config)
 	tx.Region = NewRegionClient(tx.config)

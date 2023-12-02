@@ -22,6 +22,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/periodical"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
+	"github.com/dkrasnovdev/siberiana-api/ent/personal"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -482,6 +483,21 @@ func (bu *BookUpdate) SetRegion(r *Region) *BookUpdate {
 	return bu.SetRegionID(r.ID)
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
+func (bu *BookUpdate) AddPersonalIDs(ids ...int) *BookUpdate {
+	bu.mutation.AddPersonalIDs(ids...)
+	return bu
+}
+
+// AddPersonal adds the "personal" edges to the Personal entity.
+func (bu *BookUpdate) AddPersonal(p ...*Personal) *BookUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return bu.AddPersonalIDs(ids...)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (bu *BookUpdate) Mutation() *BookMutation {
 	return bu.mutation
@@ -587,6 +603,27 @@ func (bu *BookUpdate) ClearDistrict() *BookUpdate {
 func (bu *BookUpdate) ClearRegion() *BookUpdate {
 	bu.mutation.ClearRegion()
 	return bu
+}
+
+// ClearPersonal clears all "personal" edges to the Personal entity.
+func (bu *BookUpdate) ClearPersonal() *BookUpdate {
+	bu.mutation.ClearPersonal()
+	return bu
+}
+
+// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
+func (bu *BookUpdate) RemovePersonalIDs(ids ...int) *BookUpdate {
+	bu.mutation.RemovePersonalIDs(ids...)
+	return bu
+}
+
+// RemovePersonal removes "personal" edges to Personal entities.
+func (bu *BookUpdate) RemovePersonal(p ...*Personal) *BookUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return bu.RemovePersonalIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1123,6 +1160,51 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if bu.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.PersonalTable,
+			Columns: book.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !bu.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.PersonalTable,
+			Columns: book.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := bu.mutation.PersonalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.PersonalTable,
+			Columns: book.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{book.Label}
@@ -1584,6 +1666,21 @@ func (buo *BookUpdateOne) SetRegion(r *Region) *BookUpdateOne {
 	return buo.SetRegionID(r.ID)
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by IDs.
+func (buo *BookUpdateOne) AddPersonalIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.AddPersonalIDs(ids...)
+	return buo
+}
+
+// AddPersonal adds the "personal" edges to the Personal entity.
+func (buo *BookUpdateOne) AddPersonal(p ...*Personal) *BookUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return buo.AddPersonalIDs(ids...)
+}
+
 // Mutation returns the BookMutation object of the builder.
 func (buo *BookUpdateOne) Mutation() *BookMutation {
 	return buo.mutation
@@ -1689,6 +1786,27 @@ func (buo *BookUpdateOne) ClearDistrict() *BookUpdateOne {
 func (buo *BookUpdateOne) ClearRegion() *BookUpdateOne {
 	buo.mutation.ClearRegion()
 	return buo
+}
+
+// ClearPersonal clears all "personal" edges to the Personal entity.
+func (buo *BookUpdateOne) ClearPersonal() *BookUpdateOne {
+	buo.mutation.ClearPersonal()
+	return buo
+}
+
+// RemovePersonalIDs removes the "personal" edge to Personal entities by IDs.
+func (buo *BookUpdateOne) RemovePersonalIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.RemovePersonalIDs(ids...)
+	return buo
+}
+
+// RemovePersonal removes "personal" edges to Personal entities.
+func (buo *BookUpdateOne) RemovePersonal(p ...*Personal) *BookUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return buo.RemovePersonalIDs(ids...)
 }
 
 // Where appends a list predicates to the BookUpdate builder.
@@ -2248,6 +2366,51 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(region.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if buo.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.PersonalTable,
+			Columns: book.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.RemovedPersonalIDs(); len(nodes) > 0 && !buo.mutation.PersonalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.PersonalTable,
+			Columns: book.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := buo.mutation.PersonalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   book.PersonalTable,
+			Columns: book.PersonalPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(personal.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

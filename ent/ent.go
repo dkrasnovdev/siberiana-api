@@ -45,7 +45,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -146,7 +145,6 @@ func checkColumn(table, column string) error {
 			protectedarea.Table:               protectedarea.ValidColumn,
 			protectedareacategory.Table:       protectedareacategory.ValidColumn,
 			protectedareapicture.Table:        protectedareapicture.ValidColumn,
-			proxy.Table:                       proxy.ValidColumn,
 			publication.Table:                 publication.ValidColumn,
 			publisher.Table:                   publisher.ValidColumn,
 			region.Table:                      region.ValidColumn,

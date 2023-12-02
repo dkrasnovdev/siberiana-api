@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -25,17 +24,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// EdgeProxies holds the string denoting the proxies edge name in mutations.
-	EdgeProxies = "proxies"
 	// Table holds the table name of the favourite in the database.
 	Table = "favourites"
-	// ProxiesTable is the table that holds the proxies relation/edge.
-	ProxiesTable = "proxies"
-	// ProxiesInverseTable is the table name for the Proxy entity.
-	// It exists in this package in order to avoid circular dependency with the "proxy" package.
-	ProxiesInverseTable = "proxies"
-	// ProxiesColumn is the table column denoting the proxies relation/edge.
-	ProxiesColumn = "favourite_proxies"
 )
 
 // Columns holds all SQL columns for favourite fields.
@@ -107,25 +97,4 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
-}
-
-// ByProxiesCount orders the results by proxies count.
-func ByProxiesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProxiesStep(), opts...)
-	}
-}
-
-// ByProxies orders the results by proxies terms.
-func ByProxies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProxiesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-func newProxiesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProxiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ProxiesTable, ProxiesColumn),
-	)
 }

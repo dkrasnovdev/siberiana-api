@@ -42,7 +42,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -999,33 +998,6 @@ func (f TraverseProtectedAreaPicture) Traverse(ctx context.Context, q ent.Query)
 	return fmt.Errorf("unexpected query type %T. expect *ent.ProtectedAreaPictureQuery", q)
 }
 
-// The ProxyFunc type is an adapter to allow the use of ordinary function as a Querier.
-type ProxyFunc func(context.Context, *ent.ProxyQuery) (ent.Value, error)
-
-// Query calls f(ctx, q).
-func (f ProxyFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
-	if q, ok := q.(*ent.ProxyQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *ent.ProxyQuery", q)
-}
-
-// The TraverseProxy type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseProxy func(context.Context, *ent.ProxyQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseProxy) Intercept(next ent.Querier) ent.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseProxy) Traverse(ctx context.Context, q ent.Query) error {
-	if q, ok := q.(*ent.ProxyQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *ent.ProxyQuery", q)
-}
-
 // The PublicationFunc type is an adapter to allow the use of ordinary function as a Querier.
 type PublicationFunc func(context.Context, *ent.PublicationQuery) (ent.Value, error)
 
@@ -1284,8 +1256,6 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.ProtectedAreaCategoryQuery, predicate.ProtectedAreaCategory, protectedareacategory.OrderOption]{typ: ent.TypeProtectedAreaCategory, tq: q}, nil
 	case *ent.ProtectedAreaPictureQuery:
 		return &query[*ent.ProtectedAreaPictureQuery, predicate.ProtectedAreaPicture, protectedareapicture.OrderOption]{typ: ent.TypeProtectedAreaPicture, tq: q}, nil
-	case *ent.ProxyQuery:
-		return &query[*ent.ProxyQuery, predicate.Proxy, proxy.OrderOption]{typ: ent.TypeProxy, tq: q}, nil
 	case *ent.PublicationQuery:
 		return &query[*ent.PublicationQuery, predicate.Publication, publication.OrderOption]{typ: ent.TypePublication, tq: q}, nil
 	case *ent.PublisherQuery:

@@ -20,8 +20,7 @@ func (OwnerMixin) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("owner_id").
 			NotEmpty().
-			Immutable().
-			Unique(),
+			Immutable(),
 	}
 }
 

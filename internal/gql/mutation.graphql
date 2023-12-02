@@ -137,10 +137,6 @@ type Mutation {
     input: UpdateProtectedAreaPictureInput!
   ): ProtectedAreaPicture!
   deleteProtectedAreaPicture(id: ID!): String!
-  # Proxy
-  createProxy(input: CreateProxyInput!): Proxy!
-  updateProxy(id: ID!, input: UpdateProxyInput!): Proxy!
-  deleteProxy(id: ID!): String!
   # Publication
   createPublication(input: CreatePublicationInput!): Publication!
   updatePublication(id: ID!, input: UpdatePublicationInput!): Publication!

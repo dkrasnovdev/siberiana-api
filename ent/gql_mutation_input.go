@@ -15,7 +15,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
 )
 
@@ -741,6 +740,7 @@ type CreateArtifactInput struct {
 	SettlementID          *int
 	DistrictID            *int
 	RegionID              *int
+	PersonalIDs           []int
 }
 
 // Mutate applies the CreateArtifactInput on the ArtifactMutation builder.
@@ -887,6 +887,9 @@ func (i *CreateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
+	if v := i.PersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateArtifactInput on the ArtifactCreate builder.
@@ -995,6 +998,9 @@ type UpdateArtifactInput struct {
 	DistrictID                 *int
 	ClearRegion                bool
 	RegionID                   *int
+	ClearPersonal              bool
+	AddPersonalIDs             []int
+	RemovePersonalIDs          []int
 }
 
 // Mutate applies the UpdateArtifactInput on the ArtifactMutation builder.
@@ -1293,6 +1299,15 @@ func (i *UpdateArtifactInput) Mutate(m *ArtifactMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
+	if i.ClearPersonal {
+		m.ClearPersonal()
+	}
+	if v := i.AddPersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
+	if v := i.RemovePersonalIDs; len(v) > 0 {
+		m.RemovePersonalIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateArtifactInput on the ArtifactUpdate builder.
@@ -1334,6 +1349,7 @@ type CreateBookInput struct {
 	SettlementID         *int
 	DistrictID           *int
 	RegionID             *int
+	PersonalIDs          []int
 }
 
 // Mutate applies the CreateBookInput on the BookMutation builder.
@@ -1411,6 +1427,9 @@ func (i *CreateBookInput) Mutate(m *BookMutation) {
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
+	if v := i.PersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateBookInput on the BookCreate builder.
@@ -1471,6 +1490,9 @@ type UpdateBookInput struct {
 	DistrictID                 *int
 	ClearRegion                bool
 	RegionID                   *int
+	ClearPersonal              bool
+	AddPersonalIDs             []int
+	RemovePersonalIDs          []int
 }
 
 // Mutate applies the UpdateBookInput on the BookMutation builder.
@@ -1624,6 +1646,15 @@ func (i *UpdateBookInput) Mutate(m *BookMutation) {
 	}
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
+	}
+	if i.ClearPersonal {
+		m.ClearPersonal()
+	}
+	if v := i.AddPersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
+	if v := i.RemovePersonalIDs; len(v) > 0 {
+		m.RemovePersonalIDs(v...)
 	}
 }
 
@@ -3448,7 +3479,6 @@ type CreateFavouriteInput struct {
 	UpdatedAt *time.Time
 	UpdatedBy *string
 	OwnerID   string
-	ProxyIDs  []int
 }
 
 // Mutate applies the CreateFavouriteInput on the FavouriteMutation builder.
@@ -3466,9 +3496,6 @@ func (i *CreateFavouriteInput) Mutate(m *FavouriteMutation) {
 		m.SetUpdatedBy(*v)
 	}
 	m.SetOwnerID(i.OwnerID)
-	if v := i.ProxyIDs; len(v) > 0 {
-		m.AddProxyIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the CreateFavouriteInput on the FavouriteCreate builder.
@@ -3484,9 +3511,6 @@ type UpdateFavouriteInput struct {
 	UpdatedAt      *time.Time
 	ClearUpdatedBy bool
 	UpdatedBy      *string
-	ClearProxies   bool
-	AddProxyIDs    []int
-	RemoveProxyIDs []int
 }
 
 // Mutate applies the UpdateFavouriteInput on the FavouriteMutation builder.
@@ -3505,15 +3529,6 @@ func (i *UpdateFavouriteInput) Mutate(m *FavouriteMutation) {
 	}
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
-	}
-	if i.ClearProxies {
-		m.ClearProxies()
-	}
-	if v := i.AddProxyIDs; len(v) > 0 {
-		m.AddProxyIDs(v...)
-	}
-	if v := i.RemoveProxyIDs; len(v) > 0 {
-		m.RemoveProxyIDs(v...)
 	}
 }
 
@@ -5553,13 +5568,17 @@ func (c *PersonUpdateOne) SetInput(i UpdatePersonInput) *PersonUpdateOne {
 
 // CreatePersonalInput represents a mutation input for creating personals.
 type CreatePersonalInput struct {
-	CreatedAt   *time.Time
-	CreatedBy   *string
-	UpdatedAt   *time.Time
-	UpdatedBy   *string
-	OwnerID     string
-	DisplayName string
-	ProxyIDs    []int
+	CreatedAt               *time.Time
+	CreatedBy               *string
+	UpdatedAt               *time.Time
+	UpdatedBy               *string
+	OwnerID                 string
+	DisplayName             string
+	IsPublic                *bool
+	ArtifactIDs             []int
+	PetroglyphIDs           []int
+	BookIDs                 []int
+	ProtectedAreaPictureIDs []int
 }
 
 // Mutate applies the CreatePersonalInput on the PersonalMutation builder.
@@ -5578,8 +5597,20 @@ func (i *CreatePersonalInput) Mutate(m *PersonalMutation) {
 	}
 	m.SetOwnerID(i.OwnerID)
 	m.SetDisplayName(i.DisplayName)
-	if v := i.ProxyIDs; len(v) > 0 {
-		m.AddProxyIDs(v...)
+	if v := i.IsPublic; v != nil {
+		m.SetIsPublic(*v)
+	}
+	if v := i.ArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.PetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.BookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
 	}
 }
 
@@ -5591,15 +5622,25 @@ func (c *PersonalCreate) SetInput(i CreatePersonalInput) *PersonalCreate {
 
 // UpdatePersonalInput represents a mutation input for updating personals.
 type UpdatePersonalInput struct {
-	ClearCreatedBy bool
-	CreatedBy      *string
-	UpdatedAt      *time.Time
-	ClearUpdatedBy bool
-	UpdatedBy      *string
-	DisplayName    *string
-	ClearProxies   bool
-	AddProxyIDs    []int
-	RemoveProxyIDs []int
+	ClearCreatedBy                bool
+	CreatedBy                     *string
+	UpdatedAt                     *time.Time
+	ClearUpdatedBy                bool
+	UpdatedBy                     *string
+	DisplayName                   *string
+	IsPublic                      *bool
+	ClearArtifacts                bool
+	AddArtifactIDs                []int
+	RemoveArtifactIDs             []int
+	ClearPetroglyphs              bool
+	AddPetroglyphIDs              []int
+	RemovePetroglyphIDs           []int
+	ClearBooks                    bool
+	AddBookIDs                    []int
+	RemoveBookIDs                 []int
+	ClearProtectedAreaPictures    bool
+	AddProtectedAreaPictureIDs    []int
+	RemoveProtectedAreaPictureIDs []int
 }
 
 // Mutate applies the UpdatePersonalInput on the PersonalMutation builder.
@@ -5622,14 +5663,44 @@ func (i *UpdatePersonalInput) Mutate(m *PersonalMutation) {
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
 	}
-	if i.ClearProxies {
-		m.ClearProxies()
+	if v := i.IsPublic; v != nil {
+		m.SetIsPublic(*v)
 	}
-	if v := i.AddProxyIDs; len(v) > 0 {
-		m.AddProxyIDs(v...)
+	if i.ClearArtifacts {
+		m.ClearArtifacts()
 	}
-	if v := i.RemoveProxyIDs; len(v) > 0 {
-		m.RemoveProxyIDs(v...)
+	if v := i.AddArtifactIDs; len(v) > 0 {
+		m.AddArtifactIDs(v...)
+	}
+	if v := i.RemoveArtifactIDs; len(v) > 0 {
+		m.RemoveArtifactIDs(v...)
+	}
+	if i.ClearPetroglyphs {
+		m.ClearPetroglyphs()
+	}
+	if v := i.AddPetroglyphIDs; len(v) > 0 {
+		m.AddPetroglyphIDs(v...)
+	}
+	if v := i.RemovePetroglyphIDs; len(v) > 0 {
+		m.RemovePetroglyphIDs(v...)
+	}
+	if i.ClearBooks {
+		m.ClearBooks()
+	}
+	if v := i.AddBookIDs; len(v) > 0 {
+		m.AddBookIDs(v...)
+	}
+	if v := i.RemoveBookIDs; len(v) > 0 {
+		m.RemoveBookIDs(v...)
+	}
+	if i.ClearProtectedAreaPictures {
+		m.ClearProtectedAreaPictures()
+	}
+	if v := i.AddProtectedAreaPictureIDs; len(v) > 0 {
+		m.AddProtectedAreaPictureIDs(v...)
+	}
+	if v := i.RemoveProtectedAreaPictureIDs; len(v) > 0 {
+		m.RemoveProtectedAreaPictureIDs(v...)
 	}
 }
 
@@ -5688,6 +5759,7 @@ type CreatePetroglyphInput struct {
 	AccountingDocumentationAddressID   *int
 	AccountingDocumentationAuthorID    *int
 	CollectionID                       int
+	PersonalIDs                        []int
 }
 
 // Mutate applies the CreatePetroglyphInput on the PetroglyphMutation builder.
@@ -5813,6 +5885,9 @@ func (i *CreatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 		m.SetAccountingDocumentationAuthorID(*v)
 	}
 	m.SetCollectionID(i.CollectionID)
+	if v := i.PersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreatePetroglyphInput on the PetroglyphCreate builder.
@@ -5904,6 +5979,9 @@ type UpdatePetroglyphInput struct {
 	ClearAccountingDocumentationAuthor      bool
 	AccountingDocumentationAuthorID         *int
 	CollectionID                            *int
+	ClearPersonal                           bool
+	AddPersonalIDs                          []int
+	RemovePersonalIDs                       []int
 }
 
 // Mutate applies the UpdatePetroglyphInput on the PetroglyphMutation builder.
@@ -6150,6 +6228,15 @@ func (i *UpdatePetroglyphInput) Mutate(m *PetroglyphMutation) {
 	}
 	if v := i.CollectionID; v != nil {
 		m.SetCollectionID(*v)
+	}
+	if i.ClearPersonal {
+		m.ClearPersonal()
+	}
+	if v := i.AddPersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
+	if v := i.RemovePersonalIDs; len(v) > 0 {
+		m.RemovePersonalIDs(v...)
 	}
 }
 
@@ -6703,6 +6790,7 @@ type CreateProtectedAreaPictureInput struct {
 	SettlementID         *int
 	DistrictID           *int
 	RegionID             *int
+	PersonalIDs          []int
 }
 
 // Mutate applies the CreateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
@@ -6771,6 +6859,9 @@ func (i *CreateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
+	if v := i.PersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateProtectedAreaPictureInput on the ProtectedAreaPictureCreate builder.
@@ -6822,6 +6913,9 @@ type UpdateProtectedAreaPictureInput struct {
 	DistrictID                 *int
 	ClearRegion                bool
 	RegionID                   *int
+	ClearPersonal              bool
+	AddPersonalIDs             []int
+	RemovePersonalIDs          []int
 }
 
 // Mutate applies the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureMutation builder.
@@ -6949,6 +7043,15 @@ func (i *UpdateProtectedAreaPictureInput) Mutate(m *ProtectedAreaPictureMutation
 	if v := i.RegionID; v != nil {
 		m.SetRegionID(*v)
 	}
+	if i.ClearPersonal {
+		m.ClearPersonal()
+	}
+	if v := i.AddPersonalIDs; len(v) > 0 {
+		m.AddPersonalIDs(v...)
+	}
+	if v := i.RemovePersonalIDs; len(v) > 0 {
+		m.RemovePersonalIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureUpdate builder.
@@ -6959,114 +7062,6 @@ func (c *ProtectedAreaPictureUpdate) SetInput(i UpdateProtectedAreaPictureInput)
 
 // SetInput applies the change-set in the UpdateProtectedAreaPictureInput on the ProtectedAreaPictureUpdateOne builder.
 func (c *ProtectedAreaPictureUpdateOne) SetInput(i UpdateProtectedAreaPictureInput) *ProtectedAreaPictureUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateProxyInput represents a mutation input for creating proxies.
-type CreateProxyInput struct {
-	CreatedAt   *time.Time
-	CreatedBy   *string
-	UpdatedAt   *time.Time
-	UpdatedBy   *string
-	Type        proxy.Type
-	RefID       string
-	URL         string
-	FavouriteID *int
-	PersonalID  *int
-}
-
-// Mutate applies the CreateProxyInput on the ProxyMutation builder.
-func (i *CreateProxyInput) Mutate(m *ProxyMutation) {
-	if v := i.CreatedAt; v != nil {
-		m.SetCreatedAt(*v)
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	m.SetType(i.Type)
-	m.SetRefID(i.RefID)
-	m.SetURL(i.URL)
-	if v := i.FavouriteID; v != nil {
-		m.SetFavouriteID(*v)
-	}
-	if v := i.PersonalID; v != nil {
-		m.SetPersonalID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateProxyInput on the ProxyCreate builder.
-func (c *ProxyCreate) SetInput(i CreateProxyInput) *ProxyCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateProxyInput represents a mutation input for updating proxies.
-type UpdateProxyInput struct {
-	ClearCreatedBy bool
-	CreatedBy      *string
-	UpdatedAt      *time.Time
-	ClearUpdatedBy bool
-	UpdatedBy      *string
-	RefID          *string
-	URL            *string
-	ClearFavourite bool
-	FavouriteID    *int
-	ClearPersonal  bool
-	PersonalID     *int
-}
-
-// Mutate applies the UpdateProxyInput on the ProxyMutation builder.
-func (i *UpdateProxyInput) Mutate(m *ProxyMutation) {
-	if i.ClearCreatedBy {
-		m.ClearCreatedBy()
-	}
-	if v := i.CreatedBy; v != nil {
-		m.SetCreatedBy(*v)
-	}
-	if v := i.UpdatedAt; v != nil {
-		m.SetUpdatedAt(*v)
-	}
-	if i.ClearUpdatedBy {
-		m.ClearUpdatedBy()
-	}
-	if v := i.UpdatedBy; v != nil {
-		m.SetUpdatedBy(*v)
-	}
-	if v := i.RefID; v != nil {
-		m.SetRefID(*v)
-	}
-	if v := i.URL; v != nil {
-		m.SetURL(*v)
-	}
-	if i.ClearFavourite {
-		m.ClearFavourite()
-	}
-	if v := i.FavouriteID; v != nil {
-		m.SetFavouriteID(*v)
-	}
-	if i.ClearPersonal {
-		m.ClearPersonal()
-	}
-	if v := i.PersonalID; v != nil {
-		m.SetPersonalID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateProxyInput on the ProxyUpdate builder.
-func (c *ProxyUpdate) SetInput(i UpdateProxyInput) *ProxyUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateProxyInput on the ProxyUpdateOne builder.
-func (c *ProxyUpdateOne) SetInput(i UpdateProxyInput) *ProxyUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

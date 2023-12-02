@@ -44,7 +44,6 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedarea"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareacategory"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
-	"github.com/dkrasnovdev/siberiana-api/ent/proxy"
 	"github.com/dkrasnovdev/siberiana-api/ent/publication"
 	"github.com/dkrasnovdev/siberiana-api/ent/publisher"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -97,7 +96,6 @@ const (
 	TypeProtectedArea               = "ProtectedArea"
 	TypeProtectedAreaCategory       = "ProtectedAreaCategory"
 	TypeProtectedAreaPicture        = "ProtectedAreaPicture"
-	TypeProxy                       = "Proxy"
 	TypePublication                 = "Publication"
 	TypePublisher                   = "Publisher"
 	TypeRegion                      = "Region"
@@ -4736,6 +4734,9 @@ type ArtifactMutation struct {
 	cleareddistrict              bool
 	region                       *int
 	clearedregion                bool
+	personal                     map[int]struct{}
+	removedpersonal              map[int]struct{}
+	clearedpersonal              bool
 	done                         bool
 	oldValue                     func(context.Context) (*Artifact, error)
 	predicates                   []predicate.Artifact
@@ -7213,6 +7214,60 @@ func (m *ArtifactMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
+func (m *ArtifactMutation) AddPersonalIDs(ids ...int) {
+	if m.personal == nil {
+		m.personal = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.personal[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPersonal clears the "personal" edge to the Personal entity.
+func (m *ArtifactMutation) ClearPersonal() {
+	m.clearedpersonal = true
+}
+
+// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
+func (m *ArtifactMutation) PersonalCleared() bool {
+	return m.clearedpersonal
+}
+
+// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
+func (m *ArtifactMutation) RemovePersonalIDs(ids ...int) {
+	if m.removedpersonal == nil {
+		m.removedpersonal = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.personal, ids[i])
+		m.removedpersonal[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
+func (m *ArtifactMutation) RemovedPersonalIDs() (ids []int) {
+	for id := range m.removedpersonal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PersonalIDs returns the "personal" edge IDs in the mutation.
+func (m *ArtifactMutation) PersonalIDs() (ids []int) {
+	for id := range m.personal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPersonal resets all changes to the "personal" edge.
+func (m *ArtifactMutation) ResetPersonal() {
+	m.personal = nil
+	m.clearedpersonal = false
+	m.removedpersonal = nil
+}
+
 // Where appends a list predicates to the ArtifactMutation builder.
 func (m *ArtifactMutation) Where(ps ...predicate.Artifact) {
 	m.predicates = append(m.predicates, ps...)
@@ -8074,7 +8129,7 @@ func (m *ArtifactMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ArtifactMutation) AddedEdges() []string {
-	edges := make([]string, 0, 19)
+	edges := make([]string, 0, 20)
 	if m.authors != nil {
 		edges = append(edges, artifact.EdgeAuthors)
 	}
@@ -8131,6 +8186,9 @@ func (m *ArtifactMutation) AddedEdges() []string {
 	}
 	if m.region != nil {
 		edges = append(edges, artifact.EdgeRegion)
+	}
+	if m.personal != nil {
+		edges = append(edges, artifact.EdgePersonal)
 	}
 	return edges
 }
@@ -8225,13 +8283,19 @@ func (m *ArtifactMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
+	case artifact.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.personal))
+		for id := range m.personal {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ArtifactMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 19)
+	edges := make([]string, 0, 20)
 	if m.removedauthors != nil {
 		edges = append(edges, artifact.EdgeAuthors)
 	}
@@ -8246,6 +8310,9 @@ func (m *ArtifactMutation) RemovedEdges() []string {
 	}
 	if m.removedpublications != nil {
 		edges = append(edges, artifact.EdgePublications)
+	}
+	if m.removedpersonal != nil {
+		edges = append(edges, artifact.EdgePersonal)
 	}
 	return edges
 }
@@ -8284,13 +8351,19 @@ func (m *ArtifactMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case artifact.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.removedpersonal))
+		for id := range m.removedpersonal {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ArtifactMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 19)
+	edges := make([]string, 0, 20)
 	if m.clearedauthors {
 		edges = append(edges, artifact.EdgeAuthors)
 	}
@@ -8348,6 +8421,9 @@ func (m *ArtifactMutation) ClearedEdges() []string {
 	if m.clearedregion {
 		edges = append(edges, artifact.EdgeRegion)
 	}
+	if m.clearedpersonal {
+		edges = append(edges, artifact.EdgePersonal)
+	}
 	return edges
 }
 
@@ -8393,6 +8469,8 @@ func (m *ArtifactMutation) EdgeCleared(name string) bool {
 		return m.cleareddistrict
 	case artifact.EdgeRegion:
 		return m.clearedregion
+	case artifact.EdgePersonal:
+		return m.clearedpersonal
 	}
 	return false
 }
@@ -8507,6 +8585,9 @@ func (m *ArtifactMutation) ResetEdge(name string) error {
 		return nil
 	case artifact.EdgeRegion:
 		m.ResetRegion()
+		return nil
+	case artifact.EdgePersonal:
+		m.ResetPersonal()
 		return nil
 	}
 	return fmt.Errorf("unknown Artifact edge %s", name)
@@ -9579,6 +9660,9 @@ type BookMutation struct {
 	cleareddistrict              bool
 	region                       *int
 	clearedregion                bool
+	personal                     map[int]struct{}
+	removedpersonal              map[int]struct{}
+	clearedpersonal              bool
 	done                         bool
 	oldValue                     func(context.Context) (*Book, error)
 	predicates                   []predicate.Book
@@ -10844,6 +10928,60 @@ func (m *BookMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
+func (m *BookMutation) AddPersonalIDs(ids ...int) {
+	if m.personal == nil {
+		m.personal = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.personal[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPersonal clears the "personal" edge to the Personal entity.
+func (m *BookMutation) ClearPersonal() {
+	m.clearedpersonal = true
+}
+
+// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
+func (m *BookMutation) PersonalCleared() bool {
+	return m.clearedpersonal
+}
+
+// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
+func (m *BookMutation) RemovePersonalIDs(ids ...int) {
+	if m.removedpersonal == nil {
+		m.removedpersonal = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.personal, ids[i])
+		m.removedpersonal[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
+func (m *BookMutation) RemovedPersonalIDs() (ids []int) {
+	for id := range m.removedpersonal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PersonalIDs returns the "personal" edge IDs in the mutation.
+func (m *BookMutation) PersonalIDs() (ids []int) {
+	for id := range m.personal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPersonal resets all changes to the "personal" edge.
+func (m *BookMutation) ResetPersonal() {
+	m.personal = nil
+	m.clearedpersonal = false
+	m.removedpersonal = nil
+}
+
 // Where appends a list predicates to the BookMutation builder.
 func (m *BookMutation) Where(ps ...predicate.Book) {
 	m.predicates = append(m.predicates, ps...)
@@ -11265,7 +11403,7 @@ func (m *BookMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BookMutation) AddedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.authors != nil {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -11301,6 +11439,9 @@ func (m *BookMutation) AddedEdges() []string {
 	}
 	if m.region != nil {
 		edges = append(edges, book.EdgeRegion)
+	}
+	if m.personal != nil {
+		edges = append(edges, book.EdgePersonal)
 	}
 	return edges
 }
@@ -11361,18 +11502,27 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
+	case book.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.personal))
+		for id := range m.personal {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *BookMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.removedauthors != nil {
 		edges = append(edges, book.EdgeAuthors)
 	}
 	if m.removedbook_genres != nil {
 		edges = append(edges, book.EdgeBookGenres)
+	}
+	if m.removedpersonal != nil {
+		edges = append(edges, book.EdgePersonal)
 	}
 	return edges
 }
@@ -11393,13 +11543,19 @@ func (m *BookMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case book.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.removedpersonal))
+		for id := range m.removedpersonal {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BookMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.clearedauthors {
 		edges = append(edges, book.EdgeAuthors)
 	}
@@ -11436,6 +11592,9 @@ func (m *BookMutation) ClearedEdges() []string {
 	if m.clearedregion {
 		edges = append(edges, book.EdgeRegion)
 	}
+	if m.clearedpersonal {
+		edges = append(edges, book.EdgePersonal)
+	}
 	return edges
 }
 
@@ -11467,6 +11626,8 @@ func (m *BookMutation) EdgeCleared(name string) bool {
 		return m.cleareddistrict
 	case book.EdgeRegion:
 		return m.clearedregion
+	case book.EdgePersonal:
+		return m.clearedpersonal
 	}
 	return false
 }
@@ -11548,6 +11709,9 @@ func (m *BookMutation) ResetEdge(name string) error {
 		return nil
 	case book.EdgeRegion:
 		m.ResetRegion()
+		return nil
+	case book.EdgePersonal:
+		m.ResetPersonal()
 		return nil
 	}
 	return fmt.Errorf("unknown Book edge %s", name)
@@ -23638,21 +23802,18 @@ func (m *EthnosMutation) ResetEdge(name string) error {
 // FavouriteMutation represents an operation that mutates the Favourite nodes in the graph.
 type FavouriteMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int
-	created_at     *time.Time
-	created_by     *string
-	updated_at     *time.Time
-	updated_by     *string
-	owner_id       *string
-	clearedFields  map[string]struct{}
-	proxies        map[int]struct{}
-	removedproxies map[int]struct{}
-	clearedproxies bool
-	done           bool
-	oldValue       func(context.Context) (*Favourite, error)
-	predicates     []predicate.Favourite
+	op            Op
+	typ           string
+	id            *int
+	created_at    *time.Time
+	created_by    *string
+	updated_at    *time.Time
+	updated_by    *string
+	owner_id      *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Favourite, error)
+	predicates    []predicate.Favourite
 }
 
 var _ ent.Mutation = (*FavouriteMutation)(nil)
@@ -23959,60 +24120,6 @@ func (m *FavouriteMutation) ResetOwnerID() {
 	m.owner_id = nil
 }
 
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by ids.
-func (m *FavouriteMutation) AddProxyIDs(ids ...int) {
-	if m.proxies == nil {
-		m.proxies = make(map[int]struct{})
-	}
-	for i := range ids {
-		m.proxies[ids[i]] = struct{}{}
-	}
-}
-
-// ClearProxies clears the "proxies" edge to the Proxy entity.
-func (m *FavouriteMutation) ClearProxies() {
-	m.clearedproxies = true
-}
-
-// ProxiesCleared reports if the "proxies" edge to the Proxy entity was cleared.
-func (m *FavouriteMutation) ProxiesCleared() bool {
-	return m.clearedproxies
-}
-
-// RemoveProxyIDs removes the "proxies" edge to the Proxy entity by IDs.
-func (m *FavouriteMutation) RemoveProxyIDs(ids ...int) {
-	if m.removedproxies == nil {
-		m.removedproxies = make(map[int]struct{})
-	}
-	for i := range ids {
-		delete(m.proxies, ids[i])
-		m.removedproxies[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedProxies returns the removed IDs of the "proxies" edge to the Proxy entity.
-func (m *FavouriteMutation) RemovedProxiesIDs() (ids []int) {
-	for id := range m.removedproxies {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ProxiesIDs returns the "proxies" edge IDs in the mutation.
-func (m *FavouriteMutation) ProxiesIDs() (ids []int) {
-	for id := range m.proxies {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetProxies resets all changes to the "proxies" edge.
-func (m *FavouriteMutation) ResetProxies() {
-	m.proxies = nil
-	m.clearedproxies = false
-	m.removedproxies = nil
-}
-
 // Where appends a list predicates to the FavouriteMutation builder.
 func (m *FavouriteMutation) Where(ps ...predicate.Favourite) {
 	m.predicates = append(m.predicates, ps...)
@@ -24229,85 +24336,49 @@ func (m *FavouriteMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FavouriteMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.proxies != nil {
-		edges = append(edges, favourite.EdgeProxies)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *FavouriteMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case favourite.EdgeProxies:
-		ids := make([]ent.Value, 0, len(m.proxies))
-		for id := range m.proxies {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FavouriteMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.removedproxies != nil {
-		edges = append(edges, favourite.EdgeProxies)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *FavouriteMutation) RemovedIDs(name string) []ent.Value {
-	switch name {
-	case favourite.EdgeProxies:
-		ids := make([]ent.Value, 0, len(m.removedproxies))
-		for id := range m.removedproxies {
-			ids = append(ids, id)
-		}
-		return ids
-	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FavouriteMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedproxies {
-		edges = append(edges, favourite.EdgeProxies)
-	}
+	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *FavouriteMutation) EdgeCleared(name string) bool {
-	switch name {
-	case favourite.EdgeProxies:
-		return m.clearedproxies
-	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *FavouriteMutation) ClearEdge(name string) error {
-	switch name {
-	}
 	return fmt.Errorf("unknown Favourite unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *FavouriteMutation) ResetEdge(name string) error {
-	switch name {
-	case favourite.EdgeProxies:
-		m.ResetProxies()
-		return nil
-	}
 	return fmt.Errorf("unknown Favourite edge %s", name)
 }
 
@@ -37495,22 +37566,32 @@ func (m *PersonMutation) ResetEdge(name string) error {
 // PersonalMutation represents an operation that mutates the Personal nodes in the graph.
 type PersonalMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *int
-	created_at     *time.Time
-	created_by     *string
-	updated_at     *time.Time
-	updated_by     *string
-	owner_id       *string
-	display_name   *string
-	clearedFields  map[string]struct{}
-	proxies        map[int]struct{}
-	removedproxies map[int]struct{}
-	clearedproxies bool
-	done           bool
-	oldValue       func(context.Context) (*Personal, error)
-	predicates     []predicate.Personal
+	op                             Op
+	typ                            string
+	id                             *int
+	created_at                     *time.Time
+	created_by                     *string
+	updated_at                     *time.Time
+	updated_by                     *string
+	owner_id                       *string
+	display_name                   *string
+	is_public                      *bool
+	clearedFields                  map[string]struct{}
+	artifacts                      map[int]struct{}
+	removedartifacts               map[int]struct{}
+	clearedartifacts               bool
+	petroglyphs                    map[int]struct{}
+	removedpetroglyphs             map[int]struct{}
+	clearedpetroglyphs             bool
+	books                          map[int]struct{}
+	removedbooks                   map[int]struct{}
+	clearedbooks                   bool
+	protected_area_pictures        map[int]struct{}
+	removedprotected_area_pictures map[int]struct{}
+	clearedprotected_area_pictures bool
+	done                           bool
+	oldValue                       func(context.Context) (*Personal, error)
+	predicates                     []predicate.Personal
 }
 
 var _ ent.Mutation = (*PersonalMutation)(nil)
@@ -37853,58 +37934,256 @@ func (m *PersonalMutation) ResetDisplayName() {
 	m.display_name = nil
 }
 
-// AddProxyIDs adds the "proxies" edge to the Proxy entity by ids.
-func (m *PersonalMutation) AddProxyIDs(ids ...int) {
-	if m.proxies == nil {
-		m.proxies = make(map[int]struct{})
+// SetIsPublic sets the "is_public" field.
+func (m *PersonalMutation) SetIsPublic(b bool) {
+	m.is_public = &b
+}
+
+// IsPublic returns the value of the "is_public" field in the mutation.
+func (m *PersonalMutation) IsPublic() (r bool, exists bool) {
+	v := m.is_public
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsPublic returns the old "is_public" field's value of the Personal entity.
+// If the Personal object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PersonalMutation) OldIsPublic(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsPublic is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsPublic requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsPublic: %w", err)
+	}
+	return oldValue.IsPublic, nil
+}
+
+// ResetIsPublic resets all changes to the "is_public" field.
+func (m *PersonalMutation) ResetIsPublic() {
+	m.is_public = nil
+}
+
+// AddArtifactIDs adds the "artifacts" edge to the Artifact entity by ids.
+func (m *PersonalMutation) AddArtifactIDs(ids ...int) {
+	if m.artifacts == nil {
+		m.artifacts = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.proxies[ids[i]] = struct{}{}
+		m.artifacts[ids[i]] = struct{}{}
 	}
 }
 
-// ClearProxies clears the "proxies" edge to the Proxy entity.
-func (m *PersonalMutation) ClearProxies() {
-	m.clearedproxies = true
+// ClearArtifacts clears the "artifacts" edge to the Artifact entity.
+func (m *PersonalMutation) ClearArtifacts() {
+	m.clearedartifacts = true
 }
 
-// ProxiesCleared reports if the "proxies" edge to the Proxy entity was cleared.
-func (m *PersonalMutation) ProxiesCleared() bool {
-	return m.clearedproxies
+// ArtifactsCleared reports if the "artifacts" edge to the Artifact entity was cleared.
+func (m *PersonalMutation) ArtifactsCleared() bool {
+	return m.clearedartifacts
 }
 
-// RemoveProxyIDs removes the "proxies" edge to the Proxy entity by IDs.
-func (m *PersonalMutation) RemoveProxyIDs(ids ...int) {
-	if m.removedproxies == nil {
-		m.removedproxies = make(map[int]struct{})
+// RemoveArtifactIDs removes the "artifacts" edge to the Artifact entity by IDs.
+func (m *PersonalMutation) RemoveArtifactIDs(ids ...int) {
+	if m.removedartifacts == nil {
+		m.removedartifacts = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.proxies, ids[i])
-		m.removedproxies[ids[i]] = struct{}{}
+		delete(m.artifacts, ids[i])
+		m.removedartifacts[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedProxies returns the removed IDs of the "proxies" edge to the Proxy entity.
-func (m *PersonalMutation) RemovedProxiesIDs() (ids []int) {
-	for id := range m.removedproxies {
+// RemovedArtifacts returns the removed IDs of the "artifacts" edge to the Artifact entity.
+func (m *PersonalMutation) RemovedArtifactsIDs() (ids []int) {
+	for id := range m.removedartifacts {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ProxiesIDs returns the "proxies" edge IDs in the mutation.
-func (m *PersonalMutation) ProxiesIDs() (ids []int) {
-	for id := range m.proxies {
+// ArtifactsIDs returns the "artifacts" edge IDs in the mutation.
+func (m *PersonalMutation) ArtifactsIDs() (ids []int) {
+	for id := range m.artifacts {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetProxies resets all changes to the "proxies" edge.
-func (m *PersonalMutation) ResetProxies() {
-	m.proxies = nil
-	m.clearedproxies = false
-	m.removedproxies = nil
+// ResetArtifacts resets all changes to the "artifacts" edge.
+func (m *PersonalMutation) ResetArtifacts() {
+	m.artifacts = nil
+	m.clearedartifacts = false
+	m.removedartifacts = nil
+}
+
+// AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by ids.
+func (m *PersonalMutation) AddPetroglyphIDs(ids ...int) {
+	if m.petroglyphs == nil {
+		m.petroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.petroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPetroglyphs clears the "petroglyphs" edge to the Petroglyph entity.
+func (m *PersonalMutation) ClearPetroglyphs() {
+	m.clearedpetroglyphs = true
+}
+
+// PetroglyphsCleared reports if the "petroglyphs" edge to the Petroglyph entity was cleared.
+func (m *PersonalMutation) PetroglyphsCleared() bool {
+	return m.clearedpetroglyphs
+}
+
+// RemovePetroglyphIDs removes the "petroglyphs" edge to the Petroglyph entity by IDs.
+func (m *PersonalMutation) RemovePetroglyphIDs(ids ...int) {
+	if m.removedpetroglyphs == nil {
+		m.removedpetroglyphs = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.petroglyphs, ids[i])
+		m.removedpetroglyphs[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPetroglyphs returns the removed IDs of the "petroglyphs" edge to the Petroglyph entity.
+func (m *PersonalMutation) RemovedPetroglyphsIDs() (ids []int) {
+	for id := range m.removedpetroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PetroglyphsIDs returns the "petroglyphs" edge IDs in the mutation.
+func (m *PersonalMutation) PetroglyphsIDs() (ids []int) {
+	for id := range m.petroglyphs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPetroglyphs resets all changes to the "petroglyphs" edge.
+func (m *PersonalMutation) ResetPetroglyphs() {
+	m.petroglyphs = nil
+	m.clearedpetroglyphs = false
+	m.removedpetroglyphs = nil
+}
+
+// AddBookIDs adds the "books" edge to the Book entity by ids.
+func (m *PersonalMutation) AddBookIDs(ids ...int) {
+	if m.books == nil {
+		m.books = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.books[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBooks clears the "books" edge to the Book entity.
+func (m *PersonalMutation) ClearBooks() {
+	m.clearedbooks = true
+}
+
+// BooksCleared reports if the "books" edge to the Book entity was cleared.
+func (m *PersonalMutation) BooksCleared() bool {
+	return m.clearedbooks
+}
+
+// RemoveBookIDs removes the "books" edge to the Book entity by IDs.
+func (m *PersonalMutation) RemoveBookIDs(ids ...int) {
+	if m.removedbooks == nil {
+		m.removedbooks = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.books, ids[i])
+		m.removedbooks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBooks returns the removed IDs of the "books" edge to the Book entity.
+func (m *PersonalMutation) RemovedBooksIDs() (ids []int) {
+	for id := range m.removedbooks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BooksIDs returns the "books" edge IDs in the mutation.
+func (m *PersonalMutation) BooksIDs() (ids []int) {
+	for id := range m.books {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBooks resets all changes to the "books" edge.
+func (m *PersonalMutation) ResetBooks() {
+	m.books = nil
+	m.clearedbooks = false
+	m.removedbooks = nil
+}
+
+// AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by ids.
+func (m *PersonalMutation) AddProtectedAreaPictureIDs(ids ...int) {
+	if m.protected_area_pictures == nil {
+		m.protected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.protected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProtectedAreaPictures clears the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *PersonalMutation) ClearProtectedAreaPictures() {
+	m.clearedprotected_area_pictures = true
+}
+
+// ProtectedAreaPicturesCleared reports if the "protected_area_pictures" edge to the ProtectedAreaPicture entity was cleared.
+func (m *PersonalMutation) ProtectedAreaPicturesCleared() bool {
+	return m.clearedprotected_area_pictures
+}
+
+// RemoveProtectedAreaPictureIDs removes the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
+func (m *PersonalMutation) RemoveProtectedAreaPictureIDs(ids ...int) {
+	if m.removedprotected_area_pictures == nil {
+		m.removedprotected_area_pictures = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.protected_area_pictures, ids[i])
+		m.removedprotected_area_pictures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProtectedAreaPictures returns the removed IDs of the "protected_area_pictures" edge to the ProtectedAreaPicture entity.
+func (m *PersonalMutation) RemovedProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.removedprotected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProtectedAreaPicturesIDs returns the "protected_area_pictures" edge IDs in the mutation.
+func (m *PersonalMutation) ProtectedAreaPicturesIDs() (ids []int) {
+	for id := range m.protected_area_pictures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProtectedAreaPictures resets all changes to the "protected_area_pictures" edge.
+func (m *PersonalMutation) ResetProtectedAreaPictures() {
+	m.protected_area_pictures = nil
+	m.clearedprotected_area_pictures = false
+	m.removedprotected_area_pictures = nil
 }
 
 // Where appends a list predicates to the PersonalMutation builder.
@@ -37941,7 +38220,7 @@ func (m *PersonalMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PersonalMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.created_at != nil {
 		fields = append(fields, personal.FieldCreatedAt)
 	}
@@ -37959,6 +38238,9 @@ func (m *PersonalMutation) Fields() []string {
 	}
 	if m.display_name != nil {
 		fields = append(fields, personal.FieldDisplayName)
+	}
+	if m.is_public != nil {
+		fields = append(fields, personal.FieldIsPublic)
 	}
 	return fields
 }
@@ -37980,6 +38262,8 @@ func (m *PersonalMutation) Field(name string) (ent.Value, bool) {
 		return m.OwnerID()
 	case personal.FieldDisplayName:
 		return m.DisplayName()
+	case personal.FieldIsPublic:
+		return m.IsPublic()
 	}
 	return nil, false
 }
@@ -38001,6 +38285,8 @@ func (m *PersonalMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldOwnerID(ctx)
 	case personal.FieldDisplayName:
 		return m.OldDisplayName(ctx)
+	case personal.FieldIsPublic:
+		return m.OldIsPublic(ctx)
 	}
 	return nil, fmt.Errorf("unknown Personal field %s", name)
 }
@@ -38051,6 +38337,13 @@ func (m *PersonalMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDisplayName(v)
+		return nil
+	case personal.FieldIsPublic:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsPublic(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Personal field %s", name)
@@ -38134,15 +38427,27 @@ func (m *PersonalMutation) ResetField(name string) error {
 	case personal.FieldDisplayName:
 		m.ResetDisplayName()
 		return nil
+	case personal.FieldIsPublic:
+		m.ResetIsPublic()
+		return nil
 	}
 	return fmt.Errorf("unknown Personal field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PersonalMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.proxies != nil {
-		edges = append(edges, personal.EdgeProxies)
+	edges := make([]string, 0, 4)
+	if m.artifacts != nil {
+		edges = append(edges, personal.EdgeArtifacts)
+	}
+	if m.petroglyphs != nil {
+		edges = append(edges, personal.EdgePetroglyphs)
+	}
+	if m.books != nil {
+		edges = append(edges, personal.EdgeBooks)
+	}
+	if m.protected_area_pictures != nil {
+		edges = append(edges, personal.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -38151,9 +38456,27 @@ func (m *PersonalMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *PersonalMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case personal.EdgeProxies:
-		ids := make([]ent.Value, 0, len(m.proxies))
-		for id := range m.proxies {
+	case personal.EdgeArtifacts:
+		ids := make([]ent.Value, 0, len(m.artifacts))
+		for id := range m.artifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case personal.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.petroglyphs))
+		for id := range m.petroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
+	case personal.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.books))
+		for id := range m.books {
+			ids = append(ids, id)
+		}
+		return ids
+	case personal.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.protected_area_pictures))
+		for id := range m.protected_area_pictures {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38163,9 +38486,18 @@ func (m *PersonalMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PersonalMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.removedproxies != nil {
-		edges = append(edges, personal.EdgeProxies)
+	edges := make([]string, 0, 4)
+	if m.removedartifacts != nil {
+		edges = append(edges, personal.EdgeArtifacts)
+	}
+	if m.removedpetroglyphs != nil {
+		edges = append(edges, personal.EdgePetroglyphs)
+	}
+	if m.removedbooks != nil {
+		edges = append(edges, personal.EdgeBooks)
+	}
+	if m.removedprotected_area_pictures != nil {
+		edges = append(edges, personal.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -38174,9 +38506,27 @@ func (m *PersonalMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *PersonalMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case personal.EdgeProxies:
-		ids := make([]ent.Value, 0, len(m.removedproxies))
-		for id := range m.removedproxies {
+	case personal.EdgeArtifacts:
+		ids := make([]ent.Value, 0, len(m.removedartifacts))
+		for id := range m.removedartifacts {
+			ids = append(ids, id)
+		}
+		return ids
+	case personal.EdgePetroglyphs:
+		ids := make([]ent.Value, 0, len(m.removedpetroglyphs))
+		for id := range m.removedpetroglyphs {
+			ids = append(ids, id)
+		}
+		return ids
+	case personal.EdgeBooks:
+		ids := make([]ent.Value, 0, len(m.removedbooks))
+		for id := range m.removedbooks {
+			ids = append(ids, id)
+		}
+		return ids
+	case personal.EdgeProtectedAreaPictures:
+		ids := make([]ent.Value, 0, len(m.removedprotected_area_pictures))
+		for id := range m.removedprotected_area_pictures {
 			ids = append(ids, id)
 		}
 		return ids
@@ -38186,9 +38536,18 @@ func (m *PersonalMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PersonalMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
-	if m.clearedproxies {
-		edges = append(edges, personal.EdgeProxies)
+	edges := make([]string, 0, 4)
+	if m.clearedartifacts {
+		edges = append(edges, personal.EdgeArtifacts)
+	}
+	if m.clearedpetroglyphs {
+		edges = append(edges, personal.EdgePetroglyphs)
+	}
+	if m.clearedbooks {
+		edges = append(edges, personal.EdgeBooks)
+	}
+	if m.clearedprotected_area_pictures {
+		edges = append(edges, personal.EdgeProtectedAreaPictures)
 	}
 	return edges
 }
@@ -38197,8 +38556,14 @@ func (m *PersonalMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *PersonalMutation) EdgeCleared(name string) bool {
 	switch name {
-	case personal.EdgeProxies:
-		return m.clearedproxies
+	case personal.EdgeArtifacts:
+		return m.clearedartifacts
+	case personal.EdgePetroglyphs:
+		return m.clearedpetroglyphs
+	case personal.EdgeBooks:
+		return m.clearedbooks
+	case personal.EdgeProtectedAreaPictures:
+		return m.clearedprotected_area_pictures
 	}
 	return false
 }
@@ -38215,8 +38580,17 @@ func (m *PersonalMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *PersonalMutation) ResetEdge(name string) error {
 	switch name {
-	case personal.EdgeProxies:
-		m.ResetProxies()
+	case personal.EdgeArtifacts:
+		m.ResetArtifacts()
+		return nil
+	case personal.EdgePetroglyphs:
+		m.ResetPetroglyphs()
+		return nil
+	case personal.EdgeBooks:
+		m.ResetBooks()
+		return nil
+	case personal.EdgeProtectedAreaPictures:
+		m.ResetProtectedAreaPictures()
 		return nil
 	}
 	return fmt.Errorf("unknown Personal edge %s", name)
@@ -38289,6 +38663,9 @@ type PetroglyphMutation struct {
 	clearedaccounting_documentation_author  bool
 	collection                              *int
 	clearedcollection                       bool
+	personal                                map[int]struct{}
+	removedpersonal                         map[int]struct{}
+	clearedpersonal                         bool
 	done                                    bool
 	oldValue                                func(context.Context) (*Petroglyph, error)
 	predicates                              []predicate.Petroglyph
@@ -40478,6 +40855,60 @@ func (m *PetroglyphMutation) ResetCollection() {
 	m.clearedcollection = false
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
+func (m *PetroglyphMutation) AddPersonalIDs(ids ...int) {
+	if m.personal == nil {
+		m.personal = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.personal[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPersonal clears the "personal" edge to the Personal entity.
+func (m *PetroglyphMutation) ClearPersonal() {
+	m.clearedpersonal = true
+}
+
+// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
+func (m *PetroglyphMutation) PersonalCleared() bool {
+	return m.clearedpersonal
+}
+
+// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
+func (m *PetroglyphMutation) RemovePersonalIDs(ids ...int) {
+	if m.removedpersonal == nil {
+		m.removedpersonal = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.personal, ids[i])
+		m.removedpersonal[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
+func (m *PetroglyphMutation) RemovedPersonalIDs() (ids []int) {
+	for id := range m.removedpersonal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PersonalIDs returns the "personal" edge IDs in the mutation.
+func (m *PetroglyphMutation) PersonalIDs() (ids []int) {
+	for id := range m.personal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPersonal resets all changes to the "personal" edge.
+func (m *PetroglyphMutation) ResetPersonal() {
+	m.personal = nil
+	m.clearedpersonal = false
+	m.removedpersonal = nil
+}
+
 // Where appends a list predicates to the PetroglyphMutation builder.
 func (m *PetroglyphMutation) Where(ps ...predicate.Petroglyph) {
 	m.predicates = append(m.predicates, ps...)
@@ -41408,7 +41839,7 @@ func (m *PetroglyphMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PetroglyphMutation) AddedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.cultural_affiliation != nil {
 		edges = append(edges, petroglyph.EdgeCulturalAffiliation)
 	}
@@ -41435,6 +41866,9 @@ func (m *PetroglyphMutation) AddedEdges() []string {
 	}
 	if m.collection != nil {
 		edges = append(edges, petroglyph.EdgeCollection)
+	}
+	if m.personal != nil {
+		edges = append(edges, petroglyph.EdgePersonal)
 	}
 	return edges
 }
@@ -41483,18 +41917,27 @@ func (m *PetroglyphMutation) AddedIDs(name string) []ent.Value {
 		if id := m.collection; id != nil {
 			return []ent.Value{*id}
 		}
+	case petroglyph.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.personal))
+		for id := range m.personal {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PetroglyphMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.removedpublications != nil {
 		edges = append(edges, petroglyph.EdgePublications)
 	}
 	if m.removedtechniques != nil {
 		edges = append(edges, petroglyph.EdgeTechniques)
+	}
+	if m.removedpersonal != nil {
+		edges = append(edges, petroglyph.EdgePersonal)
 	}
 	return edges
 }
@@ -41515,13 +41958,19 @@ func (m *PetroglyphMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case petroglyph.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.removedpersonal))
+		for id := range m.removedpersonal {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PetroglyphMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.clearedcultural_affiliation {
 		edges = append(edges, petroglyph.EdgeCulturalAffiliation)
 	}
@@ -41549,6 +41998,9 @@ func (m *PetroglyphMutation) ClearedEdges() []string {
 	if m.clearedcollection {
 		edges = append(edges, petroglyph.EdgeCollection)
 	}
+	if m.clearedpersonal {
+		edges = append(edges, petroglyph.EdgePersonal)
+	}
 	return edges
 }
 
@@ -41574,6 +42026,8 @@ func (m *PetroglyphMutation) EdgeCleared(name string) bool {
 		return m.clearedaccounting_documentation_author
 	case petroglyph.EdgeCollection:
 		return m.clearedcollection
+	case petroglyph.EdgePersonal:
+		return m.clearedpersonal
 	}
 	return false
 }
@@ -41637,6 +42091,9 @@ func (m *PetroglyphMutation) ResetEdge(name string) error {
 		return nil
 	case petroglyph.EdgeCollection:
 		m.ResetCollection()
+		return nil
+	case petroglyph.EdgePersonal:
+		m.ResetPersonal()
 		return nil
 	}
 	return fmt.Errorf("unknown Petroglyph edge %s", name)
@@ -45181,6 +45638,9 @@ type ProtectedAreaPictureMutation struct {
 	cleareddistrict              bool
 	region                       *int
 	clearedregion                bool
+	personal                     map[int]struct{}
+	removedpersonal              map[int]struct{}
+	clearedpersonal              bool
 	done                         bool
 	oldValue                     func(context.Context) (*ProtectedAreaPicture, error)
 	predicates                   []predicate.ProtectedAreaPicture
@@ -46262,6 +46722,60 @@ func (m *ProtectedAreaPictureMutation) ResetRegion() {
 	m.clearedregion = false
 }
 
+// AddPersonalIDs adds the "personal" edge to the Personal entity by ids.
+func (m *ProtectedAreaPictureMutation) AddPersonalIDs(ids ...int) {
+	if m.personal == nil {
+		m.personal = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.personal[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPersonal clears the "personal" edge to the Personal entity.
+func (m *ProtectedAreaPictureMutation) ClearPersonal() {
+	m.clearedpersonal = true
+}
+
+// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
+func (m *ProtectedAreaPictureMutation) PersonalCleared() bool {
+	return m.clearedpersonal
+}
+
+// RemovePersonalIDs removes the "personal" edge to the Personal entity by IDs.
+func (m *ProtectedAreaPictureMutation) RemovePersonalIDs(ids ...int) {
+	if m.removedpersonal == nil {
+		m.removedpersonal = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.personal, ids[i])
+		m.removedpersonal[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPersonal returns the removed IDs of the "personal" edge to the Personal entity.
+func (m *ProtectedAreaPictureMutation) RemovedPersonalIDs() (ids []int) {
+	for id := range m.removedpersonal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PersonalIDs returns the "personal" edge IDs in the mutation.
+func (m *ProtectedAreaPictureMutation) PersonalIDs() (ids []int) {
+	for id := range m.personal {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPersonal resets all changes to the "personal" edge.
+func (m *ProtectedAreaPictureMutation) ResetPersonal() {
+	m.personal = nil
+	m.clearedpersonal = false
+	m.removedpersonal = nil
+}
+
 // Where appends a list predicates to the ProtectedAreaPictureMutation builder.
 func (m *ProtectedAreaPictureMutation) Where(ps ...predicate.ProtectedAreaPicture) {
 	m.predicates = append(m.predicates, ps...)
@@ -46668,7 +47182,7 @@ func (m *ProtectedAreaPictureMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProtectedAreaPictureMutation) AddedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.author != nil {
 		edges = append(edges, protectedareapicture.EdgeAuthor)
 	}
@@ -46695,6 +47209,9 @@ func (m *ProtectedAreaPictureMutation) AddedEdges() []string {
 	}
 	if m.region != nil {
 		edges = append(edges, protectedareapicture.EdgeRegion)
+	}
+	if m.personal != nil {
+		edges = append(edges, protectedareapicture.EdgePersonal)
 	}
 	return edges
 }
@@ -46739,25 +47256,42 @@ func (m *ProtectedAreaPictureMutation) AddedIDs(name string) []ent.Value {
 		if id := m.region; id != nil {
 			return []ent.Value{*id}
 		}
+	case protectedareapicture.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.personal))
+		for id := range m.personal {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProtectedAreaPictureMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
+	if m.removedpersonal != nil {
+		edges = append(edges, protectedareapicture.EdgePersonal)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *ProtectedAreaPictureMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case protectedareapicture.EdgePersonal:
+		ids := make([]ent.Value, 0, len(m.removedpersonal))
+		for id := range m.removedpersonal {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProtectedAreaPictureMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.clearedauthor {
 		edges = append(edges, protectedareapicture.EdgeAuthor)
 	}
@@ -46785,6 +47319,9 @@ func (m *ProtectedAreaPictureMutation) ClearedEdges() []string {
 	if m.clearedregion {
 		edges = append(edges, protectedareapicture.EdgeRegion)
 	}
+	if m.clearedpersonal {
+		edges = append(edges, protectedareapicture.EdgePersonal)
+	}
 	return edges
 }
 
@@ -46810,6 +47347,8 @@ func (m *ProtectedAreaPictureMutation) EdgeCleared(name string) bool {
 		return m.cleareddistrict
 	case protectedareapicture.EdgeRegion:
 		return m.clearedregion
+	case protectedareapicture.EdgePersonal:
+		return m.clearedpersonal
 	}
 	return false
 }
@@ -46880,825 +47419,11 @@ func (m *ProtectedAreaPictureMutation) ResetEdge(name string) error {
 	case protectedareapicture.EdgeRegion:
 		m.ResetRegion()
 		return nil
-	}
-	return fmt.Errorf("unknown ProtectedAreaPicture edge %s", name)
-}
-
-// ProxyMutation represents an operation that mutates the Proxy nodes in the graph.
-type ProxyMutation struct {
-	config
-	op               Op
-	typ              string
-	id               *int
-	created_at       *time.Time
-	created_by       *string
-	updated_at       *time.Time
-	updated_by       *string
-	_type            *proxy.Type
-	ref_id           *string
-	url              *string
-	clearedFields    map[string]struct{}
-	favourite        *int
-	clearedfavourite bool
-	personal         *int
-	clearedpersonal  bool
-	done             bool
-	oldValue         func(context.Context) (*Proxy, error)
-	predicates       []predicate.Proxy
-}
-
-var _ ent.Mutation = (*ProxyMutation)(nil)
-
-// proxyOption allows management of the mutation configuration using functional options.
-type proxyOption func(*ProxyMutation)
-
-// newProxyMutation creates new mutation for the Proxy entity.
-func newProxyMutation(c config, op Op, opts ...proxyOption) *ProxyMutation {
-	m := &ProxyMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeProxy,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withProxyID sets the ID field of the mutation.
-func withProxyID(id int) proxyOption {
-	return func(m *ProxyMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *Proxy
-		)
-		m.oldValue = func(ctx context.Context) (*Proxy, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().Proxy.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withProxy sets the old Proxy of the mutation.
-func withProxy(node *Proxy) proxyOption {
-	return func(m *ProxyMutation) {
-		m.oldValue = func(context.Context) (*Proxy, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m ProxyMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m ProxyMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *ProxyMutation) ID() (id int, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *ProxyMutation) IDs(ctx context.Context) ([]int, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []int{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().Proxy.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (m *ProxyMutation) SetCreatedAt(t time.Time) {
-	m.created_at = &t
-}
-
-// CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *ProxyMutation) CreatedAt() (r time.Time, exists bool) {
-	v := m.created_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedAt returns the old "created_at" field's value of the Proxy entity.
-// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProxyMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
-	}
-	return oldValue.CreatedAt, nil
-}
-
-// ResetCreatedAt resets all changes to the "created_at" field.
-func (m *ProxyMutation) ResetCreatedAt() {
-	m.created_at = nil
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (m *ProxyMutation) SetCreatedBy(s string) {
-	m.created_by = &s
-}
-
-// CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *ProxyMutation) CreatedBy() (r string, exists bool) {
-	v := m.created_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedBy returns the old "created_by" field's value of the Proxy entity.
-// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProxyMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
-	}
-	return oldValue.CreatedBy, nil
-}
-
-// ClearCreatedBy clears the value of the "created_by" field.
-func (m *ProxyMutation) ClearCreatedBy() {
-	m.created_by = nil
-	m.clearedFields[proxy.FieldCreatedBy] = struct{}{}
-}
-
-// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
-func (m *ProxyMutation) CreatedByCleared() bool {
-	_, ok := m.clearedFields[proxy.FieldCreatedBy]
-	return ok
-}
-
-// ResetCreatedBy resets all changes to the "created_by" field.
-func (m *ProxyMutation) ResetCreatedBy() {
-	m.created_by = nil
-	delete(m.clearedFields, proxy.FieldCreatedBy)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (m *ProxyMutation) SetUpdatedAt(t time.Time) {
-	m.updated_at = &t
-}
-
-// UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *ProxyMutation) UpdatedAt() (r time.Time, exists bool) {
-	v := m.updated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedAt returns the old "updated_at" field's value of the Proxy entity.
-// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProxyMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
-	}
-	return oldValue.UpdatedAt, nil
-}
-
-// ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *ProxyMutation) ResetUpdatedAt() {
-	m.updated_at = nil
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (m *ProxyMutation) SetUpdatedBy(s string) {
-	m.updated_by = &s
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *ProxyMutation) UpdatedBy() (r string, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the Proxy entity.
-// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProxyMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *ProxyMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.clearedFields[proxy.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *ProxyMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[proxy.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *ProxyMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	delete(m.clearedFields, proxy.FieldUpdatedBy)
-}
-
-// SetType sets the "type" field.
-func (m *ProxyMutation) SetType(pr proxy.Type) {
-	m._type = &pr
-}
-
-// GetType returns the value of the "type" field in the mutation.
-func (m *ProxyMutation) GetType() (r proxy.Type, exists bool) {
-	v := m._type
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldType returns the old "type" field's value of the Proxy entity.
-// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProxyMutation) OldType(ctx context.Context) (v proxy.Type, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldType is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldType requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldType: %w", err)
-	}
-	return oldValue.Type, nil
-}
-
-// ResetType resets all changes to the "type" field.
-func (m *ProxyMutation) ResetType() {
-	m._type = nil
-}
-
-// SetRefID sets the "ref_id" field.
-func (m *ProxyMutation) SetRefID(s string) {
-	m.ref_id = &s
-}
-
-// RefID returns the value of the "ref_id" field in the mutation.
-func (m *ProxyMutation) RefID() (r string, exists bool) {
-	v := m.ref_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRefID returns the old "ref_id" field's value of the Proxy entity.
-// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProxyMutation) OldRefID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRefID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRefID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRefID: %w", err)
-	}
-	return oldValue.RefID, nil
-}
-
-// ResetRefID resets all changes to the "ref_id" field.
-func (m *ProxyMutation) ResetRefID() {
-	m.ref_id = nil
-}
-
-// SetURL sets the "url" field.
-func (m *ProxyMutation) SetURL(s string) {
-	m.url = &s
-}
-
-// URL returns the value of the "url" field in the mutation.
-func (m *ProxyMutation) URL() (r string, exists bool) {
-	v := m.url
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldURL returns the old "url" field's value of the Proxy entity.
-// If the Proxy object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProxyMutation) OldURL(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldURL is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldURL requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldURL: %w", err)
-	}
-	return oldValue.URL, nil
-}
-
-// ResetURL resets all changes to the "url" field.
-func (m *ProxyMutation) ResetURL() {
-	m.url = nil
-}
-
-// SetFavouriteID sets the "favourite" edge to the Favourite entity by id.
-func (m *ProxyMutation) SetFavouriteID(id int) {
-	m.favourite = &id
-}
-
-// ClearFavourite clears the "favourite" edge to the Favourite entity.
-func (m *ProxyMutation) ClearFavourite() {
-	m.clearedfavourite = true
-}
-
-// FavouriteCleared reports if the "favourite" edge to the Favourite entity was cleared.
-func (m *ProxyMutation) FavouriteCleared() bool {
-	return m.clearedfavourite
-}
-
-// FavouriteID returns the "favourite" edge ID in the mutation.
-func (m *ProxyMutation) FavouriteID() (id int, exists bool) {
-	if m.favourite != nil {
-		return *m.favourite, true
-	}
-	return
-}
-
-// FavouriteIDs returns the "favourite" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// FavouriteID instead. It exists only for internal usage by the builders.
-func (m *ProxyMutation) FavouriteIDs() (ids []int) {
-	if id := m.favourite; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetFavourite resets all changes to the "favourite" edge.
-func (m *ProxyMutation) ResetFavourite() {
-	m.favourite = nil
-	m.clearedfavourite = false
-}
-
-// SetPersonalID sets the "personal" edge to the Personal entity by id.
-func (m *ProxyMutation) SetPersonalID(id int) {
-	m.personal = &id
-}
-
-// ClearPersonal clears the "personal" edge to the Personal entity.
-func (m *ProxyMutation) ClearPersonal() {
-	m.clearedpersonal = true
-}
-
-// PersonalCleared reports if the "personal" edge to the Personal entity was cleared.
-func (m *ProxyMutation) PersonalCleared() bool {
-	return m.clearedpersonal
-}
-
-// PersonalID returns the "personal" edge ID in the mutation.
-func (m *ProxyMutation) PersonalID() (id int, exists bool) {
-	if m.personal != nil {
-		return *m.personal, true
-	}
-	return
-}
-
-// PersonalIDs returns the "personal" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// PersonalID instead. It exists only for internal usage by the builders.
-func (m *ProxyMutation) PersonalIDs() (ids []int) {
-	if id := m.personal; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetPersonal resets all changes to the "personal" edge.
-func (m *ProxyMutation) ResetPersonal() {
-	m.personal = nil
-	m.clearedpersonal = false
-}
-
-// Where appends a list predicates to the ProxyMutation builder.
-func (m *ProxyMutation) Where(ps ...predicate.Proxy) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the ProxyMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *ProxyMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.Proxy, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *ProxyMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *ProxyMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (Proxy).
-func (m *ProxyMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *ProxyMutation) Fields() []string {
-	fields := make([]string, 0, 7)
-	if m.created_at != nil {
-		fields = append(fields, proxy.FieldCreatedAt)
-	}
-	if m.created_by != nil {
-		fields = append(fields, proxy.FieldCreatedBy)
-	}
-	if m.updated_at != nil {
-		fields = append(fields, proxy.FieldUpdatedAt)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, proxy.FieldUpdatedBy)
-	}
-	if m._type != nil {
-		fields = append(fields, proxy.FieldType)
-	}
-	if m.ref_id != nil {
-		fields = append(fields, proxy.FieldRefID)
-	}
-	if m.url != nil {
-		fields = append(fields, proxy.FieldURL)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *ProxyMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case proxy.FieldCreatedAt:
-		return m.CreatedAt()
-	case proxy.FieldCreatedBy:
-		return m.CreatedBy()
-	case proxy.FieldUpdatedAt:
-		return m.UpdatedAt()
-	case proxy.FieldUpdatedBy:
-		return m.UpdatedBy()
-	case proxy.FieldType:
-		return m.GetType()
-	case proxy.FieldRefID:
-		return m.RefID()
-	case proxy.FieldURL:
-		return m.URL()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *ProxyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case proxy.FieldCreatedAt:
-		return m.OldCreatedAt(ctx)
-	case proxy.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
-	case proxy.FieldUpdatedAt:
-		return m.OldUpdatedAt(ctx)
-	case proxy.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
-	case proxy.FieldType:
-		return m.OldType(ctx)
-	case proxy.FieldRefID:
-		return m.OldRefID(ctx)
-	case proxy.FieldURL:
-		return m.OldURL(ctx)
-	}
-	return nil, fmt.Errorf("unknown Proxy field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *ProxyMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case proxy.FieldCreatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedAt(v)
-		return nil
-	case proxy.FieldCreatedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
-	case proxy.FieldUpdatedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedAt(v)
-		return nil
-	case proxy.FieldUpdatedBy:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
-		return nil
-	case proxy.FieldType:
-		v, ok := value.(proxy.Type)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetType(v)
-		return nil
-	case proxy.FieldRefID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRefID(v)
-		return nil
-	case proxy.FieldURL:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetURL(v)
-		return nil
-	}
-	return fmt.Errorf("unknown Proxy field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *ProxyMutation) AddedFields() []string {
-	return nil
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *ProxyMutation) AddedField(name string) (ent.Value, bool) {
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *ProxyMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	}
-	return fmt.Errorf("unknown Proxy numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *ProxyMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(proxy.FieldCreatedBy) {
-		fields = append(fields, proxy.FieldCreatedBy)
-	}
-	if m.FieldCleared(proxy.FieldUpdatedBy) {
-		fields = append(fields, proxy.FieldUpdatedBy)
-	}
-	return fields
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *ProxyMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *ProxyMutation) ClearField(name string) error {
-	switch name {
-	case proxy.FieldCreatedBy:
-		m.ClearCreatedBy()
-		return nil
-	case proxy.FieldUpdatedBy:
-		m.ClearUpdatedBy()
-		return nil
-	}
-	return fmt.Errorf("unknown Proxy nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *ProxyMutation) ResetField(name string) error {
-	switch name {
-	case proxy.FieldCreatedAt:
-		m.ResetCreatedAt()
-		return nil
-	case proxy.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
-	case proxy.FieldUpdatedAt:
-		m.ResetUpdatedAt()
-		return nil
-	case proxy.FieldUpdatedBy:
-		m.ResetUpdatedBy()
-		return nil
-	case proxy.FieldType:
-		m.ResetType()
-		return nil
-	case proxy.FieldRefID:
-		m.ResetRefID()
-		return nil
-	case proxy.FieldURL:
-		m.ResetURL()
-		return nil
-	}
-	return fmt.Errorf("unknown Proxy field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *ProxyMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
-	if m.favourite != nil {
-		edges = append(edges, proxy.EdgeFavourite)
-	}
-	if m.personal != nil {
-		edges = append(edges, proxy.EdgePersonal)
-	}
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *ProxyMutation) AddedIDs(name string) []ent.Value {
-	switch name {
-	case proxy.EdgeFavourite:
-		if id := m.favourite; id != nil {
-			return []ent.Value{*id}
-		}
-	case proxy.EdgePersonal:
-		if id := m.personal; id != nil {
-			return []ent.Value{*id}
-		}
-	}
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *ProxyMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *ProxyMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *ProxyMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
-	if m.clearedfavourite {
-		edges = append(edges, proxy.EdgeFavourite)
-	}
-	if m.clearedpersonal {
-		edges = append(edges, proxy.EdgePersonal)
-	}
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *ProxyMutation) EdgeCleared(name string) bool {
-	switch name {
-	case proxy.EdgeFavourite:
-		return m.clearedfavourite
-	case proxy.EdgePersonal:
-		return m.clearedpersonal
-	}
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *ProxyMutation) ClearEdge(name string) error {
-	switch name {
-	case proxy.EdgeFavourite:
-		m.ClearFavourite()
-		return nil
-	case proxy.EdgePersonal:
-		m.ClearPersonal()
-		return nil
-	}
-	return fmt.Errorf("unknown Proxy unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *ProxyMutation) ResetEdge(name string) error {
-	switch name {
-	case proxy.EdgeFavourite:
-		m.ResetFavourite()
-		return nil
-	case proxy.EdgePersonal:
+	case protectedareapicture.EdgePersonal:
 		m.ResetPersonal()
 		return nil
 	}
-	return fmt.Errorf("unknown Proxy edge %s", name)
+	return fmt.Errorf("unknown ProtectedAreaPicture edge %s", name)
 }
 
 // PublicationMutation represents an operation that mutates the Publication nodes in the graph.
