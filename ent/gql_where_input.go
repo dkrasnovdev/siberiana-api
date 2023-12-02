@@ -12953,21 +12953,6 @@ type FavouriteWhereInput struct {
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -13202,45 +13187,6 @@ func (i *FavouriteWhereInput) P() (predicate.Favourite, error) {
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, favourite.UpdatedByContainsFold(*i.UpdatedByContainsFold))
-	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, favourite.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, favourite.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, favourite.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, favourite.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, favourite.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, favourite.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, favourite.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, favourite.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, favourite.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, favourite.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, favourite.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, favourite.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, favourite.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -20752,21 +20698,6 @@ type PersonalWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-
 	// "display_name" field predicates.
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
@@ -21035,45 +20966,6 @@ func (i *PersonalWhereInput) P() (predicate.Personal, error) {
 	}
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, personal.UpdatedByContainsFold(*i.UpdatedByContainsFold))
-	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, personal.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, personal.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, personal.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, personal.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, personal.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, personal.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, personal.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, personal.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, personal.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, personal.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, personal.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, personal.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, personal.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.DisplayName != nil {
 		predicates = append(predicates, personal.DisplayNameEQ(*i.DisplayName))

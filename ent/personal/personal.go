@@ -23,8 +23,6 @@ const (
 	FieldUpdatedAt = "updated_at"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldOwnerID holds the string denoting the owner_id field in the database.
-	FieldOwnerID = "owner_id"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldIsPublic holds the string denoting the is_public field in the database.
@@ -68,7 +66,6 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedAt,
 	FieldUpdatedBy,
-	FieldOwnerID,
 	FieldDisplayName,
 	FieldIsPublic,
 }
@@ -104,7 +101,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/dkrasnovdev/siberiana-api/ent/runtime"
 var (
-	Hooks        [3]ent.Hook
+	Hooks        [2]ent.Hook
 	Interceptors [1]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -113,8 +110,6 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
-	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	OwnerIDValidator func(string) error
 	// DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.
 	DisplayNameValidator func(string) error
 	// DefaultIsPublic holds the default value on creation for the "is_public" field.
@@ -147,11 +142,6 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
-}
-
-// ByOwnerID orders the results by the owner_id field.
-func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByDisplayName orders the results by the display_name field.

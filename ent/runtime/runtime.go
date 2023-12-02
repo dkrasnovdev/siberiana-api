@@ -494,15 +494,10 @@ func init() {
 		})
 	}
 	favouriteMixinHooks0 := favouriteMixin[0].Hooks()
-	favouriteMixinHooks1 := favouriteMixin[1].Hooks()
 
 	favourite.Hooks[1] = favouriteMixinHooks0[0]
-
-	favourite.Hooks[2] = favouriteMixinHooks1[0]
 	favouriteMixinFields0 := favouriteMixin[0].Fields()
 	_ = favouriteMixinFields0
-	favouriteMixinFields1 := favouriteMixin[1].Fields()
-	_ = favouriteMixinFields1
 	favouriteFields := schema.Favourite{}.Fields()
 	_ = favouriteFields
 	// favouriteDescCreatedAt is the schema descriptor for created_at field.
@@ -515,10 +510,6 @@ func init() {
 	favourite.DefaultUpdatedAt = favouriteDescUpdatedAt.Default.(func() time.Time)
 	// favourite.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	favourite.UpdateDefaultUpdatedAt = favouriteDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// favouriteDescOwnerID is the schema descriptor for owner_id field.
-	favouriteDescOwnerID := favouriteMixinFields1[0].Descriptor()
-	// favourite.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	favourite.OwnerIDValidator = favouriteDescOwnerID.Validators[0].(func(string) error)
 	interviewMixin := schema.Interview{}.Mixin()
 	interview.Policy = privacy.NewPolicies(schema.Interview{})
 	interview.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -802,17 +793,12 @@ func init() {
 		})
 	}
 	personalMixinHooks0 := personalMixin[0].Hooks()
-	personalMixinHooks1 := personalMixin[1].Hooks()
 
 	personal.Hooks[1] = personalMixinHooks0[0]
-
-	personal.Hooks[2] = personalMixinHooks1[0]
 	personalInters := schema.Personal{}.Interceptors()
 	personal.Interceptors[0] = personalInters[0]
 	personalMixinFields0 := personalMixin[0].Fields()
 	_ = personalMixinFields0
-	personalMixinFields1 := personalMixin[1].Fields()
-	_ = personalMixinFields1
 	personalFields := schema.Personal{}.Fields()
 	_ = personalFields
 	// personalDescCreatedAt is the schema descriptor for created_at field.
@@ -825,10 +811,6 @@ func init() {
 	personal.DefaultUpdatedAt = personalDescUpdatedAt.Default.(func() time.Time)
 	// personal.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	personal.UpdateDefaultUpdatedAt = personalDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// personalDescOwnerID is the schema descriptor for owner_id field.
-	personalDescOwnerID := personalMixinFields1[0].Descriptor()
-	// personal.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	personal.OwnerIDValidator = personalDescOwnerID.Validators[0].(func(string) error)
 	// personalDescDisplayName is the schema descriptor for display_name field.
 	personalDescDisplayName := personalFields[0].Descriptor()
 	// personal.DisplayNameValidator is a validator for the "display_name" field. It is called by the builders before save.

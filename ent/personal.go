@@ -25,8 +25,6 @@ type Personal struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// OwnerID holds the value of the "owner_id" field.
-	OwnerID string `json:"owner_id,omitempty"`
 	// DisplayName holds the value of the "display_name" field.
 	DisplayName string `json:"display_name,omitempty"`
 	// IsPublic holds the value of the "is_public" field.
@@ -104,7 +102,7 @@ func (*Personal) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case personal.FieldID:
 			values[i] = new(sql.NullInt64)
-		case personal.FieldCreatedBy, personal.FieldUpdatedBy, personal.FieldOwnerID, personal.FieldDisplayName:
+		case personal.FieldCreatedBy, personal.FieldUpdatedBy, personal.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case personal.FieldCreatedAt, personal.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -152,12 +150,6 @@ func (pe *Personal) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				pe.UpdatedBy = value.String
-			}
-		case personal.FieldOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
-			} else if value.Valid {
-				pe.OwnerID = value.String
 			}
 		case personal.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -238,9 +230,6 @@ func (pe *Personal) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(pe.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("owner_id=")
-	builder.WriteString(pe.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("display_name=")
 	builder.WriteString(pe.DisplayName)

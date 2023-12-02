@@ -596,7 +596,6 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
 	}
 	// FavouritesTable holds the schema information for the "favourites" table.
 	FavouritesTable = &schema.Table{
@@ -866,7 +865,6 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
 		{Name: "display_name", Type: field.TypeString},
 		{Name: "is_public", Type: field.TypeBool, Default: false},
 	}

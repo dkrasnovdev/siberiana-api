@@ -74,11 +74,6 @@ func UpdatedBy(v string) predicate.Favourite {
 	return predicate.Favourite(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
-func OwnerID(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldEQ(FieldOwnerID, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Favourite {
 	return predicate.Favourite(sql.FieldEQ(FieldCreatedAt, v))
@@ -307,71 +302,6 @@ func UpdatedByEqualFold(v string) predicate.Favourite {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Favourite {
 	return predicate.Favourite(sql.FieldContainsFold(FieldUpdatedBy, v))
-}
-
-// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
-func OwnerIDEQ(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldEQ(FieldOwnerID, v))
-}
-
-// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
-func OwnerIDNEQ(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldNEQ(FieldOwnerID, v))
-}
-
-// OwnerIDIn applies the In predicate on the "owner_id" field.
-func OwnerIDIn(vs ...string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldIn(FieldOwnerID, vs...))
-}
-
-// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
-func OwnerIDNotIn(vs ...string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldNotIn(FieldOwnerID, vs...))
-}
-
-// OwnerIDGT applies the GT predicate on the "owner_id" field.
-func OwnerIDGT(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldGT(FieldOwnerID, v))
-}
-
-// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
-func OwnerIDGTE(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldGTE(FieldOwnerID, v))
-}
-
-// OwnerIDLT applies the LT predicate on the "owner_id" field.
-func OwnerIDLT(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldLT(FieldOwnerID, v))
-}
-
-// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
-func OwnerIDLTE(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldLTE(FieldOwnerID, v))
-}
-
-// OwnerIDContains applies the Contains predicate on the "owner_id" field.
-func OwnerIDContains(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldContains(FieldOwnerID, v))
-}
-
-// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
-func OwnerIDHasPrefix(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldHasPrefix(FieldOwnerID, v))
-}
-
-// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
-func OwnerIDHasSuffix(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldHasSuffix(FieldOwnerID, v))
-}
-
-// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
-func OwnerIDEqualFold(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldEqualFold(FieldOwnerID, v))
-}
-
-// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
-func OwnerIDContainsFold(v string) predicate.Favourite {
-	return predicate.Favourite(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // And groups predicates with the AND operator between them.

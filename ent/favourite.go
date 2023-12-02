@@ -24,9 +24,7 @@ type Favourite struct {
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
-	UpdatedBy string `json:"updated_by,omitempty"`
-	// OwnerID holds the value of the "owner_id" field.
-	OwnerID      string `json:"owner_id,omitempty"`
+	UpdatedBy    string `json:"updated_by,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -37,7 +35,7 @@ func (*Favourite) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case favourite.FieldID:
 			values[i] = new(sql.NullInt64)
-		case favourite.FieldCreatedBy, favourite.FieldUpdatedBy, favourite.FieldOwnerID:
+		case favourite.FieldCreatedBy, favourite.FieldUpdatedBy:
 			values[i] = new(sql.NullString)
 		case favourite.FieldCreatedAt, favourite.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -86,12 +84,6 @@ func (f *Favourite) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				f.UpdatedBy = value.String
 			}
-		case favourite.FieldOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
-			} else if value.Valid {
-				f.OwnerID = value.String
-			}
 		default:
 			f.selectValues.Set(columns[i], values[i])
 		}
@@ -139,9 +131,6 @@ func (f *Favourite) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(f.UpdatedBy)
-	builder.WriteString(", ")
-	builder.WriteString("owner_id=")
-	builder.WriteString(f.OwnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -3214,11 +3214,6 @@ func (f *FavouriteQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 				selectedFields = append(selectedFields, favourite.FieldUpdatedBy)
 				fieldSeen[favourite.FieldUpdatedBy] = struct{}{}
 			}
-		case "ownerID":
-			if _, ok := fieldSeen[favourite.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, favourite.FieldOwnerID)
-				fieldSeen[favourite.FieldOwnerID] = struct{}{}
-			}
 		case "id":
 		case "__typename":
 		default:
@@ -5232,11 +5227,6 @@ func (pe *PersonalQuery) collectField(ctx context.Context, opCtx *graphql.Operat
 			if _, ok := fieldSeen[personal.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, personal.FieldUpdatedBy)
 				fieldSeen[personal.FieldUpdatedBy] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[personal.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, personal.FieldOwnerID)
-				fieldSeen[personal.FieldOwnerID] = struct{}{}
 			}
 		case "displayName":
 			if _, ok := fieldSeen[personal.FieldDisplayName]; !ok {

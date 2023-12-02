@@ -3478,7 +3478,6 @@ type CreateFavouriteInput struct {
 	CreatedBy *string
 	UpdatedAt *time.Time
 	UpdatedBy *string
-	OwnerID   string
 }
 
 // Mutate applies the CreateFavouriteInput on the FavouriteMutation builder.
@@ -3495,7 +3494,6 @@ func (i *CreateFavouriteInput) Mutate(m *FavouriteMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
 }
 
 // SetInput applies the change-set in the CreateFavouriteInput on the FavouriteCreate builder.
@@ -5572,7 +5570,6 @@ type CreatePersonalInput struct {
 	CreatedBy               *string
 	UpdatedAt               *time.Time
 	UpdatedBy               *string
-	OwnerID                 string
 	DisplayName             string
 	IsPublic                *bool
 	ArtifactIDs             []int
@@ -5595,7 +5592,6 @@ func (i *CreatePersonalInput) Mutate(m *PersonalMutation) {
 	if v := i.UpdatedBy; v != nil {
 		m.SetUpdatedBy(*v)
 	}
-	m.SetOwnerID(i.OwnerID)
 	m.SetDisplayName(i.DisplayName)
 	if v := i.IsPublic; v != nil {
 		m.SetIsPublic(*v)

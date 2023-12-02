@@ -36,7 +36,6 @@ func (Personal) Policy() ent.Policy {
 func (Personal) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
-		mixin.OwnerMixin{},
 	}
 }
 
@@ -74,13 +73,13 @@ func (Personal) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 			return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
-				var owner string
-				viewer := rule.FromContext(ctx)
-				if viewer != nil {
-					owner = viewer.GetPreferredUsername()
+				var usr string
+				v := rule.FromContext(ctx)
+				if v != nil {
+					usr = v.GetPreferredUsername()
 				}
 				if q, ok := query.(*e.PersonalQuery); ok {
-					q.Where(personal.Or(personal.IsPublic(true), personal.OwnerIDEQ(owner)))
+					q.Where(personal.Or(personal.IsPublic(true), personal.CreatedBy(usr)))
 				}
 				return next.Query(ctx, query)
 			})

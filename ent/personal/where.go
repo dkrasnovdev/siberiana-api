@@ -75,11 +75,6 @@ func UpdatedBy(v string) predicate.Personal {
 	return predicate.Personal(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
-func OwnerID(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldEQ(FieldOwnerID, v))
-}
-
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.Personal {
 	return predicate.Personal(sql.FieldEQ(FieldDisplayName, v))
@@ -318,71 +313,6 @@ func UpdatedByEqualFold(v string) predicate.Personal {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Personal {
 	return predicate.Personal(sql.FieldContainsFold(FieldUpdatedBy, v))
-}
-
-// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
-func OwnerIDEQ(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldEQ(FieldOwnerID, v))
-}
-
-// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
-func OwnerIDNEQ(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldNEQ(FieldOwnerID, v))
-}
-
-// OwnerIDIn applies the In predicate on the "owner_id" field.
-func OwnerIDIn(vs ...string) predicate.Personal {
-	return predicate.Personal(sql.FieldIn(FieldOwnerID, vs...))
-}
-
-// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
-func OwnerIDNotIn(vs ...string) predicate.Personal {
-	return predicate.Personal(sql.FieldNotIn(FieldOwnerID, vs...))
-}
-
-// OwnerIDGT applies the GT predicate on the "owner_id" field.
-func OwnerIDGT(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldGT(FieldOwnerID, v))
-}
-
-// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
-func OwnerIDGTE(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldGTE(FieldOwnerID, v))
-}
-
-// OwnerIDLT applies the LT predicate on the "owner_id" field.
-func OwnerIDLT(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldLT(FieldOwnerID, v))
-}
-
-// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
-func OwnerIDLTE(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldLTE(FieldOwnerID, v))
-}
-
-// OwnerIDContains applies the Contains predicate on the "owner_id" field.
-func OwnerIDContains(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldContains(FieldOwnerID, v))
-}
-
-// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
-func OwnerIDHasPrefix(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldHasPrefix(FieldOwnerID, v))
-}
-
-// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
-func OwnerIDHasSuffix(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldHasSuffix(FieldOwnerID, v))
-}
-
-// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
-func OwnerIDEqualFold(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldEqualFold(FieldOwnerID, v))
-}
-
-// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
-func OwnerIDContainsFold(v string) predicate.Personal {
-	return predicate.Personal(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.

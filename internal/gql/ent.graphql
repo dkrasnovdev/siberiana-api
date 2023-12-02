@@ -2927,7 +2927,6 @@ input CreateFavouriteInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  ownerID: String!
 }
 """
 CreateInterviewInput is used for create Interview object.
@@ -3137,7 +3136,6 @@ input CreatePersonalInput {
   createdBy: String
   updatedAt: Time
   updatedBy: String
-  ownerID: String!
   displayName: String!
   isPublic: Boolean
   artifactIDs: [ID!]
@@ -4520,7 +4518,6 @@ type Favourite implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  ownerID: String!
 }
 """A connection to a list of items."""
 type FavouriteConnection {
@@ -4617,20 +4614,6 @@ input FavouriteWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """owner_id field predicates"""
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
 }
 type Interview implements Node {
   id: ID!
@@ -6828,7 +6811,6 @@ type Personal implements Node {
   createdBy: String
   updatedAt: Time!
   updatedBy: String
-  ownerID: String!
   displayName: String!
   isPublic: Boolean!
   artifacts: [Artifact!]
@@ -6931,20 +6913,6 @@ input PersonalWhereInput {
   updatedByNotNil: Boolean
   updatedByEqualFold: String
   updatedByContainsFold: String
-  """owner_id field predicates"""
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
   """display_name field predicates"""
   displayName: String
   displayNameNEQ: String

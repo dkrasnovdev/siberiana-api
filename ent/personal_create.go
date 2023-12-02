@@ -80,12 +80,6 @@ func (pc *PersonalCreate) SetNillableUpdatedBy(s *string) *PersonalCreate {
 	return pc
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (pc *PersonalCreate) SetOwnerID(s string) *PersonalCreate {
-	pc.mutation.SetOwnerID(s)
-	return pc
-}
-
 // SetDisplayName sets the "display_name" field.
 func (pc *PersonalCreate) SetDisplayName(s string) *PersonalCreate {
 	pc.mutation.SetDisplayName(s)
@@ -232,14 +226,6 @@ func (pc *PersonalCreate) check() error {
 	if _, ok := pc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Personal.updated_at"`)}
 	}
-	if _, ok := pc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`ent: missing required field "Personal.owner_id"`)}
-	}
-	if v, ok := pc.mutation.OwnerID(); ok {
-		if err := personal.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`ent: validator failed for field "Personal.owner_id": %w`, err)}
-		}
-	}
 	if _, ok := pc.mutation.DisplayName(); !ok {
 		return &ValidationError{Name: "display_name", err: errors.New(`ent: missing required field "Personal.display_name"`)}
 	}
@@ -292,10 +278,6 @@ func (pc *PersonalCreate) createSpec() (*Personal, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.UpdatedBy(); ok {
 		_spec.SetField(personal.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := pc.mutation.OwnerID(); ok {
-		_spec.SetField(personal.FieldOwnerID, field.TypeString, value)
-		_node.OwnerID = value
 	}
 	if value, ok := pc.mutation.DisplayName(); ok {
 		_spec.SetField(personal.FieldDisplayName, field.TypeString, value)

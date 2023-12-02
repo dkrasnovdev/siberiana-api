@@ -33,7 +33,6 @@ func (Favourite) Policy() ent.Policy {
 func (Favourite) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.AuditMixin{},
-		mixin.OwnerMixin{},
 	}
 }
 

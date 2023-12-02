@@ -76,12 +76,6 @@ func (fc *FavouriteCreate) SetNillableUpdatedBy(s *string) *FavouriteCreate {
 	return fc
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (fc *FavouriteCreate) SetOwnerID(s string) *FavouriteCreate {
-	fc.mutation.SetOwnerID(s)
-	return fc
-}
-
 // Mutation returns the FavouriteMutation object of the builder.
 func (fc *FavouriteCreate) Mutation() *FavouriteMutation {
 	return fc.mutation
@@ -144,14 +138,6 @@ func (fc *FavouriteCreate) check() error {
 	if _, ok := fc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Favourite.updated_at"`)}
 	}
-	if _, ok := fc.mutation.OwnerID(); !ok {
-		return &ValidationError{Name: "owner_id", err: errors.New(`ent: missing required field "Favourite.owner_id"`)}
-	}
-	if v, ok := fc.mutation.OwnerID(); ok {
-		if err := favourite.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`ent: validator failed for field "Favourite.owner_id": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -193,10 +179,6 @@ func (fc *FavouriteCreate) createSpec() (*Favourite, *sqlgraph.CreateSpec) {
 	if value, ok := fc.mutation.UpdatedBy(); ok {
 		_spec.SetField(favourite.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := fc.mutation.OwnerID(); ok {
-		_spec.SetField(favourite.FieldOwnerID, field.TypeString, value)
-		_node.OwnerID = value
 	}
 	return _node, _spec
 }
