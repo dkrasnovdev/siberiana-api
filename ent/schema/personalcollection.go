@@ -103,15 +103,12 @@ func OwnershipHook(next ent.Mutator) ent.Mutator {
 			return nil, fmt.Errorf("not authenticated")
 		}
 		usr := v.GetPreferredUsername()
-
 		op := m.Op()
-
 		owner, _ := m.OldCreatedBy(ctx)
-
-		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && owner != usr {
+		m.SetOp(ent.OpUpdateOne)
+		if op.Is(ent.OpUpdateOne) && owner != usr {
 			return nil, fmt.Errorf("Operation is not allowed. User %s is not owner of the collection. Owner: %s", usr, owner)
 		}
-
 		return next.Mutate(ctx, m)
 	})
 }
