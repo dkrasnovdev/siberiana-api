@@ -6,8 +6,11 @@ package resolver
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/dkrasnovdev/siberiana-api/ent"
+	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
 	"github.com/dkrasnovdev/siberiana-api/internal/gql"
 )
 
@@ -576,7 +579,18 @@ func (r *mutationResolver) UpdatePersonalCollection(ctx context.Context, id int,
 // DeletePersonalCollection is the resolver for the deletePersonalCollection field.
 func (r *mutationResolver) DeletePersonalCollection(ctx context.Context, id int) (string, error) {
 	client := ent.FromContext(ctx)
-	err := client.PersonalCollection.DeleteOneID(id).Exec(ctx)
+	viewer := privacy.FromContext(ctx)
+	if viewer == nil {
+		return "", fmt.Errorf("Only logged in users can delete personal collections")
+	}
+	user := viewer.GetPreferredUsername()
+	_, err := client.PersonalCollection.Query().
+		Where(personalcollection.And(personalcollection.IDEQ(id), personalcollection.CreatedByEQ(user))).
+		Only(ctx)
+	if err != nil {
+		return "", fmt.Errorf("Operation not permitted")
+	}
+	err = client.PersonalCollection.DeleteOneID(id).Exec(ctx)
 	if err != nil {
 		return "", err
 	}

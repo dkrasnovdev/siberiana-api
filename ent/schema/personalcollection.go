@@ -104,12 +104,9 @@ func OwnershipHook(next ent.Mutator) ent.Mutator {
 		}
 		usr := v.GetPreferredUsername()
 		op := m.Op()
-
-		id, _ := m.ID()
-		c := m.Client().PersonalCollection.Query().Where(personalcollection.ID(id)).OnlyX(ctx)
-
-		if op.Is(ent.OpUpdateOne) && c.CreatedBy != usr {
-			return nil, fmt.Errorf("Operation is not allowed. User %s is not owner of the collection. Values: %v", usr, c)
+		created_by, _ := m.CreatedBy()
+		if op.Is(ent.OpUpdateOne) && created_by != usr {
+			return nil, fmt.Errorf("Operation is not allowed. User %s is not owner of the collection.", usr)
 		}
 
 		return next.Mutate(ctx, m)
