@@ -2,6 +2,7 @@ package schema
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
@@ -85,4 +86,33 @@ func (Personal) Interceptors() []ent.Interceptor {
 			})
 		}),
 	}
+}
+
+func (Personal) Hooks() []ent.Hook {
+	return []ent.Hook{}
+}
+
+func OwnershipHook(next ent.Mutator) ent.Mutator {
+	type Ownership interface {
+		CreatedBy() string
+	}
+	return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+		mx, ok := m.(Ownership)
+		if !ok {
+			return nil, fmt.Errorf("unexpected audit-log call from mutation type %T", m)
+		}
+		v := rule.FromContext(ctx)
+		if v == nil {
+			return nil, fmt.Errorf("not authenticated")
+		}
+		usr := v.GetPreferredUsername()
+
+		op := m.Op()
+
+		if op.Is(ent.OpUpdateOne|ent.OpUpdate|ent.OpDelete|ent.OpDeleteOne) && mx.CreatedBy() != usr {
+			return nil, fmt.Errorf("not allowed")
+		}
+
+		return next.Mutate(ctx, m)
+	})
 }
