@@ -23,7 +23,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
+	"github.com/dkrasnovdev/siberiana-api/ent/familia"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/genus"
+	"github.com/dkrasnovdev/siberiana-api/ent/group"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -47,6 +51,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/species"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
@@ -512,6 +517,33 @@ func (f TraverseEthnos) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.EthnosQuery", q)
 }
 
+// The FamiliaFunc type is an adapter to allow the use of ordinary function as a Querier.
+type FamiliaFunc func(context.Context, *ent.FamiliaQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f FamiliaFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.FamiliaQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.FamiliaQuery", q)
+}
+
+// The TraverseFamilia type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseFamilia func(context.Context, *ent.FamiliaQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseFamilia) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseFamilia) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.FamiliaQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.FamiliaQuery", q)
+}
+
 // The FavouriteFunc type is an adapter to allow the use of ordinary function as a Querier.
 type FavouriteFunc func(context.Context, *ent.FavouriteQuery) (ent.Value, error)
 
@@ -537,6 +569,87 @@ func (f TraverseFavourite) Traverse(ctx context.Context, q ent.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *ent.FavouriteQuery", q)
+}
+
+// The GenusFunc type is an adapter to allow the use of ordinary function as a Querier.
+type GenusFunc func(context.Context, *ent.GenusQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f GenusFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.GenusQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.GenusQuery", q)
+}
+
+// The TraverseGenus type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseGenus func(context.Context, *ent.GenusQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseGenus) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseGenus) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.GenusQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.GenusQuery", q)
+}
+
+// The GroupFunc type is an adapter to allow the use of ordinary function as a Querier.
+type GroupFunc func(context.Context, *ent.GroupQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f GroupFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.GroupQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.GroupQuery", q)
+}
+
+// The TraverseGroup type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseGroup func(context.Context, *ent.GroupQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseGroup) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseGroup) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.GroupQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.GroupQuery", q)
+}
+
+// The HerbariumFunc type is an adapter to allow the use of ordinary function as a Querier.
+type HerbariumFunc func(context.Context, *ent.HerbariumQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f HerbariumFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.HerbariumQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.HerbariumQuery", q)
+}
+
+// The TraverseHerbarium type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseHerbarium func(context.Context, *ent.HerbariumQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseHerbarium) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseHerbarium) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.HerbariumQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.HerbariumQuery", q)
 }
 
 // The InterviewFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1133,6 +1246,33 @@ func (f TraverseSettlement) Traverse(ctx context.Context, q ent.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *ent.SettlementQuery", q)
 }
 
+// The SpeciesFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SpeciesFunc func(context.Context, *ent.SpeciesQuery) (ent.Value, error)
+
+// Query calls f(ctx, q).
+func (f SpeciesFunc) Query(ctx context.Context, q ent.Query) (ent.Value, error) {
+	if q, ok := q.(*ent.SpeciesQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *ent.SpeciesQuery", q)
+}
+
+// The TraverseSpecies type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSpecies func(context.Context, *ent.SpeciesQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSpecies) Intercept(next ent.Querier) ent.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSpecies) Traverse(ctx context.Context, q ent.Query) error {
+	if q, ok := q.(*ent.SpeciesQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *ent.SpeciesQuery", q)
+}
+
 // The TechniqueFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TechniqueFunc func(context.Context, *ent.TechniqueQuery) (ent.Value, error)
 
@@ -1220,8 +1360,16 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.DistrictQuery, predicate.District, district.OrderOption]{typ: ent.TypeDistrict, tq: q}, nil
 	case *ent.EthnosQuery:
 		return &query[*ent.EthnosQuery, predicate.Ethnos, ethnos.OrderOption]{typ: ent.TypeEthnos, tq: q}, nil
+	case *ent.FamiliaQuery:
+		return &query[*ent.FamiliaQuery, predicate.Familia, familia.OrderOption]{typ: ent.TypeFamilia, tq: q}, nil
 	case *ent.FavouriteQuery:
 		return &query[*ent.FavouriteQuery, predicate.Favourite, favourite.OrderOption]{typ: ent.TypeFavourite, tq: q}, nil
+	case *ent.GenusQuery:
+		return &query[*ent.GenusQuery, predicate.Genus, genus.OrderOption]{typ: ent.TypeGenus, tq: q}, nil
+	case *ent.GroupQuery:
+		return &query[*ent.GroupQuery, predicate.Group, group.OrderOption]{typ: ent.TypeGroup, tq: q}, nil
+	case *ent.HerbariumQuery:
+		return &query[*ent.HerbariumQuery, predicate.Herbarium, herbarium.OrderOption]{typ: ent.TypeHerbarium, tq: q}, nil
 	case *ent.InterviewQuery:
 		return &query[*ent.InterviewQuery, predicate.Interview, interview.OrderOption]{typ: ent.TypeInterview, tq: q}, nil
 	case *ent.KeywordQuery:
@@ -1266,6 +1414,8 @@ func NewQuery(q ent.Query) (Query, error) {
 		return &query[*ent.SetQuery, predicate.Set, set.OrderOption]{typ: ent.TypeSet, tq: q}, nil
 	case *ent.SettlementQuery:
 		return &query[*ent.SettlementQuery, predicate.Settlement, settlement.OrderOption]{typ: ent.TypeSettlement, tq: q}, nil
+	case *ent.SpeciesQuery:
+		return &query[*ent.SpeciesQuery, predicate.Species, species.OrderOption]{typ: ent.TypeSpecies, tq: q}, nil
 	case *ent.TechniqueQuery:
 		return &query[*ent.TechniqueQuery, predicate.Technique, technique.OrderOption]{typ: ent.TypeTechnique, tq: q}, nil
 	case *ent.VisitQuery:

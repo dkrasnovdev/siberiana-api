@@ -45,20 +45,23 @@ type PersonalCollectionEdges struct {
 	Books []*Book `json:"books,omitempty"`
 	// Dendrochronology holds the value of the dendrochronology edge.
 	Dendrochronology []*Dendrochronology `json:"dendrochronology,omitempty"`
+	// Herbaria holds the value of the herbaria edge.
+	Herbaria []*Herbarium `json:"herbaria,omitempty"`
 	// Petroglyphs holds the value of the petroglyphs edge.
 	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
 	namedDendrochronology      map[string][]*Dendrochronology
+	namedHerbaria              map[string][]*Herbarium
 	namedPetroglyphs           map[string][]*Petroglyph
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 }
@@ -99,10 +102,19 @@ func (e PersonalCollectionEdges) DendrochronologyOrErr() ([]*Dendrochronology, e
 	return nil, &NotLoadedError{edge: "dendrochronology"}
 }
 
+// HerbariaOrErr returns the Herbaria value or an error if the edge
+// was not loaded in eager-loading.
+func (e PersonalCollectionEdges) HerbariaOrErr() ([]*Herbarium, error) {
+	if e.loadedTypes[4] {
+		return e.Herbaria, nil
+	}
+	return nil, &NotLoadedError{edge: "herbaria"}
+}
+
 // PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalCollectionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Petroglyphs, nil
 	}
 	return nil, &NotLoadedError{edge: "petroglyphs"}
@@ -111,7 +123,7 @@ func (e PersonalCollectionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e PersonalCollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -218,6 +230,11 @@ func (pc *PersonalCollection) QueryBooks() *BookQuery {
 // QueryDendrochronology queries the "dendrochronology" edge of the PersonalCollection entity.
 func (pc *PersonalCollection) QueryDendrochronology() *DendrochronologyQuery {
 	return NewPersonalCollectionClient(pc.config).QueryDendrochronology(pc)
+}
+
+// QueryHerbaria queries the "herbaria" edge of the PersonalCollection entity.
+func (pc *PersonalCollection) QueryHerbaria() *HerbariumQuery {
+	return NewPersonalCollectionClient(pc.config).QueryHerbaria(pc)
 }
 
 // QueryPetroglyphs queries the "petroglyphs" edge of the PersonalCollection entity.
@@ -367,6 +384,30 @@ func (pc *PersonalCollection) appendNamedDendrochronology(name string, edges ...
 		pc.Edges.namedDendrochronology[name] = []*Dendrochronology{}
 	} else {
 		pc.Edges.namedDendrochronology[name] = append(pc.Edges.namedDendrochronology[name], edges...)
+	}
+}
+
+// NamedHerbaria returns the Herbaria named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pc *PersonalCollection) NamedHerbaria(name string) ([]*Herbarium, error) {
+	if pc.Edges.namedHerbaria == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pc.Edges.namedHerbaria[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pc *PersonalCollection) appendNamedHerbaria(name string, edges ...*Herbarium) {
+	if pc.Edges.namedHerbaria == nil {
+		pc.Edges.namedHerbaria = make(map[string][]*Herbarium)
+	}
+	if len(edges) == 0 {
+		pc.Edges.namedHerbaria[name] = []*Herbarium{}
+	} else {
+		pc.Edges.namedHerbaria[name] = append(pc.Edges.namedHerbaria[name], edges...)
 	}
 }
 

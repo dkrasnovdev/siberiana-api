@@ -28,7 +28,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
+	"github.com/dkrasnovdev/siberiana-api/ent/familia"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/genus"
+	"github.com/dkrasnovdev/siberiana-api/ent/group"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -51,6 +55,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/species"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 	"github.com/hashicorp/go-multierror"
@@ -137,10 +142,30 @@ var ethnosImplementors = []string{"Ethnos", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Ethnos) IsNode() {}
 
+var familiaImplementors = []string{"Familia", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Familia) IsNode() {}
+
 var favouriteImplementors = []string{"Favourite", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Favourite) IsNode() {}
+
+var genusImplementors = []string{"Genus", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Genus) IsNode() {}
+
+var groupImplementors = []string{"Group", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Group) IsNode() {}
+
+var herbariumImplementors = []string{"Herbarium", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Herbarium) IsNode() {}
 
 var interviewImplementors = []string{"Interview", "Node"}
 
@@ -251,6 +276,11 @@ var settlementImplementors = []string{"Settlement", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Settlement) IsNode() {}
+
+var speciesImplementors = []string{"Species", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Species) IsNode() {}
 
 var techniqueImplementors = []string{"Technique", "Node"}
 
@@ -500,10 +530,58 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
+	case familia.Table:
+		query := c.Familia.Query().
+			Where(familia.ID(id))
+		query, err := query.CollectFields(ctx, familiaImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case favourite.Table:
 		query := c.Favourite.Query().
 			Where(favourite.ID(id))
 		query, err := query.CollectFields(ctx, favouriteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case genus.Table:
+		query := c.Genus.Query().
+			Where(genus.ID(id))
+		query, err := query.CollectFields(ctx, genusImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case group.Table:
+		query := c.Group.Query().
+			Where(group.ID(id))
+		query, err := query.CollectFields(ctx, groupImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case herbarium.Table:
+		query := c.Herbarium.Query().
+			Where(herbarium.ID(id))
+		query, err := query.CollectFields(ctx, herbariumImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -768,6 +846,18 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 		query := c.Settlement.Query().
 			Where(settlement.ID(id))
 		query, err := query.CollectFields(ctx, settlementImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		n, err := query.Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
+	case species.Table:
+		query := c.Species.Query().
+			Where(species.ID(id))
+		query, err := query.CollectFields(ctx, speciesImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1113,10 +1203,74 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 				*noder = node
 			}
 		}
+	case familia.Table:
+		query := c.Familia.Query().
+			Where(familia.IDIn(ids...))
+		query, err := query.CollectFields(ctx, familiaImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case favourite.Table:
 		query := c.Favourite.Query().
 			Where(favourite.IDIn(ids...))
 		query, err := query.CollectFields(ctx, favouriteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case genus.Table:
+		query := c.Genus.Query().
+			Where(genus.IDIn(ids...))
+		query, err := query.CollectFields(ctx, genusImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case group.Table:
+		query := c.Group.Query().
+			Where(group.IDIn(ids...))
+		query, err := query.CollectFields(ctx, groupImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case herbarium.Table:
+		query := c.Herbarium.Query().
+			Where(herbarium.IDIn(ids...))
+		query, err := query.CollectFields(ctx, herbariumImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1469,6 +1623,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.Settlement.Query().
 			Where(settlement.IDIn(ids...))
 		query, err := query.CollectFields(ctx, settlementImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case species.Table:
+		query := c.Species.Query().
+			Where(species.IDIn(ids...))
+		query, err := query.CollectFields(ctx, speciesImplementors...)
 		if err != nil {
 			return nil, err
 		}

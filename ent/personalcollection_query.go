@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -33,6 +34,7 @@ type PersonalCollectionQuery struct {
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
 	withDendrochronology           *DendrochronologyQuery
+	withHerbaria                   *HerbariumQuery
 	withPetroglyphs                *PetroglyphQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	modifiers                      []func(*sql.Selector)
@@ -41,6 +43,7 @@ type PersonalCollectionQuery struct {
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
 	withNamedDendrochronology      map[string]*DendrochronologyQuery
+	withNamedHerbaria              map[string]*HerbariumQuery
 	withNamedPetroglyphs           map[string]*PetroglyphQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	// intermediate query (i.e. traversal path).
@@ -160,6 +163,28 @@ func (pcq *PersonalCollectionQuery) QueryDendrochronology() *DendrochronologyQue
 			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, selector),
 			sqlgraph.To(dendrochronology.Table, dendrochronology.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, personalcollection.DendrochronologyTable, personalcollection.DendrochronologyColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryHerbaria chains the current query on the "herbaria" edge.
+func (pcq *PersonalCollectionQuery) QueryHerbaria() *HerbariumQuery {
+	query := (&HerbariumClient{config: pcq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pcq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pcq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, selector),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.HerbariaTable, personalcollection.HerbariaPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pcq.driver.Dialect(), step)
 		return fromU, nil
@@ -407,6 +432,7 @@ func (pcq *PersonalCollectionQuery) Clone() *PersonalCollectionQuery {
 		withArtifacts:             pcq.withArtifacts.Clone(),
 		withBooks:                 pcq.withBooks.Clone(),
 		withDendrochronology:      pcq.withDendrochronology.Clone(),
+		withHerbaria:              pcq.withHerbaria.Clone(),
 		withPetroglyphs:           pcq.withPetroglyphs.Clone(),
 		withProtectedAreaPictures: pcq.withProtectedAreaPictures.Clone(),
 		// clone intermediate query.
@@ -456,6 +482,17 @@ func (pcq *PersonalCollectionQuery) WithDendrochronology(opts ...func(*Dendrochr
 		opt(query)
 	}
 	pcq.withDendrochronology = query
+	return pcq
+}
+
+// WithHerbaria tells the query-builder to eager-load the nodes that are connected to
+// the "herbaria" edge. The optional arguments are used to configure the query builder of the edge.
+func (pcq *PersonalCollectionQuery) WithHerbaria(opts ...func(*HerbariumQuery)) *PersonalCollectionQuery {
+	query := (&HerbariumClient{config: pcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pcq.withHerbaria = query
 	return pcq
 }
 
@@ -565,11 +602,12 @@ func (pcq *PersonalCollectionQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	var (
 		nodes       = []*PersonalCollection{}
 		_spec       = pcq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			pcq.withArt != nil,
 			pcq.withArtifacts != nil,
 			pcq.withBooks != nil,
 			pcq.withDendrochronology != nil,
+			pcq.withHerbaria != nil,
 			pcq.withPetroglyphs != nil,
 			pcq.withProtectedAreaPictures != nil,
 		}
@@ -625,6 +663,13 @@ func (pcq *PersonalCollectionQuery) sqlAll(ctx context.Context, hooks ...queryHo
 			return nil, err
 		}
 	}
+	if query := pcq.withHerbaria; query != nil {
+		if err := pcq.loadHerbaria(ctx, query, nodes,
+			func(n *PersonalCollection) { n.Edges.Herbaria = []*Herbarium{} },
+			func(n *PersonalCollection, e *Herbarium) { n.Edges.Herbaria = append(n.Edges.Herbaria, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pcq.withPetroglyphs; query != nil {
 		if err := pcq.loadPetroglyphs(ctx, query, nodes,
 			func(n *PersonalCollection) { n.Edges.Petroglyphs = []*Petroglyph{} },
@@ -666,6 +711,13 @@ func (pcq *PersonalCollectionQuery) sqlAll(ctx context.Context, hooks ...queryHo
 		if err := pcq.loadDendrochronology(ctx, query, nodes,
 			func(n *PersonalCollection) { n.appendNamedDendrochronology(name) },
 			func(n *PersonalCollection, e *Dendrochronology) { n.appendNamedDendrochronology(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pcq.withNamedHerbaria {
+		if err := pcq.loadHerbaria(ctx, query, nodes,
+			func(n *PersonalCollection) { n.appendNamedHerbaria(name) },
+			func(n *PersonalCollection, e *Herbarium) { n.appendNamedHerbaria(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -902,6 +954,67 @@ func (pcq *PersonalCollectionQuery) loadDendrochronology(ctx context.Context, qu
 			return fmt.Errorf(`unexpected referenced foreign-key "personal_collection_dendrochronology" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (pcq *PersonalCollectionQuery) loadHerbaria(ctx context.Context, query *HerbariumQuery, nodes []*PersonalCollection, init func(*PersonalCollection), assign func(*PersonalCollection, *Herbarium)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*PersonalCollection)
+	nids := make(map[int]map[*PersonalCollection]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(personalcollection.HerbariaTable)
+		s.Join(joinT).On(s.C(herbarium.FieldID), joinT.C(personalcollection.HerbariaPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(personalcollection.HerbariaPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(personalcollection.HerbariaPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*PersonalCollection]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Herbarium](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "herbaria" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -1165,6 +1278,20 @@ func (pcq *PersonalCollectionQuery) WithNamedDendrochronology(name string, opts 
 		pcq.withNamedDendrochronology = make(map[string]*DendrochronologyQuery)
 	}
 	pcq.withNamedDendrochronology[name] = query
+	return pcq
+}
+
+// WithNamedHerbaria tells the query-builder to eager-load the nodes that are connected to the "herbaria"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pcq *PersonalCollectionQuery) WithNamedHerbaria(name string, opts ...func(*HerbariumQuery)) *PersonalCollectionQuery {
+	query := (&HerbariumClient{config: pcq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pcq.withNamedHerbaria == nil {
+		pcq.withNamedHerbaria = make(map[string]*HerbariumQuery)
+	}
+	pcq.withNamedHerbaria[name] = query
 	return pcq
 }
 

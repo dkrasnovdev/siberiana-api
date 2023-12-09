@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
@@ -36,6 +37,7 @@ type PersonQuery struct {
 	withCollections                             *CollectionQuery
 	withArt                                     *ArtQuery
 	withArtifacts                               *ArtifactQuery
+	withHerbaria                                *HerbariumQuery
 	withProtectedAreaPictures                   *ProtectedAreaPictureQuery
 	withDonatedArtifacts                        *ArtifactQuery
 	withPetroglyphsAccountingDocumentation      *PetroglyphQuery
@@ -50,6 +52,7 @@ type PersonQuery struct {
 	withNamedCollections                        map[string]*CollectionQuery
 	withNamedArt                                map[string]*ArtQuery
 	withNamedArtifacts                          map[string]*ArtifactQuery
+	withNamedHerbaria                           map[string]*HerbariumQuery
 	withNamedProtectedAreaPictures              map[string]*ProtectedAreaPictureQuery
 	withNamedDonatedArtifacts                   map[string]*ArtifactQuery
 	withNamedPetroglyphsAccountingDocumentation map[string]*PetroglyphQuery
@@ -152,6 +155,28 @@ func (pq *PersonQuery) QueryArtifacts() *ArtifactQuery {
 			sqlgraph.From(person.Table, person.FieldID, selector),
 			sqlgraph.To(artifact.Table, artifact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, person.ArtifactsTable, person.ArtifactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryHerbaria chains the current query on the "herbaria" edge.
+func (pq *PersonQuery) QueryHerbaria() *HerbariumQuery {
+	query := (&HerbariumClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, selector),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.HerbariaTable, person.HerbariaColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -530,6 +555,7 @@ func (pq *PersonQuery) Clone() *PersonQuery {
 		withCollections:                        pq.withCollections.Clone(),
 		withArt:                                pq.withArt.Clone(),
 		withArtifacts:                          pq.withArtifacts.Clone(),
+		withHerbaria:                           pq.withHerbaria.Clone(),
 		withProtectedAreaPictures:              pq.withProtectedAreaPictures.Clone(),
 		withDonatedArtifacts:                   pq.withDonatedArtifacts.Clone(),
 		withPetroglyphsAccountingDocumentation: pq.withPetroglyphsAccountingDocumentation.Clone(),
@@ -574,6 +600,17 @@ func (pq *PersonQuery) WithArtifacts(opts ...func(*ArtifactQuery)) *PersonQuery 
 		opt(query)
 	}
 	pq.withArtifacts = query
+	return pq
+}
+
+// WithHerbaria tells the query-builder to eager-load the nodes that are connected to
+// the "herbaria" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithHerbaria(opts ...func(*HerbariumQuery)) *PersonQuery {
+	query := (&HerbariumClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withHerbaria = query
 	return pq
 }
 
@@ -750,10 +787,11 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		nodes       = []*Person{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [12]bool{
 			pq.withCollections != nil,
 			pq.withArt != nil,
 			pq.withArtifacts != nil,
+			pq.withHerbaria != nil,
 			pq.withProtectedAreaPictures != nil,
 			pq.withDonatedArtifacts != nil,
 			pq.withPetroglyphsAccountingDocumentation != nil,
@@ -809,6 +847,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.Edges.Artifacts = []*Artifact{} },
 			func(n *Person, e *Artifact) { n.Edges.Artifacts = append(n.Edges.Artifacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withHerbaria; query != nil {
+		if err := pq.loadHerbaria(ctx, query, nodes,
+			func(n *Person) { n.Edges.Herbaria = []*Herbarium{} },
+			func(n *Person, e *Herbarium) { n.Edges.Herbaria = append(n.Edges.Herbaria, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -889,6 +934,13 @@ func (pq *PersonQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Perso
 		if err := pq.loadArtifacts(ctx, query, nodes,
 			func(n *Person) { n.appendNamedArtifacts(name) },
 			func(n *Person, e *Artifact) { n.appendNamedArtifacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedHerbaria {
+		if err := pq.loadHerbaria(ctx, query, nodes,
+			func(n *Person) { n.appendNamedHerbaria(name) },
+			func(n *Person, e *Herbarium) { n.appendNamedHerbaria(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1099,6 +1151,37 @@ func (pq *PersonQuery) loadArtifacts(ctx context.Context, query *ArtifactQuery, 
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (pq *PersonQuery) loadHerbaria(ctx context.Context, query *HerbariumQuery, nodes []*Person, init func(*Person), assign func(*Person, *Herbarium)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Person)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Herbarium(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(person.HerbariaColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.person_herbaria
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "person_herbaria" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "person_herbaria" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -1595,6 +1678,20 @@ func (pq *PersonQuery) WithNamedArtifacts(name string, opts ...func(*ArtifactQue
 		pq.withNamedArtifacts = make(map[string]*ArtifactQuery)
 	}
 	pq.withNamedArtifacts[name] = query
+	return pq
+}
+
+// WithNamedHerbaria tells the query-builder to eager-load the nodes that are connected to the "herbaria"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *PersonQuery) WithNamedHerbaria(name string, opts ...func(*HerbariumQuery)) *PersonQuery {
+	query := (&HerbariumClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedHerbaria == nil {
+		pq.withNamedHerbaria = make(map[string]*HerbariumQuery)
+	}
+	pq.withNamedHerbaria[name] = query
 	return pq
 }
 

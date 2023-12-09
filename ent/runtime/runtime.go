@@ -21,7 +21,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
+	"github.com/dkrasnovdev/siberiana-api/ent/familia"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/genus"
+	"github.com/dkrasnovdev/siberiana-api/ent/group"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -44,6 +48,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/schema"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/species"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 
@@ -483,6 +488,33 @@ func init() {
 	ethnos.DefaultUpdatedAt = ethnosDescUpdatedAt.Default.(func() time.Time)
 	// ethnos.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	ethnos.UpdateDefaultUpdatedAt = ethnosDescUpdatedAt.UpdateDefault.(func() time.Time)
+	familiaMixin := schema.Familia{}.Mixin()
+	familia.Policy = privacy.NewPolicies(schema.Familia{})
+	familia.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := familia.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	familiaMixinHooks0 := familiaMixin[0].Hooks()
+
+	familia.Hooks[1] = familiaMixinHooks0[0]
+	familiaMixinFields0 := familiaMixin[0].Fields()
+	_ = familiaMixinFields0
+	familiaFields := schema.Familia{}.Fields()
+	_ = familiaFields
+	// familiaDescCreatedAt is the schema descriptor for created_at field.
+	familiaDescCreatedAt := familiaMixinFields0[0].Descriptor()
+	// familia.DefaultCreatedAt holds the default value on creation for the created_at field.
+	familia.DefaultCreatedAt = familiaDescCreatedAt.Default.(func() time.Time)
+	// familiaDescUpdatedAt is the schema descriptor for updated_at field.
+	familiaDescUpdatedAt := familiaMixinFields0[2].Descriptor()
+	// familia.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	familia.DefaultUpdatedAt = familiaDescUpdatedAt.Default.(func() time.Time)
+	// familia.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	familia.UpdateDefaultUpdatedAt = familiaDescUpdatedAt.UpdateDefault.(func() time.Time)
 	favouriteMixin := schema.Favourite{}.Mixin()
 	favourite.Policy = privacy.NewPolicies(schema.Favourite{})
 	favourite.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -510,6 +542,89 @@ func init() {
 	favourite.DefaultUpdatedAt = favouriteDescUpdatedAt.Default.(func() time.Time)
 	// favourite.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	favourite.UpdateDefaultUpdatedAt = favouriteDescUpdatedAt.UpdateDefault.(func() time.Time)
+	genusMixin := schema.Genus{}.Mixin()
+	genus.Policy = privacy.NewPolicies(schema.Genus{})
+	genus.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := genus.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	genusMixinHooks0 := genusMixin[0].Hooks()
+
+	genus.Hooks[1] = genusMixinHooks0[0]
+	genusMixinFields0 := genusMixin[0].Fields()
+	_ = genusMixinFields0
+	genusFields := schema.Genus{}.Fields()
+	_ = genusFields
+	// genusDescCreatedAt is the schema descriptor for created_at field.
+	genusDescCreatedAt := genusMixinFields0[0].Descriptor()
+	// genus.DefaultCreatedAt holds the default value on creation for the created_at field.
+	genus.DefaultCreatedAt = genusDescCreatedAt.Default.(func() time.Time)
+	// genusDescUpdatedAt is the schema descriptor for updated_at field.
+	genusDescUpdatedAt := genusMixinFields0[2].Descriptor()
+	// genus.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	genus.DefaultUpdatedAt = genusDescUpdatedAt.Default.(func() time.Time)
+	// genus.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	genus.UpdateDefaultUpdatedAt = genusDescUpdatedAt.UpdateDefault.(func() time.Time)
+	groupMixin := schema.Group{}.Mixin()
+	group.Policy = privacy.NewPolicies(schema.Group{})
+	group.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := group.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	groupMixinHooks0 := groupMixin[0].Hooks()
+
+	group.Hooks[1] = groupMixinHooks0[0]
+	groupMixinFields0 := groupMixin[0].Fields()
+	_ = groupMixinFields0
+	groupFields := schema.Group{}.Fields()
+	_ = groupFields
+	// groupDescCreatedAt is the schema descriptor for created_at field.
+	groupDescCreatedAt := groupMixinFields0[0].Descriptor()
+	// group.DefaultCreatedAt holds the default value on creation for the created_at field.
+	group.DefaultCreatedAt = groupDescCreatedAt.Default.(func() time.Time)
+	// groupDescUpdatedAt is the schema descriptor for updated_at field.
+	groupDescUpdatedAt := groupMixinFields0[2].Descriptor()
+	// group.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	group.DefaultUpdatedAt = groupDescUpdatedAt.Default.(func() time.Time)
+	// group.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	group.UpdateDefaultUpdatedAt = groupDescUpdatedAt.UpdateDefault.(func() time.Time)
+	herbariumMixin := schema.Herbarium{}.Mixin()
+	herbarium.Policy = privacy.NewPolicies(schema.Herbarium{})
+	herbarium.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := herbarium.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	herbariumMixinHooks0 := herbariumMixin[0].Hooks()
+
+	herbarium.Hooks[1] = herbariumMixinHooks0[0]
+	herbariumMixinFields0 := herbariumMixin[0].Fields()
+	_ = herbariumMixinFields0
+	herbariumMixinFields2 := herbariumMixin[2].Fields()
+	_ = herbariumMixinFields2
+	herbariumFields := schema.Herbarium{}.Fields()
+	_ = herbariumFields
+	// herbariumDescCreatedAt is the schema descriptor for created_at field.
+	herbariumDescCreatedAt := herbariumMixinFields0[0].Descriptor()
+	// herbarium.DefaultCreatedAt holds the default value on creation for the created_at field.
+	herbarium.DefaultCreatedAt = herbariumDescCreatedAt.Default.(func() time.Time)
+	// herbariumDescUpdatedAt is the schema descriptor for updated_at field.
+	herbariumDescUpdatedAt := herbariumMixinFields0[2].Descriptor()
+	// herbarium.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	herbarium.DefaultUpdatedAt = herbariumDescUpdatedAt.Default.(func() time.Time)
+	// herbarium.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	herbarium.UpdateDefaultUpdatedAt = herbariumDescUpdatedAt.UpdateDefault.(func() time.Time)
 	interviewMixin := schema.Interview{}.Mixin()
 	interview.Policy = privacy.NewPolicies(schema.Interview{})
 	interview.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1113,6 +1228,33 @@ func init() {
 	settlement.DefaultUpdatedAt = settlementDescUpdatedAt.Default.(func() time.Time)
 	// settlement.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	settlement.UpdateDefaultUpdatedAt = settlementDescUpdatedAt.UpdateDefault.(func() time.Time)
+	speciesMixin := schema.Species{}.Mixin()
+	species.Policy = privacy.NewPolicies(schema.Species{})
+	species.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := species.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	speciesMixinHooks0 := speciesMixin[0].Hooks()
+
+	species.Hooks[1] = speciesMixinHooks0[0]
+	speciesMixinFields0 := speciesMixin[0].Fields()
+	_ = speciesMixinFields0
+	speciesFields := schema.Species{}.Fields()
+	_ = speciesFields
+	// speciesDescCreatedAt is the schema descriptor for created_at field.
+	speciesDescCreatedAt := speciesMixinFields0[0].Descriptor()
+	// species.DefaultCreatedAt holds the default value on creation for the created_at field.
+	species.DefaultCreatedAt = speciesDescCreatedAt.Default.(func() time.Time)
+	// speciesDescUpdatedAt is the schema descriptor for updated_at field.
+	speciesDescUpdatedAt := speciesMixinFields0[2].Descriptor()
+	// species.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	species.DefaultUpdatedAt = speciesDescUpdatedAt.Default.(func() time.Time)
+	// species.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	species.UpdateDefaultUpdatedAt = speciesDescUpdatedAt.UpdateDefault.(func() time.Time)
 	techniqueMixin := schema.Technique{}.Mixin()
 	technique.Policy = privacy.NewPolicies(schema.Technique{})
 	technique.Hooks[0] = func(next ent.Mutator) ent.Mutator {

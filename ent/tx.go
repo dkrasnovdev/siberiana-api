@@ -42,8 +42,16 @@ type Tx struct {
 	District *DistrictClient
 	// Ethnos is the client for interacting with the Ethnos builders.
 	Ethnos *EthnosClient
+	// Familia is the client for interacting with the Familia builders.
+	Familia *FamiliaClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
+	// Genus is the client for interacting with the Genus builders.
+	Genus *GenusClient
+	// Group is the client for interacting with the Group builders.
+	Group *GroupClient
+	// Herbarium is the client for interacting with the Herbarium builders.
+	Herbarium *HerbariumClient
 	// Interview is the client for interacting with the Interview builders.
 	Interview *InterviewClient
 	// Keyword is the client for interacting with the Keyword builders.
@@ -88,6 +96,8 @@ type Tx struct {
 	Set *SetClient
 	// Settlement is the client for interacting with the Settlement builders.
 	Settlement *SettlementClient
+	// Species is the client for interacting with the Species builders.
+	Species *SpeciesClient
 	// Technique is the client for interacting with the Technique builders.
 	Technique *TechniqueClient
 	// Visit is the client for interacting with the Visit builders.
@@ -238,7 +248,11 @@ func (tx *Tx) init() {
 	tx.Dendrochronology = NewDendrochronologyClient(tx.config)
 	tx.District = NewDistrictClient(tx.config)
 	tx.Ethnos = NewEthnosClient(tx.config)
+	tx.Familia = NewFamiliaClient(tx.config)
 	tx.Favourite = NewFavouriteClient(tx.config)
+	tx.Genus = NewGenusClient(tx.config)
+	tx.Group = NewGroupClient(tx.config)
+	tx.Herbarium = NewHerbariumClient(tx.config)
 	tx.Interview = NewInterviewClient(tx.config)
 	tx.Keyword = NewKeywordClient(tx.config)
 	tx.License = NewLicenseClient(tx.config)
@@ -261,6 +275,7 @@ func (tx *Tx) init() {
 	tx.Region = NewRegionClient(tx.config)
 	tx.Set = NewSetClient(tx.config)
 	tx.Settlement = NewSettlementClient(tx.config)
+	tx.Species = NewSpeciesClient(tx.config)
 	tx.Technique = NewTechniqueClient(tx.config)
 	tx.Visit = NewVisitClient(tx.config)
 }

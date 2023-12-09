@@ -47,6 +47,8 @@ type CountryEdges struct {
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// Herbaria holds the value of the herbaria edge.
+	Herbaria []*Herbarium `json:"herbaria,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Regions holds the value of the regions edge.
@@ -59,13 +61,14 @@ type CountryEdges struct {
 	KnownAsBefore []*Country `json:"known_as_before,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
+	namedHerbaria              map[string][]*Herbarium
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedRegions               map[string][]*Region
 	namedLocations             map[string][]*Location
@@ -100,10 +103,19 @@ func (e CountryEdges) BooksOrErr() ([]*Book, error) {
 	return nil, &NotLoadedError{edge: "books"}
 }
 
+// HerbariaOrErr returns the Herbaria value or an error if the edge
+// was not loaded in eager-loading.
+func (e CountryEdges) HerbariaOrErr() ([]*Herbarium, error) {
+	if e.loadedTypes[3] {
+		return e.Herbaria, nil
+	}
+	return nil, &NotLoadedError{edge: "herbaria"}
+}
+
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e CountryEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -112,7 +124,7 @@ func (e CountryEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, err
 // RegionsOrErr returns the Regions value or an error if the edge
 // was not loaded in eager-loading.
 func (e CountryEdges) RegionsOrErr() ([]*Region, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Regions, nil
 	}
 	return nil, &NotLoadedError{edge: "regions"}
@@ -121,7 +133,7 @@ func (e CountryEdges) RegionsOrErr() ([]*Region, error) {
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e CountryEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
@@ -130,7 +142,7 @@ func (e CountryEdges) LocationsOrErr() ([]*Location, error) {
 // KnownAsAfterOrErr returns the KnownAsAfter value or an error if the edge
 // was not loaded in eager-loading.
 func (e CountryEdges) KnownAsAfterOrErr() ([]*Country, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.KnownAsAfter, nil
 	}
 	return nil, &NotLoadedError{edge: "known_as_after"}
@@ -139,7 +151,7 @@ func (e CountryEdges) KnownAsAfterOrErr() ([]*Country, error) {
 // KnownAsBeforeOrErr returns the KnownAsBefore value or an error if the edge
 // was not loaded in eager-loading.
 func (e CountryEdges) KnownAsBeforeOrErr() ([]*Country, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.KnownAsBefore, nil
 	}
 	return nil, &NotLoadedError{edge: "known_as_before"}
@@ -251,6 +263,11 @@ func (c *Country) QueryArtifacts() *ArtifactQuery {
 // QueryBooks queries the "books" edge of the Country entity.
 func (c *Country) QueryBooks() *BookQuery {
 	return NewCountryClient(c.config).QueryBooks(c)
+}
+
+// QueryHerbaria queries the "herbaria" edge of the Country entity.
+func (c *Country) QueryHerbaria() *HerbariumQuery {
+	return NewCountryClient(c.config).QueryHerbaria(c)
 }
 
 // QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Country entity.
@@ -397,6 +414,30 @@ func (c *Country) appendNamedBooks(name string, edges ...*Book) {
 		c.Edges.namedBooks[name] = []*Book{}
 	} else {
 		c.Edges.namedBooks[name] = append(c.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedHerbaria returns the Herbaria named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Country) NamedHerbaria(name string) ([]*Herbarium, error) {
+	if c.Edges.namedHerbaria == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedHerbaria[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Country) appendNamedHerbaria(name string, edges ...*Herbarium) {
+	if c.Edges.namedHerbaria == nil {
+		c.Edges.namedHerbaria = make(map[string][]*Herbarium)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedHerbaria[name] = []*Herbarium{}
+	} else {
+		c.Edges.namedHerbaria[name] = append(c.Edges.namedHerbaria[name], edges...)
 	}
 }
 

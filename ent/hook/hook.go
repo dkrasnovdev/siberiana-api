@@ -189,6 +189,18 @@ func (f EthnosFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, erro
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EthnosMutation", m)
 }
 
+// The FamiliaFunc type is an adapter to allow the use of ordinary
+// function as Familia mutator.
+type FamiliaFunc func(context.Context, *ent.FamiliaMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FamiliaFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FamiliaMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FamiliaMutation", m)
+}
+
 // The FavouriteFunc type is an adapter to allow the use of ordinary
 // function as Favourite mutator.
 type FavouriteFunc func(context.Context, *ent.FavouriteMutation) (ent.Value, error)
@@ -199,6 +211,42 @@ func (f FavouriteFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, e
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FavouriteMutation", m)
+}
+
+// The GenusFunc type is an adapter to allow the use of ordinary
+// function as Genus mutator.
+type GenusFunc func(context.Context, *ent.GenusMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f GenusFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.GenusMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GenusMutation", m)
+}
+
+// The GroupFunc type is an adapter to allow the use of ordinary
+// function as Group mutator.
+type GroupFunc func(context.Context, *ent.GroupMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f GroupFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.GroupMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GroupMutation", m)
+}
+
+// The HerbariumFunc type is an adapter to allow the use of ordinary
+// function as Herbarium mutator.
+type HerbariumFunc func(context.Context, *ent.HerbariumMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f HerbariumFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.HerbariumMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HerbariumMutation", m)
 }
 
 // The InterviewFunc type is an adapter to allow the use of ordinary
@@ -463,6 +511,18 @@ func (f SettlementFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, 
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SettlementMutation", m)
+}
+
+// The SpeciesFunc type is an adapter to allow the use of ordinary
+// function as Species mutator.
+type SpeciesFunc func(context.Context, *ent.SpeciesMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SpeciesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.SpeciesMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SpeciesMutation", m)
 }
 
 // The TechniqueFunc type is an adapter to allow the use of ordinary

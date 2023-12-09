@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -184,6 +185,21 @@ func (rc *RegionCreate) AddBooks(b ...*Book) *RegionCreate {
 		ids[i] = b[i].ID
 	}
 	return rc.AddBookIDs(ids...)
+}
+
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (rc *RegionCreate) AddHerbariumIDs(ids ...int) *RegionCreate {
+	rc.mutation.AddHerbariumIDs(ids...)
+	return rc
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (rc *RegionCreate) AddHerbaria(h ...*Herbarium) *RegionCreate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return rc.AddHerbariumIDs(ids...)
 }
 
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
@@ -471,6 +487,22 @@ func (rc *RegionCreate) createSpec() (*Region, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.HerbariaTable,
+			Columns: []string{region.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

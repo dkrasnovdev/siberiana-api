@@ -58,7 +58,7 @@ func (Collection) Fields() []ent.Field {
 		field.String("slug").
 			Unique(),
 		field.Enum("type").
-			Values("art", "artifacts", "books", "dendrochronology", "protected_area_pictures", "petroglyphs").
+			Values("art", "artifacts", "books", "dendrochronology", "herbaria", "protected_area_pictures", "petroglyphs").
 			Optional().
 			Immutable(),
 	}
@@ -76,6 +76,8 @@ func (Collection) Edges() []ent.Edge {
 		edge.To("petroglyphs", Petroglyph.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("books", Book.Type).
+			Annotations(entsql.OnDelete(entsql.Cascade)),
+		edge.To("herbaria", Herbarium.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),
 		edge.To("protected_area_pictures", ProtectedAreaPicture.Type).
 			Annotations(entsql.OnDelete(entsql.Cascade)),

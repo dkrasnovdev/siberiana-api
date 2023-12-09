@@ -30,7 +30,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
+	"github.com/dkrasnovdev/siberiana-api/ent/familia"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/genus"
+	"github.com/dkrasnovdev/siberiana-api/ent/group"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -53,6 +57,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/species"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 	"github.com/minio/minio-go/v7"
@@ -93,8 +98,16 @@ type Client struct {
 	District *DistrictClient
 	// Ethnos is the client for interacting with the Ethnos builders.
 	Ethnos *EthnosClient
+	// Familia is the client for interacting with the Familia builders.
+	Familia *FamiliaClient
 	// Favourite is the client for interacting with the Favourite builders.
 	Favourite *FavouriteClient
+	// Genus is the client for interacting with the Genus builders.
+	Genus *GenusClient
+	// Group is the client for interacting with the Group builders.
+	Group *GroupClient
+	// Herbarium is the client for interacting with the Herbarium builders.
+	Herbarium *HerbariumClient
 	// Interview is the client for interacting with the Interview builders.
 	Interview *InterviewClient
 	// Keyword is the client for interacting with the Keyword builders.
@@ -139,6 +152,8 @@ type Client struct {
 	Set *SetClient
 	// Settlement is the client for interacting with the Settlement builders.
 	Settlement *SettlementClient
+	// Species is the client for interacting with the Species builders.
+	Species *SpeciesClient
 	// Technique is the client for interacting with the Technique builders.
 	Technique *TechniqueClient
 	// Visit is the client for interacting with the Visit builders.
@@ -173,7 +188,11 @@ func (c *Client) init() {
 	c.Dendrochronology = NewDendrochronologyClient(c.config)
 	c.District = NewDistrictClient(c.config)
 	c.Ethnos = NewEthnosClient(c.config)
+	c.Familia = NewFamiliaClient(c.config)
 	c.Favourite = NewFavouriteClient(c.config)
+	c.Genus = NewGenusClient(c.config)
+	c.Group = NewGroupClient(c.config)
+	c.Herbarium = NewHerbariumClient(c.config)
 	c.Interview = NewInterviewClient(c.config)
 	c.Keyword = NewKeywordClient(c.config)
 	c.License = NewLicenseClient(c.config)
@@ -196,6 +215,7 @@ func (c *Client) init() {
 	c.Region = NewRegionClient(c.config)
 	c.Set = NewSetClient(c.config)
 	c.Settlement = NewSettlementClient(c.config)
+	c.Species = NewSpeciesClient(c.config)
 	c.Technique = NewTechniqueClient(c.config)
 	c.Visit = NewVisitClient(c.config)
 }
@@ -306,7 +326,11 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Dendrochronology:            NewDendrochronologyClient(cfg),
 		District:                    NewDistrictClient(cfg),
 		Ethnos:                      NewEthnosClient(cfg),
+		Familia:                     NewFamiliaClient(cfg),
 		Favourite:                   NewFavouriteClient(cfg),
+		Genus:                       NewGenusClient(cfg),
+		Group:                       NewGroupClient(cfg),
+		Herbarium:                   NewHerbariumClient(cfg),
 		Interview:                   NewInterviewClient(cfg),
 		Keyword:                     NewKeywordClient(cfg),
 		License:                     NewLicenseClient(cfg),
@@ -329,6 +353,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Region:                      NewRegionClient(cfg),
 		Set:                         NewSetClient(cfg),
 		Settlement:                  NewSettlementClient(cfg),
+		Species:                     NewSpeciesClient(cfg),
 		Technique:                   NewTechniqueClient(cfg),
 		Visit:                       NewVisitClient(cfg),
 	}, nil
@@ -365,7 +390,11 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Dendrochronology:            NewDendrochronologyClient(cfg),
 		District:                    NewDistrictClient(cfg),
 		Ethnos:                      NewEthnosClient(cfg),
+		Familia:                     NewFamiliaClient(cfg),
 		Favourite:                   NewFavouriteClient(cfg),
+		Genus:                       NewGenusClient(cfg),
+		Group:                       NewGroupClient(cfg),
+		Herbarium:                   NewHerbariumClient(cfg),
 		Interview:                   NewInterviewClient(cfg),
 		Keyword:                     NewKeywordClient(cfg),
 		License:                     NewLicenseClient(cfg),
@@ -388,6 +417,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Region:                      NewRegionClient(cfg),
 		Set:                         NewSetClient(cfg),
 		Settlement:                  NewSettlementClient(cfg),
+		Species:                     NewSpeciesClient(cfg),
 		Technique:                   NewTechniqueClient(cfg),
 		Visit:                       NewVisitClient(cfg),
 	}, nil
@@ -421,12 +451,12 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.DendrochronologicalAnalysis,
-		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
-		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
-		c.Periodical, c.Person, c.PersonalCollection, c.Petroglyph, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
-		c.Visit,
+		c.Dendrochronology, c.District, c.Ethnos, c.Familia, c.Favourite, c.Genus,
+		c.Group, c.Herbarium, c.Interview, c.Keyword, c.License, c.Location, c.Medium,
+		c.Model, c.Monument, c.Mound, c.Organization, c.Periodical, c.Person,
+		c.PersonalCollection, c.Petroglyph, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Species, c.Technique, c.Visit,
 	} {
 		n.Use(hooks...)
 	}
@@ -438,12 +468,12 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.Art, c.ArtGenre, c.ArtStyle, c.Artifact, c.AuditLog, c.Book, c.BookGenre,
 		c.Category, c.Collection, c.Country, c.Culture, c.DendrochronologicalAnalysis,
-		c.Dendrochronology, c.District, c.Ethnos, c.Favourite, c.Interview, c.Keyword,
-		c.License, c.Location, c.Medium, c.Model, c.Monument, c.Mound, c.Organization,
-		c.Periodical, c.Person, c.PersonalCollection, c.Petroglyph, c.Project,
-		c.ProtectedArea, c.ProtectedAreaCategory, c.ProtectedAreaPicture,
-		c.Publication, c.Publisher, c.Region, c.Set, c.Settlement, c.Technique,
-		c.Visit,
+		c.Dendrochronology, c.District, c.Ethnos, c.Familia, c.Favourite, c.Genus,
+		c.Group, c.Herbarium, c.Interview, c.Keyword, c.License, c.Location, c.Medium,
+		c.Model, c.Monument, c.Mound, c.Organization, c.Periodical, c.Person,
+		c.PersonalCollection, c.Petroglyph, c.Project, c.ProtectedArea,
+		c.ProtectedAreaCategory, c.ProtectedAreaPicture, c.Publication, c.Publisher,
+		c.Region, c.Set, c.Settlement, c.Species, c.Technique, c.Visit,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -482,8 +512,16 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.District.mutate(ctx, m)
 	case *EthnosMutation:
 		return c.Ethnos.mutate(ctx, m)
+	case *FamiliaMutation:
+		return c.Familia.mutate(ctx, m)
 	case *FavouriteMutation:
 		return c.Favourite.mutate(ctx, m)
+	case *GenusMutation:
+		return c.Genus.mutate(ctx, m)
+	case *GroupMutation:
+		return c.Group.mutate(ctx, m)
+	case *HerbariumMutation:
+		return c.Herbarium.mutate(ctx, m)
 	case *InterviewMutation:
 		return c.Interview.mutate(ctx, m)
 	case *KeywordMutation:
@@ -528,6 +566,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Set.mutate(ctx, m)
 	case *SettlementMutation:
 		return c.Settlement.mutate(ctx, m)
+	case *SpeciesMutation:
+		return c.Species.mutate(ctx, m)
 	case *TechniqueMutation:
 		return c.Technique.mutate(ctx, m)
 	case *VisitMutation:
@@ -2551,6 +2591,22 @@ func (c *CollectionClient) QueryBooks(co *Collection) *BookQuery {
 	return query
 }
 
+// QueryHerbaria queries the herbaria edge of a Collection.
+func (c *CollectionClient) QueryHerbaria(co *Collection) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(collection.Table, collection.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, collection.HerbariaTable, collection.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProtectedAreaPictures queries the protected_area_pictures edge of a Collection.
 func (c *CollectionClient) QueryProtectedAreaPictures(co *Collection) *ProtectedAreaPictureQuery {
 	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
@@ -2775,6 +2831,22 @@ func (c *CountryClient) QueryBooks(co *Country) *BookQuery {
 			sqlgraph.From(country.Table, country.FieldID, id),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, country.BooksTable, country.BooksColumn),
+		)
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHerbaria queries the herbaria edge of a Country.
+func (c *CountryClient) QueryHerbaria(co *Country) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.HerbariaTable, country.HerbariaColumn),
 		)
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
@@ -3511,6 +3583,22 @@ func (c *DistrictClient) QueryBooks(d *District) *BookQuery {
 	return query
 }
 
+// QueryHerbaria queries the herbaria edge of a District.
+func (c *DistrictClient) QueryHerbaria(d *District) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := d.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.HerbariaTable, district.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(d.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProtectedAreaPictures queries the protected_area_pictures edge of a District.
 func (c *DistrictClient) QueryProtectedAreaPictures(d *District) *ProtectedAreaPictureQuery {
 	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
@@ -3783,6 +3871,156 @@ func (c *EthnosClient) mutate(ctx context.Context, m *EthnosMutation) (Value, er
 	}
 }
 
+// FamiliaClient is a client for the Familia schema.
+type FamiliaClient struct {
+	config
+}
+
+// NewFamiliaClient returns a client for the Familia from the given config.
+func NewFamiliaClient(c config) *FamiliaClient {
+	return &FamiliaClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `familia.Hooks(f(g(h())))`.
+func (c *FamiliaClient) Use(hooks ...Hook) {
+	c.hooks.Familia = append(c.hooks.Familia, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `familia.Intercept(f(g(h())))`.
+func (c *FamiliaClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Familia = append(c.inters.Familia, interceptors...)
+}
+
+// Create returns a builder for creating a Familia entity.
+func (c *FamiliaClient) Create() *FamiliaCreate {
+	mutation := newFamiliaMutation(c.config, OpCreate)
+	return &FamiliaCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Familia entities.
+func (c *FamiliaClient) CreateBulk(builders ...*FamiliaCreate) *FamiliaCreateBulk {
+	return &FamiliaCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FamiliaClient) MapCreateBulk(slice any, setFunc func(*FamiliaCreate, int)) *FamiliaCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FamiliaCreateBulk{err: fmt.Errorf("calling to FamiliaClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FamiliaCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FamiliaCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Familia.
+func (c *FamiliaClient) Update() *FamiliaUpdate {
+	mutation := newFamiliaMutation(c.config, OpUpdate)
+	return &FamiliaUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FamiliaClient) UpdateOne(f *Familia) *FamiliaUpdateOne {
+	mutation := newFamiliaMutation(c.config, OpUpdateOne, withFamilia(f))
+	return &FamiliaUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FamiliaClient) UpdateOneID(id int) *FamiliaUpdateOne {
+	mutation := newFamiliaMutation(c.config, OpUpdateOne, withFamiliaID(id))
+	return &FamiliaUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Familia.
+func (c *FamiliaClient) Delete() *FamiliaDelete {
+	mutation := newFamiliaMutation(c.config, OpDelete)
+	return &FamiliaDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FamiliaClient) DeleteOne(f *Familia) *FamiliaDeleteOne {
+	return c.DeleteOneID(f.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FamiliaClient) DeleteOneID(id int) *FamiliaDeleteOne {
+	builder := c.Delete().Where(familia.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FamiliaDeleteOne{builder}
+}
+
+// Query returns a query builder for Familia.
+func (c *FamiliaClient) Query() *FamiliaQuery {
+	return &FamiliaQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFamilia},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Familia entity by its id.
+func (c *FamiliaClient) Get(ctx context.Context, id int) (*Familia, error) {
+	return c.Query().Where(familia.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FamiliaClient) GetX(ctx context.Context, id int) *Familia {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryHerbaria queries the herbaria edge of a Familia.
+func (c *FamiliaClient) QueryHerbaria(f *Familia) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(familia.Table, familia.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, familia.HerbariaTable, familia.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FamiliaClient) Hooks() []Hook {
+	hooks := c.hooks.Familia
+	return append(hooks[:len(hooks):len(hooks)], familia.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *FamiliaClient) Interceptors() []Interceptor {
+	return c.inters.Familia
+}
+
+func (c *FamiliaClient) mutate(ctx context.Context, m *FamiliaMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FamiliaCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FamiliaUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FamiliaUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FamiliaDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Familia mutation op: %q", m.Op())
+	}
+}
+
 // FavouriteClient is a client for the Favourite schema.
 type FavouriteClient struct {
 	config
@@ -3914,6 +4152,616 @@ func (c *FavouriteClient) mutate(ctx context.Context, m *FavouriteMutation) (Val
 		return (&FavouriteDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Favourite mutation op: %q", m.Op())
+	}
+}
+
+// GenusClient is a client for the Genus schema.
+type GenusClient struct {
+	config
+}
+
+// NewGenusClient returns a client for the Genus from the given config.
+func NewGenusClient(c config) *GenusClient {
+	return &GenusClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `genus.Hooks(f(g(h())))`.
+func (c *GenusClient) Use(hooks ...Hook) {
+	c.hooks.Genus = append(c.hooks.Genus, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `genus.Intercept(f(g(h())))`.
+func (c *GenusClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Genus = append(c.inters.Genus, interceptors...)
+}
+
+// Create returns a builder for creating a Genus entity.
+func (c *GenusClient) Create() *GenusCreate {
+	mutation := newGenusMutation(c.config, OpCreate)
+	return &GenusCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Genus entities.
+func (c *GenusClient) CreateBulk(builders ...*GenusCreate) *GenusCreateBulk {
+	return &GenusCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *GenusClient) MapCreateBulk(slice any, setFunc func(*GenusCreate, int)) *GenusCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &GenusCreateBulk{err: fmt.Errorf("calling to GenusClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*GenusCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &GenusCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Genus.
+func (c *GenusClient) Update() *GenusUpdate {
+	mutation := newGenusMutation(c.config, OpUpdate)
+	return &GenusUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *GenusClient) UpdateOne(ge *Genus) *GenusUpdateOne {
+	mutation := newGenusMutation(c.config, OpUpdateOne, withGenus(ge))
+	return &GenusUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *GenusClient) UpdateOneID(id int) *GenusUpdateOne {
+	mutation := newGenusMutation(c.config, OpUpdateOne, withGenusID(id))
+	return &GenusUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Genus.
+func (c *GenusClient) Delete() *GenusDelete {
+	mutation := newGenusMutation(c.config, OpDelete)
+	return &GenusDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *GenusClient) DeleteOne(ge *Genus) *GenusDeleteOne {
+	return c.DeleteOneID(ge.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *GenusClient) DeleteOneID(id int) *GenusDeleteOne {
+	builder := c.Delete().Where(genus.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &GenusDeleteOne{builder}
+}
+
+// Query returns a query builder for Genus.
+func (c *GenusClient) Query() *GenusQuery {
+	return &GenusQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeGenus},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Genus entity by its id.
+func (c *GenusClient) Get(ctx context.Context, id int) (*Genus, error) {
+	return c.Query().Where(genus.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *GenusClient) GetX(ctx context.Context, id int) *Genus {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryHerbaria queries the herbaria edge of a Genus.
+func (c *GenusClient) QueryHerbaria(ge *Genus) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ge.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(genus.Table, genus.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, genus.HerbariaTable, genus.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(ge.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *GenusClient) Hooks() []Hook {
+	hooks := c.hooks.Genus
+	return append(hooks[:len(hooks):len(hooks)], genus.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *GenusClient) Interceptors() []Interceptor {
+	return c.inters.Genus
+}
+
+func (c *GenusClient) mutate(ctx context.Context, m *GenusMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&GenusCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&GenusUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&GenusUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&GenusDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Genus mutation op: %q", m.Op())
+	}
+}
+
+// GroupClient is a client for the Group schema.
+type GroupClient struct {
+	config
+}
+
+// NewGroupClient returns a client for the Group from the given config.
+func NewGroupClient(c config) *GroupClient {
+	return &GroupClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `group.Hooks(f(g(h())))`.
+func (c *GroupClient) Use(hooks ...Hook) {
+	c.hooks.Group = append(c.hooks.Group, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `group.Intercept(f(g(h())))`.
+func (c *GroupClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Group = append(c.inters.Group, interceptors...)
+}
+
+// Create returns a builder for creating a Group entity.
+func (c *GroupClient) Create() *GroupCreate {
+	mutation := newGroupMutation(c.config, OpCreate)
+	return &GroupCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Group entities.
+func (c *GroupClient) CreateBulk(builders ...*GroupCreate) *GroupCreateBulk {
+	return &GroupCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *GroupClient) MapCreateBulk(slice any, setFunc func(*GroupCreate, int)) *GroupCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &GroupCreateBulk{err: fmt.Errorf("calling to GroupClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*GroupCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &GroupCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Group.
+func (c *GroupClient) Update() *GroupUpdate {
+	mutation := newGroupMutation(c.config, OpUpdate)
+	return &GroupUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *GroupClient) UpdateOne(gr *Group) *GroupUpdateOne {
+	mutation := newGroupMutation(c.config, OpUpdateOne, withGroup(gr))
+	return &GroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *GroupClient) UpdateOneID(id int) *GroupUpdateOne {
+	mutation := newGroupMutation(c.config, OpUpdateOne, withGroupID(id))
+	return &GroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Group.
+func (c *GroupClient) Delete() *GroupDelete {
+	mutation := newGroupMutation(c.config, OpDelete)
+	return &GroupDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *GroupClient) DeleteOne(gr *Group) *GroupDeleteOne {
+	return c.DeleteOneID(gr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *GroupClient) DeleteOneID(id int) *GroupDeleteOne {
+	builder := c.Delete().Where(group.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &GroupDeleteOne{builder}
+}
+
+// Query returns a query builder for Group.
+func (c *GroupClient) Query() *GroupQuery {
+	return &GroupQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeGroup},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Group entity by its id.
+func (c *GroupClient) Get(ctx context.Context, id int) (*Group, error) {
+	return c.Query().Where(group.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *GroupClient) GetX(ctx context.Context, id int) *Group {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryHerbaria queries the herbaria edge of a Group.
+func (c *GroupClient) QueryHerbaria(gr *Group) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, group.HerbariaTable, group.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *GroupClient) Hooks() []Hook {
+	hooks := c.hooks.Group
+	return append(hooks[:len(hooks):len(hooks)], group.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *GroupClient) Interceptors() []Interceptor {
+	return c.inters.Group
+}
+
+func (c *GroupClient) mutate(ctx context.Context, m *GroupMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&GroupCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&GroupUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&GroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&GroupDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Group mutation op: %q", m.Op())
+	}
+}
+
+// HerbariumClient is a client for the Herbarium schema.
+type HerbariumClient struct {
+	config
+}
+
+// NewHerbariumClient returns a client for the Herbarium from the given config.
+func NewHerbariumClient(c config) *HerbariumClient {
+	return &HerbariumClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `herbarium.Hooks(f(g(h())))`.
+func (c *HerbariumClient) Use(hooks ...Hook) {
+	c.hooks.Herbarium = append(c.hooks.Herbarium, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `herbarium.Intercept(f(g(h())))`.
+func (c *HerbariumClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Herbarium = append(c.inters.Herbarium, interceptors...)
+}
+
+// Create returns a builder for creating a Herbarium entity.
+func (c *HerbariumClient) Create() *HerbariumCreate {
+	mutation := newHerbariumMutation(c.config, OpCreate)
+	return &HerbariumCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Herbarium entities.
+func (c *HerbariumClient) CreateBulk(builders ...*HerbariumCreate) *HerbariumCreateBulk {
+	return &HerbariumCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *HerbariumClient) MapCreateBulk(slice any, setFunc func(*HerbariumCreate, int)) *HerbariumCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &HerbariumCreateBulk{err: fmt.Errorf("calling to HerbariumClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*HerbariumCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &HerbariumCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Herbarium.
+func (c *HerbariumClient) Update() *HerbariumUpdate {
+	mutation := newHerbariumMutation(c.config, OpUpdate)
+	return &HerbariumUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *HerbariumClient) UpdateOne(h *Herbarium) *HerbariumUpdateOne {
+	mutation := newHerbariumMutation(c.config, OpUpdateOne, withHerbarium(h))
+	return &HerbariumUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *HerbariumClient) UpdateOneID(id int) *HerbariumUpdateOne {
+	mutation := newHerbariumMutation(c.config, OpUpdateOne, withHerbariumID(id))
+	return &HerbariumUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Herbarium.
+func (c *HerbariumClient) Delete() *HerbariumDelete {
+	mutation := newHerbariumMutation(c.config, OpDelete)
+	return &HerbariumDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *HerbariumClient) DeleteOne(h *Herbarium) *HerbariumDeleteOne {
+	return c.DeleteOneID(h.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *HerbariumClient) DeleteOneID(id int) *HerbariumDeleteOne {
+	builder := c.Delete().Where(herbarium.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &HerbariumDeleteOne{builder}
+}
+
+// Query returns a query builder for Herbarium.
+func (c *HerbariumClient) Query() *HerbariumQuery {
+	return &HerbariumQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeHerbarium},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Herbarium entity by its id.
+func (c *HerbariumClient) Get(ctx context.Context, id int) (*Herbarium, error) {
+	return c.Query().Where(herbarium.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *HerbariumClient) GetX(ctx context.Context, id int) *Herbarium {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryAuthor queries the author edge of a Herbarium.
+func (c *HerbariumClient) QueryAuthor(h *Herbarium) *PersonQuery {
+	query := (&PersonClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(person.Table, person.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.AuthorTable, herbarium.AuthorColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFamilia queries the familia edge of a Herbarium.
+func (c *HerbariumClient) QueryFamilia(h *Herbarium) *FamiliaQuery {
+	query := (&FamiliaClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(familia.Table, familia.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.FamiliaTable, herbarium.FamiliaColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGenus queries the genus edge of a Herbarium.
+func (c *HerbariumClient) QueryGenus(h *Herbarium) *GenusQuery {
+	query := (&GenusClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(genus.Table, genus.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.GenusTable, herbarium.GenusColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroup queries the group edge of a Herbarium.
+func (c *HerbariumClient) QueryGroup(h *Herbarium) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.GroupTable, herbarium.GroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySpecies queries the species edge of a Herbarium.
+func (c *HerbariumClient) QuerySpecies(h *Herbarium) *SpeciesQuery {
+	query := (&SpeciesClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(species.Table, species.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.SpeciesTable, herbarium.SpeciesColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCollection queries the collection edge of a Herbarium.
+func (c *HerbariumClient) QueryCollection(h *Herbarium) *CollectionQuery {
+	query := (&CollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(collection.Table, collection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.CollectionTable, herbarium.CollectionColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCountry queries the country edge of a Herbarium.
+func (c *HerbariumClient) QueryCountry(h *Herbarium) *CountryQuery {
+	query := (&CountryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(country.Table, country.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.CountryTable, herbarium.CountryColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySettlement queries the settlement edge of a Herbarium.
+func (c *HerbariumClient) QuerySettlement(h *Herbarium) *SettlementQuery {
+	query := (&SettlementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(settlement.Table, settlement.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.SettlementTable, herbarium.SettlementColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDistrict queries the district edge of a Herbarium.
+func (c *HerbariumClient) QueryDistrict(h *Herbarium) *DistrictQuery {
+	query := (&DistrictClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(district.Table, district.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.DistrictTable, herbarium.DistrictColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRegion queries the region edge of a Herbarium.
+func (c *HerbariumClient) QueryRegion(h *Herbarium) *RegionQuery {
+	query := (&RegionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(region.Table, region.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, herbarium.RegionTable, herbarium.RegionColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPersonalCollection queries the personal_collection edge of a Herbarium.
+func (c *HerbariumClient) QueryPersonalCollection(h *Herbarium) *PersonalCollectionQuery {
+	query := (&PersonalCollectionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(herbarium.Table, herbarium.FieldID, id),
+			sqlgraph.To(personalcollection.Table, personalcollection.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, herbarium.PersonalCollectionTable, herbarium.PersonalCollectionPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *HerbariumClient) Hooks() []Hook {
+	hooks := c.hooks.Herbarium
+	return append(hooks[:len(hooks):len(hooks)], herbarium.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *HerbariumClient) Interceptors() []Interceptor {
+	return c.inters.Herbarium
+}
+
+func (c *HerbariumClient) mutate(ctx context.Context, m *HerbariumMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&HerbariumCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&HerbariumUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&HerbariumUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&HerbariumDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Herbarium mutation op: %q", m.Op())
 	}
 }
 
@@ -5764,6 +6612,22 @@ func (c *PersonClient) QueryArtifacts(pe *Person) *ArtifactQuery {
 	return query
 }
 
+// QueryHerbaria queries the herbaria edge of a Person.
+func (c *PersonClient) QueryHerbaria(pe *Person) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(person.Table, person.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, person.HerbariaTable, person.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProtectedAreaPictures queries the protected_area_pictures edge of a Person.
 func (c *PersonClient) QueryProtectedAreaPictures(pe *Person) *ProtectedAreaPictureQuery {
 	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
@@ -6083,6 +6947,22 @@ func (c *PersonalCollectionClient) QueryDendrochronology(pc *PersonalCollection)
 			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
 			sqlgraph.To(dendrochronology.Table, dendrochronology.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, personalcollection.DendrochronologyTable, personalcollection.DendrochronologyColumn),
+		)
+		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHerbaria queries the herbaria edge of a PersonalCollection.
+func (c *PersonalCollectionClient) QueryHerbaria(pc *PersonalCollection) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pc.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(personalcollection.Table, personalcollection.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, personalcollection.HerbariaTable, personalcollection.HerbariaPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pc.driver.Dialect(), step)
 		return fromV, nil
@@ -7708,6 +8588,22 @@ func (c *RegionClient) QueryBooks(r *Region) *BookQuery {
 	return query
 }
 
+// QueryHerbaria queries the herbaria edge of a Region.
+func (c *RegionClient) QueryHerbaria(r *Region) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(region.Table, region.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, region.HerbariaTable, region.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPetroglyphs queries the petroglyphs edge of a Region.
 func (c *RegionClient) QueryPetroglyphs(r *Region) *PetroglyphQuery {
 	query := (&PetroglyphClient{config: c.config}).Query()
@@ -8184,6 +9080,22 @@ func (c *SettlementClient) QueryBooks(s *Settlement) *BookQuery {
 	return query
 }
 
+// QueryHerbaria queries the herbaria edge of a Settlement.
+func (c *SettlementClient) QueryHerbaria(s *Settlement) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(settlement.Table, settlement.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, settlement.HerbariaTable, settlement.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProtectedAreaPictures queries the protected_area_pictures edge of a Settlement.
 func (c *SettlementClient) QueryProtectedAreaPictures(s *Settlement) *ProtectedAreaPictureQuery {
 	query := (&ProtectedAreaPictureClient{config: c.config}).Query()
@@ -8303,6 +9215,156 @@ func (c *SettlementClient) mutate(ctx context.Context, m *SettlementMutation) (V
 		return (&SettlementDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown Settlement mutation op: %q", m.Op())
+	}
+}
+
+// SpeciesClient is a client for the Species schema.
+type SpeciesClient struct {
+	config
+}
+
+// NewSpeciesClient returns a client for the Species from the given config.
+func NewSpeciesClient(c config) *SpeciesClient {
+	return &SpeciesClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `species.Hooks(f(g(h())))`.
+func (c *SpeciesClient) Use(hooks ...Hook) {
+	c.hooks.Species = append(c.hooks.Species, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `species.Intercept(f(g(h())))`.
+func (c *SpeciesClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Species = append(c.inters.Species, interceptors...)
+}
+
+// Create returns a builder for creating a Species entity.
+func (c *SpeciesClient) Create() *SpeciesCreate {
+	mutation := newSpeciesMutation(c.config, OpCreate)
+	return &SpeciesCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Species entities.
+func (c *SpeciesClient) CreateBulk(builders ...*SpeciesCreate) *SpeciesCreateBulk {
+	return &SpeciesCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SpeciesClient) MapCreateBulk(slice any, setFunc func(*SpeciesCreate, int)) *SpeciesCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SpeciesCreateBulk{err: fmt.Errorf("calling to SpeciesClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SpeciesCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SpeciesCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Species.
+func (c *SpeciesClient) Update() *SpeciesUpdate {
+	mutation := newSpeciesMutation(c.config, OpUpdate)
+	return &SpeciesUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SpeciesClient) UpdateOne(s *Species) *SpeciesUpdateOne {
+	mutation := newSpeciesMutation(c.config, OpUpdateOne, withSpecies(s))
+	return &SpeciesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SpeciesClient) UpdateOneID(id int) *SpeciesUpdateOne {
+	mutation := newSpeciesMutation(c.config, OpUpdateOne, withSpeciesID(id))
+	return &SpeciesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Species.
+func (c *SpeciesClient) Delete() *SpeciesDelete {
+	mutation := newSpeciesMutation(c.config, OpDelete)
+	return &SpeciesDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SpeciesClient) DeleteOne(s *Species) *SpeciesDeleteOne {
+	return c.DeleteOneID(s.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SpeciesClient) DeleteOneID(id int) *SpeciesDeleteOne {
+	builder := c.Delete().Where(species.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SpeciesDeleteOne{builder}
+}
+
+// Query returns a query builder for Species.
+func (c *SpeciesClient) Query() *SpeciesQuery {
+	return &SpeciesQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSpecies},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Species entity by its id.
+func (c *SpeciesClient) Get(ctx context.Context, id int) (*Species, error) {
+	return c.Query().Where(species.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SpeciesClient) GetX(ctx context.Context, id int) *Species {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryHerbaria queries the herbaria edge of a Species.
+func (c *SpeciesClient) QueryHerbaria(s *Species) *HerbariumQuery {
+	query := (&HerbariumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(species.Table, species.FieldID, id),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, species.HerbariaTable, species.HerbariaColumn),
+		)
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *SpeciesClient) Hooks() []Hook {
+	hooks := c.hooks.Species
+	return append(hooks[:len(hooks):len(hooks)], species.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *SpeciesClient) Interceptors() []Interceptor {
+	return c.inters.Species
+}
+
+func (c *SpeciesClient) mutate(ctx context.Context, m *SpeciesMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SpeciesCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SpeciesUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SpeciesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SpeciesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Species mutation op: %q", m.Op())
 	}
 }
 
@@ -8659,19 +9721,19 @@ type (
 	hooks struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
-		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
-		Model, Monument, Mound, Organization, Periodical, Person, PersonalCollection,
-		Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
-		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
-		Technique, Visit []ent.Hook
+		District, Ethnos, Familia, Favourite, Genus, Group, Herbarium, Interview,
+		Keyword, License, Location, Medium, Model, Monument, Mound, Organization,
+		Periodical, Person, PersonalCollection, Petroglyph, Project, ProtectedArea,
+		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
+		Set, Settlement, Species, Technique, Visit []ent.Hook
 	}
 	inters struct {
 		Art, ArtGenre, ArtStyle, Artifact, AuditLog, Book, BookGenre, Category,
 		Collection, Country, Culture, DendrochronologicalAnalysis, Dendrochronology,
-		District, Ethnos, Favourite, Interview, Keyword, License, Location, Medium,
-		Model, Monument, Mound, Organization, Periodical, Person, PersonalCollection,
-		Petroglyph, Project, ProtectedArea, ProtectedAreaCategory,
-		ProtectedAreaPicture, Publication, Publisher, Region, Set, Settlement,
-		Technique, Visit []ent.Interceptor
+		District, Ethnos, Familia, Favourite, Genus, Group, Herbarium, Interview,
+		Keyword, License, Location, Medium, Model, Monument, Mound, Organization,
+		Periodical, Person, PersonalCollection, Petroglyph, Project, ProtectedArea,
+		ProtectedAreaCategory, ProtectedAreaPicture, Publication, Publisher, Region,
+		Set, Settlement, Species, Technique, Visit []ent.Interceptor
 	}
 )

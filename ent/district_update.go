@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -206,6 +207,21 @@ func (du *DistrictUpdate) AddBooks(b ...*Book) *DistrictUpdate {
 	return du.AddBookIDs(ids...)
 }
 
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (du *DistrictUpdate) AddHerbariumIDs(ids ...int) *DistrictUpdate {
+	du.mutation.AddHerbariumIDs(ids...)
+	return du
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (du *DistrictUpdate) AddHerbaria(h ...*Herbarium) *DistrictUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return du.AddHerbariumIDs(ids...)
+}
+
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
 func (du *DistrictUpdate) AddProtectedAreaPictureIDs(ids ...int) *DistrictUpdate {
 	du.mutation.AddProtectedAreaPictureIDs(ids...)
@@ -366,6 +382,27 @@ func (du *DistrictUpdate) RemoveBooks(b ...*Book) *DistrictUpdate {
 		ids[i] = b[i].ID
 	}
 	return du.RemoveBookIDs(ids...)
+}
+
+// ClearHerbaria clears all "herbaria" edges to the Herbarium entity.
+func (du *DistrictUpdate) ClearHerbaria() *DistrictUpdate {
+	du.mutation.ClearHerbaria()
+	return du
+}
+
+// RemoveHerbariumIDs removes the "herbaria" edge to Herbarium entities by IDs.
+func (du *DistrictUpdate) RemoveHerbariumIDs(ids ...int) *DistrictUpdate {
+	du.mutation.RemoveHerbariumIDs(ids...)
+	return du
+}
+
+// RemoveHerbaria removes "herbaria" edges to Herbarium entities.
+func (du *DistrictUpdate) RemoveHerbaria(h ...*Herbarium) *DistrictUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return du.RemoveHerbariumIDs(ids...)
 }
 
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
@@ -697,6 +734,51 @@ func (du *DistrictUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if du.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.HerbariaTable,
+			Columns: []string{district.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.RemovedHerbariaIDs(); len(nodes) > 0 && !du.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.HerbariaTable,
+			Columns: []string{district.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := du.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.HerbariaTable,
+			Columns: []string{district.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1149,6 +1231,21 @@ func (duo *DistrictUpdateOne) AddBooks(b ...*Book) *DistrictUpdateOne {
 	return duo.AddBookIDs(ids...)
 }
 
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (duo *DistrictUpdateOne) AddHerbariumIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.AddHerbariumIDs(ids...)
+	return duo
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (duo *DistrictUpdateOne) AddHerbaria(h ...*Herbarium) *DistrictUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return duo.AddHerbariumIDs(ids...)
+}
+
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
 func (duo *DistrictUpdateOne) AddProtectedAreaPictureIDs(ids ...int) *DistrictUpdateOne {
 	duo.mutation.AddProtectedAreaPictureIDs(ids...)
@@ -1309,6 +1406,27 @@ func (duo *DistrictUpdateOne) RemoveBooks(b ...*Book) *DistrictUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return duo.RemoveBookIDs(ids...)
+}
+
+// ClearHerbaria clears all "herbaria" edges to the Herbarium entity.
+func (duo *DistrictUpdateOne) ClearHerbaria() *DistrictUpdateOne {
+	duo.mutation.ClearHerbaria()
+	return duo
+}
+
+// RemoveHerbariumIDs removes the "herbaria" edge to Herbarium entities by IDs.
+func (duo *DistrictUpdateOne) RemoveHerbariumIDs(ids ...int) *DistrictUpdateOne {
+	duo.mutation.RemoveHerbariumIDs(ids...)
+	return duo
+}
+
+// RemoveHerbaria removes "herbaria" edges to Herbarium entities.
+func (duo *DistrictUpdateOne) RemoveHerbaria(h ...*Herbarium) *DistrictUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return duo.RemoveHerbariumIDs(ids...)
 }
 
 // ClearProtectedAreaPictures clears all "protected_area_pictures" edges to the ProtectedAreaPicture entity.
@@ -1670,6 +1788,51 @@ func (duo *DistrictUpdateOne) sqlSave(ctx context.Context) (_node *District, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if duo.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.HerbariaTable,
+			Columns: []string{district.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.RemovedHerbariaIDs(); len(nodes) > 0 && !duo.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.HerbariaTable,
+			Columns: []string{district.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := duo.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   district.HerbariaTable,
+			Columns: []string{district.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

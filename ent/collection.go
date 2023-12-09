@@ -66,6 +66,8 @@ type CollectionEdges struct {
 	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// Herbaria holds the value of the herbaria edge.
+	Herbaria []*Herbarium `json:"herbaria,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
 	ProtectedAreaPictures []*ProtectedAreaPicture `json:"protected_area_pictures,omitempty"`
 	// Category holds the value of the category edge.
@@ -74,15 +76,16 @@ type CollectionEdges struct {
 	Authors []*Person `json:"authors,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedDendrochronology      map[string][]*Dendrochronology
 	namedPetroglyphs           map[string][]*Petroglyph
 	namedBooks                 map[string][]*Book
+	namedHerbaria              map[string][]*Herbarium
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedAuthors               map[string][]*Person
 }
@@ -132,10 +135,19 @@ func (e CollectionEdges) BooksOrErr() ([]*Book, error) {
 	return nil, &NotLoadedError{edge: "books"}
 }
 
+// HerbariaOrErr returns the Herbaria value or an error if the edge
+// was not loaded in eager-loading.
+func (e CollectionEdges) HerbariaOrErr() ([]*Herbarium, error) {
+	if e.loadedTypes[5] {
+		return e.Herbaria, nil
+	}
+	return nil, &NotLoadedError{edge: "herbaria"}
+}
+
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -144,7 +156,7 @@ func (e CollectionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, 
 // CategoryOrErr returns the Category value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CollectionEdges) CategoryOrErr() (*Category, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		if e.Category == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: category.Label}
@@ -157,7 +169,7 @@ func (e CollectionEdges) CategoryOrErr() (*Category, error) {
 // AuthorsOrErr returns the Authors value or an error if the edge
 // was not loaded in eager-loading.
 func (e CollectionEdges) AuthorsOrErr() ([]*Person, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Authors, nil
 	}
 	return nil, &NotLoadedError{edge: "authors"}
@@ -328,6 +340,11 @@ func (c *Collection) QueryPetroglyphs() *PetroglyphQuery {
 // QueryBooks queries the "books" edge of the Collection entity.
 func (c *Collection) QueryBooks() *BookQuery {
 	return NewCollectionClient(c.config).QueryBooks(c)
+}
+
+// QueryHerbaria queries the "herbaria" edge of the Collection entity.
+func (c *Collection) QueryHerbaria() *HerbariumQuery {
+	return NewCollectionClient(c.config).QueryHerbaria(c)
 }
 
 // QueryProtectedAreaPictures queries the "protected_area_pictures" edge of the Collection entity.
@@ -530,6 +547,30 @@ func (c *Collection) appendNamedBooks(name string, edges ...*Book) {
 		c.Edges.namedBooks[name] = []*Book{}
 	} else {
 		c.Edges.namedBooks[name] = append(c.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedHerbaria returns the Herbaria named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Collection) NamedHerbaria(name string) ([]*Herbarium, error) {
+	if c.Edges.namedHerbaria == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedHerbaria[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Collection) appendNamedHerbaria(name string, edges ...*Herbarium) {
+	if c.Edges.namedHerbaria == nil {
+		c.Edges.namedHerbaria = make(map[string][]*Herbarium)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedHerbaria[name] = []*Herbarium{}
+	} else {
+		c.Edges.namedHerbaria[name] = append(c.Edges.namedHerbaria[name], edges...)
 	}
 }
 

@@ -694,6 +694,29 @@ func HasBooksWith(preds ...predicate.Book) predicate.Region {
 	})
 }
 
+// HasHerbaria applies the HasEdge predicate on the "herbaria" edge.
+func HasHerbaria() predicate.Region {
+	return predicate.Region(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, HerbariaTable, HerbariaColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasHerbariaWith applies the HasEdge predicate on the "herbaria" edge with a given conditions (other predicates).
+func HasHerbariaWith(preds ...predicate.Herbarium) predicate.Region {
+	return predicate.Region(func(s *sql.Selector) {
+		step := newHerbariaStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPetroglyphs applies the HasEdge predicate on the "petroglyphs" edge.
 func HasPetroglyphs() predicate.Region {
 	return predicate.Region(func(s *sql.Selector) {

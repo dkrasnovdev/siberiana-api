@@ -51,8 +51,20 @@ type District func(*sql.Selector)
 // Ethnos is the predicate function for ethnos builders.
 type Ethnos func(*sql.Selector)
 
+// Familia is the predicate function for familia builders.
+type Familia func(*sql.Selector)
+
 // Favourite is the predicate function for favourite builders.
 type Favourite func(*sql.Selector)
+
+// Genus is the predicate function for genus builders.
+type Genus func(*sql.Selector)
+
+// Group is the predicate function for group builders.
+type Group func(*sql.Selector)
+
+// Herbarium is the predicate function for herbarium builders.
+type Herbarium func(*sql.Selector)
 
 // Interview is the predicate function for interview builders.
 type Interview func(*sql.Selector)
@@ -119,6 +131,9 @@ type Set func(*sql.Selector)
 
 // Settlement is the predicate function for settlement builders.
 type Settlement func(*sql.Selector)
+
+// Species is the predicate function for species builders.
+type Species func(*sql.Selector)
 
 // Technique is the predicate function for technique builders.
 type Technique func(*sql.Selector)

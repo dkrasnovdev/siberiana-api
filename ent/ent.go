@@ -27,7 +27,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
+	"github.com/dkrasnovdev/siberiana-api/ent/familia"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/genus"
+	"github.com/dkrasnovdev/siberiana-api/ent/group"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -50,6 +54,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/species"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
@@ -127,7 +132,11 @@ func checkColumn(table, column string) error {
 			dendrochronology.Table:            dendrochronology.ValidColumn,
 			district.Table:                    district.ValidColumn,
 			ethnos.Table:                      ethnos.ValidColumn,
+			familia.Table:                     familia.ValidColumn,
 			favourite.Table:                   favourite.ValidColumn,
+			genus.Table:                       genus.ValidColumn,
+			group.Table:                       group.ValidColumn,
+			herbarium.Table:                   herbarium.ValidColumn,
 			interview.Table:                   interview.ValidColumn,
 			keyword.Table:                     keyword.ValidColumn,
 			license.Table:                     license.ValidColumn,
@@ -150,6 +159,7 @@ func checkColumn(table, column string) error {
 			region.Table:                      region.ValidColumn,
 			set.Table:                         set.ValidColumn,
 			settlement.Table:                  settlement.ValidColumn,
+			species.Table:                     species.ValidColumn,
 			technique.Table:                   technique.ValidColumn,
 			visit.Table:                       visit.ValidColumn,
 		})

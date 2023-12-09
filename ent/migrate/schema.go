@@ -430,7 +430,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Unique: true},
-		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "dendrochronology", "protected_area_pictures", "petroglyphs"}},
+		{Name: "type", Type: field.TypeEnum, Nullable: true, Enums: []string{"art", "artifacts", "books", "dendrochronology", "herbaria", "protected_area_pictures", "petroglyphs"}},
 		{Name: "category_collections", Type: field.TypeInt},
 	}
 	// CollectionsTable holds the schema information for the "collections" table.
@@ -605,6 +605,26 @@ var (
 		Columns:    EthnosColumns,
 		PrimaryKey: []*schema.Column{EthnosColumns[0]},
 	}
+	// FamiliaColumns holds the columns for the "familia" table.
+	FamiliaColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+	}
+	// FamiliaTable holds the schema information for the "familia" table.
+	FamiliaTable = &schema.Table{
+		Name:       "familia",
+		Columns:    FamiliaColumns,
+		PrimaryKey: []*schema.Column{FamiliaColumns[0]},
+	}
 	// FavouritesColumns holds the columns for the "favourites" table.
 	FavouritesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -618,6 +638,141 @@ var (
 		Name:       "favourites",
 		Columns:    FavouritesColumns,
 		PrimaryKey: []*schema.Column{FavouritesColumns[0]},
+	}
+	// GenusColumns holds the columns for the "genus" table.
+	GenusColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+	}
+	// GenusTable holds the schema information for the "genus" table.
+	GenusTable = &schema.Table{
+		Name:       "genus",
+		Columns:    GenusColumns,
+		PrimaryKey: []*schema.Column{GenusColumns[0]},
+	}
+	// GroupsColumns holds the columns for the "groups" table.
+	GroupsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+	}
+	// GroupsTable holds the schema information for the "groups" table.
+	GroupsTable = &schema.Table{
+		Name:       "groups",
+		Columns:    GroupsColumns,
+		PrimaryKey: []*schema.Column{GroupsColumns[0]},
+	}
+	// HerbariaColumns holds the columns for the "herbaria" table.
+	HerbariaColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"listed", "unlisted", "draft"}, Default: "draft"},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+		{Name: "date", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"postgres": "date"}},
+		{Name: "location", Type: field.TypeString, Nullable: true},
+		{Name: "collection_herbaria", Type: field.TypeInt},
+		{Name: "country_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "district_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "familia_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "genus_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "group_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "person_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "region_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "settlement_herbaria", Type: field.TypeInt, Nullable: true},
+		{Name: "species_herbaria", Type: field.TypeInt, Nullable: true},
+	}
+	// HerbariaTable holds the schema information for the "herbaria" table.
+	HerbariaTable = &schema.Table{
+		Name:       "herbaria",
+		Columns:    HerbariaColumns,
+		PrimaryKey: []*schema.Column{HerbariaColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "herbaria_collections_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[14]},
+				RefColumns: []*schema.Column{CollectionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "herbaria_countries_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[15]},
+				RefColumns: []*schema.Column{CountriesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_districts_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[16]},
+				RefColumns: []*schema.Column{DistrictsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_familia_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[17]},
+				RefColumns: []*schema.Column{FamiliaColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_genus_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[18]},
+				RefColumns: []*schema.Column{GenusColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_groups_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[19]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_persons_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[20]},
+				RefColumns: []*schema.Column{PersonsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_regions_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[21]},
+				RefColumns: []*schema.Column{RegionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_settlements_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[22]},
+				RefColumns: []*schema.Column{SettlementsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "herbaria_species_herbaria",
+				Columns:    []*schema.Column{HerbariaColumns[23]},
+				RefColumns: []*schema.Column{SpeciesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// InterviewsColumns holds the columns for the "interviews" table.
 	InterviewsColumns = []*schema.Column{
@@ -1256,6 +1411,26 @@ var (
 			},
 		},
 	}
+	// SpeciesColumns holds the columns for the "species" table.
+	SpeciesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "abbreviation", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "external_link", Type: field.TypeString, Nullable: true},
+		{Name: "primary_image_url", Type: field.TypeString, Nullable: true},
+		{Name: "additional_images_urls", Type: field.TypeJSON, Nullable: true},
+	}
+	// SpeciesTable holds the schema information for the "species" table.
+	SpeciesTable = &schema.Table{
+		Name:       "species",
+		Columns:    SpeciesColumns,
+		PrimaryKey: []*schema.Column{SpeciesColumns[0]},
+	}
 	// TechniquesColumns holds the columns for the "techniques" table.
 	TechniquesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -1689,6 +1864,31 @@ var (
 			},
 		},
 	}
+	// PersonalCollectionHerbariaColumns holds the columns for the "personal_collection_herbaria" table.
+	PersonalCollectionHerbariaColumns = []*schema.Column{
+		{Name: "personal_collection_id", Type: field.TypeInt},
+		{Name: "herbarium_id", Type: field.TypeInt},
+	}
+	// PersonalCollectionHerbariaTable holds the schema information for the "personal_collection_herbaria" table.
+	PersonalCollectionHerbariaTable = &schema.Table{
+		Name:       "personal_collection_herbaria",
+		Columns:    PersonalCollectionHerbariaColumns,
+		PrimaryKey: []*schema.Column{PersonalCollectionHerbariaColumns[0], PersonalCollectionHerbariaColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "personal_collection_herbaria_personal_collection_id",
+				Columns:    []*schema.Column{PersonalCollectionHerbariaColumns[0]},
+				RefColumns: []*schema.Column{PersonalCollectionsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "personal_collection_herbaria_herbarium_id",
+				Columns:    []*schema.Column{PersonalCollectionHerbariaColumns[1]},
+				RefColumns: []*schema.Column{HerbariaColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// PersonalCollectionPetroglyphsColumns holds the columns for the "personal_collection_petroglyphs" table.
 	PersonalCollectionPetroglyphsColumns = []*schema.Column{
 		{Name: "personal_collection_id", Type: field.TypeInt},
@@ -1981,7 +2181,11 @@ var (
 		DendrochronologiesTable,
 		DistrictsTable,
 		EthnosTable,
+		FamiliaTable,
 		FavouritesTable,
+		GenusTable,
+		GroupsTable,
+		HerbariaTable,
 		InterviewsTable,
 		KeywordsTable,
 		LicensesTable,
@@ -2004,6 +2208,7 @@ var (
 		RegionsTable,
 		SetsTable,
 		SettlementsTable,
+		SpeciesTable,
 		TechniquesTable,
 		VisitsTable,
 		ArtGenreArtTable,
@@ -2022,6 +2227,7 @@ var (
 		PersonalCollectionArtTable,
 		PersonalCollectionArtifactsTable,
 		PersonalCollectionBooksTable,
+		PersonalCollectionHerbariaTable,
 		PersonalCollectionPetroglyphsTable,
 		PersonalCollectionProtectedAreaPicturesTable,
 		ProjectArtifactsTable,
@@ -2072,6 +2278,16 @@ func init() {
 	DendrochronologiesTable.ForeignKeys[0].RefTable = CollectionsTable
 	DendrochronologiesTable.ForeignKeys[1].RefTable = PersonalCollectionsTable
 	DistrictsTable.ForeignKeys[0].RefTable = RegionsTable
+	HerbariaTable.ForeignKeys[0].RefTable = CollectionsTable
+	HerbariaTable.ForeignKeys[1].RefTable = CountriesTable
+	HerbariaTable.ForeignKeys[2].RefTable = DistrictsTable
+	HerbariaTable.ForeignKeys[3].RefTable = FamiliaTable
+	HerbariaTable.ForeignKeys[4].RefTable = GenusTable
+	HerbariaTable.ForeignKeys[5].RefTable = GroupsTable
+	HerbariaTable.ForeignKeys[6].RefTable = PersonsTable
+	HerbariaTable.ForeignKeys[7].RefTable = RegionsTable
+	HerbariaTable.ForeignKeys[8].RefTable = SettlementsTable
+	HerbariaTable.ForeignKeys[9].RefTable = SpeciesTable
 	LocationsTable.ForeignKeys[0].RefTable = CountriesTable
 	LocationsTable.ForeignKeys[1].RefTable = DistrictsTable
 	LocationsTable.ForeignKeys[2].RefTable = SettlementsTable
@@ -2129,6 +2345,8 @@ func init() {
 	PersonalCollectionArtifactsTable.ForeignKeys[1].RefTable = ArtifactsTable
 	PersonalCollectionBooksTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
 	PersonalCollectionBooksTable.ForeignKeys[1].RefTable = BooksTable
+	PersonalCollectionHerbariaTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
+	PersonalCollectionHerbariaTable.ForeignKeys[1].RefTable = HerbariaTable
 	PersonalCollectionPetroglyphsTable.ForeignKeys[0].RefTable = PersonalCollectionsTable
 	PersonalCollectionPetroglyphsTable.ForeignKeys[1].RefTable = PetroglyphsTable
 	PersonalCollectionProtectedAreaPicturesTable.ForeignKeys[0].RefTable = PersonalCollectionsTable

@@ -98,9 +98,29 @@ func (r *queryResolver) EthnosSlice(ctx context.Context, after *entgql.Cursor[in
 	return r.client.Ethnos.Query().Paginate(ctx, after, first, before, last, offset, ent.WithEthnosOrder(orderBy), ent.WithEthnosFilter(where.Filter))
 }
 
+// FamiliaSlice is the resolver for the familiaSlice field.
+func (r *queryResolver) FamiliaSlice(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.FamiliaOrder, where *ent.FamiliaWhereInput) (*ent.FamiliaConnection, error) {
+	panic(fmt.Errorf("not implemented: FamiliaSlice - familiaSlice"))
+}
+
 // Favourites is the resolver for the favourites field.
 func (r *queryResolver) Favourites(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.FavouriteOrder, where *ent.FavouriteWhereInput) (*ent.FavouriteConnection, error) {
 	return r.client.Favourite.Query().Paginate(ctx, after, first, before, last, offset, ent.WithFavouriteOrder(orderBy), ent.WithFavouriteFilter(where.Filter))
+}
+
+// GenusSlice is the resolver for the genusSlice field.
+func (r *queryResolver) GenusSlice(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.GenusOrder, where *ent.GenusWhereInput) (*ent.GenusConnection, error) {
+	return r.client.Genus.Query().Paginate(ctx, after, first, before, last, offset, ent.WithGenusOrder(orderBy), ent.WithGenusFilter(where.Filter))
+}
+
+// Groups is the resolver for the groups field.
+func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.GroupOrder, where *ent.GroupWhereInput) (*ent.GroupConnection, error) {
+	return r.client.Group.Query().Paginate(ctx, after, first, before, last, offset, ent.WithGroupOrder(orderBy), ent.WithGroupFilter(where.Filter))
+}
+
+// Herbaria is the resolver for the herbaria field.
+func (r *queryResolver) Herbaria(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.HerbariumOrder, where *ent.HerbariumWhereInput) (*ent.HerbariumConnection, error) {
+	return r.client.Herbarium.Query().Paginate(ctx, after, first, before, last, offset, ent.WithHerbariumOrder(orderBy), ent.WithHerbariumFilter(where.Filter))
 }
 
 // Interviews is the resolver for the interviews field.
@@ -206,6 +226,11 @@ func (r *queryResolver) Sets(ctx context.Context, after *entgql.Cursor[int], fir
 // Settlements is the resolver for the settlements field.
 func (r *queryResolver) Settlements(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.SettlementOrder, where *ent.SettlementWhereInput) (*ent.SettlementConnection, error) {
 	return r.client.Settlement.Query().Paginate(ctx, after, first, before, last, offset, ent.WithSettlementOrder(orderBy), ent.WithSettlementFilter(where.Filter))
+}
+
+// SpeciesSlice is the resolver for the speciesSlice field.
+func (r *queryResolver) SpeciesSlice(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.SpeciesOrder, where *ent.SpeciesWhereInput) (*ent.SpeciesConnection, error) {
+	return r.client.Species.Query().Paginate(ctx, after, first, before, last, offset, ent.WithSpeciesOrder(orderBy), ent.WithSpeciesFilter(where.Filter))
 }
 
 // Techniques is the resolver for the techniques field.

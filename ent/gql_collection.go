@@ -23,7 +23,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
+	"github.com/dkrasnovdev/siberiana-api/ent/familia"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/genus"
+	"github.com/dkrasnovdev/siberiana-api/ent/group"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
@@ -45,6 +49,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/species"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 )
@@ -1904,6 +1909,18 @@ func (c *CollectionQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			c.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
 		case "protectedAreaPictures":
 			var (
 				alias = field.Alias
@@ -2132,6 +2149,18 @@ func (c *CountryQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 				return err
 			}
 			c.WithNamedBooks(alias, func(wq *BookQuery) {
+				*wq = *query
+			})
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
 				*wq = *query
 			})
 		case "protectedAreaPictures":
@@ -2876,6 +2905,18 @@ func (d *DistrictQuery) collectField(ctx context.Context, opCtx *graphql.Operati
 			d.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: d.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			d.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
 		case "protectedAreaPictures":
 			var (
 				alias = field.Alias
@@ -3198,6 +3239,158 @@ func newEthnosPaginateArgs(rv map[string]any) *ethnosPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (f *FamiliaQuery) CollectFields(ctx context.Context, satisfies ...string) (*FamiliaQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return f, nil
+	}
+	if err := f.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return f, nil
+}
+
+func (f *FamiliaQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(familia.Columns))
+		selectedFields = []string{familia.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[familia.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, familia.FieldCreatedAt)
+				fieldSeen[familia.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[familia.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, familia.FieldCreatedBy)
+				fieldSeen[familia.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[familia.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, familia.FieldUpdatedAt)
+				fieldSeen[familia.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[familia.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, familia.FieldUpdatedBy)
+				fieldSeen[familia.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[familia.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, familia.FieldDisplayName)
+				fieldSeen[familia.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[familia.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, familia.FieldAbbreviation)
+				fieldSeen[familia.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[familia.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, familia.FieldDescription)
+				fieldSeen[familia.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[familia.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, familia.FieldExternalLink)
+				fieldSeen[familia.FieldExternalLink] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[familia.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, familia.FieldPrimaryImageURL)
+				fieldSeen[familia.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[familia.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, familia.FieldAdditionalImagesUrls)
+				fieldSeen[familia.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		f.Select(selectedFields...)
+	}
+	return nil
+}
+
+type familiaPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []FamiliaPaginateOption
+}
+
+func newFamiliaPaginateArgs(rv map[string]any) *familiaPaginateArgs {
+	args := &familiaPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*FamiliaOrder:
+			args.opts = append(args.opts, WithFamiliaOrder(v))
+		case []any:
+			var orders []*FamiliaOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &FamiliaOrder{Field: &FamiliaOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithFamiliaOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*FamiliaWhereInput); ok {
+		args.opts = append(args.opts, WithFamiliaFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (f *FavouriteQuery) CollectFields(ctx context.Context, satisfies ...string) (*FavouriteQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -3303,6 +3496,577 @@ func newFavouritePaginateArgs(rv map[string]any) *favouritePaginateArgs {
 	}
 	if v, ok := rv[whereField].(*FavouriteWhereInput); ok {
 		args.opts = append(args.opts, WithFavouriteFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (ge *GenusQuery) CollectFields(ctx context.Context, satisfies ...string) (*GenusQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return ge, nil
+	}
+	if err := ge.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return ge, nil
+}
+
+func (ge *GenusQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(genus.Columns))
+		selectedFields = []string{genus.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: ge.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			ge.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[genus.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, genus.FieldCreatedAt)
+				fieldSeen[genus.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[genus.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, genus.FieldCreatedBy)
+				fieldSeen[genus.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[genus.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, genus.FieldUpdatedAt)
+				fieldSeen[genus.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[genus.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, genus.FieldUpdatedBy)
+				fieldSeen[genus.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[genus.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, genus.FieldDisplayName)
+				fieldSeen[genus.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[genus.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, genus.FieldAbbreviation)
+				fieldSeen[genus.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[genus.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, genus.FieldDescription)
+				fieldSeen[genus.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[genus.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, genus.FieldExternalLink)
+				fieldSeen[genus.FieldExternalLink] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[genus.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, genus.FieldPrimaryImageURL)
+				fieldSeen[genus.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[genus.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, genus.FieldAdditionalImagesUrls)
+				fieldSeen[genus.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		ge.Select(selectedFields...)
+	}
+	return nil
+}
+
+type genusPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []GenusPaginateOption
+}
+
+func newGenusPaginateArgs(rv map[string]any) *genusPaginateArgs {
+	args := &genusPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*GenusOrder:
+			args.opts = append(args.opts, WithGenusOrder(v))
+		case []any:
+			var orders []*GenusOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &GenusOrder{Field: &GenusOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithGenusOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*GenusWhereInput); ok {
+		args.opts = append(args.opts, WithGenusFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (gr *GroupQuery) CollectFields(ctx context.Context, satisfies ...string) (*GroupQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return gr, nil
+	}
+	if err := gr.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return gr, nil
+}
+
+func (gr *GroupQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(group.Columns))
+		selectedFields = []string{group.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[group.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, group.FieldCreatedAt)
+				fieldSeen[group.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[group.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, group.FieldCreatedBy)
+				fieldSeen[group.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[group.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, group.FieldUpdatedAt)
+				fieldSeen[group.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[group.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, group.FieldUpdatedBy)
+				fieldSeen[group.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[group.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, group.FieldDisplayName)
+				fieldSeen[group.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[group.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, group.FieldAbbreviation)
+				fieldSeen[group.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[group.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, group.FieldDescription)
+				fieldSeen[group.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[group.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, group.FieldExternalLink)
+				fieldSeen[group.FieldExternalLink] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[group.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, group.FieldPrimaryImageURL)
+				fieldSeen[group.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[group.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, group.FieldAdditionalImagesUrls)
+				fieldSeen[group.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		gr.Select(selectedFields...)
+	}
+	return nil
+}
+
+type groupPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []GroupPaginateOption
+}
+
+func newGroupPaginateArgs(rv map[string]any) *groupPaginateArgs {
+	args := &groupPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*GroupOrder:
+			args.opts = append(args.opts, WithGroupOrder(v))
+		case []any:
+			var orders []*GroupOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &GroupOrder{Field: &GroupOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithGroupOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*GroupWhereInput); ok {
+		args.opts = append(args.opts, WithGroupFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (h *HerbariumQuery) CollectFields(ctx context.Context, satisfies ...string) (*HerbariumQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return h, nil
+	}
+	if err := h.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return h, nil
+}
+
+func (h *HerbariumQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(herbarium.Columns))
+		selectedFields = []string{herbarium.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "author":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personImplementors)...); err != nil {
+				return err
+			}
+			h.withAuthor = query
+		case "familia":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FamiliaClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, familiaImplementors)...); err != nil {
+				return err
+			}
+			h.withFamilia = query
+		case "genus":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GenusClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, genusImplementors)...); err != nil {
+				return err
+			}
+			h.withGenus = query
+		case "group":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			h.withGroup = query
+		case "species":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SpeciesClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, speciesImplementors)...); err != nil {
+				return err
+			}
+			h.withSpecies = query
+		case "collection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CollectionClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, collectionImplementors)...); err != nil {
+				return err
+			}
+			h.withCollection = query
+		case "country":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CountryClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, countryImplementors)...); err != nil {
+				return err
+			}
+			h.withCountry = query
+		case "settlement":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SettlementClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, settlementImplementors)...); err != nil {
+				return err
+			}
+			h.withSettlement = query
+		case "district":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DistrictClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, districtImplementors)...); err != nil {
+				return err
+			}
+			h.withDistrict = query
+		case "region":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RegionClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, regionImplementors)...); err != nil {
+				return err
+			}
+			h.withRegion = query
+		case "personalCollection":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&PersonalCollectionClient{config: h.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, personalcollectionImplementors)...); err != nil {
+				return err
+			}
+			h.WithNamedPersonalCollection(alias, func(wq *PersonalCollectionQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[herbarium.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldCreatedAt)
+				fieldSeen[herbarium.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[herbarium.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldCreatedBy)
+				fieldSeen[herbarium.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[herbarium.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldUpdatedAt)
+				fieldSeen[herbarium.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[herbarium.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldUpdatedBy)
+				fieldSeen[herbarium.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[herbarium.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldDisplayName)
+				fieldSeen[herbarium.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[herbarium.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldAbbreviation)
+				fieldSeen[herbarium.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[herbarium.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldDescription)
+				fieldSeen[herbarium.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[herbarium.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldExternalLink)
+				fieldSeen[herbarium.FieldExternalLink] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[herbarium.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldStatus)
+				fieldSeen[herbarium.FieldStatus] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[herbarium.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldPrimaryImageURL)
+				fieldSeen[herbarium.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[herbarium.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldAdditionalImagesUrls)
+				fieldSeen[herbarium.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "date":
+			if _, ok := fieldSeen[herbarium.FieldDate]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldDate)
+				fieldSeen[herbarium.FieldDate] = struct{}{}
+			}
+		case "location":
+			if _, ok := fieldSeen[herbarium.FieldLocation]; !ok {
+				selectedFields = append(selectedFields, herbarium.FieldLocation)
+				fieldSeen[herbarium.FieldLocation] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		h.Select(selectedFields...)
+	}
+	return nil
+}
+
+type herbariumPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []HerbariumPaginateOption
+}
+
+func newHerbariumPaginateArgs(rv map[string]any) *herbariumPaginateArgs {
+	args := &herbariumPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*HerbariumOrder:
+			args.opts = append(args.opts, WithHerbariumOrder(v))
+		case []any:
+			var orders []*HerbariumOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &HerbariumOrder{Field: &HerbariumOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithHerbariumOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*HerbariumWhereInput); ok {
+		args.opts = append(args.opts, WithHerbariumFilter(v.Filter))
 	}
 	return args
 }
@@ -4900,6 +5664,18 @@ func (pe *PersonQuery) collectField(ctx context.Context, opCtx *graphql.Operatio
 			pe.WithNamedArtifacts(alias, func(wq *ArtifactQuery) {
 				*wq = *query
 			})
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: pe.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			pe.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
 		case "protectedAreaPictures":
 			var (
 				alias = field.Alias
@@ -5230,6 +6006,18 @@ func (pc *PersonalCollectionQuery) collectField(ctx context.Context, opCtx *grap
 				return err
 			}
 			pc.WithNamedDendrochronology(alias, func(wq *DendrochronologyQuery) {
+				*wq = *query
+			})
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: pc.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			pc.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
 				*wq = *query
 			})
 		case "petroglyphs":
@@ -6816,6 +7604,18 @@ func (r *RegionQuery) collectField(ctx context.Context, opCtx *graphql.Operation
 			r.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
 		case "petroglyphs":
 			var (
 				alias = field.Alias
@@ -7230,6 +8030,18 @@ func (s *SettlementQuery) collectField(ctx context.Context, opCtx *graphql.Opera
 			s.WithNamedBooks(alias, func(wq *BookQuery) {
 				*wq = *query
 			})
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
 		case "protectedAreaPictures":
 			var (
 				alias = field.Alias
@@ -7403,6 +8215,158 @@ func newSettlementPaginateArgs(rv map[string]any) *settlementPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*SettlementWhereInput); ok {
 		args.opts = append(args.opts, WithSettlementFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (s *SpeciesQuery) CollectFields(ctx context.Context, satisfies ...string) (*SpeciesQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return s, nil
+	}
+	if err := s.collectField(ctx, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return s, nil
+}
+
+func (s *SpeciesQuery) collectField(ctx context.Context, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(species.Columns))
+		selectedFields = []string{species.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "herbaria":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&HerbariumClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, opCtx, field, path, mayAddCondition(satisfies, herbariumImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedHerbaria(alias, func(wq *HerbariumQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[species.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, species.FieldCreatedAt)
+				fieldSeen[species.FieldCreatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[species.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, species.FieldCreatedBy)
+				fieldSeen[species.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[species.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, species.FieldUpdatedAt)
+				fieldSeen[species.FieldUpdatedAt] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[species.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, species.FieldUpdatedBy)
+				fieldSeen[species.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[species.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, species.FieldDisplayName)
+				fieldSeen[species.FieldDisplayName] = struct{}{}
+			}
+		case "abbreviation":
+			if _, ok := fieldSeen[species.FieldAbbreviation]; !ok {
+				selectedFields = append(selectedFields, species.FieldAbbreviation)
+				fieldSeen[species.FieldAbbreviation] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[species.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, species.FieldDescription)
+				fieldSeen[species.FieldDescription] = struct{}{}
+			}
+		case "externalLink":
+			if _, ok := fieldSeen[species.FieldExternalLink]; !ok {
+				selectedFields = append(selectedFields, species.FieldExternalLink)
+				fieldSeen[species.FieldExternalLink] = struct{}{}
+			}
+		case "primaryImageURL":
+			if _, ok := fieldSeen[species.FieldPrimaryImageURL]; !ok {
+				selectedFields = append(selectedFields, species.FieldPrimaryImageURL)
+				fieldSeen[species.FieldPrimaryImageURL] = struct{}{}
+			}
+		case "additionalImagesUrls":
+			if _, ok := fieldSeen[species.FieldAdditionalImagesUrls]; !ok {
+				selectedFields = append(selectedFields, species.FieldAdditionalImagesUrls)
+				fieldSeen[species.FieldAdditionalImagesUrls] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		s.Select(selectedFields...)
+	}
+	return nil
+}
+
+type speciesPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []SpeciesPaginateOption
+}
+
+func newSpeciesPaginateArgs(rv map[string]any) *speciesPaginateArgs {
+	args := &speciesPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*SpeciesOrder:
+			args.opts = append(args.opts, WithSpeciesOrder(v))
+		case []any:
+			var orders []*SpeciesOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &SpeciesOrder{Field: &SpeciesOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithSpeciesOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*SpeciesWhereInput); ok {
+		args.opts = append(args.opts, WithSpeciesFilter(v.Filter))
 	}
 	return args
 }

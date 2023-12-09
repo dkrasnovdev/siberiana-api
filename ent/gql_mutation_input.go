@@ -10,6 +10,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/collection"
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/model"
 	"github.com/dkrasnovdev/siberiana-api/ent/organization"
 	"github.com/dkrasnovdev/siberiana-api/ent/person"
@@ -2033,6 +2034,7 @@ type CreateCollectionInput struct {
 	DendrochronologyIDs     []int
 	PetroglyphIDs           []int
 	BookIDs                 []int
+	HerbariumIDs            []int
 	ProtectedAreaPictureIDs []int
 	CategoryID              int
 	AuthorIDs               []int
@@ -2095,6 +2097,9 @@ func (i *CreateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
 	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
 	}
@@ -2150,6 +2155,9 @@ type UpdateCollectionInput struct {
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
+	ClearHerbaria                 bool
+	AddHerbariumIDs               []int
+	RemoveHerbariumIDs            []int
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
@@ -2275,6 +2283,15 @@ func (i *UpdateCollectionInput) Mutate(m *CollectionMutation) {
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
 	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
+	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()
 	}
@@ -2323,6 +2340,7 @@ type CreateCountryInput struct {
 	ArtIDs                  []int
 	ArtifactIDs             []int
 	BookIDs                 []int
+	HerbariumIDs            []int
 	ProtectedAreaPictureIDs []int
 	RegionIDs               []int
 	LocationIDs             []int
@@ -2364,6 +2382,9 @@ func (i *CreateCountryInput) Mutate(m *CountryMutation) {
 	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
 	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
@@ -2412,6 +2433,9 @@ type UpdateCountryInput struct {
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
+	ClearHerbaria                 bool
+	AddHerbariumIDs               []int
+	RemoveHerbariumIDs            []int
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
@@ -2496,6 +2520,15 @@ func (i *UpdateCountryInput) Mutate(m *CountryMutation) {
 	}
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
 	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()
@@ -3125,6 +3158,7 @@ type CreateDistrictInput struct {
 	ArtIDs                  []int
 	ArtifactIDs             []int
 	BookIDs                 []int
+	HerbariumIDs            []int
 	ProtectedAreaPictureIDs []int
 	SettlementIDs           []int
 	LocationIDs             []int
@@ -3167,6 +3201,9 @@ func (i *CreateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
 	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
@@ -3218,6 +3255,9 @@ type UpdateDistrictInput struct {
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
+	ClearHerbaria                 bool
+	AddHerbariumIDs               []int
+	RemoveHerbariumIDs            []int
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
@@ -3304,6 +3344,15 @@ func (i *UpdateDistrictInput) Mutate(m *DistrictMutation) {
 	}
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
 	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()
@@ -3504,6 +3553,168 @@ func (c *EthnosUpdateOne) SetInput(i UpdateEthnosInput) *EthnosUpdateOne {
 	return c
 }
 
+// CreateFamiliaInput represents a mutation input for creating familiaslice.
+type CreateFamiliaInput struct {
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	DisplayName          *string
+	Abbreviation         *string
+	Description          *string
+	ExternalLink         *string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	HerbariumIDs         []int
+}
+
+// Mutate applies the CreateFamiliaInput on the FamiliaMutation builder.
+func (i *CreateFamiliaInput) Mutate(m *FamiliaMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateFamiliaInput on the FamiliaCreate builder.
+func (c *FamiliaCreate) SetInput(i CreateFamiliaInput) *FamiliaCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateFamiliaInput represents a mutation input for updating familiaslice.
+type UpdateFamiliaInput struct {
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearHerbaria              bool
+	AddHerbariumIDs            []int
+	RemoveHerbariumIDs         []int
+}
+
+// Mutate applies the UpdateFamiliaInput on the FamiliaMutation builder.
+func (i *UpdateFamiliaInput) Mutate(m *FamiliaMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateFamiliaInput on the FamiliaUpdate builder.
+func (c *FamiliaUpdate) SetInput(i UpdateFamiliaInput) *FamiliaUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateFamiliaInput on the FamiliaUpdateOne builder.
+func (c *FamiliaUpdateOne) SetInput(i UpdateFamiliaInput) *FamiliaUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateFavouriteInput represents a mutation input for creating favourites.
 type CreateFavouriteInput struct {
 	CreatedAt *time.Time
@@ -3570,6 +3781,642 @@ func (c *FavouriteUpdate) SetInput(i UpdateFavouriteInput) *FavouriteUpdate {
 
 // SetInput applies the change-set in the UpdateFavouriteInput on the FavouriteUpdateOne builder.
 func (c *FavouriteUpdateOne) SetInput(i UpdateFavouriteInput) *FavouriteUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateGenusInput represents a mutation input for creating genusslice.
+type CreateGenusInput struct {
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	DisplayName          *string
+	Abbreviation         *string
+	Description          *string
+	ExternalLink         *string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	HerbariumIDs         []int
+}
+
+// Mutate applies the CreateGenusInput on the GenusMutation builder.
+func (i *CreateGenusInput) Mutate(m *GenusMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateGenusInput on the GenusCreate builder.
+func (c *GenusCreate) SetInput(i CreateGenusInput) *GenusCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateGenusInput represents a mutation input for updating genusslice.
+type UpdateGenusInput struct {
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearHerbaria              bool
+	AddHerbariumIDs            []int
+	RemoveHerbariumIDs         []int
+}
+
+// Mutate applies the UpdateGenusInput on the GenusMutation builder.
+func (i *UpdateGenusInput) Mutate(m *GenusMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateGenusInput on the GenusUpdate builder.
+func (c *GenusUpdate) SetInput(i UpdateGenusInput) *GenusUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateGenusInput on the GenusUpdateOne builder.
+func (c *GenusUpdateOne) SetInput(i UpdateGenusInput) *GenusUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateGroupInput represents a mutation input for creating groups.
+type CreateGroupInput struct {
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	DisplayName          *string
+	Abbreviation         *string
+	Description          *string
+	ExternalLink         *string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	HerbariumIDs         []int
+}
+
+// Mutate applies the CreateGroupInput on the GroupMutation builder.
+func (i *CreateGroupInput) Mutate(m *GroupMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateGroupInput on the GroupCreate builder.
+func (c *GroupCreate) SetInput(i CreateGroupInput) *GroupCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateGroupInput represents a mutation input for updating groups.
+type UpdateGroupInput struct {
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearHerbaria              bool
+	AddHerbariumIDs            []int
+	RemoveHerbariumIDs         []int
+}
+
+// Mutate applies the UpdateGroupInput on the GroupMutation builder.
+func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateGroupInput on the GroupUpdate builder.
+func (c *GroupUpdate) SetInput(i UpdateGroupInput) *GroupUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateGroupInput on the GroupUpdateOne builder.
+func (c *GroupUpdateOne) SetInput(i UpdateGroupInput) *GroupUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateHerbariumInput represents a mutation input for creating herbaria.
+type CreateHerbariumInput struct {
+	CreatedAt             *time.Time
+	CreatedBy             *string
+	UpdatedAt             *time.Time
+	UpdatedBy             *string
+	DisplayName           *string
+	Abbreviation          *string
+	Description           *string
+	ExternalLink          *string
+	Status                *herbarium.Status
+	PrimaryImageURL       *string
+	AdditionalImagesUrls  []string
+	Date                  *time.Time
+	Location              *string
+	AuthorID              *int
+	FamiliaID             *int
+	GenusID               *int
+	GroupID               *int
+	SpeciesID             *int
+	CollectionID          int
+	CountryID             *int
+	SettlementID          *int
+	DistrictID            *int
+	RegionID              *int
+	PersonalCollectionIDs []int
+}
+
+// Mutate applies the CreateHerbariumInput on the HerbariumMutation builder.
+func (i *CreateHerbariumInput) Mutate(m *HerbariumMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.Date; v != nil {
+		m.SetDate(*v)
+	}
+	if v := i.Location; v != nil {
+		m.SetLocation(*v)
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
+	}
+	if v := i.FamiliaID; v != nil {
+		m.SetFamiliaID(*v)
+	}
+	if v := i.GenusID; v != nil {
+		m.SetGenusID(*v)
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+	if v := i.SpeciesID; v != nil {
+		m.SetSpeciesID(*v)
+	}
+	m.SetCollectionID(i.CollectionID)
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
+	if v := i.PersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateHerbariumInput on the HerbariumCreate builder.
+func (c *HerbariumCreate) SetInput(i CreateHerbariumInput) *HerbariumCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateHerbariumInput represents a mutation input for updating herbaria.
+type UpdateHerbariumInput struct {
+	ClearCreatedBy              bool
+	CreatedBy                   *string
+	UpdatedAt                   *time.Time
+	ClearUpdatedBy              bool
+	UpdatedBy                   *string
+	ClearDisplayName            bool
+	DisplayName                 *string
+	ClearAbbreviation           bool
+	Abbreviation                *string
+	ClearDescription            bool
+	Description                 *string
+	ClearExternalLink           bool
+	ExternalLink                *string
+	ClearStatus                 bool
+	Status                      *herbarium.Status
+	ClearPrimaryImageURL        bool
+	PrimaryImageURL             *string
+	ClearAdditionalImagesUrls   bool
+	AdditionalImagesUrls        []string
+	AppendAdditionalImagesUrls  []string
+	ClearDate                   bool
+	Date                        *time.Time
+	ClearLocation               bool
+	Location                    *string
+	ClearAuthor                 bool
+	AuthorID                    *int
+	ClearFamilia                bool
+	FamiliaID                   *int
+	ClearGenus                  bool
+	GenusID                     *int
+	ClearGroup                  bool
+	GroupID                     *int
+	ClearSpecies                bool
+	SpeciesID                   *int
+	CollectionID                *int
+	ClearCountry                bool
+	CountryID                   *int
+	ClearSettlement             bool
+	SettlementID                *int
+	ClearDistrict               bool
+	DistrictID                  *int
+	ClearRegion                 bool
+	RegionID                    *int
+	ClearPersonalCollection     bool
+	AddPersonalCollectionIDs    []int
+	RemovePersonalCollectionIDs []int
+}
+
+// Mutate applies the UpdateHerbariumInput on the HerbariumMutation builder.
+func (i *UpdateHerbariumInput) Mutate(m *HerbariumMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearDate {
+		m.ClearDate()
+	}
+	if v := i.Date; v != nil {
+		m.SetDate(*v)
+	}
+	if i.ClearLocation {
+		m.ClearLocation()
+	}
+	if v := i.Location; v != nil {
+		m.SetLocation(*v)
+	}
+	if i.ClearAuthor {
+		m.ClearAuthor()
+	}
+	if v := i.AuthorID; v != nil {
+		m.SetAuthorID(*v)
+	}
+	if i.ClearFamilia {
+		m.ClearFamilia()
+	}
+	if v := i.FamiliaID; v != nil {
+		m.SetFamiliaID(*v)
+	}
+	if i.ClearGenus {
+		m.ClearGenus()
+	}
+	if v := i.GenusID; v != nil {
+		m.SetGenusID(*v)
+	}
+	if i.ClearGroup {
+		m.ClearGroup()
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+	if i.ClearSpecies {
+		m.ClearSpecies()
+	}
+	if v := i.SpeciesID; v != nil {
+		m.SetSpeciesID(*v)
+	}
+	if v := i.CollectionID; v != nil {
+		m.SetCollectionID(*v)
+	}
+	if i.ClearCountry {
+		m.ClearCountry()
+	}
+	if v := i.CountryID; v != nil {
+		m.SetCountryID(*v)
+	}
+	if i.ClearSettlement {
+		m.ClearSettlement()
+	}
+	if v := i.SettlementID; v != nil {
+		m.SetSettlementID(*v)
+	}
+	if i.ClearDistrict {
+		m.ClearDistrict()
+	}
+	if v := i.DistrictID; v != nil {
+		m.SetDistrictID(*v)
+	}
+	if i.ClearRegion {
+		m.ClearRegion()
+	}
+	if v := i.RegionID; v != nil {
+		m.SetRegionID(*v)
+	}
+	if i.ClearPersonalCollection {
+		m.ClearPersonalCollection()
+	}
+	if v := i.AddPersonalCollectionIDs; len(v) > 0 {
+		m.AddPersonalCollectionIDs(v...)
+	}
+	if v := i.RemovePersonalCollectionIDs; len(v) > 0 {
+		m.RemovePersonalCollectionIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateHerbariumInput on the HerbariumUpdate builder.
+func (c *HerbariumUpdate) SetInput(i UpdateHerbariumInput) *HerbariumUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateHerbariumInput on the HerbariumUpdateOne builder.
+func (c *HerbariumUpdateOne) SetInput(i UpdateHerbariumInput) *HerbariumUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -5175,6 +6022,7 @@ type CreatePersonInput struct {
 	CollectionIDs                         []int
 	ArtIDs                                []int
 	ArtifactIDs                           []int
+	HerbariumIDs                          []int
 	ProtectedAreaPictureIDs               []int
 	DonatedArtifactIDs                    []int
 	PetroglyphsAccountingDocumentationIDs []int
@@ -5255,6 +6103,9 @@ func (i *CreatePersonInput) Mutate(m *PersonMutation) {
 	}
 	if v := i.ArtifactIDs; len(v) > 0 {
 		m.AddArtifactIDs(v...)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
 	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
@@ -5339,6 +6190,9 @@ type UpdatePersonInput struct {
 	ClearArtifacts                              bool
 	AddArtifactIDs                              []int
 	RemoveArtifactIDs                           []int
+	ClearHerbaria                               bool
+	AddHerbariumIDs                             []int
+	RemoveHerbariumIDs                          []int
 	ClearProtectedAreaPictures                  bool
 	AddProtectedAreaPictureIDs                  []int
 	RemoveProtectedAreaPictureIDs               []int
@@ -5513,6 +6367,15 @@ func (i *UpdatePersonInput) Mutate(m *PersonMutation) {
 	if v := i.RemoveArtifactIDs; len(v) > 0 {
 		m.RemoveArtifactIDs(v...)
 	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
+	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()
 	}
@@ -5608,6 +6471,7 @@ type CreatePersonalCollectionInput struct {
 	ArtifactIDs             []int
 	BookIDs                 []int
 	DendrochronologyIDs     []int
+	HerbariumIDs            []int
 	PetroglyphIDs           []int
 	ProtectedAreaPictureIDs []int
 }
@@ -5641,6 +6505,9 @@ func (i *CreatePersonalCollectionInput) Mutate(m *PersonalCollectionMutation) {
 	}
 	if v := i.DendrochronologyIDs; len(v) > 0 {
 		m.AddDendrochronologyIDs(v...)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
 	}
 	if v := i.PetroglyphIDs; len(v) > 0 {
 		m.AddPetroglyphIDs(v...)
@@ -5677,6 +6544,9 @@ type UpdatePersonalCollectionInput struct {
 	ClearDendrochronology         bool
 	AddDendrochronologyIDs        []int
 	RemoveDendrochronologyIDs     []int
+	ClearHerbaria                 bool
+	AddHerbariumIDs               []int
+	RemoveHerbariumIDs            []int
 	ClearPetroglyphs              bool
 	AddPetroglyphIDs              []int
 	RemovePetroglyphIDs           []int
@@ -5743,6 +6613,15 @@ func (i *UpdatePersonalCollectionInput) Mutate(m *PersonalCollectionMutation) {
 	}
 	if v := i.RemoveDendrochronologyIDs; len(v) > 0 {
 		m.RemoveDendrochronologyIDs(v...)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
 	}
 	if i.ClearPetroglyphs {
 		m.ClearPetroglyphs()
@@ -7439,6 +8318,7 @@ type CreateRegionInput struct {
 	ArtIDs                  []int
 	ArtifactIDs             []int
 	BookIDs                 []int
+	HerbariumIDs            []int
 	PetroglyphIDs           []int
 	ProtectedAreaPictureIDs []int
 	DistrictIDs             []int
@@ -7483,6 +8363,9 @@ func (i *CreateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
 	}
 	if v := i.PetroglyphIDs; len(v) > 0 {
 		m.AddPetroglyphIDs(v...)
@@ -7540,6 +8423,9 @@ type UpdateRegionInput struct {
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
+	ClearHerbaria                 bool
+	AddHerbariumIDs               []int
+	RemoveHerbariumIDs            []int
 	ClearPetroglyphs              bool
 	AddPetroglyphIDs              []int
 	RemovePetroglyphIDs           []int
@@ -7632,6 +8518,15 @@ func (i *UpdateRegionInput) Mutate(m *RegionMutation) {
 	}
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
 	}
 	if i.ClearPetroglyphs {
 		m.ClearPetroglyphs()
@@ -7879,6 +8774,7 @@ type CreateSettlementInput struct {
 	ArtIDs                  []int
 	ArtifactIDs             []int
 	BookIDs                 []int
+	HerbariumIDs            []int
 	ProtectedAreaPictureIDs []int
 	LocationIDs             []int
 	RegionID                *int
@@ -7921,6 +8817,9 @@ func (i *CreateSettlementInput) Mutate(m *SettlementMutation) {
 	}
 	if v := i.BookIDs; len(v) > 0 {
 		m.AddBookIDs(v...)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
 	}
 	if v := i.ProtectedAreaPictureIDs; len(v) > 0 {
 		m.AddProtectedAreaPictureIDs(v...)
@@ -7972,6 +8871,9 @@ type UpdateSettlementInput struct {
 	ClearBooks                    bool
 	AddBookIDs                    []int
 	RemoveBookIDs                 []int
+	ClearHerbaria                 bool
+	AddHerbariumIDs               []int
+	RemoveHerbariumIDs            []int
 	ClearProtectedAreaPictures    bool
 	AddProtectedAreaPictureIDs    []int
 	RemoveProtectedAreaPictureIDs []int
@@ -8058,6 +8960,15 @@ func (i *UpdateSettlementInput) Mutate(m *SettlementMutation) {
 	if v := i.RemoveBookIDs; len(v) > 0 {
 		m.RemoveBookIDs(v...)
 	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
+	}
 	if i.ClearProtectedAreaPictures {
 		m.ClearProtectedAreaPictures()
 	}
@@ -8116,6 +9027,168 @@ func (c *SettlementUpdate) SetInput(i UpdateSettlementInput) *SettlementUpdate {
 
 // SetInput applies the change-set in the UpdateSettlementInput on the SettlementUpdateOne builder.
 func (c *SettlementUpdateOne) SetInput(i UpdateSettlementInput) *SettlementUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateSpeciesInput represents a mutation input for creating speciesslice.
+type CreateSpeciesInput struct {
+	CreatedAt            *time.Time
+	CreatedBy            *string
+	UpdatedAt            *time.Time
+	UpdatedBy            *string
+	DisplayName          *string
+	Abbreviation         *string
+	Description          *string
+	ExternalLink         *string
+	PrimaryImageURL      *string
+	AdditionalImagesUrls []string
+	HerbariumIDs         []int
+}
+
+// Mutate applies the CreateSpeciesInput on the SpeciesMutation builder.
+func (i *CreateSpeciesInput) Mutate(m *SpeciesMutation) {
+	if v := i.CreatedAt; v != nil {
+		m.SetCreatedAt(*v)
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if v := i.HerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateSpeciesInput on the SpeciesCreate builder.
+func (c *SpeciesCreate) SetInput(i CreateSpeciesInput) *SpeciesCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateSpeciesInput represents a mutation input for updating speciesslice.
+type UpdateSpeciesInput struct {
+	ClearCreatedBy             bool
+	CreatedBy                  *string
+	UpdatedAt                  *time.Time
+	ClearUpdatedBy             bool
+	UpdatedBy                  *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearAbbreviation          bool
+	Abbreviation               *string
+	ClearDescription           bool
+	Description                *string
+	ClearExternalLink          bool
+	ExternalLink               *string
+	ClearPrimaryImageURL       bool
+	PrimaryImageURL            *string
+	ClearAdditionalImagesUrls  bool
+	AdditionalImagesUrls       []string
+	AppendAdditionalImagesUrls []string
+	ClearHerbaria              bool
+	AddHerbariumIDs            []int
+	RemoveHerbariumIDs         []int
+}
+
+// Mutate applies the UpdateSpeciesInput on the SpeciesMutation builder.
+func (i *UpdateSpeciesInput) Mutate(m *SpeciesMutation) {
+	if i.ClearCreatedBy {
+		m.ClearCreatedBy()
+	}
+	if v := i.CreatedBy; v != nil {
+		m.SetCreatedBy(*v)
+	}
+	if v := i.UpdatedAt; v != nil {
+		m.SetUpdatedAt(*v)
+	}
+	if i.ClearUpdatedBy {
+		m.ClearUpdatedBy()
+	}
+	if v := i.UpdatedBy; v != nil {
+		m.SetUpdatedBy(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearAbbreviation {
+		m.ClearAbbreviation()
+	}
+	if v := i.Abbreviation; v != nil {
+		m.SetAbbreviation(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearExternalLink {
+		m.ClearExternalLink()
+	}
+	if v := i.ExternalLink; v != nil {
+		m.SetExternalLink(*v)
+	}
+	if i.ClearPrimaryImageURL {
+		m.ClearPrimaryImageURL()
+	}
+	if v := i.PrimaryImageURL; v != nil {
+		m.SetPrimaryImageURL(*v)
+	}
+	if i.ClearAdditionalImagesUrls {
+		m.ClearAdditionalImagesUrls()
+	}
+	if v := i.AdditionalImagesUrls; v != nil {
+		m.SetAdditionalImagesUrls(v)
+	}
+	if i.AppendAdditionalImagesUrls != nil {
+		m.AppendAdditionalImagesUrls(i.AdditionalImagesUrls)
+	}
+	if i.ClearHerbaria {
+		m.ClearHerbaria()
+	}
+	if v := i.AddHerbariumIDs; len(v) > 0 {
+		m.AddHerbariumIDs(v...)
+	}
+	if v := i.RemoveHerbariumIDs; len(v) > 0 {
+		m.RemoveHerbariumIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateSpeciesInput on the SpeciesUpdate builder.
+func (c *SpeciesUpdate) SetInput(i UpdateSpeciesInput) *SpeciesUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateSpeciesInput on the SpeciesUpdateOne builder.
+func (c *SpeciesUpdateOne) SetInput(i UpdateSpeciesInput) *SpeciesUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

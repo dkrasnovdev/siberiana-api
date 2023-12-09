@@ -512,6 +512,18 @@ func (c *Collection) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
+func (c *Collection) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Collection) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = c.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
@@ -576,6 +588,18 @@ func (c *Country) Books(ctx context.Context) (result []*Book, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = c.QueryBooks().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Country) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryHerbaria().All(ctx)
 	}
 	return result, err
 }
@@ -720,6 +744,18 @@ func (d *District) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
+func (d *District) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = d.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = d.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = d.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
 func (d *District) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = d.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
@@ -796,6 +832,134 @@ func (e *Ethnos) Artifacts(ctx context.Context) (result []*Artifact, err error) 
 	}
 	if IsNotLoaded(err) {
 		result, err = e.QueryArtifacts().All(ctx)
+	}
+	return result, err
+}
+
+func (f *Familia) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
+func (ge *Genus) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = ge.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = ge.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = ge.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
+func (gr *Group) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
+func (h *Herbarium) Author(ctx context.Context) (*Person, error) {
+	result, err := h.Edges.AuthorOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryAuthor().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) Familia(ctx context.Context) (*Familia, error) {
+	result, err := h.Edges.FamiliaOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryFamilia().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) Genus(ctx context.Context) (*Genus, error) {
+	result, err := h.Edges.GenusOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryGenus().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) Group(ctx context.Context) (*Group, error) {
+	result, err := h.Edges.GroupOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryGroup().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) Species(ctx context.Context) (*Species, error) {
+	result, err := h.Edges.SpeciesOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QuerySpecies().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) Collection(ctx context.Context) (*Collection, error) {
+	result, err := h.Edges.CollectionOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryCollection().Only(ctx)
+	}
+	return result, err
+}
+
+func (h *Herbarium) Country(ctx context.Context) (*Country, error) {
+	result, err := h.Edges.CountryOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryCountry().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) Settlement(ctx context.Context) (*Settlement, error) {
+	result, err := h.Edges.SettlementOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QuerySettlement().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) District(ctx context.Context) (*District, error) {
+	result, err := h.Edges.DistrictOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryDistrict().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) Region(ctx context.Context) (*Region, error) {
+	result, err := h.Edges.RegionOrErr()
+	if IsNotLoaded(err) {
+		result, err = h.QueryRegion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (h *Herbarium) PersonalCollection(ctx context.Context) (result []*PersonalCollection, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = h.NamedPersonalCollection(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = h.Edges.PersonalCollectionOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = h.QueryPersonalCollection().All(ctx)
 	}
 	return result, err
 }
@@ -1084,6 +1248,18 @@ func (pe *Person) Artifacts(ctx context.Context) (result []*Artifact, err error)
 	return result, err
 }
 
+func (pe *Person) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pe.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pe.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pe.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
 func (pe *Person) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = pe.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1220,6 +1396,18 @@ func (pc *PersonalCollection) Dendrochronology(ctx context.Context) (result []*D
 	}
 	if IsNotLoaded(err) {
 		result, err = pc.QueryDendrochronology().All(ctx)
+	}
+	return result, err
+}
+
+func (pc *PersonalCollection) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pc.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pc.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pc.QueryHerbaria().All(ctx)
 	}
 	return result, err
 }
@@ -1564,6 +1752,18 @@ func (r *Region) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
+func (r *Region) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
 func (r *Region) Petroglyphs(ctx context.Context) (result []*Petroglyph, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = r.NamedPetroglyphs(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1716,6 +1916,18 @@ func (s *Settlement) Books(ctx context.Context) (result []*Book, err error) {
 	return result, err
 }
 
+func (s *Settlement) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryHerbaria().All(ctx)
+	}
+	return result, err
+}
+
 func (s *Settlement) ProtectedAreaPictures(ctx context.Context) (result []*ProtectedAreaPicture, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = s.NamedProtectedAreaPictures(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1776,6 +1988,18 @@ func (s *Settlement) KnownAsBefore(ctx context.Context) (result []*Settlement, e
 	}
 	if IsNotLoaded(err) {
 		result, err = s.QueryKnownAsBefore().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Species) Herbaria(ctx context.Context) (result []*Herbarium, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedHerbaria(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.HerbariaOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryHerbaria().All(ctx)
 	}
 	return result, err
 }

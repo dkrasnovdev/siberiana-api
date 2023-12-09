@@ -37,6 +37,8 @@ const (
 	EdgeArtifacts = "artifacts"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
+	// EdgeHerbaria holds the string denoting the herbaria edge name in mutations.
+	EdgeHerbaria = "herbaria"
 	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
 	EdgePetroglyphs = "petroglyphs"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
@@ -76,6 +78,13 @@ const (
 	BooksInverseTable = "books"
 	// BooksColumn is the table column denoting the books relation/edge.
 	BooksColumn = "region_books"
+	// HerbariaTable is the table that holds the herbaria relation/edge.
+	HerbariaTable = "herbaria"
+	// HerbariaInverseTable is the table name for the Herbarium entity.
+	// It exists in this package in order to avoid circular dependency with the "herbarium" package.
+	HerbariaInverseTable = "herbaria"
+	// HerbariaColumn is the table column denoting the herbaria relation/edge.
+	HerbariaColumn = "region_herbaria"
 	// PetroglyphsTable is the table that holds the petroglyphs relation/edge.
 	PetroglyphsTable = "petroglyphs"
 	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
@@ -273,6 +282,20 @@ func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByHerbariaCount orders the results by herbaria count.
+func ByHerbariaCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHerbariaStep(), opts...)
+	}
+}
+
+// ByHerbaria orders the results by herbaria terms.
+func ByHerbaria(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHerbariaStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPetroglyphsCount orders the results by petroglyphs count.
 func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -396,6 +419,13 @@ func newBooksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BooksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+	)
+}
+func newHerbariaStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HerbariaInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, HerbariaTable, HerbariaColumn),
 	)
 }
 func newPetroglyphsStep() *sqlgraph.Step {

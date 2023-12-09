@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -32,6 +33,7 @@ type CountryQuery struct {
 	withArt                        *ArtQuery
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
+	withHerbaria                   *HerbariumQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	withRegions                    *RegionQuery
 	withLocations                  *LocationQuery
@@ -42,6 +44,7 @@ type CountryQuery struct {
 	withNamedArt                   map[string]*ArtQuery
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
+	withNamedHerbaria              map[string]*HerbariumQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	withNamedRegions               map[string]*RegionQuery
 	withNamedLocations             map[string]*LocationQuery
@@ -142,6 +145,28 @@ func (cq *CountryQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(country.Table, country.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, country.BooksTable, country.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryHerbaria chains the current query on the "herbaria" edge.
+func (cq *CountryQuery) QueryHerbaria() *HerbariumQuery {
+	query := (&HerbariumClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(country.Table, country.FieldID, selector),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, country.HerbariaTable, country.HerbariaColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
@@ -454,6 +479,7 @@ func (cq *CountryQuery) Clone() *CountryQuery {
 		withArt:                   cq.withArt.Clone(),
 		withArtifacts:             cq.withArtifacts.Clone(),
 		withBooks:                 cq.withBooks.Clone(),
+		withHerbaria:              cq.withHerbaria.Clone(),
 		withProtectedAreaPictures: cq.withProtectedAreaPictures.Clone(),
 		withRegions:               cq.withRegions.Clone(),
 		withLocations:             cq.withLocations.Clone(),
@@ -495,6 +521,17 @@ func (cq *CountryQuery) WithBooks(opts ...func(*BookQuery)) *CountryQuery {
 		opt(query)
 	}
 	cq.withBooks = query
+	return cq
+}
+
+// WithHerbaria tells the query-builder to eager-load the nodes that are connected to
+// the "herbaria" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithHerbaria(opts ...func(*HerbariumQuery)) *CountryQuery {
+	query := (&HerbariumClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withHerbaria = query
 	return cq
 }
 
@@ -637,10 +674,11 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 	var (
 		nodes       = []*Country{}
 		_spec       = cq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
 			cq.withArt != nil,
 			cq.withArtifacts != nil,
 			cq.withBooks != nil,
+			cq.withHerbaria != nil,
 			cq.withProtectedAreaPictures != nil,
 			cq.withRegions != nil,
 			cq.withLocations != nil,
@@ -687,6 +725,13 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 		if err := cq.loadBooks(ctx, query, nodes,
 			func(n *Country) { n.Edges.Books = []*Book{} },
 			func(n *Country, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := cq.withHerbaria; query != nil {
+		if err := cq.loadHerbaria(ctx, query, nodes,
+			func(n *Country) { n.Edges.Herbaria = []*Herbarium{} },
+			func(n *Country, e *Herbarium) { n.Edges.Herbaria = append(n.Edges.Herbaria, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -745,6 +790,13 @@ func (cq *CountryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Coun
 		if err := cq.loadBooks(ctx, query, nodes,
 			func(n *Country) { n.appendNamedBooks(name) },
 			func(n *Country, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedHerbaria {
+		if err := cq.loadHerbaria(ctx, query, nodes,
+			func(n *Country) { n.appendNamedHerbaria(name) },
+			func(n *Country, e *Herbarium) { n.appendNamedHerbaria(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -879,6 +931,37 @@ func (cq *CountryQuery) loadBooks(ctx context.Context, query *BookQuery, nodes [
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "country_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (cq *CountryQuery) loadHerbaria(ctx context.Context, query *HerbariumQuery, nodes []*Country, init func(*Country), assign func(*Country, *Herbarium)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Country)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Herbarium(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(country.HerbariaColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.country_herbaria
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "country_herbaria" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "country_herbaria" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -1223,6 +1306,20 @@ func (cq *CountryQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *C
 		cq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	cq.withNamedBooks[name] = query
+	return cq
+}
+
+// WithNamedHerbaria tells the query-builder to eager-load the nodes that are connected to the "herbaria"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *CountryQuery) WithNamedHerbaria(name string, opts ...func(*HerbariumQuery)) *CountryQuery {
+	query := (&HerbariumClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedHerbaria == nil {
+		cq.withNamedHerbaria = make(map[string]*HerbariumQuery)
+	}
+	cq.withNamedHerbaria[name] = query
 	return cq
 }
 

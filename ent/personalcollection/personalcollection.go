@@ -35,6 +35,8 @@ const (
 	EdgeBooks = "books"
 	// EdgeDendrochronology holds the string denoting the dendrochronology edge name in mutations.
 	EdgeDendrochronology = "dendrochronology"
+	// EdgeHerbaria holds the string denoting the herbaria edge name in mutations.
+	EdgeHerbaria = "herbaria"
 	// EdgePetroglyphs holds the string denoting the petroglyphs edge name in mutations.
 	EdgePetroglyphs = "petroglyphs"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
@@ -63,6 +65,11 @@ const (
 	DendrochronologyInverseTable = "dendrochronologies"
 	// DendrochronologyColumn is the table column denoting the dendrochronology relation/edge.
 	DendrochronologyColumn = "personal_collection_dendrochronology"
+	// HerbariaTable is the table that holds the herbaria relation/edge. The primary key declared below.
+	HerbariaTable = "personal_collection_herbaria"
+	// HerbariaInverseTable is the table name for the Herbarium entity.
+	// It exists in this package in order to avoid circular dependency with the "herbarium" package.
+	HerbariaInverseTable = "herbaria"
 	// PetroglyphsTable is the table that holds the petroglyphs relation/edge. The primary key declared below.
 	PetroglyphsTable = "personal_collection_petroglyphs"
 	// PetroglyphsInverseTable is the table name for the Petroglyph entity.
@@ -96,6 +103,9 @@ var (
 	// BooksPrimaryKey and BooksColumn2 are the table columns denoting the
 	// primary key for the books relation (M2M).
 	BooksPrimaryKey = []string{"personal_collection_id", "book_id"}
+	// HerbariaPrimaryKey and HerbariaColumn2 are the table columns denoting the
+	// primary key for the herbaria relation (M2M).
+	HerbariaPrimaryKey = []string{"personal_collection_id", "herbarium_id"}
 	// PetroglyphsPrimaryKey and PetroglyphsColumn2 are the table columns denoting the
 	// primary key for the petroglyphs relation (M2M).
 	PetroglyphsPrimaryKey = []string{"personal_collection_id", "petroglyph_id"}
@@ -229,6 +239,20 @@ func ByDendrochronology(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByHerbariaCount orders the results by herbaria count.
+func ByHerbariaCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHerbariaStep(), opts...)
+	}
+}
+
+// ByHerbaria orders the results by herbaria terms.
+func ByHerbaria(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHerbariaStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPetroglyphsCount orders the results by petroglyphs count.
 func ByPetroglyphsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -282,6 +306,13 @@ func newDendrochronologyStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DendrochronologyInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DendrochronologyTable, DendrochronologyColumn),
+	)
+}
+func newHerbariaStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HerbariaInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, HerbariaTable, HerbariaPrimaryKey...),
 	)
 }
 func newPetroglyphsStep() *sqlgraph.Step {

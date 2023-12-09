@@ -49,6 +49,8 @@ type RegionEdges struct {
 	Artifacts []*Artifact `json:"artifacts,omitempty"`
 	// Books holds the value of the books edge.
 	Books []*Book `json:"books,omitempty"`
+	// Herbaria holds the value of the herbaria edge.
+	Herbaria []*Herbarium `json:"herbaria,omitempty"`
 	// Petroglyphs holds the value of the petroglyphs edge.
 	Petroglyphs []*Petroglyph `json:"petroglyphs,omitempty"`
 	// ProtectedAreaPictures holds the value of the protected_area_pictures edge.
@@ -67,13 +69,14 @@ type RegionEdges struct {
 	KnownAsBefore []*Region `json:"known_as_before,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
 	namedArt                   map[string][]*Art
 	namedArtifacts             map[string][]*Artifact
 	namedBooks                 map[string][]*Book
+	namedHerbaria              map[string][]*Herbarium
 	namedPetroglyphs           map[string][]*Petroglyph
 	namedProtectedAreaPictures map[string][]*ProtectedAreaPicture
 	namedDistricts             map[string][]*District
@@ -110,10 +113,19 @@ func (e RegionEdges) BooksOrErr() ([]*Book, error) {
 	return nil, &NotLoadedError{edge: "books"}
 }
 
+// HerbariaOrErr returns the Herbaria value or an error if the edge
+// was not loaded in eager-loading.
+func (e RegionEdges) HerbariaOrErr() ([]*Herbarium, error) {
+	if e.loadedTypes[3] {
+		return e.Herbaria, nil
+	}
+	return nil, &NotLoadedError{edge: "herbaria"}
+}
+
 // PetroglyphsOrErr returns the Petroglyphs value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Petroglyphs, nil
 	}
 	return nil, &NotLoadedError{edge: "petroglyphs"}
@@ -122,7 +134,7 @@ func (e RegionEdges) PetroglyphsOrErr() ([]*Petroglyph, error) {
 // ProtectedAreaPicturesOrErr returns the ProtectedAreaPictures value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.ProtectedAreaPictures, nil
 	}
 	return nil, &NotLoadedError{edge: "protected_area_pictures"}
@@ -131,7 +143,7 @@ func (e RegionEdges) ProtectedAreaPicturesOrErr() ([]*ProtectedAreaPicture, erro
 // DistrictsOrErr returns the Districts value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) DistrictsOrErr() ([]*District, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Districts, nil
 	}
 	return nil, &NotLoadedError{edge: "districts"}
@@ -140,7 +152,7 @@ func (e RegionEdges) DistrictsOrErr() ([]*District, error) {
 // SettlementsOrErr returns the Settlements value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) SettlementsOrErr() ([]*Settlement, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Settlements, nil
 	}
 	return nil, &NotLoadedError{edge: "settlements"}
@@ -149,7 +161,7 @@ func (e RegionEdges) SettlementsOrErr() ([]*Settlement, error) {
 // LocationsOrErr returns the Locations value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) LocationsOrErr() ([]*Location, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Locations, nil
 	}
 	return nil, &NotLoadedError{edge: "locations"}
@@ -158,7 +170,7 @@ func (e RegionEdges) LocationsOrErr() ([]*Location, error) {
 // CountryOrErr returns the Country value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e RegionEdges) CountryOrErr() (*Country, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		if e.Country == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: country.Label}
@@ -171,7 +183,7 @@ func (e RegionEdges) CountryOrErr() (*Country, error) {
 // KnownAsAfterOrErr returns the KnownAsAfter value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) KnownAsAfterOrErr() ([]*Region, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.KnownAsAfter, nil
 	}
 	return nil, &NotLoadedError{edge: "known_as_after"}
@@ -180,7 +192,7 @@ func (e RegionEdges) KnownAsAfterOrErr() ([]*Region, error) {
 // KnownAsBeforeOrErr returns the KnownAsBefore value or an error if the edge
 // was not loaded in eager-loading.
 func (e RegionEdges) KnownAsBeforeOrErr() ([]*Region, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.KnownAsBefore, nil
 	}
 	return nil, &NotLoadedError{edge: "known_as_before"}
@@ -301,6 +313,11 @@ func (r *Region) QueryArtifacts() *ArtifactQuery {
 // QueryBooks queries the "books" edge of the Region entity.
 func (r *Region) QueryBooks() *BookQuery {
 	return NewRegionClient(r.config).QueryBooks(r)
+}
+
+// QueryHerbaria queries the "herbaria" edge of the Region entity.
+func (r *Region) QueryHerbaria() *HerbariumQuery {
+	return NewRegionClient(r.config).QueryHerbaria(r)
 }
 
 // QueryPetroglyphs queries the "petroglyphs" edge of the Region entity.
@@ -462,6 +479,30 @@ func (r *Region) appendNamedBooks(name string, edges ...*Book) {
 		r.Edges.namedBooks[name] = []*Book{}
 	} else {
 		r.Edges.namedBooks[name] = append(r.Edges.namedBooks[name], edges...)
+	}
+}
+
+// NamedHerbaria returns the Herbaria named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Region) NamedHerbaria(name string) ([]*Herbarium, error) {
+	if r.Edges.namedHerbaria == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedHerbaria[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Region) appendNamedHerbaria(name string, edges ...*Herbarium) {
+	if r.Edges.namedHerbaria == nil {
+		r.Edges.namedHerbaria = make(map[string][]*Herbarium)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedHerbaria[name] = []*Herbarium{}
+	} else {
+		r.Edges.namedHerbaria[name] = append(r.Edges.namedHerbaria[name], edges...)
 	}
 }
 

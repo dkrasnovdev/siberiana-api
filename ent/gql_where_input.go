@@ -22,7 +22,11 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
 	"github.com/dkrasnovdev/siberiana-api/ent/ethnos"
+	"github.com/dkrasnovdev/siberiana-api/ent/familia"
 	"github.com/dkrasnovdev/siberiana-api/ent/favourite"
+	"github.com/dkrasnovdev/siberiana-api/ent/genus"
+	"github.com/dkrasnovdev/siberiana-api/ent/group"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/interview"
 	"github.com/dkrasnovdev/siberiana-api/ent/keyword"
 	"github.com/dkrasnovdev/siberiana-api/ent/license"
@@ -46,6 +50,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
 	"github.com/dkrasnovdev/siberiana-api/ent/set"
 	"github.com/dkrasnovdev/siberiana-api/ent/settlement"
+	"github.com/dkrasnovdev/siberiana-api/ent/species"
 	"github.com/dkrasnovdev/siberiana-api/ent/technique"
 	"github.com/dkrasnovdev/siberiana-api/ent/visit"
 	"github.com/dkrasnovdev/siberiana-api/internal/ent/types"
@@ -7651,6 +7656,10 @@ type CollectionWhereInput struct {
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
@@ -8345,6 +8354,24 @@ func (i *CollectionWhereInput) P() (predicate.Collection, error) {
 		}
 		predicates = append(predicates, collection.HasBooksWith(with...))
 	}
+	if i.HasHerbaria != nil {
+		p := collection.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = collection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, collection.HasHerbariaWith(with...))
+	}
 	if i.HasProtectedAreaPictures != nil {
 		p := collection.HasProtectedAreaPictures()
 		if !*i.HasProtectedAreaPictures {
@@ -8559,6 +8586,10 @@ type CountryWhereInput struct {
 	// "books" edge predicates.
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
+
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
 
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
@@ -9048,6 +9079,24 @@ func (i *CountryWhereInput) P() (predicate.Country, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, country.HasBooksWith(with...))
+	}
+	if i.HasHerbaria != nil {
+		p := country.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = country.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, country.HasHerbariaWith(with...))
 	}
 	if i.HasProtectedAreaPictures != nil {
 		p := country.HasProtectedAreaPictures()
@@ -11730,6 +11779,10 @@ type DistrictWhereInput struct {
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
@@ -12222,6 +12275,24 @@ func (i *DistrictWhereInput) P() (predicate.District, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, district.HasBooksWith(with...))
+	}
+	if i.HasHerbaria != nil {
+		p := district.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = district.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, district.HasHerbariaWith(with...))
 	}
 	if i.HasProtectedAreaPictures != nil {
 		p := district.HasProtectedAreaPictures()
@@ -12927,6 +12998,654 @@ func (i *EthnosWhereInput) P() (predicate.Ethnos, error) {
 	}
 }
 
+// FamiliaWhereInput represents a where input for filtering Familia queries.
+type FamiliaWhereInput struct {
+	Predicates []predicate.Familia  `json:"-"`
+	Not        *FamiliaWhereInput   `json:"not,omitempty"`
+	Or         []*FamiliaWhereInput `json:"or,omitempty"`
+	And        []*FamiliaWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *FamiliaWhereInput) AddPredicates(predicates ...predicate.Familia) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the FamiliaWhereInput filter on the FamiliaQuery builder.
+func (i *FamiliaWhereInput) Filter(q *FamiliaQuery) (*FamiliaQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyFamiliaWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyFamiliaWhereInput is returned in case the FamiliaWhereInput is empty.
+var ErrEmptyFamiliaWhereInput = errors.New("ent: empty predicate FamiliaWhereInput")
+
+// P returns a predicate for filtering familiaslice.
+// An error is returned if the input is empty or invalid.
+func (i *FamiliaWhereInput) P() (predicate.Familia, error) {
+	var predicates []predicate.Familia
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, familia.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Familia, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, familia.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Familia, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, familia.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, familia.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, familia.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, familia.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, familia.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, familia.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, familia.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, familia.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, familia.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, familia.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, familia.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, familia.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, familia.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, familia.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, familia.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, familia.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, familia.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, familia.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, familia.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, familia.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, familia.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, familia.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, familia.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, familia.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, familia.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, familia.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, familia.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, familia.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, familia.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, familia.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, familia.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, familia.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, familia.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, familia.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, familia.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, familia.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, familia.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, familia.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, familia.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, familia.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, familia.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, familia.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, familia.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, familia.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, familia.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, familia.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, familia.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, familia.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, familia.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, familia.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, familia.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, familia.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, familia.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, familia.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, familia.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, familia.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, familia.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, familia.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, familia.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, familia.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, familia.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, familia.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, familia.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, familia.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, familia.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, familia.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, familia.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, familia.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, familia.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, familia.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, familia.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, familia.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, familia.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, familia.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, familia.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, familia.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, familia.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, familia.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, familia.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, familia.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, familia.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, familia.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, familia.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, familia.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, familia.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, familia.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, familia.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, familia.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, familia.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, familia.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, familia.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, familia.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, familia.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, familia.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, familia.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, familia.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, familia.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, familia.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, familia.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, familia.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, familia.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, familia.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, familia.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, familia.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, familia.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, familia.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, familia.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, familia.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, familia.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, familia.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, familia.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, familia.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, familia.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, familia.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, familia.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, familia.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, familia.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, familia.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, familia.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, familia.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, familia.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, familia.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, familia.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, familia.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, familia.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, familia.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, familia.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, familia.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, familia.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, familia.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+
+	if i.HasHerbaria != nil {
+		p := familia.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = familia.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, familia.HasHerbariaWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyFamiliaWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return familia.And(predicates...), nil
+	}
+}
+
 // FavouriteWhereInput represents a where input for filtering Favourite queries.
 type FavouriteWhereInput struct {
 	Predicates []predicate.Favourite  `json:"-"`
@@ -13240,6 +13959,2300 @@ func (i *FavouriteWhereInput) P() (predicate.Favourite, error) {
 		return predicates[0], nil
 	default:
 		return favourite.And(predicates...), nil
+	}
+}
+
+// GenusWhereInput represents a where input for filtering Genus queries.
+type GenusWhereInput struct {
+	Predicates []predicate.Genus  `json:"-"`
+	Not        *GenusWhereInput   `json:"not,omitempty"`
+	Or         []*GenusWhereInput `json:"or,omitempty"`
+	And        []*GenusWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *GenusWhereInput) AddPredicates(predicates ...predicate.Genus) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the GenusWhereInput filter on the GenusQuery builder.
+func (i *GenusWhereInput) Filter(q *GenusQuery) (*GenusQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyGenusWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyGenusWhereInput is returned in case the GenusWhereInput is empty.
+var ErrEmptyGenusWhereInput = errors.New("ent: empty predicate GenusWhereInput")
+
+// P returns a predicate for filtering genusslice.
+// An error is returned if the input is empty or invalid.
+func (i *GenusWhereInput) P() (predicate.Genus, error) {
+	var predicates []predicate.Genus
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, genus.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Genus, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, genus.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Genus, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, genus.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, genus.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, genus.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, genus.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, genus.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, genus.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, genus.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, genus.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, genus.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, genus.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, genus.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, genus.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, genus.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, genus.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, genus.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, genus.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, genus.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, genus.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, genus.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, genus.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, genus.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, genus.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, genus.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, genus.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, genus.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, genus.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, genus.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, genus.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, genus.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, genus.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, genus.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, genus.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, genus.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, genus.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, genus.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, genus.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, genus.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, genus.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, genus.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, genus.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, genus.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, genus.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, genus.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, genus.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, genus.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, genus.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, genus.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, genus.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, genus.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, genus.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, genus.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, genus.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, genus.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, genus.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, genus.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, genus.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, genus.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, genus.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, genus.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, genus.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, genus.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, genus.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, genus.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, genus.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, genus.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, genus.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, genus.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, genus.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, genus.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, genus.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, genus.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, genus.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, genus.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, genus.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, genus.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, genus.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, genus.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, genus.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, genus.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, genus.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, genus.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, genus.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, genus.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, genus.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, genus.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, genus.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, genus.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, genus.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, genus.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, genus.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, genus.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, genus.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, genus.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, genus.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, genus.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, genus.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, genus.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, genus.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, genus.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, genus.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, genus.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, genus.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, genus.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, genus.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, genus.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, genus.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, genus.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, genus.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, genus.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, genus.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, genus.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, genus.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, genus.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, genus.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, genus.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, genus.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, genus.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, genus.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, genus.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, genus.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, genus.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, genus.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, genus.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, genus.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, genus.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, genus.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, genus.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, genus.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, genus.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, genus.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+
+	if i.HasHerbaria != nil {
+		p := genus.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = genus.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, genus.HasHerbariaWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyGenusWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return genus.And(predicates...), nil
+	}
+}
+
+// GroupWhereInput represents a where input for filtering Group queries.
+type GroupWhereInput struct {
+	Predicates []predicate.Group  `json:"-"`
+	Not        *GroupWhereInput   `json:"not,omitempty"`
+	Or         []*GroupWhereInput `json:"or,omitempty"`
+	And        []*GroupWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *GroupWhereInput) AddPredicates(predicates ...predicate.Group) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the GroupWhereInput filter on the GroupQuery builder.
+func (i *GroupWhereInput) Filter(q *GroupQuery) (*GroupQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyGroupWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyGroupWhereInput is returned in case the GroupWhereInput is empty.
+var ErrEmptyGroupWhereInput = errors.New("ent: empty predicate GroupWhereInput")
+
+// P returns a predicate for filtering groups.
+// An error is returned if the input is empty or invalid.
+func (i *GroupWhereInput) P() (predicate.Group, error) {
+	var predicates []predicate.Group
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, group.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Group, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, group.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Group, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, group.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, group.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, group.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, group.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, group.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, group.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, group.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, group.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, group.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, group.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, group.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, group.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, group.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, group.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, group.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, group.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, group.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, group.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, group.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, group.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, group.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, group.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, group.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, group.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, group.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, group.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, group.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, group.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, group.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, group.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, group.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, group.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, group.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, group.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, group.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, group.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, group.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, group.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, group.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, group.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, group.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, group.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, group.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, group.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, group.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, group.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, group.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, group.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, group.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, group.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, group.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, group.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, group.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, group.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, group.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, group.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, group.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, group.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, group.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, group.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, group.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, group.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, group.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, group.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, group.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, group.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, group.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, group.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, group.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, group.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, group.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, group.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, group.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, group.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, group.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, group.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, group.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, group.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, group.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, group.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, group.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, group.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, group.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, group.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, group.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, group.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, group.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, group.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, group.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, group.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, group.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, group.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, group.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, group.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, group.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, group.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, group.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, group.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, group.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, group.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, group.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, group.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, group.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, group.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, group.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, group.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, group.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, group.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, group.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, group.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, group.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, group.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, group.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, group.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, group.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, group.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, group.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, group.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, group.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, group.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, group.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, group.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, group.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, group.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, group.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, group.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, group.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, group.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, group.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, group.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+
+	if i.HasHerbaria != nil {
+		p := group.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasHerbariaWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyGroupWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return group.And(predicates...), nil
+	}
+}
+
+// HerbariumWhereInput represents a where input for filtering Herbarium queries.
+type HerbariumWhereInput struct {
+	Predicates []predicate.Herbarium  `json:"-"`
+	Not        *HerbariumWhereInput   `json:"not,omitempty"`
+	Or         []*HerbariumWhereInput `json:"or,omitempty"`
+	And        []*HerbariumWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "status" field predicates.
+	Status       *herbarium.Status  `json:"status,omitempty"`
+	StatusNEQ    *herbarium.Status  `json:"statusNEQ,omitempty"`
+	StatusIn     []herbarium.Status `json:"statusIn,omitempty"`
+	StatusNotIn  []herbarium.Status `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool               `json:"statusIsNil,omitempty"`
+	StatusNotNil bool               `json:"statusNotNil,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "date" field predicates.
+	Date       *time.Time  `json:"date,omitempty"`
+	DateNEQ    *time.Time  `json:"dateNEQ,omitempty"`
+	DateIn     []time.Time `json:"dateIn,omitempty"`
+	DateNotIn  []time.Time `json:"dateNotIn,omitempty"`
+	DateGT     *time.Time  `json:"dateGT,omitempty"`
+	DateGTE    *time.Time  `json:"dateGTE,omitempty"`
+	DateLT     *time.Time  `json:"dateLT,omitempty"`
+	DateLTE    *time.Time  `json:"dateLTE,omitempty"`
+	DateIsNil  bool        `json:"dateIsNil,omitempty"`
+	DateNotNil bool        `json:"dateNotNil,omitempty"`
+
+	// "location" field predicates.
+	Location             *string  `json:"location,omitempty"`
+	LocationNEQ          *string  `json:"locationNEQ,omitempty"`
+	LocationIn           []string `json:"locationIn,omitempty"`
+	LocationNotIn        []string `json:"locationNotIn,omitempty"`
+	LocationGT           *string  `json:"locationGT,omitempty"`
+	LocationGTE          *string  `json:"locationGTE,omitempty"`
+	LocationLT           *string  `json:"locationLT,omitempty"`
+	LocationLTE          *string  `json:"locationLTE,omitempty"`
+	LocationContains     *string  `json:"locationContains,omitempty"`
+	LocationHasPrefix    *string  `json:"locationHasPrefix,omitempty"`
+	LocationHasSuffix    *string  `json:"locationHasSuffix,omitempty"`
+	LocationIsNil        bool     `json:"locationIsNil,omitempty"`
+	LocationNotNil       bool     `json:"locationNotNil,omitempty"`
+	LocationEqualFold    *string  `json:"locationEqualFold,omitempty"`
+	LocationContainsFold *string  `json:"locationContainsFold,omitempty"`
+
+	// "author" edge predicates.
+	HasAuthor     *bool               `json:"hasAuthor,omitempty"`
+	HasAuthorWith []*PersonWhereInput `json:"hasAuthorWith,omitempty"`
+
+	// "familia" edge predicates.
+	HasFamilia     *bool                `json:"hasFamilia,omitempty"`
+	HasFamiliaWith []*FamiliaWhereInput `json:"hasFamiliaWith,omitempty"`
+
+	// "genus" edge predicates.
+	HasGenus     *bool              `json:"hasGenus,omitempty"`
+	HasGenusWith []*GenusWhereInput `json:"hasGenusWith,omitempty"`
+
+	// "group" edge predicates.
+	HasGroup     *bool              `json:"hasGroup,omitempty"`
+	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+
+	// "species" edge predicates.
+	HasSpecies     *bool                `json:"hasSpecies,omitempty"`
+	HasSpeciesWith []*SpeciesWhereInput `json:"hasSpeciesWith,omitempty"`
+
+	// "collection" edge predicates.
+	HasCollection     *bool                   `json:"hasCollection,omitempty"`
+	HasCollectionWith []*CollectionWhereInput `json:"hasCollectionWith,omitempty"`
+
+	// "country" edge predicates.
+	HasCountry     *bool                `json:"hasCountry,omitempty"`
+	HasCountryWith []*CountryWhereInput `json:"hasCountryWith,omitempty"`
+
+	// "settlement" edge predicates.
+	HasSettlement     *bool                   `json:"hasSettlement,omitempty"`
+	HasSettlementWith []*SettlementWhereInput `json:"hasSettlementWith,omitempty"`
+
+	// "district" edge predicates.
+	HasDistrict     *bool                 `json:"hasDistrict,omitempty"`
+	HasDistrictWith []*DistrictWhereInput `json:"hasDistrictWith,omitempty"`
+
+	// "region" edge predicates.
+	HasRegion     *bool               `json:"hasRegion,omitempty"`
+	HasRegionWith []*RegionWhereInput `json:"hasRegionWith,omitempty"`
+
+	// "personal_collection" edge predicates.
+	HasPersonalCollection     *bool                           `json:"hasPersonalCollection,omitempty"`
+	HasPersonalCollectionWith []*PersonalCollectionWhereInput `json:"hasPersonalCollectionWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *HerbariumWhereInput) AddPredicates(predicates ...predicate.Herbarium) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the HerbariumWhereInput filter on the HerbariumQuery builder.
+func (i *HerbariumWhereInput) Filter(q *HerbariumQuery) (*HerbariumQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyHerbariumWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyHerbariumWhereInput is returned in case the HerbariumWhereInput is empty.
+var ErrEmptyHerbariumWhereInput = errors.New("ent: empty predicate HerbariumWhereInput")
+
+// P returns a predicate for filtering herbaria.
+// An error is returned if the input is empty or invalid.
+func (i *HerbariumWhereInput) P() (predicate.Herbarium, error) {
+	var predicates []predicate.Herbarium
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, herbarium.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Herbarium, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, herbarium.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Herbarium, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, herbarium.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, herbarium.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, herbarium.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, herbarium.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, herbarium.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, herbarium.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, herbarium.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, herbarium.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, herbarium.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, herbarium.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, herbarium.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, herbarium.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, herbarium.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, herbarium.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, herbarium.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, herbarium.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, herbarium.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, herbarium.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, herbarium.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, herbarium.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, herbarium.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, herbarium.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, herbarium.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, herbarium.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, herbarium.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, herbarium.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, herbarium.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, herbarium.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, herbarium.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, herbarium.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, herbarium.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, herbarium.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, herbarium.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, herbarium.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, herbarium.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, herbarium.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, herbarium.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, herbarium.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, herbarium.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, herbarium.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, herbarium.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, herbarium.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, herbarium.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, herbarium.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, herbarium.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, herbarium.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, herbarium.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, herbarium.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, herbarium.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, herbarium.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, herbarium.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, herbarium.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, herbarium.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, herbarium.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, herbarium.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, herbarium.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, herbarium.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, herbarium.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, herbarium.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, herbarium.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, herbarium.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, herbarium.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, herbarium.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, herbarium.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, herbarium.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, herbarium.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, herbarium.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, herbarium.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, herbarium.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, herbarium.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, herbarium.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, herbarium.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, herbarium.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, herbarium.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, herbarium.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, herbarium.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, herbarium.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, herbarium.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, herbarium.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, herbarium.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, herbarium.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, herbarium.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, herbarium.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, herbarium.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, herbarium.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, herbarium.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, herbarium.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, herbarium.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, herbarium.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, herbarium.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, herbarium.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, herbarium.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, herbarium.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, herbarium.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, herbarium.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, herbarium.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, herbarium.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, herbarium.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, herbarium.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, herbarium.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, herbarium.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, herbarium.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, herbarium.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, herbarium.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, herbarium.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, herbarium.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, herbarium.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, herbarium.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, herbarium.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, herbarium.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, herbarium.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, herbarium.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, herbarium.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, herbarium.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, herbarium.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.Status != nil {
+		predicates = append(predicates, herbarium.StatusEQ(*i.Status))
+	}
+	if i.StatusNEQ != nil {
+		predicates = append(predicates, herbarium.StatusNEQ(*i.StatusNEQ))
+	}
+	if len(i.StatusIn) > 0 {
+		predicates = append(predicates, herbarium.StatusIn(i.StatusIn...))
+	}
+	if len(i.StatusNotIn) > 0 {
+		predicates = append(predicates, herbarium.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.StatusIsNil {
+		predicates = append(predicates, herbarium.StatusIsNil())
+	}
+	if i.StatusNotNil {
+		predicates = append(predicates, herbarium.StatusNotNil())
+	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, herbarium.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, herbarium.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, herbarium.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, herbarium.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, herbarium.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+	if i.Date != nil {
+		predicates = append(predicates, herbarium.DateEQ(*i.Date))
+	}
+	if i.DateNEQ != nil {
+		predicates = append(predicates, herbarium.DateNEQ(*i.DateNEQ))
+	}
+	if len(i.DateIn) > 0 {
+		predicates = append(predicates, herbarium.DateIn(i.DateIn...))
+	}
+	if len(i.DateNotIn) > 0 {
+		predicates = append(predicates, herbarium.DateNotIn(i.DateNotIn...))
+	}
+	if i.DateGT != nil {
+		predicates = append(predicates, herbarium.DateGT(*i.DateGT))
+	}
+	if i.DateGTE != nil {
+		predicates = append(predicates, herbarium.DateGTE(*i.DateGTE))
+	}
+	if i.DateLT != nil {
+		predicates = append(predicates, herbarium.DateLT(*i.DateLT))
+	}
+	if i.DateLTE != nil {
+		predicates = append(predicates, herbarium.DateLTE(*i.DateLTE))
+	}
+	if i.DateIsNil {
+		predicates = append(predicates, herbarium.DateIsNil())
+	}
+	if i.DateNotNil {
+		predicates = append(predicates, herbarium.DateNotNil())
+	}
+	if i.Location != nil {
+		predicates = append(predicates, herbarium.LocationEQ(*i.Location))
+	}
+	if i.LocationNEQ != nil {
+		predicates = append(predicates, herbarium.LocationNEQ(*i.LocationNEQ))
+	}
+	if len(i.LocationIn) > 0 {
+		predicates = append(predicates, herbarium.LocationIn(i.LocationIn...))
+	}
+	if len(i.LocationNotIn) > 0 {
+		predicates = append(predicates, herbarium.LocationNotIn(i.LocationNotIn...))
+	}
+	if i.LocationGT != nil {
+		predicates = append(predicates, herbarium.LocationGT(*i.LocationGT))
+	}
+	if i.LocationGTE != nil {
+		predicates = append(predicates, herbarium.LocationGTE(*i.LocationGTE))
+	}
+	if i.LocationLT != nil {
+		predicates = append(predicates, herbarium.LocationLT(*i.LocationLT))
+	}
+	if i.LocationLTE != nil {
+		predicates = append(predicates, herbarium.LocationLTE(*i.LocationLTE))
+	}
+	if i.LocationContains != nil {
+		predicates = append(predicates, herbarium.LocationContains(*i.LocationContains))
+	}
+	if i.LocationHasPrefix != nil {
+		predicates = append(predicates, herbarium.LocationHasPrefix(*i.LocationHasPrefix))
+	}
+	if i.LocationHasSuffix != nil {
+		predicates = append(predicates, herbarium.LocationHasSuffix(*i.LocationHasSuffix))
+	}
+	if i.LocationIsNil {
+		predicates = append(predicates, herbarium.LocationIsNil())
+	}
+	if i.LocationNotNil {
+		predicates = append(predicates, herbarium.LocationNotNil())
+	}
+	if i.LocationEqualFold != nil {
+		predicates = append(predicates, herbarium.LocationEqualFold(*i.LocationEqualFold))
+	}
+	if i.LocationContainsFold != nil {
+		predicates = append(predicates, herbarium.LocationContainsFold(*i.LocationContainsFold))
+	}
+
+	if i.HasAuthor != nil {
+		p := herbarium.HasAuthor()
+		if !*i.HasAuthor {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAuthorWith) > 0 {
+		with := make([]predicate.Person, 0, len(i.HasAuthorWith))
+		for _, w := range i.HasAuthorWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAuthorWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasAuthorWith(with...))
+	}
+	if i.HasFamilia != nil {
+		p := herbarium.HasFamilia()
+		if !*i.HasFamilia {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFamiliaWith) > 0 {
+		with := make([]predicate.Familia, 0, len(i.HasFamiliaWith))
+		for _, w := range i.HasFamiliaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFamiliaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasFamiliaWith(with...))
+	}
+	if i.HasGenus != nil {
+		p := herbarium.HasGenus()
+		if !*i.HasGenus {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasGenusWith) > 0 {
+		with := make([]predicate.Genus, 0, len(i.HasGenusWith))
+		for _, w := range i.HasGenusWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasGenusWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasGenusWith(with...))
+	}
+	if i.HasGroup != nil {
+		p := herbarium.HasGroup()
+		if !*i.HasGroup {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasGroupWith))
+		for _, w := range i.HasGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasGroupWith(with...))
+	}
+	if i.HasSpecies != nil {
+		p := herbarium.HasSpecies()
+		if !*i.HasSpecies {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSpeciesWith) > 0 {
+		with := make([]predicate.Species, 0, len(i.HasSpeciesWith))
+		for _, w := range i.HasSpeciesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSpeciesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasSpeciesWith(with...))
+	}
+	if i.HasCollection != nil {
+		p := herbarium.HasCollection()
+		if !*i.HasCollection {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCollectionWith) > 0 {
+		with := make([]predicate.Collection, 0, len(i.HasCollectionWith))
+		for _, w := range i.HasCollectionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCollectionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasCollectionWith(with...))
+	}
+	if i.HasCountry != nil {
+		p := herbarium.HasCountry()
+		if !*i.HasCountry {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCountryWith) > 0 {
+		with := make([]predicate.Country, 0, len(i.HasCountryWith))
+		for _, w := range i.HasCountryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCountryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasCountryWith(with...))
+	}
+	if i.HasSettlement != nil {
+		p := herbarium.HasSettlement()
+		if !*i.HasSettlement {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSettlementWith) > 0 {
+		with := make([]predicate.Settlement, 0, len(i.HasSettlementWith))
+		for _, w := range i.HasSettlementWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSettlementWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasSettlementWith(with...))
+	}
+	if i.HasDistrict != nil {
+		p := herbarium.HasDistrict()
+		if !*i.HasDistrict {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDistrictWith) > 0 {
+		with := make([]predicate.District, 0, len(i.HasDistrictWith))
+		for _, w := range i.HasDistrictWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDistrictWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasDistrictWith(with...))
+	}
+	if i.HasRegion != nil {
+		p := herbarium.HasRegion()
+		if !*i.HasRegion {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRegionWith) > 0 {
+		with := make([]predicate.Region, 0, len(i.HasRegionWith))
+		for _, w := range i.HasRegionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRegionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasRegionWith(with...))
+	}
+	if i.HasPersonalCollection != nil {
+		p := herbarium.HasPersonalCollection()
+		if !*i.HasPersonalCollection {
+			p = herbarium.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasPersonalCollectionWith) > 0 {
+		with := make([]predicate.PersonalCollection, 0, len(i.HasPersonalCollectionWith))
+		for _, w := range i.HasPersonalCollectionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasPersonalCollectionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, herbarium.HasPersonalCollectionWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyHerbariumWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return herbarium.And(predicates...), nil
 	}
 }
 
@@ -19668,6 +22681,10 @@ type PersonWhereInput struct {
 	HasArtifacts     *bool                 `json:"hasArtifacts,omitempty"`
 	HasArtifactsWith []*ArtifactWhereInput `json:"hasArtifactsWith,omitempty"`
 
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
@@ -20517,6 +23534,24 @@ func (i *PersonWhereInput) P() (predicate.Person, error) {
 		}
 		predicates = append(predicates, person.HasArtifactsWith(with...))
 	}
+	if i.HasHerbaria != nil {
+		p := person.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = person.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, person.HasHerbariaWith(with...))
+	}
 	if i.HasProtectedAreaPictures != nil {
 		p := person.HasProtectedAreaPictures()
 		if !*i.HasProtectedAreaPictures {
@@ -20776,6 +23811,10 @@ type PersonalCollectionWhereInput struct {
 	// "dendrochronology" edge predicates.
 	HasDendrochronology     *bool                         `json:"hasDendrochronology,omitempty"`
 	HasDendrochronologyWith []*DendrochronologyWhereInput `json:"hasDendrochronologyWith,omitempty"`
+
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
 
 	// "petroglyphs" edge predicates.
 	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
@@ -21136,6 +24175,24 @@ func (i *PersonalCollectionWhereInput) P() (predicate.PersonalCollection, error)
 			with = append(with, p)
 		}
 		predicates = append(predicates, personalcollection.HasDendrochronologyWith(with...))
+	}
+	if i.HasHerbaria != nil {
+		p := personalcollection.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = personalcollection.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, personalcollection.HasHerbariaWith(with...))
 	}
 	if i.HasPetroglyphs != nil {
 		p := personalcollection.HasPetroglyphs()
@@ -27596,6 +30653,10 @@ type RegionWhereInput struct {
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+
 	// "petroglyphs" edge predicates.
 	HasPetroglyphs     *bool                   `json:"hasPetroglyphs,omitempty"`
 	HasPetroglyphsWith []*PetroglyphWhereInput `json:"hasPetroglyphsWith,omitempty"`
@@ -28096,6 +31157,24 @@ func (i *RegionWhereInput) P() (predicate.Region, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, region.HasBooksWith(with...))
+	}
+	if i.HasHerbaria != nil {
+		p := region.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = region.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, region.HasHerbariaWith(with...))
 	}
 	if i.HasPetroglyphs != nil {
 		p := region.HasPetroglyphs()
@@ -29010,6 +32089,10 @@ type SettlementWhereInput struct {
 	HasBooks     *bool             `json:"hasBooks,omitempty"`
 	HasBooksWith []*BookWhereInput `json:"hasBooksWith,omitempty"`
 
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+
 	// "protected_area_pictures" edge predicates.
 	HasProtectedAreaPictures     *bool                             `json:"hasProtectedAreaPictures,omitempty"`
 	HasProtectedAreaPicturesWith []*ProtectedAreaPictureWhereInput `json:"hasProtectedAreaPicturesWith,omitempty"`
@@ -29503,6 +32586,24 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 		}
 		predicates = append(predicates, settlement.HasBooksWith(with...))
 	}
+	if i.HasHerbaria != nil {
+		p := settlement.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = settlement.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, settlement.HasHerbariaWith(with...))
+	}
 	if i.HasProtectedAreaPictures != nil {
 		p := settlement.HasProtectedAreaPictures()
 		if !*i.HasProtectedAreaPictures {
@@ -29618,6 +32719,654 @@ func (i *SettlementWhereInput) P() (predicate.Settlement, error) {
 		return predicates[0], nil
 	default:
 		return settlement.And(predicates...), nil
+	}
+}
+
+// SpeciesWhereInput represents a where input for filtering Species queries.
+type SpeciesWhereInput struct {
+	Predicates []predicate.Species  `json:"-"`
+	Not        *SpeciesWhereInput   `json:"not,omitempty"`
+	Or         []*SpeciesWhereInput `json:"or,omitempty"`
+	And        []*SpeciesWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt      *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ   *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn    []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT    *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE   *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT    *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE   *time.Time  `json:"createdAtLTE,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt      *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ   *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn    []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT    *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE   *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT    *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE   *time.Time  `json:"updatedAtLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "display_name" field predicates.
+	DisplayName             *string  `json:"displayName,omitempty"`
+	DisplayNameNEQ          *string  `json:"displayNameNEQ,omitempty"`
+	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
+	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
+	DisplayNameGT           *string  `json:"displayNameGT,omitempty"`
+	DisplayNameGTE          *string  `json:"displayNameGTE,omitempty"`
+	DisplayNameLT           *string  `json:"displayNameLT,omitempty"`
+	DisplayNameLTE          *string  `json:"displayNameLTE,omitempty"`
+	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
+	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
+	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
+	DisplayNameIsNil        bool     `json:"displayNameIsNil,omitempty"`
+	DisplayNameNotNil       bool     `json:"displayNameNotNil,omitempty"`
+	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
+	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
+
+	// "abbreviation" field predicates.
+	Abbreviation             *string  `json:"abbreviation,omitempty"`
+	AbbreviationNEQ          *string  `json:"abbreviationNEQ,omitempty"`
+	AbbreviationIn           []string `json:"abbreviationIn,omitempty"`
+	AbbreviationNotIn        []string `json:"abbreviationNotIn,omitempty"`
+	AbbreviationGT           *string  `json:"abbreviationGT,omitempty"`
+	AbbreviationGTE          *string  `json:"abbreviationGTE,omitempty"`
+	AbbreviationLT           *string  `json:"abbreviationLT,omitempty"`
+	AbbreviationLTE          *string  `json:"abbreviationLTE,omitempty"`
+	AbbreviationContains     *string  `json:"abbreviationContains,omitempty"`
+	AbbreviationHasPrefix    *string  `json:"abbreviationHasPrefix,omitempty"`
+	AbbreviationHasSuffix    *string  `json:"abbreviationHasSuffix,omitempty"`
+	AbbreviationIsNil        bool     `json:"abbreviationIsNil,omitempty"`
+	AbbreviationNotNil       bool     `json:"abbreviationNotNil,omitempty"`
+	AbbreviationEqualFold    *string  `json:"abbreviationEqualFold,omitempty"`
+	AbbreviationContainsFold *string  `json:"abbreviationContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "external_link" field predicates.
+	ExternalLink             *string  `json:"externalLink,omitempty"`
+	ExternalLinkNEQ          *string  `json:"externalLinkNEQ,omitempty"`
+	ExternalLinkIn           []string `json:"externalLinkIn,omitempty"`
+	ExternalLinkNotIn        []string `json:"externalLinkNotIn,omitempty"`
+	ExternalLinkGT           *string  `json:"externalLinkGT,omitempty"`
+	ExternalLinkGTE          *string  `json:"externalLinkGTE,omitempty"`
+	ExternalLinkLT           *string  `json:"externalLinkLT,omitempty"`
+	ExternalLinkLTE          *string  `json:"externalLinkLTE,omitempty"`
+	ExternalLinkContains     *string  `json:"externalLinkContains,omitempty"`
+	ExternalLinkHasPrefix    *string  `json:"externalLinkHasPrefix,omitempty"`
+	ExternalLinkHasSuffix    *string  `json:"externalLinkHasSuffix,omitempty"`
+	ExternalLinkIsNil        bool     `json:"externalLinkIsNil,omitempty"`
+	ExternalLinkNotNil       bool     `json:"externalLinkNotNil,omitempty"`
+	ExternalLinkEqualFold    *string  `json:"externalLinkEqualFold,omitempty"`
+	ExternalLinkContainsFold *string  `json:"externalLinkContainsFold,omitempty"`
+
+	// "primary_image_url" field predicates.
+	PrimaryImageURL             *string  `json:"primaryImageURL,omitempty"`
+	PrimaryImageURLNEQ          *string  `json:"primaryImageURLNEQ,omitempty"`
+	PrimaryImageURLIn           []string `json:"primaryImageURLIn,omitempty"`
+	PrimaryImageURLNotIn        []string `json:"primaryImageURLNotIn,omitempty"`
+	PrimaryImageURLGT           *string  `json:"primaryImageURLGT,omitempty"`
+	PrimaryImageURLGTE          *string  `json:"primaryImageURLGTE,omitempty"`
+	PrimaryImageURLLT           *string  `json:"primaryImageURLLT,omitempty"`
+	PrimaryImageURLLTE          *string  `json:"primaryImageURLLTE,omitempty"`
+	PrimaryImageURLContains     *string  `json:"primaryImageURLContains,omitempty"`
+	PrimaryImageURLHasPrefix    *string  `json:"primaryImageURLHasPrefix,omitempty"`
+	PrimaryImageURLHasSuffix    *string  `json:"primaryImageURLHasSuffix,omitempty"`
+	PrimaryImageURLIsNil        bool     `json:"primaryImageURLIsNil,omitempty"`
+	PrimaryImageURLNotNil       bool     `json:"primaryImageURLNotNil,omitempty"`
+	PrimaryImageURLEqualFold    *string  `json:"primaryImageURLEqualFold,omitempty"`
+	PrimaryImageURLContainsFold *string  `json:"primaryImageURLContainsFold,omitempty"`
+
+	// "herbaria" edge predicates.
+	HasHerbaria     *bool                  `json:"hasHerbaria,omitempty"`
+	HasHerbariaWith []*HerbariumWhereInput `json:"hasHerbariaWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *SpeciesWhereInput) AddPredicates(predicates ...predicate.Species) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the SpeciesWhereInput filter on the SpeciesQuery builder.
+func (i *SpeciesWhereInput) Filter(q *SpeciesQuery) (*SpeciesQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptySpeciesWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptySpeciesWhereInput is returned in case the SpeciesWhereInput is empty.
+var ErrEmptySpeciesWhereInput = errors.New("ent: empty predicate SpeciesWhereInput")
+
+// P returns a predicate for filtering speciesslice.
+// An error is returned if the input is empty or invalid.
+func (i *SpeciesWhereInput) P() (predicate.Species, error) {
+	var predicates []predicate.Species
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, species.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Species, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, species.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Species, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, species.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, species.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, species.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, species.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, species.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, species.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, species.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, species.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, species.IDLTE(*i.IDLTE))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, species.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, species.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, species.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, species.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, species.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, species.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, species.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, species.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, species.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, species.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, species.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, species.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, species.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, species.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, species.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, species.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, species.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, species.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, species.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, species.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, species.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, species.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, species.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, species.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, species.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, species.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, species.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, species.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, species.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, species.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, species.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, species.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, species.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, species.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, species.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, species.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, species.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, species.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, species.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, species.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, species.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, species.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, species.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, species.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, species.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, species.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.DisplayName != nil {
+		predicates = append(predicates, species.DisplayNameEQ(*i.DisplayName))
+	}
+	if i.DisplayNameNEQ != nil {
+		predicates = append(predicates, species.DisplayNameNEQ(*i.DisplayNameNEQ))
+	}
+	if len(i.DisplayNameIn) > 0 {
+		predicates = append(predicates, species.DisplayNameIn(i.DisplayNameIn...))
+	}
+	if len(i.DisplayNameNotIn) > 0 {
+		predicates = append(predicates, species.DisplayNameNotIn(i.DisplayNameNotIn...))
+	}
+	if i.DisplayNameGT != nil {
+		predicates = append(predicates, species.DisplayNameGT(*i.DisplayNameGT))
+	}
+	if i.DisplayNameGTE != nil {
+		predicates = append(predicates, species.DisplayNameGTE(*i.DisplayNameGTE))
+	}
+	if i.DisplayNameLT != nil {
+		predicates = append(predicates, species.DisplayNameLT(*i.DisplayNameLT))
+	}
+	if i.DisplayNameLTE != nil {
+		predicates = append(predicates, species.DisplayNameLTE(*i.DisplayNameLTE))
+	}
+	if i.DisplayNameContains != nil {
+		predicates = append(predicates, species.DisplayNameContains(*i.DisplayNameContains))
+	}
+	if i.DisplayNameHasPrefix != nil {
+		predicates = append(predicates, species.DisplayNameHasPrefix(*i.DisplayNameHasPrefix))
+	}
+	if i.DisplayNameHasSuffix != nil {
+		predicates = append(predicates, species.DisplayNameHasSuffix(*i.DisplayNameHasSuffix))
+	}
+	if i.DisplayNameIsNil {
+		predicates = append(predicates, species.DisplayNameIsNil())
+	}
+	if i.DisplayNameNotNil {
+		predicates = append(predicates, species.DisplayNameNotNil())
+	}
+	if i.DisplayNameEqualFold != nil {
+		predicates = append(predicates, species.DisplayNameEqualFold(*i.DisplayNameEqualFold))
+	}
+	if i.DisplayNameContainsFold != nil {
+		predicates = append(predicates, species.DisplayNameContainsFold(*i.DisplayNameContainsFold))
+	}
+	if i.Abbreviation != nil {
+		predicates = append(predicates, species.AbbreviationEQ(*i.Abbreviation))
+	}
+	if i.AbbreviationNEQ != nil {
+		predicates = append(predicates, species.AbbreviationNEQ(*i.AbbreviationNEQ))
+	}
+	if len(i.AbbreviationIn) > 0 {
+		predicates = append(predicates, species.AbbreviationIn(i.AbbreviationIn...))
+	}
+	if len(i.AbbreviationNotIn) > 0 {
+		predicates = append(predicates, species.AbbreviationNotIn(i.AbbreviationNotIn...))
+	}
+	if i.AbbreviationGT != nil {
+		predicates = append(predicates, species.AbbreviationGT(*i.AbbreviationGT))
+	}
+	if i.AbbreviationGTE != nil {
+		predicates = append(predicates, species.AbbreviationGTE(*i.AbbreviationGTE))
+	}
+	if i.AbbreviationLT != nil {
+		predicates = append(predicates, species.AbbreviationLT(*i.AbbreviationLT))
+	}
+	if i.AbbreviationLTE != nil {
+		predicates = append(predicates, species.AbbreviationLTE(*i.AbbreviationLTE))
+	}
+	if i.AbbreviationContains != nil {
+		predicates = append(predicates, species.AbbreviationContains(*i.AbbreviationContains))
+	}
+	if i.AbbreviationHasPrefix != nil {
+		predicates = append(predicates, species.AbbreviationHasPrefix(*i.AbbreviationHasPrefix))
+	}
+	if i.AbbreviationHasSuffix != nil {
+		predicates = append(predicates, species.AbbreviationHasSuffix(*i.AbbreviationHasSuffix))
+	}
+	if i.AbbreviationIsNil {
+		predicates = append(predicates, species.AbbreviationIsNil())
+	}
+	if i.AbbreviationNotNil {
+		predicates = append(predicates, species.AbbreviationNotNil())
+	}
+	if i.AbbreviationEqualFold != nil {
+		predicates = append(predicates, species.AbbreviationEqualFold(*i.AbbreviationEqualFold))
+	}
+	if i.AbbreviationContainsFold != nil {
+		predicates = append(predicates, species.AbbreviationContainsFold(*i.AbbreviationContainsFold))
+	}
+	if i.Description != nil {
+		predicates = append(predicates, species.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, species.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, species.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, species.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, species.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, species.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, species.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, species.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, species.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, species.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, species.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, species.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, species.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, species.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, species.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.ExternalLink != nil {
+		predicates = append(predicates, species.ExternalLinkEQ(*i.ExternalLink))
+	}
+	if i.ExternalLinkNEQ != nil {
+		predicates = append(predicates, species.ExternalLinkNEQ(*i.ExternalLinkNEQ))
+	}
+	if len(i.ExternalLinkIn) > 0 {
+		predicates = append(predicates, species.ExternalLinkIn(i.ExternalLinkIn...))
+	}
+	if len(i.ExternalLinkNotIn) > 0 {
+		predicates = append(predicates, species.ExternalLinkNotIn(i.ExternalLinkNotIn...))
+	}
+	if i.ExternalLinkGT != nil {
+		predicates = append(predicates, species.ExternalLinkGT(*i.ExternalLinkGT))
+	}
+	if i.ExternalLinkGTE != nil {
+		predicates = append(predicates, species.ExternalLinkGTE(*i.ExternalLinkGTE))
+	}
+	if i.ExternalLinkLT != nil {
+		predicates = append(predicates, species.ExternalLinkLT(*i.ExternalLinkLT))
+	}
+	if i.ExternalLinkLTE != nil {
+		predicates = append(predicates, species.ExternalLinkLTE(*i.ExternalLinkLTE))
+	}
+	if i.ExternalLinkContains != nil {
+		predicates = append(predicates, species.ExternalLinkContains(*i.ExternalLinkContains))
+	}
+	if i.ExternalLinkHasPrefix != nil {
+		predicates = append(predicates, species.ExternalLinkHasPrefix(*i.ExternalLinkHasPrefix))
+	}
+	if i.ExternalLinkHasSuffix != nil {
+		predicates = append(predicates, species.ExternalLinkHasSuffix(*i.ExternalLinkHasSuffix))
+	}
+	if i.ExternalLinkIsNil {
+		predicates = append(predicates, species.ExternalLinkIsNil())
+	}
+	if i.ExternalLinkNotNil {
+		predicates = append(predicates, species.ExternalLinkNotNil())
+	}
+	if i.ExternalLinkEqualFold != nil {
+		predicates = append(predicates, species.ExternalLinkEqualFold(*i.ExternalLinkEqualFold))
+	}
+	if i.ExternalLinkContainsFold != nil {
+		predicates = append(predicates, species.ExternalLinkContainsFold(*i.ExternalLinkContainsFold))
+	}
+	if i.PrimaryImageURL != nil {
+		predicates = append(predicates, species.PrimaryImageURLEQ(*i.PrimaryImageURL))
+	}
+	if i.PrimaryImageURLNEQ != nil {
+		predicates = append(predicates, species.PrimaryImageURLNEQ(*i.PrimaryImageURLNEQ))
+	}
+	if len(i.PrimaryImageURLIn) > 0 {
+		predicates = append(predicates, species.PrimaryImageURLIn(i.PrimaryImageURLIn...))
+	}
+	if len(i.PrimaryImageURLNotIn) > 0 {
+		predicates = append(predicates, species.PrimaryImageURLNotIn(i.PrimaryImageURLNotIn...))
+	}
+	if i.PrimaryImageURLGT != nil {
+		predicates = append(predicates, species.PrimaryImageURLGT(*i.PrimaryImageURLGT))
+	}
+	if i.PrimaryImageURLGTE != nil {
+		predicates = append(predicates, species.PrimaryImageURLGTE(*i.PrimaryImageURLGTE))
+	}
+	if i.PrimaryImageURLLT != nil {
+		predicates = append(predicates, species.PrimaryImageURLLT(*i.PrimaryImageURLLT))
+	}
+	if i.PrimaryImageURLLTE != nil {
+		predicates = append(predicates, species.PrimaryImageURLLTE(*i.PrimaryImageURLLTE))
+	}
+	if i.PrimaryImageURLContains != nil {
+		predicates = append(predicates, species.PrimaryImageURLContains(*i.PrimaryImageURLContains))
+	}
+	if i.PrimaryImageURLHasPrefix != nil {
+		predicates = append(predicates, species.PrimaryImageURLHasPrefix(*i.PrimaryImageURLHasPrefix))
+	}
+	if i.PrimaryImageURLHasSuffix != nil {
+		predicates = append(predicates, species.PrimaryImageURLHasSuffix(*i.PrimaryImageURLHasSuffix))
+	}
+	if i.PrimaryImageURLIsNil {
+		predicates = append(predicates, species.PrimaryImageURLIsNil())
+	}
+	if i.PrimaryImageURLNotNil {
+		predicates = append(predicates, species.PrimaryImageURLNotNil())
+	}
+	if i.PrimaryImageURLEqualFold != nil {
+		predicates = append(predicates, species.PrimaryImageURLEqualFold(*i.PrimaryImageURLEqualFold))
+	}
+	if i.PrimaryImageURLContainsFold != nil {
+		predicates = append(predicates, species.PrimaryImageURLContainsFold(*i.PrimaryImageURLContainsFold))
+	}
+
+	if i.HasHerbaria != nil {
+		p := species.HasHerbaria()
+		if !*i.HasHerbaria {
+			p = species.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasHerbariaWith) > 0 {
+		with := make([]predicate.Herbarium, 0, len(i.HasHerbariaWith))
+		for _, w := range i.HasHerbariaWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasHerbariaWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, species.HasHerbariaWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptySpeciesWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return species.And(predicates...), nil
 	}
 }
 

@@ -15,6 +15,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/dendrochronology"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/personalcollection"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -160,6 +161,21 @@ func (pcu *PersonalCollectionUpdate) AddDendrochronology(d ...*Dendrochronology)
 	return pcu.AddDendrochronologyIDs(ids...)
 }
 
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (pcu *PersonalCollectionUpdate) AddHerbariumIDs(ids ...int) *PersonalCollectionUpdate {
+	pcu.mutation.AddHerbariumIDs(ids...)
+	return pcu
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (pcu *PersonalCollectionUpdate) AddHerbaria(h ...*Herbarium) *PersonalCollectionUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return pcu.AddHerbariumIDs(ids...)
+}
+
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
 func (pcu *PersonalCollectionUpdate) AddPetroglyphIDs(ids ...int) *PersonalCollectionUpdate {
 	pcu.mutation.AddPetroglyphIDs(ids...)
@@ -277,6 +293,27 @@ func (pcu *PersonalCollectionUpdate) RemoveDendrochronology(d ...*Dendrochronolo
 		ids[i] = d[i].ID
 	}
 	return pcu.RemoveDendrochronologyIDs(ids...)
+}
+
+// ClearHerbaria clears all "herbaria" edges to the Herbarium entity.
+func (pcu *PersonalCollectionUpdate) ClearHerbaria() *PersonalCollectionUpdate {
+	pcu.mutation.ClearHerbaria()
+	return pcu
+}
+
+// RemoveHerbariumIDs removes the "herbaria" edge to Herbarium entities by IDs.
+func (pcu *PersonalCollectionUpdate) RemoveHerbariumIDs(ids ...int) *PersonalCollectionUpdate {
+	pcu.mutation.RemoveHerbariumIDs(ids...)
+	return pcu
+}
+
+// RemoveHerbaria removes "herbaria" edges to Herbarium entities.
+func (pcu *PersonalCollectionUpdate) RemoveHerbaria(h ...*Herbarium) *PersonalCollectionUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return pcu.RemoveHerbariumIDs(ids...)
 }
 
 // ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
@@ -586,6 +623,51 @@ func (pcu *PersonalCollectionUpdate) sqlSave(ctx context.Context) (n int, err er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pcu.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.HerbariaTable,
+			Columns: personalcollection.HerbariaPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcu.mutation.RemovedHerbariaIDs(); len(nodes) > 0 && !pcu.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.HerbariaTable,
+			Columns: personalcollection.HerbariaPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcu.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.HerbariaTable,
+			Columns: personalcollection.HerbariaPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if pcu.mutation.PetroglyphsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -822,6 +904,21 @@ func (pcuo *PersonalCollectionUpdateOne) AddDendrochronology(d ...*Dendrochronol
 	return pcuo.AddDendrochronologyIDs(ids...)
 }
 
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (pcuo *PersonalCollectionUpdateOne) AddHerbariumIDs(ids ...int) *PersonalCollectionUpdateOne {
+	pcuo.mutation.AddHerbariumIDs(ids...)
+	return pcuo
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (pcuo *PersonalCollectionUpdateOne) AddHerbaria(h ...*Herbarium) *PersonalCollectionUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return pcuo.AddHerbariumIDs(ids...)
+}
+
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
 func (pcuo *PersonalCollectionUpdateOne) AddPetroglyphIDs(ids ...int) *PersonalCollectionUpdateOne {
 	pcuo.mutation.AddPetroglyphIDs(ids...)
@@ -939,6 +1036,27 @@ func (pcuo *PersonalCollectionUpdateOne) RemoveDendrochronology(d ...*Dendrochro
 		ids[i] = d[i].ID
 	}
 	return pcuo.RemoveDendrochronologyIDs(ids...)
+}
+
+// ClearHerbaria clears all "herbaria" edges to the Herbarium entity.
+func (pcuo *PersonalCollectionUpdateOne) ClearHerbaria() *PersonalCollectionUpdateOne {
+	pcuo.mutation.ClearHerbaria()
+	return pcuo
+}
+
+// RemoveHerbariumIDs removes the "herbaria" edge to Herbarium entities by IDs.
+func (pcuo *PersonalCollectionUpdateOne) RemoveHerbariumIDs(ids ...int) *PersonalCollectionUpdateOne {
+	pcuo.mutation.RemoveHerbariumIDs(ids...)
+	return pcuo
+}
+
+// RemoveHerbaria removes "herbaria" edges to Herbarium entities.
+func (pcuo *PersonalCollectionUpdateOne) RemoveHerbaria(h ...*Herbarium) *PersonalCollectionUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return pcuo.RemoveHerbariumIDs(ids...)
 }
 
 // ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
@@ -1271,6 +1389,51 @@ func (pcuo *PersonalCollectionUpdateOne) sqlSave(ctx context.Context) (_node *Pe
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dendrochronology.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pcuo.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.HerbariaTable,
+			Columns: personalcollection.HerbariaPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcuo.mutation.RemovedHerbariaIDs(); len(nodes) > 0 && !pcuo.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.HerbariaTable,
+			Columns: personalcollection.HerbariaPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pcuo.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   personalcollection.HerbariaTable,
+			Columns: personalcollection.HerbariaPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

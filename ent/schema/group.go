@@ -1,0 +1,57 @@
+package schema
+
+import (
+	"entgo.io/contrib/entgql"
+	"entgo.io/ent"
+	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
+	"github.com/dkrasnovdev/siberiana-api/ent/privacy"
+	"github.com/dkrasnovdev/siberiana-api/internal/ent/mixin"
+	rule "github.com/dkrasnovdev/siberiana-api/internal/ent/privacy"
+)
+
+// Group holds the schema definition for the Group entity.
+type Group struct {
+	ent.Schema
+}
+
+// Privacy policy of the Group.
+func (Group) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			rule.DenyIfNoViewer(),
+			rule.AllowIfAdministrator(),
+			rule.AllowIfModerator(),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.AlwaysAllowRule(),
+		},
+	}
+}
+
+// Mixin of the Group.
+func (Group) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.AuditMixin{},
+		mixin.DetailsMixin{},
+		mixin.ImagesMixin{},
+	}
+}
+
+// Annotations of the Group.
+func (Group) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.RelayConnection(),
+		entgql.QueryField(),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
+		entgql.MultiOrder(),
+	}
+}
+
+// Edges of the Group.
+func (Group) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("herbaria", Herbarium.Type),
+	}
+}

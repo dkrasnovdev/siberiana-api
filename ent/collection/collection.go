@@ -56,6 +56,8 @@ const (
 	EdgePetroglyphs = "petroglyphs"
 	// EdgeBooks holds the string denoting the books edge name in mutations.
 	EdgeBooks = "books"
+	// EdgeHerbaria holds the string denoting the herbaria edge name in mutations.
+	EdgeHerbaria = "herbaria"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeCategory holds the string denoting the category edge name in mutations.
@@ -99,6 +101,13 @@ const (
 	BooksInverseTable = "books"
 	// BooksColumn is the table column denoting the books relation/edge.
 	BooksColumn = "collection_books"
+	// HerbariaTable is the table that holds the herbaria relation/edge.
+	HerbariaTable = "herbaria"
+	// HerbariaInverseTable is the table name for the Herbarium entity.
+	// It exists in this package in order to avoid circular dependency with the "herbarium" package.
+	HerbariaInverseTable = "herbaria"
+	// HerbariaColumn is the table column denoting the herbaria relation/edge.
+	HerbariaColumn = "collection_herbaria"
 	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesTable = "protected_area_pictures"
 	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
@@ -192,6 +201,7 @@ const (
 	TypeArtifacts             Type = "artifacts"
 	TypeBooks                 Type = "books"
 	TypeDendrochronology      Type = "dendrochronology"
+	TypeHerbaria              Type = "herbaria"
 	TypeProtectedAreaPictures Type = "protected_area_pictures"
 	TypePetroglyphs           Type = "petroglyphs"
 )
@@ -203,7 +213,7 @@ func (_type Type) String() string {
 // TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
 func TypeValidator(_type Type) error {
 	switch _type {
-	case TypeArt, TypeArtifacts, TypeBooks, TypeDendrochronology, TypeProtectedAreaPictures, TypePetroglyphs:
+	case TypeArt, TypeArtifacts, TypeBooks, TypeDendrochronology, TypeHerbaria, TypeProtectedAreaPictures, TypePetroglyphs:
 		return nil
 	default:
 		return fmt.Errorf("collection: invalid enum value for type field: %q", _type)
@@ -353,6 +363,20 @@ func ByBooks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByHerbariaCount orders the results by herbaria count.
+func ByHerbariaCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHerbariaStep(), opts...)
+	}
+}
+
+// ByHerbaria orders the results by herbaria terms.
+func ByHerbaria(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHerbariaStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
 func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -420,6 +444,13 @@ func newBooksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BooksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, BooksTable, BooksColumn),
+	)
+}
+func newHerbariaStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HerbariaInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, HerbariaTable, HerbariaColumn),
 	)
 }
 func newProtectedAreaPicturesStep() *sqlgraph.Step {

@@ -68,6 +68,7 @@ func (PersonalCollection) Edges() []ent.Edge {
 		edge.To("artifacts", Artifact.Type),
 		edge.To("books", Book.Type),
 		edge.To("dendrochronology", Dendrochronology.Type),
+		edge.To("herbaria", Herbarium.Type),
 		edge.To("petroglyphs", Petroglyph.Type),
 		edge.To("protected_area_pictures", ProtectedAreaPicture.Type),
 	}

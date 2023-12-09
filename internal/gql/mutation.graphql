@@ -67,6 +67,22 @@ type Mutation {
   createEthnos(input: CreateEthnosInput!): Ethnos!
   updateEthnos(id: ID!, input: UpdateEthnosInput!): Ethnos!
   deleteEthnos(id: ID!): String!
+  # Familia
+  createFamilia(input: CreateFamiliaInput!): Familia!
+  updateFamilia(id: ID!, input: UpdateFamiliaInput!): Familia!
+  deleteFamilia(id: ID!): String!
+  # Genus
+  createGenus(input: CreateGenusInput!): Genus!
+  updateGenus(id: ID!, input: UpdateGenusInput!): Genus!
+  deleteGenus(id: ID!): String!
+  # Group
+  createGroup(input: CreateGroupInput!): Group!
+  updateGroup(id: ID!, input: UpdateGroupInput!): Group!
+  deleteGroup(id: ID!): String!
+  # Herbarium
+  createHerbarium(input: CreateHerbariumInput!): Herbarium!
+  updateHerbarium(id: ID!, input: UpdateHerbariumInput!): Herbarium!
+  deleteHerbarium(id: ID!): String!
   # License
   createLicense(input: CreateLicenseInput!): License!
   updateLicense(id: ID!, input: UpdateLicenseInput!): License!
@@ -162,6 +178,10 @@ type Mutation {
   createSettlement(input: CreateSettlementInput!): Settlement!
   updateSettlement(id: ID!, input: UpdateSettlementInput!): Settlement!
   deleteSettlement(id: ID!): String!
+  # Species
+  createSpecies(input: CreateSpeciesInput!): Species!
+  updateSpecies(id: ID!, input: UpdateSpeciesInput!): Species!
+  deleteSpecies(id: ID!): String!
   # Technique
   createTechnique(input: CreateTechniqueInput!): Technique!
   updateTechnique(id: ID!, input: UpdateTechniqueInput!): Technique!

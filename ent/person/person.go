@@ -64,6 +64,8 @@ const (
 	EdgeArt = "art"
 	// EdgeArtifacts holds the string denoting the artifacts edge name in mutations.
 	EdgeArtifacts = "artifacts"
+	// EdgeHerbaria holds the string denoting the herbaria edge name in mutations.
+	EdgeHerbaria = "herbaria"
 	// EdgeProtectedAreaPictures holds the string denoting the protected_area_pictures edge name in mutations.
 	EdgeProtectedAreaPictures = "protected_area_pictures"
 	// EdgeDonatedArtifacts holds the string denoting the donated_artifacts edge name in mutations.
@@ -99,6 +101,13 @@ const (
 	// ArtifactsInverseTable is the table name for the Artifact entity.
 	// It exists in this package in order to avoid circular dependency with the "artifact" package.
 	ArtifactsInverseTable = "artifacts"
+	// HerbariaTable is the table that holds the herbaria relation/edge.
+	HerbariaTable = "herbaria"
+	// HerbariaInverseTable is the table name for the Herbarium entity.
+	// It exists in this package in order to avoid circular dependency with the "herbarium" package.
+	HerbariaInverseTable = "herbaria"
+	// HerbariaColumn is the table column denoting the herbaria relation/edge.
+	HerbariaColumn = "person_herbaria"
 	// ProtectedAreaPicturesTable is the table that holds the protected_area_pictures relation/edge.
 	ProtectedAreaPicturesTable = "protected_area_pictures"
 	// ProtectedAreaPicturesInverseTable is the table name for the ProtectedAreaPicture entity.
@@ -390,6 +399,20 @@ func ByArtifacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByHerbariaCount orders the results by herbaria count.
+func ByHerbariaCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHerbariaStep(), opts...)
+	}
+}
+
+// ByHerbaria orders the results by herbaria terms.
+func ByHerbaria(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHerbariaStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProtectedAreaPicturesCount orders the results by protected_area_pictures count.
 func ByProtectedAreaPicturesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -513,6 +536,13 @@ func newArtifactsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ArtifactsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ArtifactsTable, ArtifactsPrimaryKey...),
+	)
+}
+func newHerbariaStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HerbariaInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, HerbariaTable, HerbariaColumn),
 	)
 }
 func newProtectedAreaPicturesStep() *sqlgraph.Step {

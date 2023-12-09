@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/petroglyph"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
@@ -208,6 +209,21 @@ func (ru *RegionUpdate) AddBooks(b ...*Book) *RegionUpdate {
 	return ru.AddBookIDs(ids...)
 }
 
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (ru *RegionUpdate) AddHerbariumIDs(ids ...int) *RegionUpdate {
+	ru.mutation.AddHerbariumIDs(ids...)
+	return ru
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (ru *RegionUpdate) AddHerbaria(h ...*Herbarium) *RegionUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return ru.AddHerbariumIDs(ids...)
+}
+
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
 func (ru *RegionUpdate) AddPetroglyphIDs(ids ...int) *RegionUpdate {
 	ru.mutation.AddPetroglyphIDs(ids...)
@@ -398,6 +414,27 @@ func (ru *RegionUpdate) RemoveBooks(b ...*Book) *RegionUpdate {
 		ids[i] = b[i].ID
 	}
 	return ru.RemoveBookIDs(ids...)
+}
+
+// ClearHerbaria clears all "herbaria" edges to the Herbarium entity.
+func (ru *RegionUpdate) ClearHerbaria() *RegionUpdate {
+	ru.mutation.ClearHerbaria()
+	return ru
+}
+
+// RemoveHerbariumIDs removes the "herbaria" edge to Herbarium entities by IDs.
+func (ru *RegionUpdate) RemoveHerbariumIDs(ids ...int) *RegionUpdate {
+	ru.mutation.RemoveHerbariumIDs(ids...)
+	return ru
+}
+
+// RemoveHerbaria removes "herbaria" edges to Herbarium entities.
+func (ru *RegionUpdate) RemoveHerbaria(h ...*Herbarium) *RegionUpdate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return ru.RemoveHerbariumIDs(ids...)
 }
 
 // ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
@@ -771,6 +808,51 @@ func (ru *RegionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.HerbariaTable,
+			Columns: []string{region.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedHerbariaIDs(); len(nodes) > 0 && !ru.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.HerbariaTable,
+			Columns: []string{region.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.HerbariaTable,
+			Columns: []string{region.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -1313,6 +1395,21 @@ func (ruo *RegionUpdateOne) AddBooks(b ...*Book) *RegionUpdateOne {
 	return ruo.AddBookIDs(ids...)
 }
 
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (ruo *RegionUpdateOne) AddHerbariumIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.AddHerbariumIDs(ids...)
+	return ruo
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (ruo *RegionUpdateOne) AddHerbaria(h ...*Herbarium) *RegionUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return ruo.AddHerbariumIDs(ids...)
+}
+
 // AddPetroglyphIDs adds the "petroglyphs" edge to the Petroglyph entity by IDs.
 func (ruo *RegionUpdateOne) AddPetroglyphIDs(ids ...int) *RegionUpdateOne {
 	ruo.mutation.AddPetroglyphIDs(ids...)
@@ -1503,6 +1600,27 @@ func (ruo *RegionUpdateOne) RemoveBooks(b ...*Book) *RegionUpdateOne {
 		ids[i] = b[i].ID
 	}
 	return ruo.RemoveBookIDs(ids...)
+}
+
+// ClearHerbaria clears all "herbaria" edges to the Herbarium entity.
+func (ruo *RegionUpdateOne) ClearHerbaria() *RegionUpdateOne {
+	ruo.mutation.ClearHerbaria()
+	return ruo
+}
+
+// RemoveHerbariumIDs removes the "herbaria" edge to Herbarium entities by IDs.
+func (ruo *RegionUpdateOne) RemoveHerbariumIDs(ids ...int) *RegionUpdateOne {
+	ruo.mutation.RemoveHerbariumIDs(ids...)
+	return ruo
+}
+
+// RemoveHerbaria removes "herbaria" edges to Herbarium entities.
+func (ruo *RegionUpdateOne) RemoveHerbaria(h ...*Herbarium) *RegionUpdateOne {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return ruo.RemoveHerbariumIDs(ids...)
 }
 
 // ClearPetroglyphs clears all "petroglyphs" edges to the Petroglyph entity.
@@ -1906,6 +2024,51 @@ func (ruo *RegionUpdateOne) sqlSave(ctx context.Context) (_node *Region, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.HerbariaTable,
+			Columns: []string{region.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedHerbariaIDs(); len(nodes) > 0 && !ruo.mutation.HerbariaCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.HerbariaTable,
+			Columns: []string{region.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   region.HerbariaTable,
+			Columns: []string{region.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

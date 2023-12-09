@@ -16,6 +16,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/district"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/predicate"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
@@ -33,6 +34,7 @@ type DistrictQuery struct {
 	withArt                        *ArtQuery
 	withArtifacts                  *ArtifactQuery
 	withBooks                      *BookQuery
+	withHerbaria                   *HerbariumQuery
 	withProtectedAreaPictures      *ProtectedAreaPictureQuery
 	withSettlements                *SettlementQuery
 	withLocations                  *LocationQuery
@@ -45,6 +47,7 @@ type DistrictQuery struct {
 	withNamedArt                   map[string]*ArtQuery
 	withNamedArtifacts             map[string]*ArtifactQuery
 	withNamedBooks                 map[string]*BookQuery
+	withNamedHerbaria              map[string]*HerbariumQuery
 	withNamedProtectedAreaPictures map[string]*ProtectedAreaPictureQuery
 	withNamedSettlements           map[string]*SettlementQuery
 	withNamedLocations             map[string]*LocationQuery
@@ -145,6 +148,28 @@ func (dq *DistrictQuery) QueryBooks() *BookQuery {
 			sqlgraph.From(district.Table, district.FieldID, selector),
 			sqlgraph.To(book.Table, book.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, district.BooksTable, district.BooksColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryHerbaria chains the current query on the "herbaria" edge.
+func (dq *DistrictQuery) QueryHerbaria() *HerbariumQuery {
+	query := (&HerbariumClient{config: dq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := dq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := dq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(district.Table, district.FieldID, selector),
+			sqlgraph.To(herbarium.Table, herbarium.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, district.HerbariaTable, district.HerbariaColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(dq.driver.Dialect(), step)
 		return fromU, nil
@@ -479,6 +504,7 @@ func (dq *DistrictQuery) Clone() *DistrictQuery {
 		withArt:                   dq.withArt.Clone(),
 		withArtifacts:             dq.withArtifacts.Clone(),
 		withBooks:                 dq.withBooks.Clone(),
+		withHerbaria:              dq.withHerbaria.Clone(),
 		withProtectedAreaPictures: dq.withProtectedAreaPictures.Clone(),
 		withSettlements:           dq.withSettlements.Clone(),
 		withLocations:             dq.withLocations.Clone(),
@@ -521,6 +547,17 @@ func (dq *DistrictQuery) WithBooks(opts ...func(*BookQuery)) *DistrictQuery {
 		opt(query)
 	}
 	dq.withBooks = query
+	return dq
+}
+
+// WithHerbaria tells the query-builder to eager-load the nodes that are connected to
+// the "herbaria" edge. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithHerbaria(opts ...func(*HerbariumQuery)) *DistrictQuery {
+	query := (&HerbariumClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	dq.withHerbaria = query
 	return dq
 }
 
@@ -675,10 +712,11 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		nodes       = []*District{}
 		withFKs     = dq.withFKs
 		_spec       = dq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			dq.withArt != nil,
 			dq.withArtifacts != nil,
 			dq.withBooks != nil,
+			dq.withHerbaria != nil,
 			dq.withProtectedAreaPictures != nil,
 			dq.withSettlements != nil,
 			dq.withLocations != nil,
@@ -732,6 +770,13 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		if err := dq.loadBooks(ctx, query, nodes,
 			func(n *District) { n.Edges.Books = []*Book{} },
 			func(n *District, e *Book) { n.Edges.Books = append(n.Edges.Books, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := dq.withHerbaria; query != nil {
+		if err := dq.loadHerbaria(ctx, query, nodes,
+			func(n *District) { n.Edges.Herbaria = []*Herbarium{} },
+			func(n *District, e *Herbarium) { n.Edges.Herbaria = append(n.Edges.Herbaria, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -796,6 +841,13 @@ func (dq *DistrictQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Dis
 		if err := dq.loadBooks(ctx, query, nodes,
 			func(n *District) { n.appendNamedBooks(name) },
 			func(n *District, e *Book) { n.appendNamedBooks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range dq.withNamedHerbaria {
+		if err := dq.loadHerbaria(ctx, query, nodes,
+			func(n *District) { n.appendNamedHerbaria(name) },
+			func(n *District, e *Herbarium) { n.appendNamedHerbaria(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -930,6 +982,37 @@ func (dq *DistrictQuery) loadBooks(ctx context.Context, query *BookQuery, nodes 
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "district_books" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (dq *DistrictQuery) loadHerbaria(ctx context.Context, query *HerbariumQuery, nodes []*District, init func(*District), assign func(*District, *Herbarium)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*District)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Herbarium(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(district.HerbariaColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.district_herbaria
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "district_herbaria" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "district_herbaria" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -1306,6 +1389,20 @@ func (dq *DistrictQuery) WithNamedBooks(name string, opts ...func(*BookQuery)) *
 		dq.withNamedBooks = make(map[string]*BookQuery)
 	}
 	dq.withNamedBooks[name] = query
+	return dq
+}
+
+// WithNamedHerbaria tells the query-builder to eager-load the nodes that are connected to the "herbaria"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (dq *DistrictQuery) WithNamedHerbaria(name string, opts ...func(*HerbariumQuery)) *DistrictQuery {
+	query := (&HerbariumClient{config: dq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if dq.withNamedHerbaria == nil {
+		dq.withNamedHerbaria = make(map[string]*HerbariumQuery)
+	}
+	dq.withNamedHerbaria[name] = query
 	return dq
 }
 

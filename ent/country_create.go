@@ -14,6 +14,7 @@ import (
 	"github.com/dkrasnovdev/siberiana-api/ent/artifact"
 	"github.com/dkrasnovdev/siberiana-api/ent/book"
 	"github.com/dkrasnovdev/siberiana-api/ent/country"
+	"github.com/dkrasnovdev/siberiana-api/ent/herbarium"
 	"github.com/dkrasnovdev/siberiana-api/ent/location"
 	"github.com/dkrasnovdev/siberiana-api/ent/protectedareapicture"
 	"github.com/dkrasnovdev/siberiana-api/ent/region"
@@ -181,6 +182,21 @@ func (cc *CountryCreate) AddBooks(b ...*Book) *CountryCreate {
 		ids[i] = b[i].ID
 	}
 	return cc.AddBookIDs(ids...)
+}
+
+// AddHerbariumIDs adds the "herbaria" edge to the Herbarium entity by IDs.
+func (cc *CountryCreate) AddHerbariumIDs(ids ...int) *CountryCreate {
+	cc.mutation.AddHerbariumIDs(ids...)
+	return cc
+}
+
+// AddHerbaria adds the "herbaria" edges to the Herbarium entity.
+func (cc *CountryCreate) AddHerbaria(h ...*Herbarium) *CountryCreate {
+	ids := make([]int, len(h))
+	for i := range h {
+		ids[i] = h[i].ID
+	}
+	return cc.AddHerbariumIDs(ids...)
 }
 
 // AddProtectedAreaPictureIDs adds the "protected_area_pictures" edge to the ProtectedAreaPicture entity by IDs.
@@ -419,6 +435,22 @@ func (cc *CountryCreate) createSpec() (*Country, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.HerbariaIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   country.HerbariaTable,
+			Columns: []string{country.HerbariaColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(herbarium.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

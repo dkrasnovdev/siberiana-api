@@ -29,7 +29,11 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/dendrochronologicalanalysis
   - github.com/dkrasnovdev/siberiana-api/ent/district
   - github.com/dkrasnovdev/siberiana-api/ent/ethnos
+  - github.com/dkrasnovdev/siberiana-api/ent/familia
   - github.com/dkrasnovdev/siberiana-api/ent/favourite
+  - github.com/dkrasnovdev/siberiana-api/ent/genus
+  - github.com/dkrasnovdev/siberiana-api/ent/group
+  - github.com/dkrasnovdev/siberiana-api/ent/herbarium
   - github.com/dkrasnovdev/siberiana-api/ent/keyword
   - github.com/dkrasnovdev/siberiana-api/ent/license
   - github.com/dkrasnovdev/siberiana-api/ent/location
@@ -51,6 +55,7 @@ autobind:
   - github.com/dkrasnovdev/siberiana-api/ent/region
   - github.com/dkrasnovdev/siberiana-api/ent/set
   - github.com/dkrasnovdev/siberiana-api/ent/settlement
+  - github.com/dkrasnovdev/siberiana-api/ent/species
   - github.com/dkrasnovdev/siberiana-api/ent/technique
 
 # This section declares type mapping between the GraphQL and Go type systems.
