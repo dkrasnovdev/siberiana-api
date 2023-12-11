@@ -100,7 +100,7 @@ func (r *queryResolver) EthnosSlice(ctx context.Context, after *entgql.Cursor[in
 
 // FamiliaSlice is the resolver for the familiaSlice field.
 func (r *queryResolver) FamiliaSlice(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, offset *int, orderBy []*ent.FamiliaOrder, where *ent.FamiliaWhereInput) (*ent.FamiliaConnection, error) {
-	panic(fmt.Errorf("not implemented: FamiliaSlice - familiaSlice"))
+	return r.client.Familia.Query().Paginate(ctx, after, first, before, last, offset, ent.WithFamiliaOrder(orderBy), ent.WithFamiliaFilter(where.Filter))
 }
 
 // Favourites is the resolver for the favourites field.
